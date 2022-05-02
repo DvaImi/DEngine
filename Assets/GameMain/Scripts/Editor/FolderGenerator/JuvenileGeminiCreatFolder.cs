@@ -20,10 +20,11 @@ namespace JuvenileGemini.Editor
         const string gameScenesFolder = gameMainfolder + "Scenes";
         const string gameSoundsFolder = gameMainfolder + "Sounds";
         const string gameShadersFolder = gameMainfolder + "Shaders";
+        const string gameSpritesFolder = gameMainfolder + "Sprites";
         const string gameTexturesFolder = gameMainfolder + "Textures";
 
 
-        [MenuItem("JuvenileGemini/创建文件夹/统一生成必要文件夹")]
+        [MenuItem("JuvenileGemini/Generator/Folder Generator/Generator Standard")]
         public static void CreatAllFolder()
         {
             if (!Directory.Exists(gameEntitiesFolder))
@@ -53,6 +54,10 @@ namespace JuvenileGemini.Editor
             if (!Directory.Exists(gameShadersFolder))
             {
                 Directory.CreateDirectory(gameShadersFolder);
+            }
+            if (!Directory.Exists(gameSpritesFolder))
+            {
+                Directory.CreateDirectory(gameSpritesFolder);
             }
             if (!Directory.Exists(gameTexturesFolder))
             {

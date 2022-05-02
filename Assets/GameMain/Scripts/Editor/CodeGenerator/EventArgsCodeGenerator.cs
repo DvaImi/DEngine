@@ -54,7 +54,7 @@ namespace JuvenileGemini.Editor
             Other,
         }
 
-        [MenuItem("JuvenileGemini/代码生成器/事件参数类代码生成器")]
+        [MenuItem("JuvenileGemini/Generator/Code Generator/EventArgs")]
         public static void OpenAutoGenWindow()
         {
             EventArgsCodeGenerator window = GetWindow<EventArgsCodeGenerator>(true, "事件参数类代码生成器");

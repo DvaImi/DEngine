@@ -17,6 +17,10 @@ namespace JuvenileGemini
 {
     public class ProcedurePreload : ProcedureBase
     {
+        public static readonly string[] ConfigName = new string[] 
+        {
+            "DefaultConfig",
+        };
         public static readonly string[] DataTableNames = new string[]
         {
             "Entity",
@@ -73,6 +77,7 @@ namespace JuvenileGemini
             {
                 if (!loadedFlag.Value)
                 {
+                    Log.Debug(loadedFlag.Key);
                     return;
                 }
             }

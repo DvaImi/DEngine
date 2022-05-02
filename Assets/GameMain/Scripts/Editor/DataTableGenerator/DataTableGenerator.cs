@@ -17,6 +17,7 @@ namespace JuvenileGemini.Editor.DataTableTools
 {
     public sealed class DataTableGenerator
     {
+        private const string ConfigPath = "Assets/GameMain/Configs";
         private const string DataTablePath = "Assets/GameMain/DataTables";
         private const string CSharpCodePath = "Assets/GameMain/Scripts/DataTable";
         private const string CSharpCodeTemplateFileName = "Assets/GameMain/Configs/DataTableCodeTemplate.txt";
@@ -25,7 +26,12 @@ namespace JuvenileGemini.Editor.DataTableTools
 
         public static DataTableProcessor CreateDataTableProcessor(string dataTableName)
         {
-            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DataTablePath, dataTableName + ".txt")), Encoding.GetEncoding("GB2312"), 1, 2, null, 3, 4, 1);
+            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DataTablePath, dataTableName + ".txt")), Encoding.GetEncoding("UTF-8"), 1, 2, null, 3, 4, 1);
+        }
+
+        public static DataTableProcessor CreateConfigProcessor(string dataTableName)
+        {
+            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(ConfigPath, dataTableName + ".txt")), Encoding.GetEncoding("UTF-8"), 1, 2, null, 3, 4, 1);
         }
 
         public static bool CheckRawData(DataTableProcessor dataTableProcessor, string dataTableName)

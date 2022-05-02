@@ -58,7 +58,7 @@ namespace JuvenileGemini.Editor
         private const string UIFormCodePath = "Assets/Scripts/GameMain/UI";
         private const string HotfixUIFormCodePath = "Assets/Scripts/Hotfix/UI";
 
-        [MenuItem("JuvenileGemini/代码生成器/实体与界面代码生成器")]
+        [MenuItem("JuvenileGemini/Generator/Code Generator/EntityAndUIForm")]
         public static void OpenCodeGeneratorWindow()
         {
             EntityAndUIFormCodeGenerator window = GetWindow<EntityAndUIFormCodeGenerator>(true, "实体与界面代码生成器");

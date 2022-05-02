@@ -14,7 +14,7 @@ namespace JuvenileGemini
 {
     public static class DataTableExtension
     {
-        private const string DataRowClassPrefixName = "StarForce.DR";
+        private const string DataRowClassPrefixName = "JuvenileGemini.DR";
         internal static readonly char[] DataSplitSeparators = new char[] { '\t' };
         internal static readonly char[] DataTrimSeparators = new char[] { '\"' };
 

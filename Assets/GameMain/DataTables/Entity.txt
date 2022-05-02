@@ -1,0 +1,4 @@
+﻿#	实体表		
+#	Id		AssetName
+#	int		string
+#	实体编号	策划备注	资源名称

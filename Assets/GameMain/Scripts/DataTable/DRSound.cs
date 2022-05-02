@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2021-06-16 21:54:35.625
+// 生成时间：2022-04-15 23:19:58.014
 //------------------------------------------------------------
 
 using GameFramework;
@@ -39,7 +39,7 @@ namespace JuvenileGemini
         /// <summary>
         /// 获取资源名称。
         /// </summary>
-        public string AssetName
+        public string ResourceName
         {
             get;
             private set;
@@ -102,7 +102,7 @@ namespace JuvenileGemini
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-            AssetName = columnStrings[index++];
+            ResourceName = columnStrings[index++];
             Priority = int.Parse(columnStrings[index++]);
             Loop = bool.Parse(columnStrings[index++]);
             Volume = float.Parse(columnStrings[index++]);
@@ -120,7 +120,7 @@ namespace JuvenileGemini
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
-                    AssetName = binaryReader.ReadString();
+                    ResourceName = binaryReader.ReadString();
                     Priority = binaryReader.Read7BitEncodedInt32();
                     Loop = binaryReader.ReadBoolean();
                     Volume = binaryReader.ReadSingle();

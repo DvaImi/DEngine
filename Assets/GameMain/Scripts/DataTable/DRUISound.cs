@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2021-06-16 21:54:35.666
+// 生成时间：2022-04-15 23:19:58.016
 //------------------------------------------------------------
 
 using GameFramework;
@@ -19,14 +19,14 @@ using UnityGameFramework.Runtime;
 namespace JuvenileGemini
 {
     /// <summary>
-    /// 声音配置表。
+    /// 界面声音配置表。
     /// </summary>
     public class DRUISound : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取声音编号。
+        /// 获取界面声音编号。
         /// </summary>
         public override int Id
         {
