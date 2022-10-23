@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace JuvenileGemini.Editor.DataTableTools
+namespace Juvenile.Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

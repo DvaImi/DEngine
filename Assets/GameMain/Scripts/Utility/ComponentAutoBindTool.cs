@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     /// <summary>
     /// 组件自动绑定工具

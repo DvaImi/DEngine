@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using GameFramework;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public static class ArrayUtility
     {

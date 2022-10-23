@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace JuvenileGemini.Editor
+namespace Juvenile.Editor
 {
     public class DeviceModelConfigEditorWindow : EditorWindow
     {

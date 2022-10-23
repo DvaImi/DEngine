@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     /// <summary>
     /// 游戏入口。

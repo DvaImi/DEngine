@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public class DialogForm : UGuiForm
     {

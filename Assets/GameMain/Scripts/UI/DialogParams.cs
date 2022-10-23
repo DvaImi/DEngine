@@ -7,7 +7,7 @@
 
 using GameFramework;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     /// <summary>
     /// 对话框显示数据。

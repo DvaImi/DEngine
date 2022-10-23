@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     /// <summary>
     /// 画质模式

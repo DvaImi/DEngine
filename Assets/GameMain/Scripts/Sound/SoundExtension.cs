@@ -10,7 +10,7 @@ using GameFramework.DataTable;
 using GameFramework.Sound;
 using UnityGameFramework.Runtime;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public static class SoundExtension
     {

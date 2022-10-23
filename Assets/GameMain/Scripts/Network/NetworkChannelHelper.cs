@@ -16,7 +16,7 @@ using System.IO;
 using System.Reflection;
 using UnityGameFramework.Runtime;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public class NetworkChannelHelper : INetworkChannelHelper
     {

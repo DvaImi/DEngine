@@ -1,5 +1,5 @@
 using System.IO;
-namespace JuvenileGemini.Editor
+namespace Juvenile.Editor
 {
     /// <summary>
     /// 脚本头文件

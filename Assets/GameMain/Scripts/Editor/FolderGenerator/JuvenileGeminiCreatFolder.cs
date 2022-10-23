@@ -8,7 +8,7 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-namespace JuvenileGemini.Editor
+namespace Juvenile.Editor
 {
     public class JuvenileGeminiCreatFolder
     {

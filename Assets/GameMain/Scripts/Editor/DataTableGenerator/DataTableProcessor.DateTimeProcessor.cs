@@ -8,7 +8,7 @@
 using System;
 using System.IO;
 
-namespace JuvenileGemini.Editor.DataTableTools
+namespace Juvenile.Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

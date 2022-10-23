@@ -9,7 +9,7 @@ using GameFramework;
 using UnityEditor;
 using UnityEngine;
 
-namespace JuvenileGemini.Editor.DataTableTools
+namespace Juvenile.Editor.DataTableTools
 {
     public sealed class DataTableGeneratorMenu
     {

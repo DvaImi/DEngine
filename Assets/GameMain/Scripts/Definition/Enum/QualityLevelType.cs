@@ -1,4 +1,4 @@
-﻿namespace JuvenileGemini
+﻿namespace Juvenile
 {
     /// <summary>
     /// 画质等级

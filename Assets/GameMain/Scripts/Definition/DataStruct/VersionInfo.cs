@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public class VersionInfo
     {

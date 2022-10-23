@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public class UpdateResourceForm : MonoBehaviour
     {

@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public static partial class Constant
     {

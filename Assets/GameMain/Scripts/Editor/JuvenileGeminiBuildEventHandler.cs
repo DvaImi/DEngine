@@ -11,7 +11,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
 
-namespace JuvenileGemini.Editor
+namespace Juvenile.Editor
 {
     public sealed class JuvenileGeminiBuildEventHandler : IBuildEventHandler
     {

@@ -7,7 +7,7 @@
 
 using System;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public static class WebUtility
     {

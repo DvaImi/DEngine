@@ -16,7 +16,7 @@ using System.Text;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     /// <summary>
     /// 声音配置表。

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using BindData = JuvenileGemini.ComponentAutoBindTool.BindData;
+using BindData = Juvenile.ComponentAutoBindTool.BindData;
 
-namespace JuvenileGemini.Editor
+namespace Juvenile.Editor
 {
     /// <summary>
     /// 实体与界面代码生成器
@@ -52,11 +52,11 @@ namespace JuvenileGemini.Editor
         private bool m_IsGenShowEntityCode = true;
 
         //各种类型的代码生成后的路径
-        private const string EntityCodePath = "Assets/Scripts/GameMain/Entity";
-        private const string HotfixEntityCodePath = "Assets/Scripts/Hotfix/Entity";
+        private const string EntityCodePath = "Assets/GameMain/Scripts/Entity";
+        private const string HotfixEntityCodePath = "Assets/GameMain/Scripts/Hotfix/Entity";
 
-        private const string UIFormCodePath = "Assets/Scripts/GameMain/UI";
-        private const string HotfixUIFormCodePath = "Assets/Scripts/Hotfix/UI";
+        private const string UIFormCodePath = "Assets/GameMain/Scripts/UI";
+        private const string HotfixUIFormCodePath = "Assets/GameMain/Scripts/Hotfix/UI";
 
         [MenuItem("JuvenileGemini/Generator/Code Generator/EntityAndUIForm")]
         public static void OpenCodeGeneratorWindow()
@@ -145,7 +145,7 @@ namespace JuvenileGemini.Editor
         {
             //根据是否为热更新实体来决定一些参数
             string codepath = m_IsHotfix ? HotfixEntityCodePath : EntityCodePath;
-            string nameSpace = m_IsHotfix ? "Trinity.Hotfix" : "Trinity";
+            string nameSpace = m_IsHotfix ? "Juvenile.Hotfix" : "Juvenile";
             string logicBaseClass = m_IsHotfix ? "HotfixEntityLogic" : "EntityLogic";
 
             foreach (GameObject go in m_GameObjects)
@@ -178,7 +178,7 @@ namespace JuvenileGemini.Editor
         {
             //根据是否为热更新界面来决定一些参数
             string codepath = m_IsHotfix ? HotfixUIFormCodePath : UIFormCodePath;
-            string nameSpace = m_IsHotfix ? "Trinity.Hotfix" : "Trinity";
+            string nameSpace = m_IsHotfix ? "Juvenile.Hotfix" : "Juvenile";
             string logicBaseClass = m_IsHotfix ? "HotfixUGuiForm" : "UGuiForm";
 
 
@@ -207,7 +207,7 @@ namespace JuvenileGemini.Editor
 
             if (m_IsHotfix)
             {
-                initParam = "Trinity.HotfixEntity entityLogic, ";
+                initParam = "Juvenile.HotfixEntity entityLogic, ";
                 baseInitParam = "entityLogic, ";
                 accessModifier = "public";
             }
@@ -249,7 +249,7 @@ namespace JuvenileGemini.Editor
                 sw.WriteLine("\t\t{");
                 sw.WriteLine($"\t\t\tbase.OnInit({baseInitParam}userdata);");
                 sw.WriteLine("");
-                sw.WriteLine($"\t\t\tGetObjects();");
+                sw.WriteLine($"\t\t\tGetBindComponents();");
                 sw.WriteLine("\t\t}");
                 sw.WriteLine("");
 
@@ -263,7 +263,7 @@ namespace JuvenileGemini.Editor
                 sw.WriteLine("");
 
                 //OnHide方法 归还实体数据引用
-                sw.WriteLine($"\t\t{ accessModifier} override void OnHide(object userData)");
+                sw.WriteLine($"\t\t{accessModifier} override void OnHide(object userData)");
                 sw.WriteLine("\t\t{");
                 sw.WriteLine("\t\t\tbase.OnHide(userData);");
                 sw.WriteLine("");
@@ -288,7 +288,7 @@ namespace JuvenileGemini.Editor
                 Directory.CreateDirectory($"{codePath}/EntityData/");
             }
 
-            using (StreamWriter sw = new StreamWriter($"{codePath}/EntityData/{ entityDataName}.cs"))
+            using (StreamWriter sw = new StreamWriter($"{codePath}/EntityData/{entityDataName}.cs"))
             {
                 sw.WriteLine("using UnityEngine;");
                 sw.WriteLine("");
@@ -301,7 +301,7 @@ namespace JuvenileGemini.Editor
                 sw.WriteLine("");
 
                 //类名
-                sw.WriteLine($"\tpublic class {entityDataName} : { dataBaseClass}");
+                sw.WriteLine($"\tpublic class {entityDataName} : {dataBaseClass}");
                 sw.WriteLine("\t{");
                 sw.WriteLine("");
 
@@ -365,7 +365,7 @@ namespace JuvenileGemini.Editor
 
                 if (m_IsHotfix)
                 {
-                    sw.WriteLine("\t\t\tTrinity.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Trinity.HotfixEntityData>();");
+                    sw.WriteLine("\t\t\tJuvenile.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Juvenile.HotfixEntityData>();");
                     sw.WriteLine($"\t\t\ttData.Fill(data.Id,data.TypeId,\"{go.name}Logic\",data);");
                     sw.WriteLine("\t\t\ttData.Position = data.Position;");
                     sw.WriteLine("\t\t\ttData.Rotation = data.Rotation;");
@@ -389,7 +389,7 @@ namespace JuvenileGemini.Editor
 
                 if (m_IsHotfix)
                 {
-                    sw.WriteLine("\t\t\tTrinity.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Trinity.HotfixEntityData>();");
+                    sw.WriteLine("\t\t\tJuvenile.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Juvenile.HotfixEntityData>();");
                     sw.WriteLine($"\t\t\ttData.Fill(data.Id,data.TypeId,\"{go.name}Logic\",data);");
                     sw.WriteLine("\t\t\ttData.Position = data.Position;");
                     sw.WriteLine("\t\t\ttData.Rotation = data.Rotation;");
@@ -425,7 +425,7 @@ namespace JuvenileGemini.Editor
 
             if (m_IsHotfix)
             {
-                initParam = "Trinity.HotfixUGuiForm uiFormLogic, ";
+                initParam = "Juvenile.HotfixUGuiForm uiFormLogic, ";
                 baseInitParam = "uiFormLogic, ";
                 accessModifier = "public";
             }
@@ -458,7 +458,7 @@ namespace JuvenileGemini.Editor
                 sw.WriteLine("\t\t{");
                 sw.WriteLine($"\t\t\tbase.OnInit({baseInitParam}userdata);");
                 sw.WriteLine("");
-                sw.WriteLine($"\t\t\tGetObjects();");
+                sw.WriteLine($"\t\t\tGetBindComponents();");
                 sw.WriteLine("\t\t}");
                 sw.WriteLine("\t}");
                 sw.WriteLine("}");

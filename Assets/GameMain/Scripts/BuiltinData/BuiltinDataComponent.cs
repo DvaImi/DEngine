@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public class BuiltinDataComponent : GameFrameworkComponent
     {

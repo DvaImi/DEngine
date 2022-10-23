@@ -7,7 +7,7 @@
 
 using GameFramework;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public static class AssetUtility
     {

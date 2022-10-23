@@ -8,7 +8,7 @@
 using GameFramework;
 using GameFramework.Network;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public abstract class PacketHeaderBase : IPacketHeader, IReference
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace JuvenileGemini.Editor
+namespace Juvenile.Editor
 {
     [CustomEditor(typeof(DeviceModelConfig))]
     public class DeviceModelConfigInspector : UnityEditor.Editor

@@ -10,7 +10,7 @@ using GameFramework.Event;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public class ProcedureChangeScene : ProcedureBase
     {

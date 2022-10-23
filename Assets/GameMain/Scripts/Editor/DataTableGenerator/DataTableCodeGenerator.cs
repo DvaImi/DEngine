@@ -7,7 +7,7 @@
 
 using System.Text;
 
-namespace JuvenileGemini.Editor.DataTableTools
+namespace Juvenile.Editor.DataTableTools
 {
     public delegate void DataTableCodeGenerator(DataTableProcessor dataTableProcessor, StringBuilder codeContent, object userData);
 }

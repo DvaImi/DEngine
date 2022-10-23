@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using BindData = JuvenileGemini.ComponentAutoBindTool.BindData;
+using BindData = Juvenile.ComponentAutoBindTool.BindData;
 
-namespace JuvenileGemini.Editor
+namespace Juvenile.Editor
 {
     [CustomEditor(typeof(ComponentAutoBindTool))]
     public class ComponentAutoBindToolInspector : UnityEditor.Editor

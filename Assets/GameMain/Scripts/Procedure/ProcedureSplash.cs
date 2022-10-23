@@ -9,7 +9,7 @@ using GameFramework.Resource;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     public class ProcedureSplash : ProcedureBase
     {

@@ -4,7 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace JuvenileGemini.Editor
+namespace Juvenile.Editor
 {
 
     /// <summary>
@@ -173,7 +173,7 @@ namespace JuvenileGemini.Editor
         {
             //根据是否为热更新层事件来决定一些参数
             string codePath = m_IsHotfixEvent ? HotfixEventCodePath : EventCodePath;
-            string nameSpace = m_IsHotfixEvent ? "Trinity.Hotfix" : "Trinity";
+            string nameSpace = m_IsHotfixEvent ? "Juvenile.Hotfix" : "Juvenile";
             string baseClass = m_IsHotfixEvent ? "HotfixGameEventArgs" : "GameEventArgs";
 
             if (!Directory.Exists($"{codePath}/"))

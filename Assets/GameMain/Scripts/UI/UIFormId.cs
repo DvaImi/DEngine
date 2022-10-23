@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-namespace JuvenileGemini
+namespace Juvenile
 {
     /// <summary>
     /// 界面编号。
