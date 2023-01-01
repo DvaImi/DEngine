@@ -12,186 +12,28 @@ namespace Juvenile
 {
     public class Timer : IReference
     {
-        /// <summary>
-        /// How long the timer takes to complete from start to finish.
-        /// </summary>
-        public float duration { get; private set; }
+        public float Duration { get; private set; }
 
-        /// <summary>
-        /// Whether the timer will run again after completion.
-        /// </summary>
-        public bool isLooped { get; set; }
+        public bool IsLooped { get; set; }
 
-        /// <summary>
-        /// Whether or not the timer completed running. This is false if the timer was cancelled.
-        /// </summary>
-        public bool isCompleted { get; private set; }
+        public bool IsCompleted { get; private set; }
 
-        /// <summary>
-        /// Whether the timer uses real-time or game-time. Real time is unaffected by changes to the timescale
-        /// of the game(e.g. pausing, slow-mo), while game time is affected.
-        /// </summary>
-        public bool usesRealTime { get; private set; }
+        public bool UsesRealTime { get; private set; }
 
-        /// <summary>
-        /// Whether the timer is currently paused.
-        /// </summary>
-        public bool isPaused
+        public bool IsPaused
         {
             get { return _timeElapsedBeforePause.HasValue; }
         }
 
-        /// <summary>
-        /// Whether or not the timer was cancelled.
-        /// </summary>
-        public bool isCancelled
+        public bool IsCancelled
         {
             get { return _timeElapsedBeforeCancel.HasValue; }
         }
 
-        /// <summary>
-        /// Get whether or not the timer has finished running for any reason.
-        /// </summary>
-        public bool isDone
+        public bool IsDone
         {
-            get { return isCompleted || isCancelled; }
+            get { return IsCompleted || IsCancelled; }
         }
-
-        /// <summary>
-        /// Cancels a timer. The main benefit of this over the method on the instance is that you will not get
-        /// a <see cref="NullReferenceException"/> if the timer is null.
-        /// </summary>
-        /// <param name="timer">The timer to cancel.</param>
-        public static void Cancel(Timer timer)
-        {
-            if (timer != null)
-            {
-                timer.Cancel();
-            }
-        }
-
-        /// <summary>
-        /// Pause a timer. The main benefit of this over the method on the instance is that you will not get
-        /// a <see cref="NullReferenceException"/> if the timer is null.
-        /// </summary>
-        /// <param name="timer">The timer to pause.</param>
-        public static void Pause(Timer timer)
-        {
-            if (timer != null)
-            {
-                timer.Pause();
-            }
-        }
-
-        /// <summary>
-        /// Resume a timer. The main benefit of this over the method on the instance is that you will not get
-        /// a <see cref="NullReferenceException"/> if the timer is null.
-        /// </summary>
-        /// <param name="timer">The timer to resume.</param>
-        public static void Resume(Timer timer)
-        {
-            if (timer != null)
-            {
-                timer.Resume();
-            }
-        }
-
-        #region Public Methods
-
-        /// <summary>
-        /// Stop a timer that is in-progress or paused. The timer's on completion callback will not be called.
-        /// </summary>
-        public void Cancel()
-        {
-            if (isDone)
-            {
-                return;
-            }
-
-            _timeElapsedBeforeCancel = GetTimeElapsed();
-            _timeElapsedBeforePause = null;
-        }
-
-        /// <summary>
-        /// Pause a running timer. A paused timer can be resumed from the same point it was paused.
-        /// </summary>
-        public void Pause()
-        {
-            if (isPaused || isDone)
-            {
-                return;
-            }
-
-            _timeElapsedBeforePause = GetTimeElapsed();
-        }
-
-        /// <summary>
-        /// Continue a paused timer. Does nothing if the timer has not been paused.
-        /// </summary>
-        public void Resume()
-        {
-            if (!isPaused || isDone)
-            {
-                return;
-            }
-
-            _timeElapsedBeforePause = null;
-        }
-
-        /// <summary>
-        /// Get how many seconds have elapsed since the start of this timer's current cycle.
-        /// </summary>
-        /// <returns>The number of seconds that have elapsed since the start of this timer's current cycle, i.e.
-        /// the current loop if the timer is looped, or the start if it isn't.
-        ///
-        /// If the timer has finished running, this is equal to the duration.
-        ///
-        /// If the timer was cancelled/paused, this is equal to the number of seconds that passed between the timer
-        /// starting and when it was cancelled/paused.</returns>
-        public float GetTimeElapsed()
-        {
-            if (isCompleted || GetWorldTime() >= GetFireTime())
-            {
-                return duration;
-            }
-
-            return _timeElapsedBeforeCancel ??
-                   _timeElapsedBeforePause ??
-                   GetWorldTime() - _startTime;
-        }
-
-        /// <summary>
-        /// Get how many seconds remain before the timer completes.
-        /// </summary>
-        /// <returns>The number of seconds that remain to be elapsed until the timer is completed. A timer
-        /// is only elapsing time if it is not paused, cancelled, or completed. This will be equal to zero
-        /// if the timer completed.</returns>
-        public float GetTimeRemaining()
-        {
-            return duration - GetTimeElapsed();
-        }
-
-        /// <summary>
-        /// Get how much progress the timer has made from start to finish as a ratio.
-        /// </summary>
-        /// <returns>A value from 0 to 1 indicating how much of the timer's duration has been elapsed.</returns>
-        public float GetRatioComplete()
-        {
-            return GetTimeElapsed() / duration;
-        }
-
-        /// <summary>
-        /// Get how much progress the timer has left to make as a ratio.
-        /// </summary>
-        /// <returns>A value from 0 to 1 indicating how much of the timer's duration remains to be elapsed.</returns>
-        public float GetRatioRemaining()
-        {
-            return GetTimeRemaining() / duration;
-        }
-
-        #endregion
-
-        #region Private Properties/Fields
 
         private Action _onComplete;
         private Action<float> _onUpdate;
@@ -200,16 +42,73 @@ namespace Juvenile
 
         private float? _timeElapsedBeforeCancel;
         private float? _timeElapsedBeforePause;
-        #endregion
+     
+        public void Cancel()
+        {
+            if (IsDone)
+            {
+                return;
+            }
+
+            _timeElapsedBeforeCancel = GetTimeElapsed();
+            _timeElapsedBeforePause = null;
+        }
+
+        public void Pause()
+        {
+            if (IsPaused || IsDone)
+            {
+                return;
+            }
+
+            _timeElapsedBeforePause = GetTimeElapsed();
+        }
+
+        public void Resume()
+        {
+            if (!IsPaused || IsDone)
+            {
+                return;
+            }
+
+            _timeElapsedBeforePause = null;
+        }
+
+        public float GetTimeElapsed()
+        {
+            if (IsCompleted || GetWorldTime() >= GetFireTime())
+            {
+                return Duration;
+            }
+
+            return _timeElapsedBeforeCancel ??
+                   _timeElapsedBeforePause ??
+                   GetWorldTime() - _startTime;
+        }
+
+        public float GetTimeRemaining()
+        {
+            return Duration - GetTimeElapsed();
+        }
+
+        public float GetRatioComplete()
+        {
+            return GetTimeElapsed() / Duration;
+        }
+
+        public float GetRatioRemaining()
+        {
+            return GetTimeRemaining() / Duration;
+        }
 
         private Timer Register(float duration, Action onComplete, Action<float> onUpdate, bool isLooped, bool usesRealTime)
         {
-            this.duration = duration;
+            Duration = duration;
             _onComplete = onComplete;
             _onUpdate = onUpdate;
 
-            this.isLooped = isLooped;
-            this.usesRealTime = usesRealTime;
+            IsLooped = isLooped;
+            UsesRealTime = usesRealTime;
 
             _startTime = GetWorldTime();
             _lastUpdateTime = _startTime;
@@ -218,12 +117,12 @@ namespace Juvenile
 
         private float GetWorldTime()
         {
-            return usesRealTime ? Time.realtimeSinceStartup : Time.time;
+            return UsesRealTime ? Time.realtimeSinceStartup : Time.time;
         }
 
         private float GetFireTime()
         {
-            return _startTime + duration;
+            return _startTime + Duration;
         }
 
         private float GetTimeDelta()
@@ -233,12 +132,12 @@ namespace Juvenile
 
         public void Update()
         {
-            if (isDone)
+            if (IsDone)
             {
                 return;
             }
 
-            if (isPaused)
+            if (IsPaused)
             {
                 _startTime += GetTimeDelta();
                 _lastUpdateTime = GetWorldTime();
@@ -247,46 +146,43 @@ namespace Juvenile
 
             _lastUpdateTime = GetWorldTime();
 
-            if (_onUpdate != null)
-            {
-                _onUpdate(GetTimeElapsed());
-            }
+            _onUpdate?.Invoke(GetTimeElapsed());
 
             if (GetWorldTime() >= GetFireTime())
             {
 
-                if (_onComplete != null)
-                {
-                    _onComplete();
-                }
+                _onComplete?.Invoke();
 
-                if (isLooped)
+                if (IsLooped)
                 {
                     _startTime = GetWorldTime();
                 }
                 else
                 {
-                    isCompleted = true;
+                    IsCompleted = true;
                 }
             }
         }
 
-        internal static Timer Creat(float duration, Action onComplete, Action<float> onUpdate, bool isLooped, bool useRealTime)
+        public static Timer Creat(float duration, Action onComplete, Action<float> onUpdate, bool isLooped, bool useRealTime)
         {
             return ReferencePool.Acquire<Timer>().Register(duration, onComplete, onUpdate, isLooped, useRealTime);
         }
 
         public void Clear()
         {
-            duration = 0;
+            Duration = 0;
             _onComplete = null;
             _onUpdate = null;
 
-            isLooped = false;
-            usesRealTime = false;
+            IsLooped = false;
+            UsesRealTime = false;
 
             _startTime = 0;
             _lastUpdateTime = 0;
+
+            _timeElapsedBeforeCancel = null;
+            _timeElapsedBeforePause = null;
         }
     }
 }
