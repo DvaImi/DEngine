@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using BindData = Juvenile.ComponentAutoBindTool.BindData;
+using BindData = Dvalmi.ComponentAutoBindTool.BindData;
 
-namespace Juvenile.Editor
+namespace Dvalmi.Editor
 {
     [CustomEditor(typeof(ComponentAutoBindTool))]
     public class ComponentAutoBindToolInspector : UnityEditor.Editor
     {
         private SerializedProperty m_BindDatas;
         private SerializedProperty m_BindComs;
-        private List<BindData> m_TempList = new List<BindData>();
+        private List<ComponentAutoBindTool.BindData> m_TempList = new List<ComponentAutoBindTool.BindData>();
         private List<string> m_TempFiledNames = new List<string>();
         private List<string> m_TempComponentTypeNames = new List<string>();
 
@@ -97,9 +97,9 @@ namespace Juvenile.Editor
             ComponentAutoBindTool target = (ComponentAutoBindTool)this.target;
 
             m_TempList.Clear();
-            foreach (BindData data in target.BindDatas)
+            foreach (ComponentAutoBindTool.BindData data in target.BindDatas)
             {
-                m_TempList.Add(new BindData(data.Name, data.BindCom));
+                m_TempList.Add(new ComponentAutoBindTool.BindData(data.Name, data.BindCom));
             }
             m_TempList.Sort((x, y) =>
             {
@@ -107,7 +107,7 @@ namespace Juvenile.Editor
             });
 
             m_BindDatas.ClearArray();
-            foreach (BindData data in m_TempList)
+            foreach (ComponentAutoBindTool.BindData data in m_TempList)
             {
                 AddBindData(data.Name, data.BindCom);
             }

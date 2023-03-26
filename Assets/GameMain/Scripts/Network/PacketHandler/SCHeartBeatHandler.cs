@@ -8,7 +8,7 @@
 using GameFramework.Network;
 using UnityGameFramework.Runtime;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public class SCHeartBeatHandler : PacketHandlerBase
     {

@@ -7,7 +7,7 @@
 
 using GameFramework;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public static class AssetUtility
     {

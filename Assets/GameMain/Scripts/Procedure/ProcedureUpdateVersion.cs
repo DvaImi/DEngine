@@ -9,7 +9,7 @@ using GameFramework.Resource;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public class ProcedureUpdateVersion : ProcedureBase
     {

@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using UnityEngine;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public static class BinaryReaderExtension
     {

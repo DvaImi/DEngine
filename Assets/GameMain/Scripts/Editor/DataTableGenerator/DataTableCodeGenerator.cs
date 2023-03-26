@@ -7,7 +7,7 @@
 
 using System.Text;
 
-namespace Juvenile.Editor.DataTableTools
+namespace Dvalmi.Editor.DataTableTools
 {
     public delegate void DataTableCodeGenerator(DataTableProcessor dataTableProcessor, StringBuilder codeContent, object userData);
 }

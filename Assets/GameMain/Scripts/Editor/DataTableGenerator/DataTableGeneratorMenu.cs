@@ -9,11 +9,11 @@ using GameFramework;
 using UnityEditor;
 using UnityEngine;
 
-namespace Juvenile.Editor.DataTableTools
+namespace Dvalmi.Editor.DataTableTools
 {
     public sealed class DataTableGeneratorMenu
     {
-        [MenuItem("JuvenileGemini/Generator/Generate Configs")]
+        [MenuItem("Dvalmi/Generator/Generate Configs")]
         internal static void GenerateConfigs()
         {
             foreach (string dataTableName in ProcedurePreload.ConfigName)
@@ -31,7 +31,7 @@ namespace Juvenile.Editor.DataTableTools
             AssetDatabase.Refresh();
         }
         
-        [MenuItem("JuvenileGemini/Generator/Generate DataTables")]
+        [MenuItem("Dvalmi/Generator/Generate DataTables")]
         internal static void GenerateDataTables()
         {
             foreach (string dataTableName in ProcedurePreload.DataTableNames)
@@ -44,24 +44,6 @@ namespace Juvenile.Editor.DataTableTools
                 }
 
                 DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
-                DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
-            }
-
-            AssetDatabase.Refresh();
-        }
-        
-        [MenuItem("JuvenileGemini/Generator/Generate DataTables Code")]
-        internal static void GenerateDataTablesCode()
-        {
-            foreach (string dataTableName in ProcedurePreload.DataTableNames)
-            {
-                DataTableProcessor dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
-                if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
-                {
-                    Debug.LogError(Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
-                    break;
-                }
-
                 DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
             }
 

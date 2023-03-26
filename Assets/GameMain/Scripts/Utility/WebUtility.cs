@@ -7,7 +7,7 @@
 
 using System;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public static class WebUtility
     {

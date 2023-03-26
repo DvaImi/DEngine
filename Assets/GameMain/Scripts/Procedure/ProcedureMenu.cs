@@ -7,7 +7,7 @@
 
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public class ProcedureMenu : ProcedureBase
     {

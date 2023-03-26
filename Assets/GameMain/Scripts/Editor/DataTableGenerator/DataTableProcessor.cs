@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Juvenile.Editor.DataTableTools
+namespace Dvalmi.Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

@@ -10,7 +10,7 @@ using System;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public class ProcedureLaunch : ProcedureBase
     {
@@ -48,7 +48,7 @@ namespace Juvenile
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
             // 运行一帧即切换到 Splash 展示流程
-            ChangeState<ProcedureSplash>(procedureOwner);
+            //ChangeState<ProcedureSplash>(procedureOwner);
         }
 
         private void InitLanguageSettings()

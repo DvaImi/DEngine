@@ -8,7 +8,7 @@
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace Juvenile
+namespace Dvalmi
 {
     /// <summary>
     /// 游戏入口。

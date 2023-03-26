@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityGameFramework.Editor;
 using UnityGameFramework.Editor.ResourceTools;
 
-namespace Juvenile.Editor
+namespace Dvalmi.Editor
 {
     public static class GameFrameworkConfigs
     {

@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public abstract class UGuiForm : UIFormLogic
     {

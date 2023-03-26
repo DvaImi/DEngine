@@ -16,7 +16,7 @@ using System.IO;
 using System.Reflection;
 using UnityGameFramework.Runtime;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public class NetworkChannelHelper : INetworkChannelHelper
     {

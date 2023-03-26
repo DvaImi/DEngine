@@ -2,7 +2,7 @@
 <UnityGameFramework>
   <BuildSettings>
     <DefaultScenes>
-      <DefaultScene Name="Assets/JuvenileGameLauncher.unity" />
+      <DefaultScene Name="Assets/DvalmiLauncher.unity" />
     </DefaultScenes>
     <SearchScenePaths>
       <SearchScenePath Path="Assets" />

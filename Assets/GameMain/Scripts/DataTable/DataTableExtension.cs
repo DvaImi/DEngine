@@ -5,16 +5,15 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework.DataTable;
 using System;
+using GameFramework.DataTable;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public static class DataTableExtension
     {
-        private const string DataRowClassPrefixName = "JuvenileGemini.DR";
         internal static readonly char[] DataSplitSeparators = new char[] { '\t' };
         internal static readonly char[] DataTrimSeparators = new char[] { '\"' };
 
@@ -33,7 +32,7 @@ namespace Juvenile
                 return;
             }
 
-            string dataRowClassName = DataRowClassPrefixName + splitedNames[0];
+            string dataRowClassName = DvalmiConfig.DataRowClassPrefixName + splitedNames[0];
             Type dataRowType = Type.GetType(dataRowClassName);
             if (dataRowType == null)
             {

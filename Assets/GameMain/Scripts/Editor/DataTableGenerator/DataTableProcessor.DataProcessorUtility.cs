@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Juvenile.Editor.DataTableTools
+namespace Dvalmi.Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

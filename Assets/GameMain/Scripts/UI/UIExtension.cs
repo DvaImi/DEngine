@@ -7,12 +7,13 @@
 
 using GameFramework.DataTable;
 using GameFramework.UI;
+using Dvalmi;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public static class UIExtension
     {
@@ -51,26 +52,26 @@ namespace Juvenile
 
         public static bool HasUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
         {
-            IDataTable<DRUIForm> dtUIForm = GameEntry.DataTable.GetDataTable<DRUIForm>();
-            DRUIForm drUIForm = dtUIForm.GetDataRow(uiFormId);
-            if (drUIForm == null)
-            {
-                return false;
-            }
+            //    IDataTable<DRUIForm> dtUIForm = GameEntry.DataTable.GetDataTable<DRUIForm>();
+            //    DRUIForm drUIForm = dtUIForm.GetDataRow(uiFormId);
+            //    if (drUIForm == null)
+            //    {
+            //        return false;
+            //    }
 
-            string assetName = AssetUtility.GetUIFormAsset(drUIForm.AssetName);
-            if (string.IsNullOrEmpty(uiGroupName))
-            {
-                return uiComponent.HasUIForm(assetName);
-            }
+            //    string assetName = AssetUtility.GetUIFormAsset(drUIForm.AssetName);
+            //    if (string.IsNullOrEmpty(uiGroupName))
+            //    {
+            //        return uiComponent.HasUIForm(assetName);
+            //    }
 
-            IUIGroup uiGroup = uiComponent.GetUIGroup(uiGroupName);
-            if (uiGroup == null)
-            {
-                return false;
-            }
+            //    IUIGroup uiGroup = uiComponent.GetUIGroup(uiGroupName);
+            //    if (uiGroup == null)
+            //    {
+            return false;
+            //}
 
-            return uiGroup.HasUIForm(assetName);
+            //return uiGroup.HasUIForm(assetName);
         }
 
         public static UGuiForm GetUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)

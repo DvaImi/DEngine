@@ -8,7 +8,7 @@
 using GameFramework;
 using GameFramework.Network;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public abstract class PacketHeaderBase : IPacketHeader, IReference
     {

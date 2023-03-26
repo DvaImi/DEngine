@@ -1,6 +1,6 @@
 // ========================================================
 // 描述：
-// 作者：JuvenileGemini 
+// 作者：Dvalmi 
 // 创建时间：2022-04-16 13:09:06
 // 版 本：1.0
 // ========================================================
@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using GameFramework;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public static class ArrayUtility
     {
@@ -29,9 +29,7 @@ namespace Juvenile
                 {
                     if (handler(array[i]).CompareTo(handler(array[j])) > 0)
                     {
-                        var temp = array[i];
-                        array[i] = array[j];
-                        array[j] = temp;
+                        (array[i], array[j]) = (array[j], array[i]);
                     }
                 }
             }
@@ -53,9 +51,7 @@ namespace Juvenile
                 {
                     if (handler(array[i]).CompareTo(handler(array[j])) < 0)
                     {
-                        var temp = array[i];
-                        array[i] = array[j];
-                        array[j] = temp;
+                        (array[i], array[j]) = (array[j], array[i]);
                     }
                 }
             }

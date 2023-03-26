@@ -4,7 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace Juvenile.Editor
+namespace Dvalmi.Editor
 {
 
     /// <summary>
@@ -54,7 +54,7 @@ namespace Juvenile.Editor
             Other,
         }
 
-        [MenuItem("JuvenileGemini/Generator/Code Generator/EventArgs")]
+        [MenuItem("Dvalmi/Generator/Code Generator/EventArgs")]
         public static void OpenAutoGenWindow()
         {
             EventArgsCodeGenerator window = GetWindow<EventArgsCodeGenerator>(true, "事件参数类代码生成器");
@@ -173,7 +173,7 @@ namespace Juvenile.Editor
         {
             //根据是否为热更新层事件来决定一些参数
             string codePath = m_IsHotfixEvent ? HotfixEventCodePath : EventCodePath;
-            string nameSpace = m_IsHotfixEvent ? "Juvenile.Hotfix" : "Juvenile";
+            string nameSpace = m_IsHotfixEvent ? DvalmiConfig.HotFixNameSpace : DvalmiConfig.NameSpace;
             string baseClass = m_IsHotfixEvent ? "HotfixGameEventArgs" : "GameEventArgs";
 
             if (!Directory.Exists($"{codePath}/"))

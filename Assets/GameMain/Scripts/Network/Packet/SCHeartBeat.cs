@@ -8,7 +8,7 @@
 using ProtoBuf;
 using System;
 
-namespace Juvenile
+namespace Dvalmi
 {
     [Serializable, ProtoContract(Name = @"SCHeartBeat")]
     public class SCHeartBeat : SCPacketBase

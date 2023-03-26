@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public class UpdateResourceForm : MonoBehaviour
     {

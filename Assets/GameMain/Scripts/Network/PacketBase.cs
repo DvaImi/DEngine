@@ -8,7 +8,7 @@
 using GameFramework.Network;
 using ProtoBuf;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public abstract class PacketBase : Packet, IExtensible
     {

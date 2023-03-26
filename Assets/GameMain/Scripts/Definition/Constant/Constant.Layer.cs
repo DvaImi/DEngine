@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public static partial class Constant
     {

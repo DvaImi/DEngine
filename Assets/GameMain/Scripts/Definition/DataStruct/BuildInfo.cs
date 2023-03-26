@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-namespace Juvenile
+namespace Dvalmi
 {
     public class BuildInfo
     {

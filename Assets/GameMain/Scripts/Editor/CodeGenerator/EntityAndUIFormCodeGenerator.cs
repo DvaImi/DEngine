@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using BindData = Juvenile.ComponentAutoBindTool.BindData;
+using BindData = Dvalmi.ComponentAutoBindTool.BindData;
 
-namespace Juvenile.Editor
+namespace Dvalmi.Editor
 {
     /// <summary>
     /// 实体与界面代码生成器
@@ -58,7 +58,7 @@ namespace Juvenile.Editor
         private const string UIFormCodePath = "Assets/GameMain/Scripts/UI";
         private const string HotfixUIFormCodePath = "Assets/GameMain/Scripts/Hotfix/UI";
 
-        [MenuItem("JuvenileGemini/Generator/Code Generator/EntityAndUIForm")]
+        [MenuItem("Dvalmi/Generator/Code Generator/EntityAndUIForm")]
         public static void OpenCodeGeneratorWindow()
         {
             EntityAndUIFormCodeGenerator window = GetWindow<EntityAndUIFormCodeGenerator>(true, "实体与界面代码生成器");
@@ -145,7 +145,7 @@ namespace Juvenile.Editor
         {
             //根据是否为热更新实体来决定一些参数
             string codepath = m_IsHotfix ? HotfixEntityCodePath : EntityCodePath;
-            string nameSpace = m_IsHotfix ? "Juvenile.Hotfix" : "Juvenile";
+            string nameSpace = m_IsHotfix ? "Dvalmi.Hotfix" : "Dvalmi";
             string logicBaseClass = m_IsHotfix ? "HotfixEntityLogic" : "EntityLogic";
 
             foreach (GameObject go in m_GameObjects)
@@ -178,7 +178,7 @@ namespace Juvenile.Editor
         {
             //根据是否为热更新界面来决定一些参数
             string codepath = m_IsHotfix ? HotfixUIFormCodePath : UIFormCodePath;
-            string nameSpace = m_IsHotfix ? "Juvenile.Hotfix" : "Juvenile";
+            string nameSpace = m_IsHotfix ? "Dvalmi.Hotfix" : "Dvalmi";
             string logicBaseClass = m_IsHotfix ? "HotfixUGuiForm" : "UGuiForm";
 
 
@@ -207,7 +207,7 @@ namespace Juvenile.Editor
 
             if (m_IsHotfix)
             {
-                initParam = "Juvenile.HotfixEntity entityLogic, ";
+                initParam = "Dvalmi.HotfixEntity entityLogic, ";
                 baseInitParam = "entityLogic, ";
                 accessModifier = "public";
             }
@@ -365,7 +365,7 @@ namespace Juvenile.Editor
 
                 if (m_IsHotfix)
                 {
-                    sw.WriteLine("\t\t\tJuvenile.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Juvenile.HotfixEntityData>();");
+                    sw.WriteLine("\t\t\tDvalmi.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Dvalmi.HotfixEntityData>();");
                     sw.WriteLine($"\t\t\ttData.Fill(data.Id,data.TypeId,\"{go.name}Logic\",data);");
                     sw.WriteLine("\t\t\ttData.Position = data.Position;");
                     sw.WriteLine("\t\t\ttData.Rotation = data.Rotation;");
@@ -389,7 +389,7 @@ namespace Juvenile.Editor
 
                 if (m_IsHotfix)
                 {
-                    sw.WriteLine("\t\t\tJuvenile.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Juvenile.HotfixEntityData>();");
+                    sw.WriteLine("\t\t\tDvalmi.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Dvalmi.HotfixEntityData>();");
                     sw.WriteLine($"\t\t\ttData.Fill(data.Id,data.TypeId,\"{go.name}Logic\",data);");
                     sw.WriteLine("\t\t\ttData.Position = data.Position;");
                     sw.WriteLine("\t\t\ttData.Rotation = data.Rotation;");
@@ -425,7 +425,7 @@ namespace Juvenile.Editor
 
             if (m_IsHotfix)
             {
-                initParam = "Juvenile.HotfixUGuiForm uiFormLogic, ";
+                initParam = "Dvalmi.HotfixUGuiForm uiFormLogic, ";
                 baseInitParam = "uiFormLogic, ";
                 accessModifier = "public";
             }
@@ -500,7 +500,7 @@ namespace Juvenile.Editor
                 sw.WriteLine("");
 
 
-                foreach (BindData data in bindTool.BindDatas)
+                foreach (ComponentAutoBindTool.BindData data in bindTool.BindDatas)
                 {
                     sw.WriteLine($"\t\tprivate {data.BindCom.GetType().Name} m_{data.Name};");
                 }
@@ -517,7 +517,7 @@ namespace Juvenile.Editor
 
                 for (int i = 0; i < bindTool.BindDatas.Count; i++)
                 {
-                    BindData data = bindTool.BindDatas[i];
+                    ComponentAutoBindTool.BindData data = bindTool.BindDatas[i];
                     string filedName = $"m_{data.Name}";
                     sw.WriteLine($"\t\t\t{filedName} = autoBindTool.GetBindComponent<{data.BindCom.GetType().Name}>({i});");
                 }

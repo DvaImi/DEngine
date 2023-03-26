@@ -7,7 +7,7 @@
 
 using System.IO;
 
-namespace Juvenile.Editor.DataTableTools
+namespace Dvalmi.Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {

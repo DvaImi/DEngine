@@ -7,7 +7,7 @@
 
 using GameFramework.Network;
 
-namespace Juvenile
+namespace Dvalmi
 {
     public abstract class PacketHandlerBase : IPacketHandler
     {
