@@ -52,10 +52,10 @@ namespace Dvalmi.Editor
         private bool m_IsGenShowEntityCode = true;
 
         //各种类型的代码生成后的路径
-        private const string EntityCodePath = "Assets/GameMain/Scripts/Entity";
+        private const string EntityCodePath = "Assets/GameMain/Scripts/Base/Entity";
         private const string HotfixEntityCodePath = "Assets/GameMain/Scripts/Hotfix/Entity";
 
-        private const string UIFormCodePath = "Assets/GameMain/Scripts/UI";
+        private const string UIFormCodePath = "Assets/GameMain/Scripts/Base/UI";
         private const string HotfixUIFormCodePath = "Assets/GameMain/Scripts/Hotfix/UI";
 
         [MenuItem("Dvalmi/Generator/Code Generator/EntityAndUIForm")]

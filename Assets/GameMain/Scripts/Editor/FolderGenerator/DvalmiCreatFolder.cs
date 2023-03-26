@@ -12,7 +12,7 @@ namespace Dvalmi.Editor
 {
     public class DvalmiCreatFolder
     {
-        const string gameMainfolder = "Assets/GameMain/";
+        const string gameMainfolder = "Assets/GameMain/Scripts/Base/";
         const string gameEntitiesFolder = gameMainfolder + "Entities";
         const string gameMaterialsFolder = gameMainfolder + "Materials";
         const string gameMeshsFolder = gameMainfolder + "Meshs";

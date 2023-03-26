@@ -5,6 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using Dvalmi.Hotfix;
 using GameFramework;
 using UnityEditor;
 using UnityEngine;
@@ -13,24 +14,6 @@ namespace Dvalmi.Editor.DataTableTools
 {
     public sealed class DataTableGeneratorMenu
     {
-        [MenuItem("Dvalmi/Generator/Generate Configs")]
-        internal static void GenerateConfigs()
-        {
-            foreach (string dataTableName in ProcedurePreload.ConfigName)
-            {
-                DataTableProcessor dataTableProcessor = DataTableGenerator.CreateConfigProcessor(dataTableName);
-                if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
-                {
-                    Debug.LogError(Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
-                    break;
-                }
-
-                DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
-            }
-
-            AssetDatabase.Refresh();
-        }
-        
         [MenuItem("Dvalmi/Generator/Generate DataTables")]
         internal static void GenerateDataTables()
         {

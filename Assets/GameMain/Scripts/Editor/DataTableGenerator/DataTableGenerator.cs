@@ -19,8 +19,8 @@ namespace Dvalmi.Editor.DataTableTools
     {
         private const string ConfigPath = "Assets/GameMain/Configs";
         private const string DataTablePath = "Assets/GameMain/DataTables";
-        private const string CSharpCodePath = "Assets/GameMain/Scripts/DataTable";
-        private const string CSharpCodeTemplateFileName = "Assets/GameMain/Configs/DataTableCodeTemplate.txt";
+        private const string CSharpCodePath = "Assets/GameMain/Scripts/Hotfix/DataTable";
+        private const string CSharpCodeTemplateFileName = "Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt";
         private static readonly Regex EndWithNumberRegex = new Regex(@"\d+$");
         private static readonly Regex NameRegex = new Regex(@"^[A-Z][A-Za-z0-9_]*$");
 
@@ -80,7 +80,7 @@ namespace Dvalmi.Editor.DataTableTools
             string dataTableName = (string)userData;
 
             codeContent.Replace("__DATA_TABLE_CREATE_TIME__", DateTime.UtcNow.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.fff"));
-            codeContent.Replace("__DATA_TABLE_NAME_SPACE__", DvalmiConfig.NameSpace);
+            codeContent.Replace("__DATA_TABLE_NAME_SPACE__", DvalmiConfig.HotfixNameSpace);
             codeContent.Replace("__DATA_TABLE_CLASS_NAME__", "DR" + dataTableName);
             codeContent.Replace("__DATA_TABLE_COMMENT__", dataTableProcessor.GetValue(0, 1) + "。");
             codeContent.Replace("__DATA_TABLE_ID_COMMENT__", "获取" + dataTableProcessor.GetComment(dataTableProcessor.IdColumn) + "。");

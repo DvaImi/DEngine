@@ -173,7 +173,7 @@ namespace Dvalmi.Editor
         {
             //根据是否为热更新层事件来决定一些参数
             string codePath = m_IsHotfixEvent ? HotfixEventCodePath : EventCodePath;
-            string nameSpace = m_IsHotfixEvent ? DvalmiConfig.HotFixNameSpace : DvalmiConfig.NameSpace;
+            string nameSpace = m_IsHotfixEvent ? DvalmiConfig.HotfixNameSpace : DvalmiConfig.NameSpace;
             string baseClass = m_IsHotfixEvent ? "HotfixGameEventArgs" : "GameEventArgs";
 
             if (!Directory.Exists($"{codePath}/"))
