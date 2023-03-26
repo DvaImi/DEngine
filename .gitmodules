@@ -1,0 +1,3 @@
+[submodule "hybridclr_unity"]
+	path = hybridclr_unity
+	url = https://github.com/focus-creative-games/hybridclr_unity.git
