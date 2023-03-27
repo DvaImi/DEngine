@@ -19,7 +19,7 @@ namespace Dvalmi.Editor
     public class HybridCLRBuilderController
     {
         private const string HotfixDllPath = "Assets/GameMain/HybridCLR/Dlls";
-        private const string HotfixDllName = "Dvalmi.Hotfix.dll";
+        private const string HotfixDllName = "Game.Hotfix.dll";
 
         public string[] PlatformNames { get; }
 
