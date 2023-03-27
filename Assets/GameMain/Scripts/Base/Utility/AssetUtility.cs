@@ -13,7 +13,7 @@ namespace Dvalmi
     {
         public static string GetConfigAsset(string assetName, bool fromBytes)
         {
-            return Utility.Text.Format("Assets/GameMain/Configs/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");
+            return Utility.Text.Format("Assets/GameMain/Configs/Runtime/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");
         }
 
         public static string GetDataTableAsset(string assetName, bool fromBytes)

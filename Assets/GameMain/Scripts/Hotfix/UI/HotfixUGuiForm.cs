@@ -13,7 +13,7 @@ using UnityGameFramework.Runtime;
 
 namespace Dvalmi.Hotfix
 {
-    public abstract class UGuiForm : UIFormLogic
+    public abstract class HotfixUGuiForm : UIFormLogic
     {
         public const int DepthFactor = 100;
         private const float FadeTime = 0.3f;

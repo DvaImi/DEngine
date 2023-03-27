@@ -56,12 +56,12 @@ namespace Dvalmi.Hotfix
             return uiComponent.HasUIForm(uiFormId, uiGroupName);
         }
 
-        public static UGuiForm GetUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)
+        public static HotfixUGuiForm GetUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)
         {
             return uiComponent.GetUIForm((int)uiFormId, uiGroupName);
         }
 
-        public static UGuiForm GetUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
+        public static HotfixUGuiForm GetUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
         {
             IDataTable<DRUIForm> dtUIForm = GameEntry.DataTable.GetDataTable<DRUIForm>();
             DRUIForm drUIForm = dtUIForm.GetDataRow(uiFormId);
@@ -80,7 +80,7 @@ namespace Dvalmi.Hotfix
                     return null;
                 }
 
-                return (UGuiForm)uiForm.Logic;
+                return (HotfixUGuiForm)uiForm.Logic;
             }
 
             IUIGroup uiGroup = uiComponent.GetUIGroup(uiGroupName);
@@ -95,10 +95,10 @@ namespace Dvalmi.Hotfix
                 return null;
             }
 
-            return (UGuiForm)uiForm.Logic;
+            return (HotfixUGuiForm)uiForm.Logic;
         }
 
-        public static void CloseUIForm(this UIComponent uiComponent, UGuiForm uiForm)
+        public static void CloseUIForm(this UIComponent uiComponent, HotfixUGuiForm uiForm)
         {
             uiComponent.CloseUIForm(uiForm.UIForm);
         }

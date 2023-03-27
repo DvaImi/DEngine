@@ -15,6 +15,7 @@ namespace Dvalmi.Hotfix
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
+            GameEntry.UI.OpenUIForm(UIFormId.MenuForm);
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

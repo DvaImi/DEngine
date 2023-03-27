@@ -55,6 +55,8 @@ namespace Dvalmi.Hotfix
 #endif
         }
 
+     
+
         private static void StartHotfix()
         {
             // 重置流程组件，初始化热更新流程。
@@ -82,6 +84,10 @@ namespace Dvalmi.Hotfix
             {
                 StartHotfix();
             }
+        }
+        
+        private static void OnLoadAssetFail(string assetname, LoadResourceStatus status, string errormessage, object userdata)
+        {
         }
     }
 }

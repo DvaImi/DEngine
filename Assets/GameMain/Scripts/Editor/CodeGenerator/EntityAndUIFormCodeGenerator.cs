@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using BindData = Dvalmi.ComponentAutoBindTool.BindData;
 
 namespace Dvalmi.Editor
 {
@@ -425,7 +424,7 @@ namespace Dvalmi.Editor
 
             if (m_IsHotfix)
             {
-                initParam = "Dvalmi.HotfixUGuiForm uiFormLogic, ";
+                initParam = "HotfixUGuiForm uiFormLogic, ";
                 baseInitParam = "uiFormLogic, ";
                 accessModifier = "public";
             }
@@ -454,11 +453,11 @@ namespace Dvalmi.Editor
                 sw.WriteLine("");
 
                 //OnInit
-                sw.WriteLine($"\t\t{accessModifier} override void OnInit({initParam}object userdata)");
+                sw.WriteLine($"\t\t{accessModifier} override void OnInit(object userdata)");
                 sw.WriteLine("\t\t{");
                 sw.WriteLine($"\t\t\tbase.OnInit({baseInitParam}userdata);");
                 sw.WriteLine("");
-                sw.WriteLine($"\t\t\tGetBindComponents();");
+                sw.WriteLine($"\t\t\tGetBindComponents(gameObject);");
                 sw.WriteLine("\t\t}");
                 sw.WriteLine("\t}");
                 sw.WriteLine("}");

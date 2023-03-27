@@ -37,7 +37,7 @@ namespace Dvalmi
 
         private void StartHotfix(Assembly hotfixAssembly)
         {
-            var hotfixEntry = hotfixAssembly.GetType("Game.Hotfix.GameHotfixEntry");
+            var hotfixEntry = hotfixAssembly.GetType("Dvalmi.Hotfix.GameHotfixEntry");
             var start = hotfixEntry.GetMethod("Start");
             start?.Invoke(null, null);
         }

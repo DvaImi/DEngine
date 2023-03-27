@@ -125,7 +125,7 @@ namespace Dvalmi.Hotfix
                 (assetName, asset, duration, userData) =>
                 {
                     m_LoadedFlag[Utility.Text.Format("Font.{0}", fontName)] = true;
-                    UGuiForm.SetMainFont((Font)asset);
+                    HotfixUGuiForm.SetMainFont((Font)asset);
                     Log.Info("Load font '{0}' OK.", fontName);
                 },
 

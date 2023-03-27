@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using BindData = Dvalmi.ComponentAutoBindTool.BindData;
-
 namespace Dvalmi.Editor
 {
     [CustomEditor(typeof(ComponentAutoBindTool))]
