@@ -78,8 +78,8 @@ namespace Dvalmi.Editor
         private string m_ClassName;
 
         //事件代码生成后的路径
-        private const string EventCodePath = "Assets/Scripts/GameMain/EventArgs";
-        private const string HotfixEventCodePath = "Assets/Scripts/Hotfix/EventArgs";
+        private const string EventCodePath = "Assets/GameMain/Scripts/EventArgs";
+        private const string HotfixEventCodePath = "Assets/GameMain/Scripts/Hotfix/EventArgs";
         private void OnEnable()
         {
             m_EventArgsDatas.Clear();

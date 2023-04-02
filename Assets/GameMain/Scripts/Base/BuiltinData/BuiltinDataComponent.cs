@@ -13,8 +13,6 @@ namespace Dvalmi
         private TextAsset m_DefaultDictionaryTextAsset = null;
 
         [SerializeField]
-        private NativeDialogForm m_NativeDialogFormTemplate = null;
-        [SerializeField]
         private UpdateResourceForm m_UpdateResourceFormTemplate = null;
 
         private BuildInfo m_BuildInfo = null;
@@ -34,8 +32,6 @@ namespace Dvalmi
                 return m_UpdateResourceFormTemplate;
             }
         }
-        private NativeDialogForm m_NativeDialogForm;
-
         public void InitBuildInfo()
         {
             if (m_BuildInfoTextAsset == null || string.IsNullOrEmpty(m_BuildInfoTextAsset.text))
@@ -65,34 +61,6 @@ namespace Dvalmi
                 Log.Warning("Parse default dictionary failure.");
                 return;
             }
-        }
-        
-        /// <summary>
-        /// （游戏加载前）打开原生对话框。
-        /// </summary>
-        /// <param name="dialogParams"></param>
-        public void OpenDialog(DialogParams dialogParams)
-        {
-            if (m_NativeDialogForm == null)
-            {
-                m_NativeDialogForm = Instantiate(m_NativeDialogFormTemplate);
-            }
-
-            m_NativeDialogForm.OnOpen(dialogParams);
-        }
-
-        /// <summary>
-        /// （游戏加载后）删除原生对话框。
-        /// </summary>
-        public void DestroyDialog()
-        {
-            if (m_NativeDialogForm == null)
-            {
-                return;
-            }
-            
-            Destroy(m_NativeDialogForm);
-            m_NativeDialogForm = null;
         }
     }
 }

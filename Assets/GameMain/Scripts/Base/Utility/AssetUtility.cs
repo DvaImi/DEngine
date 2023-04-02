@@ -6,8 +6,9 @@
 //------------------------------------------------------------
 
 using GameFramework;
+using UnityEngine;
 
-namespace Dvalmi
+namespace Dvalmi.Hotfix
 {
     public static class AssetUtility
     {
@@ -43,7 +44,7 @@ namespace Dvalmi
 
         public static string GetSoundAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/GameMain/Sounds/{0}.wav", assetName);
+            return Utility.Text.Format("Assets/GameMain/Sounds/{0}.mp3", assetName);
         }
 
         public static string GetEntityAsset(string assetName)
@@ -58,7 +59,12 @@ namespace Dvalmi
 
         public static string GetUISoundAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/GameMain/UI/UISounds/{0}.wav", assetName);
+            return Utility.Text.Format("Assets/GameMain/UI/UISounds/{0}.mp3", assetName);
+        }
+
+        public static string GetSpriteAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/GameMain/Sprites/Atlas/{0}.png", assetName);
         }
     }
 }

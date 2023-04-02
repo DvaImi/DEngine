@@ -49,7 +49,7 @@ namespace Dvalmi.Hotfix
             for (int i = 0; i < AOTFlag; i++)
             {
                 string dllName = AOTDllNames[i];
-                string assetName = Utility.Text.Format("Assets/Game/HybridCLR/Dlls/{0}.bytes", dllName);
+                string assetName = Utility.Text.Format("Assets/GameMain/HybridCLR/Dlls/{0}.bytes", dllName);
                 GameEntry.Resource.LoadAsset(assetName, new LoadAssetCallbacks(OnLoadAOTDllSuccess, OnLoadAssetFail));
             }
 #endif

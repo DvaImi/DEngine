@@ -7,6 +7,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using GameFramework;
 
 namespace Dvalmi
@@ -76,6 +78,7 @@ namespace Dvalmi
                     max = array[i];
                 }
             }
+
             return max;
         }
 
@@ -98,8 +101,78 @@ namespace Dvalmi
                     min = array[i];
                 }
             }
+
             return min;
         }
+
+
+        /// <summary>
+        /// 返回随机的
+        /// </summary>
+        /// <param name="array"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T Random<T>(T[] array)
+        {
+            Random rand = new Random();
+            // 生成随机索引值
+            var index = rand.Next(array.Length);
+            return array[index];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="count"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static T[] Randoms<T>(T[] array, int count)
+        {
+            if (count > array.Length)
+            {
+                throw new ArgumentException("选择的数量不能超过数组的长度.");
+            }
+
+            Random rng = new Random();
+            T[] selectedItems = new T[count];
+            int[] indices = new int[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                // 随机生成一个索引
+                int index = rng.Next(i, array.Length);
+
+                // 二分查找下一个未使用的索引
+                int low = 0;
+                int high = i - 1;
+                while (low <= high)
+                {
+                    int mid = (low + high) / 2;
+                    if (indices[mid] < index)
+                    {
+                        low = mid + 1;
+                    }
+                    else
+                    {
+                        high = mid - 1;
+                    }
+                }
+
+                // 将新的索引插入到正确的位置
+                for (int j = i - 1; j >= low; j--)
+                {
+                    indices[j + 1] = indices[j];
+                }
+
+                indices[low] = index;
+                selectedItems[i] = array[index];
+            }
+
+            return selectedItems;
+        }
+
 
         /// <summary>
         /// 查找满足handler条件的一个
@@ -118,6 +191,7 @@ namespace Dvalmi
                     return array[i];
                 }
             }
+
             return temp;
         }
 
@@ -138,6 +212,7 @@ namespace Dvalmi
                     list.Add(array[i]);
                 }
             }
+
             return list.ToArray();
         }
 
@@ -156,9 +231,26 @@ namespace Dvalmi
             {
                 keys[i] = handler(array[i]);
             }
+
             return keys;
+        }
+
+        /// <summary>
+        /// 选取数组中满足条件的执行callback
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="predicate"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void PickAndExecute<T>(IEnumerable<T> array, GameFrameworkFunc<T, bool> predicate, Action<T> callback)
+        {
+            foreach (T item in array)
+            {
+                if (predicate(item))
+                {
+                    callback(item);
+                }
+            }
         }
     }
 }
-
-

@@ -18,7 +18,7 @@ namespace Dvalmi
             Assembly hotfixAssembly = System.AppDomain.CurrentDomain.GetAssemblies().First(assembly => assembly.GetName().Name == "Game.Hotfix");
             StartHotfix(hotfixAssembly);
 #else
-            GameEntry.Resource.LoadAsset("Assets/Game/HybridCLR/Dlls/Game.Hotfix.dll.bytes", new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFail));
+            GameEntry.Resource.LoadAsset("Assets/GameMain/HybridCLR/Dlls/Game.Hotfix.dll.bytes", new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFail));
 #endif
         }
 

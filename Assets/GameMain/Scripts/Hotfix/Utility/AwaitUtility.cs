@@ -4,6 +4,7 @@ using GameFramework;
 using GameFramework.Event;
 using GameFramework.Resource;
 using UnityGameFramework.Runtime;
+// ReSharper disable All
 
 namespace Dvalmi.Hotfix
 {

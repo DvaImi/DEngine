@@ -17,8 +17,7 @@ namespace Dvalmi.Editor
             UIForm
         }
 
-        [SerializeField]
-        private List<GameObject> m_GameObjects = new List<GameObject>();
+        [SerializeField] private List<GameObject> m_GameObjects = new List<GameObject>();
 
         private SerializedObject m_SerializedObject;
         private SerializedProperty m_SerializedProperty;
@@ -98,6 +97,7 @@ namespace Dvalmi.Editor
                     EditorGUILayout.LabelField(m_IsHotfix ? HotfixUIFormCodePath : UIFormCodePath);
                     break;
             }
+
             EditorGUILayout.EndHorizontal();
 
             //绘制各个选项
@@ -136,7 +136,6 @@ namespace Dvalmi.Editor
 
                 AssetDatabase.Refresh();
                 EditorUtility.DisplayDialog("提示", "代码生成完毕", "OK");
-
             }
         }
 
@@ -144,7 +143,7 @@ namespace Dvalmi.Editor
         {
             //根据是否为热更新实体来决定一些参数
             string codepath = m_IsHotfix ? HotfixEntityCodePath : EntityCodePath;
-            string nameSpace = m_IsHotfix ? "Dvalmi.Hotfix" : "Dvalmi";
+            string nameSpace = m_IsHotfix ? DvalmiConfig.HotfixNameSpace: DvalmiConfig.NameSpace;
             string logicBaseClass = m_IsHotfix ? "HotfixEntityLogic" : "EntityLogic";
 
             foreach (GameObject go in m_GameObjects)
@@ -169,15 +168,13 @@ namespace Dvalmi.Editor
                     GenShowEntityCode(codepath, go, nameSpace);
                 }
             }
-
-
         }
 
         private void GenUIFormCode()
         {
             //根据是否为热更新界面来决定一些参数
             string codepath = m_IsHotfix ? HotfixUIFormCodePath : UIFormCodePath;
-            string nameSpace = m_IsHotfix ? "Dvalmi.Hotfix" : "Dvalmi";
+            string nameSpace = m_IsHotfix ? DvalmiConfig.HotfixNameSpace : DvalmiConfig.NameSpace;
             string logicBaseClass = m_IsHotfix ? "HotfixUGuiForm" : "UGuiForm";
 
 
@@ -193,8 +190,6 @@ namespace Dvalmi.Editor
                     GenAutoBindCode(codepath, go, nameSpace);
                 }
             }
-
-
         }
 
         private void GenEntityMainLogicCode(string codePath, GameObject go, string nameSpace, string logicBaseClass)
@@ -225,6 +220,7 @@ namespace Dvalmi.Editor
                 {
                     sw.WriteLine("using GameFramework;");
                 }
+
                 sw.WriteLine("");
 
                 sw.WriteLine("//自动生成于：" + DateTime.Now);
@@ -280,6 +276,7 @@ namespace Dvalmi.Editor
             {
                 dataBaseClass = "HotfixEntityData";
             }
+
             string entityDataName = go.name + "Data";
 
             if (!Directory.Exists($"{codePath}/EntityData/"))
@@ -340,9 +337,9 @@ namespace Dvalmi.Editor
                 Directory.CreateDirectory($"{codePath}/ShowEntityExtension/");
             }
 
-            using (StreamWriter sw = new StreamWriter($"{codePath}/ShowEntityExtension/ShowEntityExtension.Show{go.name}.cs"))
+            using (StreamWriter sw =
+                   new StreamWriter($"{codePath}/ShowEntityExtension/ShowEntityExtension.Show{go.name}.cs"))
             {
-
                 sw.WriteLine("using System.Threading.Tasks;");
                 sw.WriteLine("using UnityGameFramework.Runtime;");
                 sw.WriteLine("");
@@ -359,12 +356,14 @@ namespace Dvalmi.Editor
                 sw.WriteLine("\t{");
 
                 //显示实体的方法
-                sw.WriteLine($"\t\tpublic static void Show{go.name}(this EntityComponent entityComponent,{entityDataName} data)");
+                sw.WriteLine(
+                    $"\t\tpublic static void Show{go.name}(this EntityComponent entityComponent,{entityDataName} data)");
                 sw.WriteLine("\t\t{");
 
                 if (m_IsHotfix)
                 {
-                    sw.WriteLine("\t\t\tDvalmi.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Dvalmi.HotfixEntityData>();");
+                    sw.WriteLine(
+                        "\t\t\tDvalmi.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Dvalmi.HotfixEntityData>();");
                     sw.WriteLine($"\t\t\ttData.Fill(data.Id,data.TypeId,\"{go.name}Logic\",data);");
                     sw.WriteLine("\t\t\ttData.Position = data.Position;");
                     sw.WriteLine("\t\t\ttData.Rotation = data.Rotation;");
@@ -383,12 +382,14 @@ namespace Dvalmi.Editor
                 sw.WriteLine("");
 
                 //显示实体的可等待扩展
-                sw.WriteLine($"\t\tpublic static async Task<Entity> AwaitShow{go.name}(this EntityComponent entityComponent,{entityDataName} data)");
+                sw.WriteLine(
+                    $"\t\tpublic static async Task<Entity> AwaitShow{go.name}(this EntityComponent entityComponent,{entityDataName} data)");
                 sw.WriteLine("\t\t{");
 
                 if (m_IsHotfix)
                 {
-                    sw.WriteLine("\t\t\tDvalmi.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Dvalmi.HotfixEntityData>();");
+                    sw.WriteLine(
+                        "\t\t\tDvalmi.HotfixEntityData tData = GameFramework.ReferencePool.Acquire<Dvalmi.HotfixEntityData>();");
                     sw.WriteLine($"\t\t\ttData.Fill(data.Id,data.TypeId,\"{go.name}Logic\",data);");
                     sw.WriteLine("\t\t\ttData.Position = data.Position;");
                     sw.WriteLine("\t\t\ttData.Rotation = data.Rotation;");
@@ -398,7 +399,8 @@ namespace Dvalmi.Editor
                 }
                 else
                 {
-                    sw.WriteLine($"\t\t\tEntity entity = await entityComponent.AwaitShowEntity(typeof({go.name}Logic), 0, data);");
+                    sw.WriteLine(
+                        $"\t\t\tEntity entity = await entityComponent.AwaitShowEntity(typeof({go.name}Logic), 0, data);");
                 }
 
 
@@ -412,8 +414,6 @@ namespace Dvalmi.Editor
 
                 sw.WriteLine("}");
             }
-
-
         }
 
         private void GenUIFormMainLogicCode(string codePath, GameObject go, string nameSpace, string logicBaseClass)
@@ -484,6 +484,7 @@ namespace Dvalmi.Editor
                 {
                     sw.WriteLine("using UnityEngine.UI;");
                 }
+
                 sw.WriteLine("");
 
                 sw.WriteLine("//自动生成于：" + DateTime.Now);
@@ -503,6 +504,7 @@ namespace Dvalmi.Editor
                 {
                     sw.WriteLine($"\t\tprivate {data.BindCom.GetType().Name} m_{data.Name};");
                 }
+
                 sw.WriteLine("");
 
                 sw.WriteLine("\t\tprivate void GetBindComponents(GameObject go)");
@@ -518,9 +520,9 @@ namespace Dvalmi.Editor
                 {
                     ComponentAutoBindTool.BindData data = bindTool.BindDatas[i];
                     string filedName = $"m_{data.Name}";
-                    sw.WriteLine($"\t\t\t{filedName} = autoBindTool.GetBindComponent<{data.BindCom.GetType().Name}>({i});");
+                    sw.WriteLine(
+                        $"\t\t\t{filedName} = autoBindTool.GetBindComponent<{data.BindCom.GetType().Name}>({i});");
                 }
-
 
 
                 sw.WriteLine("\t\t}");
@@ -533,6 +535,4 @@ namespace Dvalmi.Editor
             }
         }
     }
-
-
 }

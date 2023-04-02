@@ -37,16 +37,16 @@ namespace Dvalmi
 
             if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
             {
-                GameEntry.BuiltinData.OpenDialog(new DialogParams
-                {
-                    Mode = 2,
-                    Title = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.Title"),
-                    Message = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.Message"),
-                    ConfirmText = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.UpdateButton"),
-                    OnClickConfirm = StartUpdateResources,
-                    CancelText = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.QuitButton"),
-                    OnClickCancel = delegate (object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
-                });
+                // GameEntry.BuiltinData.OpenDialog(new DialogParams
+                // {
+                //     Mode = 2,
+                //     Title = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.Title"),
+                //     Message = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.Message"),
+                //     ConfirmText = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.UpdateButton"),
+                //     OnClickConfirm = StartUpdateResources,
+                //     CancelText = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.QuitButton"),
+                //     OnClickCancel = delegate (object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                // });
 
                 return;
             }

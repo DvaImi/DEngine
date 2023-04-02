@@ -83,7 +83,7 @@ namespace Dvalmi.Editor
             {
                 ForceUpdateGame = false,
                 UpdatePrefixUri =
-                    $"http://192.168.1.102/{gameVersion}_{m_InternalResourceVersion.ToString()}/{platformPath}",
+                    $"http://192.168.1.102/DvalmiBlocks/{gameVersion}_{m_InternalResourceVersion.ToString()}/{platformPath}",
                 LatestGameVersion = m_GameVersion,
                 InternalGameVersion = 1,
                 InternalResourceVersion = m_InternalResourceVersion,

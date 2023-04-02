@@ -7,7 +7,7 @@
 
 using System;
 
-namespace Dvalmi
+namespace Dvalmi.Hotfix
 {
     public static class WebUtility
     {

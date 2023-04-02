@@ -93,16 +93,6 @@ namespace Dvalmi.Hotfix
             transform.sizeDelta = Vector2.zero;
 
             gameObject.GetOrAddComponent<GraphicRaycaster>();
-
-            Text[] texts = GetComponentsInChildren<Text>(true);
-            for (int i = 0; i < texts.Length; i++)
-            {
-                texts[i].font = s_MainFont;
-                if (!string.IsNullOrEmpty(texts[i].text))
-                {
-                    texts[i].text = GameEntry.Localization.GetString(texts[i].text);
-                }
-            }
         }
 
 #if UNITY_2017_3_OR_NEWER
