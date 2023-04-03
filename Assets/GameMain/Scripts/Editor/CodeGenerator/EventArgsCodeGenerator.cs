@@ -54,7 +54,7 @@ namespace Dvalmi.Editor
             Other,
         }
 
-        [MenuItem("Dvalmi/Generator/Code Generator/EventArgs")]
+        [MenuItem("Dvalmi/Generator/EventArgs Code")]
         public static void OpenAutoGenWindow()
         {
             EventArgsCodeGenerator window = GetWindow<EventArgsCodeGenerator>(true, "事件参数类代码生成器");

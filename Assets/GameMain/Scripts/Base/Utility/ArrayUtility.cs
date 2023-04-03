@@ -114,21 +114,37 @@ namespace Dvalmi
         /// <returns></returns>
         public static T Random<T>(T[] array)
         {
-            Random rand = new Random();
+            Random rand = new();
             // 生成随机索引值
             var index = rand.Next(array.Length);
             return array[index];
         }
 
+
         /// <summary>
-        /// 
+        /// 返回随机的
         /// </summary>
         /// <param name="array"></param>
-        /// <param name="count"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        public static T Random<T>(List<T> array)
+        {
+            Random rand = new();
+            // 生成随机索引值
+            var index = rand.Next(array.Count);
+            return array[index];
+        }
+
+        /// <summary>
+        /// 按指定长度获取数组中得一些元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="count"></param>
+        /// <param name="probability">表示选择每个项的概率。如果 probability 等于 1，那么就相当于原来的方法，每个项都会被选择；如果 probability 等于 0，那么就不会选择任何项。如果 probability 大于 0 且小于 1，那么就会按照该概率来选择每个项。</param>
+        /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static T[] Randoms<T>(T[] array, int count)
+        public static T[] Randoms<T>(T[] array, int count, double probability = 1)
         {
             if (count > array.Length)
             {
@@ -138,40 +154,44 @@ namespace Dvalmi
             Random rng = new Random();
             T[] selectedItems = new T[count];
             int[] indices = new int[count];
+            int selectedCount = 0;
 
-            for (int i = 0; i < count; i++)
+            while (selectedCount < count)
             {
-                // 随机生成一个索引
-                int index = rng.Next(i, array.Length);
+                int index = rng.Next(0, array.Length);
+                double rand = rng.NextDouble();
 
-                // 二分查找下一个未使用的索引
-                int low = 0;
-                int high = i - 1;
-                while (low <= high)
+                if (rand < probability)
                 {
-                    int mid = (low + high) / 2;
-                    if (indices[mid] < index)
-                    {
-                        low = mid + 1;
-                    }
-                    else
-                    {
-                        high = mid - 1;
-                    }
-                }
+                    int low = 0;
+                    int high = selectedCount - 1;
 
-                // 将新的索引插入到正确的位置
-                for (int j = i - 1; j >= low; j--)
-                {
-                    indices[j + 1] = indices[j];
-                }
+                    while (low <= high)
+                    {
+                        int mid = (low + high) / 2;
+                        if (indices[mid] < index)
+                        {
+                            low = mid + 1;
+                        }
+                        else
+                        {
+                            high = mid - 1;
+                        }
+                    }
 
-                indices[low] = index;
-                selectedItems[i] = array[index];
+                    for (int j = selectedCount - 1; j >= low; j--)
+                    {
+                        indices[j + 1] = indices[j];
+                    }
+
+                    indices[low] = index;
+                    selectedItems[selectedCount++] = array[index];
+                }
             }
 
             return selectedItems;
         }
+
 
 
         /// <summary>
