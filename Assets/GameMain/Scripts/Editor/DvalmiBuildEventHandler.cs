@@ -92,7 +92,7 @@ namespace Dvalmi.Editor
                 VersionListCompressedLength = versionListCompressedLength,
                 VersionListCompressedHashCode = versionListCompressedHashCode,
             };
-            string versionJson = LitJson.JsonMapper.ToJson(versionInfo);
+            string versionJson = Newtonsoft.Json.JsonConvert.SerializeObject(versionInfo);
             IOUtility.SaveFileSafe(m_OutputDirectory, platformPath + "Version.txt", versionJson);
 
             Debug.LogFormat(

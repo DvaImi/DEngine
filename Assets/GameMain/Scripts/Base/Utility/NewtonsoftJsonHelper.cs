@@ -6,15 +6,14 @@
 //------------------------------------------------------------
 
 using GameFramework;
-using LitJson;
 using System;
-
+using Newtonsoft.Json;
 namespace Dvalmi
 {
     /// <summary>
     /// LitJSON 函数集辅助器。
     /// </summary>
-    internal class LitJsonHelper : Utility.Json.IJsonHelper
+    internal class NewtonsoftJsonHelper : Utility.Json.IJsonHelper
     {
         /// <summary>
         /// 将对象序列化为 JSON 字符串。
@@ -23,7 +22,7 @@ namespace Dvalmi
         /// <returns>序列化后的 JSON 字符串。</returns>
         public string ToJson(object obj)
         {
-            return JsonMapper.ToJson(obj);
+            return JsonConvert.SerializeObject(obj);
         }
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace Dvalmi
         /// <returns>反序列化后的对象。</returns>
         public T ToObject<T>(string json)
         {
-            return JsonMapper.ToObject<T>(json);
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         /// <summary>
@@ -45,8 +44,7 @@ namespace Dvalmi
         /// <returns>反序列化后的对象。</returns>
         public object ToObject(Type objectType, string json)
         {
-            // TODO: 可反射为 ToObject<T>(string json)
-            throw new NotSupportedException("ToObject(Type objectType, string json)");
+            return JsonConvert.DeserializeObject(json, objectType);
         }
     }
 }
