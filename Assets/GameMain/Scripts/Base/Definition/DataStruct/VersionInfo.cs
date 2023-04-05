@@ -9,63 +9,81 @@ namespace Dvalmi
 {
     public class VersionInfo
     {
-        // 是否需要强制更新游戏应用
+        /// <summary>
+        /// 是否需要强制更新游戏应用
+        /// </summary>
         public bool ForceUpdateGame
         {
             get;
             set;
         }
 
-        // 最新的游戏版本号
+        /// <summary>
+        /// 最新的游戏版本号
+        /// </summary>
         public string LatestGameVersion
         {
             get;
             set;
         }
 
-        // 最新的游戏内部版本号
+        /// <summary>
+        /// 最新的游戏内部版本号
+        /// </summary>
         public int InternalGameVersion
         {
             get;
             set;
         }
 
-        // 最新的资源内部版本号
+        /// <summary>
+        /// 最新的资源内部版本号
+        /// </summary>
         public int InternalResourceVersion
         {
             get;
             set;
         }
 
-        // 资源更新下载地址
+        /// <summary>
+        /// 资源更新下载地址
+        /// </summary>
         public string UpdatePrefixUri
         {
             get;
             set;
         }
 
-        // 资源版本列表长度
+        /// <summary>
+        /// 资源版本列表长度
+        /// </summary>
         public int VersionListLength
         {
             get;
             set;
         }
 
-        // 资源版本列表哈希值
+        /// <summary>
+        /// 资源版本列表哈希值
+        /// </summary>
         public int VersionListHashCode
         {
             get;
             set;
         }
 
-        // 资源版本列表压缩后长度
+        /// <summary>
+        /// 资源版本列表压缩后长度
+        /// </summary>
         public int VersionListCompressedLength
         {
             get;
             set;
         }
 
-        // 资源版本列表压缩后哈希值
+        /// <summary>
+        /// 资源版本列表压缩后哈希值
+        /// </summary>
         public int VersionListCompressedHashCode
         {
             get;
