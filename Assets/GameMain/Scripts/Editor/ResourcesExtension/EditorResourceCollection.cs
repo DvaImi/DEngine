@@ -35,7 +35,7 @@ namespace Dvalmi.Editor.ResourceTools
         }
 
         private bool m_Packaged;
-        public bool Packaged
+        public bool Packed
         {
             get
             {
@@ -76,7 +76,7 @@ namespace Dvalmi.Editor.ResourceTools
                     LoadTypeIndex = selectLoadTypeIndex;
                 }
                 EditorGUILayout.LabelField("Is Packaged", EditorStyles.boldLabel);
-                Packaged = EditorGUILayout.Toggle(Packaged);
+                Packed = EditorGUILayout.Toggle(Packed);
                 EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUILayout.LabelField("修改加载类型");
@@ -113,6 +113,12 @@ namespace Dvalmi.Editor.ResourceTools
                     {
                         xmlNode.Attributes["LoadType"].Value = LoadTypeIndex.ToString();
                         Debug.Log(Utility.Text.Format("Modify resource '{0}' LoadType =>{1}.", xmlNode.Attributes["Name"].Value, LoadTypeIndex.ToString()));
+                    }
+
+                    if (xmlNode.Attributes.GetNamedItem("Packed") != null)
+                    {
+                        xmlNode.Attributes["Packed"].Value = Packed.ToString();
+                        Debug.Log(Utility.Text.Format("Modify resource '{0}' Packed =>{1}.", xmlNode.Attributes["Name"].Value, Packed.ToString()));
                     }
                 }
 
