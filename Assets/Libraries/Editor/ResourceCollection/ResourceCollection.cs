@@ -5,13 +5,13 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
+using GameFramework;
 using UnityEditor;
 using UnityEngine;
 
@@ -421,6 +421,54 @@ namespace UnityGameFramework.Editor.ResourceTools
             return true;
         }
 
+        public bool SetResourceGroups(string name, string variant, string[] resourceGroups)
+        {
+            if (!IsValidResourceName(name, variant))
+            {
+                return false;
+            }
+
+            Resource resource = GetResource(name, variant);
+            if (resource == null)
+            {
+                return false;
+            }
+            if (resourceGroups == null || resourceGroups.Length == 0)
+            {
+                return false;
+            }
+
+            string[] willRemove = resource.GetResourceGroups().Except(resourceGroups).ToArray();
+
+            foreach (var resourceGroup in willRemove)
+            {
+                resource.RemoveResourceGroup(resourceGroup);
+            }
+
+            foreach (string resourceGroup in resourceGroups)
+            {
+                resource.AddResourceGroup(resourceGroup);
+            }
+            return true;
+        }
+
+        public bool SetResourceFileSystem(string name, string variant, string fileSystem)
+        {
+            if (!IsValidResourceName(name, variant))
+            {
+                return false;
+            }
+
+            Resource resource = GetResource(name, variant);
+            if (resource == null)
+            {
+                return false;
+            }
+
+            resource.FileSystem = string.IsNullOrWhiteSpace(fileSystem) ? null : fileSystem;
+            return true;
+        }
+
         public Asset[] GetAssets()
         {
             return m_Assets.Values.ToArray();
@@ -631,5 +679,6 @@ namespace UnityGameFramework.Editor.ResourceTools
 
             return true;
         }
+
     }
 }

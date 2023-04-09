@@ -6,6 +6,7 @@
 //------------------------------------------------------------
 
 using GameFramework;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -39,6 +40,8 @@ namespace UnityGameFramework.Editor.ResourceTools
         private Vector2 m_SourceAssetsViewScroll = Vector2.zero;
         private string m_InputResourceName = null;
         private string m_InputResourceVariant = null;
+        private string m_InputResourceGroups = null;
+        private string m_InputResourceFileSystem = null;
         private bool m_HideAssignedSourceAssets = false;
         private int m_CurrentResourceContentCount = 0;
         private int m_CurrentResourceRowOnDraw = 0;
@@ -81,6 +84,8 @@ namespace UnityGameFramework.Editor.ResourceTools
             m_SourceAssetsViewScroll = Vector2.zero;
             m_InputResourceName = null;
             m_InputResourceVariant = null;
+            m_InputResourceGroups = null;
+            m_InputResourceFileSystem = null;
             m_HideAssignedSourceAssets = false;
             m_CurrentResourceContentCount = 0;
             m_CurrentResourceRowOnDraw = 0;
@@ -242,7 +247,10 @@ namespace UnityGameFramework.Editor.ResourceTools
                 GUI.DrawTexture(new Rect(32f + 14f * resourceItem.Depth, 20f * m_CurrentResourceRowOnDraw + 1f, 16f, 16f), resourceItem.Icon);
                 EditorGUILayout.LabelField(string.Empty, GUILayout.Width(26f + 14f * resourceItem.Depth), GUILayout.Height(18f));
 #endif
-                EditorGUILayout.LabelField(title);
+                string[] groups = resourceItem.Resource.GetResourceGroups();
+                string rsourcesGroups = groups.Length <= 0 ? null : " ResourceGroups [" + string.Join(",", groups) + "]";
+                string fileSystem = resourceItem.Resource.FileSystem == null ? null : " FileSystem =>" + resourceItem.Resource.FileSystem;
+                EditorGUILayout.LabelField(title + rsourcesGroups + fileSystem);
             }
             EditorGUILayout.EndHorizontal();
             m_CurrentResourceRowOnDraw++;
@@ -267,6 +275,12 @@ namespace UnityGameFramework.Editor.ResourceTools
                 case MenuState.Remove:
                     DrawResourcesMenu_Remove();
                     break;
+                case MenuState.Groups:
+                    DrawResourcesMenu_Groups();
+                    break;
+                case MenuState.FileSystem:
+                    DrawResourceMenu_FileSystem();
+                    break;
             }
         }
 
@@ -277,6 +291,8 @@ namespace UnityGameFramework.Editor.ResourceTools
                 m_MenuState = MenuState.Add;
                 m_InputResourceName = null;
                 m_InputResourceVariant = null;
+                m_InputResourceGroups = null;
+                m_InputResourceFileSystem = null;
                 GUI.FocusControl(null);
             }
             EditorGUI.BeginDisabledGroup(m_SelectedResource == null);
@@ -308,6 +324,17 @@ namespace UnityGameFramework.Editor.ResourceTools
                 if (m_SelectedResource != null && packed != m_SelectedResource.Packed)
                 {
                     SetResourcePacked(packed);
+                }
+
+                if (GUILayout.Button("Groups", GUILayout.Width(65f)))
+                {
+                    m_MenuState = MenuState.Groups;
+                    m_InputResourceGroups = m_SelectedResource != null ? string.Join(",", m_SelectedResource.GetResourceGroups()) : null;
+                }
+                if (GUILayout.Button("FileSystem", GUILayout.Width(85f)))
+                {
+                    m_MenuState = MenuState.FileSystem;
+                    m_InputResourceFileSystem = m_SelectedResource != null ? m_SelectedResource.FileSystem : null;
                 }
             }
             EditorGUI.EndDisabledGroup();
@@ -400,6 +427,54 @@ namespace UnityGameFramework.Editor.ResourceTools
             }
 
             if (GUILayout.Button("No", GUILayout.Width(50f)))
+            {
+                m_MenuState = MenuState.Normal;
+            }
+        }
+
+        private void DrawResourcesMenu_Groups()
+        {
+            if (m_SelectedResource == null)
+            {
+                m_MenuState = MenuState.Normal;
+                return;
+            }
+
+            m_InputResourceGroups = EditorGUILayout.TextField(m_InputResourceGroups);
+
+            if (GUILayout.Button("OK", GUILayout.Width(50f)))
+            {
+                EditorUtility.DisplayProgressBar(Utility.Text.Format("Set Resource Groups:[{0}]", m_InputResourceGroups), "Processing...", 0f);
+                SetResourceGroups(m_SelectedResource, m_InputResourceGroups);
+                EditorUtility.ClearProgressBar();
+                m_MenuState = MenuState.Normal;
+            }
+
+            if (GUILayout.Button("Back", GUILayout.Width(50f)))
+            {
+                m_MenuState = MenuState.Normal;
+            }
+        }
+
+        private void DrawResourceMenu_FileSystem()
+        {
+            if (m_SelectedResource == null)
+            {
+                m_MenuState = MenuState.Normal;
+                return;
+            }
+
+            m_InputResourceFileSystem = EditorGUILayout.TextField(m_InputResourceFileSystem);
+
+            if (GUILayout.Button("OK", GUILayout.Width(50f)))
+            {
+                EditorUtility.DisplayProgressBar(Utility.Text.Format("Set Resource FileSystem:[{0}]", m_InputResourceFileSystem), "Processing...", 0f);
+                SetResourceFileSystem(m_SelectedResource, m_InputResourceFileSystem);
+                EditorUtility.ClearProgressBar();
+                m_MenuState = MenuState.Normal;
+            }
+
+            if (GUILayout.Button("Back", GUILayout.Width(50f)))
             {
                 m_MenuState = MenuState.Normal;
             }
@@ -762,6 +837,46 @@ namespace UnityGameFramework.Editor.ResourceTools
             else
             {
                 Debug.LogWarning(Utility.Text.Format("{1} resource '{0}' failure.", fullName, packed ? "Pack" : "Unpack"));
+            }
+        }
+
+        private void SetResourceGroups(Resource resource, string resourceGroups)
+        {
+            if (resource == null)
+            {
+                Debug.LogWarning("Resource is invalid.");
+                return;
+            }
+
+            if (m_Controller.SetResourceGroups(resource.Name, resource.Variant, resourceGroups))
+            {
+                RefreshResourceTree();
+                Debug.Log(Utility.Text.Format("SetResource '{0}' Groups '{1}' success.", resource.Name, resourceGroups));
+                m_MenuState = MenuState.Normal;
+            }
+            else
+            {
+                Debug.LogWarning(Utility.Text.Format("SetResource '{0}' Groups '{1}' failure.", resource.Name, resourceGroups));
+            }
+        }
+
+        private void SetResourceFileSystem(Resource resource, string fileSystem)
+        {
+            if (resource == null)
+            {
+                Debug.LogWarning("Resource is invalid.");
+                return;
+            }
+
+            if (m_Controller.SetResourceFileSystem(resource.Name, resource.Variant, fileSystem))
+            {
+                RefreshResourceTree();
+                Debug.Log(Utility.Text.Format("SetResource '{0}' fileSystem '{1}' success.", resource.Name, fileSystem));
+                m_MenuState = MenuState.Normal;
+            }
+            else
+            {
+                Debug.LogWarning(Utility.Text.Format("SetResource '{0}' fileSystem '{1}' failure.", resource.Name, fileSystem));
             }
         }
 

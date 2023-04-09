@@ -17,6 +17,8 @@ namespace UnityGameFramework.Editor.ResourceTools
             Add,
             Rename,
             Remove,
+            Groups,
+            FileSystem
         }
     }
 }

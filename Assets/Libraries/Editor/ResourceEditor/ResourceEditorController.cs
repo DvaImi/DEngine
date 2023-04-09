@@ -427,6 +427,16 @@ namespace UnityGameFramework.Editor.ResourceTools
             return m_ResourceCollection.SetResourcePacked(name, variant, packed);
         }
 
+        public bool SetResourceGroups(string name, string variant, string resourceGroups)
+        {
+            string[] groups = resourceGroups.Split(",");
+            return m_ResourceCollection.SetResourceGroups(name, variant, groups);
+        }
+
+        public bool SetResourceFileSystem(string name, string variant, string fileSystem)
+        {
+            return m_ResourceCollection.SetResourceFileSystem(name, variant, fileSystem);
+        }
         public int RemoveUnusedResources()
         {
             List<Resource> resources = new List<Resource>(m_ResourceCollection.GetResources());
@@ -675,5 +685,6 @@ namespace UnityGameFramework.Editor.ResourceTools
 
             return 0;
         }
+           
     }
 }
