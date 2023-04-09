@@ -429,7 +429,7 @@ namespace UnityGameFramework.Editor.ResourceTools
 
         public bool SetResourceGroups(string name, string variant, string resourceGroups)
         {
-            string[] groups = resourceGroups.Split(",");
+            string[] groups = resourceGroups?.Split(",");
             return m_ResourceCollection.SetResourceGroups(name, variant, groups);
         }
 

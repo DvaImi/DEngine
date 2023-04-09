@@ -2,15 +2,14 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Configs/DefaultConfig" LoadType="1" Packed="True" />
-      <Resource Name="Configs/ResourceCollection" LoadType="1" Packed="True" />
-      <Resource Name="Configs/ResourceEditor" LoadType="1" Packed="True" />
-      <Resource Name="DataTables/Entity" LoadType="1" Packed="True" />
-      <Resource Name="DataTables/Music" LoadType="1" Packed="True" />
-      <Resource Name="DataTables/Scene" LoadType="1" Packed="True" />
-      <Resource Name="DataTables/Sound" LoadType="1" Packed="True" />
-      <Resource Name="DataTables/UIForm" LoadType="1" Packed="True" />
-      <Resource Name="DataTables/UISound" LoadType="1" Packed="True" />
+      <Resource Name="Configs/ResourceCollection" LoadType="0" Packed="False" />
+      <Resource Name="Configs/Runtime/DefaultConfig" LoadType="0" Packed="False" />
+      <Resource Name="DataTables/Entity" LoadType="0" Packed="True" />
+      <Resource Name="DataTables/Music" LoadType="0" Packed="True" />
+      <Resource Name="DataTables/Scene" LoadType="0" Packed="True" />
+      <Resource Name="DataTables/Sound" LoadType="0" Packed="True" />
+      <Resource Name="DataTables/UIForm" LoadType="0" Packed="True" />
+      <Resource Name="DataTables/UISound" LoadType="0" Packed="True" />
       <Resource Name="Fonts/MainFont" LoadType="1" Packed="True" />
       <Resource Name="Localization/ChineseSimplified/Dictionaries/Default" LoadType="1" Packed="True" />
       <Resource Name="Localization/ChineseTraditional/Dictionaries/Default" LoadType="1" Packed="True" />
@@ -31,9 +30,8 @@
       <Asset Guid="9258441313634854fabc7228e3e80365" ResourceName="DataTables/UIForm" />
       <Asset Guid="9abe02490c4a4d24ba066c3efb1cb3a6" ResourceName="DataTables/UISound" />
       <Asset Guid="9be2e1e45f4edd74c8764538ad306b78" ResourceName="Localization/ChineseSimplified/Dictionaries/Default" />
-      <Asset Guid="ae66200d7e722c8488239c4920ab7a95" ResourceName="Configs/ResourceEditor" />
       <Asset Guid="b2fa128ab45b9c64f84d26545e78d189" ResourceName="DataTables/UIForm" />
-      <Asset Guid="b7e3b537688858643af3e5c50f517a9e" ResourceName="Configs/DefaultConfig" />
+      <Asset Guid="b7e3b537688858643af3e5c50f517a9e" ResourceName="Configs/Runtime/DefaultConfig" />
       <Asset Guid="be6d43792a4538442b6fa1227f2760b9" ResourceName="DataTables/Sound" />
       <Asset Guid="c0d0a1d08e40c164da60965aed96be3a" ResourceName="DataTables/Entity" />
       <Asset Guid="d026b922c1a2d9845b9a6b6cb4696b81" ResourceName="DataTables/Entity" />
