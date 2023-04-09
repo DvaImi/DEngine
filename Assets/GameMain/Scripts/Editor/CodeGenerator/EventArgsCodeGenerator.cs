@@ -77,9 +77,6 @@ namespace Dvalmi.Editor
         /// </summary>
         private string m_ClassName;
 
-        //事件代码生成后的路径
-        private const string EventCodePath = "Assets/GameMain/Scripts/EventArgs";
-        private const string HotfixEventCodePath = "Assets/GameMain/Scripts/Hotfix/EventArgs";
         private void OnEnable()
         {
             m_EventArgsDatas.Clear();
@@ -100,7 +97,7 @@ namespace Dvalmi.Editor
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("自动生成的代码路径：", GUILayout.Width(140f));
-            EditorGUILayout.LabelField(m_IsHotfixEvent ? HotfixEventCodePath : EventCodePath);
+            EditorGUILayout.LabelField(m_IsHotfixEvent ? DvalmiConfig.HotfixEventCodePath : DvalmiConfig.EventCodePath);
             EditorGUILayout.EndHorizontal();
 
             //绘制事件参数相关按钮
@@ -172,7 +169,7 @@ namespace Dvalmi.Editor
         private void GenEventCode()
         {
             //根据是否为热更新层事件来决定一些参数
-            string codePath = m_IsHotfixEvent ? HotfixEventCodePath : EventCodePath;
+            string codePath = m_IsHotfixEvent ? DvalmiConfig.HotfixEventCodePath : DvalmiConfig.EventCodePath;
             string nameSpace = m_IsHotfixEvent ? DvalmiConfig.HotfixNameSpace : DvalmiConfig.NameSpace;
             string baseClass = m_IsHotfixEvent ? "HotfixGameEventArgs" : "GameEventArgs";
 

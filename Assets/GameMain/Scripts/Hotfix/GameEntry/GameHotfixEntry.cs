@@ -49,16 +49,17 @@ namespace Dvalmi.Hotfix
             for (int i = 0; i < AOTFlag; i++)
             {
                 string dllName = AOTDllNames[i];
-                string assetName = Utility.Text.Format("Assets/GameMain/HybridCLR/Dlls/{0}.bytes", dllName);
+                string assetName = Utility.Text.Format(DvalmiConfig.HotfixDllAssetName, dllName);
                 GameEntry.Resource.LoadAsset(assetName, new LoadAssetCallbacks(OnLoadAOTDllSuccess, OnLoadAssetFail));
             }
 #endif
         }
 
-     
+
 
         private static void StartHotfix()
         {
+            GameEntry.BuiltinData.DestroyDialog();
             // 重置流程组件，初始化热更新流程。
             GameEntry.Fsm.DestroyFsm<IProcedureManager>();
             var procedureManager = GameFrameworkEntry.GetModule<IProcedureManager>();
@@ -75,7 +76,7 @@ namespace Dvalmi.Hotfix
 
         private static void OnLoadAOTDllSuccess(string assetName, object asset, float duration, object userdata)
         {
-            TextAsset dll = (TextAsset) asset;
+            TextAsset dll = (TextAsset)asset;
             byte[] dllBytes = dll.bytes;
             // 加载assembly对应的dll，会自动为它hook。一旦aot泛型函数的native函数不存在，用解释器版本代码
             var err = RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
@@ -85,7 +86,7 @@ namespace Dvalmi.Hotfix
                 StartHotfix();
             }
         }
-        
+
         private static void OnLoadAssetFail(string assetname, LoadResourceStatus status, string errormessage, object userdata)
         {
         }

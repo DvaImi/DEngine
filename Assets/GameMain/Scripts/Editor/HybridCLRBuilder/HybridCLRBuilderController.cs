@@ -18,9 +18,6 @@ namespace Dvalmi.Editor
 {
     public class HybridCLRBuilderController
     {
-        private const string HotfixDllPath = "Assets/GameMain/HybridCLR/Dlls";
-        private const string HotfixDllName = "Game.Hotfix.dll";
-
         public string[] PlatformNames { get; }
 
         public HybridCLRBuilderController()
@@ -35,7 +32,7 @@ namespace Dvalmi.Editor
         /// <returns>BuildTarget。</returns>
         public BuildTarget GetBuildTarget(int platformIndex)
         {
-            Platform platform = (Platform) Enum.Parse(typeof(Platform), PlatformNames[platformIndex]);
+            Platform platform = (Platform)Enum.Parse(typeof(Platform), PlatformNames[platformIndex]);
             switch (platform)
             {
                 case Platform.Windows:
@@ -76,12 +73,11 @@ namespace Dvalmi.Editor
         /// <param name="buildTarget"></param>
         public void CopyDllAssets(BuildTarget buildTarget)
         {
-            IOUtility.CreateDirectoryIfNotExists(HotfixDllPath);
-            string importSuffix = ".bytes";
+            IOUtility.CreateDirectoryIfNotExists(DvalmiConfig.HotfixDllPath);
 
             // Copy Hotfix Dll
-            string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), HotfixDllName);
-            string desFileName = Path.Combine(HotfixDllPath, HotfixDllName + importSuffix);
+            string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), DvalmiConfig.HotfixDllNameMain);
+            string desFileName = Path.Combine(DvalmiConfig.HotfixDllPath, DvalmiConfig.HotfixDllNameMain + DvalmiConfig.HotfixDllSuffix);
             File.Copy(oriFileName, desFileName, true);
 
             // Copy AOT Dll
@@ -94,7 +90,7 @@ namespace Dvalmi.Editor
                     Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOT dll.");
                     continue;
                 }
-                desFileName = Path.Combine(HotfixDllPath, dllName + importSuffix);
+                desFileName = Path.Combine(DvalmiConfig.HotfixDllPath, dllName + DvalmiConfig.HotfixDllSuffix);
                 File.Copy(oriFileName, desFileName, true);
             }
 

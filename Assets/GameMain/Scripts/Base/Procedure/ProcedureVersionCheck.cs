@@ -26,7 +26,7 @@ namespace Dvalmi
             GameEntry.Event.Subscribe(WebRequestFailureEventArgs.EventId, OnWebRequestFailure);
 
             // 向服务器请求版本信息
-            GameEntry.WebRequest.AddWebRequest(Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GetPlatformPath()), this);
+            GameEntry.WebRequest.AddWebRequest(Utility.Text.Format(DvalmiConfig.CheckVersionUrl, GetPlatformPath()), this);
         }
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)
@@ -64,13 +64,13 @@ namespace Dvalmi
         {
             string url = null;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            url = GameEntry.BuiltinData.BuildInfo.WindowsAppUrl;
+            url = DvalmiConfig.WindowsAppUrl;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            url = GameEntry.BuiltinData.BuildInfo.MacOSAppUrl;
+            url = DvalmiConfig.MacOSAppUrl;
 #elif UNITY_IOS
-            url = GameEntry.BuiltinData.BuildInfo.IOSAppUrl;
+            url = DvalmiConfig.IOSAppUrl;
 #elif UNITY_ANDROID
-            url = GameEntry.BuiltinData.BuildInfo.AndroidAppUrl;
+            url = DvalmiConfig.AndroidAppUrl;
 #endif
             if (!string.IsNullOrEmpty(url))
             {
@@ -80,7 +80,7 @@ namespace Dvalmi
 
         private void OnWebRequestSuccess(object sender, GameEventArgs e)
         {
-            WebRequestSuccessEventArgs ne = (WebRequestSuccessEventArgs) e;
+            WebRequestSuccessEventArgs ne = (WebRequestSuccessEventArgs)e;
             if (ne.UserData != this)
             {
                 return;
@@ -100,17 +100,17 @@ namespace Dvalmi
 
             if (m_VersionInfo.ForceUpdateGame)
             {
-                // 需要强制更新游戏应用
-                // GameEntry.BuiltinData.OpenDialog(new DialogParams
-                // {
-                //     Mode = 2,
-                //     Title = GameEntry.Localization.GetString("ForceUpdate.Title"),
-                //     Message = GameEntry.Localization.GetString("ForceUpdate.Message"),
-                //     ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
-                //     OnClickConfirm = GotoUpdateApp,
-                //     CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
-                //     OnClickCancel = delegate(object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
-                // });
+                //需要强制更新游戏应用
+                GameEntry.BuiltinData.OpenDialog(new DialogParams
+                {
+                    Mode = 2,
+                    Title = GameEntry.Localization.GetString("ForceUpdate.Title"),
+                    Message = GameEntry.Localization.GetString("ForceUpdate.Message"),
+                    ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
+                    OnClickConfirm = GotoUpdateApp,
+                    CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
+                    OnClickCancel = delegate (object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                });
 
                 return;
             }
@@ -124,7 +124,7 @@ namespace Dvalmi
 
         private void OnWebRequestFailure(object sender, GameEventArgs e)
         {
-            WebRequestFailureEventArgs ne = (WebRequestFailureEventArgs) e;
+            WebRequestFailureEventArgs ne = (WebRequestFailureEventArgs)e;
             if (ne.UserData != this)
             {
                 return;

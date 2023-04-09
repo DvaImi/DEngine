@@ -82,8 +82,7 @@ namespace Dvalmi.Editor
             VersionInfo versionInfo = new VersionInfo
             {
                 ForceUpdateGame = false,
-                UpdatePrefixUri =
-                    $"http://192.168.1.102/DvalmiBlocks/{gameVersion}_{m_InternalResourceVersion}/{platformPath}",
+                UpdatePrefixUri = Utility.Text.Format(DvalmiConfig.UpdatePrefixUri, gameVersion, m_InternalResourceVersion, platformPath),
                 LatestGameVersion = m_GameVersion,
                 InternalGameVersion = 1,
                 InternalResourceVersion = m_InternalResourceVersion,
@@ -144,8 +143,10 @@ namespace Dvalmi.Editor
             switch (platform)
             {
                 case Platform.Windows:
-                case Platform.Windows64:
                     return "Windows";
+
+                case Platform.Windows64:
+                    return "Windows64";
 
                 case Platform.MacOS:
                     return "MacOS";

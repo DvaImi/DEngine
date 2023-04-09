@@ -16,15 +16,15 @@ namespace Dvalmi.Editor
     public static class GameFrameworkConfigs
     {
         [BuildSettingsConfigPath]
-        public static string BuildSettingsConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "GameMain/Configs/Editor/BuildSettings.xml"));
+        public static string BuildSettingsConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, DvalmiConfig.BuildSettingsConfig));
 
         [ResourceCollectionConfigPath]
-        public static string ResourceCollectionConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "GameMain/Configs/Editor/ResourceCollection.xml"));
+        public static string ResourceCollectionConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, DvalmiConfig.ResourceCollectionConfig));
 
         [ResourceEditorConfigPath]
-        public static string ResourceEditorConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "GameMain/Configs/Editor/ResourceEditor.xml"));
+        public static string ResourceEditorConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, DvalmiConfig.ResourceEditorConfig));
 
         [ResourceBuilderConfigPath]
-        public static string ResourceBuilderConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "GameMain/Configs/Editor/ResourceBuilder.xml"));
+        public static string ResourceBuilderConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, DvalmiConfig.ResourceBuilderConfig));
     }
 }

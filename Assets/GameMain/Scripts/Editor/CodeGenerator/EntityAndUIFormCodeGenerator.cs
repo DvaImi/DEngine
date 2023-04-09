@@ -49,13 +49,6 @@ namespace Dvalmi.Editor
         /// </summary>
         private bool m_IsGenShowEntityCode = true;
 
-        //各种类型的代码生成后的路径
-        private const string EntityCodePath = "Assets/GameMain/Scripts/Base/Entity";
-        private const string HotfixEntityCodePath = "Assets/GameMain/Scripts/Hotfix/Entity";
-
-        private const string UIFormCodePath = "Assets/GameMain/Scripts/Base/UI";
-        private const string HotfixUIFormCodePath = "Assets/GameMain/Scripts/Hotfix/UI";
-
         [MenuItem("Dvalmi/Generator/Code Generator/EntityAndUIForm")]
         public static void OpenCodeGeneratorWindow()
         {
@@ -91,10 +84,10 @@ namespace Dvalmi.Editor
             switch (m_GenCodeType)
             {
                 case GenCodeType.Entity:
-                    EditorGUILayout.LabelField(m_IsHotfix ? HotfixEntityCodePath : EntityCodePath);
+                    EditorGUILayout.LabelField(m_IsHotfix ? DvalmiConfig.HotfixEntityCodePath : DvalmiConfig.EntityCodePath);
                     break;
                 case GenCodeType.UIForm:
-                    EditorGUILayout.LabelField(m_IsHotfix ? HotfixUIFormCodePath : UIFormCodePath);
+                    EditorGUILayout.LabelField(m_IsHotfix ? DvalmiConfig.HotfixUIFormCodePath : DvalmiConfig.UIFormCodePath);
                     break;
             }
 
@@ -142,8 +135,8 @@ namespace Dvalmi.Editor
         private void GenEntityCode()
         {
             //根据是否为热更新实体来决定一些参数
-            string codepath = m_IsHotfix ? HotfixEntityCodePath : EntityCodePath;
-            string nameSpace = m_IsHotfix ? DvalmiConfig.HotfixNameSpace: DvalmiConfig.NameSpace;
+            string codepath = m_IsHotfix ? DvalmiConfig.HotfixEntityCodePath : DvalmiConfig.EntityCodePath;
+            string nameSpace = m_IsHotfix ? DvalmiConfig.HotfixNameSpace : DvalmiConfig.NameSpace;
             string logicBaseClass = m_IsHotfix ? "HotfixEntityLogic" : "EntityLogic";
 
             foreach (GameObject go in m_GameObjects)
@@ -173,7 +166,7 @@ namespace Dvalmi.Editor
         private void GenUIFormCode()
         {
             //根据是否为热更新界面来决定一些参数
-            string codepath = m_IsHotfix ? HotfixUIFormCodePath : UIFormCodePath;
+            string codepath = m_IsHotfix ? DvalmiConfig.HotfixUIFormCodePath : DvalmiConfig.UIFormCodePath;
             string nameSpace = m_IsHotfix ? DvalmiConfig.HotfixNameSpace : DvalmiConfig.NameSpace;
             string logicBaseClass = m_IsHotfix ? "HotfixUGuiForm" : "UGuiForm";
 

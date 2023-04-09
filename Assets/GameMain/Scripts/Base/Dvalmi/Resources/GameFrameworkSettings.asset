@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256801c0bf10bb34aab33b83520fef00, type: 3}
   m_Name: GameFrameworkSettings
   m_EditorClassIdentifier: 
+  GameVersion: 0.1.1
+  InternalGameVersion: 0
   NameSpace: Dvalmi
   HotfixNameSpace: Dvalmi.Hotfix
   BuildSettingsConfig: GameMain/Configs/Editor/BuildSettings.xml
@@ -28,7 +30,15 @@ MonoBehaviour:
   DataTablePath: Assets/GameMain/DataTables
   CSharpCodePath: Assets/GameMain/Scripts/Hotfix/DataTable
   CSharpCodeTemplateFileName: Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt
-  DataRowClassPrefixName: Dvalmi.Hotfix.DR
+  DataRowClassPrefixName: Dvalmi.DR
   DataRowClassHotfixPrefixName: Dvalmi.Hotfix.DR
   HotfixDllPath: Assets/GameMain/HybridCLR/Dlls
-  HotfixDllName: Game.Hotfix.dll
+  HotfixDllNameMain: Game.Hotfix.dll
+  PreserveHotfixDllNames: []
+  HotfixDllSuffix: .bytes
+  CheckVersionUrl: http://192.168.1.102/{0}Version.txt
+  WindowsAppUrl: 
+  MacOSAppUrl: 
+  IOSAppUrl: 
+  AndroidAppUrl: 
+  UpdatePrefixUri: http://192.168.1.102/{0}_{1}/{2}
