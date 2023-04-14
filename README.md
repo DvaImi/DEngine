@@ -6,3 +6,5 @@
 3.接入Kcp网络协议 ing
 4.基于Gameframework设计模式实现后端框架 ing
 5.精简框架，功能剥离 ing
+6.LiomEnnNetwork preview
+
