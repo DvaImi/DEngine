@@ -1,5 +1,5 @@
 # DvalmiGame
-开发框架
+个人unity客户端框架
 基于Gameframework的个人游戏开发框架
 1.接入hybrid热更新框架✓
 2.资源模块扩展，重写资源编辑器 ing
