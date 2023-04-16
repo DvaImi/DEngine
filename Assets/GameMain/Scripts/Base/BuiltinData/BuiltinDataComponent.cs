@@ -10,8 +10,11 @@ namespace Dvalmi
         private TextAsset m_BuildInfoTextAsset = null;
 
         [SerializeField]
-        private TextAsset m_DefaultDictionaryTextAsset = null;  
-        
+        private TextAsset m_PreloadInfoTextAsset = null;
+
+        [SerializeField]
+        private TextAsset m_DefaultDictionaryTextAsset = null;
+
         [SerializeField]
         private TextAsset m_HotfixTextAsset = null;
 
@@ -26,24 +29,11 @@ namespace Dvalmi
             }
         }
 
+        public BuildInfo BuildInfo { get; private set; } = null;
 
-        private BuildInfo m_BuildInfo = null;
-        public BuildInfo BuildInfo
-        {
-            get
-            {
-                return m_BuildInfo;
-            }
-        }
+        public PreloadInfo PreloadInfo { get; private set; } = null;
 
-        private HotfixInfo m_HotfixInfo = null;
-        public HotfixInfo HotfixInfo
-        {
-            get
-            {
-                return m_HotfixInfo;
-            }
-        }
+        public HotfixInfo HotfixInfo { get; private set; } = null;
 
         private NativeDialogForm m_NativeDialogForm;
         [SerializeField]
@@ -57,8 +47,8 @@ namespace Dvalmi
                 return;
             }
 
-            m_HotfixInfo = Utility.Json.ToObject<HotfixInfo>(m_HotfixTextAsset.text);
-            if (m_HotfixInfo == null)
+            HotfixInfo = Utility.Json.ToObject<HotfixInfo>(m_HotfixTextAsset.text);
+            if (HotfixInfo == null)
             {
                 Log.Warning("Parse hotfix info failure.");
                 return;
@@ -73,8 +63,8 @@ namespace Dvalmi
                 return;
             }
 
-            m_BuildInfo = Utility.Json.ToObject<BuildInfo>(m_BuildInfoTextAsset.text);
-            if (m_BuildInfo == null)
+            BuildInfo = Utility.Json.ToObject<BuildInfo>(m_BuildInfoTextAsset.text);
+            if (BuildInfo == null)
             {
                 Log.Warning("Parse build info failure.");
                 return;
@@ -96,8 +86,24 @@ namespace Dvalmi
             }
         }
 
+        public void InitPreloadInfo()
+        {
+            if (m_PreloadInfoTextAsset == null || string.IsNullOrEmpty(m_PreloadInfoTextAsset.text))
+            {
+                Log.Info("Preload info can not be found or empty.");
+                return;
+            }
+
+            PreloadInfo = Utility.Json.ToObject<PreloadInfo>(m_PreloadInfoTextAsset.text);
+            if (PreloadInfo == null)
+            {
+                Log.Warning("Parse preload info failure.");
+                return;
+            }
+        }
+
         /// <summary>
-        /// （游戏加载前）打开原生对话框。
+        /// 打开原生对话框。
         /// </summary>
         /// <param name="dialogParams"></param>
         public void OpenDialog(DialogParams dialogParams)
@@ -111,7 +117,7 @@ namespace Dvalmi
         }
 
         /// <summary>
-        /// （游戏加载后）删除原生对话框。
+        /// 删除原生对话框。
         /// </summary>
         public void DestroyDialog()
         {

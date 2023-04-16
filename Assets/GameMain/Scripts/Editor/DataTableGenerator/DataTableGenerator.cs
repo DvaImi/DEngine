@@ -21,11 +21,21 @@ namespace Dvalmi.Editor.DataTableTools
         private static readonly Regex EndWithNumberRegex = new Regex(@"\d+$");
         private static readonly Regex NameRegex = new Regex(@"^[A-Z][A-Za-z0-9_]*$");
 
+        /// <summary>
+        /// 从txt 生成
+        /// </summary>
+        /// <param name="dataTableName"></param>
+        /// <returns></returns>
         public static DataTableProcessor CreateDataTableProcessor(string dataTableName)
         {
             return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DvalmiSetting.Instance.DataTablePath, dataTableName + ".txt")), Encoding.GetEncoding("UTF-8"), 1, 2, null, 3, 4, 1);
         }
 
+        /// <summary>
+        /// 从excle生成
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <returns></returns>
         public static DataTableProcessor CreateDataTableProcessor(ExcelWorksheet sheet)
         {
             return new DataTableProcessor(sheet, 1, 2, null, 3, 4, 1);
@@ -69,6 +79,24 @@ namespace Dvalmi.Editor.DataTableTools
             if (!dataTableProcessor.GenerateCodeFile(csharpCodeFileName, Encoding.UTF8, dataTableName) && File.Exists(csharpCodeFileName))
             {
                 File.Delete(csharpCodeFileName);
+            }
+        }
+
+        public static void GenerateDataTableInfoFile(List<string> dataTables, List<string> dictionary)
+        {
+            PreloadInfo preloadInfo = new()
+            {
+                DateTable = dataTables,
+                Dictionary = dictionary
+            };
+
+            string preloadInfoJson = Newtonsoft.Json.JsonConvert.SerializeObject(preloadInfo);
+
+            using (FileStream stream = new(DvalmiSetting.Instance.PreloadInfoPath, FileMode.Create, FileAccess.Write))
+            {
+                UTF8Encoding utf8Encoding = new(false);
+                using StreamWriter writer = new(stream, utf8Encoding);
+                writer.Write(preloadInfoJson);
             }
         }
 

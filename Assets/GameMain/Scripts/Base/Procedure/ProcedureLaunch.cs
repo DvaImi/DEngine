@@ -31,6 +31,9 @@ namespace Dvalmi
             // 默认字典：加载默认字典文件 Assets/Game/Configs/Runtime/DefaultDictionary.xml
             // 此字典文件记录了资源更新前使用的各种语言的字符串，会随 App 一起发布，故不可更新
             GameEntry.BuiltinData.InitDefaultDictionary();
+            
+            // 数据配置:
+            GameEntry.BuiltinData.InitPreloadInfo();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -106,7 +109,7 @@ namespace Dvalmi
                 return;
             }
 
-            string currentVariant = null;
+            string currentVariant;
             switch (GameEntry.Localization.Language)
             {
                 case Language.English:

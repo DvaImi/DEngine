@@ -24,9 +24,11 @@ namespace Dvalmi.Editor.DataTableTools
         [MenuItem("Dvalmi/Generator/Generate DataTables")]
         internal static void GenerateDataTables()
         {
-            string[] excelFiles = Directory.GetFiles(DvalmiSetting.Instance.DataTableExcelPath);
+            string[] dataTableExcelFiles = Directory.GetFiles(DvalmiSetting.Instance.DataTableExcelPath);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            foreach (var excelFile in excelFiles)
+            List<string> dataTableinfo = new List<string>();
+            List<string> dictionary = new List<string>();
+            foreach (var excelFile in dataTableExcelFiles)
             {
                 if (!excelFile.EndsWith(".xlsx") || excelFile.Contains("~$"))
                 {
@@ -61,10 +63,12 @@ namespace Dvalmi.Editor.DataTableTools
                             }
                             DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
                             DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
+                            dataTableinfo.Add(dataTableName);
                         }
                     }
                 }
             }
+            DataTableGenerator.GenerateDataTableInfoFile(dataTableinfo, dictionary);
             AssetDatabase.Refresh();
         }
     }

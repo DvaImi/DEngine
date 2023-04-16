@@ -32,6 +32,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
         AssetBundleOutput = DvalmiSetting.Instance.AssetBundleOutput;
         PublishAppOutput = DvalmiSetting.Instance.PublishAppOutput;
         BuildInfoPath = DvalmiSetting.Instance.BuildInfoPath;
+        PreloadInfoPath = DvalmiSetting.Instance.PreloadInfoPath;
         EntityCodePath = DvalmiSetting.Instance.EntityCodePath;
         HotfixEntityCodePath = DvalmiSetting.Instance.HotfixEntityCodePath;
         UIFormCodePath = DvalmiSetting.Instance.UIFormCodePath;
@@ -105,7 +106,12 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// 构建信息写入路径
     /// </summary>
     [DFilePath(Extensions = "*.txt")]
-    public string BuildInfoPath;
+    public string BuildInfoPath;  
+    /// <summary>
+    /// 数据表信息写入路径
+    /// </summary>
+    [DFilePath(Extensions = "*.txt")]
+    public string PreloadInfoPath;
     /// <summary>
     /// AssetBundle 构建路径
     /// </summary>
@@ -158,10 +164,10 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// <summary>
     /// 游戏数据表路径
     /// </summary>
-    public string DataTablePath;
+    public string DataTablePath;  
     [FolderPath]
     /// <summary>
-    /// 数据表类路径
+    /// 数据表逻辑类路径
     /// </summary>
     public string CSharpCodePath;
     [DFilePath(Extensions = "*.txt")]
@@ -235,6 +241,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
             DvalmiSetting.Instance.AssetBundleOutput = AssetBundleOutput;
             DvalmiSetting.Instance.PublishAppOutput = PublishAppOutput;
             DvalmiSetting.Instance.BuildInfoPath = BuildInfoPath;
+            DvalmiSetting.Instance.PreloadInfoPath = PreloadInfoPath;
             DvalmiSetting.Instance.EntityCodePath = EntityCodePath;
             DvalmiSetting.Instance.HotfixEntityCodePath = HotfixEntityCodePath;
             DvalmiSetting.Instance.UIFormCodePath = UIFormCodePath;

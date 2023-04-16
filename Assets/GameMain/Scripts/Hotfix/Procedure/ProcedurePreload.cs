@@ -18,20 +18,6 @@ namespace Dvalmi.Hotfix
 {
     public class ProcedurePreload : ProcedureBase
     {
-        public static readonly string[] ConfigName = new string[] 
-        {
-            "DefaultConfig",
-        };
-        public static readonly string[] DataTableNames = new string[]
-        {
-            "Entity",
-            "Music",
-            "Scene",
-            "Sound",
-            "UIForm",
-            "UISound",
-        };
-
         private Dictionary<string, bool> m_LoadedFlag = new Dictionary<string, bool>();
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
@@ -85,7 +71,7 @@ namespace Dvalmi.Hotfix
             LoadConfig("DefaultConfig");
 
             // Preload data tables
-            foreach (string dataTableName in DataTableNames)
+            foreach (string dataTableName in GameEntry.BuiltinData.PreloadInfo.DateTable)
             {
                 LoadDataTable(dataTableName);
             }

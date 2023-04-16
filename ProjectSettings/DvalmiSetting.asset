@@ -21,6 +21,7 @@ MonoBehaviour:
   AssetBundleOutput: AssetBundle
   PublishAppOutput: Publish
   BuildInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/BuildInfo.txt
+  PreloadInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/PreloadInfo.txt
   EntityCodePath: Assets/GameMain/Scripts/Base/Entity
   HotfixEntityCodePath: Assets/GameMain/Scripts/Hotfix/Entity
   UIFormCodePath: Assets/GameMain/Scripts/Base/UI
@@ -29,6 +30,8 @@ MonoBehaviour:
   HotfixEventCodePath: Assets/GameMain/Scripts/Hotfix/EventArgs
   DataTableExcelPath: DataTables/Excel
   DataTablePath: Assets/GameMain/AssetBundle/DataTables
+  ConfigDataTableExcelPath: DataTables/Config
+  ConfigDataTablePath: Assets/GameMain/AssetBundle/Configs/Runtime
   CSharpCodePath: Assets/GameMain/Scripts/Hotfix/DataTable
   CSharpCodeTemplateFileName: Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt
   HotfixDllPath: Assets/GameMain/AssetBundle/HotfixDll

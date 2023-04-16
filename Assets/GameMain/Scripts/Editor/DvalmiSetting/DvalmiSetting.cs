@@ -44,7 +44,11 @@ namespace Dvalmi.Editor
         /// <summary>
         /// 构建信息路径
         /// </summary>
-        public string BuildInfoPath = "GameMain/Configs/Runtime/BuildInfo.txt";
+        public string BuildInfoPath = "GameMain/Configs/Runtime/BuildInfo.txt"; 
+        /// <summary>
+        /// 数据表关联路径
+        /// </summary>
+        public string PreloadInfoPath = "GameMain/Configs/Runtime/PreloadInfo.txt";
         /// <summary>
         /// 实体脚本生成路径
         /// </summary>
