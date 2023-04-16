@@ -2,42 +2,49 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Configs/ResourceCollection" LoadType="0" Packed="False" />
-      <Resource Name="Configs/Runtime/DefaultConfig" LoadType="0" Packed="False" />
-      <Resource Name="DataTables/Entity" LoadType="0" Packed="True" />
-      <Resource Name="DataTables/Music" LoadType="0" Packed="True" />
-      <Resource Name="DataTables/Scene" LoadType="0" Packed="True" />
-      <Resource Name="DataTables/Sound" LoadType="0" Packed="True" />
-      <Resource Name="DataTables/UIForm" LoadType="0" Packed="True" />
-      <Resource Name="DataTables/UISound" LoadType="0" Packed="True" />
+      <Resource Name="Configs/Runtime/BuildInfo" LoadType="0" Packed="False" />
+      <Resource Name="Configs/Runtime/DefaultConfig" LoadType="0" Packed="True" />
+      <Resource Name="Configs/Runtime/HotfixInfo" LoadType="0" Packed="False" />
+      <Resource Name="DataTables/Entity" LoadType="0" Packed="False" />
+      <Resource Name="DataTables/Music" LoadType="0" Packed="False" />
+      <Resource Name="DataTables/Scene" LoadType="0" Packed="False" />
+      <Resource Name="DataTables/Sound" LoadType="0" Packed="False" />
+      <Resource Name="DataTables/UIForm" LoadType="0" Packed="False" />
+      <Resource Name="DataTables/UISound" LoadType="0" Packed="False" />
+      <Resource Name="Entities/EnitityPlane" LoadType="0" Packed="False" />
       <Resource Name="Fonts/MainFont" LoadType="1" Packed="True" />
+      <Resource Name="HotfixDll/Game" LoadType="0" Packed="False" />
+      <Resource Name="HotfixDll/mscorlib" LoadType="0" Packed="False" />
+      <Resource Name="HotfixDll/System" LoadType="0" Packed="False" />
       <Resource Name="Localization/ChineseSimplified/Dictionaries/Default" LoadType="1" Packed="True" />
       <Resource Name="Localization/ChineseTraditional/Dictionaries/Default" LoadType="1" Packed="True" />
       <Resource Name="Localization/English/Dictionaries/Default" LoadType="1" Packed="True" />
       <Resource Name="Localization/Korean/Dictionaries/Default" LoadType="1" Packed="True" />
-      <Resource Name="Scripts/Base/Dvalmi/Resources/GameFrameworkSettings" LoadType="0" Packed="True" />
+      <Resource Name="Scenes/Menu" LoadType="0" Packed="False" />
+      <Resource Name="UI/UIForms/WelcomeForm" LoadType="0" Packed="False" />
     </Resources>
     <Assets>
+      <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="DataTables/Sound" />
+      <Asset Guid="059cc4969a1bf5d489d20d55a9631c7a" ResourceName="HotfixDll/System" />
       <Asset Guid="1053b0070685be347ab58587156842dc" ResourceName="Localization/ChineseTraditional/Dictionaries/Default" />
       <Asset Guid="14869ac0d4433f04db1704e39d03412e" ResourceName="Localization/English/Dictionaries/Default" />
-      <Asset Guid="1c8e30745ebd064488fa583ff7a5b704" ResourceName="Scripts/Base/Dvalmi/Resources/GameFrameworkSettings" />
-      <Asset Guid="25527cc0a12e01e4aad4c44a763d862a" ResourceName="DataTables/Scene" />
-      <Asset Guid="4f82e954af0c79f41811b0ce50580e5b" ResourceName="DataTables/UISound" />
+      <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="DataTables/UIForm" />
+      <Asset Guid="2d195be6cdc3ebb4d93b0323dbf298ad" ResourceName="UI/UIForms/WelcomeForm" />
+      <Asset Guid="3e6f327a1634de344aa6262ab303a930" ResourceName="Configs/Runtime/BuildInfo" />
+      <Asset Guid="4053612cac7241a4e91508723e79236f" ResourceName="Entities/EnitityPlane" />
+      <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="DataTables/Entity" />
+      <Asset Guid="5ace651f5510f534ca61f061766456b3" ResourceName="HotfixDll/Game" />
       <Asset Guid="5dcd89912e222bf4c87f76db4044bc5e" ResourceName="Localization/Korean/Dictionaries/Default" />
-      <Asset Guid="65a2e2c47a7d8e84580e42ba975f4db5" ResourceName="DataTables/Music" />
-      <Asset Guid="6ab0e811adc83d4488e34413b0ede98e" ResourceName="DataTables/Music" />
-      <Asset Guid="6ef028861dea6c9488cc01fdb61c0165" ResourceName="DataTables/Sound" />
+      <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="DataTables/Music" />
+      <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="DataTables/UISound" />
       <Asset Guid="77cbb7c5404c10242ab59953e0746314" ResourceName="Fonts/MainFont" />
-      <Asset Guid="91abc91f8e9472b45a9401f69e1d66d3" ResourceName="DataTables/Scene" />
-      <Asset Guid="9258441313634854fabc7228e3e80365" ResourceName="DataTables/UIForm" />
-      <Asset Guid="9abe02490c4a4d24ba066c3efb1cb3a6" ResourceName="DataTables/UISound" />
       <Asset Guid="9be2e1e45f4edd74c8764538ad306b78" ResourceName="Localization/ChineseSimplified/Dictionaries/Default" />
-      <Asset Guid="b2fa128ab45b9c64f84d26545e78d189" ResourceName="DataTables/UIForm" />
+      <Asset Guid="9c179f6a3d1f7da4d91056f447043b19" ResourceName="Configs/Runtime/HotfixInfo" />
+      <Asset Guid="a3cd8c3ca615bfa4f921fed65d329612" ResourceName="HotfixDll/System" />
       <Asset Guid="b7e3b537688858643af3e5c50f517a9e" ResourceName="Configs/Runtime/DefaultConfig" />
-      <Asset Guid="be6d43792a4538442b6fa1227f2760b9" ResourceName="DataTables/Sound" />
-      <Asset Guid="c0d0a1d08e40c164da60965aed96be3a" ResourceName="DataTables/Entity" />
-      <Asset Guid="d026b922c1a2d9845b9a6b6cb4696b81" ResourceName="DataTables/Entity" />
-      <Asset Guid="d51c142d63f2af24498ff67733cec455" ResourceName="Configs/ResourceCollection" />
+      <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="DataTables/Scene" />
+      <Asset Guid="bd82155f8ae46f942aeba200d6da4ceb" ResourceName="HotfixDll/mscorlib" />
+      <Asset Guid="e915882745d181145ba138b9cb3d1db4" ResourceName="Scenes/Menu" />
     </Assets>
   </ResourceCollection>
 </UnityGameFramework>

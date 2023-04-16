@@ -70,3 +70,13 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /HybridCLRData
+DataTables/Excel/Entity.xlsx
+DataTables/Excel/Entity.xlsx.meta
+DataTables/Excel/Music.xlsx
+DataTables/Excel/Music.xlsx.meta
+DataTables/Excel/Scene.xlsx.meta
+DataTables/Excel/Sound.xlsx
+DataTables/Excel/Sound.xlsx.meta
+DataTables/Excel/UIForm.xlsx
+DataTables/Excel/UIForm.xlsx.meta
+DataTables/Excel/UISound.xlsx.meta

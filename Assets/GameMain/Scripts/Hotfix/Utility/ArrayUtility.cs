@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using GameFramework;
 
-namespace Dvalmi.Hotfix
+namespace Dvalmi
 {
     public static class ArrayUtility
     {

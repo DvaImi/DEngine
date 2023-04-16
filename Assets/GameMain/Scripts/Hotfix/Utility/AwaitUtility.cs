@@ -4,7 +4,6 @@ using GameFramework;
 using GameFramework.Event;
 using GameFramework.Resource;
 using UnityGameFramework.Runtime;
-// ReSharper disable All
 
 namespace Dvalmi.Hotfix
 {
@@ -95,21 +94,21 @@ namespace Dvalmi.Hotfix
         /// <summary>
         /// 显示实体（可等待）
         /// </summary>
-        public static Task<Entity> AwaitShowEntity(this EntityComponent self, Type logicType, string entityGroup, int priority, EntityData data)
+        public static Task<Entity> AwaitShowEntity(this EntityComponent self, Type logicType, string entityGroup, int priority, HotfixEntityData data)
         {
             s_EntityTcs = new TaskCompletionSource<Entity>();
             s_EntitySerialId = data.Id;
-            self.ShowEntity(logicType, entityGroup, priority, data);
+            self.ShowHotfixEntity(logicType, entityGroup, priority, data);
             return s_EntityTcs.Task;
         }
 
         private static void OnShowEntitySuccess(object sender, GameEventArgs e)
         {
             ShowEntitySuccessEventArgs ne = (ShowEntitySuccessEventArgs)e;
-            EntityData data = (EntityData)ne.UserData;
+            HotfixEntityData data = (HotfixEntityData)ne.UserData;
             if (data.Id == s_EntitySerialId)
             {
-                s_EntityTcs.SetResult((Entity)ne.Entity.Logic);
+                s_EntityTcs.SetResult(ne.Entity);
                 s_EntityTcs = null;
             }
         }

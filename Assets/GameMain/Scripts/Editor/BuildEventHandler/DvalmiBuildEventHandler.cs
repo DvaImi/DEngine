@@ -82,7 +82,7 @@ namespace Dvalmi.Editor
             VersionInfo versionInfo = new VersionInfo
             {
                 ForceUpdateGame = false,
-                UpdatePrefixUri = Utility.Text.Format(DvalmiConfig.UpdatePrefixUri, gameVersion, m_InternalResourceVersion, platformPath),
+                UpdatePrefixUri = Utility.Text.Format(DvalmiSetting.Instance.UpdatePrefixUri, gameVersion, m_InternalResourceVersion, platformPath),
                 LatestGameVersion = m_GameVersion,
                 InternalGameVersion = 1,
                 InternalResourceVersion = m_InternalResourceVersion,
@@ -119,8 +119,7 @@ namespace Dvalmi.Editor
             string[] fileNames = Directory.GetFiles(outputPackagePath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {
-                string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath,
-                    fileName.Substring(outputPackagePath.Length)));
+                string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName.Substring(outputPackagePath.Length)));
                 FileInfo destFileInfo = new FileInfo(destFileName);
                 if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
                 {

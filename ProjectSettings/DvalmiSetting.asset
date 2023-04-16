@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7508de6cbd5bbe14cb088673ba5f85d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NameSpace: Dvalmi
+  HotfixNameSpace: Dvalmi.Hotfix
+  BuildSettingsConfig: Assets/GameMain/Configs/Editor/BuildSettings.xml
+  ResourceCollectionConfig: Assets/GameMain/Configs/Editor/ResourceCollection.xml
+  ResourceEditorConfig: Assets/GameMain/Configs/Editor/ResourceEditor.xml
+  ResourceBuilderConfig: Assets/GameMain/Configs/Editor/ResourceBuilder.xml
+  AssetBundleOutput: AssetBundle
+  PublishAppOutput: Publish
+  BuildInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/BuildInfo.txt
+  EntityCodePath: Assets/GameMain/Scripts/Base/Entity
+  HotfixEntityCodePath: Assets/GameMain/Scripts/Hotfix/Entity
+  UIFormCodePath: Assets/GameMain/Scripts/Base/UI
+  HotfixUIFormCodePath: Assets/GameMain/Scripts/Hotfix/UI
+  EventCodePath: Assets/GameMain/Scripts/EventArgs
+  HotfixEventCodePath: Assets/GameMain/Scripts/Hotfix/EventArgs
+  DataTableExcelPath: DataTables/Excel
+  DataTablePath: Assets/GameMain/AssetBundle/DataTables
+  CSharpCodePath: Assets/GameMain/Scripts/Hotfix/DataTable
+  CSharpCodeTemplateFileName: Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt
+  HotfixDllPath: Assets/GameMain/AssetBundle/HotfixDll
+  HotfixDllNameMain: Game.Hotfix.dll
+  AOTDllNames:
+  - mscorlib.dll
+  - System.dll
+  - System.Core.dll
+  PreserveHotfixDllNames: []
+  HotfixDllSuffix: .bytes
+  HotfixInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/HotfixInfo.txt
+  CheckVersionUrl: http://192.168.1.102/{0}Version.txt
+  WindowsAppUrl: http://192.168.1.102
+  MacOSAppUrl: 
+  IOSAppUrl: 
+  AndroidAppUrl: 
+  UpdatePrefixUri: http://192.168.1.102/{0}_{1}/{2}

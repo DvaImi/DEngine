@@ -97,7 +97,7 @@ namespace Dvalmi.Editor
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("自动生成的代码路径：", GUILayout.Width(140f));
-            EditorGUILayout.LabelField(m_IsHotfixEvent ? DvalmiConfig.HotfixEventCodePath : DvalmiConfig.EventCodePath);
+            EditorGUILayout.LabelField(m_IsHotfixEvent ? DvalmiSetting.Instance.HotfixEventCodePath : DvalmiSetting.Instance.EventCodePath);
             EditorGUILayout.EndHorizontal();
 
             //绘制事件参数相关按钮
@@ -169,8 +169,8 @@ namespace Dvalmi.Editor
         private void GenEventCode()
         {
             //根据是否为热更新层事件来决定一些参数
-            string codePath = m_IsHotfixEvent ? DvalmiConfig.HotfixEventCodePath : DvalmiConfig.EventCodePath;
-            string nameSpace = m_IsHotfixEvent ? DvalmiConfig.HotfixNameSpace : DvalmiConfig.NameSpace;
+            string codePath = m_IsHotfixEvent ? DvalmiSetting.Instance.HotfixEventCodePath : DvalmiSetting.Instance.EventCodePath;
+            string nameSpace = m_IsHotfixEvent ? DvalmiSetting.Instance.HotfixNameSpace : DvalmiSetting.Instance.NameSpace;
             string baseClass = m_IsHotfixEvent ? "HotfixGameEventArgs" : "GameEventArgs";
 
             if (!Directory.Exists($"{codePath}/"))

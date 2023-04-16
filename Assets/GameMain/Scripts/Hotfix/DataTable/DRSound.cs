@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023-04-05 10:48:49.640
+// 生成时间：2023-04-16 18:31:24.653
 //------------------------------------------------------------
 
 using GameFramework;
@@ -39,7 +39,7 @@ namespace Dvalmi.Hotfix
         /// <summary>
         /// 获取资源名称。
         /// </summary>
-        public string ResourceName
+        public string AssetName
         {
             get;
             private set;
@@ -102,7 +102,7 @@ namespace Dvalmi.Hotfix
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-            ResourceName = columnStrings[index++];
+            AssetName = columnStrings[index++];
             Priority = int.Parse(columnStrings[index++]);
             Loop = bool.Parse(columnStrings[index++]);
             Volume = float.Parse(columnStrings[index++]);
@@ -120,7 +120,7 @@ namespace Dvalmi.Hotfix
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
-                    ResourceName = binaryReader.ReadString();
+                    AssetName = binaryReader.ReadString();
                     Priority = binaryReader.Read7BitEncodedInt32();
                     Loop = binaryReader.ReadBoolean();
                     Volume = binaryReader.ReadSingle();

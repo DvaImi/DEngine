@@ -20,15 +20,8 @@ namespace Dvalmi.Hotfix
     /// </summary>
     public static class GameHotfixEntry
     {
-        public static readonly string[] AOTDllNames =
-        {
-            "mscorlib.dll",
-            "System.dll",
-            "System.Core.dll", // 如果使用了Linq，需要这个
-        };
-
-        private static int AOTFlag;
-        private static int AOTLoadFlag;
+        private static int m_AOTFlag;
+        private static int m_AOTLoadFlag;
 
         public static void Start()
         {
@@ -44,12 +37,12 @@ namespace Dvalmi.Hotfix
             // 注意，补充元数据是给AOT dll补充元数据，而不是给热更新dll补充元数据。
             // 热更新dll不缺元数据，不需要补充，如果调用LoadMetadataForAOTAssembly会返回错误。
 
-            AOTFlag = AOTDllNames.Length;
-            AOTLoadFlag = 0;
-            for (int i = 0; i < AOTFlag; i++)
+            m_AOTFlag = GameEntry.BuiltinData.HotfixInfo.AOTDllNames.Length;
+            m_AOTLoadFlag = 0;
+            for (int i = 0; i < m_AOTFlag; i++)
             {
-                string dllName = AOTDllNames[i];
-                string assetName = Utility.Text.Format(DvalmiConfig.HotfixDllAssetName, dllName);
+                string dllName = GameEntry.BuiltinData.HotfixInfo.AOTDllNames[i];
+                string assetName = Utility.Text.Format(GameEntry.BuiltinData.HotfixInfo.HotfixDllPath, dllName);
                 GameEntry.Resource.LoadAsset(assetName, new LoadAssetCallbacks(OnLoadAOTDllSuccess, OnLoadAssetFail));
             }
 #endif
@@ -81,7 +74,7 @@ namespace Dvalmi.Hotfix
             // 加载assembly对应的dll，会自动为它hook。一旦aot泛型函数的native函数不存在，用解释器版本代码
             var err = RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
             Log.Info($"LoadMetadataForAOTAssembly:{assetName}. ret:{err}");
-            if (++AOTLoadFlag == AOTFlag)
+            if (++m_AOTLoadFlag == m_AOTFlag)
             {
                 StartHotfix();
             }

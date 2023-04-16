@@ -6,6 +6,7 @@
 //------------------------------------------------------------
 
 using GameFramework;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,12 +23,12 @@ namespace Dvalmi.Editor.DataTableTools
 
         public static DataTableProcessor CreateDataTableProcessor(string dataTableName)
         {
-            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DvalmiConfig.DataTablePath, dataTableName + ".txt")), Encoding.GetEncoding("UTF-8"), 1, 2, null, 3, 4, 1);
+            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DvalmiSetting.Instance.DataTablePath, dataTableName + ".txt")), Encoding.GetEncoding("UTF-8"), 1, 2, null, 3, 4, 1);
         }
 
-        public static DataTableProcessor CreateConfigProcessor(string dataTableName)
+        public static DataTableProcessor CreateDataTableProcessor(ExcelWorksheet sheet)
         {
-            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DvalmiConfig.ConfigPath, dataTableName + ".txt")), Encoding.GetEncoding("UTF-8"), 1, 2, null, 3, 4, 1);
+            return new DataTableProcessor(sheet, 1, 2, null, 3, 4, 1);
         }
 
         public static bool CheckRawData(DataTableProcessor dataTableProcessor, string dataTableName)
@@ -52,7 +53,7 @@ namespace Dvalmi.Editor.DataTableTools
 
         public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
-            string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DvalmiConfig.DataTablePath, dataTableName + ".bytes"));
+            string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DvalmiSetting.Instance.DataTablePath, dataTableName + ".bytes"));
             if (!dataTableProcessor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
             {
                 File.Delete(binaryDataFileName);
@@ -61,10 +62,10 @@ namespace Dvalmi.Editor.DataTableTools
 
         public static void GenerateCodeFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
-            dataTableProcessor.SetCodeTemplate(DvalmiConfig.CSharpCodeTemplateFileName, Encoding.UTF8);
+            dataTableProcessor.SetCodeTemplate(DvalmiSetting.Instance.CSharpCodeTemplateFileName, Encoding.UTF8);
             dataTableProcessor.SetCodeGenerator(DataTableCodeGenerator);
 
-            string csharpCodeFileName = Utility.Path.GetRegularPath(Path.Combine(DvalmiConfig.CSharpCodePath, "DR" + dataTableName + ".cs"));
+            string csharpCodeFileName = Utility.Path.GetRegularPath(Path.Combine(DvalmiSetting.Instance.CSharpCodePath, "DR" + dataTableName + ".cs"));
             if (!dataTableProcessor.GenerateCodeFile(csharpCodeFileName, Encoding.UTF8, dataTableName) && File.Exists(csharpCodeFileName))
             {
                 File.Delete(csharpCodeFileName);
@@ -76,7 +77,7 @@ namespace Dvalmi.Editor.DataTableTools
             string dataTableName = (string)userData;
 
             codeContent.Replace("__DATA_TABLE_CREATE_TIME__", DateTime.UtcNow.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.fff"));
-            codeContent.Replace("__DATA_TABLE_NAME_SPACE__", DvalmiConfig.HotfixNameSpace);
+            codeContent.Replace("__DATA_TABLE_NAME_SPACE__", DvalmiSetting.Instance.HotfixNameSpace);
             codeContent.Replace("__DATA_TABLE_CLASS_NAME__", "DR" + dataTableName);
             codeContent.Replace("__DATA_TABLE_COMMENT__", dataTableProcessor.GetValue(0, 1) + "。");
             codeContent.Replace("__DATA_TABLE_ID_COMMENT__", "获取" + dataTableProcessor.GetComment(dataTableProcessor.IdColumn) + "。");

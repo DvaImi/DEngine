@@ -333,7 +333,7 @@ namespace Dvalmi.Helper
         /// 设置声音绑定的实体。
         /// </summary>
         /// <param name="bindingEntity">声音绑定的实体。</param>
-        public override void SetBindingEntity(Entity bindingEntity)
+        public override void SetBindingEntity(UnityGameFramework.Runtime.Entity bindingEntity)
         {
             m_BindingEntityLogic = bindingEntity.Logic;
             if (m_BindingEntityLogic != null)

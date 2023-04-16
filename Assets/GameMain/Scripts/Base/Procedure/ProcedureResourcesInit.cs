@@ -28,7 +28,7 @@ namespace Dvalmi
                 return;
             }
 
-            ChangeState<ProcedureCodeInit>(procedureOwner);
+            ChangeState<ProcedureLoadHotfix>(procedureOwner);
         }
 
         private void OnInitResourcesComplete()

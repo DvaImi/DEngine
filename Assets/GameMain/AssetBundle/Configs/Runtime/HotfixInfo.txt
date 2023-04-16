@@ -1,0 +1,1 @@
+{"HotfixDllPath":"Assets/GameMain/AssetBundle/HotfixDll","HotfixDllNameMain":"Game.Hotfix.dll","AOTDllNames":["mscorlib.dll","System.dll","System.Core.dll"],"PreserveHotfixDllNames":[],"HotfixDllSuffix":".bytes"}

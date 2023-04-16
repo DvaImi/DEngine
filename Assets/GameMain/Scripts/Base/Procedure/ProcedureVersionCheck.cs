@@ -26,7 +26,7 @@ namespace Dvalmi
             GameEntry.Event.Subscribe(WebRequestFailureEventArgs.EventId, OnWebRequestFailure);
 
             // 向服务器请求版本信息
-            GameEntry.WebRequest.AddWebRequest(Utility.Text.Format(DvalmiConfig.CheckVersionUrl, GetPlatformPath()), this);
+            GameEntry.WebRequest.AddWebRequest(Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GetPlatformPath()), this);
         }
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)
@@ -64,13 +64,13 @@ namespace Dvalmi
         {
             string url = null;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            url = DvalmiConfig.WindowsAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.WindowsAppUrl;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            url = DvalmiConfig.MacOSAppUrl;
+            url = GameEntry.BuiltinData.Settings.MacOSAppUrl;
 #elif UNITY_IOS
-            url = DvalmiConfig.IOSAppUrl;
+            url = GameEntry.BuiltinData.Settings.IOSAppUrl;
 #elif UNITY_ANDROID
-            url = DvalmiConfig.AndroidAppUrl;
+            url = GameEntry.BuiltinData.Settings.AndroidAppUrl;
 #endif
             if (!string.IsNullOrEmpty(url))
             {

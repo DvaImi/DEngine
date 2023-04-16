@@ -13,6 +13,12 @@ namespace Dvalmi
         {
             base.OnEnter(procedureOwner);
 
+            // 热更配置:将热更程序集写入配置
+            GameEntry.BuiltinData.InitHotfixInfo();
+
+            // 构建信息：发布版本时，把一些数据以 Json 的格式写入BuildInfo.txt，供游戏逻辑读取
+            GameEntry.BuiltinData.InitBuildInfo();
+
             // 语言配置：设置当前使用的语言，如果不设置，则默认使用操作系统语言
             InitLanguageSettings();
 
@@ -36,7 +42,7 @@ namespace Dvalmi
             {
                 // 编辑器模式
                 Log.Info("Editor resource mode detected.");
-                ChangeState<ProcedureCodeInit>(procedureOwner);
+                ChangeState<ProcedureLoadHotfix>(procedureOwner);
                 return;
             }
 #endif

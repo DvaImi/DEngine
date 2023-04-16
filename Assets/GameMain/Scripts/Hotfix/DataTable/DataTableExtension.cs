@@ -32,7 +32,7 @@ namespace Dvalmi.Hotfix
                 return;
             }
 
-            string dataRowClassName = DvalmiConfig.DataRowClassPrefixName + splitedNames[0];
+            string dataRowClassName = "Dvalmi.Hotfix.DR" + splitedNames[0];
             Type dataRowType = Type.GetType(dataRowClassName);
             if (dataRowType == null)
             {

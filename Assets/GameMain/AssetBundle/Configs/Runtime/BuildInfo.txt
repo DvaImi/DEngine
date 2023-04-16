@@ -1,0 +1,1 @@
+{"GameVersion":"0.1.1","InternalGameVersion":0,"CheckVersionUrl":"http://192.168.1.102/{0}Version.txt","WindowsAppUrl":"http://192.168.1.102","MacOSAppUrl":"","IOSAppUrl":"","AndroidAppUrl":"","UpdatePrefixUri":"http://192.168.1.102/{0}_{1}/{2}"}

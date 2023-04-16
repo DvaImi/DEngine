@@ -73,16 +73,16 @@ namespace Dvalmi.Editor
         /// <param name="buildTarget"></param>
         public void CopyDllAssets(BuildTarget buildTarget)
         {
-            IOUtility.CreateDirectoryIfNotExists(DvalmiConfig.HotfixDllPath);
+            IOUtility.CreateDirectoryIfNotExists(DvalmiSetting.Instance.HotfixDllPath);
 
             // Copy Hotfix Dll
-            string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), DvalmiConfig.HotfixDllNameMain);
-            string desFileName = Path.Combine(DvalmiConfig.HotfixDllPath, DvalmiConfig.HotfixDllNameMain + DvalmiConfig.HotfixDllSuffix);
+            string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), DvalmiSetting.Instance.HotfixDllNameMain);
+            string desFileName = Path.Combine(DvalmiSetting.Instance.HotfixDllPath, DvalmiSetting.Instance.HotfixDllNameMain + DvalmiSetting.Instance.HotfixDllSuffix);
             File.Copy(oriFileName, desFileName, true);
 
             // Copy AOT Dll
             string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
-            foreach (var dllName in GameHotfixEntry.AOTDllNames)
+            foreach (var dllName in DvalmiSetting.Instance.AOTDllNames)
             {
                 oriFileName = Path.Combine(aotDllPath, dllName);
                 if (!File.Exists(oriFileName))
@@ -90,7 +90,7 @@ namespace Dvalmi.Editor
                     Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOT dll.");
                     continue;
                 }
-                desFileName = Path.Combine(DvalmiConfig.HotfixDllPath, dllName + DvalmiConfig.HotfixDllSuffix);
+                desFileName = Path.Combine(DvalmiSetting.Instance.HotfixDllPath, dllName + DvalmiSetting.Instance.HotfixDllSuffix);
                 File.Copy(oriFileName, desFileName, true);
             }
 

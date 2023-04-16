@@ -40,7 +40,7 @@ namespace Dvalmi
             }
             else
             {
-                ChangeState<ProcedureCodeInit>(procedureOwner);
+                ChangeState<ProcedureLoadHotfix>(procedureOwner);
             }
         }
 

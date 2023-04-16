@@ -6,8 +6,6 @@
 //------------------------------------------------------------
 
 using GameFramework;
-using System.IO;
-using UnityEngine;
 using UnityGameFramework.Editor;
 using UnityGameFramework.Editor.ResourceTools;
 
@@ -16,15 +14,15 @@ namespace Dvalmi.Editor
     public static class GameFrameworkConfigs
     {
         [BuildSettingsConfigPath]
-        public static string BuildSettingsConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, DvalmiConfig.BuildSettingsConfig));
+        public static string BuildSettingsConfig = Utility.Path.GetRegularPath(DvalmiSetting.Instance.BuildSettingsConfig);
 
         [ResourceCollectionConfigPath]
-        public static string ResourceCollectionConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, DvalmiConfig.ResourceCollectionConfig));
+        public static string ResourceCollectionConfig = Utility.Path.GetRegularPath(DvalmiSetting.Instance.ResourceCollectionConfig);
 
         [ResourceEditorConfigPath]
-        public static string ResourceEditorConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, DvalmiConfig.ResourceEditorConfig));
+        public static string ResourceEditorConfig = Utility.Path.GetRegularPath(DvalmiSetting.Instance.ResourceEditorConfig);
 
         [ResourceBuilderConfigPath]
-        public static string ResourceBuilderConfig = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, DvalmiConfig.ResourceBuilderConfig));
+        public static string ResourceBuilderConfig = Utility.Path.GetRegularPath(DvalmiSetting.Instance.ResourceBuilderConfig);
     }
 }
