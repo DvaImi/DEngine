@@ -50,7 +50,7 @@ namespace Dvalmi.Editor
         /// </summary>
         private bool m_IsGenShowEntityCode = true;
 
-        [MenuItem("Dvalmi/Generator/Code Generator/EntityAndUIForm")]
+        [MenuItem("Dvalmi/Code Generator/EntityAndUIForm")]
         public static void OpenCodeGeneratorWindow()
         {
             EntityAndUIFormCodeGenerator window = GetWindow<EntityAndUIFormCodeGenerator>(true, "实体与界面代码生成器");

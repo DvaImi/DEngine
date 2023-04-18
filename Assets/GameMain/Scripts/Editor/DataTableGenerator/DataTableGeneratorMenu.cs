@@ -21,7 +21,7 @@ namespace Dvalmi.Editor.DataTableTools
 {
     public sealed class DataTableGeneratorMenu
     {
-        [MenuItem("Dvalmi/Generator/Generate DataTables")]
+        [MenuItem("Dvalmi/Generate DataTables")]
         internal static void GenerateDataTables()
         {
             string[] dataTableExcelFiles = Directory.GetFiles(DvalmiSetting.Instance.DataTableExcelPath);

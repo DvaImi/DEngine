@@ -14,7 +14,6 @@
       <Resource Name="DataTables/UISound" LoadType="0" Packed="False" />
       <Resource Name="Entities/EnitityPlane" LoadType="0" Packed="False" />
       <Resource Name="Fonts/MainFont" LoadType="1" Packed="True" />
-      <Resource Name="GameHotfixEntry" LoadType="0" Packed="False" />
       <Resource Name="HybridCLRData/Hotfixdll/Game" LoadType="0" Packed="False" />
       <Resource Name="HybridCLRData/Hotfixdll/GameFramework" LoadType="0" Packed="False" />
       <Resource Name="HybridCLRData/Hotfixdll/mscorlib" LoadType="0" Packed="False" />
@@ -25,6 +24,7 @@
       <Resource Name="Localization/ChineseTraditional/Dictionaries/Default" LoadType="1" Packed="True" />
       <Resource Name="Localization/English/Dictionaries/Default" LoadType="1" Packed="True" />
       <Resource Name="Localization/Korean/Dictionaries/Default" LoadType="1" Packed="True" />
+      <Resource Name="Prefab/GameHotfixEntry" LoadType="0" Packed="False" />
       <Resource Name="Scenes/Menu" LoadType="0" Packed="False" />
       <Resource Name="UI/UIForms/WelcomeForm" LoadType="0" Packed="False" />
     </Resources>
@@ -33,7 +33,7 @@
       <Asset Guid="059cc4969a1bf5d489d20d55a9631c7a" ResourceName="HybridCLRData/Hotfixdll/System" />
       <Asset Guid="1053b0070685be347ab58587156842dc" ResourceName="Localization/ChineseTraditional/Dictionaries/Default" />
       <Asset Guid="14869ac0d4433f04db1704e39d03412e" ResourceName="Localization/English/Dictionaries/Default" />
-      <Asset Guid="160c4b5e23f35a642acd901f0a4cde0c" ResourceName="GameHotfixEntry" />
+      <Asset Guid="160c4b5e23f35a642acd901f0a4cde0c" ResourceName="Prefab/GameHotfixEntry" />
       <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="DataTables/UIForm" />
       <Asset Guid="2d195be6cdc3ebb4d93b0323dbf298ad" ResourceName="UI/UIForms/WelcomeForm" />
       <Asset Guid="3e6f327a1634de344aa6262ab303a930" ResourceName="Configs/Runtime/BuildInfo" />

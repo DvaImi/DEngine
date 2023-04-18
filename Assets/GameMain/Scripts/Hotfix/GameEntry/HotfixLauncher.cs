@@ -5,7 +5,6 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using System.IO;
 using GameFramework;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
@@ -43,13 +42,17 @@ namespace Dvalmi.Hotfix
         /// </summary>
         public void LoadMetadataForAOTAssemblies()
         {
-            m_AOTFlag = GameEntry.BuiltinData.HotfixInfo.AOTDllNames.Length;
+            string[] aotdll = GameEntry.BuiltinData.HotfixInfo.GetAOTDllFullName();
+            if (aotdll == null)
+            {
+                Log.Fatal("AOTAssemblies is invalid.");
+                return;
+            }
+            m_AOTFlag = aotdll.Length;
             m_AOTLoadFlag = 0;
             for (int i = 0; i < m_AOTFlag; i++)
             {
-                string dllName = GameEntry.BuiltinData.HotfixInfo.AOTDllNames[i];
-                string assetName = Utility.Path.GetRegularPath(Path.Combine(GameEntry.BuiltinData.HotfixInfo.HotfixDllPath, dllName + GameEntry.BuiltinData.HotfixInfo.HotfixDllSuffix));
-                GameEntry.Resource.LoadAsset(assetName, new LoadAssetCallbacks(OnLoadAOTDllSuccess, OnLoadAOTDllFailure));
+                GameEntry.Resource.LoadAsset(aotdll[i], new LoadAssetCallbacks(OnLoadAOTDllSuccess, OnLoadAOTDllFailure));
             }
         }
 
@@ -86,8 +89,18 @@ namespace Dvalmi.Hotfix
             };
             procedureManager.Initialize(GameFrameworkEntry.GetModule<IFsmManager>(), procedures);
 
-            //在次进入热更新启动流程
+            //在此进入热更新启动流程
             procedureManager.StartProcedure<ProcedureHotfixLaunch>();
+            UnLoadLauncher();
+        }
+
+        /// <summary>
+        /// 启动热更新流程后卸载热更新启动器
+        /// </summary>
+        private void UnLoadLauncher()
+        {
+            Destroy(gameObject);
+            Resources.UnloadUnusedAssets();
         }
     }
 }

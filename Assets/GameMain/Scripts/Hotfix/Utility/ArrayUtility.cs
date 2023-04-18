@@ -270,5 +270,24 @@ namespace Dvalmi
                 }
             }
         }
+
+        /// <summary>
+        /// 判定数组是否包含给定值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static bool Contains<T>(T[] array, T t)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (EqualityComparer<T>.Default.Equals(array[i], t))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

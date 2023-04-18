@@ -16,7 +16,7 @@ namespace Dvalmi.Editor
         [MenuItem("Dvalmi/Open Folder/DataTable Path", false, 10)]
         public static void OpenFolderDataTablePath()
         {
-            UnityGameFramework.Editor.OpenFolder.Execute(DvalmiSetting.Instance.DataTableExcelPath);
+            InternalOpenFolder(DvalmiSetting.Instance.DataTableExcelPath);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Dvalmi.Editor
         [MenuItem("Dvalmi/Open Folder/AssetBundle Output", false, 11)]
         public static void OpenFolderAssetBundlePath()
         {
-            UnityGameFramework.Editor.OpenFolder.Execute(DvalmiSetting.Instance.AssetBundleOutput);
+            InternalOpenFolder(DvalmiSetting.Instance.AssetBundleOutput);
         }
 
         /// <summary>
@@ -34,8 +34,12 @@ namespace Dvalmi.Editor
         [MenuItem("Dvalmi/Open Folder/Publish Output", false, 12)]
         public static void OpenFolderPublishAppPath()
         {
-            UnityGameFramework.Editor.OpenFolder.Execute(DvalmiSetting.Instance.PublishAppOutput);
+            InternalOpenFolder(DvalmiSetting.Instance.PublishAppOutput);
         }
 
+        internal static void InternalOpenFolder(string path)
+        {
+            UnityGameFramework.Editor.OpenFolder.Execute(path);
+        }
     }
 }

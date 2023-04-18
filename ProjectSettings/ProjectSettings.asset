@@ -701,7 +701,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Android: ENABLE_LOG
+    Android: ENABLE_LOG;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
     Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ENABLE_LOG
     WebGL: ENABLE_LOG
     Windows Store Apps: ENABLE_LOG

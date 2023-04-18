@@ -83,21 +83,25 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     public string HotfixNameSpace = "Dvalmi.Hotfix";
 
     [Header("Build Setting")]
+    [InlineButton(nameof(PingObject), "Go")]
     [DFilePath(Extensions = "*.xml")]
     /// <summary>
     /// 
     /// </summary>
     public string BuildSettingsConfig;
+    [InlineButton(nameof(PingObject), "Go")]
     [DFilePath(Extensions = "*.xml")]
     /// <summary>
     /// 
     /// </summary>
     public string ResourceCollectionConfig;
     [DFilePath(Extensions = "*.xml")]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 
     /// </summary>
     public string ResourceEditorConfig;
+    [InlineButton(nameof(PingObject), "Go")]
     [DFilePath(Extensions = "*.xml")]
     /// <summary>
     /// 
@@ -107,7 +111,9 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// 构建信息写入路径
     /// </summary>
     [DFilePath(Extensions = "*.txt")]
+    [InlineButton(nameof(PingObject), "Go")]
     public string BuildInfoPath;
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 数据表信息写入路径
     /// </summary>
@@ -117,41 +123,49 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// AssetBundle 构建路径
     /// </summary>
     [FolderPath]
+    [InlineButton(nameof(OpenOutFolder), "Go")]
     public string AssetBundleOutput;
     /// <summary>
     /// 构建应用路径
     /// </summary>
     [FolderPath]
+    [InlineButton(nameof(OpenOutFolder), "Go")]
     public string PublishAppOutput;
 
     [Header("Scripts Generate Path")]
     [Space]
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 实体脚本生成路径
     /// </summary>
     public string EntityCodePath;
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     ///  热更实体脚本生成路径
     /// </summary>
     public string HotfixEntityCodePath;
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// UI界面逻辑生成路径
     /// </summary>
     public string UIFormCodePath;
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 热更UI界面逻辑生成路径
     /// </summary>
     public string HotfixUIFormCodePath;
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 事件生成路径
     /// </summary>
     public string EventCodePath;
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 热更事件生成路径
     /// </summary>
@@ -160,18 +174,22 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     [Space]
     [Header("DataTable Path")]
     [FolderPath]
+    [InlineButton(nameof(OpenOutFolder), "Go")]
     public string DataTableExcelPath;
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 游戏数据表路径
     /// </summary>
     public string DataTablePath;
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 数据表逻辑类路径
     /// </summary>
     public string CSharpCodePath;
     [DFilePath(Extensions = "*.txt")]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 数据表类模板路径
     /// </summary>
@@ -180,6 +198,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     [Header("Hotfix Setting")]
     [Space]
     [FolderPath]
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 热更程序集生成路径
     /// </summary>
@@ -191,6 +210,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// <summary>
     /// AOT 程序集
     /// </summary>
+    [InlineButton(nameof(SelectAOTDlls), "Select")]
     public string[] AOTDllNames;
     /// <summary>
     /// 其他预留热更新程序集
@@ -202,6 +222,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     public string HotfixDllSuffix;
     [DFilePath(Extensions = "*.txt")]
     public string HotfixInfoPath;
+    [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
     /// 热更新启动器资源
     /// </summary>
@@ -235,7 +256,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// </summary>
     public string UpdatePrefixUri;
 
-    private void SaveSetting()
+    public void SaveSetting()
     {
         if (EditorGUI.EndChangeCheck())
         {
@@ -314,5 +335,21 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
 
             AssetDatabase.Refresh();
         }
+    }
+
+    private void SelectAOTDlls()
+    {
+        SelectAssembly odinEditor = GetWindow<SelectAssembly>();
+        odinEditor.Open();
+    }
+    private void PingObject(string assetPath)
+    {
+        Object obj = AssetDatabase.LoadAssetAtPath(assetPath, typeof(Object));
+        EditorGUIUtility.PingObject(obj);
+    }
+
+    private void OpenOutFolder(string path)
+    {
+        OpenFolder.InternalOpenFolder(path);
     }
 }
