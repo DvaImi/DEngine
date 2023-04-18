@@ -115,6 +115,10 @@ namespace Dvalmi.Editor
         /// </summary>
         public string HotfixInfoPath;
         /// <summary>
+        /// 热更新启动器资源
+        /// </summary>
+        public string HotfixLauncher;
+        /// <summary>
         /// 请求版本文件接口
         /// </summary>
         public string CheckVersionUrl = "http://192.168.1.102/{0}Version.txt";

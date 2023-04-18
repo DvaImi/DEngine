@@ -5,6 +5,7 @@
 // 版 本：1.0
 // ========================================================
 
+using GameFramework;
 using Newtonsoft.Json;
 
 public class HotfixInfo
@@ -50,9 +51,18 @@ public class HotfixInfo
         get; set;
     }
 
+    /// <summary>
+    /// 热更新启动对象路径
+    /// </summary>
+    public string HotfixLauncher
+    {
+        get;
+        set;
+    }
+
     [JsonIgnore]
     public string HotfixMainDllFullName
     {
-        get => HotfixDllPath + HotfixDllNameMain;
+        get => Utility.Path.GetRegularPath(System.IO.Path.Combine(HotfixDllPath, HotfixDllNameMain + HotfixDllSuffix));
     }
 }

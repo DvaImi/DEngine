@@ -1,1 +1,1 @@
-{"HotfixDllPath":"Assets/GameMain/AssetBundle/HotfixDll","HotfixDllNameMain":"Game.Hotfix.dll","AOTDllNames":["mscorlib.dll","System.dll","System.Core.dll"],"PreserveHotfixDllNames":[],"HotfixDllSuffix":".bytes"}
+{"HotfixDllPath":"Assets/GameMain/AssetBundle/HybridCLRData/Hotfixdll","HotfixDllNameMain":"Game.Hotfix.dll","AOTDllNames":["mscorlib.dll","System.dll","System.Core.dll","GameFramework.dll","UnityGameFramework.Runtime.dll"],"PreserveHotfixDllNames":[],"HotfixDllSuffix":".bytes","HotfixLauncher":"Assets/GameMain/AssetBundle/GameHotfixEntry.prefab"}

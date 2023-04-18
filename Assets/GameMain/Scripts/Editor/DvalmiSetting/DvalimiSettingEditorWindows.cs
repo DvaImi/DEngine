@@ -49,6 +49,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
         PreserveHotfixDllNames = DvalmiSetting.Instance.PreserveHotfixDllNames;
         HotfixDllSuffix = DvalmiSetting.Instance.HotfixDllSuffix;
         HotfixInfoPath = DvalmiSetting.Instance.HotfixInfoPath;
+        HotfixLauncher = DvalmiSetting.Instance.HotfixLauncher;
         CheckVersionUrl = DvalmiSetting.Instance.CheckVersionUrl;
         WindowsAppUrl = DvalmiSetting.Instance.WindowsAppUrl;
         MacOSAppUrl = DvalmiSetting.Instance.MacOSAppUrl;
@@ -106,7 +107,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// 构建信息写入路径
     /// </summary>
     [DFilePath(Extensions = "*.txt")]
-    public string BuildInfoPath;  
+    public string BuildInfoPath;
     /// <summary>
     /// 数据表信息写入路径
     /// </summary>
@@ -164,7 +165,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// <summary>
     /// 游戏数据表路径
     /// </summary>
-    public string DataTablePath;  
+    public string DataTablePath;
     [FolderPath]
     /// <summary>
     /// 数据表逻辑类路径
@@ -201,6 +202,11 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     public string HotfixDllSuffix;
     [DFilePath(Extensions = "*.txt")]
     public string HotfixInfoPath;
+    /// <summary>
+    /// 热更新启动器资源
+    /// </summary>
+    [DFilePath(Extensions = "*.prefab")]
+    public string HotfixLauncher;
 
     [Header("Resources Url")]
     [Space]
@@ -228,7 +234,6 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     /// 下载资源接口
     /// </summary>
     public string UpdatePrefixUri;
-
 
     private void SaveSetting()
     {
@@ -258,6 +263,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
             DvalmiSetting.Instance.PreserveHotfixDllNames = PreserveHotfixDllNames;
             DvalmiSetting.Instance.HotfixDllSuffix = HotfixDllSuffix;
             DvalmiSetting.Instance.HotfixInfoPath = HotfixInfoPath;
+            DvalmiSetting.Instance.HotfixLauncher = HotfixLauncher;
             DvalmiSetting.Instance.CheckVersionUrl = CheckVersionUrl;
             DvalmiSetting.Instance.WindowsAppUrl = WindowsAppUrl;
             DvalmiSetting.Instance.MacOSAppUrl = MacOSAppUrl;
@@ -294,7 +300,8 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
                 HotfixDllNameMain = DvalmiSetting.Instance.HotfixDllNameMain,
                 AOTDllNames = DvalmiSetting.Instance.AOTDllNames,
                 PreserveHotfixDllNames = DvalmiSetting.Instance.PreserveHotfixDllNames,
-                HotfixDllSuffix = DvalmiSetting.Instance.HotfixDllSuffix
+                HotfixDllSuffix = DvalmiSetting.Instance.HotfixDllSuffix,
+                HotfixLauncher = DvalmiSetting.Instance.HotfixLauncher
             };
             string hotfixJson = Newtonsoft.Json.JsonConvert.SerializeObject(hotfixInfo);
 

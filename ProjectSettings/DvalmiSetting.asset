@@ -30,19 +30,20 @@ MonoBehaviour:
   HotfixEventCodePath: Assets/GameMain/Scripts/Hotfix/EventArgs
   DataTableExcelPath: DataTables/Excel
   DataTablePath: Assets/GameMain/AssetBundle/DataTables
-  ConfigDataTableExcelPath: DataTables/Config
-  ConfigDataTablePath: Assets/GameMain/AssetBundle/Configs/Runtime
   CSharpCodePath: Assets/GameMain/Scripts/Hotfix/DataTable
   CSharpCodeTemplateFileName: Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt
-  HotfixDllPath: Assets/GameMain/AssetBundle/HotfixDll
+  HotfixDllPath: Assets/GameMain/AssetBundle/HybridCLRData/Hotfixdll
   HotfixDllNameMain: Game.Hotfix.dll
   AOTDllNames:
   - mscorlib.dll
   - System.dll
   - System.Core.dll
+  - GameFramework.dll
+  - UnityGameFramework.Runtime.dll
   PreserveHotfixDllNames: []
   HotfixDllSuffix: .bytes
   HotfixInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/HotfixInfo.txt
+  HotfixLauncher: Assets/GameMain/AssetBundle/GameHotfixEntry.prefab
   CheckVersionUrl: http://192.168.1.102/{0}Version.txt
   WindowsAppUrl: http://192.168.1.102
   MacOSAppUrl: 

@@ -6,12 +6,17 @@
 //------------------------------------------------------------
 
 using GameFramework.Procedure;
+using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
 namespace Dvalmi.Hotfix
 {
-    public class ProcedureMain : ProcedureBase
+    public class ProcedureHotfixLaunch : ProcedureBase
     {
+        /// <summary>
+        /// 热更新流程启动
+        /// </summary>
+        /// <param name="procedureOwner"></param>
         protected override void OnInit(ProcedureOwner procedureOwner)
         {
             base.OnInit(procedureOwner);
@@ -25,7 +30,7 @@ namespace Dvalmi.Hotfix
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-          
+            Log.Debug("ProcedureHotfix  Launch  ");
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -36,6 +41,7 @@ namespace Dvalmi.Hotfix
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+            ChangeState<ProcedurePreload>(procedureOwner);
         }
     }
 }

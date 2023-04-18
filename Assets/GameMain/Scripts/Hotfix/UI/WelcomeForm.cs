@@ -20,5 +20,15 @@ namespace Dvalmi.Hotfix
 			base.OnInit(userdata);
 
 		}
-	}
+
+        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+            base.OnUpdate(elapseSeconds, realElapseSeconds);
+
+			if (Input.anyKey)
+			{
+				Close();
+			}
+        }
+    }
 }

@@ -4,7 +4,6 @@
 // 创建时间：2023-04-16 12:44:18
 // 版 本：1.0
 // ========================================================
-using System.Linq;
 using System.Reflection;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
@@ -21,31 +20,49 @@ namespace Dvalmi
             base.OnEnter(procedureOwner);
 
 #if UNITY_EDITOR
-            Assembly hotfixAssembly = System.AppDomain.CurrentDomain.GetAssemblies().First(assembly => assembly.GetName().Name == "Game.Hotfix");
-            StartHotfix(hotfixAssembly);
+            HotfixLauncher();
 #else
-            GameEntry.Resource.LoadAsset(GameEntry.BuiltinData.HotfixInfo.HotfixMainDllFullName, new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFail));
+            LoadHotfixDll();
 #endif
         }
 
-        private void OnLoadAssetSuccess(string assetName, object asset, float duration, object userData)
+        private void HotfixLauncher()
+        {
+            GameEntry.Resource.LoadAsset(GameEntry.BuiltinData.HotfixInfo.HotfixLauncher, new LoadAssetCallbacks(OnLoadGameHotfixAssetSuccess, OnLoadGameHotfixAssetFailure));
+        }
+
+        private void LoadHotfixDll()
+        {
+            GameEntry.Resource.LoadAsset(GameEntry.BuiltinData.HotfixInfo.HotfixMainDllFullName, new LoadAssetCallbacks(OnLoadHotfixDllSuccess, OnLoadHotfixDllFailurel));
+        }
+
+        private void OnLoadHotfixDllFailurel(string assetName, LoadResourceStatus status, string errorMessage, object userData)
+        {
+            Log.Error("Load  dll failed. " + errorMessage);
+        }
+
+        private void OnLoadHotfixDllSuccess(string assetName, object asset, float duration, object userData)
         {
             TextAsset dll = (TextAsset)asset;
             Assembly hotfixAssembly = Assembly.Load(dll.bytes);
+            if (hotfixAssembly == null)
+            {
+                Log.Fatal($"Load hotfix dll {assetName} is Fail");
+                return;
+            }
             Log.Info("Load hotfix dll OK.");
-            StartHotfix(hotfixAssembly);
+            HotfixLauncher();
         }
 
-        private void OnLoadAssetFail(string assetName, LoadResourceStatus status, string errorMessage, object userData)
+        private void OnLoadGameHotfixAssetSuccess(string assetName, object asset, float duration, object userData)
         {
-            Log.Error("Load hotfix dll failed. " + errorMessage);
+            GameObject game = UnityEngine.Object.Instantiate((GameObject)asset);
+            game.name = "[GameHotfixEntry]";
         }
 
-        private void StartHotfix(Assembly hotfixAssembly)
+        private void OnLoadGameHotfixAssetFailure(string assetName, LoadResourceStatus status, string errorMessage, object userData)
         {
-            var hotfixEntry = hotfixAssembly.GetType("Dvalmi.Hotfix.GameHotfixEntry");
-            var start = hotfixEntry.GetMethod("Start");
-            start?.Invoke(null, null);
+            Log.Error("Load  game hotfixentry failed. " + errorMessage);
         }
     }
 }

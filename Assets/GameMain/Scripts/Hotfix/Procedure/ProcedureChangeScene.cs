@@ -89,7 +89,7 @@ namespace Dvalmi.Hotfix
             }
             else
             {
-                ChangeState<ProcedureMain>(procedureOwner);
+                ChangeState<ProcedureHotfixLaunch>(procedureOwner);
             }
         }
 

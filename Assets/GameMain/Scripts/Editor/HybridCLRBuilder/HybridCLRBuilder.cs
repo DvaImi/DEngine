@@ -8,6 +8,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using HybridCLR.Editor.Commands;
+using UnityGameFramework.Editor.ResourceTools;
 
 namespace Dvalmi.Editor
 {
@@ -86,7 +87,8 @@ namespace Dvalmi.Editor
                 }
                 if (GUILayout.Button("Build", GUILayout.Width(100)))
                 {
-                    EditorWindow window = GetWindow(Type.GetType("UnityGameFramework.Editor.ResourceTools.ResourceBuilder,UnityGameFramework.Editor"));
+                    Type resType = Type.GetType("UnityGameFramework.Editor.ResourceTools.ResourceBuilder,UnityGameFramework.Editor");
+                    EditorWindow window = GetWindow(resType);
                     window.Show();
                 }
             }
