@@ -73,3 +73,5 @@ crashlytics-build.properties
 /AssetBundle
 /Publish
 /HybridCLRData
+/Assets/GameMain/AssetBundle/HybridCLRData
+/Assets/GameMain/AssetBundle/HybridCLRData.meta

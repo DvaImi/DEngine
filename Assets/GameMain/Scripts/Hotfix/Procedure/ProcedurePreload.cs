@@ -56,7 +56,6 @@ namespace Dvalmi.Hotfix
             {
                 if (!loadedFlag.Value)
                 {
-                    Log.Debug(loadedFlag.Key);
                     return;
                 }
             }
