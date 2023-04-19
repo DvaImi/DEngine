@@ -32,6 +32,8 @@ MonoBehaviour:
   DataTablePath: Assets/GameMain/AssetBundle/DataTables
   CSharpCodePath: Assets/GameMain/Scripts/Hotfix/DataTable
   CSharpCodeTemplateFileName: Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt
+  DictionaryExclePath: DataTables/Dictionary
+  DictionaryDataPath: Assets/GameMain/AssetBundle/Localization/Dictionaries
   HotfixDllPath: Assets/GameMain/AssetBundle/HybridCLRData/Hotfixdll
   HotfixDllNameMain: Game.Hotfix.dll
   AOTDllNames:

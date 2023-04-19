@@ -44,7 +44,7 @@ namespace Dvalmi.Editor
         /// <summary>
         /// 构建信息路径
         /// </summary>
-        public string BuildInfoPath = "GameMain/Configs/Runtime/BuildInfo.txt"; 
+        public string BuildInfoPath = "GameMain/Configs/Runtime/BuildInfo.txt";
         /// <summary>
         /// 数据表关联路径
         /// </summary>
@@ -89,6 +89,14 @@ namespace Dvalmi.Editor
         /// 数据表类模板路径
         /// </summary>
         public string CSharpCodeTemplateFileName = "Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt";
+        /// <summary>
+        /// 游戏本地化字典表格路径
+        /// </summary>
+        public string DictionaryExclePath;
+        /// <summary>
+        /// 游戏字典生成路径
+        /// </summary>
+        public string DictionaryDataPath;
         /// <summary>
         /// 热更程序集生成路径
         /// </summary>

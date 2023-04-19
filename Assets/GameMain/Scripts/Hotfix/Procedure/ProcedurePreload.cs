@@ -76,7 +76,7 @@ namespace Dvalmi.Hotfix
             }
 
             // Preload dictionaries
-            LoadDictionary("Default");
+            LoadDictionary();
 
             // Preload fonts
             LoadFont("MainFont");
@@ -96,9 +96,9 @@ namespace Dvalmi.Hotfix
             GameEntry.DataTable.LoadDataTable(dataTableName, dataTableAssetName, this);
         }
 
-        private void LoadDictionary(string dictionaryName)
+        private void LoadDictionary()
         {
-            string dictionaryAssetName = AssetUtility.GetDictionaryAsset(dictionaryName, false);
+            string dictionaryAssetName = AssetUtility.GetDictionaryAsset();
             m_LoadedFlag.Add(dictionaryAssetName, false);
             GameEntry.Localization.ReadData(dictionaryAssetName, this);
         }

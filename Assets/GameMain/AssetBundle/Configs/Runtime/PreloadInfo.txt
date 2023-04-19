@@ -1,1 +1,1 @@
-{"DateTable":["Entity","Music","Scene","Sound","UIForm","UISound"],"Dictionary":[]}
+{"DateTable":["Entity","Music","Scene","Sound","UIForm","UISound"],"Dictionary":["ChineseSimplified","ChineseTraditional","English","Korean","LanguageBuiltin"],"Config":null}

@@ -62,7 +62,7 @@ namespace Dvalmi
 
         private void OnLoadGameHotfixAssetFailure(string assetName, LoadResourceStatus status, string errorMessage, object userData)
         {
-            Log.Error("Load  game hotfixentry failed. " + errorMessage);
+            Log.Error("Load  game hotfix entry failed. " + errorMessage);
         }
     }
 }

@@ -26,4 +26,13 @@ public class PreloadInfo
         get;
         set;
     }
+
+    /// <summary>
+    /// 配置
+    /// </summary>
+    public List<string> Config
+    {
+        get;
+        set;
+    }
 }

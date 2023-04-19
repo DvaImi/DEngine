@@ -32,7 +32,7 @@ namespace Dvalmi.Editor.DataTableTools
         }
 
         /// <summary>
-        /// 从excle生成
+        /// 从excle生成数据表
         /// </summary>
         /// <param name="sheet"></param>
         /// <returns></returns>
@@ -81,25 +81,7 @@ namespace Dvalmi.Editor.DataTableTools
                 File.Delete(csharpCodeFileName);
             }
         }
-
-        public static void GenerateDataTableInfoFile(List<string> dataTables, List<string> dictionary)
-        {
-            PreloadInfo preloadInfo = new()
-            {
-                DateTable = dataTables,
-                Dictionary = dictionary
-            };
-
-            string preloadInfoJson = Newtonsoft.Json.JsonConvert.SerializeObject(preloadInfo);
-
-            using (FileStream stream = new(DvalmiSetting.Instance.PreloadInfoPath, FileMode.Create, FileAccess.Write))
-            {
-                UTF8Encoding utf8Encoding = new(false);
-                using StreamWriter writer = new(stream, utf8Encoding);
-                writer.Write(preloadInfoJson);
-            }
-        }
-
+               
         private static void DataTableCodeGenerator(DataTableProcessor dataTableProcessor, StringBuilder codeContent, object userData)
         {
             string dataTableName = (string)userData;

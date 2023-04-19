@@ -5,14 +5,12 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using Dvalmi.Hotfix;
+using Dvalmi.Editor.DictionaryTools;
 using GameFramework;
-using GameFramework.DataTable;
 using OfficeOpenXml;
 using UnityEditor;
 using UnityEngine;
@@ -24,17 +22,16 @@ namespace Dvalmi.Editor.DataTableTools
         [MenuItem("Dvalmi/Generate DataTables")]
         internal static void GenerateDataTables()
         {
-            string[] dataTableExcelFiles = Directory.GetFiles(DvalmiSetting.Instance.DataTableExcelPath);
+            string[] dataTableExcelFiles = Directory.GetFiles(DvalmiSetting.Instance.DataTableExcelPath, "*.xlsx");
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             List<string> dataTableinfo = new List<string>();
-            List<string> dictionary = new List<string>();
             foreach (var excelFile in dataTableExcelFiles)
             {
-                if (!excelFile.EndsWith(".xlsx") || excelFile.Contains("~$"))
+                if (excelFile.Contains("~$"))
                 {
+                    Debug.LogWarningFormat("Excle {0} 进程占用，请先关闭以完成操作。", excelFile);
                     continue;
                 }
-
                 using (FileStream fileStream = new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (ExcelPackage excelPackage = new ExcelPackage(fileStream))
@@ -68,7 +65,7 @@ namespace Dvalmi.Editor.DataTableTools
                     }
                 }
             }
-            DataTableGenerator.GenerateDataTableInfoFile(dataTableinfo, dictionary);
+            PreloadUtility.GenerateDataTableInfoFile(dataTableinfo);
             AssetDatabase.Refresh();
         }
     }

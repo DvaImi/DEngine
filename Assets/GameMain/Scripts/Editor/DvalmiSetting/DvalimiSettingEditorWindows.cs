@@ -25,37 +25,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     protected override void OnEnable()
     {
         base.OnEnable();
-        BuildSettingsConfig = DvalmiSetting.Instance.BuildSettingsConfig;
-        ResourceCollectionConfig = DvalmiSetting.Instance.ResourceCollectionConfig;
-        ResourceEditorConfig = DvalmiSetting.Instance.ResourceEditorConfig;
-        ResourceBuilderConfig = DvalmiSetting.Instance.ResourceBuilderConfig;
-        AssetBundleOutput = DvalmiSetting.Instance.AssetBundleOutput;
-        PublishAppOutput = DvalmiSetting.Instance.PublishAppOutput;
-        BuildInfoPath = DvalmiSetting.Instance.BuildInfoPath;
-        PreloadInfoPath = DvalmiSetting.Instance.PreloadInfoPath;
-        EntityCodePath = DvalmiSetting.Instance.EntityCodePath;
-        HotfixEntityCodePath = DvalmiSetting.Instance.HotfixEntityCodePath;
-        UIFormCodePath = DvalmiSetting.Instance.UIFormCodePath;
-        HotfixUIFormCodePath = DvalmiSetting.Instance.HotfixUIFormCodePath;
-        EventCodePath = DvalmiSetting.Instance.EventCodePath;
-        HotfixEventCodePath = DvalmiSetting.Instance.HotfixEventCodePath;
-        DataTableExcelPath = DvalmiSetting.Instance.DataTableExcelPath;
-        DataTablePath = DvalmiSetting.Instance.DataTablePath;
-        CSharpCodePath = DvalmiSetting.Instance.CSharpCodePath;
-        CSharpCodeTemplateFileName = DvalmiSetting.Instance.CSharpCodeTemplateFileName;
-        HotfixDllPath = DvalmiSetting.Instance.HotfixDllPath;
-        HotfixDllNameMain = DvalmiSetting.Instance.HotfixDllNameMain;
-        AOTDllNames = DvalmiSetting.Instance.AOTDllNames;
-        PreserveHotfixDllNames = DvalmiSetting.Instance.PreserveHotfixDllNames;
-        HotfixDllSuffix = DvalmiSetting.Instance.HotfixDllSuffix;
-        HotfixInfoPath = DvalmiSetting.Instance.HotfixInfoPath;
-        HotfixLauncher = DvalmiSetting.Instance.HotfixLauncher;
-        CheckVersionUrl = DvalmiSetting.Instance.CheckVersionUrl;
-        WindowsAppUrl = DvalmiSetting.Instance.WindowsAppUrl;
-        MacOSAppUrl = DvalmiSetting.Instance.MacOSAppUrl;
-        IOSAppUrl = DvalmiSetting.Instance.IOSAppUrl;
-        AndroidAppUrl = DvalmiSetting.Instance.AndroidAppUrl;
-        UpdatePrefixUri = DvalmiSetting.Instance.UpdatePrefixUri;
+        GetValue();
     }
 
 
@@ -176,6 +146,13 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     [FolderPath]
     [InlineButton(nameof(OpenOutFolder), "Go")]
     public string DataTableExcelPath;
+    [Header("Dictionary Path")]
+    [FolderPath]
+    [InlineButton(nameof(OpenOutFolder), "Go")]
+    public string DictionaryExclePath; 
+    [FolderPath]
+    [InlineButton(nameof(OpenOutFolder), "Go")]
+    public string DictionaryDataPath;
     [FolderPath]
     [InlineButton(nameof(PingObject), "Go")]
     /// <summary>
@@ -260,39 +237,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     {
         if (EditorGUI.EndChangeCheck())
         {
-            DvalmiSetting.Instance.BuildSettingsConfig = BuildSettingsConfig;
-            DvalmiSetting.Instance.ResourceCollectionConfig = ResourceCollectionConfig;
-            DvalmiSetting.Instance.ResourceEditorConfig = ResourceEditorConfig;
-            DvalmiSetting.Instance.ResourceBuilderConfig = ResourceBuilderConfig;
-            DvalmiSetting.Instance.AssetBundleOutput = AssetBundleOutput;
-            DvalmiSetting.Instance.PublishAppOutput = PublishAppOutput;
-            DvalmiSetting.Instance.BuildInfoPath = BuildInfoPath;
-            DvalmiSetting.Instance.PreloadInfoPath = PreloadInfoPath;
-            DvalmiSetting.Instance.EntityCodePath = EntityCodePath;
-            DvalmiSetting.Instance.HotfixEntityCodePath = HotfixEntityCodePath;
-            DvalmiSetting.Instance.UIFormCodePath = UIFormCodePath;
-            DvalmiSetting.Instance.HotfixUIFormCodePath = HotfixUIFormCodePath;
-            DvalmiSetting.Instance.EventCodePath = EventCodePath;
-            DvalmiSetting.Instance.HotfixEventCodePath = HotfixEventCodePath;
-            DvalmiSetting.Instance.DataTableExcelPath = DataTableExcelPath;
-            DvalmiSetting.Instance.DataTablePath = DataTablePath;
-            DvalmiSetting.Instance.CSharpCodePath = CSharpCodePath;
-            DvalmiSetting.Instance.CSharpCodeTemplateFileName = CSharpCodeTemplateFileName;
-            DvalmiSetting.Instance.HotfixDllPath = HotfixDllPath;
-            DvalmiSetting.Instance.HotfixDllNameMain = HotfixDllNameMain;
-            DvalmiSetting.Instance.AOTDllNames = AOTDllNames;
-            DvalmiSetting.Instance.PreserveHotfixDllNames = PreserveHotfixDllNames;
-            DvalmiSetting.Instance.HotfixDllSuffix = HotfixDllSuffix;
-            DvalmiSetting.Instance.HotfixInfoPath = HotfixInfoPath;
-            DvalmiSetting.Instance.HotfixLauncher = HotfixLauncher;
-            DvalmiSetting.Instance.CheckVersionUrl = CheckVersionUrl;
-            DvalmiSetting.Instance.WindowsAppUrl = WindowsAppUrl;
-            DvalmiSetting.Instance.MacOSAppUrl = MacOSAppUrl;
-            DvalmiSetting.Instance.IOSAppUrl = IOSAppUrl;
-            DvalmiSetting.Instance.AndroidAppUrl = AndroidAppUrl;
-            DvalmiSetting.Instance.UpdatePrefixUri = UpdatePrefixUri;
-
-            DvalmiSetting.Save();
+            SaveValue();
 
             BuildInfo buildInfo = new()
             {
@@ -342,6 +287,7 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
         SelectAssembly odinEditor = GetWindow<SelectAssembly>();
         odinEditor.Open();
     }
+
     private void PingObject(string assetPath)
     {
         Object obj = AssetDatabase.LoadAssetAtPath(assetPath, typeof(Object));
@@ -351,5 +297,81 @@ public class DvalimiSettingEditorWindows : OdinEditorWindow
     private void OpenOutFolder(string path)
     {
         OpenFolder.InternalOpenFolder(path);
+    }
+
+
+    private void GetValue()
+    {
+        BuildSettingsConfig = DvalmiSetting.Instance.BuildSettingsConfig;
+        ResourceCollectionConfig = DvalmiSetting.Instance.ResourceCollectionConfig;
+        ResourceEditorConfig = DvalmiSetting.Instance.ResourceEditorConfig;
+        ResourceBuilderConfig = DvalmiSetting.Instance.ResourceBuilderConfig;
+        AssetBundleOutput = DvalmiSetting.Instance.AssetBundleOutput;
+        PublishAppOutput = DvalmiSetting.Instance.PublishAppOutput;
+        BuildInfoPath = DvalmiSetting.Instance.BuildInfoPath;
+        PreloadInfoPath = DvalmiSetting.Instance.PreloadInfoPath;
+        EntityCodePath = DvalmiSetting.Instance.EntityCodePath;
+        HotfixEntityCodePath = DvalmiSetting.Instance.HotfixEntityCodePath;
+        UIFormCodePath = DvalmiSetting.Instance.UIFormCodePath;
+        HotfixUIFormCodePath = DvalmiSetting.Instance.HotfixUIFormCodePath;
+        EventCodePath = DvalmiSetting.Instance.EventCodePath;
+        HotfixEventCodePath = DvalmiSetting.Instance.HotfixEventCodePath;
+        DataTableExcelPath = DvalmiSetting.Instance.DataTableExcelPath;
+        DataTablePath = DvalmiSetting.Instance.DataTablePath;
+        DictionaryExclePath = DvalmiSetting.Instance.DictionaryExclePath;
+        DictionaryDataPath = DvalmiSetting.Instance.DictionaryDataPath;
+        CSharpCodePath = DvalmiSetting.Instance.CSharpCodePath;
+        CSharpCodeTemplateFileName = DvalmiSetting.Instance.CSharpCodeTemplateFileName;
+        HotfixDllPath = DvalmiSetting.Instance.HotfixDllPath;
+        HotfixDllNameMain = DvalmiSetting.Instance.HotfixDllNameMain;
+        AOTDllNames = DvalmiSetting.Instance.AOTDllNames;
+        PreserveHotfixDllNames = DvalmiSetting.Instance.PreserveHotfixDllNames;
+        HotfixDllSuffix = DvalmiSetting.Instance.HotfixDllSuffix;
+        HotfixInfoPath = DvalmiSetting.Instance.HotfixInfoPath;
+        HotfixLauncher = DvalmiSetting.Instance.HotfixLauncher;
+        CheckVersionUrl = DvalmiSetting.Instance.CheckVersionUrl;
+        WindowsAppUrl = DvalmiSetting.Instance.WindowsAppUrl;
+        MacOSAppUrl = DvalmiSetting.Instance.MacOSAppUrl;
+        IOSAppUrl = DvalmiSetting.Instance.IOSAppUrl;
+        AndroidAppUrl = DvalmiSetting.Instance.AndroidAppUrl;
+        UpdatePrefixUri = DvalmiSetting.Instance.UpdatePrefixUri;
+    }
+
+    private void SaveValue()
+    {
+        DvalmiSetting.Instance.BuildSettingsConfig = BuildSettingsConfig;
+        DvalmiSetting.Instance.ResourceCollectionConfig = ResourceCollectionConfig;
+        DvalmiSetting.Instance.ResourceEditorConfig = ResourceEditorConfig;
+        DvalmiSetting.Instance.ResourceBuilderConfig = ResourceBuilderConfig;
+        DvalmiSetting.Instance.AssetBundleOutput = AssetBundleOutput;
+        DvalmiSetting.Instance.PublishAppOutput = PublishAppOutput;
+        DvalmiSetting.Instance.BuildInfoPath = BuildInfoPath;
+        DvalmiSetting.Instance.PreloadInfoPath = PreloadInfoPath;
+        DvalmiSetting.Instance.EntityCodePath = EntityCodePath;
+        DvalmiSetting.Instance.HotfixEntityCodePath = HotfixEntityCodePath;
+        DvalmiSetting.Instance.UIFormCodePath = UIFormCodePath;
+        DvalmiSetting.Instance.HotfixUIFormCodePath = HotfixUIFormCodePath;
+        DvalmiSetting.Instance.EventCodePath = EventCodePath;
+        DvalmiSetting.Instance.HotfixEventCodePath = HotfixEventCodePath;
+        DvalmiSetting.Instance.DataTableExcelPath = DataTableExcelPath;
+        DvalmiSetting.Instance.DataTablePath = DataTablePath;
+        DvalmiSetting.Instance.DictionaryExclePath = DictionaryExclePath;
+        DvalmiSetting.Instance.DictionaryDataPath = DictionaryDataPath;
+        DvalmiSetting.Instance.CSharpCodePath = CSharpCodePath;
+        DvalmiSetting.Instance.CSharpCodeTemplateFileName = CSharpCodeTemplateFileName;
+        DvalmiSetting.Instance.HotfixDllPath = HotfixDllPath;
+        DvalmiSetting.Instance.HotfixDllNameMain = HotfixDllNameMain;
+        DvalmiSetting.Instance.AOTDllNames = AOTDllNames;
+        DvalmiSetting.Instance.PreserveHotfixDllNames = PreserveHotfixDllNames;
+        DvalmiSetting.Instance.HotfixDllSuffix = HotfixDllSuffix;
+        DvalmiSetting.Instance.HotfixInfoPath = HotfixInfoPath;
+        DvalmiSetting.Instance.HotfixLauncher = HotfixLauncher;
+        DvalmiSetting.Instance.CheckVersionUrl = CheckVersionUrl;
+        DvalmiSetting.Instance.WindowsAppUrl = WindowsAppUrl;
+        DvalmiSetting.Instance.MacOSAppUrl = MacOSAppUrl;
+        DvalmiSetting.Instance.IOSAppUrl = IOSAppUrl;
+        DvalmiSetting.Instance.AndroidAppUrl = AndroidAppUrl;
+        DvalmiSetting.Instance.UpdatePrefixUri = UpdatePrefixUri;
+        DvalmiSetting.Save();
     }
 }
