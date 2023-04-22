@@ -8,8 +8,9 @@
 using GameFramework.DataTable;
 using System;
 using UnityGameFramework.Runtime;
+using GeminiLion;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public static class EntityExtension
     {

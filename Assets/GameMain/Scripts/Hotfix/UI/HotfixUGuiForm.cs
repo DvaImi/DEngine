@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public abstract class HotfixUGuiForm : UIFormLogic
     {

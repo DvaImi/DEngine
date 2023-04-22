@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f11173a96df2443448daab21bb7f0244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Text: {fileID: 2593032867071274300}
 --- !u!1 &2593032866789150676
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,10 +201,10 @@ RectTransform:
   m_Father: {fileID: 2593032866789150677}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 60}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2593032867071274301
 CanvasRenderer:
@@ -240,10 +241,10 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u770B\u5230\u8FD9\u6761\u6D88\u606F\u4EE3\u8868\u5DF2\u7ECF\u6210\u529F\u8FD0\u884C\u7A0B\u5E8F...\n\u6309\u4EFB\u610F\u952E\u5173\u95ED"
+  m_Text: "\u770B\u5230\u8FD9\u6761\u6D88\u606F\u4EE3\u8868\u5DF2\u7ECF\u6210\u529F\u8FD0\u884CHybirdCLR\u7A0B\u5E8F...\n\u6309\u4EFB\u610F\u952E\u5173\u95ED"

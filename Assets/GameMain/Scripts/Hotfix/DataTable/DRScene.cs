@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023-04-20 00:02:40.922
+// 生成时间：2023-04-22 12:28:56.227
 //------------------------------------------------------------
 
 using GameFramework;
@@ -16,7 +16,7 @@ using System.Text;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     /// <summary>
     /// 场景配置表。

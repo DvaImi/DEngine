@@ -6,7 +6,7 @@
 // ========================================================
 using GameFramework.Event;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public abstract class HotfixGameEventArgs : GameEventArgs
     {

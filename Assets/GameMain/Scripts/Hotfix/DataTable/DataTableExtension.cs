@@ -10,7 +10,7 @@ using GameFramework.DataTable;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public static class DataTableExtension
     {
@@ -32,7 +32,7 @@ namespace Dvalmi.Hotfix
                 return;
             }
 
-            string dataRowClassName = "Dvalmi.Hotfix.DR" + splitedNames[0];
+            string dataRowClassName = "GeminiLion.Hotfix.DR" + splitedNames[0];
             Type dataRowType = Type.GetType(dataRowClassName);
             if (dataRowType == null)
             {

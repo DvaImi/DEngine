@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UnityGameFramework.Runtime;
 
 //自动生成于：2023/4/16 1:20:01
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public static partial class ShowEntityExtension
     {

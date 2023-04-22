@@ -9,7 +9,7 @@ using GameFramework.Procedure;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public class ProcedureHotfixLaunch : ProcedureBase
     {

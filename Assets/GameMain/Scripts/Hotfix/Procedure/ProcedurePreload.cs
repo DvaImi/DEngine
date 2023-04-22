@@ -14,7 +14,7 @@ using UnityEngine;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public class ProcedurePreload : ProcedureBase
     {
@@ -67,7 +67,10 @@ namespace Dvalmi.Hotfix
         private void PreloadResources()
         {
             // Preload configs
-            LoadConfig("DefaultConfig");
+            foreach (var configName in GameEntry.BuiltinData.PreloadInfo.Config)
+            {
+                LoadConfig(configName);
+            }
 
             // Preload data tables
             foreach (string dataTableName in GameEntry.BuiltinData.PreloadInfo.DateTable)
@@ -76,7 +79,7 @@ namespace Dvalmi.Hotfix
             }
 
             // Preload dictionaries
-            LoadDictionary();
+            LoadDictionary("Runtime");
 
             // Preload fonts
             LoadFont("MainFont");
@@ -84,7 +87,7 @@ namespace Dvalmi.Hotfix
 
         private void LoadConfig(string configName)
         {
-            string configAssetName = AssetUtility.GetConfigAsset(configName, false);
+            string configAssetName = AssetUtility.GetConfigAsset(configName, true);
             m_LoadedFlag.Add(configAssetName, false);
             GameEntry.Config.ReadData(configAssetName, this);
         }
@@ -96,9 +99,9 @@ namespace Dvalmi.Hotfix
             GameEntry.DataTable.LoadDataTable(dataTableName, dataTableAssetName, this);
         }
 
-        private void LoadDictionary()
+        private void LoadDictionary(string dictionaryName)
         {
-            string dictionaryAssetName = AssetUtility.GetDictionaryAsset();
+            string dictionaryAssetName = AssetUtility.GetDictionaryAsset(dictionaryName, true);
             m_LoadedFlag.Add(dictionaryAssetName, false);
             GameEntry.Localization.ReadData(dictionaryAssetName, this);
         }

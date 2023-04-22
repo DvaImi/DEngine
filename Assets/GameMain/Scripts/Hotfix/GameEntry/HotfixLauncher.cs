@@ -13,7 +13,7 @@ using HybridCLR;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     /// <summary>
     /// 热更新启动器

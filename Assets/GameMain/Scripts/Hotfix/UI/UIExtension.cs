@@ -7,14 +7,14 @@
 
 using GameFramework.DataTable;
 using GameFramework.UI;
-using Dvalmi;
+using GeminiLion;
 using System.Collections;
 using GameFramework.Procedure;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public static class UIExtension
     {

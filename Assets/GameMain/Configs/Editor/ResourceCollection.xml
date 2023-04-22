@@ -3,7 +3,7 @@
   <ResourceCollection>
     <Resources>
       <Resource Name="Configs/Runtime/BuildInfo" LoadType="0" Packed="True" ResourceGroups="Build" />
-      <Resource Name="Configs/Runtime/DefaultConfig" LoadType="0" Packed="True" ResourceGroups="Build" />
+      <Resource Name="Configs/Runtime/DefaultConfig" LoadType="0" Packed="False" />
       <Resource Name="Configs/Runtime/HotfixInfo" LoadType="0" Packed="True" ResourceGroups="Build" />
       <Resource Name="Configs/Runtime/PreloadInfo" LoadType="0" Packed="True" ResourceGroups="Build" />
       <Resource Name="DataTables/Entity" LoadType="0" Packed="False" />
@@ -20,10 +20,11 @@
       <Resource Name="HybridCLRData/Hotfixdll/System" LoadType="0" Packed="False" />
       <Resource Name="HybridCLRData/Hotfixdll/UnityGameFramework" LoadType="0" Packed="False" />
       <Resource Name="HybridCLRData/link" LoadType="0" Packed="False" />
-      <Resource Name="Localization/ChineseSimplified/Dictionaries/Default" LoadType="1" Packed="True" />
-      <Resource Name="Localization/ChineseTraditional/Dictionaries/Default" LoadType="1" Packed="True" />
-      <Resource Name="Localization/English/Dictionaries/Default" LoadType="1" Packed="True" />
-      <Resource Name="Localization/Korean/Dictionaries/Default" LoadType="1" Packed="True" />
+      <Resource Name="Localization/Dictionaries/ChineseSimplified" LoadType="0" Packed="False" />
+      <Resource Name="Localization/Dictionaries/ChineseTraditional" LoadType="0" Packed="False" />
+      <Resource Name="Localization/Dictionaries/English" LoadType="0" Packed="False" />
+      <Resource Name="Localization/Dictionaries/Korean" LoadType="0" Packed="False" />
+      <Resource Name="Localization/Dictionaries/LanguageBuiltin" LoadType="0" Packed="False" />
       <Resource Name="Prefab/GameHotfixEntry" LoadType="0" Packed="False" />
       <Resource Name="Scenes/Menu" LoadType="0" Packed="False" />
       <Resource Name="UI/UIForms/WelcomeForm" LoadType="0" Packed="False" />
@@ -31,28 +32,29 @@
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="DataTables/Sound" />
       <Asset Guid="059cc4969a1bf5d489d20d55a9631c7a" ResourceName="HybridCLRData/Hotfixdll/System" />
-      <Asset Guid="1053b0070685be347ab58587156842dc" ResourceName="Localization/ChineseTraditional/Dictionaries/Default" />
-      <Asset Guid="14869ac0d4433f04db1704e39d03412e" ResourceName="Localization/English/Dictionaries/Default" />
       <Asset Guid="160c4b5e23f35a642acd901f0a4cde0c" ResourceName="Prefab/GameHotfixEntry" />
+      <Asset Guid="16806400c9bcf9748bab87aec56918d8" ResourceName="Localization/Dictionaries/Korean" />
+      <Asset Guid="279dd0b7a08ee324dab0347d8188c94d" ResourceName="Localization/Dictionaries/ChineseTraditional" />
       <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="DataTables/UIForm" />
       <Asset Guid="2d195be6cdc3ebb4d93b0323dbf298ad" ResourceName="UI/UIForms/WelcomeForm" />
       <Asset Guid="3e6f327a1634de344aa6262ab303a930" ResourceName="Configs/Runtime/BuildInfo" />
       <Asset Guid="4053612cac7241a4e91508723e79236f" ResourceName="Entities/EnitityPlane" />
       <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="DataTables/Entity" />
+      <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="Configs/Runtime/DefaultConfig" />
       <Asset Guid="5ace651f5510f534ca61f061766456b3" ResourceName="HybridCLRData/Hotfixdll/Game" />
-      <Asset Guid="5dcd89912e222bf4c87f76db4044bc5e" ResourceName="Localization/Korean/Dictionaries/Default" />
       <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="DataTables/Music" />
       <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="DataTables/UISound" />
       <Asset Guid="77cbb7c5404c10242ab59953e0746314" ResourceName="Fonts/MainFont" />
       <Asset Guid="92d022a7bd1b965489bedbead98564c3" ResourceName="HybridCLRData/Hotfixdll/GameFramework" />
-      <Asset Guid="9b3d40ed181d9fb41bdb58b6e9e631b5" ResourceName="HybridCLRData/link" />
-      <Asset Guid="9be2e1e45f4edd74c8764538ad306b78" ResourceName="Localization/ChineseSimplified/Dictionaries/Default" />
       <Asset Guid="9c179f6a3d1f7da4d91056f447043b19" ResourceName="Configs/Runtime/HotfixInfo" />
+      <Asset Guid="9ed142d734998d84287f945f3fb8c039" ResourceName="Localization/Dictionaries/English" />
       <Asset Guid="a3cd8c3ca615bfa4f921fed65d329612" ResourceName="HybridCLRData/Hotfixdll/System" />
+      <Asset Guid="a49f40f31b18936488611d118fab78c3" ResourceName="Localization/Dictionaries/ChineseSimplified" />
       <Asset Guid="b19583c0d34592a43b83ec50de41805c" ResourceName="HybridCLRData/Hotfixdll/UnityGameFramework" />
-      <Asset Guid="b7e3b537688858643af3e5c50f517a9e" ResourceName="Configs/Runtime/DefaultConfig" />
       <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="DataTables/Scene" />
+      <Asset Guid="b8d1a02c5a799044dba6ede3da589c67" ResourceName="Localization/Dictionaries/LanguageBuiltin" />
       <Asset Guid="bd82155f8ae46f942aeba200d6da4ceb" ResourceName="HybridCLRData/Hotfixdll/mscorlib" />
+      <Asset Guid="c512090bde7cc554490404d42c8c0bb1" ResourceName="HybridCLRData/link" />
       <Asset Guid="d783d8efc4946a34b96786fa6af948a7" ResourceName="Configs/Runtime/PreloadInfo" />
       <Asset Guid="e915882745d181145ba138b9cb3d1db4" ResourceName="Scenes/Menu" />
     </Assets>

@@ -5,7 +5,7 @@ using GameFramework.Event;
 using GameFramework.Resource;
 using UnityGameFramework.Runtime;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     /// <summary>
     /// 可等待工具类

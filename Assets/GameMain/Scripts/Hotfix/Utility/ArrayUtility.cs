@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using GameFramework;
 
-namespace Dvalmi
+namespace GeminiLion
 {
     public static class ArrayUtility
     {

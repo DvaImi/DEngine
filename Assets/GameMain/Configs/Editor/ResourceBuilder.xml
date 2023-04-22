@@ -2,13 +2,13 @@
 <UnityGameFramework>
   <ResourceBuilder>
     <Settings>
-      <InternalResourceVersion>1</InternalResourceVersion>
+      <InternalResourceVersion>0</InternalResourceVersion>
       <Platforms>1</Platforms>
       <AssetBundleCompression>1</AssetBundleCompression>
       <CompressionHelperTypeName>UnityGameFramework.Runtime.DefaultCompressionHelper</CompressionHelperTypeName>
       <AdditionalCompressionSelected>True</AdditionalCompressionSelected>
       <ForceRebuildAssetBundleSelected>False</ForceRebuildAssetBundleSelected>
-      <BuildEventHandlerTypeName>Dvalmi.Editor.DvalmiBuildEventHandler</BuildEventHandlerTypeName>
+      <BuildEventHandlerTypeName>GeminiLion.Editor.DvalmiBuildEventHandler</BuildEventHandlerTypeName>
       <OutputDirectory>F:/Project/Unity/ZH_GameSpace/Self/DavlmiLauncher/AssetBundle</OutputDirectory>
       <OutputPackageSelected>True</OutputPackageSelected>
       <OutputFullSelected>True</OutputFullSelected>

@@ -8,7 +8,7 @@
 using GameFramework.Procedure;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public class ProcedureMenu : ProcedureBase
     {
@@ -16,7 +16,6 @@ namespace Dvalmi.Hotfix
         {
             base.OnEnter(procedureOwner);
             GameEntry.UI.OpenUIForm(UIFormId.WelcomeForm);
-            GameEntry.Entity.ShowEnitityPlane(new EnitityPlaneData().Fill(10000));
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

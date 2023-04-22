@@ -8,7 +8,7 @@
 using GameFramework.Procedure;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public class ProcedureMain : ProcedureBase
     {

@@ -22,17 +22,17 @@ MonoBehaviour:
   PublishAppOutput: Publish
   BuildInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/BuildInfo.txt
   PreloadInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/PreloadInfo.txt
-  EntityCodePath: Assets/GameMain/Scripts/Base/Entity
+  EntityCodePath: Assets/GameMain/Scripts/Builtin/Runtime/Entity
   HotfixEntityCodePath: Assets/GameMain/Scripts/Hotfix/Entity
-  UIFormCodePath: Assets/GameMain/Scripts/Base/UI
+  UIFormCodePath: Assets/GameMain/Scripts/Builtin/Runtime/UI
   HotfixUIFormCodePath: Assets/GameMain/Scripts/Hotfix/UI
-  EventCodePath: Assets/GameMain/Scripts/EventArgs
+  EventCodePath: Assets/GameMain/Scripts/Builtin/Runtime/EventArgs
   HotfixEventCodePath: Assets/GameMain/Scripts/Hotfix/EventArgs
-  DataTableExcelPath: DataTables/Excel
+  DataTableExcelPath: Excels/Datable
   DataTablePath: Assets/GameMain/AssetBundle/DataTables
   CSharpCodePath: Assets/GameMain/Scripts/Hotfix/DataTable
   CSharpCodeTemplateFileName: Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt
-  DictionaryExclePath: DataTables/Dictionary
+  DictionaryExclePath: Excels/Dictionary
   DictionaryDataPath: Assets/GameMain/AssetBundle/Localization/Dictionaries
   HotfixDllPath: Assets/GameMain/AssetBundle/HybridCLRData/Hotfixdll
   HotfixDllNameMain: Game.Hotfix.dll
@@ -40,8 +40,6 @@ MonoBehaviour:
   - mscorlib.dll
   - System.Core.dll
   - System.dll
-  - UnityGameFramework.Runtime.dll
-  - GameFramework.dll
   PreserveHotfixDllNames: []
   HotfixDllSuffix: .bytes
   HotfixInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/HotfixInfo.txt

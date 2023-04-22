@@ -11,15 +11,13 @@ using GameFramework.Procedure;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public class ProcedureChangeScene : ProcedureBase
     {
         private const int MenuSceneId = 1;
-
         private bool m_ChangeToMenu = false;
         private bool m_IsChangeSceneComplete = false;
-        private int m_BackgroundMusicId = 0;
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -61,7 +59,6 @@ namespace Dvalmi.Hotfix
             }
 
             GameEntry.Scene.LoadScene(AssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
-            m_BackgroundMusicId = drScene.BackgroundMusicId;
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -102,12 +99,6 @@ namespace Dvalmi.Hotfix
             }
 
             Log.Info("Load scene '{0}' OK.", ne.SceneAssetName);
-
-            if (m_BackgroundMusicId > 0)
-            {
-                GameEntry.Sound.PlayMusic(m_BackgroundMusicId);
-            }
-
             m_IsChangeSceneComplete = true;
         }
 

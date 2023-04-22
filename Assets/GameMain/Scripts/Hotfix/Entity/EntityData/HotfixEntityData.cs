@@ -7,7 +7,7 @@
 using GameFramework;
 using UnityEngine;
 
-namespace Dvalmi
+namespace GeminiLion
 {
     /// <summary>
     /// 热更新层实体数据

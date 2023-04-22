@@ -6,7 +6,7 @@
 // ========================================================
 using UnityGameFramework.Runtime;
 
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
     public abstract class HotfixEntityLogic : EntityLogic
     {

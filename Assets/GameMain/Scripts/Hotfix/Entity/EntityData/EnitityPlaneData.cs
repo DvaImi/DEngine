@@ -7,7 +7,7 @@
 using UnityEngine;
 
 //自动生成于：2023/4/16 1:20:01
-namespace Dvalmi.Hotfix
+namespace GeminiLion.Hotfix
 {
 
 	public class EnitityPlaneData : HotfixEntityData
