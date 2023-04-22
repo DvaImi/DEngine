@@ -17,8 +17,13 @@
 二、待完成
 
 1.资源模块扩展，重写资源编辑器 ing
+
 2.接入Kcp网络协议 ing
+
 3.基于Gameframework设计模式实现后端框架 ing
+
 4.精简框架，功能剥离 ing
+
 5.DvaImiServer preview
+
 
