@@ -7,7 +7,7 @@
 
 using System;
 
-namespace GeminiLion.Hotfix
+namespace GeminiLion
 {
     public static class WebUtility
     {
