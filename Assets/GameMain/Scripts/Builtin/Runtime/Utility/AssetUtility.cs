@@ -23,7 +23,7 @@ namespace GeminiLion
 
         public static string GetDictionaryAsset(string assetName, bool fromBytes)
         {
-            return Utility.Text.Format("Assets/GameMain/AssetBundle/Localization/Dictionaries/{0}.{1}.{2}", GameEntry.Localization.Language, assetName, fromBytes ? "bytes" : "txt");
+            return Utility.Text.Format("Assets/GameMain/AssetBundle/Localization/Dictionaries/{0}/{1}.{2}", GameEntry.Localization.Language, assetName, fromBytes ? "bytes" : "txt");
         }
 
         public static string GetFontAsset(string assetName)

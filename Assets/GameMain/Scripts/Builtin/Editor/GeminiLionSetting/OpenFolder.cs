@@ -17,12 +17,30 @@ namespace GeminiLion.Editor
         public static void OpenFolderDataTablePath()
         {
             InternalOpenFolder(GeminiLionSetting.Instance.DataTableExcelPath);
+        } 
+        
+        /// <summary>
+        /// 打开 DataTable Path 文件夹。
+        /// </summary>
+        [MenuItem("GeminiLion/Open Folder/Dictionary Path", false, 11)]
+        public static void OpenFolderDictionaryPath()
+        {
+            InternalOpenFolder(GeminiLionSetting.Instance.DictionaryExclePath);
+        } 
+        
+        /// <summary>
+        /// 打开 DataTable Path 文件夹。
+        /// </summary>
+        [MenuItem("GeminiLion/Open Folder/Config Path", false, 12)]
+        public static void OpenFolderConfigPath()
+        {
+            InternalOpenFolder(GeminiLionSetting.Instance.ConfigExcelPath);
         }
 
         /// <summary>
         /// 打开 AssetBundle output Path 文件夹。
         /// </summary>
-        [MenuItem("GeminiLion/Open Folder/AssetBundle Output", false, 11)]
+        [MenuItem("GeminiLion/Open Folder/AssetBundle Output", false, 13)]
         public static void OpenFolderAssetBundlePath()
         {
             InternalOpenFolder(GeminiLionSetting.Instance.AssetBundleOutput);
@@ -31,7 +49,7 @@ namespace GeminiLion.Editor
         /// <summary>
         /// 打开 PublishAppOutput Path 文件夹。
         /// </summary>
-        [MenuItem("GeminiLion/Open Folder/Publish Output", false, 12)]
+        [MenuItem("GeminiLion/Open Folder/Publish Output", false, 14)]
         public static void OpenFolderPublishAppPath()
         {
             InternalOpenFolder(GeminiLionSetting.Instance.PublishAppOutput);

@@ -4,6 +4,7 @@
 // 创建时间：2023-04-19 21:29:17
 // 版 本：1.0
 // ========================================================
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -71,7 +72,7 @@ namespace GeminiLion.Editor
             }
         }
 
-        public static void ConvertExcelToBinary(string excelDirectory, string outputDirectory, out List<string> collection)
+        public static void ConvertExcelToBinary(string excelDirectory, string outputDirectory, out List<string> collection, Predicate<string> predicate = null, string binaryFileName = null)
         {
             collection = new List<string>();
             if (string.IsNullOrEmpty(excelDirectory) || string.IsNullOrEmpty(outputDirectory))
@@ -80,14 +81,31 @@ namespace GeminiLion.Editor
             }
             IOUtility.CreateDirectoryIfNotExists(outputDirectory);
             List<FileInfo> fileInfos = IOUtility.GetFilesWithExtension(excelDirectory, ExcelExtension);
-
             foreach (var fileInfo in fileInfos)
             {
                 ExcelPackage package = new ExcelPackage(fileInfo);
                 foreach (ExcelWorksheet worksheet in package.Workbook.Worksheets)
                 {
-                    string binaryFileName = package.Workbook.Worksheets.Count > 1 ? (Path.GetFileNameWithoutExtension(fileInfo.Name) + "_" + worksheet.Name) : Path.GetFileNameWithoutExtension(fileInfo.Name);
-                    binaryFileName = Path.Combine(outputDirectory, binaryFileName + BinaryExtension);
+                    string excelFileName = package.Workbook.Worksheets.Count > 1 ? (Path.GetFileNameWithoutExtension(fileInfo.Name) + "_" + worksheet.Name) : Path.GetFileNameWithoutExtension(fileInfo.Name);
+                    string binaryFileNameTemp = binaryFileName;
+                    if (predicate == null)
+                    {
+                        //默认按表格文件写入
+                        binaryFileNameTemp = Path.Combine(outputDirectory, excelFileName, binaryFileNameTemp + BinaryExtension);
+                    }
+                    else
+                    {
+                        if (predicate.Invoke(excelFileName))
+                        {
+                            binaryFileNameTemp = excelFileName;
+                            binaryFileNameTemp = Path.Combine(outputDirectory, binaryFileNameTemp + BinaryExtension);
+                        }
+                        else
+                        {
+                            binaryFileNameTemp = Path.Combine(outputDirectory, excelFileName, binaryFileNameTemp + BinaryExtension);
+                        }
+                    }
+
                     using (MemoryStream ms = new MemoryStream())
                     {
                         for (int row = 1; row <= worksheet.Dimension.Rows; row++)
@@ -105,7 +123,7 @@ namespace GeminiLion.Editor
                             ms.WriteByte((byte)'\n');
                         }
                         byte[] buffer = ms.ToArray();
-                        IOUtility.SaveFileSafe(binaryFileName, buffer);
+                        IOUtility.SaveFileSafe(binaryFileNameTemp, buffer);
                     }
                 }
                 package.Dispose();

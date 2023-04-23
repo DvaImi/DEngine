@@ -4,6 +4,7 @@
 // 创建时间：2023-04-19 23:18:18
 // 版 本：1.0
 // ========================================================
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -15,9 +16,19 @@ namespace GeminiLion.Editor.DictionaryTools
         [MenuItem("GeminiLion/Generate Dictionaries/To Binary")]
         internal static void GenerateDictionariesToBinary()
         {
-            ExcelUtility.ConvertExcelToBinary(GeminiLionSetting.Instance.DictionaryExclePath, GeminiLionSetting.Instance.DictionaryDataPath, out List<string> dictionary);
+            ExcelUtility.ConvertExcelToBinary(GeminiLionSetting.Instance.DictionaryExclePath, GeminiLionSetting.Instance.DictionaryDataPath, out List<string> dictionary, Predicate, "Runtime");
             PreloadUtility.GenerateDictionaryInfoFile(dictionary);
             AssetDatabase.Refresh();
+        }
+
+        /// <summary>
+        /// 过滤Builtin 表
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private static bool Predicate(string obj)
+        {
+            return obj.Contains("Builtin");
         }
 
         [MenuItem("GeminiLion/Generate Config/To Binary")]

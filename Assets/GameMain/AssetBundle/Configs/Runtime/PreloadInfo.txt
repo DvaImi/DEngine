@@ -1,1 +1,1 @@
-{"DateTable":["Entity","Music","Scene","Sound","UIForm","UISound"],"Dictionary":["ChineseSimplified.Runtime","ChineseTraditional.Runtime","English.Runtime","Korean.Runtime","LanguageBuiltin"],"Config":["DefaultConfig"]}
+{"DateTable":["Entity","Music","Scene","Sound","UIForm","UISound"],"Dictionary":["ChineseSimplified","ChineseTraditional","English","Korean","LanguageBuiltin"],"Config":["DefaultConfig"]}

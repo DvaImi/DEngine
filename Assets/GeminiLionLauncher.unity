@@ -630,7 +630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EditorResourceMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_JsonHelperTypeName
@@ -789,7 +789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BuildInfoTextAsset: {fileID: 4900000, guid: 3e6f327a1634de344aa6262ab303a930, type: 3}
   m_PreloadInfoTextAsset: {fileID: 4900000, guid: d783d8efc4946a34b96786fa6af948a7, type: 3}
-  m_DefaultDictionaryTextAsset: {fileID: 4900000, guid: b8d1a02c5a799044dba6ede3da589c67, type: 3}
+  m_DefaultDictionaryTextAsset: {fileID: 4900000, guid: a3315dd10f3a97748a389fedcb92e249, type: 3}
   m_HotfixTextAsset: {fileID: 4900000, guid: 9c179f6a3d1f7da4d91056f447043b19, type: 3}
   m_UpdateResourceFormTemplate: {fileID: 0}
   m_NativeDialogFormTemplate: {fileID: 0}
