@@ -4,7 +4,8 @@
 // 创建时间：2023-04-16 00:33:27
 // 版 本：1.0
 // ========================================================
-using System;
+using System.Collections.Generic;
+using GameFramework;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
@@ -32,6 +33,18 @@ namespace GeminiLion.Hotfix
                 m_Text.text += dataTables[i].Id + "\n" + dataTables[i].AssetName + "\n" + dataTables[i].UIGroupName + "\n";
             }
             m_Text.text += GameEntry.Localization.GetString("CheckVersion.Tips");
+            m_Text.text += "\n";
+            m_Text.text += "\n";
+
+            AssetInfoMap AssetInfo = GameEntry.BuiltinData.AssetInfo;
+            string json = Utility.Json.ToJson(AssetInfo);
+            m_Text.text += json;
+            Log.Info("序列化出来的的" + json);
+     
+        }
+        public void AotHelper()
+        {
+            Newtonsoft.Json.Utilities.AotHelper.IsFalse();
         }
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {

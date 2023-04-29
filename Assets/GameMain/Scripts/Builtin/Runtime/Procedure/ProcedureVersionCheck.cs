@@ -66,11 +66,11 @@ namespace GeminiLion
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             url = GameEntry.BuiltinData.BuildInfo.WindowsAppUrl;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            url = GameEntry.BuiltinData.Settings.MacOSAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.MacOSAppUrl;
 #elif UNITY_IOS
-            url = GameEntry.BuiltinData.Settings.IOSAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.IOSAppUrl;
 #elif UNITY_ANDROID
-            url = GameEntry.BuiltinData.Settings.AndroidAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.AndroidAppUrl;
 #endif
             if (!string.IsNullOrEmpty(url))
             {

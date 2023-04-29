@@ -11,11 +11,13 @@ using GameFramework.Procedure;
 using GameFramework.Resource;
 using UnityEngine;
 using UnityGameFramework.Runtime;
+using Object = UnityEngine.Object;
 
 namespace GeminiLion
 {
     public class ProcedureLoadHotfix : ProcedureBase
     {
+        private static bool m_HasLoadHotfixDll;
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
@@ -34,8 +36,15 @@ namespace GeminiLion
 
         private void LoadHotfixDll()
         {
+            if (m_HasLoadHotfixDll)
+            {
+                Log.Debug("已经加载过热更新dll ，暂时无法重复加载");
+                HotfixLauncher();
+                return;
+            }
             GameEntry.Resource.LoadAsset(GameEntry.BuiltinData.HotfixInfo.GetHotfixMainDllFullName(), new LoadAssetCallbacks(OnLoadHotfixDllSuccess, OnLoadHotfixDllFailurel));
         }
+
 
         private void OnLoadHotfixDllFailurel(string assetName, LoadResourceStatus status, string errorMessage, object userData)
         {
@@ -52,6 +61,7 @@ namespace GeminiLion
                 return;
             }
             Log.Info("Load hotfix dll OK.");
+            m_HasLoadHotfixDll = true;
             HotfixLauncher();
         }
 

@@ -13,7 +13,7 @@ namespace GeminiLion
     /// <summary>
     /// LitJSON 函数集辅助器。
     /// </summary>
-    internal class NewtonsoftJsonHelper : Utility.Json.IJsonHelper
+    public class NewtonsoftJsonHelper : Utility.Json.IJsonHelper
     {
         /// <summary>
         /// 将对象序列化为 JSON 字符串。

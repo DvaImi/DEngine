@@ -21,6 +21,13 @@ namespace GeminiLion.Editor.DictionaryTools
             AssetDatabase.Refresh();
         }
 
+        [MenuItem("GeminiLion/Generate Dictionaries/To Text")]
+        internal static void GenerateDictionariesToText()
+        {
+            ExcelUtility.ConvertExcelToTxt(GeminiLionSetting.Instance.DictionaryExclePath, GeminiLionSetting.Instance.DictionaryDataPath, out List<string> dictionary, Predicate, "Runtime");
+            PreloadUtility.GenerateDictionaryInfoFile(dictionary);
+            AssetDatabase.Refresh();
+        }
         /// <summary>
         /// 过滤Builtin 表
         /// </summary>
@@ -39,11 +46,11 @@ namespace GeminiLion.Editor.DictionaryTools
             AssetDatabase.Refresh();
         }
 
-        //[MenuItem("GeminiLion/Generate Dictionaries/To Text")]
-        internal static void GenerateDictionariesToText()
+        [MenuItem("GeminiLion/Generate Config/To Text")]
+        internal static void GenerateConfigToText()
         {
-            ExcelUtility.ConvertExcelToTxt(GeminiLionSetting.Instance.DictionaryExclePath, GeminiLionSetting.Instance.DictionaryDataPath, out List<string> dictionary);
-            PreloadUtility.GenerateDictionaryInfoFile(dictionary);
+            ExcelUtility.ConvertExcelToTxt(GeminiLionSetting.Instance.ConfigExcelPath, GeminiLionSetting.Instance.ConfigDataPath, out List<string> config);
+            PreloadUtility.GenerateConfigInfoFile(config);
             AssetDatabase.Refresh();
         }
     }

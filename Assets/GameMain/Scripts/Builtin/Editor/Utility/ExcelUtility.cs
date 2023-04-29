@@ -20,7 +20,7 @@ namespace GeminiLion.Editor
         private static readonly string ExcelExtension = ".xlsx";
         private static readonly string BinaryExtension = ".bytes";
 
-        public static void ConvertExcelToTxt(string excelDirectory, string outputDirectory, out List<string> collection)
+        public static void ConvertExcelToTxt(string excelDirectory, string outputDirectory, out List<string> collection, Predicate<string> predicate = null, string txtFileName = null)
         {
             collection = new List<string>();
             if (string.IsNullOrEmpty(excelDirectory) || string.IsNullOrEmpty(outputDirectory))
@@ -41,8 +41,25 @@ namespace GeminiLion.Editor
                 ExcelPackage package = new ExcelPackage(fileInfo);
                 foreach (ExcelWorksheet worksheet in package.Workbook.Worksheets)
                 {
-                    string txtFileName = package.Workbook.Worksheets.Count > 1 ? (Path.GetFileNameWithoutExtension(fileInfo.Name) + "_" + worksheet.Name) : Path.GetFileNameWithoutExtension(fileInfo.Name);
-                    txtFileName = Path.Combine(outputDirectory, txtFileName + TextExtension);
+                    string excelFileName = package.Workbook.Worksheets.Count > 1 ? (Path.GetFileNameWithoutExtension(fileInfo.Name) + "_" + worksheet.Name) : Path.GetFileNameWithoutExtension(fileInfo.Name);
+                    string txtFileNameTemp = txtFileName;
+                    if (predicate == null)
+                    {
+                        //默认按表格文件写入
+                        txtFileNameTemp = Path.Combine(outputDirectory, excelFileName + TextExtension);
+                    }
+                    else
+                    {
+                        if (predicate.Invoke(excelFileName))
+                        {
+                            txtFileNameTemp = excelFileName;
+                            txtFileNameTemp = Path.Combine(outputDirectory, txtFileNameTemp + TextExtension);
+                        }
+                        else
+                        {
+                            txtFileNameTemp = Path.Combine(outputDirectory, excelFileName, txtFileNameTemp + TextExtension);
+                        }
+                    }
                     StringBuilder text = new StringBuilder();
 
                     for (int row = 1; row <= worksheet.Dimension.Rows; row++)
@@ -64,7 +81,7 @@ namespace GeminiLion.Editor
                             }
                         }
                     }
-                    IOUtility.SaveFileSafe(txtFileName, text.ToString());
+                    IOUtility.SaveFileSafe(txtFileNameTemp, text.ToString());
                 }
                 package.Dispose();
                 Debug.LogFormat("Excel {0} file converted to txt successfully.", fileInfo.Name);
@@ -91,7 +108,7 @@ namespace GeminiLion.Editor
                     if (predicate == null)
                     {
                         //默认按表格文件写入
-                        binaryFileNameTemp = Path.Combine(outputDirectory, excelFileName, binaryFileNameTemp + BinaryExtension);
+                        binaryFileNameTemp = Path.Combine(outputDirectory, excelFileName + BinaryExtension);
                     }
                     else
                     {

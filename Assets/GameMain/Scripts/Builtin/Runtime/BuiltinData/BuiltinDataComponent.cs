@@ -1,4 +1,6 @@
-﻿using GameFramework;
+﻿using System.Collections.Generic;
+using GameFramework;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -8,6 +10,9 @@ namespace GeminiLion
     {
         [SerializeField]
         private TextAsset m_BuildInfoTextAsset = null;
+
+        [SerializeField]
+        private TextAsset m_AssetInfoTextAsset = null;
 
         [SerializeField]
         private TextAsset m_PreloadInfoTextAsset = null;
@@ -31,6 +36,8 @@ namespace GeminiLion
 
         public BuildInfo BuildInfo { get; private set; } = null;
 
+        public AssetInfoMap AssetInfo { get; private set; } = null;
+
         public PreloadInfo PreloadInfo { get; private set; } = null;
 
         public HotfixInfo HotfixInfo { get; private set; } = null;
@@ -53,6 +60,8 @@ namespace GeminiLion
                 Log.Warning("Parse hotfix info failure.");
                 return;
             }
+
+            Log.Info("HotfixInfo  Load Complete");
         }
 
         public void InitBuildInfo()
@@ -69,11 +78,25 @@ namespace GeminiLion
                 Log.Warning("Parse build info failure.");
                 return;
             }
+            Log.Info("BuildInfo  Load Complete");
         }
 
-        /// <summary>
-        ///
-        /// </summary>
+        public void InitAssetInfo()
+        {
+            if (m_AssetInfoTextAsset == null || string.IsNullOrEmpty(m_AssetInfoTextAsset.text))
+            {
+                Log.Info("Asset info can not be found or empty.");
+                return;
+            }
+            AssetInfo = Utility.Json.ToObject<AssetInfoMap>(m_AssetInfoTextAsset.text);
+            if (AssetInfo == null)
+            {
+                Log.Warning("Parse asset info failure.");
+                return;
+            }
+            Log.Info("AssetInfo  Load Complete");
+        }
+
         public void InitDefaultDictionary()
         {
             if (m_DefaultDictionaryTextAsset == null || string.IsNullOrEmpty(m_DefaultDictionaryTextAsset.text))
@@ -82,11 +105,12 @@ namespace GeminiLion
                 return;
             }
 
-            if (!GameEntry.Localization.ParseData(m_DefaultDictionaryTextAsset.bytes))
+            if (!GameEntry.Localization.ParseData(m_DefaultDictionaryTextAsset.text))
             {
                 Log.Warning("Parse default dictionary failure.");
                 return;
             }
+            Log.Info("m_DefaultDictionaryTextAsset  Load Complete");
         }
 
         public void InitPreloadInfo()
@@ -103,12 +127,9 @@ namespace GeminiLion
                 Log.Warning("Parse preload info failure.");
                 return;
             }
+            Log.Info("PreloadInfo  Load Complete");
         }
 
-        /// <summary>
-        /// 打开原生对话框。
-        /// </summary>
-        /// <param name="dialogParams"></param>
         public void OpenDialog(DialogParams dialogParams)
         {
             if (m_NativeDialogForm == null)
@@ -119,9 +140,6 @@ namespace GeminiLion
             m_NativeDialogForm.OnOpen(dialogParams);
         }
 
-        /// <summary>
-        /// 删除原生对话框。
-        /// </summary>
         public void DestroyDialog()
         {
             if (m_NativeDialogForm == null)

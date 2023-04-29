@@ -37,7 +37,7 @@ namespace GeminiLion.Editor
         public void Open()
         {
             var window = GetWindow<SelectAssembly>("Select AOT Assembly");
-            window.minSize = new Vector2(300, 600);
+            window.minSize = new Vector2(470, 800);
         }
 
         protected override void OnEnable()
@@ -82,7 +82,6 @@ namespace GeminiLion.Editor
             {
                 SelectAll(false);
             }
-            GUILayout.FlexibleSpace();
 
             if (GUILayout.Button("Reload", GUILayout.Width(120)))
             {

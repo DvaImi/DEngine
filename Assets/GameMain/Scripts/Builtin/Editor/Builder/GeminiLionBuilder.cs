@@ -5,14 +5,15 @@
 // 版 本：1.0
 // ========================================================
 using System;
-using UnityEditor;
-using UnityEngine;
-using HybridCLR.Editor.Commands;
-using UnityGameFramework.Editor.ResourceTools;
-using UnityEditor.Build.Reporting;
 using System.IO;
-using UnityEditor.SceneManagement;
 using System.Linq;
+using GeminiLion.Editor.ResourceTools;
+using GeminiLion.Editor.ToolbarExtension;
+using HybridCLR.Editor.Commands;
+using UnityEditor;
+using UnityEditor.Build.Reporting;
+using UnityEngine;
+using UnityGameFramework.Editor.ResourceTools;
 
 namespace GeminiLion.Editor
 {
@@ -33,6 +34,7 @@ namespace GeminiLion.Editor
                 EditorPrefs.SetInt("HybridCLRPlatform", m_HotfixPlatformIndex);
             }
         }
+
 
         [MenuItem("GeminiLion/Builder", false, 0)]
         private static void Open()
@@ -94,13 +96,12 @@ namespace GeminiLion.Editor
             }
             if (GUILayout.Button("BuildAssetBundle", GUILayout.Width(130)))
             {
-                Type resType = Type.GetType("UnityGameFramework.Editor.ResourceTools.ResourceBuilder,UnityGameFramework.Editor");
-                EditorWindow window = GetWindow(resType);
-                window.Show();
+                Platform platform = (Platform)Enum.Parse(typeof(Platform), m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]);
+                ResourceBuildHelper.StartBuild(platform);
             }
         }
 
-        private void CompileHotfixDll()
+        private  void CompileHotfixDll()
         {
             BuildTarget buildTarget = m_HybridClrBuilderController.GetBuildTarget(m_HotfixPlatformIndex);
             CompileDllCommand.CompileDll(buildTarget);
@@ -109,15 +110,7 @@ namespace GeminiLion.Editor
 
         private void BuildPlayer()
         {
-            BuildPlayerOptions buildPlayerOptions = new()
-            {
-                scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
-                locationPathName = Path.Combine(GeminiLionSetting.Instance.PublishAppOutput, Application.productName + ".exe"),
-                target = m_HybridClrBuilderController.GetBuildTarget(m_HotfixPlatformIndex),
-                options = BuildOptions.None
-            };
-
-            BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            BuildReport report = BuildApplicationForPlatform(m_HybridClrBuilderController.GetBuildTarget(m_HotfixPlatformIndex));
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
@@ -133,7 +126,7 @@ namespace GeminiLion.Editor
 
         private void GUIBuildPlayer()
         {
-            EditorGUILayout.LabelField($"(5) 构建{m_HybridClrBuilderController.GetBuildTarget(m_HotfixPlatformIndex)}工程。");
+            EditorGUILayout.LabelField($"(5) 构建{m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]}工程。");
             if (GUILayout.Button("Edit", GUILayout.Width(100)))
             {
                 BuildPlayerWindow.ShowBuildPlayerWindow();
@@ -144,5 +137,49 @@ namespace GeminiLion.Editor
                 OpenFolder.OpenFolderPublishAppPath();
             }
         }
+
+        public BuildReport BuildApplicationForPlatform(BuildTarget platform)
+        {
+            string outputExtension = GetFileExtensionForPlatform(platform);
+
+            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
+            {
+                scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
+                locationPathName = Path.Combine(GeminiLionSetting.Instance.PublishAppOutput, m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex], Application.productName + outputExtension),
+                target = platform,
+                options = BuildOptions.None
+            };
+
+            return BuildPipeline.BuildPlayer(buildPlayerOptions);
+        }
+
+        private string GetFileExtensionForPlatform(BuildTarget platform)
+        {
+            return platform switch
+            {
+                BuildTarget.StandaloneWindows64 => ".exe",
+                BuildTarget.StandaloneOSX => ".app",
+                BuildTarget.Android => ".apk",
+                BuildTarget.iOS => ".ipa",
+                BuildTarget.WebGL => "",
+                _ => ".exe",
+            };
+        }
+
+
+
+        #region Toolbar
+        private static readonly GUIContent s_OpenETCodeCreatorTool = new GUIContent("CompileHotfixDll");
+
+        [Toolbar(OnGUISide.Left, 0)]
+        private static void OnToolbarGUI()
+        {
+            if (GUILayout.Button(s_OpenETCodeCreatorTool))
+            {
+               
+            }
+        }
+        #endregion
+
     }
 }

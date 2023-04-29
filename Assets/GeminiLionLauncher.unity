@@ -408,6 +408,10 @@ PrefabInstance:
       propertyPath: m_ShowFullWindow
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_ConsoleWindow.m_LockScroll
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EntranceProcedureTypeName
       value: GeminiLion.ProcedureLaunch
@@ -512,6 +516,10 @@ PrefabInstance:
       propertyPath: m_SoundGroups.Array.data[2].m_AgentHelperCount
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 11420954, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_DownloadAgentHelperCount
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_InstanceRoot
       value: 
@@ -610,7 +618,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_FrameRate
-      value: 120
+      value: 144
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_NeverSleep
@@ -788,8 +796,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BuildInfoTextAsset: {fileID: 4900000, guid: 3e6f327a1634de344aa6262ab303a930, type: 3}
+  m_AssetInfoTextAsset: {fileID: 4900000, guid: 78817d1c6a0f253479e5a6f8cbd2c832, type: 3}
   m_PreloadInfoTextAsset: {fileID: 4900000, guid: d783d8efc4946a34b96786fa6af948a7, type: 3}
-  m_DefaultDictionaryTextAsset: {fileID: 4900000, guid: a3315dd10f3a97748a389fedcb92e249, type: 3}
+  m_DefaultDictionaryTextAsset: {fileID: 4900000, guid: d838f895679172746a630cbfa9688d84, type: 3}
   m_HotfixTextAsset: {fileID: 4900000, guid: 9c179f6a3d1f7da4d91056f447043b19, type: 3}
   m_UpdateResourceFormTemplate: {fileID: 0}
   m_NativeDialogFormTemplate: {fileID: 0}

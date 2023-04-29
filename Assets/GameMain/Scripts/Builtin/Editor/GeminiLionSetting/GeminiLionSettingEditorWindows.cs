@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using GeminiLion;
 using GeminiLion.Editor;
+using GeminiLion.Editor.ResourceTools;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
@@ -27,12 +28,20 @@ public class GeminiLionSettingEditorWindows : OdinEditorWindow
         base.OnEnable();
         GetValue();
     }
-
-
-    protected override void OnDisable()
+    protected override void OnGUI()
     {
-        base.OnDisable();
-        SaveSetting();
+        base.OnGUI();
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Reload"))
+        {
+            GetValue();
+        }
+        if (GUILayout.Button("Save"))
+        {
+            SaveSetting();
+        }
+        EditorGUILayout.EndHorizontal();
     }
 
     /// <summary>
@@ -290,6 +299,7 @@ public class GeminiLionSettingEditorWindows : OdinEditorWindow
                 writer.Write(hotfixJson);
             }
 
+            ResourceBuildHelper.SaveOutputDirectory(AssetBundleOutput);
             AssetDatabase.Refresh();
         }
     }

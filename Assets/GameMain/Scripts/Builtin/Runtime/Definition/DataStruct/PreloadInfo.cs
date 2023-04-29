@@ -7,32 +7,35 @@
 
 using System.Collections.Generic;
 
-public class PreloadInfo
+namespace GeminiLion
 {
-    /// <summary>
-    /// 数据表
-    /// </summary>
-    public List<string> DateTable
+    public class PreloadInfo
     {
-        get;
-        set;
-    }
+        /// <summary>
+        /// 数据表
+        /// </summary>
+        public List<string> DateTable
+        {
+            get;
+            set;
+        }
 
-    /// <summary>
-    /// 字典
-    /// </summary>
-    public List<string> Dictionary
-    {
-        get;
-        set;
-    }
+        /// <summary>
+        /// 字典
+        /// </summary>
+        public List<string> Dictionary
+        {
+            get;
+            set;
+        }
 
-    /// <summary>
-    /// 配置
-    /// </summary>
-    public List<string> Config
-    {
-        get;
-        set;
-    }
+        /// <summary>
+        /// 配置
+        /// </summary>
+        public List<string> Config
+        {
+            get;
+            set;
+        }
+    } 
 }

@@ -8,80 +8,83 @@
 using System.IO;
 using GameFramework;
 
-public class HotfixInfo
+namespace GeminiLion
 {
-    /// <summary>
-    /// 热更程序集生成路径
-    /// </summary>
-    public string HotfixDllPath
+    public class HotfixInfo
     {
-        get; set;
-    }
-    /// <summary>
-    /// 主热更程序集
-    /// </summary>
-    public string HotfixDllNameMain
-    {
-        get; set;
-    }
-
-    /// <summary>
-    /// AOT 程序集
-    /// </summary>
-    public string[] AOTDllNames
-    {
-        get; set;
-    }
-
-    /// <summary>
-    /// 其他预留热更新程序集
-    /// </summary>
-    public string[] PreserveHotfixDllNames
-    {
-        get; set;
-    }
-
-    /// <summary>
-    /// 热更程序集后缀
-    /// </summary>
-    public string HotfixDllSuffix
-    {
-        get; set;
-    }
-
-    /// <summary>
-    /// 热更新启动对象路径
-    /// </summary>
-    public string HotfixLauncher
-    {
-        get; set;
-    }
-
-    /// <summary>
-    /// 获取热更新程序集
-    /// </summary>
-    /// <returns>返回带后缀的完整路径</returns>
-    public string GetHotfixMainDllFullName()
-    {
-        return Utility.Path.GetRegularPath(Path.Combine(HotfixDllPath, HotfixDllNameMain + HotfixDllSuffix));
-    }
-
-    /// <summary>
-    /// 获取AOT dll 程序集
-    /// </summary>
-    /// <returns>返回带后缀的完整路径</returns>
-    public string[] GetAOTDllFullName()
-    {
-        if (AOTDllNames == null)
+        /// <summary>
+        /// 热更程序集生成路径
+        /// </summary>
+        public string HotfixDllPath
         {
-            return null;
+            get; set;
         }
-        string[] result = new string[AOTDllNames.Length];
-
-        for (int i = 0; i < result.Length; i++)
+        /// <summary>
+        /// 主热更程序集
+        /// </summary>
+        public string HotfixDllNameMain
         {
-            result[i] = Utility.Path.GetRegularPath(Path.Combine(HotfixDllPath, AOTDllNames[i] + HotfixDllSuffix));
+            get; set;
         }
-        return result;
-    }
+
+        /// <summary>
+        /// AOT 程序集
+        /// </summary>
+        public string[] AOTDllNames
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// 其他预留热更新程序集
+        /// </summary>
+        public string[] PreserveHotfixDllNames
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// 热更程序集后缀
+        /// </summary>
+        public string HotfixDllSuffix
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// 热更新启动对象路径
+        /// </summary>
+        public string HotfixLauncher
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// 获取热更新程序集
+        /// </summary>
+        /// <returns>返回带后缀的完整路径</returns>
+        public string GetHotfixMainDllFullName()
+        {
+            return Utility.Path.GetRegularPath(Path.Combine(HotfixDllPath, HotfixDllNameMain + HotfixDllSuffix));
+        }
+
+        /// <summary>
+        /// 获取AOT dll 程序集
+        /// </summary>
+        /// <returns>返回带后缀的完整路径</returns>
+        public string[] GetAOTDllFullName()
+        {
+            if (AOTDllNames == null)
+            {
+                return null;
+            }
+            string[] result = new string[AOTDllNames.Length];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = Utility.Path.GetRegularPath(Path.Combine(HotfixDllPath, AOTDllNames[i] + HotfixDllSuffix));
+            }
+            return result;
+        }
+    } 
 }

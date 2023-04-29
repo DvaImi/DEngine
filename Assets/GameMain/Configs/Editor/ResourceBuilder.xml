@@ -2,14 +2,14 @@
 <UnityGameFramework>
   <ResourceBuilder>
     <Settings>
-      <InternalResourceVersion>6</InternalResourceVersion>
+      <InternalResourceVersion>16</InternalResourceVersion>
       <Platforms>1</Platforms>
       <AssetBundleCompression>1</AssetBundleCompression>
       <CompressionHelperTypeName>UnityGameFramework.Runtime.DefaultCompressionHelper</CompressionHelperTypeName>
-      <AdditionalCompressionSelected>True</AdditionalCompressionSelected>
+      <AdditionalCompressionSelected>False</AdditionalCompressionSelected>
       <ForceRebuildAssetBundleSelected>False</ForceRebuildAssetBundleSelected>
-      <BuildEventHandlerTypeName>GeminiLion.Editor.DvalmiBuildEventHandler</BuildEventHandlerTypeName>
-      <OutputDirectory>F:/Project/Unity/ZH_GameSpace/Self/GemLionClient/AssetBundle</OutputDirectory>
+      <BuildEventHandlerTypeName>GeminiLion.Editor.GeminiLionBuildEventHandler</BuildEventHandlerTypeName>
+      <OutputDirectory>AssetBundle</OutputDirectory>
       <OutputPackageSelected>True</OutputPackageSelected>
       <OutputFullSelected>True</OutputFullSelected>
       <OutputPackedSelected>True</OutputPackedSelected>

@@ -13,7 +13,7 @@ using UnityGameFramework.Editor.ResourceTools;
 
 namespace GeminiLion.Editor
 {
-    public sealed class DvalmiBuildEventHandler : IBuildEventHandler
+    public sealed class GeminiLionBuildEventHandler : IBuildEventHandler
     {
         private string m_GameVersion;
         private int m_InternalResourceVersion;

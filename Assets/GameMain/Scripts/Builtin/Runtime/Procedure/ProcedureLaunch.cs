@@ -18,6 +18,10 @@ namespace GeminiLion
 
             // 构建信息：发布版本时，把一些数据以 Json 的格式写入BuildInfo.txt，供游戏逻辑读取
             GameEntry.BuiltinData.InitBuildInfo();
+            // 数据配置:
+            GameEntry.BuiltinData.InitAssetInfo();
+
+            GameEntry.BuiltinData.InitPreloadInfo();
 
             // 语言配置：设置当前使用的语言，如果不设置，则默认使用操作系统语言
             InitLanguageSettings();
@@ -31,9 +35,6 @@ namespace GeminiLion
             // 默认字典：加载默认字典文件 Assets/Game/Configs/Runtime/DefaultDictionary.xml
             // 此字典文件记录了资源更新前使用的各种语言的字符串，会随 App 一起发布，故不可更新
             GameEntry.BuiltinData.InitDefaultDictionary();
-            
-            // 数据配置:
-            GameEntry.BuiltinData.InitPreloadInfo();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
