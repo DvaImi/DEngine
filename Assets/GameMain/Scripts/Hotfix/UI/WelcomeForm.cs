@@ -6,6 +6,7 @@
 // ========================================================
 using System.Collections.Generic;
 using GameFramework;
+using GameFramework.Localization;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
@@ -16,12 +17,50 @@ namespace GeminiLion.Hotfix
     public partial class WelcomeForm : HotfixUGuiForm
     {
         public Text m_Text;
+        public Dropdown dropdown;
         protected override void OnInit(object userdata)
         {
             base.OnInit(userdata);
-
+            List<Dropdown.OptionData> options = new List<Dropdown.OptionData>
+            {
+                new Dropdown.OptionData()
+                {
+                    text = "ChineseSimplified"
+                },
+                new Dropdown.OptionData()
+                {
+                    text = "ChineseTraditional"
+                } ,
+                new Dropdown.OptionData()
+                {
+                    text = "English"
+                }
+            };
+            dropdown.AddOptions(options);
+            dropdown.value = GameEntry.Setting.GetInt("Dropdown");
+            dropdown.onValueChanged.AddListener(ChangeLanguage);
         }
 
+        private void ChangeLanguage(int arg0)
+        {
+            Language m_SelectedLanguage = default;
+            if (arg0 == 0)
+            {
+                m_SelectedLanguage = Language.ChineseSimplified;
+            }
+            if (arg0 == 1)
+            {
+                m_SelectedLanguage = Language.ChineseTraditional;
+            }
+            if (arg0 == 2)
+            {
+                m_SelectedLanguage = Language.English;
+            }
+            GameEntry.Setting.SetString(Constant.Setting.Language, m_SelectedLanguage.ToString());
+            GameEntry.Setting.SetInt("Dropdown", arg0);
+            GameEntry.Setting.Save();
+            UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
+        }
 
         protected override void OnOpen(object userData)
         {
@@ -40,11 +79,7 @@ namespace GeminiLion.Hotfix
             string json = Utility.Json.ToJson(AssetInfo);
             m_Text.text += json;
             Log.Info("序列化出来的的" + json);
-     
-        }
-        public void AotHelper()
-        {
-            Newtonsoft.Json.Utilities.AotHelper.IsFalse();
+
         }
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {

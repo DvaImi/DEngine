@@ -19,6 +19,7 @@
     <type fullname="GameFramework.GameFrameworkEntry" preserve="all" />
     <type fullname="GameFramework.GameFrameworkException" preserve="all" />
     <type fullname="GameFramework.IReference" preserve="all" />
+    <type fullname="GameFramework.Localization.Language" preserve="all" />
     <type fullname="GameFramework.Procedure.IProcedureManager" preserve="all" />
     <type fullname="GameFramework.Procedure.ProcedureBase" preserve="all" />
     <type fullname="GameFramework.ReferencePool" preserve="all" />
@@ -87,15 +88,14 @@
     <type fullname="System.Type" preserve="all" />
     <type fullname="System.ValueType" preserve="all" />
   </assembly>
-  <assembly fullname="Newtonsoft.Json">
-    <type fullname="Newtonsoft.Json.Utilities.AotHelper" preserve="all" />
-  </assembly>
   <assembly fullname="UnityEngine.CoreModule">
     <type fullname="UnityEngine.AsyncOperation" preserve="all" />
     <type fullname="UnityEngine.Color" preserve="all" />
     <type fullname="UnityEngine.Color32" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
     <type fullname="UnityEngine.Coroutine" preserve="all" />
+    <type fullname="UnityEngine.Events.UnityAction`1" preserve="all" />
+    <type fullname="UnityEngine.Events.UnityEvent`1" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
     <type fullname="UnityEngine.KeyCode" preserve="all" />
     <type fullname="UnityEngine.Mathf" preserve="all" />
@@ -119,6 +119,9 @@
     <type fullname="UnityEngine.Font" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.UI">
+    <type fullname="UnityEngine.UI.Dropdown" preserve="all" />
+    <type fullname="UnityEngine.UI.Dropdown/DropdownEvent" preserve="all" />
+    <type fullname="UnityEngine.UI.Dropdown/OptionData" preserve="all" />
     <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
     <type fullname="UnityEngine.UI.Slider" preserve="all" />
     <type fullname="UnityEngine.UI.Text" preserve="all" />
@@ -159,6 +162,7 @@
     <type fullname="UnityGameFramework.Runtime.OpenUIFormSuccessEventArgs" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.ResourceComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.SceneComponent" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.SettingComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.ShowEntityFailureEventArgs" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.ShowEntitySuccessEventArgs" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.ShutdownType" preserve="all" />

@@ -60,7 +60,7 @@ namespace GeminiLion.Hotfix
                 }
             }
 
-            procedureOwner.SetData<VarInt32>("NextSceneId",1);
+            procedureOwner.SetData<VarInt32>("NextSceneId", GameEntry.Config.GetInt("Scene.Menu"));
             ChangeState<ProcedureChangeScene>(procedureOwner);
         }
 

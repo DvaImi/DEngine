@@ -28,6 +28,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Threading.Tasks.Task<object>
 	// System.Threading.Tasks.TaskCompletionSource<object>
 	// System.Threading.Tasks.TaskCompletionSource<byte>
+	// UnityEngine.Events.UnityAction<int>
+	// UnityEngine.Events.UnityEvent<int>
 	// }}
 
 	public void RefMethods()

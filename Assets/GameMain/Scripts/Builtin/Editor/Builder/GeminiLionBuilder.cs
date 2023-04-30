@@ -62,14 +62,10 @@ namespace GeminiLion.Editor
             }
             GUIItem("(3) 编译Hotfix.dll。", "Compile", CompileHotfixDll);
             EditorGUILayout.BeginHorizontal();
-            {
-                GUIResourcesTool();
-            }
+            GUIResourcesTool();
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
-            {
-                GUIBuildPlayer();
-            }
+            GUIBuildPlayer();
             EditorGUILayout.EndHorizontal();
         }
 
@@ -101,7 +97,7 @@ namespace GeminiLion.Editor
             }
         }
 
-        private  void CompileHotfixDll()
+        private void CompileHotfixDll()
         {
             BuildTarget buildTarget = m_HybridClrBuilderController.GetBuildTarget(m_HotfixPlatformIndex);
             CompileDllCommand.CompileDll(buildTarget);
@@ -165,21 +161,5 @@ namespace GeminiLion.Editor
                 _ => ".exe",
             };
         }
-
-
-
-        #region Toolbar
-        private static readonly GUIContent s_OpenETCodeCreatorTool = new GUIContent("CompileHotfixDll");
-
-        [Toolbar(OnGUISide.Left, 0)]
-        private static void OnToolbarGUI()
-        {
-            if (GUILayout.Button(s_OpenETCodeCreatorTool))
-            {
-               
-            }
-        }
-        #endregion
-
     }
 }

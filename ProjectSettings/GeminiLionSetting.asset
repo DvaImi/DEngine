@@ -40,8 +40,9 @@ MonoBehaviour:
   HotfixDllNameMain: Game.Hotfix.dll
   AOTDllNames:
   - mscorlib.dll
-  - System.dll
-  - System.Core.dll
+  - UnityEngine.CoreModule.dll
+  - UnityGameFramework.Runtime.dll
+  - GameFramework.dll
   PreserveHotfixDllNames: []
   HotfixDllSuffix: .bytes
   HotfixInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/HotfixInfo.txt
