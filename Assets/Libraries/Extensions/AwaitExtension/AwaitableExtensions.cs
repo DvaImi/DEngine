@@ -2,29 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameFramework;
-using GameFramework.DataTable;
 using GameFramework.Event;
 using GameFramework.Resource;
 using UnityEngine;
 using UnityGameFramework.Runtime;
+using Object = UnityEngine.Object;
 
 namespace GeminiLion.Extensions.Await
 {
     public static partial class AwaitableExtensions
     {
-        private static readonly Dictionary<int, TaskCompletionSource<UIForm>> s_UIFormTcs =
-            new Dictionary<int, TaskCompletionSource<UIForm>>();
+        private static readonly Dictionary<int, TaskCompletionSource<UIForm>> s_UIFormTcs = new Dictionary<int, TaskCompletionSource<UIForm>>();
 
-        private static readonly Dictionary<int, TaskCompletionSource<Entity>> s_EntityTcs =
-            new Dictionary<int, TaskCompletionSource<Entity>>();
+        private static readonly Dictionary<int, TaskCompletionSource<Entity>> s_EntityTcs = new Dictionary<int, TaskCompletionSource<Entity>>();
 
-        private static readonly Dictionary<string, TaskCompletionSource<bool>> s_DataTableTcs =
-            new Dictionary<string, TaskCompletionSource<bool>>();
+        private static readonly Dictionary<string, TaskCompletionSource<bool>> s_LoadSceneTcs = new Dictionary<string, TaskCompletionSource<bool>>();
 
-        private static readonly Dictionary<string, TaskCompletionSource<bool>> s_LoadSceneTcs =
-            new Dictionary<string, TaskCompletionSource<bool>>();
-        private static readonly Dictionary<string, TaskCompletionSource<bool>> s_UnLoadSceneTcs =
-            new Dictionary<string, TaskCompletionSource<bool>>();
+        private static readonly Dictionary<string, TaskCompletionSource<bool>> s_UnLoadSceneTcs = new Dictionary<string, TaskCompletionSource<bool>>();
 
         private static readonly HashSet<int> s_WebSerialIDs = new HashSet<int>();
         private static readonly List<WebRequestResult> s_DelayReleaseWebResult = new List<WebRequestResult>();
@@ -32,16 +26,19 @@ namespace GeminiLion.Extensions.Await
         private static readonly HashSet<int> s_DownloadSerialIds = new HashSet<int>();
         private static readonly List<DownLoadResult> s_DelayReleaseDownloadResult = new List<DownLoadResult>();
 
-#if UNITY_EDITOR
-        private static bool s_IsSubscribeEvent = false;
-#endif
-
         /// <summary>
-        /// 注册需要的事件 (需再流程入口处调用 防止框架重启导致事件被取消问题)
+        /// 注册需要的事件
         /// </summary>
-        public static void SubscribeEvent()
+        static AwaitableExtensions()
         {
             EventComponent eventComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<EventComponent>();
+
+            if (eventComponent == null)
+            {
+                Log.Fatal("Event manager is invalid.");
+                return;
+            }
+
             eventComponent.Subscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
             eventComponent.Subscribe(OpenUIFormFailureEventArgs.EventId, OnOpenUIFormFailure);
 
@@ -50,40 +47,25 @@ namespace GeminiLion.Extensions.Await
 
             eventComponent.Subscribe(LoadSceneSuccessEventArgs.EventId, OnLoadSceneSuccess);
             eventComponent.Subscribe(LoadSceneFailureEventArgs.EventId, OnLoadSceneFailure);
+
             eventComponent.Subscribe(UnloadSceneSuccessEventArgs.EventId, OnUnloadSceneSuccess);
             eventComponent.Subscribe(UnloadSceneFailureEventArgs.EventId, OnUnloadSceneFailure);
-
-            // eventComponent.Subscribe(LoadDataTableSuccessEventArgs.EventId, OnLoadDataTableSuccess);
-            // eventComponent.Subscribe(LoadDataTableFailureEventArgs.EventId, OnLoadDataTableFailure);
 
             eventComponent.Subscribe(WebRequestSuccessEventArgs.EventId, OnWebRequestSuccess);
             eventComponent.Subscribe(WebRequestFailureEventArgs.EventId, OnWebRequestFailure);
 
             eventComponent.Subscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
             eventComponent.Subscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
-#if UNITY_EDITOR
-            s_IsSubscribeEvent = true;
-#endif
         }
 
-#if UNITY_EDITOR
-        private static void TipsSubscribeEvent()
-        {
-            if (!s_IsSubscribeEvent)
-            {
-                throw new Exception("Use await/async extensions must to subscribe event!");
-            }
-        }
-#endif
+
+        #region UI
 
         /// <summary>
         /// 打开界面（可等待）
         /// </summary>
-        public static Task<UIForm> OpenUIFormAsync(this UIComponent uiComponent,string uiFormAssetName, string uiGroupName, int priority, bool pauseCoveredUIForm, object userData)
+        public static Task<UIForm> OpenUIFormAsync(this UIComponent uiComponent, string uiFormAssetName, string uiGroupName, int priority, bool pauseCoveredUIForm, object userData)
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             int serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
             var tcs = new TaskCompletionSource<UIForm>();
             s_UIFormTcs.Add(serialId, tcs);
@@ -113,15 +95,15 @@ namespace GeminiLion.Extensions.Await
             }
         }
 
+        #endregion
+
+        #region Entity
+
         /// <summary>
         /// 显示实体（可等待）
         /// </summary>
-        public static Task<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityId,
-            Type entityLogicType, string entityAssetName, string entityGroupName, int priority,object userData)
+        public static Task<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityId, Type entityLogicType, string entityAssetName, string entityGroupName, int priority, object userData)
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             var tcs = new TaskCompletionSource<Entity>();
             s_EntityTcs.Add(entityId, tcs);
             entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
@@ -152,21 +134,22 @@ namespace GeminiLion.Extensions.Await
             }
         }
 
+        #endregion
+
+        #region Scene
 
         /// <summary>
         /// 加载场景（可等待）
         /// </summary>
         public static async Task<bool> LoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName)
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             var tcs = new TaskCompletionSource<bool>();
             var isUnLoadScene = s_UnLoadSceneTcs.TryGetValue(sceneAssetName, out var unloadSceneTcs);
             if (isUnLoadScene)
             {
                 await unloadSceneTcs.Task;
             }
+
             s_LoadSceneTcs.Add(sceneAssetName, tcs);
 
             try
@@ -179,6 +162,7 @@ namespace GeminiLion.Extensions.Await
                 tcs.SetException(e);
                 s_LoadSceneTcs.Remove(sceneAssetName);
             }
+
             return await tcs.Task;
         }
 
@@ -204,15 +188,12 @@ namespace GeminiLion.Extensions.Await
                 s_LoadSceneTcs.Remove(ne.SceneAssetName);
             }
         }
-        
+
         /// <summary>
         /// 卸载场景（可等待）
         /// </summary>
         public static async Task<bool> UnLoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName)
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             var tcs = new TaskCompletionSource<bool>();
             var isLoadSceneTcs = s_LoadSceneTcs.TryGetValue(sceneAssetName, out var loadSceneTcs);
             if (isLoadSceneTcs)
@@ -220,6 +201,7 @@ namespace GeminiLion.Extensions.Await
                 Debug.Log("Unload  loading scene");
                 await loadSceneTcs.Task;
             }
+
             s_UnLoadSceneTcs.Add(sceneAssetName, tcs);
             try
             {
@@ -231,8 +213,10 @@ namespace GeminiLion.Extensions.Await
                 tcs.SetException(e);
                 s_UnLoadSceneTcs.Remove(sceneAssetName);
             }
+
             return await tcs.Task;
         }
+
         private static void OnUnloadSceneSuccess(object sender, GameEventArgs e)
         {
             UnloadSceneSuccessEventArgs ne = (UnloadSceneSuccessEventArgs)e;
@@ -256,15 +240,15 @@ namespace GeminiLion.Extensions.Await
             }
         }
 
+        #endregion
+
+        #region Resources
+
         /// <summary>
         /// 加载资源（可等待）
         /// </summary>
-        public static Task<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName)
-            where T : UnityEngine.Object
+        public static Task<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName) where T : Object
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             TaskCompletionSource<T> loadAssetTcs = new TaskCompletionSource<T>();
             resourceComponent.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks(
                 (tempAssetName, asset, duration, userdata) =>
@@ -278,7 +262,8 @@ namespace GeminiLion.Extensions.Await
                     }
                     else
                     {
-                        Debug.LogError($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}.");
+                        Debug.LogError(
+                            $"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}.");
                         source.SetException(new GameFrameworkException(
                             $"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
                     }
@@ -296,15 +281,13 @@ namespace GeminiLion.Extensions.Await
         /// <summary>
         /// 加载多个资源（可等待）
         /// </summary>
-        public static async Task<T[]> LoadAssetsAsync<T>(this ResourceComponent resourceComponent, string[] assetName) where T : UnityEngine.Object
+        public static async Task<T[]> LoadAssetsAsync<T>(this ResourceComponent resourceComponent, string[] assetName) where T : Object
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             if (assetName == null)
             {
                 return null;
             }
+
             T[] assets = new T[assetName.Length];
             Task<T>[] tasks = new Task<T>[assets.Length];
             for (int i = 0; i < tasks.Length; i++)
@@ -321,16 +304,15 @@ namespace GeminiLion.Extensions.Await
             return assets;
         }
 
+        #endregion
+
+        #region WebRequest
 
         /// <summary>
         /// 增加Web请求任务（可等待）
         /// </summary>
-        public static Task<WebRequestResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent,
-            string webRequestUri, WWWForm wwwForm = null, object userdata = null)
+        public static Task<WebRequestResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri, WWWForm wwwForm = null, object userdata = null)
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             var tsc = new TaskCompletionSource<WebRequestResult>();
             int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm,
                 AwaitDataWrap<WebRequestResult>.Create(userdata, tsc));
@@ -341,12 +323,8 @@ namespace GeminiLion.Extensions.Await
         /// <summary>
         /// 增加Web请求任务（可等待）
         /// </summary>
-        public static Task<WebRequestResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent,
-            string webRequestUri, byte[] postData, object userdata = null)
+        public static Task<WebRequestResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri, byte[] postData, object userdata = null)
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             var tsc = new TaskCompletionSource<WebRequestResult>();
             int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData,
                 AwaitDataWrap<WebRequestResult>.Create(userdata, tsc));
@@ -361,7 +339,8 @@ namespace GeminiLion.Extensions.Await
             {
                 if (ne.UserData is AwaitDataWrap<WebRequestResult> webRequestUserdata)
                 {
-                    WebRequestResult requestResult = WebRequestResult.Create(ne.GetWebResponseBytes(), false, string.Empty,
+                    WebRequestResult requestResult = WebRequestResult.Create(ne.GetWebResponseBytes(), false,
+                        string.Empty,
                         webRequestUserdata.UserData);
                     s_DelayReleaseWebResult.Add(requestResult);
                     webRequestUserdata.Source.TrySetResult(requestResult);
@@ -388,7 +367,8 @@ namespace GeminiLion.Extensions.Await
             {
                 if (ne.UserData is AwaitDataWrap<WebRequestResult> webRequestUserdata)
                 {
-                    WebRequestResult requestResult = WebRequestResult.Create(null, true, ne.ErrorMessage, webRequestUserdata.UserData);
+                    WebRequestResult requestResult =
+                        WebRequestResult.Create(null, true, ne.ErrorMessage, webRequestUserdata.UserData);
                     webRequestUserdata.Source.TrySetResult(requestResult);
                     s_DelayReleaseWebResult.Add(requestResult);
                     ReferencePool.Release(webRequestUserdata);
@@ -407,17 +387,15 @@ namespace GeminiLion.Extensions.Await
             }
         }
 
+        #endregion
+
+        #region DownLoad
+
         /// <summary>
         /// 增加下载任务（可等待)
         /// </summary>
-        public static Task<DownLoadResult> AddDownloadAsync(this DownloadComponent downloadComponent,
-            string downloadPath,
-            string downloadUri,
-            object userdata = null)
+        public static Task<DownLoadResult> AddDownloadAsync(this DownloadComponent downloadComponent, string downloadPath, string downloadUri, object userdata = null)
         {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
             var tcs = new TaskCompletionSource<DownLoadResult>();
             int serialId = downloadComponent.AddDownload(downloadPath, downloadUri,
                 AwaitDataWrap<DownLoadResult>.Create(userdata, tcs));
@@ -476,5 +454,7 @@ namespace GeminiLion.Extensions.Await
                 }
             }
         }
+
+        #endregion
     }
 }
