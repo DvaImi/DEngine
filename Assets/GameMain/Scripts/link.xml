@@ -135,6 +135,7 @@
     <type fullname="UnityExtension" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.BaseComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.ConfigComponent" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DataNodeComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.DataRowBase" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.DataTableComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.DownloadComponent" preserve="all" />
@@ -171,6 +172,7 @@
     <type fullname="UnityGameFramework.Runtime.UIForm" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.UIFormLogic" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.VarInt32" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.VarString" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.WebRequestComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.WebRequestFailureEventArgs" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.WebRequestSuccessEventArgs" preserve="all" />

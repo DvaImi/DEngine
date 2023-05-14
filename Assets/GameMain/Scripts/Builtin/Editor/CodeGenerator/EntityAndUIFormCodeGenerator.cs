@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using GeminiLion.Hotfix;
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,7 +12,7 @@ namespace GeminiLion.Editor
     /// <summary>
     /// 实体与界面代码生成器
     /// </summary>
-    public class EntityAndUIFormCodeGenerator : EditorWindow
+    public class EntityAndUIFormCodeGenerator : OdinEditorWindow
     {
         private enum GenCodeType
         {
@@ -57,17 +59,18 @@ namespace GeminiLion.Editor
             window.minSize = new Vector2(300f, 300f);
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             m_SerializedObject = new SerializedObject(this);
             m_SerializedProperty = m_SerializedObject.FindProperty("m_GameObjects");
         }
 
-        private void OnGUI()
+        protected override void OnGUI()
         {
+            base.OnGUI();
             //绘制GameObject列表
             EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(m_SerializedProperty, true);
             if (EditorGUI.EndChangeCheck())
             {
                 m_SerializedObject.ApplyModifiedProperties();

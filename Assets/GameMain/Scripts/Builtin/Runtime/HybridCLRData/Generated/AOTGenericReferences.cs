@@ -46,13 +46,14 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// object UnityEngine.Component.GetComponent<object>()
 		// System.Void UnityEngine.Component.GetComponentsInChildren<object>(bool,System.Collections.Generic.List<object>)
 		// object UnityExtension.GetOrAddComponent<object>(UnityEngine.GameObject)
+		// System.Void UnityGameFramework.Runtime.DataNodeComponent.SetData<object>(string,object)
 		// GameFramework.DataTable.IDataTable<object> UnityGameFramework.Runtime.DataTableComponent.GetDataTable<object>()
 		// bool UnityGameFramework.Runtime.FsmComponent.DestroyFsm<object>()
-		// System.Void UnityGameFramework.Runtime.Log.Error<object,object>(string,object,object)
 		// System.Void UnityGameFramework.Runtime.Log.Error<object,object,object>(string,object,object,object)
-		// System.Void UnityGameFramework.Runtime.Log.Info<object,object>(string,object,object)
-		// System.Void UnityGameFramework.Runtime.Log.Info<object>(string,object)
+		// System.Void UnityGameFramework.Runtime.Log.Error<object,object>(string,object,object)
 		// System.Void UnityGameFramework.Runtime.Log.Info<object,object,object,object>(string,object,object,object,object)
+		// System.Void UnityGameFramework.Runtime.Log.Info<object>(string,object)
+		// System.Void UnityGameFramework.Runtime.Log.Info<object,object>(string,object,object)
 		// System.Void UnityGameFramework.Runtime.Log.Warning<object>(string,object)
 	}
 }
