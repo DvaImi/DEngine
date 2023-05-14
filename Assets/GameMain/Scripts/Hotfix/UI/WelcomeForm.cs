@@ -8,8 +8,10 @@
 using System.Collections.Generic;
 using GameFramework;
 using GameFramework.Localization;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
+using GeminiLion.Extensions.Await;
 
 //自动生成于：2023/4/16 0:33:27
 namespace GeminiLion.Hotfix
@@ -18,6 +20,7 @@ namespace GeminiLion.Hotfix
     {
         public Text m_Text;
         public Dropdown dropdown;
+        [FormerlySerializedAs("wenTest")] public Button webTest;
 
         protected override void OnInit(object userdata)
         {
@@ -40,6 +43,17 @@ namespace GeminiLion.Hotfix
             dropdown.AddOptions(options);
             dropdown.value = GameEntry.Setting.GetInt("Dropdown");
             dropdown.onValueChanged.AddListener(ChangeLanguage);
+            webTest.onClick.AddListener(WebRequestTest);
+        }
+
+        private async void WebRequestTest()
+        {
+            var result = await GameEntry.WebRequest.AddWebRequestAsync("https://www.zhihu.com/question/33870165/answer/2799501996");
+
+            if (result.IsError == false)
+            {
+                Log.Debug(Utility.Converter.GetString(result.Bytes));
+            }
         }
 
         private void ChangeLanguage(int arg0)

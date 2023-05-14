@@ -314,8 +314,7 @@ namespace GeminiLion.Extensions.Await
         public static Task<WebRequestResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri, WWWForm wwwForm = null, object userdata = null)
         {
             var tsc = new TaskCompletionSource<WebRequestResult>();
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm,
-                AwaitDataWrap<WebRequestResult>.Create(userdata, tsc));
+            int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm, AwaitDataWrap<WebRequestResult>.Create(userdata, tsc));
             s_WebSerialIDs.Add(serialId);
             return tsc.Task;
         }
@@ -326,8 +325,7 @@ namespace GeminiLion.Extensions.Await
         public static Task<WebRequestResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri, byte[] postData, object userdata = null)
         {
             var tsc = new TaskCompletionSource<WebRequestResult>();
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData,
-                AwaitDataWrap<WebRequestResult>.Create(userdata, tsc));
+            int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData, AwaitDataWrap<WebRequestResult>.Create(userdata, tsc));
             s_WebSerialIDs.Add(serialId);
             return tsc.Task;
         }
@@ -339,9 +337,7 @@ namespace GeminiLion.Extensions.Await
             {
                 if (ne.UserData is AwaitDataWrap<WebRequestResult> webRequestUserdata)
                 {
-                    WebRequestResult requestResult = WebRequestResult.Create(ne.GetWebResponseBytes(), false,
-                        string.Empty,
-                        webRequestUserdata.UserData);
+                    WebRequestResult requestResult = WebRequestResult.Create(ne.GetWebResponseBytes(), false, string.Empty, webRequestUserdata.UserData);
                     s_DelayReleaseWebResult.Add(requestResult);
                     webRequestUserdata.Source.TrySetResult(requestResult);
                     ReferencePool.Release(webRequestUserdata);
@@ -367,8 +363,7 @@ namespace GeminiLion.Extensions.Await
             {
                 if (ne.UserData is AwaitDataWrap<WebRequestResult> webRequestUserdata)
                 {
-                    WebRequestResult requestResult =
-                        WebRequestResult.Create(null, true, ne.ErrorMessage, webRequestUserdata.UserData);
+                    WebRequestResult requestResult = WebRequestResult.Create(null, true, ne.ErrorMessage, webRequestUserdata.UserData);
                     webRequestUserdata.Source.TrySetResult(requestResult);
                     s_DelayReleaseWebResult.Add(requestResult);
                     ReferencePool.Release(webRequestUserdata);
@@ -397,8 +392,7 @@ namespace GeminiLion.Extensions.Await
         public static Task<DownLoadResult> AddDownloadAsync(this DownloadComponent downloadComponent, string downloadPath, string downloadUri, object userdata = null)
         {
             var tcs = new TaskCompletionSource<DownLoadResult>();
-            int serialId = downloadComponent.AddDownload(downloadPath, downloadUri,
-                AwaitDataWrap<DownLoadResult>.Create(userdata, tcs));
+            int serialId = downloadComponent.AddDownload(downloadPath, downloadUri, AwaitDataWrap<DownLoadResult>.Create(userdata, tcs));
             s_DownloadSerialIds.Add(serialId);
             return tcs.Task;
         }
