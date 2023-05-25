@@ -3,6 +3,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 
 	// {{ AOT assemblies
 	// GameFramework.dll
+	// UniTask.dll
 	// UnityEngine.CoreModule.dll
 	// UnityGameFramework.Runtime.dll
 	// mscorlib.dll
@@ -12,6 +13,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// }} 
 
 	// {{ AOT generic types
+	// Cysharp.Threading.Tasks.UniTask<object>
+	// Cysharp.Threading.Tasks.UniTask.Awaiter<object>
 	// GameFramework.DataTable.IDataTable<object>
 	// GameFramework.Fsm.FsmState<object>
 	// GameFramework.Fsm.IFsm<object>
@@ -23,11 +26,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.List.Enumerator<object>
 	// System.EventHandler<object>
 	// System.Nullable<int>
-	// System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>
-	// System.Runtime.CompilerServices.TaskAwaiter<object>
-	// System.Threading.Tasks.Task<object>
-	// System.Threading.Tasks.TaskCompletionSource<object>
-	// System.Threading.Tasks.TaskCompletionSource<byte>
 	// UnityEngine.Events.UnityAction<int>
 	// UnityEngine.Events.UnityEvent<int>
 	// }}
@@ -40,20 +38,19 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// object GameFramework.GameFrameworkEntry.GetModule<object>()
 		// System.Void GameFramework.Procedure.IProcedureManager.StartProcedure<object>()
 		// string GameFramework.Utility.Text.Format<object>(string,object)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,GeminiLion.Hotfix.AwaitUtility.<AwaitLoadAssets>d__23>(System.Runtime.CompilerServices.TaskAwaiter<object>&,GeminiLion.Hotfix.AwaitUtility.<AwaitLoadAssets>d__23&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<GeminiLion.Hotfix.AwaitUtility.<AwaitLoadAsset>d__24<object>>(GeminiLion.Hotfix.AwaitUtility.<AwaitLoadAsset>d__24<object>&)
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<GeminiLion.Hotfix.AwaitUtility.<AwaitLoadAssets>d__23>(GeminiLion.Hotfix.AwaitUtility.<AwaitLoadAssets>d__23&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,GeminiLion.Hotfix.WelcomeForm.<WebRequestTest>d__4>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,GeminiLion.Hotfix.WelcomeForm.<WebRequestTest>d__4&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<GeminiLion.Hotfix.WelcomeForm.<WebRequestTest>d__4>(GeminiLion.Hotfix.WelcomeForm.<WebRequestTest>d__4&)
 		// object UnityEngine.Component.GetComponent<object>()
 		// System.Void UnityEngine.Component.GetComponentsInChildren<object>(bool,System.Collections.Generic.List<object>)
 		// object UnityExtension.GetOrAddComponent<object>(UnityEngine.GameObject)
 		// System.Void UnityGameFramework.Runtime.DataNodeComponent.SetData<object>(string,object)
 		// GameFramework.DataTable.IDataTable<object> UnityGameFramework.Runtime.DataTableComponent.GetDataTable<object>()
 		// bool UnityGameFramework.Runtime.FsmComponent.DestroyFsm<object>()
-		// System.Void UnityGameFramework.Runtime.Log.Error<object,object,object>(string,object,object,object)
 		// System.Void UnityGameFramework.Runtime.Log.Error<object,object>(string,object,object)
-		// System.Void UnityGameFramework.Runtime.Log.Info<object,object,object,object>(string,object,object,object,object)
-		// System.Void UnityGameFramework.Runtime.Log.Info<object>(string,object)
+		// System.Void UnityGameFramework.Runtime.Log.Error<object,object,object>(string,object,object,object)
 		// System.Void UnityGameFramework.Runtime.Log.Info<object,object>(string,object,object)
+		// System.Void UnityGameFramework.Runtime.Log.Info<object>(string,object)
+		// System.Void UnityGameFramework.Runtime.Log.Info<object,object,object,object>(string,object,object,object,object)
 		// System.Void UnityGameFramework.Runtime.Log.Warning<object>(string,object)
 	}
 }

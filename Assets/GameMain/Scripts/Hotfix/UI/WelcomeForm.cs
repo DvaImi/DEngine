@@ -8,10 +8,10 @@
 using System.Collections.Generic;
 using GameFramework;
 using GameFramework.Localization;
+using GeminiLion.Await;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
-using GeminiLion.Extensions.Await;
 
 //自动生成于：2023/4/16 0:33:27
 namespace GeminiLion.Hotfix

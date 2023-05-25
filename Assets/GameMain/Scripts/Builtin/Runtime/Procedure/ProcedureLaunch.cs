@@ -3,6 +3,7 @@ using GameFramework.Fsm;
 using GameFramework.Localization;
 using GameFramework.Procedure;
 using GameFramework.Resource;
+using GeminiLion.Await;
 using UnityGameFramework.Runtime;
 
 namespace GeminiLion
@@ -35,6 +36,9 @@ namespace GeminiLion
             // 默认字典：加载默认字典文件 Assets/Game/Configs/Runtime/DefaultDictionary.xml
             // 此字典文件记录了资源更新前使用的各种语言的字符串，会随 App 一起发布，故不可更新
             GameEntry.BuiltinData.InitDefaultDictionary();
+
+            //注册Await 扩展事件
+            AwaitableExtensions.Subscribe();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

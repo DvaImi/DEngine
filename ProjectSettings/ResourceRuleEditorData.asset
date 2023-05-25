@@ -21,7 +21,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/GameMain/AssetBundle/Configs/Runtime
     loadType: 0
     packed: 0
-    filterType: 3
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: Datable
@@ -31,7 +31,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/GameMain/AssetBundle/DataTables
     loadType: 0
     packed: 0
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: Entity
@@ -61,7 +61,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/GameMain/AssetBundle/HybridCLRData
     loadType: 0
     packed: 0
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: Localization
@@ -121,7 +121,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/GameMain/AssetBundle/Scenes
     loadType: 0
     packed: 0
-    filterType: 2
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: UI
@@ -131,5 +131,5 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/GameMain/AssetBundle/UI
     loadType: 0
     packed: 0
-    filterType: 2
+    filterType: 1
     searchPatterns: '*.*'

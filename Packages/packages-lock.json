@@ -5,7 +5,16 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d205f00a1bfc7c2e64112650fc0aa94615a58f98"
+      "hash": "07b52bed050e90c718271f198428647c19792b85"
+    },
+    "com.unity.burst": {
+      "version": "1.6.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
       "version": "2.0.3",
@@ -29,6 +38,15 @@
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.9"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.inputsystem": {
+      "version": "1.5.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },

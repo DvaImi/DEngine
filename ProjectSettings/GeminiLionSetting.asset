@@ -43,10 +43,11 @@ MonoBehaviour:
   - UnityEngine.CoreModule.dll
   - UnityGameFramework.Runtime.dll
   - GameFramework.dll
+  - UniTask.dll
   PreserveHotfixDllNames: []
   HotfixDllSuffix: .bytes
   HotfixInfoPath: Assets/GameMain/AssetBundle/Configs/Runtime/HotfixInfo.txt
-  HotfixLauncher: Assets/GameMain/AssetBundle/Prefab/GameHotfixEntry.prefab
+  HotfixLauncher: Assets/GameMain/AssetBundle/HybridCLRData/GameHotfixEntry.prefab
   CheckVersionUrl: http://192.168.1.102/{0}Version.txt
   WindowsAppUrl: http://192.168.1.102/App/Windows
   MacOSAppUrl: http://192.168.1.102/App/MacOS

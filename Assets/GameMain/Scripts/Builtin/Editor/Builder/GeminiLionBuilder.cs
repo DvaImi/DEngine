@@ -34,6 +34,7 @@ namespace GeminiLion.Editor
         }
 
         private bool m_BeginBuild = false;
+        private bool m_IsAotGeneric = false;
 
         [MenuItem("GeminiLion/Builder", false, 0)]
         private static void Open()
@@ -54,10 +55,8 @@ namespace GeminiLion.Editor
             // Builder
             GUILayout.Space(5f);
             EditorGUILayout.LabelField("Build", EditorStyles.boldLabel);
-            GUIItem("(1) 由于ab包依赖裁剪后的dll，在编译hotfix.dl前需要build工程。生成裁剪后的 AOT dll。", "AOT Generic Build",
-                () => m_BeginBuild = true, 120);
-            int hotfixPlatformIndex = EditorGUILayout.Popup("(2) 选择Hotfix平台。", m_HotfixPlatformIndex,
-                m_HybridClrBuilderController.PlatformNames);
+            GUIItem("(1) 由于ab包依赖裁剪后的dll，在编译hotfix.dl前需要build工程。生成裁剪后的 AOT dll。", "AOT Generic Build", () => m_IsAotGeneric = m_BeginBuild = true, 120);
+            int hotfixPlatformIndex = EditorGUILayout.Popup("(2) 选择Hotfix平台。", m_HotfixPlatformIndex, m_HybridClrBuilderController.PlatformNames);
             if (hotfixPlatformIndex != m_HotfixPlatformIndex)
             {
                 HotfixPlatformIndex = hotfixPlatformIndex;
@@ -76,8 +75,9 @@ namespace GeminiLion.Editor
         {
             if (m_BeginBuild)
             {
-                BuildPlayer();
                 m_BeginBuild = false;
+                BuildPlayer(m_IsAotGeneric);
+                m_IsAotGeneric = false;
             }
         }
 
@@ -99,13 +99,11 @@ namespace GeminiLion.Editor
             EditorGUILayout.LabelField("(4) 编辑Hotfix.dll等资源，并打包。");
             if (GUILayout.Button("Edit", GUILayout.Width(100)))
             {
-                EditorWindow window =
-                    GetWindow(Type.GetType(
-                        "UnityGameFramework.Editor.ResourceTools.ResourceEditor,UnityGameFramework.Editor"));
+                EditorWindow window =  GetWindow(Type.GetType( "UnityGameFramework.Editor.ResourceTools.ResourceEditor,UnityGameFramework.Editor"));
                 window.Show();
             }
 
-            if (GUILayout.Button("BuildAssetBundle", GUILayout.Width(130)))
+            if (GUILayout.Button("Build", GUILayout.Width(130)))
             {
                 Platform platform = (Platform)Enum.Parse(typeof(Platform),
                     m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]);
@@ -120,15 +118,19 @@ namespace GeminiLion.Editor
             m_HybridClrBuilderController.CopyDllAssets(buildTarget);
         }
 
-        private void BuildPlayer()
+        private void BuildPlayer(bool aot = false)
         {
-            BuildReport report =
-                BuildApplicationForPlatform(m_HybridClrBuilderController.GetBuildTarget(m_HotfixPlatformIndex));
+            BuildReport report = BuildApplicationForPlatform(m_HybridClrBuilderController.GetBuildTarget(m_HotfixPlatformIndex), aot);
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Build succeeded: " + StringUtility.GetByteLengthString((long)summary.totalSize));
+
+                if (!aot)
+                {
+                    OpenFolder.OpenFolderPublishAppPath();
+                }
             }
 
             if (summary.result == BuildResult.Failed)
@@ -145,19 +147,19 @@ namespace GeminiLion.Editor
                 BuildPlayerWindow.ShowBuildPlayerWindow();
             }
 
-            if (GUILayout.Button("BuildPlayerTarget", GUILayout.Width(130)))
+            if (GUILayout.Button("Build", GUILayout.Width(130)))
             {
                 m_BeginBuild = true;
             }
         }
 
-        public BuildReport BuildApplicationForPlatform(BuildTarget platform)
+        public BuildReport BuildApplicationForPlatform(BuildTarget platform, bool aot)
         {
             string outputExtension = GetFileExtensionForPlatform(platform);
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
-                scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
+                scenes = aot ? EditorBuildSettings.scenes.Select(x => x.path).ToArray() : new string[] { EditorBuildSettings.scenes[0].path },
                 locationPathName = Path.Combine(GeminiLionSetting.Instance.PublishAppOutput,
                     m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex],
                     Application.productName + outputExtension),
