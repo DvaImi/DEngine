@@ -25,7 +25,7 @@ namespace GeminiLion.Editor
 
         private int HotfixPlatformIndex
         {
-            get { return EditorPrefs.GetInt("HybridCLRPlatform", 2); }
+            get => EditorPrefs.GetInt("HybridCLRPlatform", 2);
             set
             {
                 m_HotfixPlatformIndex = value;
@@ -99,14 +99,20 @@ namespace GeminiLion.Editor
             EditorGUILayout.LabelField("(4) 编辑Hotfix.dll等资源，并打包。");
             if (GUILayout.Button("Edit", GUILayout.Width(100)))
             {
-                EditorWindow window =  GetWindow(Type.GetType( "UnityGameFramework.Editor.ResourceTools.ResourceEditor,UnityGameFramework.Editor"));
+                EditorWindow window = GetWindow(Type.GetType("UnityGameFramework.Editor.ResourceTools.ResourceEditor,UnityGameFramework.Editor"));
                 window.Show();
+            }
+
+            if (GUILayout.Button("Rule", GUILayout.Width(100)))
+            {
+                EditorWindow window = GetWindow(Type.GetType("GeminiLion.Editor.ResourceTools.ResourceRuleEditor"));
+                window.minSize = new Vector2(1640f, 420f);
             }
 
             if (GUILayout.Button("Build", GUILayout.Width(130)))
             {
-                Platform platform = (Platform)Enum.Parse(typeof(Platform),
-                    m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]);
+                ResourceRuleEditorUtility.RefreshResourceCollection();
+                Platform platform = (Platform)Enum.Parse(typeof(Platform), m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]);
                 ResourceBuildHelper.StartBuild(platform);
             }
         }

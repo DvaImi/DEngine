@@ -18,7 +18,7 @@ namespace GeminiLion.Editor
     {
         private static StringBuilder m_RelatePath = new StringBuilder();
 
-        [MenuItem("Assets/Copy Selects AssetsPath", isValidateFunction: false, priority: -1)]
+        [MenuItem("Assets/CopyPath", isValidateFunction: false, priority: -1)]
         public static void GetAssetsPath()
         {
             Object[] objects = Selection.objects;

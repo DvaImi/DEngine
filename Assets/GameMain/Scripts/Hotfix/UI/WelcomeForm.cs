@@ -52,7 +52,8 @@ namespace GeminiLion.Hotfix
 
             if (result.IsError == false)
             {
-                Log.Debug(Utility.Converter.GetString(result.Bytes));
+                m_Text.text += "\n";
+                m_Text.text += Utility.Converter.GetString(result.Bytes);
             }
         }
 

@@ -27,7 +27,7 @@ namespace GeminiLion.Editor.ResourceTools
         [FolderPath(RequireExistingPath = true)]
         public string[] folderPaths;
 
-        private readonly char[] illegalCharacters =
+        private readonly char[] m_IllegalCharacters =
         {
             ' ', '\\', '/', ':', '*', '?', '\"', '<', '>', '|', '+', '[', ']', '{', '}', '%', '#', '&', '`', '~', '\'',
             '@', '-', '\''
@@ -74,12 +74,12 @@ namespace GeminiLion.Editor.ResourceTools
                         }
 
                         // 判断是否包含非法字符
-                        bool hasIllegalCharacters = illegalCharacters.Any(c => asset.name.Contains(c));
+                        bool hasIllegalCharacters = m_IllegalCharacters.Any(c => asset.name.Contains(c));
 
                         // 替换非法字符并重命名文件
                         if (hasIllegalCharacters)
                         {
-                            string illegalChar = illegalCharacters.FirstOrDefault(c => asset.name.Contains(c))
+                            string illegalChar = m_IllegalCharacters.FirstOrDefault(c => asset.name.Contains(c))
                                 .ToString();
                             Debug.LogWarningFormat("{0} has an illegal character '{1}'", asset.name, illegalChar);
                         }
@@ -87,10 +87,10 @@ namespace GeminiLion.Editor.ResourceTools
                         // 重命名文件夹
                         string assetFolder = Path.GetDirectoryName(assetPath);
                         string folderName = Path.GetFileName(assetFolder);
-                        bool hasFolderIllegalCharacters = illegalCharacters.Any(c => folderName.Contains(c));
+                        bool hasFolderIllegalCharacters = m_IllegalCharacters.Any(c => folderName.Contains(c));
                         if (hasFolderIllegalCharacters)
                         {
-                            string illegalChar = illegalCharacters.FirstOrDefault(c => asset.name.Contains(c))
+                            string illegalChar = m_IllegalCharacters.FirstOrDefault(c => asset.name.Contains(c))
                                 .ToString();
                             Debug.LogWarningFormat("Folder {0} has an illegal character '{1}'", asset.name,
                                 illegalChar);
@@ -118,12 +118,12 @@ namespace GeminiLion.Editor.ResourceTools
                         Object asset = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
 
                         // 判断是否包含非法字符
-                        bool hasIllegalCharacters = illegalCharacters.Any(c => asset.name.Contains(c));
+                        bool hasIllegalCharacters = m_IllegalCharacters.Any(c => asset.name.Contains(c));
 
                         // 替换非法字符并重命名文件
                         if (hasIllegalCharacters)
                         {
-                            string newAssetName = string.Concat(asset.name.Split(illegalCharacters,
+                            string newAssetName = string.Concat(asset.name.Split(m_IllegalCharacters,
                                 StringSplitOptions.RemoveEmptyEntries));
                             AssetDatabase.RenameAsset(assetPath, newAssetName);
                         }
@@ -131,10 +131,10 @@ namespace GeminiLion.Editor.ResourceTools
                         // 重命名文件夹
                         string assetFolder = Path.GetDirectoryName(assetPath);
                         string folderName = Path.GetFileName(assetFolder);
-                        bool hasFolderIllegalCharacters = illegalCharacters.Any(c => folderName.Contains(c));
+                        bool hasFolderIllegalCharacters = m_IllegalCharacters.Any(c => folderName.Contains(c));
                         if (hasFolderIllegalCharacters)
                         {
-                            string newFolderName = string.Concat(folderName.Split(illegalCharacters,
+                            string newFolderName = string.Concat(folderName.Split(m_IllegalCharacters,
                                 StringSplitOptions.RemoveEmptyEntries));
                             string newFolderPath = Path.Combine(Path.GetDirectoryName(assetPath), newFolderName);
                             AssetDatabase.RenameAsset(assetFolder, newFolderPath);

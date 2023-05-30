@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
 
 namespace GeminiLion.Editor.ResourceTools
 {
-    [GeminiLionFilePath("ProjectSettings/ResourceRuleEditorData.asset")]
-    public class ResourceRuleEditorData : ScriptableSingleton<ResourceRuleEditorData>
+    public class ResourceRuleEditorData : ScriptableObject
     {
         public List<ResourceRule> rules = new List<ResourceRule>();
     }
@@ -18,6 +18,7 @@ namespace GeminiLion.Editor.ResourceTools
         public string fileSystem = string.Empty;
         public string groups = string.Empty;
         public string assetsDirectoryPath = string.Empty;
+        public bool lockPath = false;
         public LoadType loadType = LoadType.LoadFromFile;
         public bool packed = true;
         public ResourceFilterType filterType = ResourceFilterType.Root;

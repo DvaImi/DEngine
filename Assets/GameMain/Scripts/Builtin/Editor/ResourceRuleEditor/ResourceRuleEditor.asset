@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
+  m_Name: ResourceRuleEditor
+  m_EditorClassIdentifier: 
+  rules:
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: base
+    groups: 
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/Configs
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: base
+    groups: 
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/DataTables
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: entity
+    groups: 
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/Entities
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: font
+    groups: 
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/Fonts
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: clr
+    groups: 
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/HybridCLRData
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: localization
+    groups: zh-cn
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/Localization/Dictionaries/ChineseSimplified
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: localization
+    groups: zh-tw
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/Localization/Dictionaries/ChineseTraditional
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: localization
+    groups: en-us
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/Localization/Dictionaries/English
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: localization
+    groups: ko-kr
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/Localization/Dictionaries/Korean
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: scene
+    groups: 
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/Scenes
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: ui
+    groups: 
+    assetsDirectoryPath: Assets/GameMain/AssetBundle/UI
+    lockPath: 1
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'

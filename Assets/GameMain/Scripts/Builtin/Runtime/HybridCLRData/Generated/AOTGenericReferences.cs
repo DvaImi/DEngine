@@ -37,7 +37,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void GameFramework.Fsm.IFsm<object>.SetData<object>(string,object)
 		// object GameFramework.GameFrameworkEntry.GetModule<object>()
 		// System.Void GameFramework.Procedure.IProcedureManager.StartProcedure<object>()
-		// string GameFramework.Utility.Text.Format<object>(string,object)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,GeminiLion.Hotfix.WelcomeForm.<WebRequestTest>d__4>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,GeminiLion.Hotfix.WelcomeForm.<WebRequestTest>d__4&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<GeminiLion.Hotfix.WelcomeForm.<WebRequestTest>d__4>(GeminiLion.Hotfix.WelcomeForm.<WebRequestTest>d__4&)
 		// object UnityEngine.Component.GetComponent<object>()

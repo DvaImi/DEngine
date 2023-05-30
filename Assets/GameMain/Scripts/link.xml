@@ -37,7 +37,6 @@
     <type fullname="GameFramework.Utility" preserve="all" />
     <type fullname="GameFramework.Utility/Converter" preserve="all" />
     <type fullname="GameFramework.Utility/Json" preserve="all" />
-    <type fullname="GameFramework.Utility/Text" preserve="all" />
   </assembly>
   <assembly fullname="HybridCLR.Runtime">
     <type fullname="HybridCLR.HomologousImageMode" preserve="all" />

@@ -8,15 +8,15 @@ using UnityEditor.Callbacks;
 using UnityEditorInternal;
 using UnityGameFramework.Editor.ResourceTools;
 using GFResource = UnityGameFramework.Editor.ResourceTools.Resource;
-using Sirenix.OdinInspector.Editor;
 
 namespace GeminiLion.Editor.ResourceTools
 {
     /// <summary>
     /// Resource 规则编辑器，支持按规则配置自动生成 ResourceCollection.xml
     /// </summary>
-    public class ResourceRuleEditor : OdinEditorWindow
+    public class ResourceRuleEditor : EditorWindow
     {
+        private readonly string m_NormalConfigurationPath = "Assets/GameMain/Scripts/Builtin/Editor/ResourceRuleEditor/ResourceRuleEditor.asset";
         private ResourceRuleEditorData m_Configuration;
         private ResourceCollection m_ResourceCollection;
 
@@ -29,14 +29,12 @@ namespace GeminiLion.Editor.ResourceTools
         private string m_SourceAssetExceptLabelFilter = "l:ResourceExclusive";
         private string[] m_SourceAssetExceptLabelFilterGUIDArray;
 
-        [MenuItem("Game Framework/Resource Tools/Resource Rule Editor", false, 50)]
-        static void Open()
-        {
-            ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, "Resource Rule Editor", true);
-            window.minSize = new Vector2(1555f, 420f);
-        }
+        private int m_CurrentConfigIndex;
+        [SerializeField] private string m_CurrentConfigPath;
+        private List<string> m_AllConfigPaths;
+        private string[] m_ConfigNames;
 
-        protected override void OnGUI()
+        private void OnGUI()
         {
             if (m_Configuration == null)
             {
@@ -50,11 +48,6 @@ namespace GeminiLion.Editor.ResourceTools
 
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
             {
-                if (GUILayout.Button("Add", EditorStyles.toolbarButton))
-                {
-                    Add();
-                }
-
                 if (GUILayout.Button("Save", EditorStyles.toolbarButton))
                 {
                     Save();
@@ -95,8 +88,37 @@ namespace GeminiLion.Editor.ResourceTools
 
         private void Load()
         {
-            m_Configuration = ResourceRuleEditorData.Instance;
+            m_AllConfigPaths = AssetDatabase.FindAssets("t:ResourceRuleEditorData").Select(AssetDatabase.GUIDToAssetPath).ToList();
+            m_ConfigNames = m_AllConfigPaths.Select(Path.GetFileNameWithoutExtension).ToArray();
+
+            m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_CurrentConfigPath);
+            if (m_Configuration == null)
+            {
+                if (m_AllConfigPaths.Count == 0)
+                {
+                    m_Configuration = ScriptableObject.CreateInstance<ResourceRuleEditorData>();
+                    m_CurrentConfigPath = m_NormalConfigurationPath;
+                    m_AllConfigPaths = new List<string>() { m_NormalConfigurationPath };
+                    m_ConfigNames = new[] { Path.GetFileNameWithoutExtension(m_NormalConfigurationPath) };
+                }
+                else
+                {
+                    m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_AllConfigPaths[m_CurrentConfigIndex]);
+                }
+
+                m_CurrentConfigIndex = 0;
+            }
+            else
+            {
+                m_CurrentConfigIndex = m_AllConfigPaths.ToList().FindIndex(0, _ => string.Equals(m_CurrentConfigPath, _));
+            }
+
             m_RuleList = null;
+        }
+
+        private T LoadAssetAtPath<T>(string path) where T : Object
+        {
+            return (T)AssetDatabase.LoadAssetAtPath(path, typeof(T));
         }
 
         private void InitRuleListDrawer()
@@ -111,13 +133,7 @@ namespace GeminiLion.Editor.ResourceTools
 
         private void Add()
         {
-            string path = SelectFolder();
-            if (!string.IsNullOrEmpty(path))
-            {
-                var rule = new ResourceRule();
-                rule.assetsDirectoryPath = path;
-                m_Configuration.rules.Add(rule);
-            }
+            m_Configuration.rules.Add(new ResourceRule());
         }
 
         private void OnListElementGUI(Rect rect, int index, bool isactive, bool isfocused)
@@ -126,6 +142,7 @@ namespace GeminiLion.Editor.ResourceTools
             {
                 return;
             }
+
             const float GAP = 5;
 
             ResourceRule rule = m_Configuration.rules[index];
@@ -135,21 +152,22 @@ namespace GeminiLion.Editor.ResourceTools
             r.width = 16;
             r.height = 18;
             rule.valid = EditorGUI.Toggle(r, rule.valid);
+            GUI.enabled = rule.valid;
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMax + 425;
+            r.xMax = r.xMin + 210;
             float assetBundleNameLength = r.width;
             rule.name = EditorGUI.TextField(r, rule.name);
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 100;
+            r.xMax = r.xMin + 200;
             rule.loadType = (LoadType)EditorGUI.EnumPopup(r, rule.loadType);
 
             r.xMin = r.xMax + GAP + 15;
             r.xMax = r.xMin + 30;
             rule.packed = EditorGUI.Toggle(r, rule.packed);
 
-            r.xMin = r.xMax + GAP;
+            r.xMin = r.xMax + GAP + 5;
             r.xMax = r.xMin + 85;
             rule.fileSystem = EditorGUI.TextField(r, rule.fileSystem);
 
@@ -166,18 +184,24 @@ namespace GeminiLion.Editor.ResourceTools
             }
 
             r.xMin = r.xMax + GAP;
-            r.width = assetBundleNameLength - 15;
-            GUI.enabled = false;
+            r.width = assetBundleNameLength + 230;
+            GUI.enabled = rule.valid && !rule.lockPath;
             rule.assetsDirectoryPath = EditorGUI.TextField(r, rule.assetsDirectoryPath);
-            GUI.enabled = true;
+            GUI.enabled = rule.valid;
+            if (DropPath(r, out string assetsPath))
+            {
+                rule.assetsDirectoryPath = assetsPath;
+            }
 
             r.xMin = r.xMax + GAP;
-            r.width = 50;
-            if (GUI.Button(r, "Select"))
+            r.xMax = r.xMin + 30;
+            rule.lockPath = EditorGUI.Toggle(r, rule.lockPath);
+
+            r.xMin = r.xMax + GAP - 10;
+            r.xMax = r.xMin + 30;
+            if (GUI.Button(r, Directory.Exists(rule.assetsDirectoryPath) ? EditorGUIUtility.IconContent("Folder Icon") : EditorGUIUtility.IconContent("console.erroricon")))
             {
-                var path = SelectFolder();
-                if (path != null)
-                    rule.assetsDirectoryPath = path;
+                EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(rule.assetsDirectoryPath));
             }
 
             r.xMin = r.xMax + GAP;
@@ -187,35 +211,24 @@ namespace GeminiLion.Editor.ResourceTools
             r.xMin = r.xMax + GAP;
             r.xMax = rect.xMax;
             rule.searchPatterns = EditorGUI.TextField(r, rule.searchPatterns);
-        }
-
-        private string SelectFolder()
-        {
-            string dataPath = Application.dataPath;
-            string selectedPath = EditorUtility.OpenFolderPanel("Path", dataPath, "");
-            if (!string.IsNullOrEmpty(selectedPath))
-            {
-                if (selectedPath.StartsWith(dataPath))
-                {
-                    return "Assets/" + selectedPath.Substring(dataPath.Length + 1);
-                }
-                else
-                {
-#if UNITY_2019_1_OR_NEWER
-                    ShowNotification(new GUIContent("Can not be outside of 'Assets/'!"), 2);
-#else
-                    ShowNotification(new GUIContent("Can not be outside of 'Assets/'!"));
-#endif
-                }
-            }
-
-            return null;
+            GUI.enabled = true;
         }
 
         private void OnListHeaderGUI(Rect rect)
         {
             Rect rules = new Rect(rect.x, rect.y, 100, rect.height);
             EditorGUI.LabelField(rules, "Rules");
+            Rect configLabel = new Rect(rect.x + rules.width, rect.y, 90, rect.height);
+            EditorGUI.LabelField(configLabel, "CurrentConfig:");
+            Rect configs = new Rect(rect.x + rules.width + configLabel.width, rect.y, 200, rect.height);
+            m_CurrentConfigIndex = EditorGUI.Popup(configs, m_CurrentConfigIndex, m_ConfigNames);
+            if (m_CurrentConfigPath != m_AllConfigPaths[m_CurrentConfigIndex])
+            {
+                m_CurrentConfigPath = m_AllConfigPaths[m_CurrentConfigIndex];
+                m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_CurrentConfigPath);
+                m_RuleList = null;
+            }
+
             Rect reload = new Rect(rect.width - 100, rect.y, 100, rect.height);
             if (GUI.Button(reload, "Reload"))
             {
@@ -229,18 +242,18 @@ namespace GeminiLion.Editor.ResourceTools
             const float GAP = 5;
             GUI.enabled = false;
 
-            Rect r = new Rect(0, 20, rect.width, rect.height);
+            Rect r = new Rect(GAP, 20, rect.width, rect.height);
             r.width = 45;
             r.height = 18;
             EditorGUI.TextField(r, "Active");
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMax + 415;
+            r.xMax = r.xMin + 200;
             float assetBundleNameLength = r.width;
             EditorGUI.TextField(r, "Name");
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 100;
+            r.xMax = r.xMin + 200;
             EditorGUI.TextField(r, "Load Type");
 
             r.xMin = r.xMax + GAP;
@@ -260,7 +273,7 @@ namespace GeminiLion.Editor.ResourceTools
             EditorGUI.TextField(r, "Variant");
 
             r.xMin = r.xMax + GAP;
-            r.width = assetBundleNameLength + 50;
+            r.width = assetBundleNameLength + 300;
             EditorGUI.TextField(r, "AssetDirectory");
 
             r.xMin = r.xMax + GAP;
@@ -273,10 +286,49 @@ namespace GeminiLion.Editor.ResourceTools
             GUI.enabled = true;
         }
 
+
+        private bool DropPath(Rect dropArea, out string folderPath)
+        {
+            Event currentEvent = Event.current;
+            folderPath = string.Empty;
+            if (currentEvent.type == EventType.DragUpdated)
+            {
+                if (dropArea.Contains(currentEvent.mousePosition))
+                {
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    currentEvent.Use();
+                }
+            }
+            else if (currentEvent.type == EventType.DragPerform)
+            {
+                if (dropArea.Contains(currentEvent.mousePosition))
+                {
+                    DragAndDrop.AcceptDrag();
+
+                    foreach (Object draggedObject in DragAndDrop.objectReferences)
+                    {
+                        folderPath = AssetDatabase.GetAssetPath(draggedObject);
+                        if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+                        {
+                            currentEvent.Use();
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         private void Save()
         {
-            ResourceRuleEditorData.Instance.rules = m_Configuration.rules;
-            ResourceRuleEditorData.Save();
+            if (LoadAssetAtPath<ResourceRuleEditorData>(m_CurrentConfigPath) == null)
+            {
+                AssetDatabase.CreateAsset(m_Configuration, m_CurrentConfigPath);
+            }
+            else
+            {
+                EditorUtility.SetDirty(m_Configuration);
+            }
         }
 
         #region Refresh ResourceCollection.xml
@@ -285,6 +337,27 @@ namespace GeminiLion.Editor.ResourceTools
         {
             if (m_Configuration == null)
             {
+                Load();
+            }
+
+            m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
+            m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
+            AnalysisResourceFilters();
+            if (SaveCollection())
+            {
+                Debug.Log("Refresh ResourceCollection.xml success");
+            }
+            else
+            {
+                Debug.Log("Refresh ResourceCollection.xml fail");
+            }
+        }
+
+        public void RefreshResourceCollection(string configPath)
+        {
+            if (m_Configuration == null || !m_CurrentConfigPath.Equals(configPath))
+            {
+                m_CurrentConfigPath = configPath;
                 Load();
             }
 
@@ -311,19 +384,28 @@ namespace GeminiLion.Editor.ResourceTools
             return m_ResourceCollection.HasResource(name, variant);
         }
 
-        private bool AddResource(string name, string variant, string fileSystem, LoadType loadType, bool packed, string[] resourceGroups)
+        private bool AddResource(string name, string variant, string fileSystem,
+            LoadType loadType, bool packed, string[] resourceGroups)
         {
-            return m_ResourceCollection.AddResource(name, variant, fileSystem, loadType, packed, resourceGroups);
+            return m_ResourceCollection.AddResource(name, variant, fileSystem, loadType,
+                packed, resourceGroups);
         }
 
-        private bool RenameResource(string oldName, string oldVariant, string newName, string newVariant)
+        private bool RenameResource(string oldName, string oldVariant,
+            string newName, string newVariant)
         {
-            return m_ResourceCollection.RenameResource(oldName, oldVariant, newName, newVariant);
+            return m_ResourceCollection.RenameResource(oldName, oldVariant,
+                newName, newVariant);
         }
 
         private bool AssignAsset(string assetGuid, string resourceName, string resourceVariant)
         {
-            return m_ResourceCollection.AssignAsset(assetGuid, resourceName, resourceVariant);
+            if (m_ResourceCollection.AssignAsset(assetGuid, resourceName, resourceVariant))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void AnalysisResourceFilters()
@@ -334,9 +416,7 @@ namespace GeminiLion.Editor.ResourceTools
             foreach (ResourceRule resourceRule in m_Configuration.rules)
             {
                 if (resourceRule.variant == "")
-                {
                     resourceRule.variant = null;
-                }
 
                 if (resourceRule.valid)
                 {
@@ -346,12 +426,15 @@ namespace GeminiLion.Editor.ResourceTools
                             {
                                 if (string.IsNullOrEmpty(resourceRule.name))
                                 {
-                                    string relativeDirectoryName = resourceRule.assetsDirectoryPath.Replace("Assets/", "");
-                                    ApplyResourceFilter(ref signedAssetBundleList, resourceRule, Utility.Path.GetRegularPath(relativeDirectoryName));
+                                    string relativeDirectoryName =
+                                        resourceRule.assetsDirectoryPath.Replace("Assets/", "");
+                                    ApplyResourceFilter(ref signedAssetBundleList, resourceRule,
+                                        Utility.Path.GetRegularPath(relativeDirectoryName));
                                 }
                                 else
                                 {
-                                    ApplyResourceFilter(ref signedAssetBundleList, resourceRule, resourceRule.name);
+                                    ApplyResourceFilter(ref signedAssetBundleList, resourceRule,
+                                        resourceRule.name);
                                 }
                             }
                             break;
@@ -361,23 +444,27 @@ namespace GeminiLion.Editor.ResourceTools
                                 string[] patterns = resourceRule.searchPatterns.Split(';', ',', '|');
                                 for (int i = 0; i < patterns.Length; i++)
                                 {
-                                    FileInfo[] assetFiles = new DirectoryInfo(resourceRule.assetsDirectoryPath).GetFiles(patterns[i], SearchOption.AllDirectories);
+                                    FileInfo[] assetFiles =
+                                        new DirectoryInfo(resourceRule.assetsDirectoryPath).GetFiles(patterns[i],
+                                            SearchOption.AllDirectories);
                                     foreach (FileInfo file in assetFiles)
                                     {
                                         if (file.Extension.Contains("meta"))
-                                        {
                                             continue;
-                                        }
 
                                         string relativeAssetName = file.FullName.Substring(Application.dataPath.Length + 1);
-                                        string relativeAssetNameWithoutExtension = Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
+                                        string relativeAssetNameWithoutExtension =
+                                            Utility.Path.GetRegularPath(
+                                                relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
 
                                         string assetName = Path.Combine("Assets", relativeAssetName);
                                         string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
 
-                                        if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                                        if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) &&
+                                            !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                                         {
-                                            ApplyResourceFilter(ref signedAssetBundleList, resourceRule, relativeAssetNameWithoutExtension, assetGUID);
+                                            ApplyResourceFilter(ref signedAssetBundleList, resourceRule,
+                                                relativeAssetNameWithoutExtension, assetGUID);
                                         }
                                     }
                                 }
@@ -386,40 +473,51 @@ namespace GeminiLion.Editor.ResourceTools
 
                         case ResourceFilterType.ChildrenFoldersOnly:
                             {
-                                DirectoryInfo[] assetDirectories = new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
+                                DirectoryInfo[] assetDirectories =
+                                    new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
                                 foreach (DirectoryInfo directory in assetDirectories)
                                 {
-                                    string relativeDirectoryName = directory.FullName.Substring(Application.dataPath.Length + 1);
-                                    ApplyResourceFilter(ref signedAssetBundleList, resourceRule, Utility.Path.GetRegularPath(relativeDirectoryName), string.Empty, directory.FullName);
+                                    string relativeDirectoryName =
+                                        directory.FullName.Substring(Application.dataPath.Length + 1);
+
+                                    ApplyResourceFilter(ref signedAssetBundleList, resourceRule,
+                                        Utility.Path.GetRegularPath(relativeDirectoryName), string.Empty,
+                                        directory.FullName);
                                 }
                             }
                             break;
 
                         case ResourceFilterType.ChildrenFilesOnly:
                             {
-                                DirectoryInfo[] assetDirectories = new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
+                                DirectoryInfo[] assetDirectories =
+                                    new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
                                 foreach (DirectoryInfo directory in assetDirectories)
                                 {
                                     string[] patterns = resourceRule.searchPatterns.Split(';', ',', '|');
                                     for (int i = 0; i < patterns.Length; i++)
                                     {
-                                        FileInfo[] assetFiles = new DirectoryInfo(directory.FullName).GetFiles(patterns[i], SearchOption.AllDirectories);
+                                        FileInfo[] assetFiles =
+                                            new DirectoryInfo(directory.FullName).GetFiles(patterns[i],
+                                                SearchOption.AllDirectories);
                                         foreach (FileInfo file in assetFiles)
                                         {
                                             if (file.Extension.Contains("meta"))
-                                            {
                                                 continue;
-                                            }
 
-                                            string relativeAssetName = file.FullName.Substring(Application.dataPath.Length + 1);
-                                            string relativeAssetNameWithoutExtension = Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
+                                            string relativeAssetName =
+                                                file.FullName.Substring(Application.dataPath.Length + 1);
+                                            string relativeAssetNameWithoutExtension =
+                                                Utility.Path.GetRegularPath(
+                                                    relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
 
                                             string assetName = Path.Combine("Assets", relativeAssetName);
                                             string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
 
-                                            if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                                            if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) &&
+                                                !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                                             {
-                                                ApplyResourceFilter(ref signedAssetBundleList, resourceRule, relativeAssetNameWithoutExtension, assetGUID);
+                                                ApplyResourceFilter(ref signedAssetBundleList, resourceRule,
+                                                    relativeAssetNameWithoutExtension, assetGUID);
                                             }
                                         }
                                     }
@@ -431,7 +529,8 @@ namespace GeminiLion.Editor.ResourceTools
             }
         }
 
-        private void ApplyResourceFilter(ref List<string> signedResourceList, ResourceRule resourceRule, string resourceName, string singleAssetGUID = "", string childDirectoryPath = "")
+        private void ApplyResourceFilter(ref List<string> signedResourceList, ResourceRule resourceRule,
+            string resourceName, string singleAssetGUID = "", string childDirectoryPath = "")
         {
             if (!signedResourceList.Contains(Path.Combine(resourceRule.assetsDirectoryPath, resourceName)))
             {
@@ -441,7 +540,8 @@ namespace GeminiLion.Editor.ResourceTools
                 {
                     if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
                     {
-                        RenameResource(oldResource.Name, oldResource.Variant, resourceName, resourceRule.variant);
+                        RenameResource(oldResource.Name, oldResource.Variant,
+                            resourceName, resourceRule.variant);
                         break;
                     }
                 }
@@ -453,7 +553,9 @@ namespace GeminiLion.Editor.ResourceTools
                         resourceRule.fileSystem = null;
                     }
 
-                    AddResource(resourceName, resourceRule.variant, resourceRule.fileSystem, resourceRule.loadType, resourceRule.packed, resourceRule.groups.Split(';', ',', '|'));
+                    AddResource(resourceName, resourceRule.variant, resourceRule.fileSystem,
+                        resourceRule.loadType, resourceRule.packed,
+                        resourceRule.groups.Split(';', ',', '|'));
                 }
 
                 switch (resourceRule.filterType)
@@ -468,22 +570,24 @@ namespace GeminiLion.Editor.ResourceTools
 
                         for (int i = 0; i < patterns.Length; i++)
                         {
-                            FileInfo[] assetFiles = new DirectoryInfo(childDirectoryPath).GetFiles(patterns[i], SearchOption.AllDirectories);
+                            FileInfo[] assetFiles =
+                                new DirectoryInfo(childDirectoryPath).GetFiles(patterns[i],
+                                    SearchOption.AllDirectories);
                             foreach (FileInfo file in assetFiles)
                             {
                                 if (file.Extension.Contains("meta"))
-                                {
                                     continue;
-                                }
 
                                 string assetName = Path.Combine("Assets",
-                                file.FullName.Substring(Application.dataPath.Length + 1));
+                                    file.FullName.Substring(Application.dataPath.Length + 1));
 
                                 string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
 
-                                if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                                if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) &&
+                                    !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                                 {
-                                    AssignAsset(assetGUID, resourceName, resourceRule.variant);
+                                    AssignAsset(assetGUID, resourceName,
+                                        resourceRule.variant);
                                 }
                             }
                         }
@@ -493,7 +597,8 @@ namespace GeminiLion.Editor.ResourceTools
                     case ResourceFilterType.Children:
                     case ResourceFilterType.ChildrenFilesOnly:
                         {
-                            AssignAsset(singleAssetGUID, resourceName, resourceRule.variant);
+                            AssignAsset(singleAssetGUID, resourceName,
+                                resourceRule.variant);
                         }
                         break;
                 }

@@ -2,53 +2,49 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="CLR" FileSystem="clr" LoadType="0" Packed="False" ResourceGroups="clr" />
-      <Resource Name="Config" FileSystem="data" LoadType="0" Packed="False" ResourceGroups="base" />
-      <Resource Name="GameMain/AssetBundle/DataTables/Entity" FileSystem="data" LoadType="0" Packed="False" ResourceGroups="base" />
-      <Resource Name="GameMain/AssetBundle/DataTables/Music" FileSystem="data" LoadType="0" Packed="False" ResourceGroups="base" />
-      <Resource Name="GameMain/AssetBundle/DataTables/Scene" FileSystem="data" LoadType="0" Packed="False" ResourceGroups="base" />
-      <Resource Name="GameMain/AssetBundle/DataTables/Sound" FileSystem="data" LoadType="0" Packed="False" ResourceGroups="base" />
-      <Resource Name="GameMain/AssetBundle/DataTables/UIForm" FileSystem="data" LoadType="0" Packed="False" ResourceGroups="base" />
-      <Resource Name="GameMain/AssetBundle/DataTables/UISound" FileSystem="data" LoadType="0" Packed="False" ResourceGroups="base" />
-      <Resource Name="GameMain/AssetBundle/Entities/EnitityPlane" FileSystem="entity" LoadType="0" Packed="False" ResourceGroups="entity" />
-      <Resource Name="GameMain/AssetBundle/Scenes/Menu" FileSystem="scene" LoadType="0" Packed="False" />
-      <Resource Name="GameMain/AssetBundle/UI/UIForms/WelcomeForm" FileSystem="ui" LoadType="0" Packed="False" />
-      <Resource Name="Localization" Variant="en-us" FileSystem="localization" LoadType="0" Packed="False" ResourceGroups="localization" />
-      <Resource Name="Localization" Variant="ko-kr" FileSystem="localization" LoadType="0" Packed="False" ResourceGroups="localization" />
-      <Resource Name="Localization" Variant="zh-cn" FileSystem="localization" LoadType="0" Packed="False" ResourceGroups="localization" />
-      <Resource Name="Localization" Variant="zh-tw" FileSystem="localization" LoadType="0" Packed="False" ResourceGroups="localization" />
+      <Resource Name="GameMain/AssetBundle/Configs" FileSystem="base" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/DataTables/Entity" FileSystem="base" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/DataTables/Music" FileSystem="base" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/DataTables/Scene" FileSystem="base" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/DataTables/Sound" FileSystem="base" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/DataTables/UIForm" FileSystem="base" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/DataTables/UISound" FileSystem="base" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/Entities/EnitityPlane" FileSystem="entity" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/HybridCLRData" FileSystem="clr" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/Localization/Dictionaries/ChineseSimplified/Runtime" FileSystem="localization" LoadType="0" Packed="True" ResourceGroups="zh-cn" />
+      <Resource Name="GameMain/AssetBundle/Localization/Dictionaries/ChineseTraditional/Runtime" FileSystem="localization" LoadType="0" Packed="True" ResourceGroups="zh-tw" />
+      <Resource Name="GameMain/AssetBundle/Localization/Dictionaries/English/Runtime" FileSystem="localization" LoadType="0" Packed="True" ResourceGroups="en-us" />
+      <Resource Name="GameMain/AssetBundle/Localization/Dictionaries/Korean/Runtime" FileSystem="localization" LoadType="0" Packed="True" ResourceGroups="ko-kr" />
+      <Resource Name="GameMain/AssetBundle/Scenes/Menu" FileSystem="scene" LoadType="0" Packed="True" />
+      <Resource Name="GameMain/AssetBundle/UI/UIForms/WelcomeForm" FileSystem="ui" LoadType="0" Packed="True" />
     </Resources>
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="GameMain/AssetBundle/DataTables/Sound" />
-      <Asset Guid="160c4b5e23f35a642acd901f0a4cde0c" ResourceName="CLR" />
-      <Asset Guid="1b5169a15daff524083a7fe4b6b0a834" ResourceName="Localization" ResourceVariant="zh-cn" />
+      <Asset Guid="160c4b5e23f35a642acd901f0a4cde0c" ResourceName="GameMain/AssetBundle/HybridCLRData" />
       <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="GameMain/AssetBundle/DataTables/UIForm" />
       <Asset Guid="2d195be6cdc3ebb4d93b0323dbf298ad" ResourceName="GameMain/AssetBundle/UI/UIForms/WelcomeForm" />
-      <Asset Guid="375701afef2c3f8469802e0b5a880fff" ResourceName="Localization" ResourceVariant="en-us" />
-      <Asset Guid="3e6f327a1634de344aa6262ab303a930" ResourceName="Config" />
-      <Asset Guid="3f91f1376b5a9ad4eab5f2659082ea04" ResourceName="Localization" ResourceVariant="ko-kr" />
+      <Asset Guid="375701afef2c3f8469802e0b5a880fff" ResourceName="GameMain/AssetBundle/Localization/Dictionaries/English/Runtime" />
+      <Asset Guid="3e6f327a1634de344aa6262ab303a930" ResourceName="GameMain/AssetBundle/Configs" />
+      <Asset Guid="3f91f1376b5a9ad4eab5f2659082ea04" ResourceName="GameMain/AssetBundle/Localization/Dictionaries/Korean/Runtime" />
       <Asset Guid="4053612cac7241a4e91508723e79236f" ResourceName="GameMain/AssetBundle/Entities/EnitityPlane" />
-      <Asset Guid="45454ac2536ba514a97c8338997547bc" ResourceName="Localization" ResourceVariant="zh-cn" />
+      <Asset Guid="45454ac2536ba514a97c8338997547bc" ResourceName="GameMain/AssetBundle/Localization/Dictionaries/ChineseSimplified/Runtime" />
       <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="GameMain/AssetBundle/DataTables/Entity" />
-      <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="Config" />
-      <Asset Guid="5ace651f5510f534ca61f061766456b3" ResourceName="CLR" />
+      <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="GameMain/AssetBundle/Configs" />
+      <Asset Guid="5ace651f5510f534ca61f061766456b3" ResourceName="GameMain/AssetBundle/HybridCLRData" />
       <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="GameMain/AssetBundle/DataTables/Music" />
       <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="GameMain/AssetBundle/DataTables/UISound" />
-      <Asset Guid="706144a1c1d3e5041aec46b4ee018d86" ResourceName="Config" />
-      <Asset Guid="76030dc259f6d6a4785469d7197a5f4c" ResourceName="CLR" />
-      <Asset Guid="78817d1c6a0f253479e5a6f8cbd2c832" ResourceName="Config" />
-      <Asset Guid="8ac59aeb3c6c9ab48b9a4d99baf5fddc" ResourceName="CLR" />
-      <Asset Guid="9c179f6a3d1f7da4d91056f447043b19" ResourceName="Config" />
-      <Asset Guid="a71ebff547306e042bada694a372cfcb" ResourceName="CLR" />
-      <Asset Guid="ad598c598072988448f737e00b297622" ResourceName="Localization" ResourceVariant="ko-kr" />
+      <Asset Guid="706144a1c1d3e5041aec46b4ee018d86" ResourceName="GameMain/AssetBundle/Configs" />
+      <Asset Guid="76030dc259f6d6a4785469d7197a5f4c" ResourceName="GameMain/AssetBundle/HybridCLRData" />
+      <Asset Guid="78817d1c6a0f253479e5a6f8cbd2c832" ResourceName="GameMain/AssetBundle/Configs" />
+      <Asset Guid="8ac59aeb3c6c9ab48b9a4d99baf5fddc" ResourceName="GameMain/AssetBundle/HybridCLRData" />
+      <Asset Guid="9c179f6a3d1f7da4d91056f447043b19" ResourceName="GameMain/AssetBundle/Configs" />
+      <Asset Guid="a71ebff547306e042bada694a372cfcb" ResourceName="GameMain/AssetBundle/HybridCLRData" />
       <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="GameMain/AssetBundle/DataTables/Scene" />
-      <Asset Guid="bd82155f8ae46f942aeba200d6da4ceb" ResourceName="CLR" />
-      <Asset Guid="d783d8efc4946a34b96786fa6af948a7" ResourceName="Config" />
-      <Asset Guid="db1c53abaa863ab4fa9c8e2ee54367e4" ResourceName="Localization" ResourceVariant="zh-tw" />
-      <Asset Guid="e1cd8c6008f9b4d48ac293ebaccd05ea" ResourceName="Localization" ResourceVariant="en-us" />
-      <Asset Guid="e3dcebef333eb6d449c95f3d57d85e95" ResourceName="CLR" />
+      <Asset Guid="bd82155f8ae46f942aeba200d6da4ceb" ResourceName="GameMain/AssetBundle/HybridCLRData" />
+      <Asset Guid="d783d8efc4946a34b96786fa6af948a7" ResourceName="GameMain/AssetBundle/Configs" />
+      <Asset Guid="e3dcebef333eb6d449c95f3d57d85e95" ResourceName="GameMain/AssetBundle/HybridCLRData" />
       <Asset Guid="e915882745d181145ba138b9cb3d1db4" ResourceName="GameMain/AssetBundle/Scenes/Menu" />
-      <Asset Guid="e9265ec98dfc3d842af598b46e1efb22" ResourceName="Localization" ResourceVariant="zh-tw" />
+      <Asset Guid="e9265ec98dfc3d842af598b46e1efb22" ResourceName="GameMain/AssetBundle/Localization/Dictionaries/ChineseTraditional/Runtime" />
     </Assets>
   </ResourceCollection>
 </UnityGameFramework>
