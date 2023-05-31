@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
+  m_Name: ResourceRuleEditor
+  m_EditorClassIdentifier: 
+  rules:
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: base
+    groups: 
+    assetsDirectoryPath: Assets/Game/Configs
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: base
+    groups: 
+    assetsDirectoryPath: Assets/Game/DataTables
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: entity
+    groups: 
+    assetsDirectoryPath: Assets/Game/Entities
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: clr
+    groups: 
+    assetsDirectoryPath: Assets/Game/HybridCLRData
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: zh-cn
+    fileSystem: localization
+    groups: 
+    assetsDirectoryPath: Assets/Game/Localization/Dictionaries/ChineseSimplified
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: zh-tw
+    fileSystem: localization
+    groups: 
+    assetsDirectoryPath: Assets/Game/Localization/Dictionaries/ChineseTraditional
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: en-us
+    fileSystem: localization
+    groups: 
+    assetsDirectoryPath: Assets/Game/Localization/Dictionaries/English
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: ko-kr
+    fileSystem: localization
+    groups: 
+    assetsDirectoryPath: Assets/Game/Localization/Dictionaries/Korean
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: scene
+    groups: 
+    assetsDirectoryPath: Assets/Game/Scenes
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: ui
+    groups: 
+    assetsDirectoryPath: Assets/Game/UI
+    lockPath: 0
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
