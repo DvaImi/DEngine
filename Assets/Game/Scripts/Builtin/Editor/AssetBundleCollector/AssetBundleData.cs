@@ -4,9 +4,15 @@ using UnityGameFramework.Editor.ResourceTools;
 
 namespace Game.Editor.ResourceTools
 {
-    public class ResourceRuleEditorData : ScriptableObject
+    public class AssetBundleData : ScriptableObject
     {
+        /// <summary>
+        /// 开启寻址加载
+        /// </summary>
+        public bool EnableAddress { get; set; }
+
         public List<ResourceRule> rules = new List<ResourceRule>();
+
     }
 
     [System.Serializable]
@@ -18,7 +24,6 @@ namespace Game.Editor.ResourceTools
         public string fileSystem = string.Empty;
         public string groups = string.Empty;
         public string assetsDirectoryPath = string.Empty;
-        public bool lockPath = false;
         public LoadType loadType = LoadType.LoadFromFile;
         public bool packed = true;
         public ResourceFilterType filterType = ResourceFilterType.Root;

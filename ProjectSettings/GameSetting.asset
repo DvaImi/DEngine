@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NameSpace: GeminiLion
   HotfixNameSpace: GeminiLion.Hotfix
-  BuildSettingsConfig: Assets/Game/Scripts/Builtin/Editor/ResourceRuleEditor/Configs/BuildSettings.xml
-  ResourceCollectionConfig: Assets/Game/Scripts/Builtin/Editor/ResourceRuleEditor/Configs/ResourceCollection.xml
-  ResourceEditorConfig: Assets/Game/Scripts/Builtin/Editor/ResourceRuleEditor/Configs/ResourceEditor.xml
-  ResourceBuilderConfig: Assets/Game/Scripts/Builtin/Editor/ResourceRuleEditor/Configs/ResourceBuilder.xml
+  BuildSettingsConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/BuildSetting.xml
+  ResourceCollectionConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceCollection.xml
+  ResourceEditorConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceEditor.xml
+  ResourceBuilderConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceBuilder.xml
   AssetBundleOutput: AssetBundle
   PublishAppOutput: Publish
   BuildInfoPath: Assets/Game/Configs/BuildInfo.txt

@@ -12,9 +12,6 @@ namespace Game
         private TextAsset m_BuildInfoTextAsset = null;
 
         [SerializeField]
-        private TextAsset m_AssetInfoTextAsset = null;
-
-        [SerializeField]
         private TextAsset m_PreloadInfoTextAsset = null;
 
         [SerializeField]
@@ -35,8 +32,6 @@ namespace Game
         }
 
         public BuildInfo BuildInfo { get; private set; } = null;
-
-        public AssetInfoMap AssetInfo { get; private set; } = null;
 
         public PreloadInfo PreloadInfo { get; private set; } = null;
 
@@ -79,22 +74,6 @@ namespace Game
                 return;
             }
             Log.Info("BuildInfo  Load Complete");
-        }
-
-        public void InitAssetInfo()
-        {
-            if (m_AssetInfoTextAsset == null || string.IsNullOrEmpty(m_AssetInfoTextAsset.text))
-            {
-                Log.Info("Asset info can not be found or empty.");
-                return;
-            }
-            AssetInfo = Utility.Json.ToObject<AssetInfoMap>(m_AssetInfoTextAsset.text);
-            if (AssetInfo == null)
-            {
-                Log.Warning("Parse asset info failure.");
-                return;
-            }
-            Log.Info("AssetInfo  Load Complete");
         }
 
         public void InitDefaultDictionary()

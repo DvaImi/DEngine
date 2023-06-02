@@ -14,10 +14,10 @@ namespace Game.Editor.ResourceTools
     /// <summary>
     /// Resource 规则编辑器，支持按规则配置自动生成 ResourceCollection.xml
     /// </summary>
-    public class ResourceRuleEditor : EditorWindow
+    public class AssetBundleCollector : EditorWindow
     {
-        private readonly string m_NormalConfigurationPath = "Assets/GameMain/Scripts/Builtin/Editor/ResourceRuleEditor/ResourceRuleEditor.asset";
-        private ResourceRuleEditorData m_Configuration;
+        private readonly string m_NormalConfigurationPath = "Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceRuleEditor.asset";
+        private AssetBundleData m_Configuration;
         private ResourceCollection m_ResourceCollection;
 
         private ReorderableList m_RuleList;
@@ -30,10 +30,10 @@ namespace Game.Editor.ResourceTools
         private string[] m_SourceAssetExceptLabelFilterGUIDArray;
 
         private int m_CurrentConfigIndex;
-        [SerializeField] private string m_CurrentConfigPath;
+        private string m_CurrentConfigPath;
         private List<string> m_AllConfigPaths;
         private string[] m_ConfigNames;
-
+        private bool m_build = false;
         private void OnGUI()
         {
             if (m_Configuration == null)
@@ -45,20 +45,6 @@ namespace Game.Editor.ResourceTools
             {
                 InitRuleListDrawer();
             }
-
-            GUILayout.BeginHorizontal(EditorStyles.toolbar);
-            {
-                if (GUILayout.Button("Save", EditorStyles.toolbarButton))
-                {
-                    Save();
-                }
-
-                if (GUILayout.Button("Refresh ResourceCollection.xml", EditorStyles.toolbarButton))
-                {
-                    RefreshResourceCollection();
-                }
-            }
-            GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             {
@@ -86,27 +72,34 @@ namespace Game.Editor.ResourceTools
             }
         }
 
+        private void Update()
+        {
+            if (m_build)
+            {
+                m_build = false;
+                AssetBundleUtility.StartBuild();
+            }
+        }
+
         private void Load()
         {
-            m_AllConfigPaths = AssetDatabase.FindAssets("t:ResourceRuleEditorData").Select(AssetDatabase.GUIDToAssetPath).ToList();
+            m_AllConfigPaths = AssetDatabase.FindAssets("t:AssetBundleData").Select(AssetDatabase.GUIDToAssetPath).ToList();
             m_ConfigNames = m_AllConfigPaths.Select(Path.GetFileNameWithoutExtension).ToArray();
 
-            m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_CurrentConfigPath);
+            m_Configuration = LoadAssetAtPath<AssetBundleData>(m_CurrentConfigPath);
             if (m_Configuration == null)
             {
                 if (m_AllConfigPaths.Count == 0)
                 {
-                    m_Configuration = ScriptableObject.CreateInstance<ResourceRuleEditorData>();
+                    m_Configuration = ScriptableObject.CreateInstance<AssetBundleData>();
                     m_CurrentConfigPath = m_NormalConfigurationPath;
                     m_AllConfigPaths = new List<string>() { m_NormalConfigurationPath };
                     m_ConfigNames = new[] { Path.GetFileNameWithoutExtension(m_NormalConfigurationPath) };
                 }
                 else
                 {
-                    m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_AllConfigPaths[m_CurrentConfigIndex]);
+                    m_Configuration = LoadAssetAtPath<AssetBundleData>(m_AllConfigPaths[m_CurrentConfigIndex]);
                 }
-
-                m_CurrentConfigIndex = 0;
             }
             else
             {
@@ -184,10 +177,8 @@ namespace Game.Editor.ResourceTools
             }
 
             r.xMin = r.xMax + GAP;
-            r.width = assetBundleNameLength + 230;
-            GUI.enabled = rule.valid && !rule.lockPath;
+            r.width = assetBundleNameLength + 270;
             rule.assetsDirectoryPath = EditorGUI.TextField(r, rule.assetsDirectoryPath);
-            GUI.enabled = rule.valid;
             if (DropPath(r, out string assetsPath))
             {
                 rule.assetsDirectoryPath = assetsPath;
@@ -195,11 +186,7 @@ namespace Game.Editor.ResourceTools
 
             r.xMin = r.xMax + GAP;
             r.xMax = r.xMin + 30;
-            rule.lockPath = EditorGUI.Toggle(r, rule.lockPath);
-
-            r.xMin = r.xMax + GAP - 10;
-            r.xMax = r.xMin + 30;
-            if (GUI.Button(r, Directory.Exists(rule.assetsDirectoryPath) ? EditorGUIUtility.IconContent("Folder Icon") : EditorGUIUtility.IconContent("console.erroricon")))
+            if (GUI.Button(r, Directory.Exists(rule.assetsDirectoryPath) ? EditorGUIUtility.IconContent("Folder Icon") : EditorGUIUtility.IconContent("console.erroricon"), new GUIStyle() { imagePosition = ImagePosition.ImageAbove }))
             {
                 EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(rule.assetsDirectoryPath));
             }
@@ -225,15 +212,55 @@ namespace Game.Editor.ResourceTools
             if (m_CurrentConfigPath != m_AllConfigPaths[m_CurrentConfigIndex])
             {
                 m_CurrentConfigPath = m_AllConfigPaths[m_CurrentConfigIndex];
-                m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_CurrentConfigPath);
+                m_Configuration = LoadAssetAtPath<AssetBundleData>(m_CurrentConfigPath);
                 m_RuleList = null;
             }
 
-            Rect reload = new Rect(rect.width - 100, rect.y, 100, rect.height);
+            Rect newRule = new Rect(configs.x + configs.width + 5, configs.y, 100, configs.height);
+            if (GUI.Button(newRule, "New"))
+            {
+                string newPath = m_NormalConfigurationPath.Replace("ResourceRuleEditor", "ResourceRuleEditor" + m_AllConfigPaths.Count);
+                AssetDatabase.CreateAsset(CreateInstance<AssetBundleData>(), newPath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                Load();
+            }
+
+            Rect delete = new Rect(newRule.x + newRule.width + 5, newRule.y, 100, newRule.height);
+            GUI.enabled = m_AllConfigPaths.Count > 1;
+            if (GUI.Button(delete, "Delete"))
+            {
+                int deleteindex = m_CurrentConfigIndex;
+                AssetDatabase.DeleteAsset(m_AllConfigPaths[deleteindex]);
+                m_CurrentConfigIndex = deleteindex - 1;
+                Load();
+            }
+            GUI.enabled = true;
+            Rect save = new Rect(delete.x + delete.width + 5, delete.y, 100, delete.height);
+            if (GUI.Button(save, "Save"))
+            {
+                Save();
+                RefreshResourceCollection();
+                AssetDatabase.SaveAssets();
+            }
+
+            Rect reload = new Rect(save.x + save.width + 5, save.y, 100, save.height);
             if (GUI.Button(reload, "Reload"))
             {
                 Load();
             }
+
+            Rect address = new Rect(rect.xMax - 250, reload.y, 120, reload.height);
+            m_Configuration.EnableAddress = GUI.Toggle(address, m_Configuration.EnableAddress, "可寻址加载");
+
+            Rect build = new Rect(rect.xMax - 130, reload.y, 120, reload.height);
+            Color bc = GUI.backgroundColor;
+            GUI.backgroundColor = Color.green;
+            if (GUI.Button(build, "Build"))
+            {
+                m_build = true;
+            }
+            GUI.backgroundColor = bc;
         }
 
         private void OnListElementLabelGUI()
@@ -242,7 +269,7 @@ namespace Game.Editor.ResourceTools
             const float GAP = 5;
             GUI.enabled = false;
 
-            Rect r = new Rect(GAP, 20, rect.width, rect.height);
+            Rect r = new Rect(GAP, GAP, rect.width, rect.height);
             r.width = 45;
             r.height = 18;
             EditorGUI.TextField(r, "Active");
@@ -286,7 +313,6 @@ namespace Game.Editor.ResourceTools
             GUI.enabled = true;
         }
 
-
         private bool DropPath(Rect dropArea, out string folderPath)
         {
             Event currentEvent = Event.current;
@@ -321,7 +347,7 @@ namespace Game.Editor.ResourceTools
 
         private void Save()
         {
-            if (LoadAssetAtPath<ResourceRuleEditorData>(m_CurrentConfigPath) == null)
+            if (LoadAssetAtPath<AssetBundleData>(m_CurrentConfigPath) == null)
             {
                 AssetDatabase.CreateAsset(m_Configuration, m_CurrentConfigPath);
             }
@@ -330,8 +356,6 @@ namespace Game.Editor.ResourceTools
                 EditorUtility.SetDirty(m_Configuration);
             }
         }
-
-        #region Refresh ResourceCollection.xml
 
         public void RefreshResourceCollection()
         {
@@ -374,6 +398,16 @@ namespace Game.Editor.ResourceTools
             }
         }
 
+        public bool EnableAddress()
+        {
+            if (m_Configuration == null)
+            {
+                Load();
+            }
+
+            return m_Configuration.EnableAddress;
+        }
+
         private GFResource[] GetResources()
         {
             return m_ResourceCollection.GetResources();
@@ -384,15 +418,13 @@ namespace Game.Editor.ResourceTools
             return m_ResourceCollection.HasResource(name, variant);
         }
 
-        private bool AddResource(string name, string variant, string fileSystem,
-            LoadType loadType, bool packed, string[] resourceGroups)
+        private bool AddResource(string name, string variant, string fileSystem, LoadType loadType, bool packed, string[] resourceGroups)
         {
             return m_ResourceCollection.AddResource(name, variant, fileSystem, loadType,
                 packed, resourceGroups);
         }
 
-        private bool RenameResource(string oldName, string oldVariant,
-            string newName, string newVariant)
+        private bool RenameResource(string oldName, string oldVariant, string newName, string newVariant)
         {
             return m_ResourceCollection.RenameResource(oldName, oldVariant,
                 newName, newVariant);
@@ -529,8 +561,7 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        private void ApplyResourceFilter(ref List<string> signedResourceList, ResourceRule resourceRule,
-            string resourceName, string singleAssetGUID = "", string childDirectoryPath = "")
+        private void ApplyResourceFilter(ref List<string> signedResourceList, ResourceRule resourceRule, string resourceName, string singleAssetGUID = "", string childDirectoryPath = "")
         {
             if (!signedResourceList.Contains(Path.Combine(resourceRule.assetsDirectoryPath, resourceName)))
             {
@@ -609,7 +640,5 @@ namespace Game.Editor.ResourceTools
         {
             return m_ResourceCollection.Save();
         }
-
-        #endregion
     }
 }

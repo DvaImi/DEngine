@@ -24,11 +24,11 @@ namespace Game.Editor
 
         private int HotfixPlatformIndex
         {
-            get => EditorPrefs.GetInt("HybridCLRPlatform", 2);
+            get => EditorPrefs.GetInt("BuildPlatform", 2);
             set
             {
                 m_HotfixPlatformIndex = value;
-                EditorPrefs.SetInt("HybridCLRPlatform", m_HotfixPlatformIndex);
+                EditorPrefs.SetInt("BuildPlatform", m_HotfixPlatformIndex);
             }
         }
 
@@ -96,23 +96,16 @@ namespace Game.Editor
         private void GUIResourcesTool()
         {
             EditorGUILayout.LabelField("(4) 编辑Hotfix.dll等资源，并打包。");
-            if (GUILayout.Button("Edit", GUILayout.Width(100)))
-            {
-                EditorWindow window = GetWindow(Type.GetType("UnityGameFramework.Editor.ResourceTools.ResourceEditor,UnityGameFramework.Editor"));
-                window.Show();
-            }
 
-            if (GUILayout.Button("Rule", GUILayout.Width(100)))
+            if (GUILayout.Button("Editor", GUILayout.Width(100)))
             {
-                EditorWindow window = GetWindow(Type.GetType("Game.Editor.ResourceTools.ResourceRuleEditor"));
+                EditorWindow window = GetWindow(Type.GetType("Game.Editor.ResourceTools.AssetBundleCollector"));
                 window.minSize = new Vector2(1640f, 420f);
             }
 
             if (GUILayout.Button("Build", GUILayout.Width(130)))
             {
-                ResourceRuleEditorUtility.RefreshResourceCollection();
-                Platform platform = (Platform)Enum.Parse(typeof(Platform), m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]);
-                ResourceBuildHelper.StartBuild(platform);
+                AssetBundleUtility.StartBuild();
             }
         }
 

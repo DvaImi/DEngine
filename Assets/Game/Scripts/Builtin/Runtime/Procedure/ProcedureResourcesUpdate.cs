@@ -50,6 +50,7 @@ namespace Game
 
                 return;
             }
+            StartUpdateResources(null);
         }
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)

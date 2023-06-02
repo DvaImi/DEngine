@@ -19,8 +19,6 @@ namespace Game
 
             // 构建信息：发布版本时，把一些数据以 Json 的格式写入BuildInfo.txt，供游戏逻辑读取
             GameEntry.BuiltinData.InitBuildInfo();
-            // 数据配置:
-            GameEntry.BuiltinData.InitAssetInfo();
 
             GameEntry.BuiltinData.InitPreloadInfo();
 

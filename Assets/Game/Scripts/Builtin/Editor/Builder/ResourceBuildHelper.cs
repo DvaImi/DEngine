@@ -5,6 +5,7 @@
 // 版 本：1.0
 // ========================================================
 using System;
+using System.Collections.Generic;
 using System.IO;
 using GameFramework;
 using UnityEditor;
@@ -99,6 +100,28 @@ namespace Game.Editor.ResourceTools
                 case MessageType.Error:
                     Debug.LogError(buildMessage);
                     break;
+            }
+        }
+
+        internal static void AnalyzeAddress()
+        {
+            ResourceCollection controller = new ResourceCollection();
+            if (controller.Load())
+            {
+                HashSet<string> temeper = new HashSet<string>();
+
+                foreach (var asset in controller.GetAssets())
+                {
+                    string address = Path.GetFileNameWithoutExtension(asset.Name);
+                    if (temeper.Contains(address))
+                    {
+                        throw new GameFrameworkException($"The address is existed : {address} in collector : {asset.Name}");
+                    }
+                    else
+                    {
+                        temeper.Add(address);
+                    }
+                }
             }
         }
 
@@ -226,9 +249,7 @@ namespace Game.Editor.ResourceTools
 
         private static void OnAnalyzingAsset(int index, int count)
         {
-            EditorUtility.DisplayProgressBar("Analyzing Assets",
-                GameFramework.Utility.Text.Format("Analyzing assets, {0}/{1} analyzed.", index, count),
-                (float)index / count);
+            EditorUtility.DisplayProgressBar("Analyzing Assets", Utility.Text.Format("Analyzing assets, {0}/{1} analyzed.", index, count), (float)index / count);
         }
 
         private static void OnAnalyzeCompleted()
@@ -274,9 +295,10 @@ namespace Game.Editor.ResourceTools
         private static void OnBuildResourceError(string errorMessage)
         {
             EditorUtility.ClearProgressBar();
-            Debug.LogWarning(GameFramework.Utility.Text.Format("Build resources error with error message '{0}'.",
-                errorMessage));
+            Debug.LogWarning(Utility.Text.Format("Build resources error with error message '{0}'.", errorMessage));
         }
+
+
     }
 }
 
