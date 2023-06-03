@@ -5,9 +5,12 @@
 // 版 本：1.0
 // ========================================================
 using System;
+using GameFramework;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
+using System.Collections.Generic;
 
 namespace Game.Editor.ResourceTools
 {
@@ -30,11 +33,38 @@ namespace Game.Editor.ResourceTools
             Platform platform = (Platform)EditorPrefs.GetInt("BuildPlatform");
             AssetBundleCollector ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollector>();
             ruleEditor.RefreshResourceCollection();
-            if (ruleEditor.EnableAddress())
+            bool enableAddress = ruleEditor.EnableAddress();
+            if (enableAddress)
             {
                 ResourceBuildHelper.AnalyzeAddress();
             }
             ResourceBuildHelper.StartBuild(platform);
+            if (enableAddress)
+            {
+                GameAddressSerializer serializer = new GameAddressSerializer();
+                serializer.RegisterSerializeCallback(0, GameAddressSerializerCallback.Serializer);
+                Dictionary<string, string> address = new Dictionary<string, string>();
+
+                ResourceCollection collection = new ResourceCollection();
+
+                if (collection.Load())
+                {
+                    foreach (var asset in collection.GetAssets())
+                    {
+                        address.Add(Path.GetFileNameWithoutExtension(asset.Name), asset.Name);
+                    }
+                }
+
+                using (FileStream fileStream = new FileStream(AssetUtility.AddressPath, FileMode.Create, FileAccess.Write))
+                {
+                    if (!serializer.Serialize(fileStream, address))
+                    {
+                        throw new GameFrameworkException("Serialize read-only version list failure.");
+                    }
+                }
+
+                AssetDatabase.Refresh();
+            }
         }
     }
 }

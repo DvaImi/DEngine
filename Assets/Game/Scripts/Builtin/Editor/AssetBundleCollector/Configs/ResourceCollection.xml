@@ -16,7 +16,6 @@
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="Game/DataTables" />
       <Asset Guid="160c4b5e23f35a642acd901f0a4cde0c" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="1b5169a15daff524083a7fe4b6b0a834" ResourceName="Game/Localization/Dictionaries/ChineseSimplified" ResourceVariant="zh-cn" />
       <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="Game/DataTables" />
       <Asset Guid="2d195be6cdc3ebb4d93b0323dbf298ad" ResourceName="Game/UI" />
       <Asset Guid="375701afef2c3f8469802e0b5a880fff" ResourceName="Game/Localization/Dictionaries/English" ResourceVariant="en-us" />
@@ -29,19 +28,15 @@
       <Asset Guid="5ace651f5510f534ca61f061766456b3" ResourceName="Game/HybridCLRData" />
       <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="Game/DataTables" />
       <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="Game/DataTables" />
-      <Asset Guid="706144a1c1d3e5041aec46b4ee018d86" ResourceName="Game/Configs" />
       <Asset Guid="76030dc259f6d6a4785469d7197a5f4c" ResourceName="Game/HybridCLRData" />
       <Asset Guid="8ac59aeb3c6c9ab48b9a4d99baf5fddc" ResourceName="Game/HybridCLRData" />
       <Asset Guid="9c179f6a3d1f7da4d91056f447043b19" ResourceName="Game/Configs" />
       <Asset Guid="a71ebff547306e042bada694a372cfcb" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="ad598c598072988448f737e00b297622" ResourceName="Game/Localization/Dictionaries/Korean" ResourceVariant="ko-kr" />
       <Asset Guid="b7bd110b51906684f8df300deef753c0" ResourceName="Game/HybridCLRData" />
       <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="Game/DataTables" />
       <Asset Guid="bd82155f8ae46f942aeba200d6da4ceb" ResourceName="Game/HybridCLRData" />
       <Asset Guid="cc8d902ef63469b458c125b44c9e2966" ResourceName="Game/HybridCLRData" />
       <Asset Guid="d783d8efc4946a34b96786fa6af948a7" ResourceName="Game/Configs" />
-      <Asset Guid="db1c53abaa863ab4fa9c8e2ee54367e4" ResourceName="Game/Localization/Dictionaries/ChineseTraditional" ResourceVariant="zh-tw" />
-      <Asset Guid="e1cd8c6008f9b4d48ac293ebaccd05ea" ResourceName="Game/Localization/Dictionaries/English" ResourceVariant="en-us" />
       <Asset Guid="e3dcebef333eb6d449c95f3d57d85e95" ResourceName="Game/HybridCLRData" />
       <Asset Guid="e915882745d181145ba138b9cb3d1db4" ResourceName="Game/Scenes" />
       <Asset Guid="e9265ec98dfc3d842af598b46e1efb22" ResourceName="Game/Localization/Dictionaries/ChineseTraditional" ResourceVariant="zh-tw" />

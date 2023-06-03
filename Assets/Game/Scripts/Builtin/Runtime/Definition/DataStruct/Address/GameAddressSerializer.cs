@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameFramework;
 
@@ -11,6 +12,7 @@ namespace Game
         {
 
         }
+
         protected override byte[] GetHeader()
         {
             return Header;

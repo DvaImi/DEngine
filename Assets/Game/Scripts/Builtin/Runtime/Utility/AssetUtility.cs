@@ -5,12 +5,43 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.IO;
+using Cysharp.Threading.Tasks;
 using GameFramework;
+using GameFramework.Resource;
+using UnityEngine;
+using UnityGameFramework.Runtime;
 
 namespace Game
 {
     public static class AssetUtility
     {
+        private static Dictionary<string, string> m_Address = null;
+        public static readonly string AddressPath = Path.Combine(Application.streamingAssetsPath, "address.dat");
+
+        public static async UniTask InitAddress()
+        {
+            if (!File.Exists(AddressPath))
+            {
+                return;
+            }
+
+            byte[] bytes = await File.ReadAllBytesAsync(AddressPath);
+            GameAddressSerializer serializer = new GameAddressSerializer();
+            serializer.RegisterDeserializeCallback(0, GameAddressSerializerCallback.Deserialize);
+
+            using (Stream stream = new MemoryStream(bytes))
+            {
+                m_Address = serializer.Deserialize(stream);
+            }
+
+            foreach (var item in m_Address)
+            {
+                Log.Debug(item.Key + "|" + item.Value);
+            }
+        }
+
         public static string GetConfigAsset(string assetName, bool fromBytes)
         {
             return Utility.Text.Format("Assets/Game/Configs/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");

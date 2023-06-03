@@ -79,7 +79,7 @@ namespace Game.Hotfix
             }
 
             // Preload dictionaries
-            LoadDictionary("Runtime");
+            LoadDictionary(GameEntry.Localization.Language.ToString());
         }
 
         private void LoadConfig(string configName)

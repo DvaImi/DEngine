@@ -5,6 +5,7 @@ using GameFramework.Procedure;
 using GameFramework.Resource;
 using Game.Await;
 using UnityGameFramework.Runtime;
+using Cysharp.Threading.Tasks;
 
 namespace Game
 {
@@ -37,6 +38,9 @@ namespace Game
 
             //注册Await 扩展事件
             AwaitableUtility.Subscribe();
+
+            //初始化address
+            AssetUtility.InitAddress().Forget();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

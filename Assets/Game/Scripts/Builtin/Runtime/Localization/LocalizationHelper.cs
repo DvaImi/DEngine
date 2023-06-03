@@ -210,8 +210,24 @@ namespace Game.Helper
         {
             try
             {
-                string dictionaryString = Utility.Converter.GetString(dictionaryBytes);
-                return ParseData(localizationManager,dictionaryString,userData);
+                using (MemoryStream memoryStream = new MemoryStream(dictionaryBytes, startIndex, length, false))
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
+                    {
+                        while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
+                        {
+                            string dictionaryKey = binaryReader.ReadString();
+                            string dictionaryValue = binaryReader.ReadString();
+                            if (!localizationManager.AddRawString(dictionaryKey, dictionaryValue))
+                            {
+                                Log.Warning("Can not add raw string with dictionary key '{0}' which may be invalid or duplicate.", dictionaryKey);
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                return true;
             }
             catch (Exception exception)
             {
