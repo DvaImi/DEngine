@@ -76,26 +76,26 @@ namespace Game.Hotfix
                 LoadDataTable(dataTableName);
             }
 
-            LoadDictionary(GameEntry.Localization.Language.ToString());
+            LoadLocalization(GameEntry.Localization.Language.ToString());
         }
 
         private void LoadConfig(string configName)
         {
-            string configAssetName = AssetUtility.GetConfigAsset(configName, true);
+            string configAssetName = AssetUtility.GetAddress(configName);
             m_LoadedFlag.Add(configAssetName, false);
             GameEntry.Config.ReadData(configAssetName, this);
         }
 
         private void LoadDataTable(string dataTableName)
         {
-            string dataTableAssetName = AssetUtility.GetDataTableAsset(dataTableName, true);
+            string dataTableAssetName = AssetUtility.GetAddress(dataTableName);
             m_LoadedFlag.Add(dataTableAssetName, false);
             GameEntry.DataTable.LoadDataTable(dataTableName, dataTableAssetName, this);
         }
 
-        private void LoadDictionary(string dictionaryName)
+        private void LoadLocalization(string dictionaryName)
         {
-            string dictionaryAssetName = AssetUtility.GetDictionaryAsset(dictionaryName, true);
+            string dictionaryAssetName = AssetUtility.GetAddress(dictionaryName);
             m_LoadedFlag.Add(dictionaryAssetName, false);
             GameEntry.Localization.ReadData(dictionaryAssetName, this);
         }

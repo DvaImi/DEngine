@@ -8,9 +8,7 @@
 using System.Collections.Generic;
 using GameFramework;
 using GameFramework.Localization;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using UnityGameFramework.Runtime;
 
 //自动生成于：2023/4/16 0:33:27
 namespace Game.Hotfix
@@ -19,7 +17,7 @@ namespace Game.Hotfix
     {
         public Text m_Text;
         public Dropdown dropdown;
-        [FormerlySerializedAs("wenTest")] public Button webTest;
+        public Button webTest;
 
         protected override void OnInit(object userdata)
         {
@@ -47,7 +45,7 @@ namespace Game.Hotfix
 
         private async void WebRequestTest()
         {
-            var result = await GameEntry.WebRequest.AddWebRequestAsync("https://www.zhihu.com/question/33870165/answer/2799501996");
+            var result = await GameEntry.WebRequest.AddWebRequestAsync("https://www.bilibili.com/video/BV14W4y1R7Hn/?spm_id_from=333.999.0.0&vd_source=ecc8458b679b0651a8a8d406993954ef");
 
             if (result.IsError == false)
             {
@@ -56,7 +54,7 @@ namespace Game.Hotfix
             }
         }
 
-        private void ChangeLanguage(int arg0)
+        private async void ChangeLanguage(int arg0)
         {
             Language m_SelectedLanguage = default;
             if (arg0 == 0)
@@ -74,15 +72,27 @@ namespace Game.Hotfix
                 m_SelectedLanguage = Language.English;
             }
 
+            await GameEntry.Localization.LoadDictionaryAsync(m_SelectedLanguage);
             GameEntry.Setting.SetString(Constant.Setting.Language, m_SelectedLanguage.ToString());
             GameEntry.Setting.SetInt("Dropdown", arg0);
             GameEntry.Setting.Save();
-            UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
+            ReadLanguage();
         }
 
         protected override void OnOpen(object userData)
         {
             base.OnOpen(userData);
+            ReadLanguage();
+        }
+
+        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+            base.OnUpdate(elapseSeconds, realElapseSeconds);
+        }
+
+        private void ReadLanguage()
+        {
+            m_Text.text = string.Empty;
             m_Text.text += "\n";
             DRUIForm[] dataTables = GameEntry.DataTable.GetDataTable<DRUIForm>().GetAllDataRows();
             for (int i = 0; i < dataTables.Length; i++)
@@ -90,17 +100,10 @@ namespace Game.Hotfix
                 m_Text.text += dataTables[i].Id + "\n" + dataTables[i].AssetName + "\n" + dataTables[i].UIGroupName +
                                "\n";
             }
-
             m_Text.text += GameEntry.Localization.GetString("Game.Name");
             m_Text.text += "\n";
-            m_Text.text += GameEntry.Localization.GetString("CheckVersion.Tips");
             m_Text.text += "\n";
             m_Text.text += "\n";
-        }
-
-        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-        {
-            base.OnUpdate(elapseSeconds, realElapseSeconds);
         }
     }
 }

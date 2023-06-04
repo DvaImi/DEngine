@@ -170,12 +170,9 @@ public class GameSettingEditorWindows : OdinEditorWindow
             }
             HotfixInfo hotfixInfo = new()
             {
-                HotfixDllPath = GameSetting.Instance.HotfixDllPath,
                 HotfixDllNameMain = GameSetting.Instance.HotfixDllNameMain,
                 AOTDllNames = GameSetting.Instance.AOTDllNames,
                 PreserveHotfixDllNames = GameSetting.Instance.PreserveHotfixDllNames,
-                HotfixDllSuffix = GameSetting.Instance.HotfixDllSuffix,
-                HotfixLauncher = GameSetting.Instance.HotfixLauncher
             };
             string hotfixJson = Newtonsoft.Json.JsonConvert.SerializeObject(hotfixInfo);
 

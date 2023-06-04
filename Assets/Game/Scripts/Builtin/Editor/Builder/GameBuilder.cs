@@ -9,12 +9,14 @@ using System;
 using System.IO;
 using System.Linq;
 using Game.Editor.ResourceTools;
+using GameFramework;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
-using static UnityEditor.ObjectChangeEventStream;
+using Object = UnityEngine.Object;
+using Path = System.IO.Path;
 
 namespace Game.Editor
 {
@@ -236,12 +238,34 @@ namespace Game.Editor
 
         private void CopyDllAssets(BuildTarget buildTarget)
         {
-            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.HotfixDllPath);
+            if (string.IsNullOrEmpty(GameSetting.Instance.HotfixDllPath))
+            {
+                Debug.LogError("Directory path is null.");
+                return;
+            }
 
-            // Copy Hotfix Dll
+            if (!Directory.Exists(GameSetting.Instance.HotfixDllPath))
+            {
+                Directory.CreateDirectory(GameSetting.Instance.HotfixDllPath);
+            }
+            else
+            {
+                string[] files = AssetDatabase.FindAssets("", new string[] { GameSetting.Instance.HotfixDllPath });
+
+                foreach (string file in files)
+                {
+                    string filePath = AssetDatabase.GUIDToAssetPath(file);
+                    AssetDatabase.DeleteAsset(filePath);
+                }
+
+                AssetDatabase.Refresh();
+            }
+
+            //Copy Hotfix Dll
             string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), GameSetting.Instance.HotfixDllNameMain);
             string desFileName = Path.Combine(GameSetting.Instance.HotfixDllPath, GameSetting.Instance.HotfixDllNameMain + GameSetting.Instance.HotfixDllSuffix);
             File.Copy(oriFileName, desFileName, true);
+            Debug.Log("Copy hotfix dll success.");
 
             // Copy AOT Dll
             string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
@@ -257,6 +281,7 @@ namespace Game.Editor
                 File.Copy(oriFileName, desFileName, true);
             }
 
+            Debug.Log("Copy Aot dll success.");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

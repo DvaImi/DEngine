@@ -78,13 +78,13 @@ namespace Game
 
         public void InitDefaultDictionary()
         {
-            if (m_DefaultDictionaryTextAsset == null || string.IsNullOrEmpty(m_DefaultDictionaryTextAsset.text))
+            if (m_DefaultDictionaryTextAsset == null || m_DefaultDictionaryTextAsset.bytes == null)
             {
                 Log.Info("Default dictionary can not be found or empty.");
                 return;
             }
 
-            if (!GameEntry.Localization.ParseData(m_DefaultDictionaryTextAsset.text))
+            if (!GameEntry.Localization.ParseData(m_DefaultDictionaryTextAsset.bytes))
             {
                 Log.Warning("Parse default dictionary failure.");
                 return;

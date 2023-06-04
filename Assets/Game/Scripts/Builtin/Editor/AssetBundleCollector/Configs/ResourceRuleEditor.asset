@@ -55,43 +55,43 @@ MonoBehaviour:
     searchPatterns: '*.*'
   - valid: 1
     name: 
-    variant: zh-cn
+    variant: 
     fileSystem: localization
     groups: 
     assetsDirectoryPath: Assets/Game/Localization/ChineseSimplified
     loadType: 0
     packed: 1
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
-    variant: zh-tw
+    variant: 
     fileSystem: localization
     groups: 
     assetsDirectoryPath: Assets/Game/Localization/ChineseTraditional
     loadType: 0
     packed: 1
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
-    variant: en-us
+    variant: 
     fileSystem: localization
     groups: 
     assetsDirectoryPath: Assets/Game/Localization/English
     loadType: 0
     packed: 1
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
-    variant: ko-kr
+    variant: 
     fileSystem: localization
     groups: 
     assetsDirectoryPath: Assets/Game/Localization/Korean
     loadType: 0
     packed: 1
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 

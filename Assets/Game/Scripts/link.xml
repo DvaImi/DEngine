@@ -6,7 +6,6 @@
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
     <type fullname="Game.DataTableExtension" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
-    <type fullname="Game.HotfixInfo" preserve="all" />
     <type fullname="Game.PreloadInfo" preserve="all" />
     <type fullname="Game.UIFormId" preserve="all" />
     <type fullname="Game.WebRequestResult" preserve="all" />
@@ -23,9 +22,6 @@
     <type fullname="GameFramework.Procedure.IProcedureManager" preserve="all" />
     <type fullname="GameFramework.Procedure.ProcedureBase" preserve="all" />
     <type fullname="GameFramework.ReferencePool" preserve="all" />
-    <type fullname="GameFramework.Resource.LoadAssetCallbacks" preserve="all" />
-    <type fullname="GameFramework.Resource.LoadAssetFailureCallback" preserve="all" />
-    <type fullname="GameFramework.Resource.LoadAssetSuccessCallback" preserve="all" />
     <type fullname="GameFramework.Resource.LoadResourceStatus" preserve="all" />
     <type fullname="GameFramework.Sound.ISoundGroup" preserve="all" />
     <type fullname="GameFramework.Sound.PlaySoundParams" preserve="all" />
@@ -155,7 +151,6 @@
     <type fullname="UnityGameFramework.Runtime.LoadSceneUpdateEventArgs" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.LocalizationComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.Log" preserve="all" />
-    <type fullname="UnityGameFramework.Runtime.ResourceComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.SceneComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.SettingComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.ShutdownType" preserve="all" />

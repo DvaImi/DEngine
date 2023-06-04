@@ -204,6 +204,8 @@ namespace Game.Editor.ResourceTools
 
         private static void BuildResources()
         {
+            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
+            AssetDatabase.Refresh();
             if (m_Controller.BuildResources())
             {
                 Debug.Log("Build resources success.");
@@ -211,7 +213,7 @@ namespace Game.Editor.ResourceTools
             }
             else
             {
-                Debug.LogError($"Build resources failure. <a href=\"file:///{GameFramework.Utility.Path.GetRegularPath(Path.Combine(m_Controller.BuildReportPath, "BuildLog.txt"))}\" line=\"0\">[ Open BuildLog.txt ]</a>");
+                Debug.LogError($"Build resources failure. <a href=\"file:///{Utility.Path.GetRegularPath(Path.Combine(m_Controller.BuildReportPath, "BuildLog.txt"))}\" line=\"0\">[ Open BuildLog.txt ]</a>");
             }
         }
 

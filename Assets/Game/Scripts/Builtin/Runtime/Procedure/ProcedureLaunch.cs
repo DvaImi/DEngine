@@ -4,7 +4,6 @@ using GameFramework.Localization;
 using GameFramework.Procedure;
 using GameFramework.Resource;
 using UnityGameFramework.Runtime;
-using Cysharp.Threading.Tasks;
 
 namespace Game
 {
@@ -39,7 +38,7 @@ namespace Game
             AwaitableUtility.Subscribe();
 
             //初始化address
-            AssetUtility.InitAddress().Forget();
+            AssetUtility.InitAddress();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,7 @@ namespace Game.Editor
         public static void GenerateLocalizationsFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            List<string> dictionary = new List<string>();
             if (Directory.Exists(DataTableSetting.Instance.LocalizationExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableSetting.Instance.LocalizationExcelsFolder);
@@ -41,7 +44,9 @@ namespace Game.Editor
                             }
                         }
                     }
+                    dictionary.Add(excelName);
                 }
+                PreloadUtility.GenerateDictionaryInfoFile(dictionary);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 AssetDatabase.Refresh();
@@ -53,6 +58,7 @@ namespace Game.Editor
         public static void GenerateConfigFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            List<string> config = new List<string>();
             if (Directory.Exists(DataTableSetting.Instance.ConfigExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableSetting.Instance.ConfigExcelsFolder);
@@ -78,7 +84,9 @@ namespace Game.Editor
                             }
                         }
                     }
+                    config.Add(excelName);
                 }
+                PreloadUtility.GenerateConfigInfoFile(config);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 AssetDatabase.Refresh();

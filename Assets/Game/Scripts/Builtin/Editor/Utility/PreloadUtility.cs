@@ -13,10 +13,6 @@ namespace Game.Editor
 {
     public static class PreloadUtility
     {
-        /// <summary>
-        /// 生成数据表信息文件
-        /// </summary>
-        /// <param name="dataTables"></param>
         public static void GenerateDataTableInfoFile(List<string> dataTables)
         {
             PreloadInfo preloadInfo = GetPreloadInfo();
@@ -25,10 +21,6 @@ namespace Game.Editor
             SavePreloadInfoToJson(preloadInfoJson);
         }
 
-        /// <summary>
-        /// 生成字典信息文件
-        /// </summary>
-        /// <param name="dictionary"></param>
         public static void GenerateDictionaryInfoFile(List<string> dictionary)
         {
             PreloadInfo preloadInfo = GetPreloadInfo();
@@ -45,10 +37,6 @@ namespace Game.Editor
             SavePreloadInfoToJson(preloadInfoJson);
         }
 
-        /// <summary>
-        /// 保存Preload info 文件
-        /// </summary>
-        /// <param name="preloadInfoJson"></param>
         public static void SavePreloadInfoToJson(string preloadInfoJson)
         {
             using (FileStream stream = new(GameSetting.Instance.PreloadInfoPath, FileMode.Create, FileAccess.Write))

@@ -36,8 +36,8 @@ namespace Game.Editor
             m_InternalResourceVersion = internalResourceVersion;
             m_OutputDirectory = outputDirectory;
 
-            string streamingAssetsPath =
-                Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+            Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
             string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {
@@ -49,7 +49,6 @@ namespace Game.Editor
                 File.Delete(fileName);
             }
 
-            Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier,

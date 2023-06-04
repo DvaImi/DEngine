@@ -9,9 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using GameFramework;
-using GameFramework.Resource;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace Game
 {
@@ -20,14 +18,14 @@ namespace Game
         private static Dictionary<string, string> m_Address = null;
         public static readonly string AddressPath = Path.Combine(Application.streamingAssetsPath, "address.dat");
 
-        public static async UniTask InitAddress()
+        public static void InitAddress()
         {
             if (!File.Exists(AddressPath))
             {
                 return;
             }
 
-            byte[] bytes = await File.ReadAllBytesAsync(AddressPath);
+            byte[] bytes = File.ReadAllBytes(AddressPath);
             GameAddressSerializer serializer = new GameAddressSerializer();
             serializer.RegisterDeserializeCallback(0, GameAddressSerializerCallback.Deserialize);
 
@@ -35,11 +33,35 @@ namespace Game
             {
                 m_Address = serializer.Deserialize(stream);
             }
+        }
 
-            foreach (var item in m_Address)
+        public static string GetAddress(string address)
+        {
+            return m_Address == null
+                ? throw new GameFrameworkException("Unable Load Address")
+                : m_Address.TryGetValue(address, out string asstePath) ? asstePath : null;
+        }
+
+        public static string[] GetAddress(string[] address)
+        {
+            if (m_Address == null)
             {
-                Log.Debug(item.Key + "|" + item.Value);
+                throw new GameFrameworkException("Unable Load Address");
             }
+            if (address == null)
+            {
+                throw new GameFrameworkException("address is  invalid");
+            }
+
+            for (int i = 0; i < address.Length; i++)
+            {
+                if (m_Address.TryGetValue(address[i], out string asstePath))
+                {
+                    address[i] = asstePath;
+                }
+            }
+
+            return address;
         }
 
         public static string GetConfigAsset(string assetName, bool fromBytes)

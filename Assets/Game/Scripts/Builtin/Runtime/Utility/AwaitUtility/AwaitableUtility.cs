@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
+using GameFramework.Localization;
 using GameFramework.Resource;
 using UnityEngine;
 using UnityGameFramework.Runtime;
@@ -19,6 +20,8 @@ namespace Game
         private static readonly Dictionary<string, UniTaskCompletionSource<bool>> m_LoadSceneTcs = new Dictionary<string, UniTaskCompletionSource<bool>>();
 
         private static readonly Dictionary<string, UniTaskCompletionSource<bool>> m_UnLoadSceneTcs = new Dictionary<string, UniTaskCompletionSource<bool>>();
+
+        private static readonly Dictionary<Language, UniTaskCompletionSource<Language>> m_LoadDictionaryTcs = new Dictionary<Language, UniTaskCompletionSource<Language>>();
 
         private static readonly HashSet<int> m_WebSerialIDs = new HashSet<int>();
         private static readonly List<WebRequestResult> m_DelayReleaseWebResult = new List<WebRequestResult>();
@@ -56,6 +59,9 @@ namespace Game
 
             eventComponent.Subscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
             eventComponent.Subscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
+
+            eventComponent.Subscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
+            eventComponent.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
         }
 
 
@@ -448,6 +454,54 @@ namespace Game
             }
         }
 
+        #endregion
+
+        #region Dictionary
+
+
+        public static UniTask LoadDictionaryAsync(this LocalizationComponent localization, Language language)
+        {
+            localization.RemoveAllRawStrings();
+            GameEntry.BuiltinData.InitDefaultDictionary();
+            localization.ReadData(AssetUtility.GetAddress(language.ToString()), language);
+            UniTaskCompletionSource<Language> tcs = new UniTaskCompletionSource<Language>();
+            m_LoadDictionaryTcs.Add(language, tcs);
+            return tcs.Task;
+        }
+
+        private static void OnLoadDictionarySuccess(object sender, GameEventArgs e)
+        {
+            LoadDictionarySuccessEventArgs ne = (LoadDictionarySuccessEventArgs)e;
+
+            if (ne.UserData is Language language)
+            {
+                if (m_LoadDictionaryTcs.TryGetValue(language, out var tcs))
+                {
+                    if (tcs != null)
+                    {
+                        tcs.TrySetResult(language);
+                        m_LoadDictionaryTcs.Remove(language);
+                    }
+                }
+            }
+        }
+
+        private static void OnLoadDictionaryFailure(object sender, GameEventArgs e)
+        {
+            LoadDictionaryFailureEventArgs ne = (LoadDictionaryFailureEventArgs)e;
+
+            if (ne.UserData is Language language)
+            {
+                if (m_LoadDictionaryTcs.TryGetValue(language, out var tcs))
+                {
+                    if (tcs != null)
+                    {
+                        tcs.TrySetException(new GameFrameworkException(ne.ErrorMessage));
+                        m_LoadDictionaryTcs.Remove(language);
+                    }
+                }
+            }
+        }
         #endregion
     }
 }
