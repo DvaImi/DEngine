@@ -34,8 +34,7 @@ namespace Game
         private async UniTask HotfixLauncher()
         {
             var launch = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetAddress("GameHotfixEntry"));
-            GameObject game = Object.Instantiate(launch);
-            game.name = "[GameHotfixEntry]";
+            Object.Instantiate(launch);
         }
 
         private async UniTask LoadHotfixDll()

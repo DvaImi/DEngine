@@ -10,6 +10,8 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine;
+using UnityEngine.Networking;
+using Utility = GameFramework.Utility;
 
 namespace Game
 {
@@ -18,27 +20,38 @@ namespace Game
         private static Dictionary<string, string> m_Address = null;
         public static readonly string AddressPath = Path.Combine(Application.streamingAssetsPath, "address.dat");
 
-        public static void InitAddress()
+        public static bool SerializerComplete
         {
-            if (!File.Exists(AddressPath))
+            get;
+            private set;
+        }
+
+        public static async UniTask InitAddress()
+        {
+            UnityWebRequest unityWebRequest = UnityWebRequest.Get(AddressPath);
+            var webRequest = await unityWebRequest.SendWebRequest();
+            if (webRequest == null)
             {
                 return;
             }
 
-            byte[] bytes = File.ReadAllBytes(AddressPath);
-            GameAddressSerializer serializer = new GameAddressSerializer();
-            serializer.RegisterDeserializeCallback(0, GameAddressSerializerCallback.Deserialize);
-
-            using (Stream stream = new MemoryStream(bytes))
+            if (webRequest.isDone)
             {
-                m_Address = serializer.Deserialize(stream);
+                GameAddressSerializer serializer = new GameAddressSerializer();
+                serializer.RegisterDeserializeCallback(0, GameAddressSerializerCallback.Deserialize);
+
+                using (Stream stream = new MemoryStream(webRequest.downloadHandler.data))
+                {
+                    m_Address = serializer.Deserialize(stream);
+                }
+                SerializerComplete = true;
             }
         }
 
         public static string GetAddress(string address)
         {
             return m_Address == null
-                ? throw new GameFrameworkException("Unable Load Address")
+                ? throw new GameFrameworkException($"Unable Load Address ：{address}")
                 : m_Address.TryGetValue(address, out string asstePath) ? asstePath : null;
         }
 

@@ -8,6 +8,7 @@
 using System.Collections.Generic;
 using GameFramework;
 using GameFramework.Localization;
+using UnityEngine;
 using UnityEngine.UI;
 
 //自动生成于：2023/4/16 0:33:27
@@ -71,7 +72,7 @@ namespace Game.Hotfix
             {
                 m_SelectedLanguage = Language.English;
             }
-
+            
             await GameEntry.Localization.LoadDictionaryAsync(m_SelectedLanguage);
             GameEntry.Setting.SetString(Constant.Setting.Language, m_SelectedLanguage.ToString());
             GameEntry.Setting.SetInt("Dropdown", arg0);

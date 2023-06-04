@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
 using GameFramework.Localization;
 using GameFramework.Procedure;
@@ -38,12 +39,17 @@ namespace Game
             AwaitableUtility.Subscribe();
 
             //初始化address
-            AssetUtility.InitAddress();
+            AssetUtility.InitAddress().Forget();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+
+            if (!AssetUtility.SerializerComplete)
+            {
+                return;
+            }
 
 #if UNITY_EDITOR
             if (GameEntry.Base.EditorResourceMode)
@@ -54,7 +60,6 @@ namespace Game
                 return;
             }
 #endif
-
             if (GameEntry.Resource.ResourceMode == ResourceMode.Package)
             {
                 // 单机模式

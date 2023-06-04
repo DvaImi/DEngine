@@ -2,10 +2,9 @@
 using System.IO;
 using System.Linq;
 using GameFramework;
-using UnityEngine;
 using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEditorInternal;
+using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
 using GFResource = UnityGameFramework.Editor.ResourceTools.Resource;
 
@@ -16,7 +15,8 @@ namespace Game.Editor.ResourceTools
     /// </summary>
     public class AssetBundleCollector : EditorWindow
     {
-        private readonly string m_NormalConfigurationPath = "Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceRuleEditor.asset";
+        private readonly string m_NormalConfigurationPath = "Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs";
+        private readonly string m_NormalFileName = "AssetBundleCollector{0}.asset";
         private AssetBundleData m_Configuration;
         private ResourceCollection m_ResourceCollection;
 
@@ -34,6 +34,8 @@ namespace Game.Editor.ResourceTools
         private List<string> m_AllConfigPaths;
         private string[] m_ConfigNames;
         private bool m_build = false;
+
+
         private void OnGUI()
         {
             if (m_Configuration == null)
@@ -85,16 +87,15 @@ namespace Game.Editor.ResourceTools
         {
             m_AllConfigPaths = AssetDatabase.FindAssets("t:AssetBundleData").Select(AssetDatabase.GUIDToAssetPath).ToList();
             m_ConfigNames = m_AllConfigPaths.Select(Path.GetFileNameWithoutExtension).ToArray();
-
             m_Configuration = LoadAssetAtPath<AssetBundleData>(m_CurrentConfigPath);
             if (m_Configuration == null)
             {
                 if (m_AllConfigPaths.Count == 0)
                 {
-                    m_Configuration = ScriptableObject.CreateInstance<AssetBundleData>();
-                    m_CurrentConfigPath = m_NormalConfigurationPath;
-                    m_AllConfigPaths = new List<string>() { m_NormalConfigurationPath };
-                    m_ConfigNames = new[] { Path.GetFileNameWithoutExtension(m_NormalConfigurationPath) };
+                    m_Configuration = CreateInstance<AssetBundleData>();
+                    m_CurrentConfigPath = Path.Combine(m_NormalConfigurationPath, string.Format(m_NormalFileName, ""));
+                    m_AllConfigPaths = new List<string>() { m_CurrentConfigPath };
+                    m_ConfigNames = new[] { Path.GetFileNameWithoutExtension(string.Format(m_NormalFileName, "")) };
                 }
                 else
                 {
@@ -122,11 +123,26 @@ namespace Game.Editor.ResourceTools
             m_RuleList.draggable = true;
             m_RuleList.elementHeight = 22;
             m_RuleList.onAddCallback = (list) => Add();
+            m_RuleList.onSelectCallback = Select;
         }
+
 
         private void Add()
         {
             m_Configuration.rules.Add(new ResourceRule());
+        }
+
+        private void Select(ReorderableList list)
+        {
+            int index = list.index;
+            if (m_Configuration == null)
+            {
+                Load();
+            }
+
+            string select = m_Configuration.rules[index].assetPath;
+            Object obj = AssetDatabase.LoadMainAssetAtPath(select);
+            Selection.activeObject = obj;
         }
 
         private void OnListElementGUI(Rect rect, int index, bool isactive, bool isfocused)
@@ -178,17 +194,19 @@ namespace Game.Editor.ResourceTools
 
             r.xMin = r.xMax + GAP;
             r.width = assetBundleNameLength + 270;
-            rule.assetsDirectoryPath = EditorGUI.TextField(r, rule.assetsDirectoryPath);
-            if (DropPath(r, out string assetsPath))
+            rule.assetPath = EditorGUI.TextField(r, rule.assetPath);
+
+            if (DropPath(r, out string assetsPath, rule.filterType == ResourceFilterType.FileOnly))
             {
-                rule.assetsDirectoryPath = assetsPath;
+                rule.assetPath = assetsPath;
             }
 
             r.xMin = r.xMax + GAP;
             r.xMax = r.xMin + 30;
-            if (GUI.Button(r, Directory.Exists(rule.assetsDirectoryPath) ? EditorGUIUtility.IconContent("Folder Icon") : EditorGUIUtility.IconContent("console.erroricon"), new GUIStyle() { imagePosition = ImagePosition.ImageAbove }))
+            bool isFile = rule.filterType == ResourceFilterType.FileOnly;
+            if (GUI.Button(r, (isFile ? File.Exists(rule.assetPath) : Directory.Exists(rule.assetPath)) ? EditorGUIUtility.IconContent("Folder Icon") : EditorGUIUtility.IconContent("console.erroricon"), new GUIStyle() { imagePosition = ImagePosition.ImageAbove }))
             {
-                EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(rule.assetsDirectoryPath));
+                EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(rule.assetPath));
             }
 
             r.xMin = r.xMax + GAP;
@@ -209,6 +227,11 @@ namespace Game.Editor.ResourceTools
             EditorGUI.LabelField(configLabel, "CurrentConfig:");
             Rect configs = new Rect(rect.x + rules.width + configLabel.width, rect.y, 200, rect.height);
             m_CurrentConfigIndex = EditorGUI.Popup(configs, m_CurrentConfigIndex, m_ConfigNames);
+            if (m_CurrentConfigIndex < 0 || m_CurrentConfigIndex > m_AllConfigPaths.Count)
+            {
+                m_Configuration = null;
+                return;
+            }
             if (m_CurrentConfigPath != m_AllConfigPaths[m_CurrentConfigIndex])
             {
                 m_CurrentConfigPath = m_AllConfigPaths[m_CurrentConfigIndex];
@@ -219,7 +242,15 @@ namespace Game.Editor.ResourceTools
             Rect newRule = new Rect(configs.x + configs.width + 5, configs.y, 100, configs.height);
             if (GUI.Button(newRule, "New"))
             {
-                string newPath = m_NormalConfigurationPath.Replace("ResourceRuleEditor", "ResourceRuleEditor" + m_AllConfigPaths.Count);
+                string format = "(" + m_AllConfigPaths.Count + ")";
+                string newPath = Path.Combine(m_NormalConfigurationPath, string.Format(m_NormalFileName, format));
+                if (File.Exists(newPath))
+                {
+                    string format2 = "(" + (m_AllConfigPaths.Count + 1) + ")";
+                    newPath = newPath.Replace(format, format2);
+                }
+                m_CurrentConfigPath = Utility.Path.GetRegularPath(newPath);
+
                 AssetDatabase.CreateAsset(CreateInstance<AssetBundleData>(), newPath);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
@@ -232,7 +263,15 @@ namespace Game.Editor.ResourceTools
             {
                 int deleteindex = m_CurrentConfigIndex;
                 AssetDatabase.DeleteAsset(m_AllConfigPaths[deleteindex]);
-                m_CurrentConfigIndex = deleteindex - 1;
+                if (deleteindex == 0)
+                {
+                    m_CurrentConfigIndex = deleteindex;
+                }
+                else
+                {
+                    m_CurrentConfigIndex = deleteindex - 1;
+                }
+                m_RuleList = null;
                 Load();
             }
             GUI.enabled = true;
@@ -301,7 +340,7 @@ namespace Game.Editor.ResourceTools
 
             r.xMin = r.xMax + GAP;
             r.width = assetBundleNameLength + 300;
-            EditorGUI.TextField(r, "AssetDirectory");
+            EditorGUI.TextField(r, "AssetPath");
 
             r.xMin = r.xMax + GAP;
             r.xMax = r.xMin + 85;
@@ -313,10 +352,10 @@ namespace Game.Editor.ResourceTools
             GUI.enabled = true;
         }
 
-        private bool DropPath(Rect dropArea, out string folderPath)
+        private bool DropPath(Rect dropArea, out string assetPath, bool files = false)
         {
             Event currentEvent = Event.current;
-            folderPath = string.Empty;
+            assetPath = string.Empty;
             if (currentEvent.type == EventType.DragUpdated)
             {
                 if (dropArea.Contains(currentEvent.mousePosition))
@@ -333,11 +372,11 @@ namespace Game.Editor.ResourceTools
 
                     foreach (Object draggedObject in DragAndDrop.objectReferences)
                     {
-                        folderPath = AssetDatabase.GetAssetPath(draggedObject);
-                        if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+                        assetPath = AssetDatabase.GetAssetPath(draggedObject);
+                        if (!string.IsNullOrEmpty(assetPath))
                         {
                             currentEvent.Use();
-                            return true;
+                            return files ? File.Exists(assetPath) : Directory.Exists(assetPath);
                         }
                     }
                 }
@@ -459,7 +498,7 @@ namespace Game.Editor.ResourceTools
                                 if (string.IsNullOrEmpty(resourceRule.name))
                                 {
                                     string relativeDirectoryName =
-                                        resourceRule.assetsDirectoryPath.Replace("Assets/", "");
+                                        resourceRule.assetPath.Replace("Assets/", "");
                                     ApplyResourceFilter(ref signedAssetBundleList, resourceRule,
                                         Utility.Path.GetRegularPath(relativeDirectoryName));
                                 }
@@ -477,7 +516,7 @@ namespace Game.Editor.ResourceTools
                                 for (int i = 0; i < patterns.Length; i++)
                                 {
                                     FileInfo[] assetFiles =
-                                        new DirectoryInfo(resourceRule.assetsDirectoryPath).GetFiles(patterns[i],
+                                        new DirectoryInfo(resourceRule.assetPath).GetFiles(patterns[i],
                                             SearchOption.AllDirectories);
                                     foreach (FileInfo file in assetFiles)
                                     {
@@ -506,7 +545,7 @@ namespace Game.Editor.ResourceTools
                         case ResourceFilterType.ChildrenFoldersOnly:
                             {
                                 DirectoryInfo[] assetDirectories =
-                                    new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
+                                    new DirectoryInfo(resourceRule.assetPath).GetDirectories();
                                 foreach (DirectoryInfo directory in assetDirectories)
                                 {
                                     string relativeDirectoryName =
@@ -522,7 +561,7 @@ namespace Game.Editor.ResourceTools
                         case ResourceFilterType.ChildrenFilesOnly:
                             {
                                 DirectoryInfo[] assetDirectories =
-                                    new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
+                                    new DirectoryInfo(resourceRule.assetPath).GetDirectories();
                                 foreach (DirectoryInfo directory in assetDirectories)
                                 {
                                     string[] patterns = resourceRule.searchPatterns.Split(';', ',', '|');
@@ -556,6 +595,18 @@ namespace Game.Editor.ResourceTools
                                 }
                             }
                             break;
+                        case ResourceFilterType.FileOnly:
+                            FileInfo assetFile = new FileInfo(resourceRule.assetPath);
+                            string assetFileName = assetFile.FullName.Substring(Application.dataPath.Length + 1);
+                            string assetNameWithoutExtension = Utility.Path.GetRegularPath(assetFileName.Substring(0, assetFileName.LastIndexOf('.')));
+                            assetFileName = Path.Combine("Assets", assetFileName);
+                            string assetFileGUID = AssetDatabase.AssetPathToGUID(assetFileName);
+
+                            if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetFileGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetFileGUID))
+                            {
+                                ApplyResourceFilter(ref signedAssetBundleList, resourceRule, assetNameWithoutExtension, assetFileGUID);
+                            }
+                            break;
                     }
                 }
             }
@@ -563,9 +614,9 @@ namespace Game.Editor.ResourceTools
 
         private void ApplyResourceFilter(ref List<string> signedResourceList, ResourceRule resourceRule, string resourceName, string singleAssetGUID = "", string childDirectoryPath = "")
         {
-            if (!signedResourceList.Contains(Path.Combine(resourceRule.assetsDirectoryPath, resourceName)))
+            if (!signedResourceList.Contains(Path.Combine(resourceRule.assetPath, resourceName)))
             {
-                signedResourceList.Add(Path.Combine(resourceRule.assetsDirectoryPath, resourceName));
+                signedResourceList.Add(Path.Combine(resourceRule.assetPath, resourceName));
 
                 foreach (GFResource oldResource in GetResources())
                 {
@@ -596,7 +647,7 @@ namespace Game.Editor.ResourceTools
                         string[] patterns = resourceRule.searchPatterns.Split(';', ',', '|');
                         if (childDirectoryPath == "")
                         {
-                            childDirectoryPath = resourceRule.assetsDirectoryPath;
+                            childDirectoryPath = resourceRule.assetPath;
                         }
 
                         for (int i = 0; i < patterns.Length; i++)
@@ -627,9 +678,9 @@ namespace Game.Editor.ResourceTools
 
                     case ResourceFilterType.Children:
                     case ResourceFilterType.ChildrenFilesOnly:
+                    case ResourceFilterType.FileOnly:
                         {
-                            AssignAsset(singleAssetGUID, resourceName,
-                                resourceRule.variant);
+                            AssignAsset(singleAssetGUID, resourceName, resourceRule.variant);
                         }
                         break;
                 }

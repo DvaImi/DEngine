@@ -23,7 +23,7 @@ namespace Game.Editor.ResourceTools
         public string variant = null;
         public string fileSystem = string.Empty;
         public string groups = string.Empty;
-        public string assetsDirectoryPath = string.Empty;
+        public string assetPath = string.Empty;
         public LoadType loadType = LoadType.LoadFromFile;
         public bool packed = true;
         public ResourceFilterType filterType = ResourceFilterType.Root;
@@ -48,5 +48,9 @@ namespace Game.Editor.ResourceTools
         /// 指定文件夹下的子文件夹的文件分别打成一个Resource。
         /// </summary>
         ChildrenFilesOnly,
+        /// <summary>
+        /// 指定文件
+        /// </summary>
+        FileOnly,
     }
 }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
-  m_Name: ResourceRuleEditor
+  m_Name: AssetBundleCollector
   m_EditorClassIdentifier: 
   rules:
   - valid: 1
@@ -18,7 +18,7 @@ MonoBehaviour:
     variant: 
     fileSystem: base
     groups: 
-    assetsDirectoryPath: Assets/Game/Configs
+    assetPath: Assets/Game/Configs
     loadType: 0
     packed: 1
     filterType: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
     variant: 
     fileSystem: base
     groups: 
-    assetsDirectoryPath: Assets/Game/DataTables
+    assetPath: Assets/Game/DataTables
     loadType: 0
     packed: 1
     filterType: 0
@@ -36,9 +36,9 @@ MonoBehaviour:
   - valid: 1
     name: 
     variant: 
-    fileSystem: data
+    fileSystem: obj
     groups: 
-    assetsDirectoryPath: Assets/Game/Entities
+    assetPath: Assets/Game/Entities
     loadType: 0
     packed: 1
     filterType: 0
@@ -46,9 +46,9 @@ MonoBehaviour:
   - valid: 1
     name: 
     variant: 
-    fileSystem: base
+    fileSystem: clr
     groups: 
-    assetsDirectoryPath: Assets/Game/HybridCLRData
+    assetPath: Assets/Game/HybridCLRData
     loadType: 0
     packed: 1
     filterType: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
     variant: 
     fileSystem: localization
     groups: 
-    assetsDirectoryPath: Assets/Game/Localization/ChineseSimplified
+    assetPath: Assets/Game/Localization/ChineseSimplified
     loadType: 0
     packed: 1
     filterType: 1
@@ -68,7 +68,7 @@ MonoBehaviour:
     variant: 
     fileSystem: localization
     groups: 
-    assetsDirectoryPath: Assets/Game/Localization/ChineseTraditional
+    assetPath: Assets/Game/Localization/ChineseTraditional
     loadType: 0
     packed: 1
     filterType: 1
@@ -78,7 +78,7 @@ MonoBehaviour:
     variant: 
     fileSystem: localization
     groups: 
-    assetsDirectoryPath: Assets/Game/Localization/English
+    assetPath: Assets/Game/Localization/English
     loadType: 0
     packed: 1
     filterType: 1
@@ -88,7 +88,7 @@ MonoBehaviour:
     variant: 
     fileSystem: localization
     groups: 
-    assetsDirectoryPath: Assets/Game/Localization/Korean
+    assetPath: Assets/Game/Localization/Korean
     loadType: 0
     packed: 1
     filterType: 1
@@ -98,7 +98,7 @@ MonoBehaviour:
     variant: 
     fileSystem: scene
     groups: 
-    assetsDirectoryPath: Assets/Game/Scenes
+    assetPath: Assets/Game/Scenes
     loadType: 0
     packed: 1
     filterType: 0
@@ -106,10 +106,10 @@ MonoBehaviour:
   - valid: 1
     name: 
     variant: 
-    fileSystem: ui
+    fileSystem: uiform
     groups: 
-    assetsDirectoryPath: Assets/Game/UI
+    assetPath: Assets/Game/UI/UIForms
     loadType: 0
     packed: 1
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
