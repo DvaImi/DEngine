@@ -25,14 +25,9 @@ namespace Game.Editor
             PlatformNames = Enum.GetNames(typeof(Platform)).Skip(1).ToArray();
         }
 
-        /// <summary>
-        /// 由 UnityGameFramework.Editor.ResourceTools.Platform 得到 BuildTarget。
-        /// </summary>
-        /// <param name="platformIndex"></param>
-        /// <returns>BuildTarget。</returns>
         public BuildTarget GetBuildTarget(int platformIndex)
         {
-            Platform platform = (Platform)Enum.Parse(typeof(Platform), PlatformNames[platformIndex]);
+            Platform platform = GetPlatform(platformIndex);
             switch (platform)
             {
                 case Platform.Windows:
@@ -67,35 +62,9 @@ namespace Game.Editor
             }
         }
 
-        /// <summary>
-        /// 将 dll 文件拷贝至项目目录，用于 GameFramework 资源模块的编辑和打包。
-        /// </summary>
-        /// <param name="buildTarget"></param>
-        public void CopyDllAssets(BuildTarget buildTarget)
+        public Platform GetPlatform(int platformIndex)
         {
-            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.HotfixDllPath);
-
-            // Copy Hotfix Dll
-            string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), GameSetting.Instance.HotfixDllNameMain);
-            string desFileName = Path.Combine(GameSetting.Instance.HotfixDllPath, GameSetting.Instance.HotfixDllNameMain + GameSetting.Instance.HotfixDllSuffix);
-            File.Copy(oriFileName, desFileName, true);
-
-            // Copy AOT Dll
-            string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
-            foreach (var dllName in GameSetting.Instance.AOTDllNames)
-            {
-                oriFileName = Path.Combine(aotDllPath, dllName);
-                if (!File.Exists(oriFileName))
-                {
-                    Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOT dll.");
-                    continue;
-                }
-                desFileName = Path.Combine(GameSetting.Instance.HotfixDllPath, dllName + GameSetting.Instance.HotfixDllSuffix);
-                File.Copy(oriFileName, desFileName, true);
-            }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            return (Platform)Enum.Parse(typeof(Platform), PlatformNames[platformIndex]);
         }
     }
 }

@@ -30,7 +30,8 @@ namespace Game.Editor.ResourceTools
 
         public static void StartBuild()
         {
-            Platform platform = (Platform)EditorPrefs.GetInt("BuildPlatform");
+            HybridCLRBuilderController builderController = new HybridCLRBuilderController();
+            Platform platform = (Platform)Enum.Parse(typeof(Platform), builderController.PlatformNames[EditorPrefs.GetInt("BuildPlatform")]);
             AssetBundleCollector ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollector>();
             ruleEditor.RefreshResourceCollection();
             bool enableAddress = ruleEditor.EnableAddress();

@@ -9,11 +9,12 @@ using System;
 using System.IO;
 using System.Linq;
 using Game.Editor.ResourceTools;
+using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
-using UnityGameFramework.Editor.ResourceTools;
+using static UnityEditor.ObjectChangeEventStream;
 
 namespace Game.Editor
 {
@@ -30,6 +31,18 @@ namespace Game.Editor
                 m_HotfixPlatformIndex = value;
                 EditorPrefs.SetInt("BuildPlatform", m_HotfixPlatformIndex);
             }
+        }
+
+        private string PublishAppOutput
+        {
+            get => EditorPrefs.GetString("PublishAppOutput");
+            set => EditorPrefs.SetString("PublishAppOutput", value);
+        }
+
+        private string AssetBundleOutput
+        {
+            get => EditorPrefs.GetString("AssetBundleOutput");
+            set => EditorPrefs.SetString("AssetBundleOutput", value);
         }
 
         private bool m_BeginBuild = false;
@@ -54,20 +67,31 @@ namespace Game.Editor
             // Builder
             GUILayout.Space(5f);
             EditorGUILayout.LabelField("Build", EditorStyles.boldLabel);
-            GUIItem("(1) 由于ab包依赖裁剪后的dll，在编译hotfix.dl前需要build工程。生成裁剪后的 AOT dll。", "AOT Generic Build", () => m_IsAotGeneric = m_BeginBuild = true, 120);
-            int hotfixPlatformIndex = EditorGUILayout.Popup("(2) 选择Hotfix平台。", m_HotfixPlatformIndex, m_HybridClrBuilderController.PlatformNames);
-            if (hotfixPlatformIndex != m_HotfixPlatformIndex)
+            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
             {
-                HotfixPlatformIndex = hotfixPlatformIndex;
-            }
+                int hotfixPlatformIndex = EditorGUILayout.Popup(m_HotfixPlatformIndex, m_HybridClrBuilderController.PlatformNames, GUILayout.Width(200));
+                if (hotfixPlatformIndex != m_HotfixPlatformIndex)
+                {
+                    HotfixPlatformIndex = hotfixPlatformIndex;
+                }
 
-            GUIItem("(3) 编译Hotfix.dll。", "Compile", CompileHotfixDll);
-            EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("AOT Generic Build", GUILayout.Width(120)))
+                {
+                    m_IsAotGeneric = m_BeginBuild = true;
+                }
+
+                if (GUILayout.Button("编译Hotfix.dll", GUILayout.Width(120)))
+                {
+                    CompileHotfixDll();
+                }
+            }
+            GUILayout.Space(5f);
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(5f);
             GUIResourcesTool();
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
+            GUILayout.Space(5f);
             GUIBuildPlayer();
-            EditorGUILayout.EndHorizontal();
         }
 
         private void Update()
@@ -80,40 +104,85 @@ namespace Game.Editor
             }
         }
 
-        private void GUIItem(string content, string button, Action onClick, float width = 100)
+        private void GUIResourcesTool()
         {
             EditorGUILayout.BeginHorizontal();
             {
-                EditorGUILayout.LabelField(content);
-                if (GUILayout.Button(button, GUILayout.Width(width)))
+                EditorGUILayout.LabelField("编辑资源或打包。");
+
+                if (GUILayout.Button("Edit", GUILayout.Width(100)))
                 {
-                    onClick?.Invoke();
+                    EditorWindow window = GetWindow(Type.GetType("Game.Editor.ResourceTools.AssetBundleCollector"));
+                    window.minSize = new Vector2(1640f, 420f);
                 }
+
+                Color bc = GUI.backgroundColor;
+                GUI.backgroundColor = Color.green;
+                if (GUILayout.Button("Build", GUILayout.Width(130)))
+                {
+                    AssetBundleUtility.StartBuild();
+                }
+                GUI.backgroundColor = bc;
+                if (GUILayout.Button("Path", GUILayout.Width(100)))
+                {
+                    string value = EditorUtility.OpenFolderPanel("AssetBundle Output", "", "Output");
+                    if (Directory.Exists(value) && value != AssetBundleOutput)
+                    {
+                        AssetBundleOutput = value;
+                    }
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUI.enabled = false;
+                EditorGUILayout.LabelField("输出路径===>" + AssetBundleOutput);
+                GUI.enabled = true;
             }
             EditorGUILayout.EndHorizontal();
         }
 
-        private void GUIResourcesTool()
+        private void GUIBuildPlayer()
         {
-            EditorGUILayout.LabelField("(4) 编辑Hotfix.dll等资源，并打包。");
+            EditorGUILayout.BeginHorizontal();
 
-            if (GUILayout.Button("Editor", GUILayout.Width(100)))
+            EditorGUILayout.LabelField($"构建{m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]}工程。");
+            if (GUILayout.Button("Edit", GUILayout.Width(100)))
             {
-                EditorWindow window = GetWindow(Type.GetType("Game.Editor.ResourceTools.AssetBundleCollector"));
-                window.minSize = new Vector2(1640f, 420f);
+                BuildPlayerWindow.ShowBuildPlayerWindow();
             }
 
+            Color bc = GUI.backgroundColor;
+            GUI.backgroundColor = Color.green;
             if (GUILayout.Button("Build", GUILayout.Width(130)))
             {
-                AssetBundleUtility.StartBuild();
+                m_BeginBuild = true;
             }
+            GUI.backgroundColor = bc;
+
+            if (GUILayout.Button("Path", GUILayout.Width(100)))
+            {
+                string value = EditorUtility.OpenFolderPanel("PublishApp Output", "", "Output");
+                if (Directory.Exists(value) && value != PublishAppOutput)
+                {
+                    PublishAppOutput = value;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            GUI.enabled = false;
+            EditorGUILayout.LabelField("输出路径===>" + PublishAppOutput);
+            GUI.enabled = true;
+            EditorGUILayout.EndHorizontal();
         }
 
         private void CompileHotfixDll()
         {
             BuildTarget buildTarget = m_HybridClrBuilderController.GetBuildTarget(m_HotfixPlatformIndex);
             CompileDllCommand.CompileDll(buildTarget);
-            m_HybridClrBuilderController.CopyDllAssets(buildTarget);
+            CopyDllAssets(buildTarget);
         }
 
         private void BuildPlayer(bool aot = false)
@@ -137,20 +206,6 @@ namespace Game.Editor
             }
         }
 
-        private void GUIBuildPlayer()
-        {
-            EditorGUILayout.LabelField($"(5) 构建{m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]}工程。");
-            if (GUILayout.Button("Edit", GUILayout.Width(100)))
-            {
-                BuildPlayerWindow.ShowBuildPlayerWindow();
-            }
-
-            if (GUILayout.Button("Build", GUILayout.Width(130)))
-            {
-                m_BeginBuild = true;
-            }
-        }
-
         public BuildReport BuildApplicationForPlatform(BuildTarget platform, bool aot)
         {
             string outputExtension = GetFileExtensionForPlatform(platform);
@@ -158,9 +213,7 @@ namespace Game.Editor
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = aot ? EditorBuildSettings.scenes.Select(x => x.path).ToArray() : new string[] { EditorBuildSettings.scenes[0].path },
-                locationPathName = Path.Combine(GameSetting.Instance.PublishAppOutput,
-                    m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex],
-                    Application.productName + outputExtension),
+                locationPathName = Path.Combine(PublishAppOutput, m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex], Application.productName + outputExtension),
                 target = platform,
                 options = BuildOptions.None
             };
@@ -179,6 +232,33 @@ namespace Game.Editor
                 BuildTarget.WebGL => "",
                 _ => ".exe",
             };
+        }
+
+        private void CopyDllAssets(BuildTarget buildTarget)
+        {
+            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.HotfixDllPath);
+
+            // Copy Hotfix Dll
+            string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), GameSetting.Instance.HotfixDllNameMain);
+            string desFileName = Path.Combine(GameSetting.Instance.HotfixDllPath, GameSetting.Instance.HotfixDllNameMain + GameSetting.Instance.HotfixDllSuffix);
+            File.Copy(oriFileName, desFileName, true);
+
+            // Copy AOT Dll
+            string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
+            foreach (var dllName in GameSetting.Instance.AOTDllNames)
+            {
+                oriFileName = Path.Combine(aotDllPath, dllName);
+                if (!File.Exists(oriFileName))
+                {
+                    Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOT dll.");
+                    continue;
+                }
+                desFileName = Path.Combine(GameSetting.Instance.HotfixDllPath, dllName + GameSetting.Instance.HotfixDllSuffix);
+                File.Copy(oriFileName, desFileName, true);
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 }

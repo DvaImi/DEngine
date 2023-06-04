@@ -10,14 +10,6 @@ namespace Game.Editor
     public class GameSetting : ScriptableSingleton<GameSetting>
     {
         /// <summary>
-        /// 基础程序集
-        /// </summary>
-        public string NameSpace = "GeminiLion";
-        /// <summary>
-        /// 热更新程序集
-        /// </summary>
-        public string HotfixNameSpace = "GeminiLion.Hotfix";
-        /// <summary>
         /// 
         /// </summary>
         public string BuildSettingsConfig = "GameMain/Configs/Editor/BuildSettings.xml";
@@ -34,14 +26,6 @@ namespace Game.Editor
         /// </summary>
         public string ResourceBuilderConfig = "GameMain/Configs/Editor/ResourceBuilder.xml";
         /// <summary>
-        /// AB包构建路径
-        /// </summary>
-        public string AssetBundleOutput = "";
-        /// <summary>
-        /// 构建应用路径
-        /// </summary>
-        public string PublishAppOutput = "";
-        /// <summary>
         /// 构建信息路径
         /// </summary>
         public string BuildInfoPath = "GameMain/Configs/Runtime/BuildInfo.txt";
@@ -49,62 +33,6 @@ namespace Game.Editor
         /// 数据表关联路径
         /// </summary>
         public string PreloadInfoPath = "GameMain/Configs/Runtime/PreloadInfo.txt";
-        /// <summary>
-        /// 实体脚本生成路径
-        /// </summary>
-        public string EntityCodePath = "Assets/GameMain/Scripts/Base/Entity";
-        /// <summary>
-        ///  热更实体脚本生成路径
-        /// </summary>
-        public string HotfixEntityCodePath = "Assets/GameMain/Scripts/Hotfix/Entity";
-        /// <summary>
-        /// UI界面逻辑生成路径
-        /// </summary>
-        public string UIFormCodePath = "Assets/GameMain/Scripts/Base/UI";
-        /// <summary>
-        /// 热更UI界面逻辑生成路径
-        /// </summary>
-        public string HotfixUIFormCodePath = "Assets/GameMain/Scripts/Hotfix/UI";
-        /// <summary>
-        /// 事件生成路径
-        /// </summary>
-        public string EventCodePath = "Assets/GameMain/Scripts/EventArgs";
-        /// <summary>
-        /// 热更事件生成路径
-        /// </summary>
-        public string HotfixEventCodePath = "Assets/GameMain/Scripts/Hotfix/EventArgs";
-        /// <summary>
-        /// 配置表格路径
-        /// </summary>
-        public string ConfigExcelPath = "";
-        /// <summary>
-        /// 游戏数据表生成路径路径
-        /// </summary>
-        public string ConfigDataPath = "";
-        /// <summary>
-        /// 数据表格路径
-        /// </summary>
-        public string DataTableExcelPath = "";
-        /// <summary>
-        /// 游戏数据表生成路径路径
-        /// </summary>
-        public string DataTablePath = "Assets/GameMain/DataTables";
-        /// <summary>
-        /// 数据表类路径
-        /// </summary>
-        public string CSharpCodePath = "Assets/GameMain/Scripts/Hotfix/DataTable";
-        /// <summary>
-        /// 数据表类模板路径
-        /// </summary>
-        public string CSharpCodeTemplateFileName = "Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt";
-        /// <summary>
-        /// 游戏本地化字典表格路径
-        /// </summary>
-        public string DictionaryExclePath;
-        /// <summary>
-        /// 游戏字典生成路径
-        /// </summary>
-        public string DictionaryDataPath;
         /// <summary>
         /// 热更程序集生成路径
         /// </summary>

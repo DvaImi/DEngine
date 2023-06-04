@@ -15,7 +15,7 @@ MonoBehaviour:
   DataTableFolderPath: Assets/Game/DataTables
   ExcelsFolder: Excels/Datable
   CSharpCodePath: Assets/Game/Scripts/Hotfix/DataTable
-  CSharpCodeTemplateFileName: Assets/Libraries/Libraries/DataTableExtension/Editor/TableCodeTemplate/DataTableCodeTemplate.txt
+  CSharpCodeTemplateFileName: Assets/Game/Scripts/Builtin/Editor/ExcelUtility/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Hotfix/DataTable/Extensions
   NameSpace: Game.Hotfix
   AssemblyNames:
@@ -30,3 +30,7 @@ MonoBehaviour:
   CommentRow: 3
   ContentStartRow: 4
   IdColumn: 1
+  LocalizationPath: Assets/Game/Localization
+  LocalizationExcelsFolder: Excels/Localization
+  ConfigPath: Assets/Game/Configs
+  ConfigExcelsFolder: Excels/Config

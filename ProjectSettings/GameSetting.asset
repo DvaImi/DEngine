@@ -12,36 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ee0b9678739e54fb24dfff12f65674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameSpace: GeminiLion
-  HotfixNameSpace: GeminiLion.Hotfix
   BuildSettingsConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/BuildSetting.xml
   ResourceCollectionConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceBuilder.xml
-  AssetBundleOutput: AssetBundle
-  PublishAppOutput: Publish
   BuildInfoPath: Assets/Game/Configs/BuildInfo.txt
   PreloadInfoPath: Assets/Game/Configs/PreloadInfo.txt
-  EntityCodePath: Assets/GameMain/Scripts/Base/Entity
-  HotfixEntityCodePath: Assets/GameMain/Scripts/Hotfix/Entity
-  UIFormCodePath: Assets/GameMain/Scripts/Base/UI
-  HotfixUIFormCodePath: Assets/GameMain/Scripts/Hotfix/UI
-  EventCodePath: Assets/GameMain/Scripts/EventArgs
-  HotfixEventCodePath: Assets/GameMain/Scripts/Hotfix/EventArgs
-  ConfigExcelPath: Excels/Config
-  ConfigDataPath: Assets/Game/Configs
-  DataTableExcelPath: 
-  DataTablePath: Assets/GameMain/DataTables
-  CSharpCodePath: Assets/GameMain/Scripts/Hotfix/DataTable
-  CSharpCodeTemplateFileName: Assets/GameMain/Configs/Editor/DataTableCodeTemplate.txt
-  DictionaryExclePath: Excels/Dictionary
-  DictionaryDataPath: Assets/Game/Localization/Dictionaries
   HotfixDllPath: Assets/Game/HybridCLRData/Hotfixdll
   HotfixDllNameMain: Game.Hotfix.dll
   AOTDllNames:
   - mscorlib.dll
-  - System.dll
+  - UnityEngine.CoreModule.dll
   - System.Core.dll
+  - System.dll
+  - UnityGameFramework.Runtime.dll
+  - UniTask.dll
+  - GameFramework.dll
   PreserveHotfixDllNames: []
   HotfixDllSuffix: .bytes
   HotfixInfoPath: Assets/Game/Configs/HotfixInfo.txt

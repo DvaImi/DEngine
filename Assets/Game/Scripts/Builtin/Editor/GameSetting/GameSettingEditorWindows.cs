@@ -81,38 +81,6 @@ public class GameSettingEditorWindows : OdinEditorWindow
     /// </summary>
     [DFilePath(Extensions = "*.txt", RequireExistingPath = true)]
     public string PreloadInfoPath;
-    /// <summary>
-    /// AssetBundle 构建路径
-    /// </summary>
-    [FolderPath(RequireExistingPath = true)]
-    [InlineButton(nameof(OpenOutFolder), "Go")]
-    public string AssetBundleOutput;
-    /// <summary>
-    /// 构建应用路径
-    /// </summary>
-    [FolderPath(RequireExistingPath = true)]
-    [InlineButton(nameof(OpenOutFolder), "Go")]
-    public string PublishAppOutput;
-
-    [Space]
-    [Header("Config Path")]
-    [FolderPath(RequireExistingPath = true)]
-    [InlineButton(nameof(OpenOutFolder), "Go")]
-    public string ConfigExcelPath;
-
-    [Space]
-    [FolderPath(RequireExistingPath = true)]
-    [InlineButton(nameof(PingObject), "Go")]
-    public string ConfigDataPath;
-
-    [Space]
-    [Header("Dictionary Path")]
-    [FolderPath(RequireExistingPath = true)]
-    [InlineButton(nameof(OpenOutFolder), "Go")]
-    public string DictionaryExclePath;
-    [FolderPath(RequireExistingPath = true)]
-    [InlineButton(nameof(OpenOutFolder), "Go")]
-    public string DictionaryDataPath;
 
     [Space]
     [Header("Hotfix Setting")]
@@ -218,7 +186,6 @@ public class GameSettingEditorWindows : OdinEditorWindow
                 writer.Write(hotfixJson);
             }
 
-            ResourceBuildHelper.SaveOutputDirectory(AssetBundleOutput);
             AssetDatabase.Refresh();
         }
     }
@@ -240,25 +207,14 @@ public class GameSettingEditorWindows : OdinEditorWindow
         EditorGUIUtility.PingObject(obj);
     }
 
-    private void OpenOutFolder(string path)
-    {
-        OpenFolder.InternalOpenFolder(path);
-    }
-
     private void GetValue()
     {
         BuildSettingsConfig = GameSetting.Instance.BuildSettingsConfig;
         ResourceCollectionConfig = GameSetting.Instance.ResourceCollectionConfig;
         ResourceEditorConfig = GameSetting.Instance.ResourceEditorConfig;
         ResourceBuilderConfig = GameSetting.Instance.ResourceBuilderConfig;
-        AssetBundleOutput = GameSetting.Instance.AssetBundleOutput;
-        PublishAppOutput = GameSetting.Instance.PublishAppOutput;
         BuildInfoPath = GameSetting.Instance.BuildInfoPath;
         PreloadInfoPath = GameSetting.Instance.PreloadInfoPath;
-        ConfigExcelPath = GameSetting.Instance.ConfigExcelPath;
-        ConfigDataPath = GameSetting.Instance.ConfigDataPath;
-        DictionaryExclePath = GameSetting.Instance.DictionaryExclePath;
-        DictionaryDataPath = GameSetting.Instance.DictionaryDataPath;
         HotfixDllPath = GameSetting.Instance.HotfixDllPath;
         HotfixDllNameMain = GameSetting.Instance.HotfixDllNameMain;
         AOTDllNames = GameSetting.Instance.AOTDllNames;
@@ -280,14 +236,8 @@ public class GameSettingEditorWindows : OdinEditorWindow
         GameSetting.Instance.ResourceCollectionConfig = ResourceCollectionConfig;
         GameSetting.Instance.ResourceEditorConfig = ResourceEditorConfig;
         GameSetting.Instance.ResourceBuilderConfig = ResourceBuilderConfig;
-        GameSetting.Instance.AssetBundleOutput = AssetBundleOutput;
-        GameSetting.Instance.PublishAppOutput = PublishAppOutput;
         GameSetting.Instance.BuildInfoPath = BuildInfoPath;
         GameSetting.Instance.PreloadInfoPath = PreloadInfoPath;
-        GameSetting.Instance.ConfigExcelPath = ConfigExcelPath;
-        GameSetting.Instance.ConfigDataPath = ConfigDataPath;
-        GameSetting.Instance.DictionaryExclePath = DictionaryExclePath;
-        GameSetting.Instance.DictionaryDataPath = DictionaryDataPath;
         GameSetting.Instance.HotfixDllPath = HotfixDllPath;
         GameSetting.Instance.HotfixDllNameMain = HotfixDllNameMain;
         GameSetting.Instance.AOTDllNames = AOTDllNames;
@@ -302,5 +252,6 @@ public class GameSettingEditorWindows : OdinEditorWindow
         GameSetting.Instance.AndroidAppUrl = AndroidAppUrl;
         GameSetting.Instance.UpdatePrefixUri = UpdatePrefixUri;
         GameSetting.Save();
+        Debug.Log("Save success");
     }
 }

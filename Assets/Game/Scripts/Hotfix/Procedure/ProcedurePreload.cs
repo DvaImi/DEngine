@@ -66,19 +66,16 @@ namespace Game.Hotfix
 
         private void PreloadResources()
         {
-            // Preload configs
             foreach (var configName in GameEntry.BuiltinData.PreloadInfo.Config)
             {
                 LoadConfig(configName);
             }
 
-            // Preload data tables
             foreach (string dataTableName in GameEntry.BuiltinData.PreloadInfo.DateTable)
             {
                 LoadDataTable(dataTableName);
             }
 
-            // Preload dictionaries
             LoadDictionary(GameEntry.Localization.Language.ToString());
         }
 

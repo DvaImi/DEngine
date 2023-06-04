@@ -6,23 +6,24 @@
       <Resource Name="Game/DataTables" FileSystem="base" LoadType="0" Packed="True" />
       <Resource Name="Game/Entities" FileSystem="data" LoadType="0" Packed="True" />
       <Resource Name="Game/HybridCLRData" FileSystem="base" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/Dictionaries/ChineseSimplified" Variant="zh-cn" FileSystem="localization" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/Dictionaries/ChineseTraditional" Variant="zh-tw" FileSystem="localization" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/Dictionaries/English" Variant="en-us" FileSystem="localization" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/Dictionaries/Korean" Variant="ko-kr" FileSystem="localization" LoadType="0" Packed="True" />
+      <Resource Name="Game/Localization/ChineseSimplified" Variant="zh-cn" FileSystem="localization" LoadType="0" Packed="True" />
+      <Resource Name="Game/Localization/ChineseTraditional" Variant="zh-tw" FileSystem="localization" LoadType="0" Packed="True" />
+      <Resource Name="Game/Localization/English" Variant="en-us" FileSystem="localization" LoadType="0" Packed="True" />
+      <Resource Name="Game/Localization/Korean" Variant="ko-kr" FileSystem="localization" LoadType="0" Packed="True" />
       <Resource Name="Game/Scenes" FileSystem="scene" LoadType="0" Packed="True" />
       <Resource Name="Game/UI" FileSystem="ui" LoadType="0" Packed="True" />
     </Resources>
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="Game/DataTables" />
+      <Asset Guid="09db37e41a9f392438c6ed17f81aac38" ResourceName="Game/HybridCLRData" />
       <Asset Guid="160c4b5e23f35a642acd901f0a4cde0c" ResourceName="Game/HybridCLRData" />
       <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="Game/DataTables" />
       <Asset Guid="2d195be6cdc3ebb4d93b0323dbf298ad" ResourceName="Game/UI" />
-      <Asset Guid="375701afef2c3f8469802e0b5a880fff" ResourceName="Game/Localization/Dictionaries/English" ResourceVariant="en-us" />
+      <Asset Guid="375701afef2c3f8469802e0b5a880fff" ResourceName="Game/Localization/English" ResourceVariant="en-us" />
       <Asset Guid="3e6f327a1634de344aa6262ab303a930" ResourceName="Game/Configs" />
-      <Asset Guid="3f91f1376b5a9ad4eab5f2659082ea04" ResourceName="Game/Localization/Dictionaries/Korean" ResourceVariant="ko-kr" />
+      <Asset Guid="3f91f1376b5a9ad4eab5f2659082ea04" ResourceName="Game/Localization/Korean" ResourceVariant="ko-kr" />
       <Asset Guid="4053612cac7241a4e91508723e79236f" ResourceName="Game/Entities" />
-      <Asset Guid="45454ac2536ba514a97c8338997547bc" ResourceName="Game/Localization/Dictionaries/ChineseSimplified" ResourceVariant="zh-cn" />
+      <Asset Guid="45454ac2536ba514a97c8338997547bc" ResourceName="Game/Localization/ChineseSimplified" ResourceVariant="zh-cn" />
       <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="Game/DataTables" />
       <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="Game/Configs" />
       <Asset Guid="5ace651f5510f534ca61f061766456b3" ResourceName="Game/HybridCLRData" />
@@ -37,9 +38,10 @@
       <Asset Guid="bd82155f8ae46f942aeba200d6da4ceb" ResourceName="Game/HybridCLRData" />
       <Asset Guid="cc8d902ef63469b458c125b44c9e2966" ResourceName="Game/HybridCLRData" />
       <Asset Guid="d783d8efc4946a34b96786fa6af948a7" ResourceName="Game/Configs" />
+      <Asset Guid="d838f895679172746a630cbfa9688d84" ResourceName="Game/Configs" />
       <Asset Guid="e3dcebef333eb6d449c95f3d57d85e95" ResourceName="Game/HybridCLRData" />
       <Asset Guid="e915882745d181145ba138b9cb3d1db4" ResourceName="Game/Scenes" />
-      <Asset Guid="e9265ec98dfc3d842af598b46e1efb22" ResourceName="Game/Localization/Dictionaries/ChineseTraditional" ResourceVariant="zh-tw" />
+      <Asset Guid="e9265ec98dfc3d842af598b46e1efb22" ResourceName="Game/Localization/ChineseTraditional" ResourceVariant="zh-tw" />
     </Assets>
   </ResourceCollection>
 </UnityGameFramework>

@@ -1,4 +1,3 @@
-#	默认配置			
-#	配置项	#策划备注	配置值	
-	Scene.Menu		1	
-	Scene.Main		2	
+
+Scene.Menu1
+Scene.Main2

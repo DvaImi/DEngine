@@ -8,7 +8,6 @@
 using System.Collections.Generic;
 using GameFramework;
 using GameFramework.Localization;
-using Game.Await;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;

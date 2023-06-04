@@ -6,6 +6,7 @@
 // ========================================================
 using GameFramework;
 using GameFramework.Config;
+using GameFramework.Localization;
 using System;
 using System.IO;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Game.Helper
     {
         private static readonly string[] ColumnSplitSeparator = new string[] { "\t" };
         private static readonly string BytesAssetExtension = ".bytes";
-        private const int ColumnCount = 5;
+        private const int ColumnCount = 4;
 
         private ResourceComponent m_ResourceComponent = null;
 
@@ -129,8 +130,23 @@ namespace Game.Helper
         {
             try
             {
-                string configString = Utility.Converter.GetString(configBytes);
-                return ParseData(configManager, configString, userData);
+                using (MemoryStream memoryStream = new MemoryStream(configBytes, startIndex, length, false))
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
+                    {
+                        while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
+                        {
+                            string dictionaryKey = binaryReader.ReadString();
+                            string dictionaryValue = binaryReader.ReadString();
+                            if (!configManager.AddConfig(dictionaryKey, dictionaryValue))
+                            {
+                                Log.Warning("Can not add raw string with config key '{0}' which may be invalid or duplicate.", dictionaryKey);
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
             }
             catch (Exception exception)
             {
