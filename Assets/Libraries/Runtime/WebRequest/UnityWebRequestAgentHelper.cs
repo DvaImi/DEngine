@@ -81,6 +81,18 @@ namespace UnityGameFramework.Runtime
                 m_UnityWebRequest = UnityWebRequest.Post(webRequestUri, wwwFormInfo.WWWForm);
             }
 
+            if (wwwFormInfo.UserData is UnityWebRequestHeader requestParams)
+            {
+                if (requestParams.Header != null)
+                {
+                    foreach (var header in requestParams.Header)
+                    {
+                        m_UnityWebRequest.SetRequestHeader(header.Key, header.Value);
+                    }
+                }
+                ReferencePool.Release(requestParams);
+            }
+
 #if UNITY_2017_2_OR_NEWER
             m_UnityWebRequest.SendWebRequest();
 #else
@@ -103,6 +115,22 @@ namespace UnityGameFramework.Runtime
             }
 
             m_UnityWebRequest = UnityWebRequest.Post(webRequestUri, Utility.Converter.GetString(postData));
+
+
+            WWWFormInfo wwwFormInfo = (WWWFormInfo)userData;
+
+            if (wwwFormInfo.UserData is UnityWebRequestHeader requestParams)
+            {
+                if (requestParams.Header != null)
+                {
+                    foreach (var header in requestParams.Header)
+                    {
+                        m_UnityWebRequest.SetRequestHeader(header.Key, header.Value);
+                    }
+                }
+                ReferencePool.Release(requestParams);
+            }
+
 #if UNITY_2017_2_OR_NEWER
             m_UnityWebRequest.SendWebRequest();
 #else

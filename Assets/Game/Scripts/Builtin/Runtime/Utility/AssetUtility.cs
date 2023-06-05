@@ -10,7 +10,6 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine;
-using UnityEngine.Networking;
 using Utility = GameFramework.Utility;
 
 namespace Game
@@ -28,24 +27,19 @@ namespace Game
 
         public static async UniTask InitAddress()
         {
-            UnityWebRequest unityWebRequest = UnityWebRequest.Get(AddressPath);
-            var webRequest = await unityWebRequest.SendWebRequest();
-            if (webRequest == null)
-            {
-                return;
-            }
+            var result = await GameEntry.WebRequest.AddWebRequestAsync(AddressPath);
 
-            if (webRequest.isDone)
+            if (result.Success)
             {
                 GameAddressSerializer serializer = new GameAddressSerializer();
                 serializer.RegisterDeserializeCallback(0, GameAddressSerializerCallback.Deserialize);
 
-                using (Stream stream = new MemoryStream(webRequest.downloadHandler.data))
+                using (Stream stream = new MemoryStream(result.Bytes))
                 {
                     m_Address = serializer.Deserialize(stream);
                 }
-                SerializerComplete = true;
             }
+            SerializerComplete = true;
         }
 
         public static string GetAddress(string address)

@@ -11,11 +11,20 @@ namespace Game
         /// <summary>
         /// 自定义数据
         /// </summary>
-        public object UserData { get; private set; }
+        public object UserData
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// UniTaskCompletionSource
         /// </summary>
-        public UniTaskCompletionSource<T> Source { get; private set; }
+        public UniTaskCompletionSource<T> Source
+        {
+            get;
+            private set;
+        }
 
         public static AwaitDataWrap<T> Create(object userData, UniTaskCompletionSource<T> source)
         {

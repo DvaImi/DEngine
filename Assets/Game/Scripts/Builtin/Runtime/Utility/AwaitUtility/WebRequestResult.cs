@@ -12,9 +12,9 @@ namespace Game
         /// </summary>
         public byte[] Bytes { get; private set; }
         /// <summary>
-        /// 是否有错误
+        /// 是否请求成功
         /// </summary>
-        public bool IsError { get; private set; }
+        public bool Success { get; private set; }
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -24,21 +24,20 @@ namespace Game
         /// </summary>
         public object UserData { get; private set; }
 
-
-        public static WebRequestResult Create(byte[] bytes, bool isError, string errorMessage, object userData)
+        public static WebRequestResult Create(byte[] bytes, bool success, string errorMessage, object userData)
         {
             WebRequestResult webRequestResult = ReferencePool.Acquire<WebRequestResult>();
             webRequestResult.Bytes = bytes;
-            webRequestResult.IsError = isError;
+            webRequestResult.Success = success;
             webRequestResult.ErrorMessage = errorMessage;
             webRequestResult.UserData = userData;
             return webRequestResult;
         }
-        
+
         public void Clear()
         {
             Bytes = null;
-            IsError = false;
+            Success = false;
             ErrorMessage = string.Empty;
             UserData = null;
         }
