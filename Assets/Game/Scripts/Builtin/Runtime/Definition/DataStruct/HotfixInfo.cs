@@ -10,6 +10,14 @@ namespace Game
     public class HotfixInfo
     {
         /// <summary>
+        /// 是否开启热更
+        /// </summary>
+        public bool EnableHotfix
+        {
+            get;
+            set;
+        }
+        /// <summary>
         /// 主热更程序集
         /// </summary>
         public string HotfixDllNameMain

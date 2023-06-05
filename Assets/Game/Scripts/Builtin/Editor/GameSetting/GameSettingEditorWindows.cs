@@ -9,6 +9,7 @@ using System.Text;
 using Game;
 using Game.Editor;
 using Game.Editor.ResourceTools;
+using HybridCLR.Editor;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
@@ -170,6 +171,7 @@ public class GameSettingEditorWindows : OdinEditorWindow
             }
             HotfixInfo hotfixInfo = new()
             {
+                EnableHotfix=HybridCLRSettings.Instance.enable,
                 HotfixDllNameMain = GameSetting.Instance.HotfixDllNameMain,
                 AOTDllNames = GameSetting.Instance.AOTDllNames,
                 PreserveHotfixDllNames = GameSetting.Instance.PreserveHotfixDllNames,

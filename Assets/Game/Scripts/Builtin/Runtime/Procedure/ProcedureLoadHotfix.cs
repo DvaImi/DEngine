@@ -39,23 +39,30 @@ namespace Game
 
         private async UniTask LoadHotfixDll()
         {
-            if (m_HasLoadHotfixDll)
+            if (GameEntry.BuiltinData.HotfixInfo.EnableHotfix)
             {
-                Log.Debug("已经加载过热更新dll ，暂时无法重复加载");
-                await HotfixLauncher();
-                return;
-            }
-            var dll = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress(GameEntry.BuiltinData.HotfixInfo.HotfixDllNameMain));
-            Assembly hotfixAssembly = Assembly.Load(dll.bytes);
-            if (hotfixAssembly == null)
-            {
-                Log.Fatal(Utility.Text.Format("Load hotfix dll {0} is Fail", GameEntry.BuiltinData.HotfixInfo.HotfixDllNameMain));
-                return;
-            }
-            Log.Info("Load hotfix dll OK.");
-            m_HasLoadHotfixDll = true;
+                if (m_HasLoadHotfixDll)
+                {
+                    Log.Debug("已经加载过热更新dll ，暂时无法重复加载");
+                    await HotfixLauncher();
+                    return;
+                }
+                var dll = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress(GameEntry.BuiltinData.HotfixInfo.HotfixDllNameMain));
+                Assembly hotfixAssembly = Assembly.Load(dll.bytes);
+                if (hotfixAssembly == null)
+                {
+                    Log.Fatal(Utility.Text.Format("Load hotfix dll {0} is Fail", GameEntry.BuiltinData.HotfixInfo.HotfixDllNameMain));
+                    return;
+                }
+                Log.Info("Load hotfix dll OK.");
+                m_HasLoadHotfixDll = true;
 
-            await LoadMetadataForAOTAssemblies();
+                await LoadMetadataForAOTAssemblies();
+            }
+            else
+            {
+                await HotfixLauncher();
+            }
         }
 
         /// <summary>
