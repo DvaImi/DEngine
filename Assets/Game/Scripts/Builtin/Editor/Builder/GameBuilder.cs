@@ -8,6 +8,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Game.Editor.ResourceTools;
 using GameFramework;
 using HybridCLR.Editor;
@@ -70,30 +71,43 @@ namespace Game.Editor
             GUILayout.Space(5f);
             EditorGUILayout.LabelField("Build", EditorStyles.boldLabel);
             GUILayout.Space(5f);
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginVertical("box");
             {
-                int hotfixPlatformIndex = EditorGUILayout.Popup(m_HotfixPlatformIndex, m_HybridClrBuilderController.PlatformNames, GUILayout.Width(200));
-                if (hotfixPlatformIndex != m_HotfixPlatformIndex)
+                EditorGUILayout.BeginHorizontal();
                 {
-                    HotfixPlatformIndex = hotfixPlatformIndex;
-                }
+                    EditorGUILayout.LabelField("打包平台设置", EditorStyles.boldLabel);
+                    int hotfixPlatformIndex = EditorGUILayout.Popup(m_HotfixPlatformIndex, m_HybridClrBuilderController.PlatformNames, GUILayout.Width(100));
+                    if (hotfixPlatformIndex != m_HotfixPlatformIndex)
+                    {
+                        HotfixPlatformIndex = hotfixPlatformIndex;
+                    }
 
-                if (GUILayout.Button("AOT Generic Build", GUILayout.Width(120)))
-                {
-                    m_IsAotGeneric = m_BeginBuild = true;
-                }
+                    if (GUILayout.Button("AOT Generic", GUILayout.Width(100)))
+                    {
+                        m_IsAotGeneric = m_BeginBuild = true;
+                    }
 
-                if (GUILayout.Button("编译Hotfix.dll", GUILayout.Width(120)))
-                {
-                    CompileHotfixDll();
+                    if (GUILayout.Button("Hotfix", GUILayout.Width(100)))
+                    {
+                        CompileHotfixDll();
+                    }
                 }
             }
+            EditorGUILayout.EndVertical();
             GUILayout.Space(5f);
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);
-            GUIResourcesTool();
+            EditorGUILayout.BeginVertical("box");
+            {
+                GUIResourcesTool();
+            }
+            EditorGUILayout.EndVertical();
             GUILayout.Space(5f);
-            GUIBuildPlayer();
+            EditorGUILayout.BeginVertical("box");
+            {
+                GUIBuildPlayer();
+            }
+            EditorGUILayout.EndVertical();
         }
 
         private void Update()
@@ -110,22 +124,40 @@ namespace Game.Editor
         {
             EditorGUILayout.BeginHorizontal();
             {
-                EditorGUILayout.LabelField("编辑资源或打包。");
+                EditorGUILayout.LabelField("资源", EditorStyles.boldLabel);
 
+                if (GUILayout.Button("Assress", GUILayout.Width(100)))
+                {
+                    AssetBundleUtility.WriteAddress();
+                }
+                if (GUILayout.Button("Builtin", GUILayout.Width(100)))
+                {
+                    AssetBundleUtility.GenerateBuiltin();
+                }
                 if (GUILayout.Button("Edit", GUILayout.Width(100)))
                 {
                     EditorWindow window = GetWindow(Type.GetType("Game.Editor.ResourceTools.AssetBundleCollector"));
                     window.minSize = new Vector2(1640f, 420f);
                 }
+            }
 
-                Color bc = GUI.backgroundColor;
-                GUI.backgroundColor = Color.green;
-                if (GUILayout.Button("Build", GUILayout.Width(130)))
-                {
-                    AssetBundleUtility.StartBuild();
-                }
-                GUI.backgroundColor = bc;
-                if (GUILayout.Button("Path", GUILayout.Width(100)))
+            EditorGUILayout.EndHorizontal();
+            Color bc = GUI.backgroundColor;
+            GUI.backgroundColor = Color.green;
+            GUILayout.Space(5f);
+            if (GUILayout.Button("Build", GUILayout.Height(30)))
+            {
+                AssetBundleUtility.StartBuild();
+            }
+            GUI.backgroundColor = bc;
+            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUI.enabled = false;
+                EditorGUILayout.LabelField(AssetBundleOutput);
+                GUI.enabled = true;
+                bool exists = Directory.Exists(AssetBundleOutput);
+                if (GUILayout.Button(exists ? EditorGUIUtility.IconContent("Project") : EditorGUIUtility.IconContent("console.erroricon"), new GUIStyle() { imagePosition = ImagePosition.ImageOnly }, GUILayout.Width(20)))
                 {
                     string value = EditorUtility.OpenFolderPanel("AssetBundle Output", "", "Output");
                     if (Directory.Exists(value) && value != AssetBundleOutput)
@@ -134,49 +166,38 @@ namespace Game.Editor
                     }
                 }
             }
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            {
-                GUI.enabled = false;
-                EditorGUILayout.LabelField("输出路径===>" + AssetBundleOutput);
-                GUI.enabled = true;
-            }
             EditorGUILayout.EndHorizontal();
         }
 
         private void GUIBuildPlayer()
         {
             EditorGUILayout.BeginHorizontal();
-
-            EditorGUILayout.LabelField($"构建{m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]}工程。");
-            if (GUILayout.Button("Edit", GUILayout.Width(100)))
             {
-                BuildPlayerWindow.ShowBuildPlayerWindow();
+                EditorGUILayout.LabelField($"构建{m_HybridClrBuilderController.PlatformNames[HotfixPlatformIndex]}工程。", EditorStyles.boldLabel);
             }
-
+            EditorGUILayout.EndHorizontal();
             Color bc = GUI.backgroundColor;
             GUI.backgroundColor = Color.green;
-            if (GUILayout.Button("Build", GUILayout.Width(130)))
+            if (GUILayout.Button("Build", GUILayout.Height(30)))
             {
                 m_BeginBuild = true;
             }
             GUI.backgroundColor = bc;
-
-            if (GUILayout.Button("Path", GUILayout.Width(100)))
+            EditorGUILayout.BeginHorizontal();
             {
-                string value = EditorUtility.OpenFolderPanel("PublishApp Output", "", "Output");
-                if (Directory.Exists(value) && value != PublishAppOutput)
+                GUI.enabled = false;
+                EditorGUILayout.LabelField(PublishAppOutput);
+                GUI.enabled = true;
+                bool exists = Directory.Exists(PublishAppOutput);
+                if (GUILayout.Button(exists ? EditorGUIUtility.IconContent("Project") : EditorGUIUtility.IconContent("console.erroricon"), new GUIStyle() { imagePosition = ImagePosition.ImageOnly }, GUILayout.Width(20)))
                 {
-                    PublishAppOutput = value;
+                    string value = EditorUtility.OpenFolderPanel("PublishApp Output", "", "Output");
+                    if (Directory.Exists(value) && value != PublishAppOutput)
+                    {
+                        PublishAppOutput = value;
+                    }
                 }
             }
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            GUI.enabled = false;
-            EditorGUILayout.LabelField("输出路径===>" + PublishAppOutput);
-            GUI.enabled = true;
             EditorGUILayout.EndHorizontal();
         }
 

@@ -13,6 +13,12 @@ using GameFramework.Procedure;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
+using System.IO;
+using System.Text;
+using Cysharp.Threading.Tasks;
+using static GameFramework.Utility;
+using System.Collections;
+using System.Runtime.ExceptionServices;
 
 namespace Game.Hotfix
 {
@@ -33,7 +39,7 @@ namespace Game.Hotfix
 
             m_LoadedFlag.Clear();
 
-            PreloadResources();
+            PreloadResources().Forget();
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -61,20 +67,47 @@ namespace Game.Hotfix
             }
 
             procedureOwner.SetData<VarInt32>("NextSceneId", GameEntry.Config.GetInt("Scene.Menu"));
+
             ChangeState<ProcedureChangeScene>(procedureOwner);
         }
 
-        private void PreloadResources()
+        private async UniTask PreloadResources()
         {
-            foreach (var configName in GameEntry.BuiltinData.PreloadInfo.Config)
+            m_LoadedFlag.Add("BaseData", false);
+            var result = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress("BaseData"));
+            if (result != null && result.bytes != null)
             {
-                LoadConfig(configName);
+                m_LoadedFlag["BaseData"] = true;
+                string[] dataTables, configs;
+                using (Stream stream = new MemoryStream(result.bytes))
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
+                    {
+                        int dataTable = binaryReader.ReadInt32();
+                        dataTables = new string[dataTable];
+                        for (int i = 0; i < dataTable; i++)
+                        {
+                            dataTables[i] = binaryReader.ReadString();
+                        }
+                        int config = binaryReader.ReadInt32();
+                        configs = new string[config];
+                        for (int i = 0; i < config; i++)
+                        {
+                            configs[i] = binaryReader.ReadString();
+                        }
+                    }
+                }
+                foreach (var configName in configs)
+                {
+                    LoadConfig(configName);
+                }
+
+                foreach (string dataTableName in dataTables)
+                {
+                    LoadDataTable(dataTableName);
+                }
             }
 
-            foreach (string dataTableName in GameEntry.BuiltinData.PreloadInfo.DateTable)
-            {
-                LoadDataTable(dataTableName);
-            }
 
             LoadLocalization(GameEntry.Localization.Language.ToString());
         }

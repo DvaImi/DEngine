@@ -103,6 +103,7 @@ namespace Game
             float progressTotal = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
             string descriptionText = GameEntry.Localization.GetString("UpdateResource.Tips", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), GetByteLengthString(currentTotalUpdateLength), GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("F2"), GetByteLengthString((int)GameEntry.Download.CurrentSpeed));
             m_UpdateResourceForm.SetProgress(progressTotal, descriptionText);
+            Log.Debug(descriptionText);
         }
 
         private string GetByteLengthString(long byteLength)

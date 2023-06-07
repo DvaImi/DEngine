@@ -5,48 +5,93 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine;
+using UnityGameFramework.Runtime;
 using Utility = GameFramework.Utility;
 
 namespace Game
 {
     public static class AssetUtility
     {
-        private static Dictionary<string, string> m_Address = null;
-        public static readonly string AddressPath = Path.Combine(Application.streamingAssetsPath, "address.dat");
+        private static Dictionary<string, Dictionary<Type, string>> m_Address = null;
 
-        public static bool SerializerComplete
+        public static void InitAddress(byte[] bytes)
         {
-            get;
-            private set;
-        }
+            GameAddressSerializer serializer = new GameAddressSerializer();
+            serializer.RegisterDeserializeCallback(0, GameAddressSerializerCallback.Deserialize);
 
-        public static async UniTask InitAddress()
-        {
-            var result = await GameEntry.WebRequest.AddWebRequestAsync(AddressPath);
-
-            if (result.Success)
+            using (Stream stream = new MemoryStream(bytes))
             {
-                GameAddressSerializer serializer = new GameAddressSerializer();
-                serializer.RegisterDeserializeCallback(0, GameAddressSerializerCallback.Deserialize);
-
-                using (Stream stream = new MemoryStream(result.Bytes))
-                {
-                    m_Address = serializer.Deserialize(stream);
-                }
+                m_Address = serializer.Deserialize(stream);
+                Log.Debug("address serializer success");
             }
-            SerializerComplete = true;
         }
 
         public static string GetAddress(string address)
         {
-            return m_Address == null
-                ? throw new GameFrameworkException($"Unable Load Address ：{address}")
-                : m_Address.TryGetValue(address, out string asstePath) ? asstePath : null;
+            if (m_Address == null)
+            {
+                return null;
+            }
+
+            if (m_Address.TryGetValue(address, out Dictionary<Type, string> typeAssets))
+            {
+                if (typeAssets != null)
+                {
+                    using Dictionary<Type, string>.Enumerator enumerator = typeAssets.GetEnumerator();
+                    if (enumerator.MoveNext())
+                    {
+                        return enumerator.Current.Value;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static string GetAddress<T>(string address)
+        {
+            if (m_Address == null)
+            {
+                return null;
+            }
+
+            if (m_Address.TryGetValue(address, out Dictionary<Type, string> typeAssets))
+            {
+                if (typeAssets != null)
+                {
+                    if (typeAssets.TryGetValue(typeof(T), out string assetPath))
+                    {
+                        return assetPath;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static string GetAddress(Type type, string address)
+        {
+            if (m_Address == null)
+            {
+                return null;
+            }
+
+            if (m_Address.TryGetValue(address, out Dictionary<Type, string> typeAssets))
+            {
+                if (typeAssets != null)
+                {
+                    if (typeAssets.TryGetValue(type, out string assetPath))
+                    {
+                        return assetPath;
+                    }
+                }
+            }
+            return null;
         }
 
         public static string[] GetAddress(string[] address)
@@ -59,16 +104,13 @@ namespace Game
             {
                 throw new GameFrameworkException("address is  invalid");
             }
-
+            string[] addressArray = new string[address.Length];
             for (int i = 0; i < address.Length; i++)
             {
-                if (m_Address.TryGetValue(address[i], out string asstePath))
-                {
-                    address[i] = asstePath;
-                }
+                addressArray[i] = GetAddress(address[i]);
             }
 
-            return address;
+            return addressArray;
         }
 
         public static string GetConfigAsset(string assetName, bool fromBytes)

@@ -10,7 +10,9 @@ using System.IO;
 using GameFramework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityGameFramework.Editor.ResourceTools;
+using Object = UnityEngine.Object;
 
 namespace Game.Editor.ResourceTools
 {
@@ -21,7 +23,7 @@ namespace Game.Editor.ResourceTools
     {
         private static ResourceBuilderController m_Controller = null;
         private static Platform m_OriginalPlatform;
-
+        private static GameFrameworkAction m_Complete;
         public static void SaveOutputDirectory(string outputDirectory)
         {
             if (!Directory.Exists(outputDirectory))
@@ -47,11 +49,7 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        /// <summary>
-        /// build resource
-        /// </summary>
-        /// <param name="specificPlatform">为Undefined使用设置的平台</param>
-        public static void StartBuild(Platform platform)
+        public static void StartBuild(Platform platform, GameFrameworkAction complete = null)
         {
             m_Controller = new ResourceBuilderController();
             m_Controller.OnLoadingResource += OnLoadingResource;
@@ -63,6 +61,7 @@ namespace Game.Editor.ResourceTools
             m_Controller.ProcessingBinary += OnProcessingBinary;
             m_Controller.ProcessResourceComplete += OnProcessResourceComplete;
             m_Controller.BuildResourceError += OnBuildResourceError;
+            m_Complete = complete;
 
             if (m_Controller.Load())
             {
@@ -103,26 +102,45 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        internal static void AnalyzeAddress()
+        internal static void AnalyzeAddress(out Dictionary<string, Dictionary<Type, string>> address)
         {
+            address = new Dictionary<string, Dictionary<Type, string>>();
             ResourceCollection controller = new ResourceCollection();
             if (controller.Load())
             {
-                HashSet<string> temeper = new HashSet<string>();
-
+                int index = 0;
+                int length = controller.AssetCount;
                 foreach (var asset in controller.GetAssets())
                 {
-                    string address = Path.GetFileNameWithoutExtension(asset.Name);
-                    if (temeper.Contains(address))
+                    string fileWithoutExtensionName = Path.GetFileNameWithoutExtension(asset.Name);
+                    Type type = AssetDatabase.LoadAssetAtPath<Object>(asset.Name).GetType();
+                    if (type == typeof(SceneAsset))
                     {
-                        throw new GameFrameworkException($"The address is existed : {address} in collector : {asset.Name}");
+                        type = typeof(Scene);
+                    }
+
+                    if (address.ContainsKey(fileWithoutExtensionName))
+                    {
+                        if (address[fileWithoutExtensionName].ContainsKey(type))
+                        {
+                            EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(asset.Name));
+                            EditorUtility.ClearProgressBar();
+                            throw new GameFrameworkException($"The address is existed : {address} in collector : {asset.Name}");
+                        }
+                        else
+                        {
+                            address[fileWithoutExtensionName].Add(type, asset.Name);
+                        }
                     }
                     else
                     {
-                        temeper.Add(address);
+                        address.Add(fileWithoutExtensionName, new Dictionary<Type, string>() { { type, asset.Name } });
                     }
+                    index += 1;
+                    EditorUtility.DisplayProgressBar("Analyzing Assets", Utility.Text.Format("Analyzing assets, {0}/{1} analyzed.", index, length), (float)index / length);
                 }
             }
+            EditorUtility.ClearProgressBar();
         }
 
         private static void GetBuildMessage(out string message, out MessageType messageType)
@@ -167,8 +185,7 @@ namespace Game.Editor.ResourceTools
             messageType = MessageType.Info;
             if (Directory.Exists(m_Controller.OutputPackagePath))
             {
-                message += GameFramework.Utility.Text.Format("{0} will be overwritten.",
-                    m_Controller.OutputPackagePath);
+                message += Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputPackagePath);
                 messageType = MessageType.Warning;
             }
 
@@ -179,7 +196,7 @@ namespace Game.Editor.ResourceTools
                     message += " ";
                 }
 
-                message += GameFramework.Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputFullPath);
+                message += Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputFullPath);
                 messageType = MessageType.Warning;
             }
 
@@ -190,7 +207,7 @@ namespace Game.Editor.ResourceTools
                     message += " ";
                 }
 
-                message += GameFramework.Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputPackedPath);
+                message += Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputPackedPath);
                 messageType = MessageType.Warning;
             }
 
@@ -204,8 +221,6 @@ namespace Game.Editor.ResourceTools
 
         private static void BuildResources()
         {
-            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
-            AssetDatabase.Refresh();
             if (m_Controller.BuildResources())
             {
                 Debug.Log("Build resources success.");
@@ -232,16 +247,12 @@ namespace Game.Editor.ResourceTools
 
         private static void OnLoadingResource(int index, int count)
         {
-            EditorUtility.DisplayProgressBar("Loading Resources",
-                GameFramework.Utility.Text.Format("Loading resources, {0}/{1} loaded.", index, count),
-                (float)index / count);
+            EditorUtility.DisplayProgressBar("Loading Resources", Utility.Text.Format("Loading resources, {0}/{1} loaded.", index, count), (float)index / count);
         }
 
         private static void OnLoadingAsset(int index, int count)
         {
-            EditorUtility.DisplayProgressBar("Loading Assets",
-                GameFramework.Utility.Text.Format("Loading assets, {0}/{1} loaded.", index, count),
-                (float)index / count);
+            EditorUtility.DisplayProgressBar("Loading Assets", Utility.Text.Format("Loading assets, {0}/{1} loaded.", index, count), (float)index / count);
         }
 
         private static void OnLoadCompleted()
@@ -261,8 +272,7 @@ namespace Game.Editor.ResourceTools
 
         private static bool OnProcessingAssetBundle(string assetBundleName, float progress)
         {
-            if (EditorUtility.DisplayCancelableProgressBar("Processing AssetBundle",
-                    GameFramework.Utility.Text.Format("Processing '{0}'...", assetBundleName), progress))
+            if (EditorUtility.DisplayCancelableProgressBar("Processing AssetBundle", Utility.Text.Format("Processing '{0}'...", assetBundleName), progress))
             {
                 EditorUtility.ClearProgressBar();
                 return true;
@@ -275,8 +285,7 @@ namespace Game.Editor.ResourceTools
 
         private static bool OnProcessingBinary(string binaryName, float progress)
         {
-            if (EditorUtility.DisplayCancelableProgressBar("Processing Binary",
-                    GameFramework.Utility.Text.Format("Processing '{0}'...", binaryName), progress))
+            if (EditorUtility.DisplayCancelableProgressBar("Processing Binary", Utility.Text.Format("Processing '{0}'...", binaryName), progress))
             {
                 EditorUtility.ClearProgressBar();
                 return true;
@@ -290,8 +299,9 @@ namespace Game.Editor.ResourceTools
         private static void OnProcessResourceComplete(Platform platform)
         {
             EditorUtility.ClearProgressBar();
-            Debug.Log(GameFramework.Utility.Text.Format("Build resources {0}({1}) for '{2}' complete.",
-                m_Controller.ApplicableGameVersion, m_Controller.InternalResourceVersion, platform));
+            Debug.Log(Utility.Text.Format("Build resources {0}({1}) for '{2}' complete.", m_Controller.ApplicableGameVersion, m_Controller.InternalResourceVersion, platform));
+            m_Complete?.Invoke();
+            m_Complete = null;
         }
 
         private static void OnBuildResourceError(string errorMessage)
@@ -299,8 +309,6 @@ namespace Game.Editor.ResourceTools
             EditorUtility.ClearProgressBar();
             Debug.LogWarning(Utility.Text.Format("Build resources error with error message '{0}'.", errorMessage));
         }
-
-
     }
 }
 

@@ -149,42 +149,6 @@ public class GameSettingEditorWindows : OdinEditorWindow
         if (EditorGUI.EndChangeCheck())
         {
             SaveValue();
-
-            BuildInfo buildInfo = new()
-            {
-                CheckVersionUrl = GameSetting.Instance.CheckVersionUrl,
-                WindowsAppUrl = GameSetting.Instance.WindowsAppUrl,
-                MacOSAppUrl = GameSetting.Instance.MacOSAppUrl,
-                IOSAppUrl = GameSetting.Instance.IOSAppUrl,
-                AndroidAppUrl = GameSetting.Instance.AndroidAppUrl,
-                UpdatePrefixUri = GameSetting.Instance.UpdatePrefixUri
-            };
-
-            string buildInfoJson = Newtonsoft.Json.JsonConvert.SerializeObject(buildInfo);
-
-
-            using (FileStream stream = new(BuildInfoPath, FileMode.Create, FileAccess.Write))
-            {
-                UTF8Encoding utf8Encoding = new(false);
-                using StreamWriter writer = new(stream, utf8Encoding);
-                writer.Write(buildInfoJson);
-            }
-            HotfixInfo hotfixInfo = new()
-            {
-                EnableHotfix=HybridCLRSettings.Instance.enable,
-                HotfixDllNameMain = GameSetting.Instance.HotfixDllNameMain,
-                AOTDllNames = GameSetting.Instance.AOTDllNames,
-                PreserveHotfixDllNames = GameSetting.Instance.PreserveHotfixDllNames,
-            };
-            string hotfixJson = Newtonsoft.Json.JsonConvert.SerializeObject(hotfixInfo);
-
-            using (FileStream stream = new(HotfixInfoPath, FileMode.Create, FileAccess.Write))
-            {
-                UTF8Encoding utf8Encoding = new(false);
-                using StreamWriter writer = new(stream, utf8Encoding);
-                writer.Write(hotfixJson);
-            }
-
             AssetDatabase.Refresh();
         }
     }

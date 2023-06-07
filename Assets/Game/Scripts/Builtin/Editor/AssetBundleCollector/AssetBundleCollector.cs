@@ -126,7 +126,6 @@ namespace Game.Editor.ResourceTools
             m_RuleList.onSelectCallback = Select;
         }
 
-
         private void Add()
         {
             m_Configuration.rules.Add(new ResourceRule());
@@ -240,7 +239,9 @@ namespace Game.Editor.ResourceTools
             }
 
             Rect newRule = new Rect(configs.x + configs.width + 5, configs.y, 100, configs.height);
-            if (GUI.Button(newRule, "New"))
+            GUIStyle style = new GUIStyle(GUI.skin.button);
+            style.fontSize = 20;
+            if (GUI.Button(newRule, "+", style))
             {
                 string format = "(" + m_AllConfigPaths.Count + ")";
                 string newPath = Path.Combine(m_NormalConfigurationPath, string.Format(m_NormalFileName, format));
@@ -259,7 +260,7 @@ namespace Game.Editor.ResourceTools
 
             Rect delete = new Rect(newRule.x + newRule.width + 5, newRule.y, 100, newRule.height);
             GUI.enabled = m_AllConfigPaths.Count > 1;
-            if (GUI.Button(delete, "Delete"))
+            if (GUI.Button(delete, "X"))
             {
                 int deleteindex = m_CurrentConfigIndex;
                 AssetDatabase.DeleteAsset(m_AllConfigPaths[deleteindex]);
@@ -276,7 +277,8 @@ namespace Game.Editor.ResourceTools
             }
             GUI.enabled = true;
             Rect save = new Rect(delete.x + delete.width + 5, delete.y, 100, delete.height);
-            if (GUI.Button(save, "Save"))
+
+            if (GUI.Button(save, EditorGUIUtility.IconContent("Save")))
             {
                 Save();
                 RefreshResourceCollection();
@@ -284,7 +286,7 @@ namespace Game.Editor.ResourceTools
             }
 
             Rect reload = new Rect(save.x + save.width + 5, save.y, 100, save.height);
-            if (GUI.Button(reload, "Reload"))
+            if (GUI.Button(reload, EditorGUIUtility.IconContent("Refresh")))
             {
                 Load();
             }

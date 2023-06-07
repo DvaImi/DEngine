@@ -16,7 +16,17 @@ MonoBehaviour:
   - valid: 1
     name: 
     variant: 
-    fileSystem: base
+    fileSystem: builtin
+    groups: 
+    assetPath: Assets/Game/Builtin
+    loadType: 0
+    packed: 1
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: config
     groups: 
     assetPath: Assets/Game/Configs
     loadType: 0
@@ -26,7 +36,7 @@ MonoBehaviour:
   - valid: 1
     name: 
     variant: 
-    fileSystem: base
+    fileSystem: data
     groups: 
     assetPath: Assets/Game/DataTables
     loadType: 0
@@ -58,40 +68,10 @@ MonoBehaviour:
     variant: 
     fileSystem: localization
     groups: 
-    assetPath: Assets/Game/Localization/ChineseSimplified
+    assetPath: Assets/Game/Localization
     loadType: 0
     packed: 1
-    filterType: 1
-    searchPatterns: '*.*'
-  - valid: 1
-    name: 
-    variant: 
-    fileSystem: localization
-    groups: 
-    assetPath: Assets/Game/Localization/ChineseTraditional
-    loadType: 0
-    packed: 1
-    filterType: 1
-    searchPatterns: '*.*'
-  - valid: 1
-    name: 
-    variant: 
-    fileSystem: localization
-    groups: 
-    assetPath: Assets/Game/Localization/English
-    loadType: 0
-    packed: 1
-    filterType: 1
-    searchPatterns: '*.*'
-  - valid: 1
-    name: 
-    variant: 
-    fileSystem: localization
-    groups: 
-    assetPath: Assets/Game/Localization/Korean
-    loadType: 0
-    packed: 1
-    filterType: 1
+    filterType: 0
     searchPatterns: '*.*'
   - valid: 1
     name: 
@@ -111,5 +91,5 @@ MonoBehaviour:
     assetPath: Assets/Game/UI/UIForms
     loadType: 0
     packed: 1
-    filterType: 1
+    filterType: 0
     searchPatterns: '*.*'

@@ -1,1 +1,0 @@
-{"EnableHotfix":false,"HotfixDllNameMain":"Game.Hotfix.dll","AOTDllNames":["mscorlib.dll","UnityEngine.CoreModule.dll","System.Core.dll","System.dll","UnityGameFramework.Runtime.dll","UniTask.dll","GameFramework.dll"],"PreserveHotfixDllNames":[]}

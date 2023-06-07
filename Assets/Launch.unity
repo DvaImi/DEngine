@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 8983371}
   - component: {fileID: 8983372}
   m_Layer: 0
-  m_Name: Game Framework
+  m_Name: Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -406,22 +406,6 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_Skin
-      value: 
-      objectReference: {fileID: 11400000, guid: a4c1cc1e6676f0e48a527bad48941f98, type: 2}
-    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_ActiveWindow
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_ShowFullWindow
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_ConsoleWindow.m_LockScroll
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EntranceProcedureTypeName
       value: Game.ProcedureLaunch
@@ -481,7 +465,7 @@ PrefabInstance:
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_AudioMixer
       value: 
-      objectReference: {fileID: 24100000, guid: b7317ff76310723499b9d88117cd0191, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.size
       value: 3
@@ -628,7 +612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ResourceMode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_FrameRate
@@ -809,11 +793,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfb0b001fcb30fe45ac95ddb8c28ba57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BuildInfoTextAsset: {fileID: 4900000, guid: 3e6f327a1634de344aa6262ab303a930, type: 3}
-  m_PreloadInfoTextAsset: {fileID: 4900000, guid: d783d8efc4946a34b96786fa6af948a7, type: 3}
-  m_DefaultDictionaryTextAsset: {fileID: 4900000, guid: 897bef6da305fb64fa1667e33bfa2a47, type: 3}
-  m_HotfixTextAsset: {fileID: 4900000, guid: 9c179f6a3d1f7da4d91056f447043b19, type: 3}
-  m_UpdateResourceFormTemplate: {fileID: 0}
+  m_Address: {fileID: 4900000, guid: d4f634fd67f3d934c8db043bac5af72d, type: 3}
+  m_BuildInfo: {fileID: 4900000, guid: a6df3f4862d4b014f945f3a8e9b2f0eb, type: 3}
+  m_LanguageBuiltin: {fileID: 4900000, guid: c25eaf03fa8abf9419f0c98d5a46ebf4, type: 3}
+  m_UpdateResourceFormTemplate: {fileID: 4863827266948120156, guid: 1a28f36a920aad544bac449fb4127126, type: 3}
   m_NativeDialogFormTemplate: {fileID: 0}
 --- !u!4 &1996035038 stripped
 Transform:

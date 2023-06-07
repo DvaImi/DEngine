@@ -1,28 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Text;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityGameFramework.Runtime;
+using static ICSharpCode.SharpZipLib.Zip.ZipEntryFactory;
+using static UnityEngine.Networking.UnityWebRequest;
 
 namespace Game
 {
     public class BuiltinDataComponent : GameFrameworkComponent
     {
         [SerializeField]
-        private TextAsset m_BuildInfoTextAsset = null;
-
+        private TextAsset m_Address;
         [SerializeField]
-        private TextAsset m_PreloadInfoTextAsset = null;
-
+        private TextAsset m_BuildInfo;
         [SerializeField]
-        private TextAsset m_DefaultDictionaryTextAsset = null;
-
-        [SerializeField]
-        private TextAsset m_HotfixTextAsset = null;
-
+        private TextAsset m_LanguageBuiltin;
         [SerializeField]
         private UpdateResourceForm m_UpdateResourceFormTemplate = null;
-
         public UpdateResourceForm UpdateResourceFormTemplate
         {
             get
@@ -31,82 +31,60 @@ namespace Game
             }
         }
 
-        public BuildInfo BuildInfo { get; private set; } = null;
-
-        public PreloadInfo PreloadInfo { get; private set; } = null;
-
-        public HotfixInfo HotfixInfo { get; private set; } = null;
-
         private NativeDialogForm m_NativeDialogForm;
+
         [SerializeField]
         private NativeDialogForm m_NativeDialogFormTemplate = null;
 
-        public void InitHotfixInfo()
+        public BuildInfo BuildInfo
         {
-            if (m_HotfixTextAsset == null || string.IsNullOrEmpty(m_HotfixTextAsset.text))
-            {
-                Log.Info("Hotfix info can not be found or empty.");
-                return;
-            }
+            get;
+            private set;
+        }
 
-            HotfixInfo = Utility.Json.ToObject<HotfixInfo>(m_HotfixTextAsset.text);
-            if (HotfixInfo == null)
-            {
-                Log.Warning("Parse hotfix info failure.");
-                return;
-            }
-
-            Log.Info("HotfixInfo  Load Complete");
+        public void InitAddress()
+        {
+            AssetUtility.InitAddress(m_Address.bytes);
         }
 
         public void InitBuildInfo()
         {
-            if (m_BuildInfoTextAsset == null || string.IsNullOrEmpty(m_BuildInfoTextAsset.text))
+            if (m_BuildInfo == null || m_BuildInfo.bytes == null)
             {
-                Log.Info("Build info can not be found or empty.");
+                Log.Info("BuildInfo can not be found or empty.");
                 return;
             }
 
-            BuildInfo = Utility.Json.ToObject<BuildInfo>(m_BuildInfoTextAsset.text);
-            if (BuildInfo == null)
+            BuildInfo = new BuildInfo();
+            using (Stream stream = new MemoryStream(m_BuildInfo.bytes))
             {
-                Log.Warning("Parse build info failure.");
-                return;
+                using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
+                {
+                    BuildInfo.CheckVersionUrl = binaryReader.ReadString();
+                    BuildInfo.WindowsAppUrl = binaryReader.ReadString();
+                    BuildInfo.MacOSAppUrl = binaryReader.ReadString();
+                    BuildInfo.IOSAppUrl = binaryReader.ReadString();
+                    BuildInfo.AndroidAppUrl = binaryReader.ReadString();
+                    BuildInfo.UpdatePrefixUri = binaryReader.ReadString();
+                    Log.Info("BuildInfo Load Complete");
+                }
             }
-            Log.Info("BuildInfo  Load Complete");
         }
 
-        public void InitDefaultDictionary()
+        public void InitLanguageBuiltin()
         {
-            if (m_DefaultDictionaryTextAsset == null || m_DefaultDictionaryTextAsset.bytes == null)
+            if (m_LanguageBuiltin == null || m_LanguageBuiltin.bytes == null)
             {
-                Log.Info("Default dictionary can not be found or empty.");
+                Log.Info("LanguageBuiltin can not be found or empty.");
                 return;
             }
 
-            if (!GameEntry.Localization.ParseData(m_DefaultDictionaryTextAsset.bytes))
+            if (!GameEntry.Localization.ParseData(m_LanguageBuiltin.bytes))
             {
-                Log.Warning("Parse default dictionary failure.");
+                Log.Warning("Parse LanguageBuiltin failure.");
                 return;
             }
-            Log.Info("m_DefaultDictionaryTextAsset  Load Complete");
-        }
-
-        public void InitPreloadInfo()
-        {
-            if (m_PreloadInfoTextAsset == null || string.IsNullOrEmpty(m_PreloadInfoTextAsset.text))
-            {
-                Log.Info("Preload info can not be found or empty.");
-                return;
-            }
-
-            PreloadInfo = Utility.Json.ToObject<PreloadInfo>(m_PreloadInfoTextAsset.text);
-            if (PreloadInfo == null)
-            {
-                Log.Warning("Parse preload info failure.");
-                return;
-            }
-            Log.Info("PreloadInfo  Load Complete");
+            Log.Info("LanguageBuiltin Load Complete");
         }
 
         public void OpenDialog(DialogParams dialogParams)

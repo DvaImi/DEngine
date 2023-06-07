@@ -4,9 +4,9 @@ using GameFramework;
 
 namespace Game
 {
-    public class GameAddressSerializer : GameFrameworkSerializer<Dictionary<string, string>>
+    public class GameAddressSerializer : GameFrameworkSerializer<Dictionary<string, Dictionary<Type, string>>>
     {
-        private static readonly byte[] Header = new byte[] { (byte)'A', (byte)'S', (byte)'D' };
+        private static readonly byte[] m_Header = new byte[] { (byte)'A', (byte)'S', (byte)'D' };
 
         public GameAddressSerializer()
         {
@@ -15,7 +15,7 @@ namespace Game
 
         protected override byte[] GetHeader()
         {
-            return Header;
+            return m_Header;
         }
     }
 }

@@ -16,7 +16,7 @@ MonoBehaviour:
   ResourceCollectionConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceBuilder.xml
-  BuildInfoPath: Assets/Game/Configs/BuildInfo.txt
+  BuildInfoPath: Assets/Game/Configs/BuildInfo.bytes
   PreloadInfoPath: Assets/Game/Configs/PreloadInfo.txt
   HotfixDllPath: Assets/Game/HybridCLRData/Hotfixdll
   HotfixDllNameMain: Game.Hotfix.dll

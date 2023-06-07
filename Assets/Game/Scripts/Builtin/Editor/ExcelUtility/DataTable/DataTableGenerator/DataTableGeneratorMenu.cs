@@ -43,7 +43,6 @@ namespace Game.Editor.DataTableTools
         public static void GenerateDataTablesFormExcel()
         {
             DataTableSetting.Instance.RefreshDataTables("*.bytes");
-            List<string> dataTableNames = new List<string>();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ExtensionsGenerate.GenerateExtensionByAnalysis(ExtensionsGenerate.DataTableType.Excel, DataTableSetting.Instance.ExcelFilePaths, 2);
             foreach (var excelFile in DataTableSetting.Instance.ExcelFilePaths)
@@ -67,12 +66,10 @@ namespace Game.Editor.DataTableTools
 
                             DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
                             DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
-                            dataTableNames.Add(dataTableName);
                         }
                     }
                 }
             }
-            PreloadUtility.GenerateDataTableInfoFile(dataTableNames);
             AssetDatabase.Refresh();
         }
 

@@ -5,12 +5,15 @@
 // 版 本：1.0
 // ========================================================
 using System;
-using GameFramework;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using GameFramework;
+using HybridCLR.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
-using System.Collections.Generic;
 
 namespace Game.Editor.ResourceTools
 {
@@ -30,42 +33,124 @@ namespace Game.Editor.ResourceTools
 
         public static void StartBuild()
         {
+            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
+            AssetDatabase.Refresh();
+            RefreshResourceCollection();
             HybridCLRBuilderController builderController = new HybridCLRBuilderController();
             Platform platform = (Platform)Enum.Parse(typeof(Platform), builderController.PlatformNames[EditorPrefs.GetInt("BuildPlatform")]);
-            AssetBundleCollector ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollector>();
-            ruleEditor.RefreshResourceCollection();
-            bool enableAddress = ruleEditor.EnableAddress();
-            if (enableAddress)
+            ResourceBuildHelper.StartBuild(platform, OnComplete);
+            AssetDatabase.Refresh();
+        }
+
+        private static void OnComplete()
+        {
+            if (ScriptableObject.CreateInstance<AssetBundleCollector>().EnableAddress())
             {
-                ResourceBuildHelper.AnalyzeAddress();
+                WriteAddress();
             }
-            ResourceBuildHelper.StartBuild(platform);
-            if (enableAddress)
+        }
+
+        public static void WriteAddress()
+        {
+            ResourceBuildHelper.AnalyzeAddress(out Dictionary<string, Dictionary<Type, string>> addressInfo);
+            GameAddressSerializer serializer = new();
+            serializer.RegisterSerializeCallback(0, GameAddressSerializerCallback.Serializer);
+            string address = "Assets/Game/Builtin/Address.bytes";
+            using (FileStream fileStream = new FileStream(address, FileMode.Create, FileAccess.Write))
             {
-                GameAddressSerializer serializer = new GameAddressSerializer();
-                serializer.RegisterSerializeCallback(0, GameAddressSerializerCallback.Serializer);
-                Dictionary<string, string> address = new Dictionary<string, string>();
-
-                ResourceCollection collection = new ResourceCollection();
-
-                if (collection.Load())
+                if (serializer.Serialize(fileStream, addressInfo))
                 {
-                    foreach (var asset in collection.GetAssets())
+                    Debug.Log("Write address success");
+                }
+                else
+                {
+                    throw new GameFrameworkException("Serialize read-only version list failure.");
+                }
+            }
+        }
+
+        public static void GenerateBuiltin()
+        {
+            string buildInfo = "Assets/Game/Builtin/BuildInfo.bytes";
+            using (FileStream stream = new(buildInfo, FileMode.Create, FileAccess.Write))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
+                {
+                    binaryWriter.Write(GameSetting.Instance.CheckVersionUrl);
+                    binaryWriter.Write(GameSetting.Instance.WindowsAppUrl);
+                    binaryWriter.Write(GameSetting.Instance.MacOSAppUrl);
+                    binaryWriter.Write(GameSetting.Instance.IOSAppUrl);
+                    binaryWriter.Write(GameSetting.Instance.AndroidAppUrl);
+                    binaryWriter.Write(GameSetting.Instance.UpdatePrefixUri);
+                }
+            }
+
+            List<string> dataTables = new List<string>();
+            List<string> configs = new List<string>();
+
+            string[] dataTableGuids = AssetDatabase.FindAssets("", new[] { DataTableSetting.Instance.DataTableFolderPath });
+            string[] configGuids = AssetDatabase.FindAssets("", new[] { DataTableSetting.Instance.ConfigPath });
+
+            foreach (string guid in dataTableGuids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (!AssetDatabase.IsValidFolder(assetPath))
+                {
+                    dataTables.Add(Path.GetFileNameWithoutExtension(assetPath));
+                }
+            }
+
+            foreach (string guid in configGuids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (!AssetDatabase.IsValidFolder(assetPath))
+                {
+                    configs.Add(Path.GetFileNameWithoutExtension(assetPath));
+                }
+            }
+
+            const string baseData = "Assets/Game/Builtin/BaseData.bytes";
+            using (FileStream stream = new(baseData, FileMode.Create, FileAccess.Write))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
+                {
+                    binaryWriter.Write(dataTables.Count);
+                    foreach (var dataTable in dataTables)
                     {
-                        address.Add(Path.GetFileNameWithoutExtension(asset.Name), asset.Name);
+                        binaryWriter.Write(dataTable);
+                    }
+                    binaryWriter.Write(configs.Count);
+                    foreach (var config in configs)
+                    {
+                        binaryWriter.Write(config);
                     }
                 }
+            }
 
-                using (FileStream fileStream = new FileStream(AssetUtility.AddressPath, FileMode.Create, FileAccess.Write))
+            const string dllInfo = "Assets/Game/Builtin/DllInfo.bytes";
+            using (FileStream stream = new(dllInfo, FileMode.Create, FileAccess.Write))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
                 {
-                    if (!serializer.Serialize(fileStream, address))
+                    binaryWriter.Write(HybridCLRSettings.Instance.enable);
+                    binaryWriter.Write(GameSetting.Instance.HotfixDllNameMain);
+                    int aot = GameSetting.Instance.AOTDllNames.Length;
+                    binaryWriter.Write(aot);
+                    for (int i = 0; i < aot; i++)
                     {
-                        throw new GameFrameworkException("Serialize read-only version list failure.");
+                        binaryWriter.Write(GameSetting.Instance.AOTDllNames[i]);
+                    }
+                    int preserve = GameSetting.Instance.PreserveHotfixDllNames.Length;
+                    binaryWriter.Write(preserve);
+                    for (int i = 0; i < preserve; i++)
+                    {
+                        binaryWriter.Write(GameSetting.Instance.PreserveHotfixDllNames[i]);
                     }
                 }
-
-                AssetDatabase.Refresh();
             }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 }

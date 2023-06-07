@@ -248,27 +248,26 @@ namespace Game
         public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName) where T : Object
         {
             UniTaskCompletionSource<T> loadAssetTcs = new UniTaskCompletionSource<T>();
-            resourceComponent.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks(
-                (tempAssetName, asset, duration, userdata) =>
+            resourceComponent.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks((tempAssetName, asset, duration, userdata) =>
+            {
+                var source = loadAssetTcs;
+                loadAssetTcs = null;
+                T tAsset = asset as T;
+                if (tAsset != null)
                 {
-                    var source = loadAssetTcs;
-                    loadAssetTcs = null;
-                    T tAsset = asset as T;
-                    if (tAsset != null)
-                    {
-                        source.TrySetResult(tAsset);
-                    }
-                    else
-                    {
-                        Debug.LogError($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}.");
-                        source.TrySetException(new GameFrameworkException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
-                    }
-                },
-                (tempAssetName, status, errorMessage, userdata) =>
-                {
-                    Debug.LogError(errorMessage);
-                    loadAssetTcs.TrySetException(new GameFrameworkException(errorMessage));
+                    source.TrySetResult(tAsset);
                 }
+                else
+                {
+                    Debug.LogError($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}.");
+                    source.TrySetException(new GameFrameworkException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
+                }
+            },
+             (tempAssetName, status, errorMessage, userdata) =>
+             {
+                 Debug.LogError(errorMessage);
+                 loadAssetTcs.TrySetException(new GameFrameworkException(errorMessage));
+             }
             ));
 
             return loadAssetTcs.Task;
@@ -344,8 +343,8 @@ namespace Game
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;
-        }  
-        
+        }
+
         /// <summary>
         /// 增加Web请求任务（可等待）
         /// </summary>
@@ -439,7 +438,6 @@ namespace Game
         public static UniTask LoadDictionaryAsync(this LocalizationComponent localization, Language language)
         {
             localization.RemoveAllRawStrings();
-            GameEntry.BuiltinData.InitDefaultDictionary();
             localization.ReadData(AssetUtility.GetAddress(language.ToString()), language);
             UniTaskCompletionSource<Language> tcs = new UniTaskCompletionSource<Language>();
             m_LoadDictionaryResult.Add(language, tcs);

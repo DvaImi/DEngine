@@ -4,7 +4,9 @@
 // 创建时间：2023-04-16 12:44:18
 // 版 本：1.0
 // ========================================================
+using System.IO;
 using System.Reflection;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Fsm;
@@ -12,6 +14,7 @@ using GameFramework.Procedure;
 using HybridCLR;
 using UnityEngine;
 using UnityGameFramework.Runtime;
+using static ICSharpCode.SharpZipLib.Zip.ZipEntryFactory;
 using Object = UnityEngine.Object;
 
 namespace Game
@@ -20,14 +23,62 @@ namespace Game
     {
         private static bool m_HasLoadHotfixDll;
 
+        /// <summary>
+        /// 是否开启热更
+        /// </summary>
+        private bool m_EnableHotfix;
+
+        /// <summary>
+        /// 主热更程序集
+        /// </summary>
+        private string m_HotfixDllNameMain;
+
+        /// <summary>
+        /// AOT 程序集
+        /// </summary>
+        private string[] m_AOTDllNames;
+
+        /// <summary>
+        /// 其他预留热更新程序集
+        /// </summary>
+        private string[] m_PreserveHotfixDllNames;
+
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
 
+            InitHotfixInfo().Forget();
+        }
+
+        private async UniTask InitHotfixInfo()
+        {
+            var result = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress("DllInfo"));
+
+            using (Stream stream = new MemoryStream(result.bytes))
+            {
+                using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
+                {
+                    m_EnableHotfix = binaryReader.ReadBoolean();
+                    m_HotfixDllNameMain = binaryReader.ReadString();
+                    int aot = binaryReader.ReadInt32();
+                    m_AOTDllNames = new string[aot];
+                    for (int i = 0; i < aot; i++)
+                    {
+                        m_AOTDllNames[i] = binaryReader.ReadString();
+                    }
+                    int preserve = binaryReader.ReadInt32();
+                    m_PreserveHotfixDllNames = new string[preserve];
+                    for (int i = 0; i < preserve; i++)
+                    {
+                        m_PreserveHotfixDllNames[i] = binaryReader.ReadString();
+                    }
+                }
+            }
+
 #if UNITY_EDITOR
-            HotfixLauncher().Forget();
+            await HotfixLauncher();
 #else
-            LoadHotfixDll().Forget();
+            await LoadHotfixDll();
 #endif
         }
 
@@ -39,7 +90,7 @@ namespace Game
 
         private async UniTask LoadHotfixDll()
         {
-            if (GameEntry.BuiltinData.HotfixInfo.EnableHotfix)
+            if (m_EnableHotfix)
             {
                 if (m_HasLoadHotfixDll)
                 {
@@ -47,11 +98,11 @@ namespace Game
                     await HotfixLauncher();
                     return;
                 }
-                var dll = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress(GameEntry.BuiltinData.HotfixInfo.HotfixDllNameMain));
+                var dll = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress(m_HotfixDllNameMain));
                 Assembly hotfixAssembly = Assembly.Load(dll.bytes);
                 if (hotfixAssembly == null)
                 {
-                    Log.Fatal(Utility.Text.Format("Load hotfix dll {0} is Fail", GameEntry.BuiltinData.HotfixInfo.HotfixDllNameMain));
+                    Log.Fatal(Utility.Text.Format("Load hotfix dll {0} is Fail", m_HotfixDllNameMain));
                     return;
                 }
                 Log.Info("Load hotfix dll OK.");
@@ -76,7 +127,7 @@ namespace Game
         private async UniTask LoadMetadataForAOTAssemblies()
         {
 
-            string[] aotdll = GameEntry.BuiltinData.HotfixInfo.AOTDllNames;
+            string[] aotdll = m_AOTDllNames;
             if (aotdll == null)
             {
                 Log.Fatal("AOTAssemblies is invalid.");

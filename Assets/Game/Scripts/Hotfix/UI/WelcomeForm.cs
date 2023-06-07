@@ -5,11 +5,15 @@
 // 版 本：1.0
 // ========================================================
 
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Localization;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityGameFramework.Runtime;
 
 //自动生成于：2023/4/16 0:33:27
 namespace Game.Hotfix
@@ -19,6 +23,7 @@ namespace Game.Hotfix
         public Text m_Text;
         public Dropdown dropdown;
         public Button webTest;
+        public Button dowTest;
 
         protected override void OnInit(object userdata)
         {
@@ -42,16 +47,25 @@ namespace Game.Hotfix
             dropdown.value = GameEntry.Setting.GetInt("Dropdown");
             dropdown.onValueChanged.AddListener(ChangeLanguage);
             webTest.onClick.AddListener(WebRequestTest);
+            dowTest.onClick.AddListener(DownLoadTest);
+        }
+        int number = 0;
+        private async void DownLoadTest()
+        {
+            DownLoadResult downLoadResult = await GameEntry.Download.AddDownloadAsync(@$"E:\\Desktop\\Dow\PhotoWall{number}.zip", "https://codeload.github.com/DvaImi/PhotoWall/zip/refs/heads/master");
+            if (downLoadResult.Success)
+            {
+                Log.Debug(downLoadResult);
+            }
+            number += 1;
         }
 
         private async void WebRequestTest()
         {
-            var result = await GameEntry.WebRequest.AddWebRequestAsync("https://www.bilibili.com/video/BV14W4y1R7Hn/?spm_id_from=333.999.0.0&vd_source=ecc8458b679b0651a8a8d406993954ef");
-
-            if (result.IsError == false)
+            WebRequestResult result = await GameEntry.WebRequest.AddWebRequestWithHeaderAsync(@"E:\\Desktop\\BuildInfo.txt", UnityWebRequestHeader.Creat(null));
+            if (result.Success)
             {
-                m_Text.text += "\n";
-                m_Text.text += Utility.Converter.GetString(result.Bytes);
+                Log.Debug(Utility.Converter.GetString(result.Bytes));
             }
         }
 
@@ -72,8 +86,9 @@ namespace Game.Hotfix
             {
                 m_SelectedLanguage = Language.English;
             }
-            
+
             await GameEntry.Localization.LoadDictionaryAsync(m_SelectedLanguage);
+            GameEntry.BuiltinData.InitLanguageBuiltin();
             GameEntry.Setting.SetString(Constant.Setting.Language, m_SelectedLanguage.ToString());
             GameEntry.Setting.SetInt("Dropdown", arg0);
             GameEntry.Setting.Save();

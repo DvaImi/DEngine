@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +15,6 @@ namespace Game.Editor
         public static void GenerateLocalizationsFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            List<string> dictionary = new List<string>();
             if (Directory.Exists(DataTableSetting.Instance.LocalizationExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableSetting.Instance.LocalizationExcelsFolder);
@@ -34,9 +32,7 @@ namespace Game.Editor
                                 ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
                                 string dictionaryName = workCount > 1 ? excelName + "_" + sheet.Name : excelName;
                                 DictionaryProcessor processor = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
-                                string folder = Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName);
-                                IOUtility.CreateDirectoryIfNotExists(folder);
-                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(folder, dictionaryName + ".bytes"));
+                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName + ".bytes"));
                                 if (!processor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
                                 {
                                     File.Delete(binaryDataFileName);
@@ -44,9 +40,7 @@ namespace Game.Editor
                             }
                         }
                     }
-                    dictionary.Add(excelName);
                 }
-                PreloadUtility.GenerateDictionaryInfoFile(dictionary);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 AssetDatabase.Refresh();
@@ -58,7 +52,6 @@ namespace Game.Editor
         public static void GenerateConfigFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            List<string> config = new List<string>();
             if (Directory.Exists(DataTableSetting.Instance.ConfigExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableSetting.Instance.ConfigExcelsFolder);
@@ -84,9 +77,7 @@ namespace Game.Editor
                             }
                         }
                     }
-                    config.Add(excelName);
                 }
-                PreloadUtility.GenerateConfigInfoFile(config);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 AssetDatabase.Refresh();
