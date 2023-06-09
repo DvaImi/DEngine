@@ -9,7 +9,7 @@ namespace Game.Editor.ResourceTools
         /// <summary>
         /// 开启寻址加载
         /// </summary>
-        public bool EnableAddress { get; set; }
+        public bool EnableAddress;
 
         public List<ResourceRule> rules = new List<ResourceRule>();
 

@@ -103,7 +103,7 @@ namespace Game
                 //需要强制更新游戏应用
                 GameEntry.BuiltinData.OpenDialog(new DialogParams
                 {
-                    Mode = 2,
+                    Mode = 1,
                     Title = GameEntry.Localization.GetString("ForceUpdate.Title"),
                     Message = GameEntry.Localization.GetString("ForceUpdate.Message"),
                     ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
@@ -144,7 +144,7 @@ namespace Game
             switch (Application.platform)
             {
                 case RuntimePlatform.WindowsEditor:
-                    return "Android";
+                    return "Windows";
                 case RuntimePlatform.WindowsPlayer:
                     return "Windows";
 

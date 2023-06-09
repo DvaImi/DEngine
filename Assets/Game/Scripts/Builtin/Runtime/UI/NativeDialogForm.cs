@@ -40,22 +40,20 @@ namespace Game
         
         public void OnConfirmButtonClick()
         {
-            Close();
-
             if (m_OnClickConfirm != null)
             {
                 m_OnClickConfirm(m_UserData);
             }
+            Close();
         }
 
         public void OnCancelButtonClick()
         {
-            Close();
-
             if (m_OnClickCancel != null)
             {
                 m_OnClickCancel(m_UserData);
             }
+            Close();
         }
 
         public void OnOtherButtonClick()

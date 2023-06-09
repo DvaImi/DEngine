@@ -5,8 +5,8 @@
     <type fullname="Game.AwaitableUtility" preserve="all" />
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
     <type fullname="Game.DataTableExtension" preserve="all" />
+    <type fullname="Game.DownLoadResult" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
-    <type fullname="Game.PreloadInfo" preserve="all" />
     <type fullname="Game.UIFormId" preserve="all" />
     <type fullname="Game.WebRequestResult" preserve="all" />
   </assembly>
@@ -22,18 +22,12 @@
     <type fullname="GameFramework.Procedure.IProcedureManager" preserve="all" />
     <type fullname="GameFramework.Procedure.ProcedureBase" preserve="all" />
     <type fullname="GameFramework.ReferencePool" preserve="all" />
-    <type fullname="GameFramework.Resource.LoadResourceStatus" preserve="all" />
     <type fullname="GameFramework.Sound.ISoundGroup" preserve="all" />
     <type fullname="GameFramework.Sound.PlaySoundParams" preserve="all" />
     <type fullname="GameFramework.UI.IUIForm" preserve="all" />
     <type fullname="GameFramework.UI.IUIGroup" preserve="all" />
     <type fullname="GameFramework.Utility" preserve="all" />
     <type fullname="GameFramework.Utility/Converter" preserve="all" />
-  </assembly>
-  <assembly fullname="HybridCLR.Runtime">
-    <type fullname="HybridCLR.HomologousImageMode" preserve="all" />
-    <type fullname="HybridCLR.LoadImageErrorCode" preserve="all" />
-    <type fullname="HybridCLR.RuntimeApi" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">
     <type fullname="System.Boolean" preserve="all" />
@@ -42,7 +36,6 @@
     <type fullname="System.Collections.Generic.IEnumerator`1" preserve="all" />
     <type fullname="System.Collections.Generic.KeyValuePair`2" preserve="all" />
     <type fullname="System.Collections.Generic.List`1" preserve="all" />
-    <type fullname="System.Collections.Generic.List`1/Enumerator" preserve="all" />
     <type fullname="System.Collections.IEnumerator" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
@@ -77,11 +70,14 @@
     <type fullname="System.ValueType" preserve="all" />
   </assembly>
   <assembly fullname="UniTask">
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
-    <type fullname="UnityEngine.AsyncOperation" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
     <type fullname="UnityEngine.Coroutine" preserve="all" />
     <type fullname="UnityEngine.Events.UnityAction" preserve="all" />
@@ -95,8 +91,6 @@
     <type fullname="UnityEngine.Object" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.RectTransform" preserve="all" />
-    <type fullname="UnityEngine.Resources" preserve="all" />
-    <type fullname="UnityEngine.Serialization.FormerlySerializedAsAttribute" preserve="all" />
     <type fullname="UnityEngine.TextAsset" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
     <type fullname="UnityEngine.Vector2" preserve="all" />
@@ -133,6 +127,7 @@
     <type fullname="UnityGameFramework.Runtime.ConfigComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.DataRowBase" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.DataTableComponent" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DownloadComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.Entity" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.EntityComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.EntityLogic" preserve="all" />
@@ -151,6 +146,7 @@
     <type fullname="UnityGameFramework.Runtime.LoadSceneUpdateEventArgs" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.LocalizationComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.Log" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.ResourceComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.SceneComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.SettingComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.ShutdownType" preserve="all" />
@@ -158,6 +154,7 @@
     <type fullname="UnityGameFramework.Runtime.UIComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.UIForm" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.UIFormLogic" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.UnityWebRequestHeader" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.VarInt32" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.WebRequestComponent" preserve="all" />
   </assembly>

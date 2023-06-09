@@ -5,20 +5,15 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework;
-using GameFramework.Event;
-using GameFramework.Resource;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Cysharp.Threading.Tasks;
+using GameFramework.Event;
 using GameFramework.Procedure;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
-using System.IO;
-using System.Text;
-using Cysharp.Threading.Tasks;
-using static GameFramework.Utility;
-using System.Collections;
-using System.Runtime.ExceptionServices;
 
 namespace Game.Hotfix
 {
@@ -73,11 +68,11 @@ namespace Game.Hotfix
 
         private async UniTask PreloadResources()
         {
-            m_LoadedFlag.Add("BaseData", false);
-            var result = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress("BaseData"));
+            m_LoadedFlag.Add("basedata", false);
+            var result = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress("basedata"));
             if (result != null && result.bytes != null)
             {
-                m_LoadedFlag["BaseData"] = true;
+                m_LoadedFlag["basedata"] = true;
                 string[] dataTables, configs;
                 using (Stream stream = new MemoryStream(result.bytes))
                 {

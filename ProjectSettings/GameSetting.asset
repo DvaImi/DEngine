@@ -12,14 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ee0b9678739e54fb24dfff12f65674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildSettingsConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/BuildSetting.xml
+  BuildSettingsConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceBuilder.xml
   ResourceCollectionConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Builtin/Editor/AssetBundleCollector/Configs/ResourceBuilder.xml
-  BuildInfoPath: Assets/Game/Configs/BuildInfo.bytes
-  PreloadInfoPath: Assets/Game/Configs/PreloadInfo.txt
-  HotfixDllPath: Assets/Game/HybridCLRData/Hotfixdll
-  HotfixDllNameMain: Game.Hotfix.dll
+  ResourceModeIndex: 1
+  ForceUpdateGame: 0
+  CheckVersionUrl: http://192.168.1.102/GameClient/{0}Version.bytes
+  WindowsAppUrl: http://192.168.1.102/GameClient/WindowsApp
+  MacOSAppUrl: http://192.168.1.102/MacOSApp
+  IOSAppUrl: http://192.168.1.102/IOSApp
+  AndroidAppUrl: http://192.168.1.102/GameClient/AndroidApp
+  UpdatePrefixUri: http://192.168.1.102/GameClient/{0}.{1}/{2}
+  HotupdateDllPath: Assets/Game/HybridCLRData/HotUpdate
+  HotUpdateAssemblyDefinition: {fileID: 5897886265953266890, guid: 1b482ecb56af90e4188a38330b70f1e0, type: 3}
   AOTDllNames:
   - mscorlib.dll
   - UnityEngine.CoreModule.dll
@@ -28,13 +34,6 @@ MonoBehaviour:
   - UnityGameFramework.Runtime.dll
   - UniTask.dll
   - GameFramework.dll
+  VirtualServerAddress: F:/DvalmiService/GameClient
+  AutoCopyToVirtualServer: 1
   PreserveHotfixDllNames: []
-  HotfixDllSuffix: .bytes
-  HotfixInfoPath: Assets/Game/Configs/HotfixInfo.txt
-  HotfixLauncher: Assets/Game/HybridCLRData/GameHotfixEntry.prefab
-  CheckVersionUrl: http://192.168.1.102/{0}Version.txt
-  WindowsAppUrl: 
-  MacOSAppUrl: 
-  IOSAppUrl: 
-  AndroidAppUrl: 
-  UpdatePrefixUri: http://192.168.1.102/{0}_{1}/{2}

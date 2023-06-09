@@ -23,7 +23,6 @@ namespace Game.Hotfix
         public Text m_Text;
         public Dropdown dropdown;
         public Button webTest;
-        public Button dowTest;
 
         protected override void OnInit(object userdata)
         {
@@ -47,25 +46,15 @@ namespace Game.Hotfix
             dropdown.value = GameEntry.Setting.GetInt("Dropdown");
             dropdown.onValueChanged.AddListener(ChangeLanguage);
             webTest.onClick.AddListener(WebRequestTest);
-            dowTest.onClick.AddListener(DownLoadTest);
-        }
-        int number = 0;
-        private async void DownLoadTest()
-        {
-            DownLoadResult downLoadResult = await GameEntry.Download.AddDownloadAsync(@$"E:\\Desktop\\Dow\PhotoWall{number}.zip", "https://codeload.github.com/DvaImi/PhotoWall/zip/refs/heads/master");
-            if (downLoadResult.Success)
-            {
-                Log.Debug(downLoadResult);
-            }
-            number += 1;
         }
 
         private async void WebRequestTest()
         {
-            WebRequestResult result = await GameEntry.WebRequest.AddWebRequestWithHeaderAsync(@"E:\\Desktop\\BuildInfo.txt", UnityWebRequestHeader.Creat(null));
+            WebRequestResult result = await GameEntry.WebRequest.AddWebRequestWithHeaderAsync("https://space.bilibili.com/52728890", UnityWebRequestHeader.Creat(null));
             if (result.Success)
             {
-                Log.Debug(Utility.Converter.GetString(result.Bytes));
+                m_Text.text += "\n";
+                m_Text.text += Utility.Converter.GetString(result.Bytes);
             }
         }
 

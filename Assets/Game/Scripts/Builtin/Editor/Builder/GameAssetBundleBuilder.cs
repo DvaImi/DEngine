@@ -7,8 +7,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using GameFramework;
+using GameFramework.Resource;
+using HybridCLR.Editor;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityGameFramework.Editor.ResourceTools;
@@ -19,11 +25,211 @@ namespace Game.Editor.ResourceTools
     /// <summary>
     /// 资源生成器。
     /// </summary>
-    public static class ResourceBuildHelper
+    public static class GameAssetBundleBuilder
     {
         private static ResourceBuilderController m_Controller = null;
         private static Platform m_OriginalPlatform;
         private static GameFrameworkAction m_Complete;
+
+        public static string[] ResourceMode { get; }
+
+        static GameAssetBundleBuilder()
+        {
+            ResourceMode = Enum.GetNames(typeof(ResourceMode)).Skip(1).ToArray();
+        }
+
+        public static string AppOutput
+        {
+            get => EditorPrefs.GetString("AppOutput", "Assets/../AppOutput");
+            set => EditorPrefs.SetString("AppOutput", value);
+        }
+
+        public static string BundlesOutput
+        {
+            get => EditorPrefs.GetString("BundlesOutput", "Assets/../BundlesOutput");
+            set => EditorPrefs.SetString("BundlesOutput", value);
+        }
+
+        public static void RefreshResourceCollection()
+        {
+            AssetBundleCollector ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollector>();
+            ruleEditor.RefreshResourceCollection();
+        }
+
+        public static void RefreshResourceCollection(string configPath)
+        {
+            AssetBundleCollector ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollector>();
+            ruleEditor.RefreshResourceCollection(configPath);
+        }
+
+        public static void BuildBundle()
+        {
+            HybridCLRBuilderController builderController = new HybridCLRBuilderController();
+            Platform platform = (Platform)Enum.Parse(typeof(Platform), builderController.PlatformNames[EditorPrefs.GetInt("BuildPlatform")]);
+            StartBuild(platform, BundlesOutput);
+        }
+
+        public static void OnPreprocess()
+        {
+            IOUtility.CreateDirectoryIfNotExists(BundlesOutput);
+            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
+
+            //清空StreamingAssets
+            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+            Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
+            string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
+            foreach (string fileName in fileNames)
+            {
+                File.Delete(fileName);
+            }
+
+            //写入版本资源更新地址信息
+            string buildInfo = "Assets/Game/Builtin/buildInfo.bytes";
+            using (FileStream stream = new(buildInfo, FileMode.Create, FileAccess.Write))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
+                {
+                    binaryWriter.Write(GameSetting.Instance.CheckVersionUrl);
+                    binaryWriter.Write(GameSetting.Instance.WindowsAppUrl);
+                    binaryWriter.Write(GameSetting.Instance.MacOSAppUrl);
+                    binaryWriter.Write(GameSetting.Instance.IOSAppUrl);
+                    binaryWriter.Write(GameSetting.Instance.AndroidAppUrl);
+                    binaryWriter.Write(GameSetting.Instance.UpdatePrefixUri);
+                }
+            }
+
+            //写入内置数据表信息
+            List<string> dataTables = new List<string>();
+            List<string> configs = new List<string>();
+
+            string[] dataTableGuids = AssetDatabase.FindAssets("", new[] { DataTableSetting.Instance.DataTableFolderPath });
+            string[] configGuids = AssetDatabase.FindAssets("", new[] { DataTableSetting.Instance.ConfigPath });
+
+            foreach (string guid in dataTableGuids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (!AssetDatabase.IsValidFolder(assetPath))
+                {
+                    dataTables.Add(Path.GetFileNameWithoutExtension(assetPath));
+                }
+            }
+
+            foreach (string guid in configGuids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (!AssetDatabase.IsValidFolder(assetPath))
+                {
+                    configs.Add(Path.GetFileNameWithoutExtension(assetPath));
+                }
+            }
+
+            const string baseData = "Assets/Game/Builtin/basedata.bytes";
+            using (FileStream stream = new(baseData, FileMode.Create, FileAccess.Write))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
+                {
+                    binaryWriter.Write(dataTables.Count);
+                    foreach (var dataTable in dataTables)
+                    {
+                        binaryWriter.Write(dataTable);
+                    }
+                    binaryWriter.Write(configs.Count);
+                    foreach (var config in configs)
+                    {
+                        binaryWriter.Write(config);
+                    }
+                }
+            }
+
+            //写入要更新的程序集信息
+            const string dllInfo = "Assets/Game/Builtin/hybridclr.bytes";
+            using (FileStream stream = new(dllInfo, FileMode.Create, FileAccess.Write))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
+                {
+                    binaryWriter.Write(HybridCLRSettings.Instance.enable);
+                    binaryWriter.Write(GameSetting.Instance.HotUpdateAssemblyDefinition.name + ".dll");
+                    int aot = GameSetting.Instance.AOTDllNames.Length;
+                    binaryWriter.Write(aot);
+                    for (int i = 0; i < aot; i++)
+                    {
+                        binaryWriter.Write(GameSetting.Instance.AOTDllNames[i]);
+                    }
+                    int preserve = GameSetting.Instance.PreserveHotfixDllNames.Length;
+                    binaryWriter.Write(preserve);
+                    for (int i = 0; i < preserve; i++)
+                    {
+                        binaryWriter.Write(GameSetting.Instance.PreserveHotfixDllNames[i]);
+                    }
+                }
+            }
+            RefreshResourceCollection();
+
+            //写入寻址资源映射表信息
+            AnalyzeAddress(out Dictionary<string, Dictionary<Type, string>> addressInfo);
+            GameAddressSerializer serializer = new();
+            serializer.RegisterSerializeCallback(0, GameAddressSerializerCallback.Serializer);
+            string address = "Assets/Game/Builtin/address.bytes";
+            using (FileStream fileStream = new FileStream(address, FileMode.Create, FileAccess.Write))
+            {
+                if (serializer.Serialize(fileStream, addressInfo))
+                {
+                    Debug.Log("Write address success");
+                }
+                else
+                {
+                    throw new GameFrameworkException("Serialize read-only version list failure.");
+                }
+            }
+
+            //绑定到内置对象
+            BuiltinDataComponent builtinDataComponent = Object.FindObjectOfType<BuiltinDataComponent>();
+            if (builtinDataComponent != null)
+            {
+                Type type = typeof(BuiltinDataComponent);
+                FieldInfo addressTextAsset = type.GetField("m_Address", BindingFlags.NonPublic | BindingFlags.Instance);
+                FieldInfo buildInfoTextAsset = type.GetField("m_BuildInfo", BindingFlags.NonPublic | BindingFlags.Instance);
+                buildInfoTextAsset?.SetValue(builtinDataComponent, AssetDatabase.LoadAssetAtPath<TextAsset>(buildInfo));
+                addressTextAsset?.SetValue(builtinDataComponent, AssetDatabase.LoadAssetAtPath<TextAsset>(address));
+                EditorUtility.SetDirty(builtinDataComponent);
+                EditorSceneManager.SaveOpenScenes();
+            }
+
+            AssetDatabase.Refresh();
+            AssetDatabase.SaveAssets();
+        }
+
+        public static void ClearVersion()
+        {
+            if (!Directory.Exists(BundlesOutput))
+            {
+                Debug.LogWarning("Path is invalid ");
+                return;
+            }
+
+            DirectoryInfo directoryInfo = new(BundlesOutput);
+            FileInfo[] fileInfos = directoryInfo.GetFiles("*", SearchOption.AllDirectories);
+            DirectoryInfo[] directoryInfos = directoryInfo.GetDirectories();
+
+            foreach (var file in fileInfos)
+            {
+                file.Delete();
+            }
+
+            foreach (var item in directoryInfos)
+            {
+                item.Delete(true);
+            }
+
+            ResourceBuilderController controller = new ResourceBuilderController();
+            if (controller.Load())
+            {
+                controller.InternalResourceVersion = 0;
+                controller.Save();
+            }
+            Debug.Log("Clear success");
+        }
+
         public static void SaveOutputDirectory(string outputDirectory)
         {
             if (!Directory.Exists(outputDirectory))
@@ -49,7 +255,7 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        public static void StartBuild(Platform platform, GameFrameworkAction complete = null)
+        public static void StartBuild(Platform platform, string outputDirectory, GameFrameworkAction complete = null)
         {
             m_Controller = new ResourceBuilderController();
             m_Controller.OnLoadingResource += OnLoadingResource;
@@ -70,7 +276,10 @@ namespace Game.Editor.ResourceTools
                 {
                     m_Controller.Platforms = platform;
                 }
-
+                if (m_Controller.OutputDirectory != outputDirectory)
+                {
+                    m_Controller.OutputDirectory = outputDirectory;
+                }
                 Debug.Log("Load configuration success.");
 
                 m_Controller.RefreshCompressionHelper();
@@ -102,7 +311,7 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        internal static void AnalyzeAddress(out Dictionary<string, Dictionary<Type, string>> address)
+        public static void AnalyzeAddress(out Dictionary<string, Dictionary<Type, string>> address)
         {
             address = new Dictionary<string, Dictionary<Type, string>>();
             ResourceCollection controller = new ResourceCollection();

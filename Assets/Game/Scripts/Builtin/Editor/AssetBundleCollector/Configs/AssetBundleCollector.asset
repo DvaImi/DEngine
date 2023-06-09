@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
   m_Name: AssetBundleCollector
   m_EditorClassIdentifier: 
+  EnableAddress: 1
   rules:
   - valid: 1
     name: 
@@ -29,9 +30,9 @@ MonoBehaviour:
     fileSystem: config
     groups: 
     assetPath: Assets/Game/Configs
-    loadType: 0
-    packed: 1
-    filterType: 0
+    loadType: 4
+    packed: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
@@ -39,19 +40,9 @@ MonoBehaviour:
     fileSystem: data
     groups: 
     assetPath: Assets/Game/DataTables
-    loadType: 0
-    packed: 1
-    filterType: 0
-    searchPatterns: '*.*'
-  - valid: 1
-    name: 
-    variant: 
-    fileSystem: obj
-    groups: 
-    assetPath: Assets/Game/Entities
-    loadType: 0
-    packed: 1
-    filterType: 0
+    loadType: 4
+    packed: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
@@ -60,8 +51,8 @@ MonoBehaviour:
     groups: 
     assetPath: Assets/Game/HybridCLRData
     loadType: 0
-    packed: 1
-    filterType: 0
+    packed: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
@@ -69,9 +60,9 @@ MonoBehaviour:
     fileSystem: localization
     groups: 
     assetPath: Assets/Game/Localization
-    loadType: 0
-    packed: 1
-    filterType: 0
+    loadType: 4
+    packed: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
@@ -80,8 +71,8 @@ MonoBehaviour:
     groups: 
     assetPath: Assets/Game/Scenes
     loadType: 0
-    packed: 1
-    filterType: 0
+    packed: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
@@ -90,6 +81,6 @@ MonoBehaviour:
     groups: 
     assetPath: Assets/Game/UI/UIForms
     loadType: 0
-    packed: 1
-    filterType: 0
+    packed: 0
+    filterType: 1
     searchPatterns: '*.*'

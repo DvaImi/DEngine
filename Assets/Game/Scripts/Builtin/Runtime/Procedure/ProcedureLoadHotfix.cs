@@ -14,7 +14,6 @@ using GameFramework.Procedure;
 using HybridCLR;
 using UnityEngine;
 using UnityGameFramework.Runtime;
-using static ICSharpCode.SharpZipLib.Zip.ZipEntryFactory;
 using Object = UnityEngine.Object;
 
 namespace Game
@@ -52,7 +51,7 @@ namespace Game
 
         private async UniTask InitHotfixInfo()
         {
-            var result = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress("DllInfo"));
+            var result = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress("hybridclr"));
 
             using (Stream stream = new MemoryStream(result.bytes))
             {
@@ -72,6 +71,7 @@ namespace Game
                     {
                         m_PreserveHotfixDllNames[i] = binaryReader.ReadString();
                     }
+                    Log.Info("hybridclr is Ready.");
                 }
             }
 
@@ -98,7 +98,7 @@ namespace Game
                     await HotfixLauncher();
                     return;
                 }
-                var dll = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress(m_HotfixDllNameMain));
+                var dll = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress<TextAsset>(m_HotfixDllNameMain));
                 Assembly hotfixAssembly = Assembly.Load(dll.bytes);
                 if (hotfixAssembly == null)
                 {

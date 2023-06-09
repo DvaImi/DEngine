@@ -79,7 +79,7 @@ namespace Game.Editor.ResourceTools
             if (m_build)
             {
                 m_build = false;
-                AssetBundleUtility.StartBuild();
+                GameAssetBundleBuilder.BuildBundle();
             }
         }
 
@@ -195,7 +195,7 @@ namespace Game.Editor.ResourceTools
             r.width = assetBundleNameLength + 270;
             rule.assetPath = EditorGUI.TextField(r, rule.assetPath);
 
-            if (DropPath(r, out string assetsPath, rule.filterType == ResourceFilterType.FileOnly))
+            if (PathUtility.DropPath(r, out string assetsPath, rule.filterType == ResourceFilterType.FileOnly))
             {
                 rule.assetPath = assetsPath;
             }
@@ -283,6 +283,7 @@ namespace Game.Editor.ResourceTools
                 Save();
                 RefreshResourceCollection();
                 AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
 
             Rect reload = new Rect(save.x + save.width + 5, save.y, 100, save.height);
@@ -352,38 +353,6 @@ namespace Game.Editor.ResourceTools
             r.xMax = r.xMin + 250;
             EditorGUI.TextField(r, "Patterns");
             GUI.enabled = true;
-        }
-
-        private bool DropPath(Rect dropArea, out string assetPath, bool files = false)
-        {
-            Event currentEvent = Event.current;
-            assetPath = string.Empty;
-            if (currentEvent.type == EventType.DragUpdated)
-            {
-                if (dropArea.Contains(currentEvent.mousePosition))
-                {
-                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-                    currentEvent.Use();
-                }
-            }
-            else if (currentEvent.type == EventType.DragPerform)
-            {
-                if (dropArea.Contains(currentEvent.mousePosition))
-                {
-                    DragAndDrop.AcceptDrag();
-
-                    foreach (Object draggedObject in DragAndDrop.objectReferences)
-                    {
-                        assetPath = AssetDatabase.GetAssetPath(draggedObject);
-                        if (!string.IsNullOrEmpty(assetPath))
-                        {
-                            currentEvent.Use();
-                            return files ? File.Exists(assetPath) : Directory.Exists(assetPath);
-                        }
-                    }
-                }
-            }
-            return false;
         }
 
         private void Save()

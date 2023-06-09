@@ -4,9 +4,11 @@
 // 创建时间：2023-03-26 16:41:12
 // 版 本：1.0
 // ========================================================
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using GameFramework;
 using UnityEngine;
 
 namespace Game
@@ -92,6 +94,23 @@ namespace Game
                 result.Add(fileInfos[i]);
             }
             return result;
+        }
+
+        /// <summary>
+        /// 递归删除指定文件夹下的所有文件,不包含文件夹
+        /// </summary>
+        /// <param name="directoryPath"></param>
+        /// <param name="recursive"></param>
+        public static void DeleteFileWithoutSelf(string directoryPath)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+
+            FileInfo[] fileInfos = directoryInfo.GetFiles("*", SearchOption.AllDirectories);
+
+            for (int i = 0; i < fileInfos.Length; i++)
+            {
+                File.Delete(fileInfos[i].FullName);
+            }
         }
     }
 }

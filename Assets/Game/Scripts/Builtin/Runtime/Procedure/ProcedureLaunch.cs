@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Numerics;
-using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
 using GameFramework.Localization;
 using GameFramework.Procedure;

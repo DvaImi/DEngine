@@ -5,7 +5,9 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using Game.Editor.ResourceTools;
 using GameFramework;
+using GameFramework.Resource;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -36,19 +38,7 @@ namespace Game.Editor
             m_InternalResourceVersion = internalResourceVersion;
             m_OutputDirectory = outputDirectory;
 
-            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
-            Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
-            string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
-            foreach (string fileName in fileNames)
-            {
-                if (fileName.Contains(".gitkeep"))
-                {
-                    continue;
-                }
-
-                File.Delete(fileName);
-            }
-
+            GameAssetBundleBuilder.OnPreprocess();
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier,
@@ -77,21 +67,20 @@ namespace Game.Editor
             int versionListHashCode, int versionListCompressedLength, int versionListCompressedHashCode)
         {
             string platformPath = GetPlatformPath(platform);
-            string gameVersion = m_GameVersion.Replace('.', '_');
-            VersionInfo versionInfo = new VersionInfo
+            VersionInfo versionInfo = new()
             {
-                ForceUpdateGame = false,
-                UpdatePrefixUri = Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, gameVersion, m_InternalResourceVersion, platformPath),
+                ForceUpdateGame = GameSetting.Instance.ForceUpdateGame,
+                UpdatePrefixUri = Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, m_GameVersion, m_InternalResourceVersion, platformPath),
                 LatestGameVersion = m_GameVersion,
                 InternalGameVersion = 1,
                 InternalResourceVersion = m_InternalResourceVersion,
                 VersionListLength = versionListLength,
                 VersionListHashCode = versionListHashCode,
                 VersionListCompressedLength = versionListCompressedLength,
-                VersionListCompressedHashCode = versionListCompressedHashCode,
+                VersionListCompressedHashCode = versionListCompressedHashCode
             };
             string versionJson = Newtonsoft.Json.JsonConvert.SerializeObject(versionInfo);
-            IOUtility.SaveFileSafe(m_OutputDirectory, platformPath + "Version.txt", versionJson);
+            IOUtility.SaveFileSafe(m_OutputDirectory, platformPath + "Version.bytes", versionJson);
 
             Debug.LogFormat(
                 "Version save success. \n length is {0} , hash code is {1} . \n compressed length is {2} , compressed hash code is {3} . \n list path is {4} \n ",
@@ -113,12 +102,19 @@ namespace Game.Editor
                 return;
             }
 
-            string streamingAssetsPath =
-                Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
-            string[] fileNames = Directory.GetFiles(outputPackagePath, "*", SearchOption.AllDirectories);
+            #region StreamingAssets
+            string fileSourcePath = outputPackagePath;
+            //非单机模式下只拷贝outputPackedPath下的文件
+            if (GameSetting.Instance.ResourceModeIndex != ((int)ResourceMode.Package))
+            {
+                fileSourcePath = outputPackedPath;
+            }
+
+            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+            string[] fileNames = Directory.GetFiles(fileSourcePath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {
-                string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName.Substring(outputPackagePath.Length)));
+                string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName[fileSourcePath.Length..]));
                 FileInfo destFileInfo = new FileInfo(destFileName);
                 if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
                 {
@@ -127,6 +123,58 @@ namespace Game.Editor
 
                 File.Copy(fileName, destFileName);
             }
+
+            #endregion
+
+            #region Simulator
+
+            string virtualServerAddress = GameSetting.Instance.VirtualServerAddress;
+
+            if (!Directory.Exists(virtualServerAddress))
+            {
+                Debug.LogWarning("VirtualServerAddress is invalid");
+                return;
+            }
+
+            DirectoryInfo directoryInfo = new(virtualServerAddress);
+            FileInfo[] fileInfos = directoryInfo.GetFiles("*", SearchOption.AllDirectories);
+            DirectoryInfo[] directoryInfos = directoryInfo.GetDirectories();
+
+            foreach (var file in fileInfos)
+            {
+                file.Delete();
+            }
+
+            foreach (var item in directoryInfos)
+            {
+                item.Delete(true);
+            }
+
+            if (GameSetting.Instance.AutoCopyToVirtualServer)
+            {
+                string versionJson = Path.Combine(m_OutputDirectory, GetPlatformPath(platform) + "Version.bytes");
+                if (File.Exists(versionJson))
+                {
+                    File.Copy(versionJson, Path.Combine(virtualServerAddress, GetPlatformPath(platform) + "Version.bytes"));
+
+                    fileNames = Directory.GetFiles(outputFullPath, "*", SearchOption.AllDirectories);
+                    foreach (string fileName in fileNames)
+                    {
+                        string destFileName = Utility.Path.GetRegularPath(Path.Combine(virtualServerAddress, m_GameVersion + "." + m_InternalResourceVersion.ToString(), GetPlatformPath(platform), fileName[outputFullPath.Length..]));
+                        FileInfo destFileInfo = new FileInfo(destFileName);
+                        if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
+                        {
+                            destFileInfo.Directory.Create();
+                        }
+
+                        File.Copy(fileName, destFileName);
+                    }
+
+                    Debug.Log("Copy Bundles to virtualServer success");
+                }
+
+            }
+            #endregion
         }
 
         /// <summary>

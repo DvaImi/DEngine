@@ -8,10 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Cysharp.Threading.Tasks;
 using GameFramework;
-using UnityEngine;
 using UnityGameFramework.Runtime;
 using Utility = GameFramework.Utility;
 
@@ -30,6 +27,10 @@ namespace Game
             {
                 m_Address = serializer.Deserialize(stream);
                 Log.Debug("address serializer success");
+                foreach (var item in m_Address)
+                {
+                    Log.Debug("Key :" + item.Key);
+                }
             }
         }
 

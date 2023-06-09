@@ -7,7 +7,7 @@ namespace Game.Editor
 {
     public class BuiltInResourceWindow : EditorWindow
     {
-        [MenuItem("Game/BuiltInResourceWindow")]
+        //[MenuItem("Game/BuiltInResourceWindow")]
         static void Init()
         {
             EditorWindow window = EditorWindow.CreateInstance<BuiltInResourceWindow>();

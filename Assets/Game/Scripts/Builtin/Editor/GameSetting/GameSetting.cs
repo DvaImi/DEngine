@@ -4,6 +4,10 @@
 // 创建时间：2023-04-15 11:24:21
 // 版 本：1.0
 // ========================================================
+using GameFramework.Resource;
+using UnityEditor;
+using UnityEditorInternal;
+
 namespace Game.Editor
 {
     [GameFilePath("ProjectSettings/GameSetting.asset")]
@@ -26,46 +30,17 @@ namespace Game.Editor
         /// </summary>
         public string ResourceBuilderConfig = "GameMain/Configs/Editor/ResourceBuilder.xml";
         /// <summary>
-        /// 构建信息路径
+        /// 资源打包模式
         /// </summary>
-        public string BuildInfoPath = "GameMain/Configs/Runtime/BuildInfo.txt";
+        public int ResourceModeIndex;
         /// <summary>
-        /// 数据表关联路径
+        /// 是否需要强制更新应用
         /// </summary>
-        public string PreloadInfoPath = "GameMain/Configs/Runtime/PreloadInfo.txt";
-        /// <summary>
-        /// 热更程序集生成路径
-        /// </summary>
-        public string HotfixDllPath = "Assets/GameMain/HybridCLR/Dlls";
-        /// <summary>
-        /// 主热更程序集
-        /// </summary>
-        public string HotfixDllNameMain = "Game.Hotfix.dll";
-        /// <summary>
-        /// AOT 程序集
-        /// </summary>
-        public string[] AOTDllNames = { "mscorlib.dll", "System.dll", "System.Core.dll" };
-
-        /// <summary>
-        /// 其他预留热更新程序集
-        /// </summary>
-        public string[] PreserveHotfixDllNames;
-        /// <summary>
-        /// 热更程序集后缀
-        /// </summary>
-        public string HotfixDllSuffix = ".bytes";
-        /// <summary>
-        /// 热更配置信息
-        /// </summary>
-        public string HotfixInfoPath;
-        /// <summary>
-        /// 热更新启动器资源
-        /// </summary>
-        public string HotfixLauncher;
+        public bool ForceUpdateGame = false;
         /// <summary>
         /// 请求版本文件接口
         /// </summary>
-        public string CheckVersionUrl = "http://192.168.1.102/{0}Version.txt";
+        public string CheckVersionUrl;
         /// <summary>
         /// 
         /// </summary>
@@ -85,6 +60,30 @@ namespace Game.Editor
         /// <summary>
         /// 下载资源接口
         /// </summary>
-        public string UpdatePrefixUri = "http://192.168.1.102/{0}_{1}/{2}";
+        public string UpdatePrefixUri;
+        /// <summary>
+        /// 热更程序集生成路径
+        /// </summary>
+        public string HotupdateDllPath = "Assets/GameMain/HybridCLR/Dlls";
+        /// <summary>
+        /// 主热更程序集
+        /// </summary>
+        public AssemblyDefinitionAsset HotUpdateAssemblyDefinition;
+        /// <summary>
+        /// AOT 程序集
+        /// </summary>
+        public string[] AOTDllNames = { "mscorlib.dll", "System.dll", "System.Core.dll" };
+
+        public string VirtualServerAddress;
+        public bool AutoCopyToVirtualServer;
+
+        /// <summary>
+        /// 其他预留热更新程序集
+        /// </summary>
+        public string[] PreserveHotfixDllNames;
+        public void SaveSetting()
+        {
+            Save();
+        }
     }
 }
