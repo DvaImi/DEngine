@@ -4,19 +4,15 @@ using UnityGameFramework.Editor.ResourceTools;
 
 namespace Game.Editor.ResourceTools
 {
-    public class AssetBundleData : ScriptableObject
+    public class AssetBundleCollector : ScriptableObject
     {
-        /// <summary>
-        /// 开启寻址加载
-        /// </summary>
         public bool EnableAddress;
 
-        public List<ResourceRule> rules = new List<ResourceRule>();
-
+        public List<AssetCollector> Collector = new List<AssetCollector>();
     }
 
     [System.Serializable]
-    public class ResourceRule
+    public class AssetCollector
     {
         public bool valid = true;
         public string name = string.Empty;
@@ -26,11 +22,11 @@ namespace Game.Editor.ResourceTools
         public string assetPath = string.Empty;
         public LoadType loadType = LoadType.LoadFromFile;
         public bool packed = true;
-        public ResourceFilterType filterType = ResourceFilterType.Root;
+        public FilterType filterType = FilterType.Root;
         public string searchPatterns = "*.*";
     }
 
-    public enum ResourceFilterType
+    public enum FilterType
     {
         /// <summary>
         /// 指定文件夹

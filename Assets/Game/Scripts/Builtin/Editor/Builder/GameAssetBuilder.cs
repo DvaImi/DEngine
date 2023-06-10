@@ -25,63 +25,87 @@ namespace Game.Editor.ResourceTools
     /// <summary>
     /// 资源生成器。
     /// </summary>
-    public static class GameAssetBundleBuilder
+    public static class GameAssetBuilder
     {
         private static ResourceBuilderController m_Controller = null;
         private static Platform m_OriginalPlatform;
         private static GameFrameworkAction m_Complete;
-
         public static string[] ResourceMode { get; }
+        public static string[] PlatformNames { get; }
 
-        static GameAssetBundleBuilder()
+        static GameAssetBuilder()
         {
             ResourceMode = Enum.GetNames(typeof(ResourceMode)).Skip(1).ToArray();
+            PlatformNames = Enum.GetNames(typeof(Platform)).Skip(1).ToArray();
         }
 
-        public static string AppOutput
+        public static BuildTarget GetBuildTarget(int platformIndex)
         {
-            get => EditorPrefs.GetString("AppOutput", "Assets/../AppOutput");
-            set => EditorPrefs.SetString("AppOutput", value);
+            Platform platform = GetPlatform(platformIndex);
+            switch (platform)
+            {
+                case Platform.Windows:
+                    return BuildTarget.StandaloneWindows;
+
+                case Platform.Windows64:
+                    return BuildTarget.StandaloneWindows64;
+
+                case Platform.MacOS:
+#if UNITY_2017_3_OR_NEWER
+                    return BuildTarget.StandaloneOSX;
+#else
+                    return BuildTarget.StandaloneOSXUniversal;
+#endif
+                case Platform.Linux:
+                    return BuildTarget.StandaloneLinux64;
+
+                case Platform.IOS:
+                    return BuildTarget.iOS;
+
+                case Platform.Android:
+                    return BuildTarget.Android;
+
+                case Platform.WindowsStore:
+                    return BuildTarget.WSAPlayer;
+
+                case Platform.WebGL:
+                    return BuildTarget.WebGL;
+
+                default:
+                    throw new GameFrameworkException("Platform is invalid.");
+            }
         }
 
-        public static string BundlesOutput
+        public static Platform GetPlatform(int platformIndex)
         {
-            get => EditorPrefs.GetString("BundlesOutput", "Assets/../BundlesOutput");
-            set => EditorPrefs.SetString("BundlesOutput", value);
+            return (Platform)Enum.Parse(typeof(Platform), PlatformNames[platformIndex]);
         }
 
         public static void RefreshResourceCollection()
         {
-            AssetBundleCollector ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollector>();
+            AssetBundleCollectorWindow ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollectorWindow>();
             ruleEditor.RefreshResourceCollection();
         }
 
         public static void RefreshResourceCollection(string configPath)
         {
-            AssetBundleCollector ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollector>();
+            AssetBundleCollectorWindow ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollectorWindow>();
             ruleEditor.RefreshResourceCollection(configPath);
         }
 
         public static void BuildBundle()
         {
-            HybridCLRBuilderController builderController = new HybridCLRBuilderController();
-            Platform platform = (Platform)Enum.Parse(typeof(Platform), builderController.PlatformNames[EditorPrefs.GetInt("BuildPlatform")]);
-            StartBuild(platform, BundlesOutput);
+            Platform platform = (Platform)Enum.Parse(typeof(Platform), PlatformNames[GameSetting.Instance.BuildPlatform]);
+            StartBuild(platform, GameSetting.Instance.BundlesOutput);
         }
 
         public static void OnPreprocess()
         {
-            IOUtility.CreateDirectoryIfNotExists(BundlesOutput);
+            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
             IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
 
             //清空StreamingAssets
-            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
-            Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
-            string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
-            foreach (string fileName in fileNames)
-            {
-                File.Delete(fileName);
-            }
+            IOUtility.Delete(Application.streamingAssetsPath);
 
             //写入版本资源更新地址信息
             string buildInfo = "Assets/Game/Builtin/buildInfo.bytes";
@@ -142,7 +166,7 @@ namespace Game.Editor.ResourceTools
             }
 
             //写入要更新的程序集信息
-            const string dllInfo = "Assets/Game/Builtin/hybridclr.bytes";
+            const string dllInfo = "Assets/Game/HybridCLRData/hybridclr.bytes";
             using (FileStream stream = new(dllInfo, FileMode.Create, FileAccess.Write))
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
@@ -163,8 +187,8 @@ namespace Game.Editor.ResourceTools
                     }
                 }
             }
-            RefreshResourceCollection();
 
+            RefreshResourceCollection();
             //写入寻址资源映射表信息
             AnalyzeAddress(out Dictionary<string, Dictionary<Type, string>> addressInfo);
             GameAddressSerializer serializer = new();
@@ -199,28 +223,9 @@ namespace Game.Editor.ResourceTools
             AssetDatabase.SaveAssets();
         }
 
-        public static void ClearVersion()
+        public static void ClearBundles()
         {
-            if (!Directory.Exists(BundlesOutput))
-            {
-                Debug.LogWarning("Path is invalid ");
-                return;
-            }
-
-            DirectoryInfo directoryInfo = new(BundlesOutput);
-            FileInfo[] fileInfos = directoryInfo.GetFiles("*", SearchOption.AllDirectories);
-            DirectoryInfo[] directoryInfos = directoryInfo.GetDirectories();
-
-            foreach (var file in fileInfos)
-            {
-                file.Delete();
-            }
-
-            foreach (var item in directoryInfos)
-            {
-                item.Delete(true);
-            }
-
+            IOUtility.Delete(GameSetting.Instance.BundlesOutput);
             ResourceBuilderController controller = new ResourceBuilderController();
             if (controller.Load())
             {

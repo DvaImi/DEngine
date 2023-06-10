@@ -29,10 +29,25 @@ namespace Game.Editor
         /// 
         /// </summary>
         public string ResourceBuilderConfig = "GameMain/Configs/Editor/ResourceBuilder.xml";
+
+        /// <summary>
+        /// 记录打包平台
+        /// </summary>
+        public int BuildPlatform;
         /// <summary>
         /// 资源打包模式
         /// </summary>
         public int ResourceModeIndex;
+
+        /// <summary>
+        /// 应用发布路径
+        /// </summary>
+        public string AppOutput = "Assets/../AppOutput";
+        /// <summary>
+        /// 资源打包路径
+        /// </summary>
+        public string BundlesOutput = "Assets/../BundlesOutput";
+       
         /// <summary>
         /// 是否需要强制更新应用
         /// </summary>
@@ -73,8 +88,13 @@ namespace Game.Editor
         /// AOT 程序集
         /// </summary>
         public string[] AOTDllNames = { "mscorlib.dll", "System.dll", "System.Core.dll" };
-
+        /// <summary>
+        /// 虚拟服务器地址
+        /// </summary>
         public string VirtualServerAddress;
+        /// <summary>
+        /// 自动拷贝最新资源包
+        /// </summary>
         public bool AutoCopyToVirtualServer;
 
         /// <summary>

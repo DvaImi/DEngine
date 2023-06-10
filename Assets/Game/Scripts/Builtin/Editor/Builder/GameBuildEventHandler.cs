@@ -38,7 +38,7 @@ namespace Game.Editor
             m_InternalResourceVersion = internalResourceVersion;
             m_OutputDirectory = outputDirectory;
 
-            GameAssetBundleBuilder.OnPreprocess();
+            GameAssetBuilder.OnPreprocess();
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier,
@@ -102,10 +102,12 @@ namespace Game.Editor
                 return;
             }
 
+            ResourceMode resourceMode = (ResourceMode)GameSetting.Instance.ResourceModeIndex;
+
             #region StreamingAssets
             string fileSourcePath = outputPackagePath;
             //非单机模式下只拷贝outputPackedPath下的文件
-            if (GameSetting.Instance.ResourceModeIndex != ((int)ResourceMode.Package))
+            if (resourceMode != ResourceMode.Package)
             {
                 fileSourcePath = outputPackedPath;
             }
@@ -150,7 +152,7 @@ namespace Game.Editor
                 item.Delete(true);
             }
 
-            if (GameSetting.Instance.AutoCopyToVirtualServer)
+            if (resourceMode != ResourceMode.Package && GameSetting.Instance.AutoCopyToVirtualServer)
             {
                 string versionJson = Path.Combine(m_OutputDirectory, GetPlatformPath(platform) + "Version.bytes");
                 if (File.Exists(versionJson))

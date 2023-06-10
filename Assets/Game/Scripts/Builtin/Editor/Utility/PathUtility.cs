@@ -1,4 +1,5 @@
 using System.IO;
+using GameFramework;
 using UnityEditor;
 using UnityEngine;
 
@@ -57,6 +58,17 @@ namespace Game.Editor
                 }
             }
             EditorGUILayout.EndHorizontal();
+        }
+
+        /// <summary>
+        /// 转换为相对UnityAssets 的路径
+        /// </summary>
+        /// <param name="inputPath"></param>
+        /// <returns></returns>
+        public static string ConvertToAssetPath(string inputPath)
+        {
+            string absoluteFolderPath = Application.dataPath + "/" + inputPath[(inputPath.IndexOf("Assets/") + "Assets/".Length)..];
+            return Utility.Path.GetRegularPath($"Assets{absoluteFolderPath[Application.dataPath.Length..]}");
         }
     }
 }
