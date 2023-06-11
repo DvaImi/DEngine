@@ -7,6 +7,41 @@ namespace Game.Editor
 {
     public static class PathUtility
     {
+        public static bool DropPathOutType(Rect dropArea, out string assetPath, out bool isFile)
+        {
+            Event currentEvent = Event.current;
+            assetPath = string.Empty;
+            if (currentEvent.type == EventType.DragUpdated)
+            {
+                if (dropArea.Contains(currentEvent.mousePosition))
+                {
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    currentEvent.Use();
+                }
+            }
+            else if (currentEvent.type == EventType.DragPerform)
+            {
+                if (dropArea.Contains(currentEvent.mousePosition))
+                {
+                    DragAndDrop.AcceptDrag();
+
+                    foreach (Object draggedObject in DragAndDrop.objectReferences)
+                    {
+                        assetPath = AssetDatabase.GetAssetPath(draggedObject);
+                        if (!string.IsNullOrEmpty(assetPath))
+                        {
+                            currentEvent.Use();
+                            Debug.Log(assetPath);
+                            isFile = File.Exists(assetPath);
+                            return true;
+                        }
+                    }
+                }
+            }
+            isFile = false;
+            return isFile;
+        }
+
         public static bool DropPath(Rect dropArea, out string assetPath, bool files = false)
         {
             Event currentEvent = Event.current;

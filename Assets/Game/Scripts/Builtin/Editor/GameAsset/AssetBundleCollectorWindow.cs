@@ -35,6 +35,10 @@ namespace Game.Editor.ResourceTools
         private string[] m_ConfigNames;
         private SerializedObject m_SerializedObject;
 
+        private bool m_AllActive;
+        private bool m_AllPackage;
+
+
         private void OnEnable()
         {
             m_SerializedObject = new SerializedObject(this);
@@ -43,13 +47,14 @@ namespace Game.Editor.ResourceTools
             m_RuleList = new ReorderableList(m_Configuration.Collector, typeof(AssetCollector))
             {
                 drawElementCallback = OnListElementGUI,
-                drawHeaderCallback = rect => EditorGUI.LabelField(rect, ""),
+                drawHeaderCallback = DrawReorderableListHeader,
                 draggable = true,
                 elementHeight = 22,
-                onAddCallback = (list) => Add(),
+                onAddCallback = Add,
                 onSelectCallback = Select
             };
         }
+
 
         private void OnGUI()
         {
@@ -93,7 +98,6 @@ namespace Game.Editor.ResourceTools
             m_SerializedObject.ApplyModifiedProperties();
         }
 
-
         private void Load()
         {
             m_AllConfigPaths = AssetDatabase.FindAssets("t:AssetBundleCollector").Select(AssetDatabase.GUIDToAssetPath).ToList();
@@ -124,7 +128,7 @@ namespace Game.Editor.ResourceTools
             return (T)AssetDatabase.LoadAssetAtPath(path, typeof(T));
         }
 
-        private void Add()
+        private void Add(ReorderableList list)
         {
             m_Configuration.Collector.Add(new AssetCollector());
         }
@@ -203,9 +207,10 @@ namespace Game.Editor.ResourceTools
             rule.assetPath = EditorGUI.TextField(r, rule.assetPath);
             GUI.contentColor = bc;
 
-            if (PathUtility.DropPath(r, out string assetsPath, rule.filterType == FilterType.FileOnly))
+            if (PathUtility.DropPathOutType(r, out string assetsPath, out bool isFile))
             {
                 rule.assetPath = assetsPath;
+                rule.filterType = isFile ? FilterType.FileOnly : rule.filterType;
             }
 
             r.xMin = r.xMax + GAP - 20;
@@ -317,6 +322,11 @@ namespace Game.Editor.ResourceTools
                 Load();
             }
             GUI.backgroundColor = bc;
+        }
+
+        private void DrawReorderableListHeader(Rect rect)
+        {
+            
         }
 
         private void DrawElementLabelGUI()

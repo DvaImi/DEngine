@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DataTableFolderPath: Assets/Game/DataTables
-  ExcelsFolder: Excels/Datable
+  DataTableExcelsFolder: Excels/Datable
   CSharpCodePath: Assets/Game/Scripts/Hotfix/DataTable
   CSharpCodeTemplateFileName: Assets/Game/Scripts/Builtin/Editor/ExcelUtility/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Hotfix/DataTable/Extensions

@@ -16,32 +16,32 @@ namespace Game.Editor
         /// <summary>
         /// 数据表存放文件夹路径
         /// </summary>
-        public string DataTableFolderPath;
+        public string DataTableFolderPath = "Assets/Game/DataTables";
 
         /// <summary>
         /// Excel存放的文件夹路径
         /// </summary>
-        public string ExcelsFolder;
+        public string DataTableExcelsFolder = "Assets/../Excels/DataTable";
 
         /// <summary>
         /// 数据表C#实体类生成文件夹路径
         /// </summary>
-        public string CSharpCodePath;
+        public string CSharpCodePath= "Assets/Game/Scripts/Hotfix/DataTable";
 
         /// <summary>
         /// 数据表C#实体类模板存放路径
         /// </summary>
-        public string CSharpCodeTemplateFileName;
+        public string CSharpCodeTemplateFileName= "Assets/Game/Scripts/Builtin/Editor/ExcelUtility/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt";
 
         /// <summary>
         /// 数据表扩展类文件夹路径
         /// </summary>
-        public string ExtensionDirectoryPath;
+        public string ExtensionDirectoryPath= "Assets/Game/Scripts/Hotfix/DataTable/Extensions";
 
         /// <summary>
         /// 数据表命名空间
         /// </summary>
-        public string NameSpace;
+        public string NameSpace="Game";
 
         /// <summary>
         /// 数据表中使用类型 所在的所有程序集
@@ -111,9 +111,9 @@ namespace Game.Editor
                 DataTableNames = txtFolder.GetFiles(searchPattern, SearchOption.TopDirectoryOnly).Select(file => Path.GetFileNameWithoutExtension(file.Name)).ToArray();
             }
 
-            if (Directory.Exists(ExcelsFolder))
+            if (Directory.Exists(DataTableExcelsFolder))
             {
-                DirectoryInfo excelFolder = new(ExcelsFolder);
+                DirectoryInfo excelFolder = new(DataTableExcelsFolder);
                 ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(_ => !_.Name.StartsWith("~$")).Select(_ => Utility.Path.GetRegularPath(_.FullName)).ToArray();
             }
         }
@@ -124,11 +124,11 @@ namespace Game.Editor
         /// <summary>
         /// 数据表存放文件夹路径
         /// </summary>
-        public string LocalizationPath;
+        public string LocalizationPath= "Assets/Game/Localization";
         /// <summary>
         /// Excel存放的文件夹路径
         /// </summary>
-        public string LocalizationExcelsFolder;
+        public string LocalizationExcelsFolder = "Assets/../Excels/Localization";
 
         #endregion
 
@@ -136,11 +136,11 @@ namespace Game.Editor
         /// <summary>
         /// 数据表存放文件夹路径
         /// </summary>
-        public string ConfigPath;
+        public string ConfigPath= "Assets/Game/Configs";
         /// <summary>
         /// Excel存放的文件夹路径
         /// </summary>
-        public string ConfigExcelsFolder;
+        public string ConfigExcelsFolder = "Assets/../Excels/Config";
         #endregion
     }
 }

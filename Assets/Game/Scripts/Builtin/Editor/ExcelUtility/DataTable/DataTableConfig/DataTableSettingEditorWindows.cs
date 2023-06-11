@@ -130,7 +130,7 @@ namespace Game.Editor.DataTableTools
         private void ReadSetting()
         {
             DataTableFolderPath = DataTableSetting.Instance.DataTableFolderPath;
-            ExcelsFolder = DataTableSetting.Instance.ExcelsFolder;
+            ExcelsFolder = DataTableSetting.Instance.DataTableExcelsFolder;
             CSharpCodePath = DataTableSetting.Instance.CSharpCodePath;
             CSharpCodeTemplateFileName = DataTableSetting.Instance.CSharpCodeTemplateFileName;
             ExtensionDirectoryPath = DataTableSetting.Instance.ExtensionDirectoryPath;
@@ -153,7 +153,7 @@ namespace Game.Editor.DataTableTools
         private void SaveSetting()
         {
             DataTableSetting.Instance.DataTableFolderPath = DataTableFolderPath;
-            DataTableSetting.Instance.ExcelsFolder = ExcelsFolder;
+            DataTableSetting.Instance.DataTableExcelsFolder = ExcelsFolder;
             DataTableSetting.Instance.CSharpCodePath = CSharpCodePath;
             DataTableSetting.Instance.CSharpCodeTemplateFileName = CSharpCodeTemplateFileName;
             DataTableSetting.Instance.ExtensionDirectoryPath = ExtensionDirectoryPath;

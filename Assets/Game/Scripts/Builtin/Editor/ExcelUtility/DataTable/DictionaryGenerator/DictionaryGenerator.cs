@@ -7,12 +7,13 @@ using GameFramework;
 using OfficeOpenXml;
 using UnityEditor;
 using UnityEngine;
+using UnityGameFramework.Editor;
 
 namespace Game.Editor
 {
     public sealed class DictionaryGenerator
     {
-        [MenuItem("DataTable/Generate Localizations", priority = 3)]
+        [MenuItem("DataTable/Generate/Localizations", priority = 2)]
         public static void GenerateLocalizationsFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -53,7 +54,7 @@ namespace Game.Editor
             }
         }
 
-        [MenuItem("DataTable/Generate Config", priority = 4)]
+        [MenuItem("DataTable/Generate/Config", priority = 3)]
         public static void GenerateConfigFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -93,5 +94,17 @@ namespace Game.Editor
                 Debug.Log("Config Data File Generated !");
             }
         }
+     
+        [MenuItem("DataTable/Editor/Localization", priority = 2)]
+        public static void EditorLocalization()
+        {
+            OpenFolder.Execute(DataTableSetting.Instance.LocalizationExcelsFolder);
+        }
+
+        [MenuItem("DataTable/Editor/Config", priority = 3)]
+        public static void EditorConfig()
+        {
+            OpenFolder.Execute(DataTableSetting.Instance.ConfigExcelsFolder);
+        } 
     }
 }

@@ -12,6 +12,7 @@ using OfficeOpenXml;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
 using Game.Editor.ResourceTools;
+using UnityGameFramework.Editor;
 
 namespace Game.Editor.DataTableTools
 {
@@ -40,7 +41,7 @@ namespace Game.Editor.DataTableTools
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("DataTable/Generate DataTables", priority = 2)]
+        [MenuItem("DataTable/Generate/DataTables", priority = 1)]
         public static void GenerateDataTablesFormExcel()
         {
             DataTableSetting.Instance.RefreshDataTables("*.bytes");
@@ -78,17 +79,22 @@ namespace Game.Editor.DataTableTools
             AssetDatabase.Refresh();
         }
 
+        [MenuItem("DataTable/Editor/DataTables", priority = 1)]
+        public static void EditorDataTable()
+        {
+            OpenFolder.Execute(DataTableSetting.Instance.DataTableExcelsFolder);
+        }
         //[MenuItem("DataTable/Generate DataTables/Excel To Txt", priority = 32)]
         public static void ExcelToTxt()
         {
             DataTableSetting.Instance.RefreshDataTables();
-            if (!Directory.Exists(DataTableSetting.Instance.ExcelsFolder))
+            if (!Directory.Exists(DataTableSetting.Instance.DataTableExcelsFolder))
             {
-                Debug.LogError($"{DataTableSetting.Instance.ExcelsFolder} is not exist!");
+                Debug.LogError($"{DataTableSetting.Instance.DataTableExcelsFolder} is not exist!");
                 return;
             }
 
-            ExcelExtension.ExcelToTxt(DataTableSetting.Instance.ExcelsFolder, DataTableSetting.Instance.DataTableFolderPath);
+            ExcelExtension.ExcelToTxt(DataTableSetting.Instance.DataTableExcelsFolder, DataTableSetting.Instance.DataTableFolderPath);
             AssetDatabase.Refresh();
         }
     }
