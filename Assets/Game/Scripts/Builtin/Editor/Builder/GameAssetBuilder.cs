@@ -106,115 +106,15 @@ namespace Game.Editor.ResourceTools
 
             //清空StreamingAssets
             IOUtility.Delete(Application.streamingAssetsPath);
-
-            //写入版本资源更新地址信息
-            string buildInfo = "Assets/Game/Builtin/buildInfo.bytes";
-            using (FileStream stream = new(buildInfo, FileMode.Create, FileAccess.Write))
-            {
-                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
-                {
-                    binaryWriter.Write(GameSetting.Instance.CheckVersionUrl);
-                    binaryWriter.Write(GameSetting.Instance.WindowsAppUrl);
-                    binaryWriter.Write(GameSetting.Instance.MacOSAppUrl);
-                    binaryWriter.Write(GameSetting.Instance.IOSAppUrl);
-                    binaryWriter.Write(GameSetting.Instance.AndroidAppUrl);
-                    binaryWriter.Write(GameSetting.Instance.UpdatePrefixUri);
-                }
-            }
-
-            //写入内置数据表信息
-            List<string> dataTables = new List<string>();
-            List<string> configs = new List<string>();
-
-            string[] dataTableGuids = AssetDatabase.FindAssets("", new[] { DataTableSetting.Instance.DataTableFolderPath });
-            string[] configGuids = AssetDatabase.FindAssets("", new[] { DataTableSetting.Instance.ConfigPath });
-
-            foreach (string guid in dataTableGuids)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                if (!AssetDatabase.IsValidFolder(assetPath))
-                {
-                    dataTables.Add(Path.GetFileNameWithoutExtension(assetPath));
-                }
-            }
-
-            foreach (string guid in configGuids)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                if (!AssetDatabase.IsValidFolder(assetPath))
-                {
-                    configs.Add(Path.GetFileNameWithoutExtension(assetPath));
-                }
-            }
-
-            const string baseData = "Assets/Game/Builtin/basedata.bytes";
-            using (FileStream stream = new(baseData, FileMode.Create, FileAccess.Write))
-            {
-                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
-                {
-                    binaryWriter.Write(dataTables.Count);
-                    foreach (var dataTable in dataTables)
-                    {
-                        binaryWriter.Write(dataTable);
-                    }
-                    binaryWriter.Write(configs.Count);
-                    foreach (var config in configs)
-                    {
-                        binaryWriter.Write(config);
-                    }
-                }
-            }
-
-            //写入要更新的程序集信息
-            const string dllInfo = "Assets/Game/HybridCLRData/hybridclr.bytes";
-            using (FileStream stream = new(dllInfo, FileMode.Create, FileAccess.Write))
-            {
-                using (BinaryWriter binaryWriter = new BinaryWriter(stream, Encoding.UTF8))
-                {
-                    binaryWriter.Write(HybridCLRSettings.Instance.enable);
-                    binaryWriter.Write(GameSetting.Instance.HotUpdateAssemblyDefinition.name + ".dll");
-                    int aot = GameSetting.Instance.AOTDllNames.Length;
-                    binaryWriter.Write(aot);
-                    for (int i = 0; i < aot; i++)
-                    {
-                        binaryWriter.Write(GameSetting.Instance.AOTDllNames[i]);
-                    }
-                    int preserve = GameSetting.Instance.PreserveHotfixDllNames.Length;
-                    binaryWriter.Write(preserve);
-                    for (int i = 0; i < preserve; i++)
-                    {
-                        binaryWriter.Write(GameSetting.Instance.PreserveHotfixDllNames[i]);
-                    }
-                }
-            }
-
+         
             RefreshResourceCollection();
-            //写入寻址资源映射表信息
-            AnalyzeAddress(out Dictionary<string, Dictionary<Type, string>> addressInfo);
-            GameAddressSerializer serializer = new();
-            serializer.RegisterSerializeCallback(0, GameAddressSerializerCallback.Serializer);
-            string address = "Assets/Game/Builtin/address.bytes";
-            using (FileStream fileStream = new FileStream(address, FileMode.Create, FileAccess.Write))
-            {
-                if (serializer.Serialize(fileStream, addressInfo))
-                {
-                    Debug.Log("Write address success");
-                }
-                else
-                {
-                    throw new GameFrameworkException("Serialize read-only version list failure.");
-                }
-            }
-
             //绑定到内置对象
             BuiltinDataComponent builtinDataComponent = Object.FindObjectOfType<BuiltinDataComponent>();
             if (builtinDataComponent != null)
             {
                 Type type = typeof(BuiltinDataComponent);
-                FieldInfo addressTextAsset = type.GetField("m_Address", BindingFlags.NonPublic | BindingFlags.Instance);
-                FieldInfo buildInfoTextAsset = type.GetField("m_BuildInfo", BindingFlags.NonPublic | BindingFlags.Instance);
-                buildInfoTextAsset?.SetValue(builtinDataComponent, AssetDatabase.LoadAssetAtPath<TextAsset>(buildInfo));
-                addressTextAsset?.SetValue(builtinDataComponent, AssetDatabase.LoadAssetAtPath<TextAsset>(address));
+                FieldInfo buildInfo = type.GetField("m_BuildInfo", BindingFlags.NonPublic | BindingFlags.Instance);
+                buildInfo?.SetValue(builtinDataComponent, GameSetting.Instance.BuildInfo);
                 EditorUtility.SetDirty(builtinDataComponent);
                 EditorSceneManager.SaveOpenScenes();
             }
@@ -314,47 +214,6 @@ namespace Game.Editor.ResourceTools
                     Debug.LogError(buildMessage);
                     break;
             }
-        }
-
-        public static void AnalyzeAddress(out Dictionary<string, Dictionary<Type, string>> address)
-        {
-            address = new Dictionary<string, Dictionary<Type, string>>();
-            ResourceCollection controller = new ResourceCollection();
-            if (controller.Load())
-            {
-                int index = 0;
-                int length = controller.AssetCount;
-                foreach (var asset in controller.GetAssets())
-                {
-                    string fileWithoutExtensionName = Path.GetFileNameWithoutExtension(asset.Name);
-                    Type type = AssetDatabase.LoadAssetAtPath<Object>(asset.Name).GetType();
-                    if (type == typeof(SceneAsset))
-                    {
-                        type = typeof(Scene);
-                    }
-
-                    if (address.ContainsKey(fileWithoutExtensionName))
-                    {
-                        if (address[fileWithoutExtensionName].ContainsKey(type))
-                        {
-                            EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(asset.Name));
-                            EditorUtility.ClearProgressBar();
-                            throw new GameFrameworkException($"The address is existed : {address} in collector : {asset.Name}");
-                        }
-                        else
-                        {
-                            address[fileWithoutExtensionName].Add(type, asset.Name);
-                        }
-                    }
-                    else
-                    {
-                        address.Add(fileWithoutExtensionName, new Dictionary<Type, string>() { { type, asset.Name } });
-                    }
-                    index += 1;
-                    EditorUtility.DisplayProgressBar("Analyzing Assets", Utility.Text.Format("Analyzing assets, {0}/{1} analyzed.", index, length), (float)index / length);
-                }
-            }
-            EditorUtility.ClearProgressBar();
         }
 
         private static void GetBuildMessage(out string message, out MessageType messageType)

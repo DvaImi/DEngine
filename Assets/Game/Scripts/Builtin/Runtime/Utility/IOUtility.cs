@@ -4,7 +4,6 @@
 // 创建时间：2023-03-26 16:41:12
 // 版 本：1.0
 // ========================================================
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -97,19 +96,39 @@ namespace Game
         }
 
         /// <summary>
-        /// 递归删除指定文件夹下的所有文件,不包含文件夹
+        /// 删除指定目录下的文件以及文件夹
         /// </summary>
         /// <param name="directoryPath"></param>
-        /// <param name="recursive"></param>
-        public static void DeleteFileWithoutSelf(string directoryPath)
+        public static void Delete(string directoryPath)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
-
-            FileInfo[] fileInfos = directoryInfo.GetFiles("*", SearchOption.AllDirectories);
-
-            for (int i = 0; i < fileInfos.Length; i++)
+            if (!Directory.Exists(directoryPath))
             {
-                File.Delete(fileInfos[i].FullName);
+                Debug.LogWarning("Path is invalid ");
+                return;
+            }
+
+            DirectoryInfo directoryInfo = new(directoryPath);
+            FileInfo[] fileInfos = directoryInfo.GetFiles("*", SearchOption.AllDirectories);
+            DirectoryInfo[] directoryInfos = directoryInfo.GetDirectories();
+
+            foreach (var file in fileInfos)
+            {
+                file.Delete();
+            }
+
+            foreach (var item in directoryInfos)
+            {
+                item.Delete(true);
+            }
+        }
+
+        public static void Delete(string directoryPath, string searchPattern = "*")
+        {
+            Utility.Path.RemoveEmptyDirectory(directoryPath);
+            string[] fileNames = Directory.GetFiles(directoryPath, searchPattern, SearchOption.AllDirectories);
+            foreach (string fileName in fileNames)
+            {
+                File.Delete(fileName);
             }
         }
     }

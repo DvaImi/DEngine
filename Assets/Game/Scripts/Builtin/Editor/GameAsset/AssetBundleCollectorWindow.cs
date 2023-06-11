@@ -302,8 +302,6 @@ namespace Game.Editor.ResourceTools
             GUILayout.Space(20);
 
             GUILayout.FlexibleSpace();
-            m_Configuration.EnableAddress = GUILayout.Toggle(m_Configuration.EnableAddress, "可寻址加载", GUILayout.Width(100));
-
             Color bc = GUI.backgroundColor;
             GUI.backgroundColor = Color.green;
             if (GUILayout.Button(EditorGUIUtility.IconContent("Save"), GUILayout.Width(100)))
@@ -399,16 +397,6 @@ namespace Game.Editor.ResourceTools
             {
                 Debug.Log("Refresh ResourceCollection.xml fail");
             }
-        }
-
-        public bool EnableAddress()
-        {
-            if (m_Configuration == null)
-            {
-                Load();
-            }
-
-            return m_Configuration.EnableAddress;
         }
 
         public bool AssetPathvalid(AssetCollector resourceRule)

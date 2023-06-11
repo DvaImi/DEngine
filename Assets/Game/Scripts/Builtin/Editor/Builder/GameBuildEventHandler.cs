@@ -70,7 +70,7 @@ namespace Game.Editor
             VersionInfo versionInfo = new()
             {
                 ForceUpdateGame = GameSetting.Instance.ForceUpdateGame,
-                UpdatePrefixUri = Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, m_GameVersion, m_InternalResourceVersion, platformPath),
+                UpdatePrefixUri = Utility.Text.Format(GameSetting.Instance.BuildInfo.UpdatePrefixUri, m_GameVersion, m_InternalResourceVersion, platformPath),
                 LatestGameVersion = m_GameVersion,
                 InternalGameVersion = 1,
                 InternalResourceVersion = m_InternalResourceVersion,

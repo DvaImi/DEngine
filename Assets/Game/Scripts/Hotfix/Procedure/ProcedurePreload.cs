@@ -5,12 +5,14 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using GameFramework.Event;
 using GameFramework.Procedure;
+using GameFramework.Resource;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
@@ -34,7 +36,7 @@ namespace Game.Hotfix
 
             m_LoadedFlag.Clear();
 
-            PreloadResources().Forget();
+            PreloadResources();
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -66,64 +68,82 @@ namespace Game.Hotfix
             ChangeState<ProcedureChangeScene>(procedureOwner);
         }
 
-        private async UniTask PreloadResources()
+        private void PreloadResources()
         {
-            m_LoadedFlag.Add("basedata", false);
-            var result = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetAddress("basedata"));
-            if (result != null && result.bytes != null)
+            m_LoadedFlag.Add("ConfigMainfest", false);
+            m_LoadedFlag.Add("DataTableMainfest", false);
+            GameEntry.Resource.LoadAsset(AssetUtility.GetConfigAsset("ConfigMainfest", true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnConfigMainfestLoadSuccess)));
+            GameEntry.Resource.LoadAsset(AssetUtility.GetDataTableAsset("DataTableMainfest", true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableMainfestLoadSuccess)));
+            LoadLocalization(GameEntry.Localization.Language.ToString());
+        }
+
+        private void OnConfigMainfestLoadSuccess(string assetName, object asset, float duration, object userData)
+        {
+            if (asset is TextAsset textAsset)
             {
-                m_LoadedFlag["basedata"] = true;
-                string[] dataTables, configs;
-                using (Stream stream = new MemoryStream(result.bytes))
+                using (Stream stream = new MemoryStream(textAsset.bytes))
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
+                    {
+                        int count = binaryReader.ReadInt32();
+                        Debug.Log("Count: " + count);
+
+                        for (int i = 0; i < count; i++)
+                        {
+                            if (stream.Position < stream.Length)
+                            {
+                                string manifest = binaryReader.ReadString();
+                                Debug.Log("Manifest " + i + ": " + manifest);
+                                LoadConfig(manifest);
+                            }
+                            else
+                            {
+                                Debug.LogError("Attempted to read beyond the end of the stream.");
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            m_LoadedFlag["ConfigMainfest"] = true;
+        }
+
+        private void OnDataTableMainfestLoadSuccess(string assetName, object asset, float duration, object userData)
+        {
+            if (asset is TextAsset textAsset)
+            {
+                using (Stream stream = new MemoryStream(textAsset.bytes))
                 {
                     using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
                     {
                         int dataTable = binaryReader.ReadInt32();
-                        dataTables = new string[dataTable];
                         for (int i = 0; i < dataTable; i++)
                         {
-                            dataTables[i] = binaryReader.ReadString();
-                        }
-                        int config = binaryReader.ReadInt32();
-                        configs = new string[config];
-                        for (int i = 0; i < config; i++)
-                        {
-                            configs[i] = binaryReader.ReadString();
+                            LoadDataTable(binaryReader.ReadString());
                         }
                     }
-                }
-                foreach (var configName in configs)
-                {
-                    LoadConfig(configName);
-                }
-
-                foreach (string dataTableName in dataTables)
-                {
-                    LoadDataTable(dataTableName);
+                    m_LoadedFlag["DataTableMainfest"] = true;
                 }
             }
-
-
-            LoadLocalization(GameEntry.Localization.Language.ToString());
         }
 
         private void LoadConfig(string configName)
         {
-            string configAssetName = AssetUtility.GetAddress(configName);
+            string configAssetName = AssetUtility.GetConfigAsset(configName, true);
             m_LoadedFlag.Add(configAssetName, false);
             GameEntry.Config.ReadData(configAssetName, this);
         }
 
         private void LoadDataTable(string dataTableName)
         {
-            string dataTableAssetName = AssetUtility.GetAddress(dataTableName);
+            string dataTableAssetName = AssetUtility.GetDataTableAsset(dataTableName, true);
             m_LoadedFlag.Add(dataTableAssetName, false);
             GameEntry.DataTable.LoadDataTable(dataTableName, dataTableAssetName, this);
         }
 
         private void LoadLocalization(string dictionaryName)
         {
-            string dictionaryAssetName = AssetUtility.GetAddress(dictionaryName);
+            string dictionaryAssetName = AssetUtility.GetDictionaryAsset(dictionaryName, true);
             m_LoadedFlag.Add(dictionaryAssetName, false);
             GameEntry.Localization.ReadData(dictionaryAssetName, this);
         }

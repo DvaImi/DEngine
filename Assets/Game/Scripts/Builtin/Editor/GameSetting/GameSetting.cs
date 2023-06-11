@@ -47,43 +47,26 @@ namespace Game.Editor
         /// 资源打包路径
         /// </summary>
         public string BundlesOutput = "Assets/../BundlesOutput";
-       
         /// <summary>
         /// 是否需要强制更新应用
         /// </summary>
         public bool ForceUpdateGame = false;
         /// <summary>
-        /// 请求版本文件接口
+        /// 内置信息
         /// </summary>
-        public string CheckVersionUrl;
-        /// <summary>
-        /// 
-        /// </summary>
-        public string WindowsAppUrl;
-        /// <summary>
-        /// 
-        /// </summary>
-        public string MacOSAppUrl;
-        /// <summary>
-        /// 
-        /// </summary>
-        public string IOSAppUrl;
-        /// <summary>
-        /// 
-        /// </summary>
-        public string AndroidAppUrl;
-        /// <summary>
-        /// 下载资源接口
-        /// </summary>
-        public string UpdatePrefixUri;
+        public BuildInfo BuildInfo;
         /// <summary>
         /// 热更程序集生成路径
         /// </summary>
-        public string HotupdateDllPath = "Assets/GameMain/HybridCLR/Dlls";
+        public string HotupdateDllPath = "Assets/Game/HybridCLRDate/HotUpdate";
         /// <summary>
         /// 主热更程序集
         /// </summary>
         public AssemblyDefinitionAsset HotUpdateAssemblyDefinition;
+        /// <summary>
+        /// AOT 元数据生成路径
+        /// </summary>
+        public string AOtDllPath = "Assets/Game/HybridCLRData/AOT";
         /// <summary>
         /// AOT 程序集
         /// </summary>

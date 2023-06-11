@@ -11,6 +11,7 @@ using NUnit.Framework;
 using OfficeOpenXml;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
+using Game.Editor.ResourceTools;
 
 namespace Game.Editor.DataTableTools
 {
@@ -44,6 +45,7 @@ namespace Game.Editor.DataTableTools
         {
             DataTableSetting.Instance.RefreshDataTables("*.bytes");
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            List<string> dataTableNames = new List<string>();
             ExtensionsGenerate.GenerateExtensionByAnalysis(ExtensionsGenerate.DataTableType.Excel, DataTableSetting.Instance.ExcelFilePaths, 2);
             foreach (var excelFile in DataTableSetting.Instance.ExcelFilePaths)
             {
@@ -66,10 +68,13 @@ namespace Game.Editor.DataTableTools
 
                             DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
                             DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
+                            dataTableNames.Add(dataTableName);
                         }
                     }
                 }
             }
+            string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, "DataTableMainfest" + ".bytes"));
+            GameMainfestUitlity.CreatMainfest(dataTableNames.ToArray(), mainfest);
             AssetDatabase.Refresh();
         }
 
@@ -86,6 +91,5 @@ namespace Game.Editor.DataTableTools
             ExcelExtension.ExcelToTxt(DataTableSetting.Instance.ExcelsFolder, DataTableSetting.Instance.DataTableFolderPath);
             AssetDatabase.Refresh();
         }
-
     }
 }

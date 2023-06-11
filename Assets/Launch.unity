@@ -612,7 +612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ResourceMode
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_FrameRate
@@ -793,11 +793,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfb0b001fcb30fe45ac95ddb8c28ba57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Address: {fileID: 4900000, guid: d4f634fd67f3d934c8db043bac5af72d, type: 3}
-  m_BuildInfo: {fileID: 4900000, guid: a6df3f4862d4b014f945f3a8e9b2f0eb, type: 3}
   m_LanguageBuiltin: {fileID: 4900000, guid: c25eaf03fa8abf9419f0c98d5a46ebf4, type: 3}
   m_UpdateResourceFormTemplate: {fileID: 4863827266948120156, guid: 1a28f36a920aad544bac449fb4127126, type: 3}
   m_NativeDialogFormTemplate: {fileID: -7793811446997299701, guid: a91171fb30298464b95cd0e975dd83c7, type: 3}
+  m_BuildInfo:
+    CheckVersionUrl: http://192.168.1.102/GameClient/{0}Version.bytes
+    UpdatePrefixUri: http://192.168.1.102/GameClient/{0}.{1}/{2}
+    WindowsAppUrl: http://192.168.1.102/GameClient/WindowsApp
+    MacOSAppUrl: http://192.168.1.102/MacOSApp
+    IOSAppUrl: http://192.168.1.102/IOSApp
+    AndroidAppUrl: http://192.168.1.102/GameClient/AndroidApp
 --- !u!4 &1996035038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 430602, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}

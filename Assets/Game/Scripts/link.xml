@@ -5,7 +5,6 @@
     <type fullname="Game.AwaitableUtility" preserve="all" />
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
     <type fullname="Game.DataTableExtension" preserve="all" />
-    <type fullname="Game.DownLoadResult" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
     <type fullname="Game.UIFormId" preserve="all" />
     <type fullname="Game.WebRequestResult" preserve="all" />
@@ -22,12 +21,19 @@
     <type fullname="GameFramework.Procedure.IProcedureManager" preserve="all" />
     <type fullname="GameFramework.Procedure.ProcedureBase" preserve="all" />
     <type fullname="GameFramework.ReferencePool" preserve="all" />
+    <type fullname="GameFramework.Resource.LoadAssetCallbacks" preserve="all" />
+    <type fullname="GameFramework.Resource.LoadAssetSuccessCallback" preserve="all" />
     <type fullname="GameFramework.Sound.ISoundGroup" preserve="all" />
     <type fullname="GameFramework.Sound.PlaySoundParams" preserve="all" />
     <type fullname="GameFramework.UI.IUIForm" preserve="all" />
     <type fullname="GameFramework.UI.IUIGroup" preserve="all" />
     <type fullname="GameFramework.Utility" preserve="all" />
     <type fullname="GameFramework.Utility/Converter" preserve="all" />
+  </assembly>
+  <assembly fullname="HybridCLR.Runtime">
+    <type fullname="HybridCLR.HomologousImageMode" preserve="all" />
+    <type fullname="HybridCLR.LoadImageErrorCode" preserve="all" />
+    <type fullname="HybridCLR.RuntimeApi" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">
     <type fullname="System.Boolean" preserve="all" />
@@ -127,7 +133,6 @@
     <type fullname="UnityGameFramework.Runtime.ConfigComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.DataRowBase" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.DataTableComponent" preserve="all" />
-    <type fullname="UnityGameFramework.Runtime.DownloadComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.Entity" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.EntityComponent" preserve="all" />
     <type fullname="UnityGameFramework.Runtime.EntityLogic" preserve="all" />

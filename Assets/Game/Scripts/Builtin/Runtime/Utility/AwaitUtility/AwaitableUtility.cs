@@ -438,7 +438,7 @@ namespace Game
         public static UniTask LoadDictionaryAsync(this LocalizationComponent localization, Language language)
         {
             localization.RemoveAllRawStrings();
-            localization.ReadData(AssetUtility.GetAddress(language.ToString()), language);
+            localization.ReadData(AssetUtility.GetDictionaryAsset(language.ToString(), true), language);
             UniTaskCompletionSource<Language> tcs = new UniTaskCompletionSource<Language>();
             m_LoadDictionaryResult.Add(language, tcs);
             return tcs.Task;

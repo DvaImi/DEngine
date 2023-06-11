@@ -5,119 +5,18 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using GameFramework;
-using UnityGameFramework.Runtime;
 using Utility = GameFramework.Utility;
 
 namespace Game
 {
     public static class AssetUtility
     {
-        private static Dictionary<string, Dictionary<Type, string>> m_Address = null;
-
-        public static void InitAddress(byte[] bytes)
-        {
-            GameAddressSerializer serializer = new GameAddressSerializer();
-            serializer.RegisterDeserializeCallback(0, GameAddressSerializerCallback.Deserialize);
-
-            using (Stream stream = new MemoryStream(bytes))
-            {
-                m_Address = serializer.Deserialize(stream);
-                Log.Debug("address serializer success");
-                foreach (var item in m_Address)
-                {
-                    Log.Debug("Key :" + item.Key);
-                }
-            }
-        }
-
-        public static string GetAddress(string address)
-        {
-            if (m_Address == null)
-            {
-                return null;
-            }
-
-            if (m_Address.TryGetValue(address, out Dictionary<Type, string> typeAssets))
-            {
-                if (typeAssets != null)
-                {
-                    using Dictionary<Type, string>.Enumerator enumerator = typeAssets.GetEnumerator();
-                    if (enumerator.MoveNext())
-                    {
-                        return enumerator.Current.Value;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public static string GetAddress<T>(string address)
-        {
-            if (m_Address == null)
-            {
-                return null;
-            }
-
-            if (m_Address.TryGetValue(address, out Dictionary<Type, string> typeAssets))
-            {
-                if (typeAssets != null)
-                {
-                    if (typeAssets.TryGetValue(typeof(T), out string assetPath))
-                    {
-                        return assetPath;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public static string GetAddress(Type type, string address)
-        {
-            if (m_Address == null)
-            {
-                return null;
-            }
-
-            if (m_Address.TryGetValue(address, out Dictionary<Type, string> typeAssets))
-            {
-                if (typeAssets != null)
-                {
-                    if (typeAssets.TryGetValue(type, out string assetPath))
-                    {
-                        return assetPath;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public static string[] GetAddress(string[] address)
-        {
-            if (m_Address == null)
-            {
-                throw new GameFrameworkException("Unable Load Address");
-            }
-            if (address == null)
-            {
-                throw new GameFrameworkException("address is  invalid");
-            }
-            string[] addressArray = new string[address.Length];
-            for (int i = 0; i < address.Length; i++)
-            {
-                addressArray[i] = GetAddress(address[i]);
-            }
-
-            return addressArray;
-        }
 
         public static string GetConfigAsset(string assetName, bool fromBytes)
         {
             return Utility.Text.Format("Assets/Game/Configs/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");
         }
+
 
         public static string GetDataTableAsset(string assetName, bool fromBytes)
         {
@@ -126,7 +25,7 @@ namespace Game
 
         public static string GetDictionaryAsset(string assetName, bool fromBytes)
         {
-            return Utility.Text.Format("Assets/Game/Localization/{0}/{1}.{2}", GameEntry.Localization.Language, assetName, fromBytes ? "bytes" : "txt");
+            return Utility.Text.Format("Assets/Game/Localization/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");
         }
 
         public static string GetFontAsset(string assetName)
@@ -136,7 +35,7 @@ namespace Game
 
         public static string GetSceneAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/Game/Scenes/{0}.unity", assetName);
+            return Utility.Text.Format("Assets/Game/Scenes/{0}/{1}.unity", assetName, assetName);
         }
 
         public static string GetMusicAsset(string assetName)
@@ -162,6 +61,21 @@ namespace Game
         public static string GetUISoundAsset(string assetName)
         {
             return Utility.Text.Format("Assets/UI/UISounds/{0}.mp3", assetName);
+        }
+
+        public static string GetCLRUpdateAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Game/HybridCLRData/HotUpdate/{0}.{1}", assetName, "bytes");
+        }
+
+        public static string GetCLRAOTAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Game/HybridCLRData/AOT/{0}.{1}", assetName, "bytes");
+        }
+
+        public static string GetCLRLanuchAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Game/HybridCLRData/{0}.{1}", assetName, "prefab");
         }
     }
 }

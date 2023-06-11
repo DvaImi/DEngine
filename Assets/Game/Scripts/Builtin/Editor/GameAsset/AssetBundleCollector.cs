@@ -6,8 +6,6 @@ namespace Game.Editor.ResourceTools
 {
     public class AssetBundleCollector : ScriptableObject
     {
-        public bool EnableAddress;
-
         public List<AssetCollector> Collector = new List<AssetCollector>();
     }
 

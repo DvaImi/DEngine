@@ -58,7 +58,7 @@ namespace Game.Hotfix
                 return;
             }
 
-            GameEntry.Scene.LoadScene(AssetUtility.GetAddress(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
+            GameEntry.Scene.LoadScene(AssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

@@ -109,6 +109,7 @@ namespace Game.Hotfix
             m_Text.text += "\n";
             m_Text.text += "\n";
             m_Text.text += "\n";
+            m_Text.text += "删除了ADD";
         }
     }
 }

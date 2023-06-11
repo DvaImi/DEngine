@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
   m_Name: AssetBundleCollector
   m_EditorClassIdentifier: 
-  EnableAddress: 1
   Collector:
   - valid: 1
     name: 
@@ -20,7 +19,77 @@ MonoBehaviour:
     fileSystem: 
     groups: 
     assetPath: Assets/Game/Configs
-    loadType: 4
-    packed: 1
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 
+    assetPath: Assets/Game/DataTables
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 
+    assetPath: Assets/Game/HybridCLRData
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 
+    assetPath: Assets/Game/Localization
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 
+    assetPath: Assets/Game/Scenes
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 
+    assetPath: Assets/Game/UI
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 
+    assetPath: Assets/Game/HybridCLRData/AOT
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 
+    assetPath: Assets/Game/HybridCLRData/HotUpdate
+    loadType: 0
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'

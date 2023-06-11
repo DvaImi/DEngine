@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Game.Editor.ResourceTools;
 using GameFramework;
 using OfficeOpenXml;
 using UnityEditor;
@@ -15,6 +16,7 @@ namespace Game.Editor
         public static void GenerateLocalizationsFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            List<string> dictionaryNames = new List<string>();
             if (Directory.Exists(DataTableSetting.Instance.LocalizationExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableSetting.Instance.LocalizationExcelsFolder);
@@ -37,10 +39,13 @@ namespace Game.Editor
                                 {
                                     File.Delete(binaryDataFileName);
                                 }
+                                dictionaryNames.Add(dictionaryName);
                             }
                         }
                     }
                 }
+                string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, "LocalizationMainfest" + ".bytes"));
+                GameMainfestUitlity.CreatMainfest(dictionaryNames.ToArray(), mainfest);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 AssetDatabase.Refresh();
@@ -55,6 +60,7 @@ namespace Game.Editor
             if (Directory.Exists(DataTableSetting.Instance.ConfigExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableSetting.Instance.ConfigExcelsFolder);
+                List<string> dictionaryNames = new List<string>();
                 string[] ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(_ => !_.Name.StartsWith("~$")).Select(_ => Utility.Path.GetRegularPath(_.FullName)).ToArray();
                 foreach (var excelFile in ExcelFilePaths)
                 {
@@ -74,10 +80,13 @@ namespace Game.Editor
                                 {
                                     File.Delete(binaryDataFileName);
                                 }
+                                dictionaryNames.Add(dictionaryName);
                             }
                         }
                     }
                 }
+                string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, "ConfigMainfest" + ".bytes"));
+                GameMainfestUitlity.CreatMainfest(dictionaryNames.ToArray(), mainfest);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 AssetDatabase.Refresh();

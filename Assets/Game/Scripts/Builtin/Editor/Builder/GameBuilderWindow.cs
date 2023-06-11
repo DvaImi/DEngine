@@ -94,14 +94,19 @@ namespace Game.Editor
             if (m_BeginBuildPlayer)
             {
                 m_BeginBuildPlayer = false;
-                BuildPlayer(m_IsAotGeneric);
-                m_IsAotGeneric = false;
+                BuildPlayer();
             }
 
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
                 GameAssetBuilder.BuildBundle();
+            }
+
+            if (m_IsAotGeneric)
+            {
+                m_IsAotGeneric = false;
+                StripAOTDllCommand.GenerateStripedAOTDlls();
             }
         }
 
@@ -135,12 +140,12 @@ namespace Game.Editor
             EditorGUILayout.BeginHorizontal();
             {
                 GameSetting.Instance.HotupdateDllPath = EditorGUILayout.TextField("HotUpdate Dll Path", GameSetting.Instance.HotupdateDllPath);
-                Rect textFieldRect = GUILayoutUtility.GetLastRect();
-                if (PathUtility.DropPath(textFieldRect, out string assetPath))
+                Rect hotUpdateRect = GUILayoutUtility.GetLastRect();
+                if (PathUtility.DropPath(hotUpdateRect, out string hotDatePath))
                 {
-                    if (assetPath != GameSetting.Instance.HotupdateDllPath)
+                    if (hotDatePath != GameSetting.Instance.HotupdateDllPath)
                     {
-                        GameSetting.Instance.HotupdateDllPath = assetPath;
+                        GameSetting.Instance.HotupdateDllPath = hotDatePath;
                     }
                 }
 
@@ -154,6 +159,25 @@ namespace Game.Editor
             EditorGUILayout.BeginHorizontal();
             {
                 GameSetting.Instance.HotUpdateAssemblyDefinition = (AssemblyDefinitionAsset)EditorGUILayout.ObjectField("HotUpdateAssembly", GameSetting.Instance.HotUpdateAssemblyDefinition, typeof(AssemblyDefinitionAsset), false);
+            }
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
+            {
+                GameSetting.Instance.AOtDllPath = EditorGUILayout.TextField("AOT Dll Path", GameSetting.Instance.AOtDllPath);
+                Rect aotPathRect = GUILayoutUtility.GetLastRect();
+                if (PathUtility.DropPath(aotPathRect, out string aotPath))
+                {
+                    if (aotPath != GameSetting.Instance.AOtDllPath)
+                    {
+                        GameSetting.Instance.AOtDllPath = aotPath;
+                    }
+                }
+
+                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                {
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.AOtDllPath));
+                }
             }
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);
@@ -187,16 +211,20 @@ namespace Game.Editor
 
             Color bc = GUI.backgroundColor;
             GUI.backgroundColor = Color.green;
-            if (GUILayout.Button("AOT Generic", GUILayout.Height(30)))
+            EditorGUILayout.BeginHorizontal();
             {
-                m_IsAotGeneric = m_BeginBuildPlayer = true;
-            }
+                if (GUILayout.Button("AOT Generic"))
+                {
+                    m_IsAotGeneric = true;
+                }
 
-            if (GUILayout.Button("Compile", GUILayout.Height(30)))
-            {
-                CompileHotfixDll();
+                if (GUILayout.Button("Compile"))
+                {
+                    CompileHotfixDll();
+                }
+                GUI.backgroundColor = bc;
             }
-            GUI.backgroundColor = bc;
+            EditorGUILayout.EndHorizontal();
         }
 
         private void GUIResources()
@@ -212,15 +240,6 @@ namespace Game.Editor
                     //由于跳过了 ResourceMode.Unspecified 保存时索引+1
                     GameSetting.Instance.ResourceModeIndex = resourceModeIndex + 1;
                     GameSetting.Instance.SaveSetting();
-
-                    ResourceComponent resourceComponent = FindObjectOfType<ResourceComponent>();
-                    if (resourceComponent != null)
-                    {
-                        Type type = typeof(ResourceComponent);
-                        FieldInfo resourceField = type.GetField("m_ResourceMode", BindingFlags.NonPublic | BindingFlags.Instance);
-                        resourceField?.SetValue(resourceComponent, (ResourceMode)GameSetting.Instance.ResourceModeIndex);
-                        EditorUtility.SetDirty(resourceComponent.gameObject);
-                    }
                 }
 
                 if (GUILayout.Button("Edit", GUILayout.Width(100)))
@@ -283,12 +302,13 @@ namespace Game.Editor
                 if (m_FoldoutBuiltInfoGroup)
                 {
                     GameSetting.Instance.ForceUpdateGame = EditorGUILayout.Toggle("强制更新应用", GameSetting.Instance.ForceUpdateGame);
-                    GameSetting.Instance.CheckVersionUrl = EditorGUILayout.TextField("版本检查地址", GameSetting.Instance.CheckVersionUrl);
-                    GameSetting.Instance.UpdatePrefixUri = EditorGUILayout.TextField("资源更新地址", GameSetting.Instance.UpdatePrefixUri);
-                    GameSetting.Instance.WindowsAppUrl = EditorGUILayout.TextField("Windows下载应用地址", GameSetting.Instance.WindowsAppUrl);
-                    GameSetting.Instance.AndroidAppUrl = EditorGUILayout.TextField("Android应用下载地址", GameSetting.Instance.AndroidAppUrl);
-                    GameSetting.Instance.MacOSAppUrl = EditorGUILayout.TextField("MacOS下载应用地址", GameSetting.Instance.MacOSAppUrl);
-                    GameSetting.Instance.IOSAppUrl = EditorGUILayout.TextField("IOS下载应用地址", GameSetting.Instance.IOSAppUrl);
+                    GameSetting.Instance.BuildInfo.CheckVersionUrl = EditorGUILayout.TextField("版本检查地址", GameSetting.Instance.BuildInfo.CheckVersionUrl);
+                    GameSetting.Instance.BuildInfo.UpdatePrefixUri = EditorGUILayout.TextField("资源更新地址", GameSetting.Instance.BuildInfo.UpdatePrefixUri);
+                    GameSetting.Instance.BuildInfo.WindowsAppUrl = EditorGUILayout.TextField("Windows下载应用地址", GameSetting.Instance.BuildInfo.WindowsAppUrl);
+                    GameSetting.Instance.BuildInfo.AndroidAppUrl = EditorGUILayout.TextField("Android应用下载地址", GameSetting.Instance.BuildInfo.AndroidAppUrl);
+                    GameSetting.Instance.BuildInfo.MacOSAppUrl = EditorGUILayout.TextField("MacOS下载应用地址", GameSetting.Instance.BuildInfo.MacOSAppUrl);
+                    GameSetting.Instance.BuildInfo.IOSAppUrl = EditorGUILayout.TextField("IOS下载应用地址", GameSetting.Instance.BuildInfo.IOSAppUrl);
+
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
 
@@ -375,22 +395,15 @@ namespace Game.Editor
             GUI.backgroundColor = bc;
         }
 
-        private void BuildPlayer(bool aot = false)
+        private void BuildPlayer()
         {
-            BuildReport report = BuildApplicationForPlatform(GameAssetBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform), aot);
+            BuildReport report = BuildApplicationForPlatform(GameAssetBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform));
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Build succeeded: " + StringUtility.GetByteLengthString((long)summary.totalSize));
-
-                if (aot)
-                {
-                }
-                else
-                {
-                    UnityGameFramework.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
-                }
+                UnityGameFramework.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
             }
 
             if (summary.result == BuildResult.Failed)
@@ -399,7 +412,7 @@ namespace Game.Editor
             }
         }
 
-        public BuildReport BuildApplicationForPlatform(BuildTarget platform, bool aot)
+        public BuildReport BuildApplicationForPlatform(BuildTarget platform)
         {
             string outputExtension = GetFileExtensionForPlatform(platform);
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
@@ -410,7 +423,7 @@ namespace Game.Editor
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
-                scenes = aot ? EditorBuildSettings.scenes.Select(x => x.path).ToArray() : new string[] { EditorBuildSettings.scenes[0].path },
+                scenes = new string[] { EditorBuildSettings.scenes[0].path },
                 locationPathName = Path.Combine(GameSetting.Instance.AppOutput, GameAssetBuilder.PlatformNames[GameSetting.Instance.BuildPlatform], Application.productName + outputExtension),
                 target = platform,
                 options = BuildOptions.None
@@ -447,22 +460,24 @@ namespace Game.Editor
                 return;
             }
 
-            if (!Directory.Exists(GameSetting.Instance.HotupdateDllPath))
+            if (Directory.Exists(GameSetting.Instance.HotupdateDllPath))
             {
-                Directory.CreateDirectory(GameSetting.Instance.HotupdateDllPath);
+                IOUtility.Delete(GameSetting.Instance.HotupdateDllPath);
             }
             else
             {
-                string[] files = AssetDatabase.FindAssets("", new string[] { GameSetting.Instance.HotupdateDllPath });
-
-                foreach (string file in files)
-                {
-                    string filePath = AssetDatabase.GUIDToAssetPath(file);
-                    AssetDatabase.DeleteAsset(filePath);
-                }
-
-                AssetDatabase.Refresh();
+                Directory.CreateDirectory(GameSetting.Instance.HotupdateDllPath);
             }
+
+            if (Directory.Exists(GameSetting.Instance.AOtDllPath))
+            {
+                IOUtility.Delete(GameSetting.Instance.AOtDllPath);
+            }
+            else
+            {
+                Directory.CreateDirectory(GameSetting.Instance.AOtDllPath);
+            }
+
 
             string hotUpdateAssemblyDefinitionFullName = GameSetting.Instance.HotUpdateAssemblyDefinition.name + ".dll";
             //Copy Hotfix Dll
@@ -471,6 +486,8 @@ namespace Game.Editor
             //加bytes 后缀让Unity识别为TextAsset 文件
             string desFileName = Path.Combine(GameSetting.Instance.HotupdateDllPath, hotUpdateAssemblyDefinitionFullName + ".bytes");
             File.Copy(oriFileName, desFileName, true);
+            string updataDllMainfest = Path.Combine(GameSetting.Instance.HotupdateDllPath, "UpdataDllMainfest" + ".bytes");
+            GameMainfestUitlity.CreatMainfest(hotUpdateAssemblyDefinitionFullName, updataDllMainfest);
             Debug.Log("Copy hotfix dll success.");
 
             // Copy AOT Dll
@@ -483,11 +500,14 @@ namespace Game.Editor
                     Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOT dll.");
                     continue;
                 }
-                desFileName = Path.Combine(GameSetting.Instance.HotupdateDllPath, dllName + ".bytes");
+                desFileName = Path.Combine(GameSetting.Instance.AOtDllPath, dllName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
             }
 
             Debug.Log("Copy Aot dll success.");
+
+            string aotMainfest = Path.Combine(GameSetting.Instance.AOtDllPath, "AOTMetadataMainfest" + ".bytes");
+            GameMainfestUitlity.CreatMainfest(GameSetting.Instance.AOTDllNames, aotMainfest);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
