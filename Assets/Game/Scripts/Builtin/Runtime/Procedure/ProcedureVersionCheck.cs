@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Text;
-using GameFramework;
+﻿using GameFramework;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
 using GameFramework.Resource;
@@ -14,7 +12,6 @@ namespace Game
         private bool m_CheckVersionComplete = false;
         private bool m_NeedUpdateVersion = false;
         private VersionInfo m_VersionInfo = null;
-        private BuildInfo m_BuildInfo = null;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
@@ -55,6 +52,7 @@ namespace Game
             WebRequestResult result = await GameEntry.WebRequest.AddWebRequestAsync(Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GetPlatformPath()));
             if (result.Success)
             {
+
                 // 解析版本信息
                 byte[] versionInfoBytes = result.Bytes;
                 string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
@@ -67,23 +65,20 @@ namespace Game
 
                 Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
 
-                if (m_VersionInfo.ForceUpdateGame)
-                {
-                    //需要强制更新游戏应用
-                    GameEntry.BuiltinData.OpenDialog(new DialogParams
-                    {
-                        Mode = 1,
-                        Title = GameEntry.Localization.GetString("ForceUpdate.Title"),
-                        Message = GameEntry.Localization.GetString("ForceUpdate.Message"),
-                        ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
-                        OnClickConfirm = GotoUpdateApp,
-                        CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
-                        OnClickCancel = delegate (object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
-                    });
-
-                    return;
-                }
-
+                //if (m_VersionInfo.ForceUpdateGame)
+                //{
+                //    //需要强制更新游戏应用
+                //    GameEntry.BuiltinData.OpenDialog(new DialogParams
+                //    {
+                //        Mode = 1,
+                //        Title = GameEntry.Localization.GetString("ForceUpdate.Title"),
+                //        Message = GameEntry.Localization.GetString("ForceUpdate.Message"),
+                //        ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
+                //        OnClickConfirm = GotoUpdateApp,
+                //        CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
+                //        OnClickCancel = delegate (object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                //    });
+                //}
                 // 设置资源更新下载地址
                 GameEntry.Resource.UpdatePrefixUri = Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
 
@@ -100,17 +95,18 @@ namespace Game
         {
             string url = null;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            url = m_BuildInfo.WindowsAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.WindowsAppUrl;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            url = m_BuildInfo.MacOSAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.MacOSAppUrl;
 #elif UNITY_IOS
-            url = m_BuildInfo.IOSAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.IOSAppUrl;
 #elif UNITY_ANDROID
-            url = m_BuildInfo.AndroidAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.AndroidAppUrl;
 #endif
             if (!string.IsNullOrEmpty(url))
             {
                 Application.OpenURL(url);
+                UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit);
             }
         }
 

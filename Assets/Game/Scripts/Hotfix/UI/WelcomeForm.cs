@@ -7,12 +7,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Localization;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using UnityGameFramework.Runtime;
 
 //自动生成于：2023/4/16 0:33:27
@@ -23,7 +22,10 @@ namespace Game.Hotfix
         public Text m_Text;
         public Dropdown dropdown;
         public Button webTest;
-
+        public RawImage[] images;
+        public Button play;
+        public RawImage video;
+        VideoPlayer videoPlayer;
         protected override void OnInit(object userdata)
         {
             base.OnInit(userdata);
@@ -46,15 +48,22 @@ namespace Game.Hotfix
             dropdown.value = GameEntry.Setting.GetInt("Dropdown");
             dropdown.onValueChanged.AddListener(ChangeLanguage);
             webTest.onClick.AddListener(WebRequestTest);
+            play.onClick.AddListener(PlayerVideo);
         }
+
+
 
         private async void WebRequestTest()
         {
-            WebRequestResult result = await GameEntry.WebRequest.AddWebRequestWithHeaderAsync("https://space.bilibili.com/52728890", UnityWebRequestHeader.Creat(null));
-            if (result.Success)
+            for (int i = 0; i < images.Length; i++)
             {
-                m_Text.text += "\n";
-                m_Text.text += Utility.Converter.GetString(result.Bytes);
+                WebRequestResult result = await GameEntry.WebRequest.AddWebRequestAsync($"http://192.168.1.102/CDN/{i}.jpg");
+                if (result.Success)
+                {
+                    Texture2D texture = new Texture2D((int)images[i].rectTransform.rect.width, (int)images[i].rectTransform.rect.height);
+                    texture.LoadImage(result.Bytes);
+                    images[i].texture = texture;
+                }
             }
         }
 
@@ -93,6 +102,15 @@ namespace Game.Hotfix
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
+            if (videoPlayer == null)
+            {
+                return;
+            }
+
+            if (videoPlayer.isPrepared)
+            {
+                video.texture = videoPlayer.texture;
+            }
         }
 
         private void ReadLanguage()
@@ -109,7 +127,18 @@ namespace Game.Hotfix
             m_Text.text += "\n";
             m_Text.text += "\n";
             m_Text.text += "\n";
-            m_Text.text += "删除了ADD";
+            m_Text.text += GameEntry.Config.GetString("TestValue");
+        }
+
+
+        private async void PlayerVideo()
+        {
+            VideoClip videoClip = await GameEntry.Resource.LoadAssetAsync<VideoClip>("Assets/Game/Ori.mp4");
+            videoPlayer = video.gameObject.GetOrAddComponent<VideoPlayer>();
+            videoPlayer.clip = videoClip;
+            videoPlayer.Prepare();
+            videoPlayer.Play();
+
         }
     }
 }

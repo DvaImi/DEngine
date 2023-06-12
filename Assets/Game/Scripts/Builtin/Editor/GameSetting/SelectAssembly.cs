@@ -99,7 +99,7 @@ namespace Game.Editor
             var projectAssemblyDlls = GetProjectAssemblyDlls();
 
             assemblyDataList = projectAssemblyDlls
-                .Select(item => new AssemblyData(!item.GetName().Name.Contains("Editor") && item.GetName().Name != "Game", item.GetName().Name))
+                .Select(item => new AssemblyData(item.GetName().Name != "Game", item.GetName().Name))
                 .ToList();
 
             HashSet<string> aotDllNames = new HashSet<string>(GameSetting.Instance.AOTDllNames.Select(item => item.Replace(".dll", null)));

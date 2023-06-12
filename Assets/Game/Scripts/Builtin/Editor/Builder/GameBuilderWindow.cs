@@ -87,6 +87,12 @@ namespace Game.Editor
                 }
             }
             GUILayout.EndHorizontal();
+
+            if (GUI.changed)
+            {
+                GameSetting.Instance.SaveSetting();
+                Repaint();
+            }
         }
 
         private void Update()
@@ -106,7 +112,7 @@ namespace Game.Editor
             if (m_IsAotGeneric)
             {
                 m_IsAotGeneric = false;
-                StripAOTDllCommand.GenerateStripedAOTDlls();
+                BuildPlayer(false);
             }
         }
 
@@ -119,6 +125,7 @@ namespace Game.Editor
                 {
                     EditorGUILayout.LabelField("Platform", EditorStyles.boldLabel);
                     int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, GameAssetBuilder.PlatformNames, GUILayout.Width(100));
+
                     if (hotfixPlatformIndex != GameSetting.Instance.BuildPlatform)
                     {
                         GameSetting.Instance.BuildPlatform = hotfixPlatformIndex;
@@ -316,8 +323,12 @@ namespace Game.Editor
                 m_FoldoutSimulatorGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutSimulatorGroup, "Simulator");
                 if (m_FoldoutSimulatorGroup)
                 {
-                    GUI.enabled = GameSetting.Instance.AutoCopyToVirtualServer = GameSetting.Instance.ResourceModeIndex > 1;
+                    GUI.enabled = GameSetting.Instance.ResourceModeIndex > 1;
                     GameSetting.Instance.AutoCopyToVirtualServer = EditorGUILayout.Toggle("开启自动拷贝资源", GameSetting.Instance.AutoCopyToVirtualServer);
+                    if (GameSetting.Instance.ResourceModeIndex <= 1)
+                    {
+                        GameSetting.Instance.AutoCopyToVirtualServer = false;
+                    }
                     EditorGUILayout.BeginHorizontal();
                     {
                         EditorGUILayout.LabelField("本地虚拟服务器地址", GameSetting.Instance.VirtualServerAddress);
@@ -386,6 +397,22 @@ namespace Game.Editor
                 }
             }
             EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            {
+                string locationPathName = GameAssetBuilder.GetBuildAppFullName();
+                if (File.Exists(locationPathName))
+                {
+                    GUI.enabled = false;
+                    EditorGUILayout.LabelField(locationPathName);
+                    GUI.enabled = true;
+
+                    if (GUILayout.Button("Run", GUILayout.Width(100)))
+                    {
+                        System.Diagnostics.Process.Start(locationPathName);
+                    }
+                }
+            }
+            EditorGUILayout.EndHorizontal();
             Color bc = GUI.backgroundColor;
             GUI.backgroundColor = Color.green;
             if (GUILayout.Button("Build", GUILayout.Height(30)))
@@ -395,7 +422,7 @@ namespace Game.Editor
             GUI.backgroundColor = bc;
         }
 
-        private void BuildPlayer()
+        private void BuildPlayer(bool completeOpenFolder = true)
         {
             BuildReport report = BuildApplicationForPlatform(GameAssetBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform));
             BuildSummary summary = report.summary;
@@ -403,7 +430,10 @@ namespace Game.Editor
             if (summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Build succeeded: " + StringUtility.GetByteLengthString((long)summary.totalSize));
-                UnityGameFramework.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
+                if (completeOpenFolder)
+                {
+                    UnityGameFramework.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
+                }
             }
 
             if (summary.result == BuildResult.Failed)
@@ -414,7 +444,7 @@ namespace Game.Editor
 
         public BuildReport BuildApplicationForPlatform(BuildTarget platform)
         {
-            string outputExtension = GetFileExtensionForPlatform(platform);
+            string outputExtension = GameAssetBuilder.GetFileExtensionForPlatform(platform);
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
             {
                 IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.AppOutput);
@@ -430,19 +460,6 @@ namespace Game.Editor
             };
 
             return BuildPipeline.BuildPlayer(buildPlayerOptions);
-        }
-
-        private string GetFileExtensionForPlatform(BuildTarget platform)
-        {
-            return platform switch
-            {
-                BuildTarget.StandaloneWindows64 => ".exe",
-                BuildTarget.StandaloneOSX => ".app",
-                BuildTarget.Android => ".apk",
-                BuildTarget.iOS => ".ipa",
-                BuildTarget.WebGL => "",
-                _ => ".exe",
-            };
         }
 
         private void CompileHotfixDll()

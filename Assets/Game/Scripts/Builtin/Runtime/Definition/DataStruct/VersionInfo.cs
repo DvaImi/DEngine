@@ -5,9 +5,12 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+
 namespace Game
 {
-    public class VersionInfo
+    public class VersionInfo : IEquatable<VersionInfo>
     {
         /// <summary>
         /// 是否需要强制更新游戏应用
@@ -88,6 +91,39 @@ namespace Game
         {
             get;
             set;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as VersionInfo);
+        }
+
+        public bool Equals(VersionInfo other)
+        {
+            return other is not null &&
+                   LatestGameVersion == other.LatestGameVersion &&
+                   InternalGameVersion == other.InternalGameVersion &&
+                   InternalResourceVersion == other.InternalResourceVersion &&
+                   UpdatePrefixUri == other.UpdatePrefixUri &&
+                   VersionListLength == other.VersionListLength &&
+                   VersionListHashCode == other.VersionListHashCode &&
+                   VersionListCompressedLength == other.VersionListCompressedLength &&
+                   VersionListCompressedHashCode == other.VersionListCompressedHashCode;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(LatestGameVersion, InternalGameVersion, InternalResourceVersion, UpdatePrefixUri, VersionListLength, VersionListHashCode, VersionListCompressedLength, VersionListCompressedHashCode);
+        }
+
+        public static bool operator ==(VersionInfo left, VersionInfo right)
+        {
+            return EqualityComparer<VersionInfo>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(VersionInfo left, VersionInfo right)
+        {
+            return !(left == right);
         }
     }
 }

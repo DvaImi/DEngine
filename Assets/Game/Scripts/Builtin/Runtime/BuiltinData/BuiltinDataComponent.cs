@@ -151,8 +151,8 @@ namespace Game
                 return;
             }
 
+            Destroy(m_NativeDialogForm.gameObject);
             Destroy(m_NativeDialogForm);
-            m_NativeDialogForm = null;
         }
     }
 }

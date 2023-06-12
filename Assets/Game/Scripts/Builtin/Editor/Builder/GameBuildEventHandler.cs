@@ -9,6 +9,7 @@ using Game.Editor.ResourceTools;
 using GameFramework;
 using GameFramework.Resource;
 using System.IO;
+using System.IO.Compression;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
@@ -97,38 +98,40 @@ namespace Game.Editor
                 return;
             }
 
-            if (platform != Platform.Windows && platform != Platform.Windows64)
+            ResourceMode resourceMode = (ResourceMode)GameSetting.Instance.ResourceModeIndex;
+            if (platform == Platform.Windows || platform == Platform.Windows64)
+            {
+                #region StreamingAssets
+                string fileSourcePath = outputPackagePath;
+                //非单机模式下只拷贝outputPackedPath下的文件
+                if (resourceMode != ResourceMode.Package)
+                {
+                    fileSourcePath = outputPackedPath;
+                }
+
+                string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+                string[] fileNames = Directory.GetFiles(fileSourcePath, "*", SearchOption.AllDirectories);
+                foreach (string fileName in fileNames)
+                {
+                    string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName[fileSourcePath.Length..]));
+                    FileInfo destFileInfo = new FileInfo(destFileName);
+                    if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
+                    {
+                        destFileInfo.Directory.Create();
+                    }
+
+                    File.Copy(fileName, destFileName);
+                }
+
+                #endregion
+
+            }
+            #region Simulator
+
+            if (!GameSetting.Instance.AutoCopyToVirtualServer)
             {
                 return;
             }
-
-            ResourceMode resourceMode = (ResourceMode)GameSetting.Instance.ResourceModeIndex;
-
-            #region StreamingAssets
-            string fileSourcePath = outputPackagePath;
-            //非单机模式下只拷贝outputPackedPath下的文件
-            if (resourceMode != ResourceMode.Package)
-            {
-                fileSourcePath = outputPackedPath;
-            }
-
-            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
-            string[] fileNames = Directory.GetFiles(fileSourcePath, "*", SearchOption.AllDirectories);
-            foreach (string fileName in fileNames)
-            {
-                string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName[fileSourcePath.Length..]));
-                FileInfo destFileInfo = new FileInfo(destFileName);
-                if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
-                {
-                    destFileInfo.Directory.Create();
-                }
-
-                File.Copy(fileName, destFileName);
-            }
-
-            #endregion
-
-            #region Simulator
 
             string virtualServerAddress = GameSetting.Instance.VirtualServerAddress;
 
@@ -159,7 +162,7 @@ namespace Game.Editor
                 {
                     File.Copy(versionJson, Path.Combine(virtualServerAddress, GetPlatformPath(platform) + "Version.bytes"));
 
-                    fileNames = Directory.GetFiles(outputFullPath, "*", SearchOption.AllDirectories);
+                    var fileNames = Directory.GetFiles(outputFullPath, "*", SearchOption.AllDirectories);
                     foreach (string fileName in fileNames)
                     {
                         string destFileName = Utility.Path.GetRegularPath(Path.Combine(virtualServerAddress, m_GameVersion + "." + m_InternalResourceVersion.ToString(), GetPlatformPath(platform), fileName[outputFullPath.Length..]));
@@ -174,7 +177,51 @@ namespace Game.Editor
 
                     Debug.Log("Copy Bundles to virtualServer success");
                 }
+            }
 
+            if (GameSetting.Instance.ForceUpdateGame)
+            {
+                if (platform == Platform.Windows || platform == Platform.Windows64)
+                {
+                    string virtualFilePath = GameSetting.Instance.VirtualServerAddress + "/" + platform.ToString() + "App/" + platform.ToString();
+                    IOUtility.CreateDirectoryIfNotExists(virtualFilePath);
+
+                    string sourceFileName = GameSetting.Instance.AppOutput + "/" + platform.ToString();
+                    if (!Directory.Exists(sourceFileName))
+                    {
+                        return;
+                    }
+                    // 获取源路径的目录名作为压缩包名称
+                    string packageName = Application.productName + ".zip";
+                    string packagePath = Path.Combine(virtualFilePath, packageName);
+
+                    // 创建临时目录，用于保存过滤后的文件
+                    string tempPath = Path.Combine(Path.GetTempPath(), "PackageTemp");
+                    Directory.CreateDirectory(tempPath);
+
+                    // 复制源路径下的文件到临时目录，过滤掉指定文件夹
+                    IOUtility.CopyFiles(sourceFileName, tempPath, Application.productName + "_BackUpThisFolder_ButDontShipItWithYourGame");
+
+                    // 创建压缩包
+                    ZipFile.CreateFromDirectory(tempPath, packagePath);
+
+                    // 删除临时目录
+                    Directory.Delete(tempPath, true);
+
+                    Debug.Log($"Package '{packageName}' created at '{packagePath}'");
+                }
+
+                else if (platform == Platform.Android)
+                {
+                    string virtualFilePath = GameSetting.Instance.VirtualServerAddress + "/" + platform.ToString() + "App/";
+                    IOUtility.CreateDirectoryIfNotExists(virtualFilePath);
+                    string sourceFileName = Path.Combine(GameSetting.Instance.AppOutput, platform.ToString(), Application.productName + ".apk");
+                    File.Copy(sourceFileName, virtualFilePath + "/" + Application.productName + ".apk", true);
+                }
+                else
+                {
+                    Debug.Log("待扩展...");
+                }
             }
             #endregion
         }

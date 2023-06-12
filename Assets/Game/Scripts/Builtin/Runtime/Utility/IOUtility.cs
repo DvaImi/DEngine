@@ -131,5 +131,28 @@ namespace Game
                 File.Delete(fileName);
             }
         }
+
+        public static void CopyFiles(string sourceDir, string targetDir, string excludeDir)
+        {
+            foreach (string dirPath in Directory.GetDirectories(sourceDir, "*", SearchOption.AllDirectories))
+            {
+                if (dirPath.Contains(excludeDir))
+                {
+                    continue;
+                }
+
+                Directory.CreateDirectory(dirPath.Replace(sourceDir, targetDir));
+            }
+
+            foreach (string filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+            {
+                if (filePath.Contains(excludeDir))
+                {
+                    continue;
+                }
+
+                File.Copy(filePath, filePath.Replace(sourceDir, targetDir), true);
+            }
+        }
     }
 }

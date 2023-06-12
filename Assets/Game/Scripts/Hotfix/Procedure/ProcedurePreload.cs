@@ -86,8 +86,6 @@ namespace Game.Hotfix
                     using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
                     {
                         int count = binaryReader.ReadInt32();
-                        Debug.Log("Count: " + count);
-
                         for (int i = 0; i < count; i++)
                         {
                             if (stream.Position < stream.Length)

@@ -40,7 +40,7 @@ namespace Game
             }
             else
             {
-                ChangeState<ProcedureLoadHotfix>(procedureOwner);
+                ChangeState<ProcedureLoadAotMetadData>(procedureOwner);
             }
         }
 

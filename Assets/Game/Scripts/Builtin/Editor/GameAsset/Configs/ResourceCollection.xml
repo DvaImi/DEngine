@@ -6,6 +6,7 @@
       <Resource Name="Game/DataTables" LoadType="0" Packed="False" />
       <Resource Name="Game/HybridCLRData" LoadType="0" Packed="False" />
       <Resource Name="Game/Localization" LoadType="0" Packed="False" />
+      <Resource Name="Game/Ori" LoadType="0" Packed="False" />
       <Resource Name="Game/Scenes" LoadType="0" Packed="False" />
       <Resource Name="Game/UI" LoadType="0" Packed="False" />
     </Resources>
@@ -40,6 +41,7 @@
       <Asset Guid="ccad32ea0f365c542b96dfa71566e8a0" ResourceName="Game/HybridCLRData" />
       <Asset Guid="ceaaca8536175884eb0322b1d349be89" ResourceName="Game/HybridCLRData" />
       <Asset Guid="e915882745d181145ba138b9cb3d1db4" ResourceName="Game/Scenes" />
+      <Asset Guid="eec9ab88f862ff343b66ec25deb7f14f" ResourceName="Game/Ori" />
       <Asset Guid="f245b52998352c14c9136e8b082b667d" ResourceName="Game/Localization" />
     </Assets>
   </ResourceCollection>

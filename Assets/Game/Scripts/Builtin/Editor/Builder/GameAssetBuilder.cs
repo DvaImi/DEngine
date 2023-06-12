@@ -76,9 +76,43 @@ namespace Game.Editor.ResourceTools
             }
         }
 
+        public static Platform GetPlatform(BuildTarget editorPlatform)
+        {
+            return editorPlatform switch
+            {
+                BuildTarget.StandaloneOSX => Platform.MacOS,
+                BuildTarget.StandaloneWindows => Platform.Windows,
+                BuildTarget.iOS => Platform.IOS,
+                BuildTarget.Android => Platform.Android,
+                BuildTarget.StandaloneWindows64 => Platform.Windows64,
+                BuildTarget.WebGL => Platform.WebGL,
+                BuildTarget.WSAPlayer => Platform.WindowsStore,
+                BuildTarget.StandaloneLinux64 => Platform.Linux,
+                _ => throw new GameFrameworkException("Platform is invalid."),
+            };
+        }
+
         public static Platform GetPlatform(int platformIndex)
         {
             return (Platform)Enum.Parse(typeof(Platform), PlatformNames[platformIndex]);
+        }
+
+        public static string GetFileExtensionForPlatform(BuildTarget platform)
+        {
+            return platform switch
+            {
+                BuildTarget.StandaloneWindows64 => ".exe",
+                BuildTarget.StandaloneOSX => ".app",
+                BuildTarget.Android => ".apk",
+                BuildTarget.iOS => ".ipa",
+                BuildTarget.WebGL => "",
+                _ => ".exe",
+            };
+        }
+
+        public static string GetBuildAppFullName()
+        {
+            return Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform], Application.productName + GetFileExtensionForPlatform(GetBuildTarget((int)m_OriginalPlatform)));
         }
 
         public static void RefreshResourceCollection()
@@ -106,7 +140,7 @@ namespace Game.Editor.ResourceTools
 
             //清空StreamingAssets
             IOUtility.Delete(Application.streamingAssetsPath);
-         
+
             RefreshResourceCollection();
             //绑定到内置对象
             BuiltinDataComponent builtinDataComponent = Object.FindObjectOfType<BuiltinDataComponent>();
@@ -382,6 +416,7 @@ namespace Game.Editor.ResourceTools
             EditorUtility.ClearProgressBar();
             Debug.LogWarning(Utility.Text.Format("Build resources error with error message '{0}'.", errorMessage));
         }
+
     }
 }
 

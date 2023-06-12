@@ -29,7 +29,7 @@ namespace Game
                 return;
             }
 
-            ChangeState<ProcedureLoadHotfix>(procedureOwner);
+            ChangeState<ProcedureLoadAotMetadData>(procedureOwner);
         }
 
         private void OnInitResourcesComplete()
