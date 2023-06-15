@@ -26,6 +26,7 @@ namespace Game.Hotfix
         public Button play;
         public RawImage video;
         VideoPlayer videoPlayer;
+
         protected override void OnInit(object userdata)
         {
             base.OnInit(userdata);
@@ -131,14 +132,26 @@ namespace Game.Hotfix
         }
 
 
-        private async void PlayerVideo()
+        private void PlayerVideo()
         {
-            VideoClip videoClip = await GameEntry.Resource.LoadAssetAsync<VideoClip>("Assets/Game/Ori.mp4");
-            videoPlayer = video.gameObject.GetOrAddComponent<VideoPlayer>();
-            videoPlayer.clip = videoClip;
-            videoPlayer.Prepare();
-            videoPlayer.Play();
+            GameEntry.Resource.UpdateResources("Ori", OnUpdateResourcesComplete);
+        }
 
+        private async void OnUpdateResourcesComplete(GameFramework.Resource.IResourceGroup resourceGroup, bool result)
+        {
+            if (result)
+            {
+                Log.Info($"Update resources group {resourceGroup.Name} complete with no errors.");
+                videoPlayer = video.gameObject.GetOrAddComponent<VideoPlayer>();
+                var videoClip = await GameEntry.Resource.LoadAssetAsync<VideoClip>("Assets/Game/Ori.mp4");
+                videoPlayer.clip = videoClip;
+                videoPlayer.Prepare();
+                videoPlayer.Play();
+            }
+            else
+            {
+                Log.Error("Update resources complete with errors.");
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   DataTableFolderPath: Assets/Game/DataTables
   DataTableExcelsFolder: Excels/Datable
   CSharpCodePath: Assets/Game/Scripts/Hotfix/DataTable
-  CSharpCodeTemplateFileName: Assets/Game/Scripts/Builtin/Editor/ExcelUtility/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
+  CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/ExcelUtility/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Hotfix/DataTable/Extensions
   NameSpace: Game.Hotfix
   AssemblyNames:

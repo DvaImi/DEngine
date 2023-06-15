@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
-  <assembly fullname="Game">
+  <assembly fullname="Game.Runtime">
     <type fullname="Game.AssetUtility" preserve="all" />
     <type fullname="Game.AwaitableUtility" preserve="all" />
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
@@ -21,8 +21,10 @@
     <type fullname="GameFramework.Procedure.IProcedureManager" preserve="all" />
     <type fullname="GameFramework.Procedure.ProcedureBase" preserve="all" />
     <type fullname="GameFramework.ReferencePool" preserve="all" />
+    <type fullname="GameFramework.Resource.IResourceGroup" preserve="all" />
     <type fullname="GameFramework.Resource.LoadAssetCallbacks" preserve="all" />
     <type fullname="GameFramework.Resource.LoadAssetSuccessCallback" preserve="all" />
+    <type fullname="GameFramework.Resource.UpdateResourcesCompleteCallback" preserve="all" />
     <type fullname="GameFramework.Sound.ISoundGroup" preserve="all" />
     <type fullname="GameFramework.Sound.PlaySoundParams" preserve="all" />
     <type fullname="GameFramework.UI.IUIForm" preserve="all" />

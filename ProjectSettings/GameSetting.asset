@@ -12,22 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ee0b9678739e54fb24dfff12f65674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildSettingsConfig: Assets/Game/Scripts/Builtin/Editor/GameAsset/Configs/BuildSetting.xml
-  ResourceCollectionConfig: Assets/Game/Scripts/Builtin/Editor/GameAsset/Configs/ResourceCollection.xml
-  ResourceEditorConfig: Assets/Game/Scripts/Builtin/Editor/GameAsset/Configs/ResourceEditor.xml
-  ResourceBuilderConfig: Assets/Game/Scripts/Builtin/Editor/GameAsset/Configs/ResourceBuilder.xml
+  BuildSettingsConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/BuildSetting.xml
+  ResourceCollectionConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceCollection.xml
+  ResourceEditorConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceEditor.xml
+  ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
   BuildPlatform: 0
-  ResourceModeIndex: 2
+  ResourceModeIndex: 1
   AppOutput: Assets/../AppOutput
-  BundlesOutput: Assets/../BundlesOutput
+  BundlesOutput: F:/Project/Unity/Work/GameClient/Bundles
   ForceUpdateGame: 0
+  InternalResourceVersion: 2
+  LatestGameVersion: 0.1.1
+  UpdatePrefixUri: http://192.168.1.102/GameClient/{0}.{1}/{2}
   BuildInfo:
-    CheckVersionUrl: http://192.168.1.102/GameClient/{0}Version.bytes
-    UpdatePrefixUri: http://192.168.1.102/GameClient/{0}.{1}/{2}
-    WindowsAppUrl: http://192.168.1.102/GameClient/WindowsApp
+    CheckVersionUrl: http://192.168.1.102/GameClient/0.1.1/{0}Version.bytes
+    WindowsAppUrl: http://192.168.1.102/GameClient/WindowsApp/Game.zip
     MacOSAppUrl: http://192.168.1.102/MacOSApp
     IOSAppUrl: http://192.168.1.102/IOSApp
-    AndroidAppUrl: http://192.168.1.102/GameClient/AndroidApp
+    AndroidAppUrl: http://192.168.1.102/GameClient/AndroidApp/Game.apk
   HotupdateDllPath: Assets/Game/HybridCLRData/HotUpdate
   HotUpdateAssemblyDefinition: {fileID: 5897886265953266890, guid: 1b482ecb56af90e4188a38330b70f1e0, type: 3}
   AOtDllPath: Assets/Game/HybridCLRData/AOT
@@ -37,11 +39,12 @@ MonoBehaviour:
   - System.Core.dll
   - System.dll
   - UnityGameFramework.Runtime.dll
-  - UniTask.dll
-  - GameFramework.dll
   - HybridCLR.Runtime.dll
+  - UniTask.dll
   - UniTask.Linq.dll
+  - GameFramework.dll
   - Newtonsoft.Json.dll
+  - Game.Runtime.dll
   VirtualServerAddress: F:/DvalmiService/GameClient
-  AutoCopyToVirtualServer: 1
+  AutoCopyToVirtualServer: 0
   PreserveHotfixDllNames: []

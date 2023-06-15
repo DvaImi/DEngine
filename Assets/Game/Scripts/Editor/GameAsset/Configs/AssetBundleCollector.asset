@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
+  m_Name: AssetBundleCollector
+  m_EditorClassIdentifier: 
+  Collector:
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 0
+    assetPath: Assets/Game/Configs
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 0
+    assetPath: Assets/Game/DataTables
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 0
+    assetPath: Assets/Game/HybridCLRData
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 0
+    assetPath: Assets/Game/Localization
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 0
+    assetPath: Assets/Game/Scenes
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 0
+    assetPath: Assets/Game/UI
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 0
+    assetPath: Assets/Game/HybridCLRData/AOT
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: 
+    variant: 
+    fileSystem: 
+    groups: 0
+    assetPath: Assets/Game/HybridCLRData/HotUpdate
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
