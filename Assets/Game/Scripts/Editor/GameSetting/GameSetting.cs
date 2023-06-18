@@ -1,11 +1,9 @@
-// ========================================================
+﻿// ========================================================
 // 描述：
 // 作者：GeminiLion 
 // 创建时间：2023-04-15 11:24:21
 // 版 本：1.0
 // ========================================================
-using GameFramework.Resource;
-using UnityEditor;
 using UnityEditorInternal;
 
 namespace Game.Editor
@@ -38,7 +36,6 @@ namespace Game.Editor
         /// 资源打包模式
         /// </summary>
         public int ResourceModeIndex;
-
         /// <summary>
         /// 应用发布路径
         /// </summary>

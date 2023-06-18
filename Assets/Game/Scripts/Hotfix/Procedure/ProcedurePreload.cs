@@ -5,11 +5,9 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Cysharp.Threading.Tasks;
 using GameFramework.Event;
 using GameFramework.Procedure;
 using GameFramework.Resource;
@@ -91,7 +89,6 @@ namespace Game.Hotfix
                             if (stream.Position < stream.Length)
                             {
                                 string manifest = binaryReader.ReadString();
-                                Debug.Log("Manifest " + i + ": " + manifest);
                                 LoadConfig(manifest);
                             }
                             else

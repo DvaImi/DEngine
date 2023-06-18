@@ -2,46 +2,43 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Game/Configs" LoadType="0" Packed="False" ResourceGroups="0" />
-      <Resource Name="Game/DataTables" LoadType="0" Packed="False" ResourceGroups="0" />
-      <Resource Name="Game/HybridCLRData" LoadType="0" Packed="False" ResourceGroups="0" />
-      <Resource Name="Game/Localization" LoadType="0" Packed="False" ResourceGroups="0" />
-      <Resource Name="Game/Scenes" LoadType="0" Packed="False" ResourceGroups="0" />
-      <Resource Name="Game/UI" LoadType="0" Packed="False" ResourceGroups="0" />
+      <Resource Name="data" LoadType="0" Packed="False" />
+      <Resource Name="level" LoadType="0" Packed="False" />
+      <Resource Name="localization" LoadType="0" Packed="False" />
+      <Resource Name="runtime" LoadType="0" Packed="False" />
     </Resources>
     <Assets>
-      <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="Game/DataTables" />
-      <Asset Guid="0bf51f5e6cf690246a48a92e62e60e93" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="0dcea7f52b9aac14880b416d1bc1870c" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="1df6b2b0b01f1fe498ddfe4e3c676d84" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="Game/DataTables" />
-      <Asset Guid="2a580f3ee0b575b4da1cd6527f93cad5" ResourceName="Game/Localization" />
-      <Asset Guid="2d195be6cdc3ebb4d93b0323dbf298ad" ResourceName="Game/UI" />
-      <Asset Guid="3273c77b30efb1b43be2b4c620319dd3" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="462ee883cba3edd458a79864c990d5e4" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="Game/DataTables" />
-      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="502dbd8454b80064b825d2cc3aa41fa4" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="58221e0ad068d824b8e5e973330ecc21" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="Game/Configs" />
-      <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="Game/DataTables" />
-      <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="Game/DataTables" />
-      <Asset Guid="62d5c748b4061814ba495f687fb8ea58" ResourceName="Game/Localization" />
-      <Asset Guid="6979a4cbd06aea342bb1ae43f275f5ef" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="6d99a6fb6d9891c488979efffc78e49c" ResourceName="Game/DataTables" />
-      <Asset Guid="84a74f80a37fcaf4193accc900e61e9b" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="8655916a38d7578458011f3f7c530912" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="94c6ff02ddf768c48963cfd97b6fbf18" ResourceName="Game/Localization" />
-      <Asset Guid="9f3f80b59dbaeef4aa4ce726e7123be9" ResourceName="Game/Localization" />
-      <Asset Guid="b84b18dde3f867e47983c5a3c0b27883" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="Game/DataTables" />
-      <Asset Guid="c25eaf03fa8abf9419f0c98d5a46ebf4" ResourceName="Game/Localization" />
-      <Asset Guid="c4e445699e1cafe489178ee6116d0cb3" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="c57fbfa79805fa345afb3ca1de249a70" ResourceName="Game/Configs" />
-      <Asset Guid="ccad32ea0f365c542b96dfa71566e8a0" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="ceaaca8536175884eb0322b1d349be89" ResourceName="Game/HybridCLRData" />
-      <Asset Guid="e915882745d181145ba138b9cb3d1db4" ResourceName="Game/Scenes" />
-      <Asset Guid="f245b52998352c14c9136e8b082b667d" ResourceName="Game/Localization" />
+      <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="data" />
+      <Asset Guid="0bf51f5e6cf690246a48a92e62e60e93" ResourceName="runtime" />
+      <Asset Guid="0dcea7f52b9aac14880b416d1bc1870c" ResourceName="runtime" />
+      <Asset Guid="1df6b2b0b01f1fe498ddfe4e3c676d84" ResourceName="runtime" />
+      <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="data" />
+      <Asset Guid="2a580f3ee0b575b4da1cd6527f93cad5" ResourceName="localization" />
+      <Asset Guid="3273c77b30efb1b43be2b4c620319dd3" ResourceName="runtime" />
+      <Asset Guid="462ee883cba3edd458a79864c990d5e4" ResourceName="runtime" />
+      <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="data" />
+      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="runtime" />
+      <Asset Guid="502dbd8454b80064b825d2cc3aa41fa4" ResourceName="runtime" />
+      <Asset Guid="58221e0ad068d824b8e5e973330ecc21" ResourceName="runtime" />
+      <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="data" />
+      <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="data" />
+      <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="data" />
+      <Asset Guid="62d5c748b4061814ba495f687fb8ea58" ResourceName="localization" />
+      <Asset Guid="6979a4cbd06aea342bb1ae43f275f5ef" ResourceName="runtime" />
+      <Asset Guid="6d99a6fb6d9891c488979efffc78e49c" ResourceName="data" />
+      <Asset Guid="84a74f80a37fcaf4193accc900e61e9b" ResourceName="runtime" />
+      <Asset Guid="8655916a38d7578458011f3f7c530912" ResourceName="runtime" />
+      <Asset Guid="94c6ff02ddf768c48963cfd97b6fbf18" ResourceName="localization" />
+      <Asset Guid="9f3f80b59dbaeef4aa4ce726e7123be9" ResourceName="localization" />
+      <Asset Guid="b84b18dde3f867e47983c5a3c0b27883" ResourceName="runtime" />
+      <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="data" />
+      <Asset Guid="c25eaf03fa8abf9419f0c98d5a46ebf4" ResourceName="localization" />
+      <Asset Guid="c4e445699e1cafe489178ee6116d0cb3" ResourceName="runtime" />
+      <Asset Guid="c57fbfa79805fa345afb3ca1de249a70" ResourceName="data" />
+      <Asset Guid="ccad32ea0f365c542b96dfa71566e8a0" ResourceName="runtime" />
+      <Asset Guid="ceaaca8536175884eb0322b1d349be89" ResourceName="runtime" />
+      <Asset Guid="e915882745d181145ba138b9cb3d1db4" ResourceName="level" />
+      <Asset Guid="f245b52998352c14c9136e8b082b667d" ResourceName="localization" />
     </Assets>
   </ResourceCollection>
 </UnityGameFramework>

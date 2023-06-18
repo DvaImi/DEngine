@@ -78,7 +78,7 @@ namespace Game
             }
             else
             {
-                return dataTable.ParseData(Utility.Converter.GetString(dataTableBytes, startIndex, length), userData);
+                return dataTable.ParseData(GameFramework.Utility.Converter.GetString(dataTableBytes, startIndex, length), userData);
             }
         }
 

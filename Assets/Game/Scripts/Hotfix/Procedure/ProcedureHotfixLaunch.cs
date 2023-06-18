@@ -27,10 +27,10 @@ namespace Game.Hotfix
             base.OnDestroy(procedureOwner);
         }
 
-        protected override void OnEnter(ProcedureOwner procedureOwner)
+        protected override async void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            Log.Debug("ProcedureHotfix  Launch  ");
+            Log.Info("ProcedureHotfix  Launch  ");
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -41,7 +41,6 @@ namespace Game.Hotfix
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            ChangeState<ProcedurePreload>(procedureOwner);
         }
     }
 }

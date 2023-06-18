@@ -68,7 +68,7 @@ namespace Game.Helper
             }
             else
             {
-                return configManager.ParseData(Utility.Converter.GetString(configBytes, startIndex, length), userData);
+                return configManager.ParseData(GameFramework.Utility.Converter.GetString(configBytes, startIndex, length), userData);
             }
         }
 

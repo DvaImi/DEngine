@@ -1,4 +1,4 @@
-// ========================================================
+﻿// ========================================================
 // 描述：
 // 作者：GeminiLion 
 // 创建时间：2023-03-26 16:39:10
@@ -17,7 +17,7 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using Path = System.IO.Path;
 
-namespace Game.Editor
+namespace Game.Editor.Builder
 {
     public class GameBuilderWindow : EditorWindow
     {
@@ -78,7 +78,7 @@ namespace Game.Editor
                 if (GUILayout.Button("Save"))
                 {
                     GameSetting.Instance.SaveSetting();
-                    GameAssetBuilder.SaveBuildInfo();
+                    GameBuilder.SaveBuildInfo();
                     Debug.Log("Save success");
                 }
             }
@@ -102,7 +102,7 @@ namespace Game.Editor
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
-                GameAssetBuilder.BuildBundle();
+                GameBuilder.BuildBundle();
             }
 
             if (m_IsAotGeneric)
@@ -120,7 +120,7 @@ namespace Game.Editor
                 EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUILayout.LabelField("Platform", EditorStyles.boldLabel);
-                    int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, GameAssetBuilder.PlatformNames, GUILayout.Width(100));
+                    int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, GameBuilder.PlatformNames, GUILayout.Width(100));
 
                     if (hotfixPlatformIndex != GameSetting.Instance.BuildPlatform)
                     {
@@ -235,16 +235,14 @@ namespace Game.Editor
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
-
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
-                int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameAssetBuilder.ResourceMode, GUILayout.Width(160));
+                int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameBuilder.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)
                 {
                     //由于跳过了 ResourceMode.Unspecified 保存时索引+1
                     GameSetting.Instance.ResourceModeIndex = resourceModeIndex + 1;
                     GameSetting.Instance.SaveSetting();
                 }
-
                 if (GUILayout.Button("Edit", GUILayout.Width(100)))
                 {
                     EditorWindow window = GetWindow<AssetBundleCollectorWindow>(false, "AssetBundleCollector");
@@ -255,7 +253,7 @@ namespace Game.Editor
 
                 if (GUILayout.Button("Clear", GUILayout.Width(100)))
                 {
-                    GameAssetBuilder.ClearBundles();
+                    GameBuilder.ClearBundles();
                 }
             }
 
@@ -275,7 +273,7 @@ namespace Game.Editor
                         {
                             GameSetting.Instance.BundlesOutput = directory;
                         }
-                        GameAssetBuilder.SaveOutputDirectory(GameSetting.Instance.BundlesOutput);
+                        GameBuilder.SaveOutputDirectory(GameSetting.Instance.BundlesOutput);
                     }
                 }
 
@@ -304,17 +302,29 @@ namespace Game.Editor
                 m_FoldoutBuiltInfoGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutBuiltInfoGroup, "BuildInfo");
                 if (m_FoldoutBuiltInfoGroup)
                 {
+                    GameSetting.Instance.ForceUpdateGame = EditorGUILayout.Toggle("强制更新应用", GameSetting.Instance.ForceUpdateGame);
+                    EditorGUILayout.BeginHorizontal();
+                    {
+                        if (GameSetting.Instance.ForceUpdateGame)
+                        {
+                            GUI.enabled = false;
+                            EditorGUILayout.LabelField($"强制更新应用将以{GameSetting.Instance.LatestGameVersion} 为最后一个版本号");
+                            GUI.enabled = true;
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
 
+                    GameSetting.Instance.UpdatePrefixUri = EditorGUILayout.TextField("资源更新地址", GameSetting.Instance.UpdatePrefixUri);
                     GUI.enabled = false;
                     GameSetting.Instance.InternalResourceVersion = EditorGUILayout.IntField("内置资源版本", GameSetting.Instance.InternalResourceVersion);
-                    GameSetting.Instance.LatestGameVersion = EditorGUILayout.TextField("最新的游戏版本号", GameSetting.Instance.LatestGameVersion);
+                    GameSetting.Instance.LatestGameVersion = EditorGUILayout.TextField("最新的游戏版本号", Application.version);
                     GUI.enabled = true;
-                    GameSetting.Instance.UpdatePrefixUri = EditorGUILayout.TextField("资源更新地址", GameSetting.Instance.UpdatePrefixUri);
                     GameSetting.Instance.BuildInfo.CheckVersionUrl = EditorGUILayout.TextField("版本检查文件地址", GameSetting.Instance.BuildInfo.CheckVersionUrl);
                     GameSetting.Instance.BuildInfo.WindowsAppUrl = EditorGUILayout.TextField("Windows下载应用地址", GameSetting.Instance.BuildInfo.WindowsAppUrl);
                     GameSetting.Instance.BuildInfo.AndroidAppUrl = EditorGUILayout.TextField("Android应用下载地址", GameSetting.Instance.BuildInfo.AndroidAppUrl);
                     GameSetting.Instance.BuildInfo.MacOSAppUrl = EditorGUILayout.TextField("MacOS下载应用地址", GameSetting.Instance.BuildInfo.MacOSAppUrl);
                     GameSetting.Instance.BuildInfo.IOSAppUrl = EditorGUILayout.TextField("IOS下载应用地址", GameSetting.Instance.BuildInfo.IOSAppUrl);
+                    GameSetting.Instance.BuildInfo.LatestGameVersion = GameSetting.Instance.LatestGameVersion;
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
 
@@ -371,7 +381,7 @@ namespace Game.Editor
                 EditorGUILayout.LabelField("BuildPlayer", EditorStyles.boldLabel);
             }
             EditorGUILayout.EndHorizontal();
-            GameSetting.Instance.ForceUpdateGame = EditorGUILayout.Toggle("强制更新应用", GameSetting.Instance.ForceUpdateGame);
+
             EditorGUILayout.BeginHorizontal();
             {
                 GUI.enabled = false;
@@ -398,7 +408,7 @@ namespace Game.Editor
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
             {
-                string locationPathName = GameAssetBuilder.GetBuildAppFullName();
+                string locationPathName = GameBuilder.GetBuildAppFullName();
                 if (File.Exists(locationPathName))
                 {
                     GUI.enabled = false;
@@ -423,14 +433,8 @@ namespace Game.Editor
 
         private void BuildPlayer(bool completeOpenFolder = true)
         {
-            if (GameSetting.Instance.ForceUpdateGame)
-            {
-                GameSetting.Instance.BuildInfo.CheckVersionUrl = Utility.Text.Format(GameSetting.Instance.BuildInfo.CheckVersionUrl, GameSetting.Instance.LatestGameVersion + "/{0}");
-                GameSetting.Instance.SaveSetting();
-                GameAssetBuilder.SaveBuildInfo();
-            }
-
-            BuildReport report = GameAssetBuilder.BuildApplication(GameAssetBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform));
+            GameBuilder.SaveBuildInfo();
+            BuildReport report = GameBuilder.BuildApplication(GameBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform));
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
@@ -443,7 +447,7 @@ namespace Game.Editor
 
                 if (GameSetting.Instance.ForceUpdateGame)
                 {
-                    GameAssetBuilder.PutLastVserionApp(GameAssetBuilder.GetPlatform(GameSetting.Instance.BuildPlatform));
+                    GameBuilder.PutLastVserionApp(GameBuilder.GetPlatform(GameSetting.Instance.BuildPlatform));
                 }
             }
 
@@ -455,7 +459,7 @@ namespace Game.Editor
 
         private void CompileHotfixDll()
         {
-            BuildTarget buildTarget = GameAssetBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform);
+            BuildTarget buildTarget = GameBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform);
             CompileDllCommand.CompileDll(buildTarget);
             CopyDllAssets(buildTarget);
         }

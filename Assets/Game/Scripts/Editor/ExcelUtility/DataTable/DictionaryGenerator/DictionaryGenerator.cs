@@ -8,6 +8,7 @@ using OfficeOpenXml;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor;
+using Utility = GameFramework.Utility;
 
 namespace Game.Editor
 {
@@ -35,7 +36,7 @@ namespace Game.Editor
                                 ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
                                 string dictionaryName = workCount > 1 ? excelName + "_" + sheet.Name : excelName;
                                 DictionaryProcessor processor = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
-                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName + ".bytes"));
+                                string binaryDataFileName = GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName + ".bytes"));
                                 if (!processor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
                                 {
                                     File.Delete(binaryDataFileName);
@@ -45,7 +46,7 @@ namespace Game.Editor
                         }
                     }
                 }
-                string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, "LocalizationMainfest" + ".bytes"));
+                string mainfest = GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, "LocalizationMainfest" + ".bytes"));
                 GameMainfestUitlity.CreatMainfest(dictionaryNames.ToArray(), mainfest);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
@@ -76,7 +77,7 @@ namespace Game.Editor
                                 ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
                                 string dictionaryName = workCount > 1 ? excelName + "_" + sheet.Name : excelName;
                                 DictionaryProcessor processor = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
-                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, dictionaryName + ".bytes"));
+                                string binaryDataFileName = GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, dictionaryName + ".bytes"));
                                 if (!processor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
                                 {
                                     File.Delete(binaryDataFileName);
@@ -86,7 +87,7 @@ namespace Game.Editor
                         }
                     }
                 }
-                string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, "ConfigMainfest" + ".bytes"));
+                string mainfest = GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, "ConfigMainfest" + ".bytes"));
                 GameMainfestUitlity.CreatMainfest(dictionaryNames.ToArray(), mainfest);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
@@ -94,7 +95,7 @@ namespace Game.Editor
                 Debug.Log("Config Data File Generated !");
             }
         }
-     
+
         [MenuItem("DataTable/Editor/Localization", priority = 2)]
         public static void EditorLocalization()
         {
@@ -105,6 +106,6 @@ namespace Game.Editor
         public static void EditorConfig()
         {
             OpenFolder.Execute(DataTableSetting.Instance.ConfigExcelsFolder);
-        } 
+        }
     }
 }

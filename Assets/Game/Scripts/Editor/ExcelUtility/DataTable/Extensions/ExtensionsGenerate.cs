@@ -383,7 +383,7 @@ namespace Game.Editor.DataTableTools
         private static void GenerateCodeFile(string fileName, string value)
         {
             var filePath =
-                Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, fileName + ".cs"));
+                GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, fileName + ".cs"));
             if (File.Exists(filePath)) File.Delete(filePath);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))

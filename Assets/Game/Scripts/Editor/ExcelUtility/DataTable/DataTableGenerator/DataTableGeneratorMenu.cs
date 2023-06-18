@@ -30,7 +30,7 @@ namespace Game.Editor.DataTableTools
                 var dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
                 if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
                 {
-                    Debug.LogError(Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
+                    Debug.LogError(GameFramework.Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
                     break;
                 }
 
@@ -63,7 +63,7 @@ namespace Game.Editor.DataTableTools
                             var dataTableProcessor = DataTableGenerator.CreateExcelDataTableProcessor(sheet);
                             if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
                             {
-                                Debug.LogError(Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
+                                Debug.LogError(GameFramework.Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
                                 break;
                             }
 
@@ -74,7 +74,7 @@ namespace Game.Editor.DataTableTools
                     }
                 }
             }
-            string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, "DataTableMainfest" + ".bytes"));
+            string mainfest = GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, "DataTableMainfest" + ".bytes"));
             GameMainfestUitlity.CreatMainfest(dataTableNames.ToArray(), mainfest);
             AssetDatabase.Refresh();
         }

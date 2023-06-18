@@ -435,7 +435,7 @@ namespace UnityGameFramework.Editor.ResourceTools
                 return "<None>";
             }
 
-            string[] splitedVersionNames = versionName.Split('_');
+            string[] splitedVersionNames = versionName.Split('.');
             if (splitedVersionNames.Length < 2)
             {
                 return null;

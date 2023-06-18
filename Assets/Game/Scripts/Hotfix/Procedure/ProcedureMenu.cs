@@ -15,7 +15,6 @@ namespace Game.Hotfix
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            GameEntry.UI.OpenUIForm(UIFormId.WelcomeForm);
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

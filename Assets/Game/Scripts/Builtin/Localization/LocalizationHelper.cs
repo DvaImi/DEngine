@@ -129,7 +129,7 @@ namespace Game.Helper
             }
             else
             {
-                return localizationManager.ParseData(Utility.Converter.GetString(dictionaryBytes, startIndex, length), userData);
+                return localizationManager.ParseData(GameFramework.Utility.Converter.GetString(dictionaryBytes, startIndex, length), userData);
             }
         }
 

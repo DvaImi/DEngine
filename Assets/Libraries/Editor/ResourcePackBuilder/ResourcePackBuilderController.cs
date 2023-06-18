@@ -270,7 +270,7 @@ namespace UnityGameFramework.Editor.ResourceTools
             List<string> versionNames = new List<string>();
             foreach (DirectoryInfo directoryInfo in sourceDirectoryInfo.GetDirectories())
             {
-                string[] splitedVersionNames = directoryInfo.Name.Split('_');
+                string[] splitedVersionNames = directoryInfo.Name.Split('.');
                 if (splitedVersionNames.Length < 2)
                 {
                     continue;
@@ -309,7 +309,7 @@ namespace UnityGameFramework.Editor.ResourceTools
 
             versionNames.Sort((x, y) =>
             {
-                return int.Parse(x.Substring(x.LastIndexOf('_') + 1)).CompareTo(int.Parse(y.Substring(y.LastIndexOf('_') + 1)));
+                return int.Parse(x.Substring(x.LastIndexOf('.') + 1)).CompareTo(int.Parse(y.Substring(y.LastIndexOf('.') + 1)));
             });
 
             return versionNames.ToArray();
@@ -541,13 +541,13 @@ namespace UnityGameFramework.Editor.ResourceTools
 
         private string GetNoneVersion(string targetVersion)
         {
-            string[] splitedVersionNames = targetVersion.Split('_');
+            string[] splitedVersionNames = targetVersion.Split('.');
             for (int i = 0; i < splitedVersionNames.Length; i++)
             {
                 splitedVersionNames[i] = "0";
             }
 
-            return string.Join("_", splitedVersionNames);
+            return string.Join(".", splitedVersionNames);
         }
 
         private string GetResourceFullName(string name, string variant, int hashCode)

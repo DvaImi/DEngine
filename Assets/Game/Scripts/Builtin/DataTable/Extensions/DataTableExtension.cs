@@ -27,7 +27,7 @@ namespace Game
             }
 
             string dataRowClassName = "Game.Hotfix.DR" + splitedNames[0];
-            Type dataRowType = Utility.Assembly.GetType(dataRowClassName);
+            Type dataRowType = GameFramework.Utility.Assembly.GetType(dataRowClassName);
             if (dataRowType == null)
             {
                 Log.Warning("Can not get data row type with class name '{0}'.", dataRowClassName);

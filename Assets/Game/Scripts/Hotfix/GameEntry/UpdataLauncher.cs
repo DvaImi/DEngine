@@ -25,11 +25,9 @@ namespace Game.Hotfix
     /// </summary>
     public class UpdataLauncher : MonoBehaviour
     {
-        private int m_AotLength;
-        private int m_LoadedAotLength;
         private void Start()
         {
-            Log.Debug("启动器加载成功...");
+            Log.Info("启动器加载成功...");
             StartHotfixProcedure();
         }
 

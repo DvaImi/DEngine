@@ -34,7 +34,7 @@ namespace Game
             GameEntry.Event.Subscribe(ResourceUpdateChangedEventArgs.EventId, OnResourceUpdateChanged);
             GameEntry.Event.Subscribe(ResourceUpdateSuccessEventArgs.EventId, OnResourceUpdateSuccess);
             GameEntry.Event.Subscribe(ResourceUpdateFailureEventArgs.EventId, OnResourceUpdateFailure);
-            StartUpdateResources("0");
+            StartUpdateResources();
         }
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)
@@ -65,7 +65,7 @@ namespace Game
             ChangeState<ProcedureLoadAotMetadData>(procedureOwner);
         }
 
-        private void StartUpdateResources(string resourceGroupName)
+        private void StartUpdateResources(string resourceGroupName = null)
         {
             if (m_UpdateResourceForm == null)
             {
@@ -85,44 +85,9 @@ namespace Game
             }
 
             float progressTotal = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
-            string descriptionText = GameEntry.Localization.GetString("UpdateResource.Tips", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), GetByteLengthString(currentTotalUpdateLength), GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("F2"), GetByteLengthString((int)GameEntry.Download.CurrentSpeed));
+            string descriptionText = GameEntry.Localization.GetString("UpdateResource.Tips", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), StringUtility.GetByteLengthString(currentTotalUpdateLength), StringUtility.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("F2"), StringUtility.GetByteLengthString((int)GameEntry.Download.CurrentSpeed));
             m_UpdateResourceForm.SetProgress(progressTotal, descriptionText);
-            Log.Debug(descriptionText);
-        }
-
-        private string GetByteLengthString(long byteLength)
-        {
-            if (byteLength < 1024L) // 2 ^ 10
-            {
-                return Utility.Text.Format("{0} Bytes", byteLength);
-            }
-
-            if (byteLength < 1048576L) // 2 ^ 20
-            {
-                return Utility.Text.Format("{0:F2} KB", byteLength / 1024f);
-            }
-
-            if (byteLength < 1073741824L) // 2 ^ 30
-            {
-                return Utility.Text.Format("{0:F2} MB", byteLength / 1048576f);
-            }
-
-            if (byteLength < 1099511627776L) // 2 ^ 40
-            {
-                return Utility.Text.Format("{0:F2} GB", byteLength / 1073741824f);
-            }
-
-            if (byteLength < 1125899906842624L) // 2 ^ 50
-            {
-                return Utility.Text.Format("{0:F2} TB", byteLength / 1099511627776f);
-            }
-
-            if (byteLength < 1152921504606846976L) // 2 ^ 60
-            {
-                return Utility.Text.Format("{0:F2} PB", byteLength / 1125899906842624f);
-            }
-
-            return Utility.Text.Format("{0:F2} EB", byteLength / 1152921504606846976f);
+            Log.Info(descriptionText);
         }
 
         private void OnUpdateResourcesComplete(GameFramework.Resource.IResourceGroup resourceGroup, bool result)

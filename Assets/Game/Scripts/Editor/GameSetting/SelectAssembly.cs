@@ -137,7 +137,7 @@ namespace Game.Editor
         /// <returns></returns>
         private Assembly[] GetProjectAssemblyDlls()
         {
-            return Utility.Assembly.GetAssemblies();
+            return GameFramework.Utility.Assembly.GetAssemblies();
         }
 
         public void SetSaveCallBack(GameFrameworkAction<string[]> value)

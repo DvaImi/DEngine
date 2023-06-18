@@ -116,7 +116,7 @@ namespace Game.Editor.DataTableTools
                             foreach (var typeString in dataProcessor.GetTypeStrings())
                             foreach (var tTypeString in tDataProcessor.GetTypeStrings())
                             {
-                                var key = Utility.Text.Format(typeString.ToLower(), tTypeString);
+                                var key = GameFramework.Utility.Text.Format(typeString.ToLower(), tTypeString);
                                 s_DataProcessors.Add(key, dataProcessor);
                             }
                         }
@@ -153,7 +153,7 @@ namespace Game.Editor.DataTableTools
                             foreach (var typeString in dataProcessor.GetTypeStrings())
                             foreach (var tTypeString in addList[i].GetTypeStrings())
                             {
-                                var key = Utility.Text.Format(typeString.ToLower(), tTypeString);
+                                var key = GameFramework.Utility.Text.Format(typeString.ToLower(), tTypeString);
                                 s_DataProcessors.Add(key, dataProcessor);
                             }
                         }
@@ -205,7 +205,7 @@ namespace Game.Editor.DataTableTools
                                 {
                                     foreach (var value in keyValue[1].GetTypeStrings())
                                     {
-                                        var str = Utility.Text.Format(typeString.ToLower(), key, value);
+                                        var str = GameFramework.Utility.Text.Format(typeString.ToLower(), key, value);
                                         s_DataProcessors.Add(str, dataProcessor);
                                     }
                                 }
@@ -221,7 +221,7 @@ namespace Game.Editor.DataTableTools
                 DataProcessor dataProcessor = null;
                 if (s_DataProcessors.TryGetValue(type.ToLower(), out dataProcessor)) return dataProcessor;
 
-                throw new GameFrameworkException(Utility.Text.Format("Not supported data processor type '{0}'.", type));
+                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Not supported data processor type '{0}'.", type));
             }
         }
     }

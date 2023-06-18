@@ -46,7 +46,7 @@ namespace Game
         /// </summary>
         private void LoadMetadataForAOTAssemblies()
         {
-            Log.Debug("补充元数据...");
+            Log.Info("补充元数据...");
             GameEntry.Resource.LoadAsset(AssetUtility.GetCLRAOTAsset("AOTMetadataMainfest"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnAOTMetadataMainfestLoadSuccessAsync)));
         }
 
@@ -65,9 +65,10 @@ namespace Game
 
                         for (int i = 0; i < count; i++)
                         {
-                            aotdll[i] = AssetUtility.GetCLRAOTAsset(binaryReader.ReadString());
+                            string aot = binaryReader.ReadString();
+                            aotdll[i] = AssetUtility.GetCLRAOTAsset(aot);
+                            Log.Info($"AOTMetadata\n {aot} is Ready.");
                         }
-                        Log.Info($"AOTMetadata\n {string.Join("\n", aotdll)}\n is Ready.");
                     }
                 }
             }
@@ -88,11 +89,13 @@ namespace Game
             }
             // 加载assembly对应的dll，会自动为它hook。一旦aot泛型函数的native函数不存在，用解释器版本代码
             RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.SuperSet);
-            Log.Debug($"AOTMetadata :{assetName} Load Success");
+
+            Log.Info($"AOTMetadata :{textAsset.name} Load Success");
+
             m_LoadedAotLength++;
             if (m_LoadedAotLength == m_AotLength)
             {
-                Log.Debug($"AOTMetadata Load Complete.");
+                Log.Info($"AOTMetadata Load Complete.");
                 m_LoadComplete = true;
             }
         }

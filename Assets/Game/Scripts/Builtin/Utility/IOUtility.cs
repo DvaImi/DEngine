@@ -124,7 +124,7 @@ namespace Game
 
         public static void Delete(string directoryPath, string searchPattern = "*")
         {
-            Utility.Path.RemoveEmptyDirectory(directoryPath);
+            GameFramework.Utility.Path.RemoveEmptyDirectory(directoryPath);
             string[] fileNames = Directory.GetFiles(directoryPath, searchPattern, SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {

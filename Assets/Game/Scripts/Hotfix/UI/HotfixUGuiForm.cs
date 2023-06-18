@@ -5,7 +5,6 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,12 +12,11 @@ using UnityGameFramework.Runtime;
 
 namespace Game.Hotfix
 {
-    public abstract class HotfixUGuiForm : UIFormLogic
+    public abstract class HotfixUGUIForm : UIFormLogic
     {
         public const int DepthFactor = 100;
         private const float FadeTime = 0.3f;
 
-        private static Font s_MainFont = null;
         private Canvas m_CachedCanvas = null;
         private CanvasGroup m_CanvasGroup = null;
         private List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
@@ -52,24 +50,13 @@ namespace Game.Hotfix
             }
             else
             {
-                StartCoroutine(CloseCo(FadeTime));
+                Close(FadeTime);
             }
         }
 
         public void PlayUISound(int uiSoundId)
         {
             GameEntry.Sound.PlayUISound(uiSoundId);
-        }
-
-        public static void SetMainFont(Font mainFont)
-        {
-            if (mainFont == null)
-            {
-                Log.Error("Main font is invalid.");
-                return;
-            }
-
-            s_MainFont = mainFont;
         }
 
 #if UNITY_2017_3_OR_NEWER
@@ -202,9 +189,9 @@ namespace Game.Hotfix
             m_CachedCanvasContainer.Clear();
         }
 
-        private IEnumerator CloseCo(float duration)
+        protected async void Close(float duration)
         {
-            yield return m_CanvasGroup.FadeToAlpha(0f, duration);
+            await m_CanvasGroup.FadeToAlphaByUniTask(0f, duration);
             GameEntry.UI.CloseUIForm(this);
         }
     }

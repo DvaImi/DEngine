@@ -13,6 +13,10 @@ namespace Game
     public class BuildInfo
     {
         /// <summary>
+        /// 最新的游戏版本号
+        /// </summary>
+        public string LatestGameVersion;
+        /// <summary>
         /// 请求版本文件接口
         /// </summary>
         public string CheckVersionUrl;

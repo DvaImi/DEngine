@@ -17,15 +17,16 @@ MonoBehaviour:
   ResourceEditorConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
   BuildPlatform: 0
-  ResourceModeIndex: 1
-  AppOutput: Assets/../AppOutput
-  BundlesOutput: F:/Project/Unity/Work/GameClient/Bundles
+  ResourceModeIndex: 2
+  AppOutput: F:/Project/Unity/Work/GameClient/AppOutput
+  BundlesOutput: F:/Project/Unity/Work/GameClient/BundlesOutput
   ForceUpdateGame: 0
-  InternalResourceVersion: 2
-  LatestGameVersion: 0.1.1
-  UpdatePrefixUri: http://192.168.1.102/GameClient/{0}.{1}/{2}
+  InternalResourceVersion: 1
+  LatestGameVersion: 0.1.0
+  UpdatePrefixUri: http://192.168.1.102/GameClient/{0}/{1}/{2}
   BuildInfo:
-    CheckVersionUrl: http://192.168.1.102/GameClient/0.1.1/{0}Version.bytes
+    LatestGameVersion: 0.1.0
+    CheckVersionUrl: http://192.168.1.102/GameClient/{0}/{1}Version.json
     WindowsAppUrl: http://192.168.1.102/GameClient/WindowsApp/Game.zip
     MacOSAppUrl: http://192.168.1.102/MacOSApp
     IOSAppUrl: http://192.168.1.102/IOSApp
@@ -46,5 +47,5 @@ MonoBehaviour:
   - Newtonsoft.Json.dll
   - Game.Runtime.dll
   VirtualServerAddress: F:/DvalmiService/GameClient
-  AutoCopyToVirtualServer: 0
+  AutoCopyToVirtualServer: 1
   PreserveHotfixDllNames: []

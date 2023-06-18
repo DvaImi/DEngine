@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GameFramework;
@@ -435,9 +435,8 @@ namespace Game
         #region Dictionary
 
 
-        public static UniTask LoadDictionaryAsync(this LocalizationComponent localization, Language language)
+        public static UniTask<Language> LoadDictionaryAsync(this LocalizationComponent localization, Language language)
         {
-            localization.RemoveAllRawStrings();
             localization.ReadData(AssetUtility.GetDictionaryAsset(language.ToString(), true), language);
             UniTaskCompletionSource<Language> tcs = new UniTaskCompletionSource<Language>();
             m_LoadDictionaryResult.Add(language, tcs);

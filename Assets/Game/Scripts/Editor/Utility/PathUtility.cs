@@ -103,7 +103,7 @@ namespace Game.Editor
         public static string ConvertToAssetPath(string inputPath)
         {
             string absoluteFolderPath = Application.dataPath + "/" + inputPath[(inputPath.IndexOf("Assets/") + "Assets/".Length)..];
-            return Utility.Path.GetRegularPath($"Assets{absoluteFolderPath[Application.dataPath.Length..]}");
+            return GameFramework.Utility.Path.GetRegularPath($"Assets{absoluteFolderPath[Application.dataPath.Length..]}");
         }
     }
 }

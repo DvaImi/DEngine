@@ -5,11 +5,10 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System.Collections;
+using Cysharp.Threading.Tasks;
 using GameFramework.DataTable;
 using GameFramework.UI;
-using Game;
-using System.Collections;
-using GameFramework.Procedure;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
@@ -46,6 +45,19 @@ namespace Game.Hotfix
             slider.value = value;
         }
 
+        public static async UniTask FadeToAlphaByUniTask(this CanvasGroup canvasGroup, float alpha, float duration)
+        {
+            float time = 0f;
+            float originalAlpha = canvasGroup.alpha;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
+                await UniTask.Yield();
+            }
+            canvasGroup.alpha = alpha;
+        }
+
         public static bool HasUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)
         {
             return uiComponent.HasUIForm((int)uiFormId, uiGroupName);
@@ -56,12 +68,12 @@ namespace Game.Hotfix
             return uiComponent.HasUIForm(uiFormId, uiGroupName);
         }
 
-        public static HotfixUGuiForm GetUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)
+        public static HotfixUGUIForm GetUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)
         {
             return uiComponent.GetUIForm((int)uiFormId, uiGroupName);
         }
 
-        public static HotfixUGuiForm GetUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
+        public static HotfixUGUIForm GetUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
         {
             IDataTable<DRUIForm> dtUIForm = GameEntry.DataTable.GetDataTable<DRUIForm>();
             DRUIForm drUIForm = dtUIForm.GetDataRow(uiFormId);
@@ -80,7 +92,7 @@ namespace Game.Hotfix
                     return null;
                 }
 
-                return (HotfixUGuiForm)uiForm.Logic;
+                return (HotfixUGUIForm)uiForm.Logic;
             }
 
             IUIGroup uiGroup = uiComponent.GetUIGroup(uiGroupName);
@@ -95,10 +107,10 @@ namespace Game.Hotfix
                 return null;
             }
 
-            return (HotfixUGuiForm)uiForm.Logic;
+            return (HotfixUGUIForm)uiForm.Logic;
         }
 
-        public static void CloseUIForm(this UIComponent uiComponent, HotfixUGuiForm uiForm)
+        public static void CloseUIForm(this UIComponent uiComponent, HotfixUGUIForm uiForm)
         {
             uiComponent.CloseUIForm(uiForm.UIForm);
         }
@@ -134,6 +146,5 @@ namespace Game.Hotfix
 
             return uiComponent.OpenUIForm(assetName, drUIForm.UIGroupName, Constant.AssetPriority.UIFormAsset, drUIForm.PauseCoveredUIForm, userData);
         }
-     
     }
 }

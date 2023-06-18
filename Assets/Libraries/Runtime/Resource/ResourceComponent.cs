@@ -635,8 +635,11 @@ namespace UnityGameFramework.Runtime
                 {
                     m_ReadWritePathType = ReadWritePathType.PersistentData;
                 }
-
+#if PLATFORM_STANDALONE_WIN &&!UNITY_EDITOR
+                m_ResourceManager.SetReadWritePath(Utility.Path.GetRegularPath(System.IO.Path.Combine(Application.dataPath, "_data")));
+#else
                 m_ResourceManager.SetReadWritePath(Application.persistentDataPath);
+#endif
             }
 
             if (m_EditorResourceMode)

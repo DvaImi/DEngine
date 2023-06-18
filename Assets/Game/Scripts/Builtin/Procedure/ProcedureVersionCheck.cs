@@ -48,7 +48,7 @@ namespace Game
 
         private async void CheckVersionList()
         {
-            string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GetPlatformPath());
+            string checkVersionUrl = GameFramework.Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.BuildInfo.LatestGameVersion, GetPlatformPath());
 
             // 向服务器请求版本信息
             WebRequestResult result = await GameEntry.WebRequest.AddWebRequestAsync(checkVersionUrl);
@@ -57,8 +57,8 @@ namespace Game
 
                 // 解析版本信息
                 byte[] versionInfoBytes = result.Bytes;
-                string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
-                m_VersionInfo = Utility.Json.ToObject<VersionInfo>(versionInfoString);
+                string versionInfoString = GameFramework.Utility.Converter.GetString(versionInfoBytes);
+                m_VersionInfo = GameFramework.Utility.Json.ToObject<VersionInfo>(versionInfoString);
                 if (m_VersionInfo == null)
                 {
                     Log.Error("Parse VersionInfo failure.");
@@ -84,7 +84,7 @@ namespace Game
                     return;
                 }
                 // 设置资源更新下载地址
-                GameEntry.Resource.UpdatePrefixUri = Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
+                GameEntry.Resource.UpdatePrefixUri = GameFramework.Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
                 m_CheckVersionComplete = true;
             }
             else
@@ -150,7 +150,7 @@ namespace Game
                     return "Linux";
 
                 default:
-                    throw new System.NotSupportedException(Utility.Text.Format("Platform '{0}' is not supported.", Application.platform));
+                    throw new System.NotSupportedException(GameFramework.Utility.Text.Format("Platform '{0}' is not supported.", Application.platform));
             }
         }
     }
