@@ -4,7 +4,7 @@
 // 创建时间：2023-04-01 17:20:03
 // 版 本：1.0
 // ========================================================
-using GameFramework.Event;
+using DEngine.Event;
 
 namespace Game.Hotfix
 {
@@ -18,5 +18,4 @@ namespace Game.Hotfix
 
         }
     }
-
 }

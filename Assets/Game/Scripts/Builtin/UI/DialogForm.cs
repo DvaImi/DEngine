@@ -1,14 +1,7 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using GameFramework;
+﻿using DEngine;
+using DEngine.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityGameFramework.Runtime;
 
 namespace Game
 {
@@ -29,9 +22,9 @@ namespace Game
         private int m_DialogMode = 1;
         private bool m_PauseGame = false;
         private object m_UserData = null;
-        private GameFrameworkAction<object> m_OnClickConfirm = null;
-        private GameFrameworkAction<object> m_OnClickCancel = null;
-        private GameFrameworkAction<object> m_OnClickOther = null;
+        private DEngineAction<object> m_OnClickConfirm = null;
+        private DEngineAction<object> m_OnClickCancel = null;
+        private DEngineAction<object> m_OnClickOther = null;
 
         public int DialogMode
         {

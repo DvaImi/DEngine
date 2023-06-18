@@ -1,18 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Game.Editor;
-using Game;
-using System.Text;
-using GameFramework;
-using NUnit.Framework;
+using DEngine.Editor;
+using Game.Editor.ResourceTools;
 using OfficeOpenXml;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
-using Game.Editor.ResourceTools;
-using UnityGameFramework.Editor;
 
 namespace Game.Editor.DataTableTools
 {
@@ -30,7 +22,7 @@ namespace Game.Editor.DataTableTools
                 var dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
                 if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
                 {
-                    Debug.LogError(GameFramework.Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
+                    Debug.LogError(DEngine.Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
                     break;
                 }
 
@@ -63,7 +55,7 @@ namespace Game.Editor.DataTableTools
                             var dataTableProcessor = DataTableGenerator.CreateExcelDataTableProcessor(sheet);
                             if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
                             {
-                                Debug.LogError(GameFramework.Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
+                                Debug.LogError(DEngine.Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
                                 break;
                             }
 
@@ -74,7 +66,7 @@ namespace Game.Editor.DataTableTools
                     }
                 }
             }
-            string mainfest = GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, "DataTableMainfest" + ".bytes"));
+            string mainfest = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, "DataTableMainfest" + ".bytes"));
             GameMainfestUitlity.CreatMainfest(dataTableNames.ToArray(), mainfest);
             AssetDatabase.Refresh();
         }

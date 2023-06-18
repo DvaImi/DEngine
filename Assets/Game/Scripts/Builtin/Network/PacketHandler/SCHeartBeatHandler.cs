@@ -5,8 +5,8 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework.Network;
-using UnityGameFramework.Runtime;
+using DEngine.Network;
+using DEngine.Runtime;
 
 namespace Game
 {

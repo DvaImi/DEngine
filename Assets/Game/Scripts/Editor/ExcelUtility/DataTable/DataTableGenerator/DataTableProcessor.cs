@@ -1,8 +1,8 @@
 ﻿//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2020 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
+// Homepage: https://DEngine.cn/
+// Feedback: mailto:ellan@DEngine.cn
 //------------------------------------------------------------
 
 using System;
@@ -10,8 +10,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using GameFramework;
-using GameFramework.FileSystem;
+using DEngine;
+using DEngine.FileSystem;
 using Game;
 using UnityEngine;
 
@@ -40,14 +40,14 @@ namespace Game.Editor.DataTableTools
             int? defaultValueRow, int? commentRow, int contentStartRow, int idColumn)
         {
             if (string.IsNullOrEmpty(dataTableFileName))
-                throw new GameFrameworkException("Data table file name is invalid.");
+                throw new DEngineException("Data table file name is invalid.");
 
             if (!dataTableFileName.EndsWith(".txt", StringComparison.Ordinal))
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Data table file '{0}' is not a txt.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Data table file '{0}' is not a txt.",
                     dataTableFileName));
 
             if (!File.Exists(dataTableFileName))
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Data table file '{0}' is not exist.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Data table file '{0}' is not exist.",
                     dataTableFileName));
 
             var lines = File.ReadAllLines(dataTableFileName, encoding);
@@ -63,7 +63,7 @@ namespace Game.Editor.DataTableTools
                 if (i == 0)
                     rawColumnCount = rawValue.Length;
                 else if (rawValue.Length != rawColumnCount)
-                    throw new GameFrameworkException(GameFramework.Utility.Text.Format(
+                    throw new DEngineException(DEngine.Utility.Text.Format(
                         "Data table file '{0}', raw Column is '{2}', but line '{1}' column is '{3}'.",
                         dataTableFileName, i.ToString(), rawColumnCount.ToString(), rawValue.Length.ToString()));
 
@@ -73,44 +73,44 @@ namespace Game.Editor.DataTableTools
             m_RawValues = rawValues.ToArray();
 
             if (nameRow < 0)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Name row '{0}' is invalid.", nameRow.ToString()));
+                throw new DEngineException(DEngine.Utility.Text.Format("Name row '{0}' is invalid.", nameRow.ToString()));
 
             if (typeRow < 0)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Type row '{0}' is invalid.", typeRow.ToString()));
+                throw new DEngineException(DEngine.Utility.Text.Format("Type row '{0}' is invalid.", typeRow.ToString()));
 
             if (contentStartRow < 0)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Content start row '{0}' is invalid.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Content start row '{0}' is invalid.",
                     contentStartRow.ToString()));
 
             if (idColumn < 0)
-                throw new GameFrameworkException(
-                    GameFramework.Utility.Text.Format("Id column '{0}' is invalid.", idColumn.ToString()));
+                throw new DEngineException(
+                    DEngine.Utility.Text.Format("Id column '{0}' is invalid.", idColumn.ToString()));
 
             if (nameRow >= rawRowCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format(
+                throw new DEngineException(DEngine.Utility.Text.Format(
                     "Name row '{0}' >= raw row count '{1}' is not allow.", nameRow.ToString(), rawRowCount.ToString()));
 
             if (typeRow >= rawRowCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format(
+                throw new DEngineException(DEngine.Utility.Text.Format(
                     "Type row '{0}' >= raw row count '{1}' is not allow.", typeRow.ToString(), rawRowCount.ToString()));
 
             if (defaultValueRow.HasValue && defaultValueRow.Value >= rawRowCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format(
+                throw new DEngineException(DEngine.Utility.Text.Format(
                     "Default value row '{0}' >= raw row count '{1}' is not allow.", defaultValueRow.Value.ToString(),
                     rawRowCount.ToString()));
 
             if (commentRow.HasValue && commentRow.Value >= rawRowCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format(
+                throw new DEngineException(DEngine.Utility.Text.Format(
                     "Comment row '{0}' >= raw row count '{1}' is not allow.", commentRow.Value.ToString(),
                     rawRowCount.ToString()));
 
             if (contentStartRow > rawRowCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format(
+                throw new DEngineException(DEngine.Utility.Text.Format(
                     "Content start row '{0}' > raw row count '{1}' is not allow.", contentStartRow.ToString(),
                     rawRowCount.ToString()));
 
             if (idColumn >= rawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format(
+                throw new DEngineException(DEngine.Utility.Text.Format(
                     "Id column '{0}' >= raw column count '{1}' is not allow.", idColumn.ToString(),
                     rawColumnCount.ToString()));
 
@@ -174,7 +174,7 @@ namespace Game.Editor.DataTableTools
         public bool IsListColumn(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].GetTypeStrings()[0].Equals("List<{0}>");
@@ -183,7 +183,7 @@ namespace Game.Editor.DataTableTools
         public bool IsArrayColumn(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].GetTypeStrings()[0].Equals("{0}[]");
@@ -192,7 +192,7 @@ namespace Game.Editor.DataTableTools
         public bool IsEnumrColumn(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].IsEnum;
@@ -201,7 +201,7 @@ namespace Game.Editor.DataTableTools
         public bool IsDictionaryColumn(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].GetTypeStrings()[0].Equals("Dictionary<{0},{1}>");
@@ -210,7 +210,7 @@ namespace Game.Editor.DataTableTools
         public bool IsIdColumn(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].IsId;
@@ -219,7 +219,7 @@ namespace Game.Editor.DataTableTools
         public bool IsCommentRow(int rawRow)
         {
             if (rawRow < 0 || rawRow >= RawRowCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw row '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw row '{0}' is out of range.",
                     rawRow.ToString()));
 
             return GetValue(rawRow, 0).StartsWith(CommentLineSeparator, StringComparison.Ordinal);
@@ -228,7 +228,7 @@ namespace Game.Editor.DataTableTools
         public bool IsCommentColumn(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return string.IsNullOrEmpty(GetName(rawColumn)) || m_DataProcessor[rawColumn].IsComment;
@@ -237,7 +237,7 @@ namespace Game.Editor.DataTableTools
         public string GetName(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             if (IsIdColumn(rawColumn)) return "Id";
@@ -248,7 +248,7 @@ namespace Game.Editor.DataTableTools
         public bool IsSystem(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].IsSystem;
@@ -257,7 +257,7 @@ namespace Game.Editor.DataTableTools
         public Type GetType(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].Type;
@@ -266,7 +266,7 @@ namespace Game.Editor.DataTableTools
         public string GetLanguageKeyword(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].LanguageKeyword;
@@ -275,7 +275,7 @@ namespace Game.Editor.DataTableTools
         public string[] GetTypeStrings(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DataProcessor[rawColumn].GetTypeStrings();
@@ -284,7 +284,7 @@ namespace Game.Editor.DataTableTools
         public string GetDefaultValue(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_DefaultValueRow != null ? m_DefaultValueRow[rawColumn] : null;
@@ -293,7 +293,7 @@ namespace Game.Editor.DataTableTools
         public string GetComment(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_CommentRow != null ? m_CommentRow[rawColumn] : null;
@@ -302,11 +302,11 @@ namespace Game.Editor.DataTableTools
         public string GetValue(int rawRow, int rawColumn)
         {
             if (rawRow < 0 || rawRow >= RawRowCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw row '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw row '{0}' is out of range.",
                     rawRow.ToString()));
 
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("Raw column '{0}' is out of range.",
                     rawColumn.ToString()));
 
             return m_RawValues[rawRow][rawColumn];
@@ -315,7 +315,7 @@ namespace Game.Editor.DataTableTools
         public string GetString(int index)
         {
             if (index < 0 || index >= StringCount)
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("String index '{0}' is out of range.",
+                throw new DEngineException(DEngine.Utility.Text.Format("String index '{0}' is out of range.",
                     index.ToString()));
 
             return m_Strings[index];
@@ -332,7 +332,7 @@ namespace Game.Editor.DataTableTools
 
         public bool GenerateDataFile(string outputFileName)
         {
-            if (string.IsNullOrEmpty(outputFileName)) throw new GameFrameworkException("Output file name is invalid.");
+            if (string.IsNullOrEmpty(outputFileName)) throw new DEngineException("Output file name is invalid.");
 
             try
             {
@@ -351,12 +351,12 @@ namespace Game.Editor.DataTableTools
                     }
                 }
 
-                Debug.Log(GameFramework.Utility.Text.Format("Parse data table '{0}' success.", outputFileName));
+                Debug.Log(DEngine.Utility.Text.Format("Parse data table '{0}' success.", outputFileName));
                 return true;
             }
             catch (Exception exception)
             {
-                Debug.LogError(GameFramework.Utility.Text.Format("Parse data table '{0}' failure, exception is '{1}'.",
+                Debug.LogError(DEngine.Utility.Text.Format("Parse data table '{0}' failure, exception is '{1}'.",
                     outputFileName, exception.ToString()));
                 return false;
             }
@@ -367,12 +367,12 @@ namespace Game.Editor.DataTableTools
             try
             {
                 m_CodeTemplate = File.ReadAllText(codeTemplateFileName, encoding);
-                Debug.Log(GameFramework.Utility.Text.Format("Set code template '{0}' success.", codeTemplateFileName));
+                Debug.Log(DEngine.Utility.Text.Format("Set code template '{0}' success.", codeTemplateFileName));
                 return true;
             }
             catch (Exception exception)
             {
-                Debug.LogError(GameFramework.Utility.Text.Format("Set code template '{0}' failure, exception is '{1}'.",
+                Debug.LogError(DEngine.Utility.Text.Format("Set code template '{0}' failure, exception is '{1}'.",
                     codeTemplateFileName, exception.ToString()));
                 return false;
             }
@@ -386,9 +386,9 @@ namespace Game.Editor.DataTableTools
         public bool GenerateCodeFile(string outputFileName, Encoding encoding, object userData = null)
         {
             if (string.IsNullOrEmpty(m_CodeTemplate))
-                throw new GameFrameworkException("You must set code template first.");
+                throw new DEngineException("You must set code template first.");
 
-            if (string.IsNullOrEmpty(outputFileName)) throw new GameFrameworkException("Output file name is invalid.");
+            if (string.IsNullOrEmpty(outputFileName)) throw new DEngineException("Output file name is invalid.");
 
             try
             {
@@ -403,12 +403,12 @@ namespace Game.Editor.DataTableTools
                     }
                 }
 
-                Debug.Log(GameFramework.Utility.Text.Format("Generate code file '{0}' success.", outputFileName));
+                Debug.Log(DEngine.Utility.Text.Format("Generate code file '{0}' success.", outputFileName));
                 return true;
             }
             catch (Exception exception)
             {
-                Debug.LogError(GameFramework.Utility.Text.Format("Generate code file '{0}' failure, exception is '{1}'.",
+                Debug.LogError(DEngine.Utility.Text.Format("Generate code file '{0}' failure, exception is '{1}'.",
                     outputFileName, exception.ToString()));
                 return false;
             }
@@ -432,14 +432,14 @@ namespace Game.Editor.DataTableTools
                         {
                             if (m_DataProcessor[rawColumn].IsId || string.IsNullOrEmpty(GetDefaultValue(rawColumn)))
                             {
-                                Debug.LogError(GameFramework.Utility.Text.Format(
+                                Debug.LogError(DEngine.Utility.Text.Format(
                                     "Parse raw value failure. OutputFileName='{0}' RawRow='{1}' RowColumn='{2}' Name='{3}' Type='{4}' RawValue='{5}'",
                                     outputFileName, rawRow.ToString(), rawColumn.ToString(), GetName(rawColumn),
                                     GetLanguageKeyword(rawColumn), GetValue(rawRow, rawColumn)));
                                 return null;
                             }
 
-                            Debug.LogWarning(GameFramework.Utility.Text.Format(
+                            Debug.LogWarning(DEngine.Utility.Text.Format(
                                 "Parse raw value failure, will try default value. OutputFileName='{0}' RawRow='{1}' RowColumn='{2}' Name='{3}' Type='{4}' RawValue='{5}'",
                                 outputFileName, rawRow.ToString(), rawColumn.ToString(), GetName(rawColumn),
                                 GetLanguageKeyword(rawColumn), GetValue(rawRow, rawColumn)));
@@ -450,7 +450,7 @@ namespace Game.Editor.DataTableTools
                             }
                             catch
                             {
-                                Debug.LogError(GameFramework.Utility.Text.Format(
+                                Debug.LogError(DEngine.Utility.Text.Format(
                                     "Parse default value failure. OutputFileName='{0}' RawRow='{1}' RowColumn='{2}' Name='{3}' Type='{4}' RawValue='{5}'",
                                     outputFileName, rawRow.ToString(), rawColumn.ToString(), GetName(rawColumn),
                                     GetLanguageKeyword(rawColumn), GetComment(rawColumn)));

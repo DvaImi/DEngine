@@ -1,5 +1,5 @@
-using System.IO;
-using GameFramework;
+ï»¿using System.IO;
+using DEngine;
 using UnityEditor;
 using UnityEngine;
 
@@ -96,14 +96,14 @@ namespace Game.Editor
         }
 
         /// <summary>
-        /// ×ª»»ÎªÏà¶ÔUnityAssets µÄÂ·¾¶
+        /// è½¬æ¢ä¸ºç›¸å¯¹UnityAssets çš„è·¯å¾„
         /// </summary>
         /// <param name="inputPath"></param>
         /// <returns></returns>
         public static string ConvertToAssetPath(string inputPath)
         {
             string absoluteFolderPath = Application.dataPath + "/" + inputPath[(inputPath.IndexOf("Assets/") + "Assets/".Length)..];
-            return GameFramework.Utility.Path.GetRegularPath($"Assets{absoluteFolderPath[Application.dataPath.Length..]}");
+            return Utility.Path.GetRegularPath($"Assets{absoluteFolderPath[Application.dataPath.Length..]}");
         }
     }
 }

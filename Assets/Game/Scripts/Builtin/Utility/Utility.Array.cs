@@ -1,4 +1,4 @@
-// ========================================================
+﻿// ========================================================
 // 描述：
 // 作者：Dvalmi 
 // 创建时间：2022-04-16 13:09:06
@@ -7,7 +7,7 @@
 
 using System;
 using System.Collections.Generic;
-using GameFramework;
+using DEngine;
 
 namespace Game
 {
@@ -22,7 +22,7 @@ namespace Game
             /// <typeparam name="TKey">数据类型字段的类型</typeparam>
             /// <param name="array">数据类型对象的数组</param>
             /// <param name="handler">委托对象</param>
-            public static void OrderBy<T, TKey>(T[] array, GameFrameworkFunc<T, TKey> handler)
+            public static void OrderBy<T, TKey>(T[] array, DEngineFunc<T, TKey> handler)
                 where TKey : IComparable<TKey>
             {
                 for (int i = 0; i < array.Length; i++)
@@ -44,7 +44,7 @@ namespace Game
             /// <typeparam name="TKey">数据类型字段的类型</typeparam>
             /// <param name="array">数据类型对象的数组</param>
             /// <param name="handler">委托对象</param>
-            public static void OrderByDescending<T, TKey>(T[] array, GameFrameworkFunc<T, TKey> handler)
+            public static void OrderByDescending<T, TKey>(T[] array, DEngineFunc<T, TKey> handler)
                 where TKey : IComparable<TKey>
             {
                 for (int i = 0; i < array.Length; i++)
@@ -66,7 +66,7 @@ namespace Game
             /// <typeparam name="TKey">数据类型字段的类型</typeparam>
             /// <param name="array">数据类型对象的数组</param>
             /// <param name="handler">委托对象</param>
-            public static T Max<T, TKey>(T[] array, GameFrameworkFunc<T, TKey> handler)
+            public static T Max<T, TKey>(T[] array, DEngineFunc<T, TKey> handler)
                 where TKey : IComparable<TKey>
             {
                 T max = default(T);
@@ -89,7 +89,7 @@ namespace Game
             /// <typeparam name="TKey">数据类型字段的类型</typeparam>
             /// <param name="array">数据类型对象的数组</param>
             /// <param name="handler">委托对象</param>
-            public static T Min<T, TKey>(T[] array, GameFrameworkFunc<T, TKey> handler)
+            public static T Min<T, TKey>(T[] array, DEngineFunc<T, TKey> handler)
                 where TKey : IComparable<TKey>
             {
                 T min = default(T);
@@ -200,7 +200,7 @@ namespace Game
             /// <param name="array">数组</param>
             /// <param name="handler">查找条件委托</param>
             /// <returns></returns>
-            public static T Find<T>(T[] array, GameFrameworkFunc<T, bool> handler)
+            public static T Find<T>(T[] array, DEngineFunc<T, bool> handler)
             {
                 T temp = default(T);
                 for (int i = 0; i < array.Length; i++)
@@ -222,7 +222,7 @@ namespace Game
             /// <param name="array"></param>
             /// <param name="handler"></param>
             /// <returns></returns>
-            public static T[] FindAll<T>(T[] array, GameFrameworkFunc<T, bool> handler)
+            public static T[] FindAll<T>(T[] array, DEngineFunc<T, bool> handler)
             {
                 List<T> list = new List<T>();
                 for (int i = 0; i < array.Length; i++)
@@ -245,7 +245,7 @@ namespace Game
             /// <param name="array"></param>
             /// <param name="handler"></param>
             /// <returns></returns>
-            public static TKey[] Select<T, TKey>(T[] array, GameFrameworkFunc<T, TKey> handler)
+            public static TKey[] Select<T, TKey>(T[] array, DEngineFunc<T, TKey> handler)
             {
                 TKey[] keys = new TKey[array.Length];
                 for (int i = 0; i < array.Length; i++)
@@ -264,7 +264,7 @@ namespace Game
             /// <param name="predicate"></param>
             /// <param name="callback"></param>
             /// <typeparam name="T"></typeparam>
-            public static void PickAndExecute<T>(IEnumerable<T> array, GameFrameworkFunc<T, bool> predicate, Action<T> callback)
+            public static void PickAndExecute<T>(IEnumerable<T> array, DEngineFunc<T, bool> predicate, Action<T> callback)
             {
                 foreach (T item in array)
                 {

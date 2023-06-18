@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
-using UnityGameFramework.Editor.ResourceTools;
+using DEngine.Editor.ResourceTools;
+using DEngine;
 
 namespace Game.Editor.Builder
 {
@@ -31,7 +32,7 @@ namespace Game.Editor.Builder
                 var fileNames = Directory.GetFiles(outputFullPath, "*", SearchOption.AllDirectories);
                 foreach (string fileName in fileNames)
                 {
-                    string destFileName = GameFramework.Utility.Path.GetRegularPath(Path.Combine(versionpath, GameSetting.Instance.InternalResourceVersion.ToString(), GetPlatformPath(platform), fileName[outputFullPath.Length..]));
+                    string destFileName = Utility.Path.GetRegularPath(Path.Combine(versionpath, GameSetting.Instance.InternalResourceVersion.ToString(), GetPlatformPath(platform), fileName[outputFullPath.Length..]));
                     FileInfo destFileInfo = new(destFileName);
                     if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
                     {

@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using System.Text;
-using GameFramework.Fsm;
-using GameFramework.Procedure;
-using GameFramework.Resource;
+using DEngine.Fsm;
+using DEngine.Procedure;
+using DEngine.Resource;
+using DEngine.Runtime;
 using HybridCLR;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace Game
 {
@@ -53,7 +53,6 @@ namespace Game
         private void OnAOTMetadataMainfestLoadSuccessAsync(string assetName, object asset, float duration, object userData)
         {
             TextAsset result = (TextAsset)asset;
-            string[] aotdll = null;
             if (result != null && result.bytes != null)
             {
                 using (Stream stream = new MemoryStream(result.bytes))
@@ -61,22 +60,14 @@ namespace Game
                     using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
                     {
                         int count = binaryReader.ReadInt32();
-                        aotdll = new string[count];
-
+                        m_AotLength = count;
                         for (int i = 0; i < count; i++)
                         {
-                            string aot = binaryReader.ReadString();
-                            aotdll[i] = AssetUtility.GetCLRAOTAsset(aot);
-                            Log.Info($"AOTMetadata\n {aot} is Ready.");
+                            string aotFullName = AssetUtility.GetCLRAOTAsset(binaryReader.ReadString());
+                            GameEntry.Resource.LoadAsset(aotFullName, new LoadAssetCallbacks(OndAotMetadDataLoadSuccess));
                         }
                     }
                 }
-            }
-            m_AotLength = aotdll.Length;
-            for (int i = 0; i < aotdll.Length; i++)
-            {
-                int index = i;
-                GameEntry.Resource.LoadAsset(aotdll[index], new LoadAssetCallbacks(OndAotMetadDataLoadSuccess), index);
             }
         }
 

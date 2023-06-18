@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using GameFramework;
+using DEngine;
 using UnityEditor;
 
 namespace Game.Editor
@@ -56,7 +56,7 @@ namespace Game.Editor
         /// </summary>
         public string[] EditorAssemblyNames =
         {
-            "UnityGameFramework.Editor",
+            "UnityDEngine.Editor",
             "Game.Editor",
             "Assembly-CSharp-Editor"
         };

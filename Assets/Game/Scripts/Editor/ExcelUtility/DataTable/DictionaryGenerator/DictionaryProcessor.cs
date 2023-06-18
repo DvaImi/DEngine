@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using GameFramework;
+using DEngine;
 using OfficeOpenXml;
 using UnityEngine;
 
@@ -78,22 +78,22 @@ namespace Game.Editor
 
             if (nameRow < 0)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Name row '{0}' is invalid.", nameRow));
+                throw new DEngineException(Utility.Text.Format("Name row '{0}' is invalid.", nameRow));
             }
 
             if (contentStartRow < 0)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Content start row '{0}' is invalid.", contentStartRow.ToString()));
+                throw new DEngineException(Utility.Text.Format("Content start row '{0}' is invalid.", contentStartRow.ToString()));
             }
 
             if (nameRow >= rawRowCount)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Name row '{0}' >= raw row count '{1}' is not allow.", nameRow, rawRowCount));
+                throw new DEngineException(Utility.Text.Format("Name row '{0}' >= raw row count '{1}' is not allow.", nameRow, rawRowCount));
             }
 
             if (contentStartRow > rawRowCount)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Content start row '{0}' > raw row count '{1}' is not allow.", contentStartRow, rawRowCount));
+                throw new DEngineException(Utility.Text.Format("Content start row '{0}' > raw row count '{1}' is not allow.", contentStartRow, rawRowCount));
             }
 
             m_NameRow = m_RawValues[nameRow];
@@ -143,7 +143,7 @@ namespace Game.Editor
         {
             if (rawRow < 0 || rawRow >= RawRowCount)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw row '{0}' is out of range.", rawRow));
+                throw new DEngineException(Utility.Text.Format("Raw row '{0}' is out of range.", rawRow));
             }
 
             return GetValue(rawRow, 0).StartsWith(CommentLineSeparator, StringComparison.Ordinal);
@@ -159,7 +159,7 @@ namespace Game.Editor
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.", rawColumn));
+                throw new DEngineException(Utility.Text.Format("Raw column '{0}' is out of range.", rawColumn));
             }
 
             string columnName = GetName(rawColumn);
@@ -176,7 +176,7 @@ namespace Game.Editor
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.", rawColumn));
+                throw new DEngineException(Utility.Text.Format("Raw column '{0}' is out of range.", rawColumn));
             }
 
             return m_NameRow[rawColumn];
@@ -193,12 +193,12 @@ namespace Game.Editor
         {
             if (rawRow < 0 || rawRow >= RawRowCount)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw row '{0}' is out of range.", rawRow));
+                throw new DEngineException(Utility.Text.Format("Raw row '{0}' is out of range.", rawRow));
             }
 
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
             {
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Raw column '{0}' is out of range.", rawColumn));
+                throw new DEngineException(Utility.Text.Format("Raw column '{0}' is out of range.", rawColumn));
             }
 
             return m_RawValues[rawRow][rawColumn];
@@ -208,7 +208,7 @@ namespace Game.Editor
         {
             if (string.IsNullOrEmpty(outputFileName))
             {
-                throw new GameFrameworkException("Output file name is invalid.");
+                throw new DEngineException("Output file name is invalid.");
             }
 
             try
@@ -238,7 +238,7 @@ namespace Game.Editor
                                 }
                                 catch
                                 {
-                                    Debug.LogError(GameFramework.Utility.Text.Format("Generate config file failure. OutputFileName='{0}' RawRow='{1}' RowColumn='{2}'.", outputFileName, rawRow.ToString(), rawColumn.ToString()));
+                                    Debug.LogError(Utility.Text.Format("Generate config file failure. OutputFileName='{0}' RawRow='{1}' RowColumn='{2}'.", outputFileName, rawRow.ToString(), rawColumn.ToString()));
                                     return false;
                                 }
                             }
@@ -250,7 +250,7 @@ namespace Game.Editor
             }
             catch (Exception exception)
             {
-                Debug.LogError(GameFramework.Utility.Text.Format("Parse '{0}' failure, exception is '{1}'.", outputFileName, exception));
+                Debug.LogError(Utility.Text.Format("Parse '{0}' failure, exception is '{1}'.", outputFileName, exception));
                 return false;
             }
         }

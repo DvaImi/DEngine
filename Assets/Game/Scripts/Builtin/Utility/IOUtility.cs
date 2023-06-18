@@ -1,4 +1,4 @@
-// ========================================================
+﻿// ========================================================
 // 描述：
 // 作者：Dvalmi 
 // 创建时间：2023-03-26 16:41:12
@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using GameFramework;
+using DEngine;
 using UnityEngine;
 
 namespace Game
@@ -124,7 +124,7 @@ namespace Game
 
         public static void Delete(string directoryPath, string searchPattern = "*")
         {
-            GameFramework.Utility.Path.RemoveEmptyDirectory(directoryPath);
+            Utility.Path.RemoveEmptyDirectory(directoryPath);
             string[] fileNames = Directory.GetFiles(directoryPath, searchPattern, SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {

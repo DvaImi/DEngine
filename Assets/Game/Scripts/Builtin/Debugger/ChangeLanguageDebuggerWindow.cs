@@ -1,14 +1,14 @@
 ﻿//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
+// Homepage: https://DEngine.cn/
+// Feedback: mailto:ellan@DEngine.cn
 //------------------------------------------------------------
 
-using GameFramework.Debugger;
-using GameFramework.Localization;
+using DEngine.Debugger;
+using DEngine.Localization;
 using UnityEngine;
-using UnityGameFramework.Runtime;
+using DEngine.Runtime;
 
 namespace Game
 {
@@ -38,7 +38,7 @@ namespace Game
             if (m_NeedRestart)
             {
                 m_NeedRestart = false;
-                UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
+                DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
             }
         }
 

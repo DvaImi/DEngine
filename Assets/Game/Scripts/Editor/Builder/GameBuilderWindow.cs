@@ -7,7 +7,7 @@
 
 using System.IO;
 using Game.Editor.ResourceTools;
-using GameFramework;
+using DEngine;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
 using UnityEditor;
@@ -200,11 +200,6 @@ namespace Game.Editor.Builder
                         {
                             SelectAssembly odinEditor = GetWindow<SelectAssembly>();
                             odinEditor.Open();
-                            odinEditor.SetSaveCallBack((aot) =>
-                            {
-                                GameSetting.Instance.AOTDllNames = aot;
-                                GameSetting.Instance.SaveSetting();
-                            });
                         }
                     }
                     EditorGUILayout.EndHorizontal();
@@ -279,7 +274,7 @@ namespace Game.Editor.Builder
 
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
-                    UnityGameFramework.Editor.OpenFolder.Execute(GameSetting.Instance.BundlesOutput);
+                    DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.BundlesOutput);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -355,7 +350,7 @@ namespace Game.Editor.Builder
                         }
                         if (GUILayout.Button("Go", GUILayout.Width(30)))
                         {
-                            UnityGameFramework.Editor.OpenFolder.Execute(GameSetting.Instance.VirtualServerAddress);
+                            DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.VirtualServerAddress);
                         }
                     }
                     EditorGUILayout.EndHorizontal();
@@ -402,7 +397,7 @@ namespace Game.Editor.Builder
 
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
-                    UnityGameFramework.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
+                    DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -442,7 +437,7 @@ namespace Game.Editor.Builder
                 Debug.Log("Build succeeded: " + StringUtility.GetByteLengthString((long)summary.totalSize));
                 if (completeOpenFolder)
                 {
-                    UnityGameFramework.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
+                    DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
                 }
 
                 if (GameSetting.Instance.ForceUpdateGame)

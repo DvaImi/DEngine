@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GameFramework;
+using DEngine;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityGameFramework.Editor.ResourceTools;
-using GFResource = UnityGameFramework.Editor.ResourceTools.Resource;
+using DEngine.Editor.ResourceTools;
+using GFResource = DEngine.Editor.ResourceTools.Resource;
 
 namespace Game.Editor.ResourceTools
 {
@@ -278,7 +278,7 @@ namespace Game.Editor.ResourceTools
                     string format2 = "(" + (m_AllConfigPaths.Count + 1) + ")";
                     newPath = newPath.Replace(format, format2);
                 }
-                m_CurrentConfigPath = GameFramework.Utility.Path.GetRegularPath(newPath);
+                m_CurrentConfigPath = DEngine.Utility.Path.GetRegularPath(newPath);
 
                 AssetDatabase.CreateAsset(CreateInstance<AssetBundleCollector>(), newPath);
                 AssetDatabase.SaveAssets();
@@ -465,7 +465,7 @@ namespace Game.Editor.ResourceTools
                                 if (string.IsNullOrEmpty(assetCollector.name))
                                 {
                                     string relativeDirectoryName = assetCollector.assetPath.Replace("Assets/", "");
-                                    ApplyResourceFilter(ref signedAssetBundleList, assetCollector, GameFramework.Utility.Path.GetRegularPath(relativeDirectoryName));
+                                    ApplyResourceFilter(ref signedAssetBundleList, assetCollector, DEngine.Utility.Path.GetRegularPath(relativeDirectoryName));
                                 }
                                 else
                                 {
@@ -488,7 +488,7 @@ namespace Game.Editor.ResourceTools
                                         }
 
                                         string relativeAssetName = file.FullName[(Application.dataPath.Length + 1)..];
-                                        string relativeAssetNameWithoutExtension = GameFramework.Utility.Path.GetRegularPath(relativeAssetName[..relativeAssetName.LastIndexOf('.')]);
+                                        string relativeAssetNameWithoutExtension = DEngine.Utility.Path.GetRegularPath(relativeAssetName[..relativeAssetName.LastIndexOf('.')]);
 
                                         string assetName = Path.Combine("Assets", relativeAssetName);
                                         string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
@@ -509,7 +509,7 @@ namespace Game.Editor.ResourceTools
                                 {
                                     string relativeDirectoryName = directory.FullName[(Application.dataPath.Length + 1)..];
 
-                                    ApplyResourceFilter(ref signedAssetBundleList, assetCollector, GameFramework.Utility.Path.GetRegularPath(relativeDirectoryName), string.Empty, directory.FullName);
+                                    ApplyResourceFilter(ref signedAssetBundleList, assetCollector, DEngine.Utility.Path.GetRegularPath(relativeDirectoryName), string.Empty, directory.FullName);
                                 }
                             }
                             break;
@@ -531,7 +531,7 @@ namespace Game.Editor.ResourceTools
                                             }
 
                                             string relativeAssetName = file.FullName.Substring(Application.dataPath.Length + 1);
-                                            string relativeAssetNameWithoutExtension = GameFramework.Utility.Path.GetRegularPath(relativeAssetName[..relativeAssetName.LastIndexOf('.')]);
+                                            string relativeAssetNameWithoutExtension = DEngine.Utility.Path.GetRegularPath(relativeAssetName[..relativeAssetName.LastIndexOf('.')]);
 
                                             string assetName = Path.Combine("Assets", relativeAssetName);
                                             string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
@@ -548,7 +548,7 @@ namespace Game.Editor.ResourceTools
                         case FilterType.FileOnly:
                             FileInfo assetFile = new FileInfo(assetCollector.assetPath);
                             string assetFileName = assetFile.FullName.Substring(Application.dataPath.Length + 1);
-                            string assetNameWithoutExtension = GameFramework.Utility.Path.GetRegularPath(assetFileName[..assetFileName.LastIndexOf('.')]);
+                            string assetNameWithoutExtension = DEngine.Utility.Path.GetRegularPath(assetFileName[..assetFileName.LastIndexOf('.')]);
                             assetFileName = Path.Combine("Assets", assetFileName);
                             string assetFileGUID = AssetDatabase.AssetPathToGUID(assetFileName);
 

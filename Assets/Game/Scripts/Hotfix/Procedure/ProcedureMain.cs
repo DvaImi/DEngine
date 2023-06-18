@@ -5,8 +5,8 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework.Procedure;
-using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
+using DEngine.Procedure;
+using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
 namespace Game.Hotfix
 {
@@ -25,7 +25,7 @@ namespace Game.Hotfix
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-          
+
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

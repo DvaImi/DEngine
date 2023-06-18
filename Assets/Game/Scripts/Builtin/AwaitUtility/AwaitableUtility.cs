@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using GameFramework;
-using GameFramework.Event;
-using GameFramework.Localization;
-using GameFramework.Resource;
+using DEngine;
+using DEngine.Event;
+using DEngine.Localization;
+using DEngine.Resource;
+using DEngine.Runtime;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 using Object = UnityEngine.Object;
 
 namespace Game
@@ -26,7 +26,7 @@ namespace Game
         /// </summary>
         public static void Subscribe()
         {
-            EventComponent eventComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<EventComponent>();
+            EventComponent eventComponent = DEngine.Runtime.GameEntry.GetComponent<EventComponent>();
 
             if (eventComponent == null)
             {
@@ -88,7 +88,7 @@ namespace Game
             if (result != null)
             {
                 Debug.LogError(ne.ErrorMessage);
-                result.TrySetException(new GameFrameworkException(ne.ErrorMessage));
+                result.TrySetException(new DEngineException(ne.ErrorMessage));
                 m_UIFormResult.Remove(ne.SerialId);
             }
         }
@@ -127,7 +127,7 @@ namespace Game
             if (result != null)
             {
                 Debug.LogError(ne.ErrorMessage);
-                result.TrySetException(new GameFrameworkException(ne.ErrorMessage));
+                result.TrySetException(new DEngineException(ne.ErrorMessage));
                 m_EntityResult.Remove(ne.EntityId);
             }
         }
@@ -182,7 +182,7 @@ namespace Game
             if (result != null)
             {
                 Debug.LogError(ne.ErrorMessage);
-                result.TrySetException(new GameFrameworkException(ne.ErrorMessage));
+                result.TrySetException(new DEngineException(ne.ErrorMessage));
                 m_LoadSceneResult.Remove(ne.SceneAssetName);
             }
         }
@@ -233,7 +233,7 @@ namespace Game
             if (result != null)
             {
                 Debug.LogError($"Unload scene {ne.SceneAssetName} failure.");
-                result.TrySetException(new GameFrameworkException($"Unload scene {ne.SceneAssetName} failure."));
+                result.TrySetException(new DEngineException($"Unload scene {ne.SceneAssetName} failure."));
                 m_UnLoadSceneResult.Remove(ne.SceneAssetName);
             }
         }
@@ -260,13 +260,13 @@ namespace Game
                 else
                 {
                     Debug.LogError($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}.");
-                    source.TrySetException(new GameFrameworkException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
+                    source.TrySetException(new DEngineException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
                 }
             },
              (tempAssetName, status, errorMessage, userdata) =>
              {
                  Debug.LogError(errorMessage);
-                 loadAssetTcs.TrySetException(new GameFrameworkException(errorMessage));
+                 loadAssetTcs.TrySetException(new DEngineException(errorMessage));
              }
             ));
 
@@ -470,7 +470,7 @@ namespace Game
                 {
                     if (tcs != null)
                     {
-                        tcs.TrySetException(new GameFrameworkException(ne.ErrorMessage));
+                        tcs.TrySetException(new DEngineException(ne.ErrorMessage));
                         m_LoadDictionaryResult.Remove(language);
                     }
                 }

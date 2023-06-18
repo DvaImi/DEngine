@@ -1,9 +1,9 @@
-using System;
+ï»¿using System;
 using System.Linq;
-using GameFramework;
-using GameFramework.Resource;
+using DEngine;
+using DEngine.Editor.ResourceTools;
+using DEngine.Resource;
 using UnityEditor;
-using UnityGameFramework.Editor.ResourceTools;
 
 namespace Game.Editor.Builder
 {
@@ -52,7 +52,7 @@ namespace Game.Editor.Builder
                     return BuildTarget.WebGL;
 
                 default:
-                    throw new GameFrameworkException("Platform is invalid.");
+                    throw new DEngineException("Platform is invalid.");
             }
         }
 
@@ -68,7 +68,7 @@ namespace Game.Editor.Builder
                 BuildTarget.WebGL => Platform.WebGL,
                 BuildTarget.WSAPlayer => Platform.WindowsStore,
                 BuildTarget.StandaloneLinux64 => Platform.Linux,
-                _ => throw new GameFrameworkException("Platform is invalid."),
+                _ => throw new DEngineException("Platform is invalid."),
             };
         }
 
@@ -78,14 +78,14 @@ namespace Game.Editor.Builder
         }
 
         /// <summary>
-        /// ÓÉ UnityGameFramework.Editor.ResourceTools.Platform µÃµ½ Æ½Ì¨±êÊ¶·û¡£
+        /// ç”± UnityGameFramework.Editor.ResourceTools.Platform å¾—åˆ° å¹³å°æ ‡è¯†ç¬¦ã€‚
         /// </summary>
-        /// <param name="platform">UnityGameFramework.Editor.ResourceTools.Platform¡£</param>
-        /// <returns>Æ½Ì¨±êÊ¶·û¡£</returns>
+        /// <param name="platform">UnityGameFramework.Editor.ResourceTools.Platformã€‚</param>
+        /// <returns>å¹³å°æ ‡è¯†ç¬¦ã€‚</returns>
         public static string GetPlatformPath(Platform platform)
         {
-            // ÕâÀïºÍ ProcedureVersionCheck.GetPlatformPath() ¶ÔÓ¦¡£
-            // Ê¹ÓÃ Æ½Ì¨±êÊ¶·û ¹ØÁª UnityEngine.RuntimePlatform ºÍ UnityGameFramework.Editor.ResourceTools.Platform
+            // è¿™é‡Œå’Œ ProcedureVersionCheck.GetPlatformPath() å¯¹åº”ã€‚
+            // ä½¿ç”¨ å¹³å°æ ‡è¯†ç¬¦ å…³è” UnityEngine.RuntimePlatform å’Œ UnityGameFramework.Editor.ResourceTools.Platform
             switch (platform)
             {
                 case Platform.Windows:
@@ -113,7 +113,7 @@ namespace Game.Editor.Builder
                     return "Linux";
 
                 default:
-                    throw new GameFrameworkException("Platform is invalid.");
+                    throw new DEngineException("Platform is invalid.");
             }
         }
     }

@@ -3,13 +3,9 @@
 // 生成时间：2023-05-31 22:34:14.871
 //------------------------------------------------------------
 
-using GameFramework;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using UnityEngine;
-using UnityGameFramework.Runtime;
+using DEngine.Runtime;
 
 
 namespace Game.Hotfix
@@ -80,10 +76,10 @@ namespace Game.Hotfix
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-			AssetName = columnStrings[index++];
-			UIGroupName = columnStrings[index++];
-			AllowMultiInstance = bool.Parse(columnStrings[index++]);
-			PauseCoveredUIForm = bool.Parse(columnStrings[index++]);
+            AssetName = columnStrings[index++];
+            UIGroupName = columnStrings[index++];
+            AllowMultiInstance = bool.Parse(columnStrings[index++]);
+            PauseCoveredUIForm = bool.Parse(columnStrings[index++]);
             GeneratePropertyArray();
             return true;
         }

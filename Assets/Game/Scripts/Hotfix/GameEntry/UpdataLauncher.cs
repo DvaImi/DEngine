@@ -1,22 +1,7 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Cysharp.Threading.Tasks;
-using GameFramework;
-using GameFramework.Fsm;
-using GameFramework.Procedure;
-using GameFramework.Resource;
-using HybridCLR;
+﻿using DEngine.Fsm;
+using DEngine.Procedure;
+using DEngine.Runtime;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace Game.Hotfix
 {
@@ -36,7 +21,7 @@ namespace Game.Hotfix
             GameEntry.BuiltinData.DestroyDialog();
             // 重置流程组件，初始化热更新流程。
             GameEntry.Fsm.DestroyFsm<IProcedureManager>();
-            var procedureManager = GameFrameworkEntry.GetModule<IProcedureManager>();
+            var procedureManager = DEngine.DEngineEntry.GetModule<IProcedureManager>();
             ProcedureBase[] procedures =
             {
                 new ProcedureHotfixLaunch(),
@@ -44,7 +29,7 @@ namespace Game.Hotfix
                 new ProcedureChangeScene(),
                 new ProcedureMenu(),
             };
-            procedureManager.Initialize(GameFrameworkEntry.GetModule<IFsmManager>(), procedures);
+            procedureManager.Initialize(DEngine.DEngineEntry.GetModule<IFsmManager>(), procedures);
 
             //在此进入热更新启动流程
             procedureManager.StartProcedure<ProcedureHotfixLaunch>();

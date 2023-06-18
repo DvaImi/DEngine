@@ -1,16 +1,10 @@
-// ========================================================
-// 描述：
-// 作者：GeminiLion 
-// 创建时间：2023-04-20 00:05:35
-// 版 本：1.0
-// ========================================================
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
-using GameFramework;
-using GameFramework.Localization;
+using DEngine;
+using DEngine.Localization;
+using DEngine.Runtime;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace Game.Helper
 {
@@ -129,7 +123,7 @@ namespace Game.Helper
             }
             else
             {
-                return localizationManager.ParseData(GameFramework.Utility.Converter.GetString(dictionaryBytes, startIndex, length), userData);
+                return localizationManager.ParseData(Utility.Converter.GetString(dictionaryBytes, startIndex, length), userData);
             }
         }
 
@@ -247,7 +241,7 @@ namespace Game.Helper
 
         private void Start()
         {
-            m_ResourceComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<ResourceComponent>();
+            m_ResourceComponent = DEngine.Runtime.GameEntry.GetComponent<ResourceComponent>();
             if (m_ResourceComponent == null)
             {
                 Log.Fatal("Resource component is invalid.");

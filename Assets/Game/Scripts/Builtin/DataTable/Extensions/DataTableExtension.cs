@@ -1,8 +1,7 @@
 ﻿using System;
-using GameFramework;
-using GameFramework.DataTable;
+using DEngine.DataTable;
+using DEngine.Runtime;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace Game
 {
@@ -27,7 +26,7 @@ namespace Game
             }
 
             string dataRowClassName = "Game.Hotfix.DR" + splitedNames[0];
-            Type dataRowType = GameFramework.Utility.Assembly.GetType(dataRowClassName);
+            Type dataRowType = DEngine.Utility.Assembly.GetType(dataRowClassName);
             if (dataRowType == null)
             {
                 Log.Warning("Can not get data row type with class name '{0}'.", dataRowClassName);

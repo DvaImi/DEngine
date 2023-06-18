@@ -1,12 +1,5 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using UnityEngine;
-using UnityGameFramework.Runtime;
+﻿using UnityEngine;
+using DEngine.Runtime;
 
 namespace Game
 {
@@ -203,27 +196,27 @@ namespace Game
 
         private static void InitBuiltinComponents()
         {
-            Base = UnityGameFramework.Runtime.GameEntry.GetComponent<BaseComponent>();
-            Config = UnityGameFramework.Runtime.GameEntry.GetComponent<ConfigComponent>();
-            DataNode = UnityGameFramework.Runtime.GameEntry.GetComponent<DataNodeComponent>();
-            DataTable = UnityGameFramework.Runtime.GameEntry.GetComponent<DataTableComponent>();
-            Debugger = UnityGameFramework.Runtime.GameEntry.GetComponent<DebuggerComponent>();
-            Download = UnityGameFramework.Runtime.GameEntry.GetComponent<DownloadComponent>();
-            Entity = UnityGameFramework.Runtime.GameEntry.GetComponent<EntityComponent>();
-            Event = UnityGameFramework.Runtime.GameEntry.GetComponent<EventComponent>();
-            FileSystem = UnityGameFramework.Runtime.GameEntry.GetComponent<FileSystemComponent>();
-            Fsm = UnityGameFramework.Runtime.GameEntry.GetComponent<FsmComponent>();
-            Localization = UnityGameFramework.Runtime.GameEntry.GetComponent<LocalizationComponent>();
-            Network = UnityGameFramework.Runtime.GameEntry.GetComponent<NetworkComponent>();
-            ObjectPool = UnityGameFramework.Runtime.GameEntry.GetComponent<ObjectPoolComponent>();
-            Procedure = UnityGameFramework.Runtime.GameEntry.GetComponent<ProcedureComponent>();
-            Resource = UnityGameFramework.Runtime.GameEntry.GetComponent<ResourceComponent>();
-            Scene = UnityGameFramework.Runtime.GameEntry.GetComponent<SceneComponent>();
-            Setting = UnityGameFramework.Runtime.GameEntry.GetComponent<SettingComponent>();
-            Sound = UnityGameFramework.Runtime.GameEntry.GetComponent<SoundComponent>();
-            UI = UnityGameFramework.Runtime.GameEntry.GetComponent<UIComponent>();
-            WebRequest = UnityGameFramework.Runtime.GameEntry.GetComponent<WebRequestComponent>();
-            BuiltinData = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinDataComponent>();
+            Base = DEngine.Runtime.GameEntry.GetComponent<BaseComponent>();
+            Config = DEngine.Runtime.GameEntry.GetComponent<ConfigComponent>();
+            DataNode = DEngine.Runtime.GameEntry.GetComponent<DataNodeComponent>();
+            DataTable = DEngine.Runtime.GameEntry.GetComponent<DataTableComponent>();
+            Debugger = DEngine.Runtime.GameEntry.GetComponent<DebuggerComponent>();
+            Download = DEngine.Runtime.GameEntry.GetComponent<DownloadComponent>();
+            Entity = DEngine.Runtime.GameEntry.GetComponent<EntityComponent>();
+            Event = DEngine.Runtime.GameEntry.GetComponent<EventComponent>();
+            FileSystem = DEngine.Runtime.GameEntry.GetComponent<FileSystemComponent>();
+            Fsm = DEngine.Runtime.GameEntry.GetComponent<FsmComponent>();
+            Localization = DEngine.Runtime.GameEntry.GetComponent<LocalizationComponent>();
+            Network = DEngine.Runtime.GameEntry.GetComponent<NetworkComponent>();
+            ObjectPool = DEngine.Runtime.GameEntry.GetComponent<ObjectPoolComponent>();
+            Procedure = DEngine.Runtime.GameEntry.GetComponent<ProcedureComponent>();
+            Resource = DEngine.Runtime.GameEntry.GetComponent<ResourceComponent>();
+            Scene = DEngine.Runtime.GameEntry.GetComponent<SceneComponent>();
+            Setting = DEngine.Runtime.GameEntry.GetComponent<SettingComponent>();
+            Sound = DEngine.Runtime.GameEntry.GetComponent<SoundComponent>();
+            UI = DEngine.Runtime.GameEntry.GetComponent<UIComponent>();
+            WebRequest = DEngine.Runtime.GameEntry.GetComponent<WebRequestComponent>();
+            BuiltinData = DEngine.Runtime.GameEntry.GetComponent<BuiltinDataComponent>();
         }
     }
 }

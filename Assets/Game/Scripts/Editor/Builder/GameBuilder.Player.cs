@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityGameFramework.Editor.ResourceTools;
+using DEngine.Editor.ResourceTools;
 using Object = UnityEngine.Object;
 
 namespace Game.Editor.Builder

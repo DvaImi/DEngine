@@ -1,4 +1,4 @@
-// ========================================================
+﻿// ========================================================
 // 描述：
 // 作者：Dvalmi 
 // 创建时间：2023-04-07 20:47:46
@@ -6,11 +6,11 @@
 // ========================================================
 using System;
 using System.Collections;
-using GameFramework;
-using GameFramework.Sound;
+using DEngine;
+using DEngine.Runtime;
+using DEngine.Sound;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityGameFramework.Runtime;
 
 namespace Game.Helper
 {
@@ -18,7 +18,7 @@ namespace Game.Helper
     {
         private Transform m_CachedTransform = null;
         private AudioSource m_AudioSource = null;
-        private UnityGameFramework.Runtime.EntityLogic m_BindingEntityLogic = null;
+        private EntityLogic m_BindingEntityLogic = null;
         private float m_VolumeWhenPause = 0f;
         private bool m_ApplicationPauseFlag = false;
         private EventHandler<ResetSoundAgentEventArgs> m_ResetSoundAgentEventHandler = null;
@@ -333,7 +333,7 @@ namespace Game.Helper
         /// 设置声音绑定的实体。
         /// </summary>
         /// <param name="bindingEntity">声音绑定的实体。</param>
-        public override void SetBindingEntity(UnityGameFramework.Runtime.Entity bindingEntity)
+        public override void SetBindingEntity(DEngine.Runtime.Entity bindingEntity)
         {
             m_BindingEntityLogic = bindingEntity.Logic;
             if (m_BindingEntityLogic != null)

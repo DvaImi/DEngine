@@ -17,11 +17,11 @@ MonoBehaviour:
   ResourceEditorConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
   BuildPlatform: 0
-  ResourceModeIndex: 2
+  ResourceModeIndex: 1
   AppOutput: F:/Project/Unity/Work/GameClient/AppOutput
-  BundlesOutput: F:/Project/Unity/Work/GameClient/BundlesOutput
+  BundlesOutput: F:/Project/Unity/Work/DEngine/Bundles
   ForceUpdateGame: 0
-  InternalResourceVersion: 1
+  InternalResourceVersion: 0
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: http://192.168.1.102/GameClient/{0}/{1}/{2}
   BuildInfo:
@@ -37,15 +37,16 @@ MonoBehaviour:
   AOTDllNames:
   - mscorlib.dll
   - UnityEngine.CoreModule.dll
+  - UnityEngine.UIModule.dll
   - System.Core.dll
   - System.dll
-  - UnityGameFramework.Runtime.dll
+  - Game.Runtime.dll
   - HybridCLR.Runtime.dll
   - UniTask.dll
   - UniTask.Linq.dll
-  - GameFramework.dll
+  - DEngine.dll
+  - DEngine.Runtime.dll
   - Newtonsoft.Json.dll
-  - Game.Runtime.dll
   VirtualServerAddress: F:/DvalmiService/GameClient
   AutoCopyToVirtualServer: 1
   PreserveHotfixDllNames: []

@@ -1,9 +1,9 @@
-﻿using GameFramework;
-using GameFramework.Fsm;
-using GameFramework.Procedure;
-using GameFramework.Resource;
+﻿using DEngine;
+using DEngine.Fsm;
+using DEngine.Procedure;
+using DEngine.Resource;
+using DEngine.Runtime;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace Game
 {
@@ -48,7 +48,7 @@ namespace Game
 
         private async void CheckVersionList()
         {
-            string checkVersionUrl = GameFramework.Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.BuildInfo.LatestGameVersion, GetPlatformPath());
+            string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.BuildInfo.LatestGameVersion, GetPlatformPath());
 
             // 向服务器请求版本信息
             WebRequestResult result = await GameEntry.WebRequest.AddWebRequestAsync(checkVersionUrl);
@@ -57,8 +57,8 @@ namespace Game
 
                 // 解析版本信息
                 byte[] versionInfoBytes = result.Bytes;
-                string versionInfoString = GameFramework.Utility.Converter.GetString(versionInfoBytes);
-                m_VersionInfo = GameFramework.Utility.Json.ToObject<VersionInfo>(versionInfoString);
+                string versionInfoString =Utility.Converter.GetString(versionInfoBytes);
+                m_VersionInfo = Utility.Json.ToObject<VersionInfo>(versionInfoString);
                 if (m_VersionInfo == null)
                 {
                     Log.Error("Parse VersionInfo failure.");
@@ -79,12 +79,12 @@ namespace Game
                         ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
                         OnClickConfirm = GotoUpdateApp,
                         CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
-                        OnClickCancel = delegate (object userData) { UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                        OnClickCancel = delegate (object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                     });
                     return;
                 }
                 // 设置资源更新下载地址
-                GameEntry.Resource.UpdatePrefixUri = GameFramework.Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
+                GameEntry.Resource.UpdatePrefixUri =Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
                 m_CheckVersionComplete = true;
             }
             else
@@ -108,14 +108,10 @@ namespace Game
             if (!string.IsNullOrEmpty(url))
             {
                 Application.OpenURL(url);
-                UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Quit);
+                DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit);
             }
         }
 
-        /// <summary>
-        /// 由 UnityEngine.RuntimePlatform 得到 平台标识符。
-        /// </summary>
-        /// <returns>平台标识符。</returns>
         private string GetPlatformPath()
         {
             // 这里和 GameBuildEventHandler.GetPlatformPath() 对应。
@@ -150,7 +146,7 @@ namespace Game
                     return "Linux";
 
                 default:
-                    throw new System.NotSupportedException(GameFramework.Utility.Text.Format("Platform '{0}' is not supported.", Application.platform));
+                    throw new System.NotSupportedException(Utility.Text.Format("Platform '{0}' is not supported.", Application.platform));
             }
         }
     }

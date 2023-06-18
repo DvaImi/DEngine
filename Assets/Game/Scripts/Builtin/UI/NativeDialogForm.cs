@@ -1,13 +1,13 @@
-// ========================================================
+﻿// ========================================================
 // 描述：
 // 作者：Dvalmi 
 // 创建时间：2023-03-26 17:37:27
 // 版 本：1.0
 // ========================================================
-using GameFramework;
+using DEngine;
+using DEngine.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityGameFramework.Runtime;
 
 namespace Game
 {
@@ -34,10 +34,10 @@ namespace Game
         private int m_DialogMode = 1;
         private bool m_PauseGame = false;
         private object m_UserData = null;
-        private GameFrameworkAction<object> m_OnClickConfirm = null;
-        private GameFrameworkAction<object> m_OnClickCancel = null;
-        private GameFrameworkAction<object> m_OnClickOther = null;
-        
+        private DEngineAction<object> m_OnClickConfirm = null;
+        private DEngineAction<object> m_OnClickCancel = null;
+        private DEngineAction<object> m_OnClickOther = null;
+
         public void OnConfirmButtonClick()
         {
             if (m_OnClickConfirm != null)
@@ -65,7 +65,7 @@ namespace Game
                 m_OnClickOther(m_UserData);
             }
         }
-        
+
         public void OnOpen(DialogParams dialogParams)
         {
             if (dialogParams == null)
@@ -117,7 +117,7 @@ namespace Game
             RefreshOtherText(string.Empty);
             m_OnClickOther = null;
         }
-        
+
         private void RefreshDialogMode()
         {
             for (int i = 1; i <= m_ModeObjects.Length; i++)

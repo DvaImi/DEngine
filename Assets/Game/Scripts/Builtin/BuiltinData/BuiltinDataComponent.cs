@@ -1,13 +1,11 @@
 ﻿using System;
-using System.IO;
-using System.Text;
-using GameFramework.Localization;
+using DEngine.Localization;
+using DEngine.Runtime;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public class BuiltinDataComponent : GameFrameworkComponent
+    public class BuiltinDataComponent : DEngineComponent
     {
         [SerializeField]
         private TextAsset m_LanguageBuiltin;

@@ -8,7 +8,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityGameFramework.Runtime;
+using DEngine.Runtime;
 
 namespace Game.Hotfix
 {

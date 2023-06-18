@@ -1,10 +1,10 @@
-﻿using GameFramework;
-using GameFramework.Event;
+﻿using DEngine;
+using DEngine.Event;
 using System.Collections.Generic;
-using GameFramework.Fsm;
-using GameFramework.Procedure;
+using DEngine.Fsm;
+using DEngine.Procedure;
 using UnityEngine;
-using UnityGameFramework.Runtime;
+using DEngine.Runtime;
 
 namespace Game
 {
@@ -90,7 +90,7 @@ namespace Game
             Log.Info(descriptionText);
         }
 
-        private void OnUpdateResourcesComplete(GameFramework.Resource.IResourceGroup resourceGroup, bool result)
+        private void OnUpdateResourcesComplete(DEngine.Resource.IResourceGroup resourceGroup, bool result)
         {
             if (result)
             {

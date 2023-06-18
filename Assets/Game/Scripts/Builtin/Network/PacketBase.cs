@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework.Network;
+using DEngine.Network;
 using ProtoBuf;
 
 namespace Game

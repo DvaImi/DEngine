@@ -7,12 +7,12 @@
 using System.IO;
 using System.Reflection;
 using System.Text;
-using GameFramework;
-using GameFramework.Fsm;
-using GameFramework.Procedure;
-using GameFramework.Resource;
+using DEngine;
+using DEngine.Fsm;
+using DEngine.Procedure;
+using DEngine.Resource;
+using DEngine.Runtime;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 using Object = UnityEngine.Object;
 
 namespace Game
@@ -72,7 +72,7 @@ namespace Game
         {
             if (m_HasLoadHotfixDll)
             {
-                Log.Warning("已经加载过热更新dll ，暂时无法重复加载");
+                Log.Info("已经加载过热更新dll ，暂时无法重复加载");
                 HotfixLauncher();
                 return;
             }

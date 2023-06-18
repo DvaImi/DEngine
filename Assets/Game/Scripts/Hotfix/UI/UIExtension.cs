@@ -1,17 +1,17 @@
 ﻿//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
+// Homepage: https://DEngine.cn/
+// Feedback: mailto:ellan@DEngine.cn
 //------------------------------------------------------------
 
 using System.Collections;
 using Cysharp.Threading.Tasks;
-using GameFramework.DataTable;
-using GameFramework.UI;
+using DEngine.DataTable;
+using DEngine.UI;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityGameFramework.Runtime;
+using DEngine.Runtime;
 
 namespace Game.Hotfix
 {

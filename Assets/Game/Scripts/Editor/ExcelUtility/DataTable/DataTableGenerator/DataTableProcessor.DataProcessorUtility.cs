@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using GameFramework;
+using DEngine;
 
 namespace Game.Editor.DataTableTools
 {
@@ -27,7 +27,7 @@ namespace Game.Editor.DataTableTools
                     if (dataProcessorBaseType.IsAssignableFrom(types[i]))
                     {
                         DataProcessor dataProcessor = null;
-                        dataProcessor = (DataProcessor) Activator.CreateInstance(types[i]);
+                        dataProcessor = (DataProcessor)Activator.CreateInstance(types[i]);
                         if (dataProcessor.IsEnum)
                         {
                             continue;
@@ -42,9 +42,9 @@ namespace Game.Editor.DataTableTools
                 AddListType(addList);
                 AddArrayType(addList);
                 AddDictionary(addList);
-                
+
             }
-            
+
             private static void AddEnumType(List<DataProcessor> addList)
             {
                 foreach (var assemblyName in DataTableSetting.Instance.AssemblyNames)
@@ -67,7 +67,7 @@ namespace Game.Editor.DataTableTools
                         if (type.IsEnum)
                         {
                             Type enumProcessorType = typeof(EnumProcessor<>).MakeGenericType(type);
-                            DataProcessor dataProcessor =  (DataProcessor) Activator.CreateInstance(enumProcessorType);
+                            DataProcessor dataProcessor = (DataProcessor)Activator.CreateInstance(enumProcessorType);
                             foreach (var typeString in dataProcessor.GetTypeStrings())
                             {
                                 if (s_DataProcessors.ContainsKey(typeString))
@@ -78,7 +78,7 @@ namespace Game.Editor.DataTableTools
                                     if (repeatProcessor.GetType().GetProperty("EnumType")?.GetValue(repeatProcessor) is Type repeatType)
                                         stringBuilder.AppendLine($"程序集:{repeatType.Assembly.GetName().Name} 存在同名枚举:{type.FullName}");
                                     throw new Exception("不同程序集中存在同名枚举,请修改后重试.\n" + stringBuilder);
-                                    
+
                                 }
                                 s_DataProcessors.Add(typeString.ToLower(), dataProcessor);
                             }
@@ -111,14 +111,14 @@ namespace Game.Editor.DataTableTools
                         var arrayType = type.MakeGenericType(typeArgs);
                         if (dataProcessorBaseType.IsAssignableFrom(arrayType))
                         {
-                            var dataProcessor = (DataProcessor) Activator.CreateInstance(arrayType);
+                            var dataProcessor = (DataProcessor)Activator.CreateInstance(arrayType);
                             var tDataProcessor = addList[i];
                             foreach (var typeString in dataProcessor.GetTypeStrings())
-                            foreach (var tTypeString in tDataProcessor.GetTypeStrings())
-                            {
-                                var key = GameFramework.Utility.Text.Format(typeString.ToLower(), tTypeString);
-                                s_DataProcessors.Add(key, dataProcessor);
-                            }
+                                foreach (var tTypeString in tDataProcessor.GetTypeStrings())
+                                {
+                                    var key = DEngine.Utility.Text.Format(typeString.ToLower(), tTypeString);
+                                    s_DataProcessors.Add(key, dataProcessor);
+                                }
                         }
                     }
                 }
@@ -149,13 +149,13 @@ namespace Game.Editor.DataTableTools
                         if (dataProcessorBaseType.IsAssignableFrom(listType))
                         {
                             var dataProcessor =
-                                (DataProcessor) Activator.CreateInstance(listType);
+                                (DataProcessor)Activator.CreateInstance(listType);
                             foreach (var typeString in dataProcessor.GetTypeStrings())
-                            foreach (var tTypeString in addList[i].GetTypeStrings())
-                            {
-                                var key = GameFramework.Utility.Text.Format(typeString.ToLower(), tTypeString);
-                                s_DataProcessors.Add(key, dataProcessor);
-                            }
+                                foreach (var tTypeString in addList[i].GetTypeStrings())
+                                {
+                                    var key = DEngine.Utility.Text.Format(typeString.ToLower(), tTypeString);
+                                    s_DataProcessors.Add(key, dataProcessor);
+                                }
                         }
                     }
                 }
@@ -169,25 +169,25 @@ namespace Game.Editor.DataTableTools
                 for (var i = 0; i < addList.Count; i++)
                 {
                     Type dataProcessorType = addList[i].GetType();
-            
+
                     if (!dataProcessorType.HasImplementedRawGeneric(typeof(GenericDataProcessor<>))) continue;
                     var memberInfo = dataProcessorType.BaseType;
-            
+
                     if (memberInfo != null) list.Add(addList[i]);
                 }
-            
-            
+
+
                 var keyValueList = PermutationAndCombination<DataProcessor>.GetCombination(list.ToArray(), 2).ToList();
-                var reverseList = keyValueList.Select(types => new[] {types[1], types[0]}).ToList();
+                var reverseList = keyValueList.Select(types => new[] { types[1], types[0] }).ToList();
                 keyValueList.AddRange(reverseList);
-                foreach (var value in list) keyValueList.Add(new[] {value, value});
+                foreach (var value in list) keyValueList.Add(new[] { value, value });
                 foreach (var keyValue in keyValueList)
                 {
                     var keyType = keyValue[0].GetType().BaseType;
                     var valueType = keyValue[1].GetType().BaseType;
                     if (keyType != null && valueType != null)
                     {
-                        
+
                         Type[] typeArgs =
                         {
                             keyValue[0].GetType(),
@@ -198,14 +198,14 @@ namespace Game.Editor.DataTableTools
                         var dictionaryType = type.MakeGenericType(typeArgs);
                         if (dataProcessorBaseType.IsAssignableFrom(dictionaryType))
                         {
-                            var dataProcessor = (DataProcessor) Activator.CreateInstance(dictionaryType);
+                            var dataProcessor = (DataProcessor)Activator.CreateInstance(dictionaryType);
                             foreach (var typeString in dataProcessor.GetTypeStrings())
                             {
                                 foreach (var key in keyValue[0].GetTypeStrings())
                                 {
                                     foreach (var value in keyValue[1].GetTypeStrings())
                                     {
-                                        var str = GameFramework.Utility.Text.Format(typeString.ToLower(), key, value);
+                                        var str = DEngine.Utility.Text.Format(typeString.ToLower(), key, value);
                                         s_DataProcessors.Add(str, dataProcessor);
                                     }
                                 }
@@ -221,7 +221,7 @@ namespace Game.Editor.DataTableTools
                 DataProcessor dataProcessor = null;
                 if (s_DataProcessors.TryGetValue(type.ToLower(), out dataProcessor)) return dataProcessor;
 
-                throw new GameFrameworkException(GameFramework.Utility.Text.Format("Not supported data processor type '{0}'.", type));
+                throw new DEngineException(DEngine.Utility.Text.Format("Not supported data processor type '{0}'.", type));
             }
         }
     }

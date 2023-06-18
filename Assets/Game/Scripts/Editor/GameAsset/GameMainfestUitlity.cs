@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
-using GameFramework;
 
 namespace Game.Editor.ResourceTools
 {
@@ -34,6 +32,5 @@ namespace Game.Editor.ResourceTools
                 }
             }
         }
-       
     }
 }

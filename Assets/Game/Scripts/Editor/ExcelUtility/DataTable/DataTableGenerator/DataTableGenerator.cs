@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using GameFramework;
+using DEngine;
 using OfficeOpenXml;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ namespace Game.Editor.DataTableTools
         public static DataTableProcessor CreateDataTableProcessor(string dataTableName)
         {
             return new DataTableProcessor(
-                GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + ".txt")),
+                DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + ".txt")),
                 Encoding.UTF8, 1, 2,
                 null, 3, 4, 1);
         }
@@ -41,7 +41,7 @@ namespace Game.Editor.DataTableTools
 
                 if (!NameRegex.IsMatch(name))
                 {
-                    Debug.LogWarning(GameFramework.Utility.Text.Format("Check raw data failure. DataTableName='{0}' Name='{1}'",
+                    Debug.LogWarning(DEngine.Utility.Text.Format("Check raw data failure. DataTableName='{0}' Name='{1}'",
                         dataTableName, name));
                     return false;
                 }
@@ -53,7 +53,7 @@ namespace Game.Editor.DataTableTools
         public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
             var binaryDataFileName =
-                GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath,
+                DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath,
                     dataTableName + ".bytes"));
             if (!dataTableProcessor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
                 File.Delete(binaryDataFileName);
@@ -70,7 +70,7 @@ namespace Game.Editor.DataTableTools
                 return;
             }
 
-            var csharpCodeFileName = GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.CSharpCodePath, "DR" + dataTableName + ".cs"));
+            var csharpCodeFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.CSharpCodePath, "DR" + dataTableName + ".cs"));
             if (!dataTableProcessor.GenerateCodeFile(csharpCodeFileName, Encoding.UTF8, dataTableName) && File.Exists(csharpCodeFileName))
             {
                 File.Delete(csharpCodeFileName);
@@ -480,7 +480,7 @@ namespace Game.Editor.DataTableTools
                     .AppendLine("            }")
                     .AppendLine()
                     .AppendFormat(
-                        "            throw new GameFrameworkException(Utility.Text.Format(\"Get{0} with invalid id '{{0}}'.\", id.ToString()));",
+                        "            throw new DEngineException(Utility.Text.Format(\"Get{0} with invalid id '{{0}}'.\", id.ToString()));",
                         propertyCollection.Name).AppendLine()
                     .AppendLine("        }")
                     .AppendLine()
@@ -491,7 +491,7 @@ namespace Game.Editor.DataTableTools
                     .AppendLine()
                     .AppendLine("            {")
                     .AppendFormat(
-                        "                throw new GameFrameworkException(Utility.Text.Format(\"Get{0}At with invalid index '{{0}}'.\", index.ToString()));",
+                        "                throw new DEngineException(Utility.Text.Format(\"Get{0}At with invalid index '{{0}}'.\", index.ToString()));",
                         propertyCollection.Name).AppendLine()
                     .AppendLine("            }")
                     .AppendLine()
@@ -557,7 +557,7 @@ namespace Game.Editor.DataTableTools
             public KeyValuePair<int, string> GetItem(int index)
             {
                 if (index < 0 || index >= m_Items.Count)
-                    throw new GameFrameworkException(GameFramework.Utility.Text.Format("GetItem with invalid index '{0}'.",
+                    throw new DEngineException(DEngine.Utility.Text.Format("GetItem with invalid index '{0}'.",
                         index.ToString()));
 
                 return m_Items[index];

@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
-using GameFramework.Localization;
-using UnityGameFramework.Runtime;
+using DEngine.Localization;
+using DEngine.Runtime;
 
 namespace Game
 {

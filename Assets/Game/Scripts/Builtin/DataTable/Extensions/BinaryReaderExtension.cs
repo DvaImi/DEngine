@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using GameFramework;
+using DEngine;
 using UnityEngine;
 
 namespace Game
@@ -67,7 +67,7 @@ namespace Game
             {
                 if (shift >= 35)
                 {
-                    throw new GameFrameworkException("7 bit encoded int is invalid.");
+                    throw new DEngineException("7 bit encoded int is invalid.");
                 }
 
                 b = binaryReader.ReadByte();

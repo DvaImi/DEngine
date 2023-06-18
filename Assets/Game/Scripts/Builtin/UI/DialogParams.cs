@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework;
+using DEngine;
 
 namespace Game
 {
@@ -62,7 +62,7 @@ namespace Game
         /// <summary>
         /// 确定按钮回调。
         /// </summary>
-        public GameFrameworkAction<object> OnClickConfirm
+        public DEngineAction<object> OnClickConfirm
         {
             get;
             set;
@@ -80,7 +80,7 @@ namespace Game
         /// <summary>
         /// 取消按钮回调。
         /// </summary>
-        public GameFrameworkAction<object> OnClickCancel
+        public DEngineAction<object> OnClickCancel
         {
             get;
             set;
@@ -98,7 +98,7 @@ namespace Game
         /// <summary>
         /// 其它按钮回调。
         /// </summary>
-        public GameFrameworkAction<object> OnClickOther
+        public DEngineAction<object> OnClickOther
         {
             get;
             set;

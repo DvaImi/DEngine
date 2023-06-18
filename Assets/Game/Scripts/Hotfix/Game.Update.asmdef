@@ -2,6 +2,7 @@
     "name": "Game.Update",
     "rootNamespace": "",
     "references": [
+        "GUID:844937d985828c648866dc5fe1dc749c",
         "GUID:7bc98016d4aac29439a48a73d0e6dcf3",
         "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
         "GUID:13ba8ce62aa80c74598530029cb2d649",

@@ -1,16 +1,8 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using GameFramework.DataTable;
-using GameFramework.Event;
-using GameFramework.Procedure;
-using UnityGameFramework.Runtime;
-using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
-
+﻿using DEngine.DataTable;
+using DEngine.Event;
+using DEngine.Procedure;
+using DEngine.Runtime;
+using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 namespace Game.Hotfix
 {
     public class ProcedureChangeScene : ProcedureBase

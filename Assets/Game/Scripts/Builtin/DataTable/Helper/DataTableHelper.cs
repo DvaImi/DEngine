@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using GameFramework;
-using GameFramework.DataTable;
+using DEngine.DataTable;
+using DEngine.Runtime;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace Game
 {
@@ -50,7 +49,7 @@ namespace Game
                 }
                 else
                 {
-                 
+
                     return dataTable.ParseData(dataTableTextAsset.text, userData);
                 }
             }
@@ -78,7 +77,7 @@ namespace Game
             }
             else
             {
-                return dataTable.ParseData(GameFramework.Utility.Converter.GetString(dataTableBytes, startIndex, length), userData);
+                return dataTable.ParseData(DEngine.Utility.Converter.GetString(dataTableBytes, startIndex, length), userData);
             }
         }
 
@@ -173,7 +172,7 @@ namespace Game
 
         private void Start()
         {
-            m_ResourceComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<ResourceComponent>();
+            m_ResourceComponent = DEngine.Runtime.GameEntry.GetComponent<ResourceComponent>();
             if (m_ResourceComponent == null)
             {
                 Log.Fatal("Resource component is invalid.");

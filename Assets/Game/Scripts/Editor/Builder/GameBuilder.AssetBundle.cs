@@ -1,17 +1,10 @@
-﻿// ========================================================
-// 描述：
-// 作者：GeminiLion 
-// 创建时间：2023-04-29 10:50:09
-// 版 本：1.0
-// ========================================================
-using System;
+﻿using System;
 using System.IO;
+using DEngine;
+using DEngine.Editor.ResourceTools;
 using Game.Editor.ResourceTools;
-using GameFramework;
-using GameFramework.Resource;
 using UnityEditor;
 using UnityEngine;
-using UnityGameFramework.Editor.ResourceTools;
 
 namespace Game.Editor.Builder
 {
@@ -127,7 +120,7 @@ namespace Game.Editor.Builder
         {
             if (!Directory.Exists(outputDirectory))
             {
-                throw new GameFrameworkException($"OutputDirectory: {outputDirectory}  is invalid.");
+                throw new DEngineException($"OutputDirectory: {outputDirectory}  is invalid.");
             }
             ResourceBuilderController controller = new();
             if (controller.Load())
@@ -179,7 +172,7 @@ namespace Game.Editor.Builder
             messageType = MessageType.Info;
             if (Directory.Exists(builderController.OutputPackagePath))
             {
-                message += GameFramework.Utility.Text.Format("{0} will be overwritten.", builderController.OutputPackagePath);
+                message += Utility.Text.Format("{0} will be overwritten.", builderController.OutputPackagePath);
                 messageType = MessageType.Warning;
             }
 
@@ -311,7 +304,7 @@ namespace Game.Editor.Builder
         private static void OnBuildResourceError(string errorMessage)
         {
             EditorUtility.ClearProgressBar();
-            Debug.LogWarning(GameFramework.Utility.Text.Format("Build resources error with error message '{0}'.", errorMessage));
+            Debug.LogWarning(Utility.Text.Format("Build resources error with error message '{0}'.", errorMessage));
         }
     }
 }

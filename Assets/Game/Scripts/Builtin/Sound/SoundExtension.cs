@@ -1,13 +1,6 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using GameFramework;
-using GameFramework.Sound;
-using UnityGameFramework.Runtime;
+﻿using DEngine;
+using DEngine.Runtime;
+using DEngine.Sound;
 
 namespace Game
 {
@@ -30,7 +23,7 @@ namespace Game
 
             soundGroup.Mute = mute;
 
-            GameEntry.Setting.SetBool(GameFramework.Utility.Text.Format(Constant.Setting.SoundGroupMuted, soundGroupName), mute);
+            GameEntry.Setting.SetBool(Utility.Text.Format(Constant.Setting.SoundGroupMuted, soundGroupName), mute);
             GameEntry.Setting.Save();
         }
 
@@ -51,7 +44,7 @@ namespace Game
 
             soundGroup.Volume = volume;
 
-            GameEntry.Setting.SetFloat(GameFramework.Utility.Text.Format(Constant.Setting.SoundGroupVolume, soundGroupName), volume);
+            GameEntry.Setting.SetFloat(Utility.Text.Format(Constant.Setting.SoundGroupVolume, soundGroupName), volume);
             GameEntry.Setting.Save();
         }
     }

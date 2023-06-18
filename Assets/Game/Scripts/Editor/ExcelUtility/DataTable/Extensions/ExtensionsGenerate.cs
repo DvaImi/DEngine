@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using GameFramework;
+using DEngine;
 using OfficeOpenXml;
 using UnityEditor;
 
@@ -382,8 +382,7 @@ namespace Game.Editor.DataTableTools
 
         private static void GenerateCodeFile(string fileName, string value)
         {
-            var filePath =
-                GameFramework.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, fileName + ".cs"));
+            var filePath =  Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, fileName + ".cs"));
             if (File.Exists(filePath)) File.Delete(filePath);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
