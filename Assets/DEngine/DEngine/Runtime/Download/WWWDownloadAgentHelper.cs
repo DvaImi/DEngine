@@ -1,19 +1,12 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
+﻿#if !UNITY_2018_3_OR_NEWER
 
-#if !UNITY_2018_3_OR_NEWER
-
-using GameFramework;
-using GameFramework.Download;
+using DEngine;
+using DEngine.Download;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityGameFramework.Runtime
+namespace DEngine.Runtime
 {
     /// <summary>
     /// WWW 下载代理辅助器。

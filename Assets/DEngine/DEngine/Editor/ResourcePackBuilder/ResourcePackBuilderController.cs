@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using DEngine;
+﻿using DEngine;
 using DEngine.Resource;
 using System;
 using System.Collections.Generic;
@@ -19,8 +12,8 @@ namespace DEngine.Editor.ResourceTools
 {
     public sealed class ResourcePackBuilderController
     {
-        private const string DefaultResourcePackName = "GameFrameworkResourcePack";
-        private const string DefaultExtension = "dat";
+        private const string DefaultResourcePackName = "DEngineResourcePack";
+        private const string DefaultExtension = "block";
         private const string NoneOptionName = "<None>";
         private static readonly string[] EmptyStringArray = new string[0];
         private static readonly UpdatableVersionList.Resource[] EmptyResourceArray = new UpdatableVersionList.Resource[0];
@@ -32,7 +25,7 @@ namespace DEngine.Editor.ResourceTools
 
         public ResourcePackBuilderController()
         {
-            m_ConfigurationPath = Type.GetConfigurationPath<ResourceBuilderConfigPathAttribute>() ?? Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "GameFramework/Configs/ResourceBuilder.xml"));
+            m_ConfigurationPath = Type.GetConfigurationPath<ResourceBuilderConfigPathAttribute>() ?? Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "DEngine/Configs/ResourceBuilder.xml"));
 
             m_UpdatableVersionListSerializer = new UpdatableVersionListSerializer();
             m_UpdatableVersionListSerializer.RegisterDeserializeCallback(0, BuiltinVersionListSerializer.UpdatableVersionListDeserializeCallback_V0);
@@ -209,7 +202,7 @@ namespace DEngine.Editor.ResourceTools
             {
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(m_ConfigurationPath);
-                XmlNode xmlRoot = xmlDocument.SelectSingleNode("UnityGameFramework");
+                XmlNode xmlRoot = xmlDocument.SelectSingleNode("DEngine");
                 XmlNode xmlEditor = xmlRoot.SelectSingleNode("ResourceBuilder");
                 XmlNode xmlSettings = xmlEditor.SelectSingleNode("Settings");
 
@@ -290,7 +283,7 @@ namespace DEngine.Editor.ResourceTools
                     continue;
                 }
 
-                FileInfo[] versionListFiles = platformDirectoryInfo.GetFiles("GameFrameworkVersion.*.dat", SearchOption.TopDirectoryOnly);
+                FileInfo[] versionListFiles = platformDirectoryInfo.GetFiles("DEngineVersion.*.block", SearchOption.TopDirectoryOnly);
                 if (versionListFiles.Length != 1)
                 {
                     continue;
@@ -397,7 +390,7 @@ namespace DEngine.Editor.ResourceTools
                 if (sourceVersion != null)
                 {
                     DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(Path.Combine(Path.Combine(SourcePath, sourceVersion), Platform.ToString()));
-                    FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("GameFrameworkVersion.*.dat", SearchOption.TopDirectoryOnly);
+                    FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("DEngineVersion.*.block", SearchOption.TopDirectoryOnly);
                     byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
                     sourceVersionListBytes = Utility.Compression.Decompress(sourceVersionListBytes);
                     using (Stream stream = new MemoryStream(sourceVersionListBytes))
@@ -408,7 +401,7 @@ namespace DEngine.Editor.ResourceTools
 
                 UpdatableVersionList targetUpdatableVersionList = default(UpdatableVersionList);
                 DirectoryInfo targetDirectoryInfo = new DirectoryInfo(Path.Combine(Path.Combine(SourcePath, targetVersion), Platform.ToString()));
-                FileInfo[] targetVersionListFiles = targetDirectoryInfo.GetFiles("GameFrameworkVersion.*.dat", SearchOption.TopDirectoryOnly);
+                FileInfo[] targetVersionListFiles = targetDirectoryInfo.GetFiles("DEngineVersion.*.block", SearchOption.TopDirectoryOnly);
                 byte[] targetVersionListBytes = File.ReadAllBytes(targetVersionListFiles[0].FullName);
                 targetVersionListBytes = Utility.Compression.Decompress(targetVersionListBytes);
                 using (Stream stream = new MemoryStream(targetVersionListBytes))

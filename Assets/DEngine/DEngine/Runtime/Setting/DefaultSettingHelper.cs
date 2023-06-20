@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using DEngine;
+﻿using DEngine;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +11,7 @@ namespace DEngine.Runtime
     /// </summary>
     public class DefaultSettingHelper : SettingHelperBase
     {
-        private const string SettingFileName = "GameFrameworkSetting.dat";
+        private const string SettingFileName = "DEngineSetting.block";
 
         private string m_FilePath = null;
         private DefaultSetting m_Settings = null;

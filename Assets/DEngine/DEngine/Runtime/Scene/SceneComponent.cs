@@ -69,7 +69,7 @@ namespace DEngine.Runtime
             m_SceneManager.UnloadSceneSuccess += OnUnloadSceneSuccess;
             m_SceneManager.UnloadSceneFailure += OnUnloadSceneFailure;
 
-            m_DEngineScene = SceneManager.GetSceneAt(GameEntry.GameFrameworkSceneId);
+            m_DEngineScene = SceneManager.GetSceneAt(GameEntry.DEngineSceneId);
             if (!m_DEngineScene.IsValid())
             {
                 Log.Fatal("Game Framework scene is invalid.");

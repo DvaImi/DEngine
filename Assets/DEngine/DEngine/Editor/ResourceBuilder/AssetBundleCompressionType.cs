@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://DEngine.cn/
-// Feedback: mailto:ellan@DEngine.cn
-//------------------------------------------------------------
-
-namespace DEngine.Editor.ResourceTools
+﻿namespace DEngine.Editor.ResourceTools
 {
     /// <summary>
     /// 对 AssetBundle 应用的压缩算法类型。

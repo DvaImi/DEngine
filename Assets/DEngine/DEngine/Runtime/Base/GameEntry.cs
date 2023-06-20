@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using DEngine;
+﻿using DEngine;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,12 +11,12 @@ namespace DEngine.Runtime
     /// </summary>
     public static class GameEntry
     {
-        private static readonly DEngineLinkedList<DEngineComponent> s_GameFrameworkComponents = new DEngineLinkedList<DEngineComponent>();
+        private static readonly DEngineLinkedList<DEngineComponent> s_DEngineComponents = new DEngineLinkedList<DEngineComponent>();
 
         /// <summary>
         /// 游戏框架所在的场景编号。
         /// </summary>
-        internal const int GameFrameworkSceneId = 0;
+        internal const int DEngineSceneId = 0;
 
         /// <summary>
         /// 获取游戏框架组件。
@@ -42,7 +35,7 @@ namespace DEngine.Runtime
         /// <returns>要获取的游戏框架组件。</returns>
         public static DEngineComponent GetComponent(Type type)
         {
-            LinkedListNode<DEngineComponent> current = s_GameFrameworkComponents.First;
+            LinkedListNode<DEngineComponent> current = s_DEngineComponents.First;
             while (current != null)
             {
                 if (current.Value.GetType() == type)
@@ -63,7 +56,7 @@ namespace DEngine.Runtime
         /// <returns>要获取的游戏框架组件。</returns>
         public static DEngineComponent GetComponent(string typeName)
         {
-            LinkedListNode<DEngineComponent> current = s_GameFrameworkComponents.First;
+            LinkedListNode<DEngineComponent> current = s_DEngineComponents.First;
             while (current != null)
             {
                 Type type = current.Value.GetType();
@@ -84,7 +77,7 @@ namespace DEngine.Runtime
         /// <param name="shutdownType">关闭游戏框架类型。</param>
         public static void Shutdown(ShutdownType shutdownType)
         {
-            Log.Info("Shutdown Game Framework ({0})...", shutdownType);
+            Log.Info("Shutdown DEngine ({0})...", shutdownType);
             BaseComponent baseComponent = GetComponent<BaseComponent>();
             if (baseComponent != null)
             {
@@ -92,7 +85,7 @@ namespace DEngine.Runtime
                 baseComponent = null;
             }
 
-            s_GameFrameworkComponents.Clear();
+            s_DEngineComponents.Clear();
 
             if (shutdownType == ShutdownType.None)
             {
@@ -101,7 +94,7 @@ namespace DEngine.Runtime
 
             if (shutdownType == ShutdownType.Restart)
             {
-                SceneManager.LoadScene(GameFrameworkSceneId);
+                SceneManager.LoadScene(DEngineSceneId);
                 return;
             }
 
@@ -118,30 +111,30 @@ namespace DEngine.Runtime
         /// <summary>
         /// 注册游戏框架组件。
         /// </summary>
-        /// <param name="gameFrameworkComponent">要注册的游戏框架组件。</param>
-        internal static void RegisterComponent(DEngineComponent gameFrameworkComponent)
+        /// <param name="dEngineComponent">要注册的游戏框架组件。</param>
+        internal static void RegisterComponent(DEngineComponent dEngineComponent)
         {
-            if (gameFrameworkComponent == null)
+            if (dEngineComponent == null)
             {
-                Log.Error("Game Framework component is invalid.");
+                Log.Error("DEngine component is invalid.");
                 return;
             }
 
-            Type type = gameFrameworkComponent.GetType();
+            Type type = dEngineComponent.GetType();
 
-            LinkedListNode<DEngineComponent> current = s_GameFrameworkComponents.First;
+            LinkedListNode<DEngineComponent> current = s_DEngineComponents.First;
             while (current != null)
             {
                 if (current.Value.GetType() == type)
                 {
-                    Log.Error("Game Framework component type '{0}' is already exist.", type.FullName);
+                    Log.Error("DEngine component type '{0}' is already exist.", type.FullName);
                     return;
                 }
 
                 current = current.Next;
             }
 
-            s_GameFrameworkComponents.AddLast(gameFrameworkComponent);
+            s_DEngineComponents.AddLast(dEngineComponent);
         }
     }
 }

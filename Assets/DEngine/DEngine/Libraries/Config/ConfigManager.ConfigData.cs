@@ -1,12 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://
-// .cn/
-// Feedback: mailto:ellan@DEngine.cn
-//------------------------------------------------------------
-
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace DEngine.Config
 {

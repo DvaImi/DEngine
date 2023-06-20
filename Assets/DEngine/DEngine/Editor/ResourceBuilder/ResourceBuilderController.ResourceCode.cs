@@ -1,14 +1,8 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-namespace DEngine.Editor.ResourceTools
+﻿namespace DEngine.Editor.ResourceTools
 {
     public sealed partial class ResourceBuilderController
     {
+
         private sealed class ResourceCode
         {
             private readonly Platform m_Platform;

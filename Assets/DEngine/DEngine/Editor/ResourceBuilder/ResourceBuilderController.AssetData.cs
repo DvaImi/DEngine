@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-namespace DEngine.Editor.ResourceTools
+﻿namespace DEngine.Editor.ResourceTools
 {
     public sealed partial class ResourceBuilderController
     {
@@ -16,14 +9,17 @@ namespace DEngine.Editor.ResourceTools
             private readonly int m_Length;
             private readonly int m_HashCode;
             private readonly string[] m_DependencyAssetNames;
-
-            public AssetData(string guid, string name, int length, int hashCode, string[] dependencyAssetNames)
+            private readonly int m_MetaLength;
+            private readonly int m_MetaHashCode;
+            public AssetData(string guid, string name, int length, int hashCode, string[] dependencyAssetNames, int metaLength, int metaHashCode)
             {
                 m_Guid = guid;
                 m_Name = name;
                 m_Length = length;
                 m_HashCode = hashCode;
                 m_DependencyAssetNames = dependencyAssetNames;
+                m_MetaLength = metaLength;
+                m_MetaHashCode = metaHashCode;
             }
 
             public string Guid
@@ -55,6 +51,22 @@ namespace DEngine.Editor.ResourceTools
                 get
                 {
                     return m_HashCode;
+                }
+            }
+
+            public int MetaLength
+            {
+                get
+                {
+                    return m_MetaLength;
+                }
+            }
+
+            public int MetaHashCode
+            {
+                get
+                {
+                    return m_MetaHashCode;
                 }
             }
 

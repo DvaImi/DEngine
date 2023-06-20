@@ -1,12 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://
-// .cn/
-// Feedback: mailto:ellan@DEngine.cn
-//------------------------------------------------------------
-
-namespace DEngine.WebRequest
+﻿namespace DEngine.WebRequest
 {
     /// <summary>
     /// Web 请求相关常量。

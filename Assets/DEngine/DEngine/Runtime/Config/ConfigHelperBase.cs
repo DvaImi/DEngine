@@ -1,12 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://
-// .cn/
-// Feedback: mailto:ellan@DEngine.cn
-//------------------------------------------------------------
-
-using DEngine;
+﻿using DEngine;
 using DEngine.Config;
 using UnityEngine;
 

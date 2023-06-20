@@ -24,7 +24,7 @@ namespace DEngine.Runtime
         private bool m_EnableLoadDictionaryDependencyAssetEvent = false;
 
         [SerializeField]
-        private string m_LocalizationHelperTypeName = "UnityGameFramework.Runtime.DefaultLocalizationHelper";
+        private string m_LocalizationHelperTypeName = "DEngine.Runtime.DefaultLocalizationHelper";
 
         [SerializeField]
         private LocalizationHelperBase m_CustomLocalizationHelper = null;

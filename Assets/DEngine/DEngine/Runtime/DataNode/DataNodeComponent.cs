@@ -1,12 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://
-// .cn/
-// Feedback: mailto:ellan@DEngine.cn
-//------------------------------------------------------------
-
-using DEngine;
+﻿using DEngine;
 using DEngine.DataNode;
 using UnityEngine;
 
@@ -16,7 +8,7 @@ namespace DEngine.Runtime
     /// 数据结点组件。
     /// </summary>
     [DisallowMultipleComponent]
-    [AddComponentMenu("Game Framework/Data Node")]
+    [AddComponentMenu("DEngine/Data Node")]
     public sealed class DataNodeComponent : DEngineComponent
     {
         private IDataNodeManager m_DataNodeManager = null;

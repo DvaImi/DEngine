@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DEngine.Editor.ResourceTools
 {
@@ -135,9 +128,9 @@ namespace DEngine.Editor.ResourceTools
                 return null;
             }
 
-            public void AddAssetData(string guid, string name, int length, int hashCode, string[] dependencyAssetNames)
+            public void AddAssetData(string guid, string name, int length, int hashCode, string[] dependencyAssetNames, int metaLength, int metaHashCode)
             {
-                m_AssetDatas.Add(new AssetData(guid, name, length, hashCode, dependencyAssetNames));
+                m_AssetDatas.Add(new AssetData(guid, name, length, hashCode, dependencyAssetNames, metaLength, metaHashCode));
             }
 
             public ResourceCode GetCode(Platform platform)

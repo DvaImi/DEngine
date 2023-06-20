@@ -136,7 +136,7 @@ namespace DEngine
         [StructLayout(LayoutKind.Auto)]
         public struct Enumerator : IEnumerator<T>, IEnumerator
         {
-            private readonly DEngineLinkedListRange<T> m_GameFrameworkLinkedListRange;
+            private readonly DEngineLinkedListRange<T> m_DEngineLinkedListRange;
             private LinkedListNode<T> m_Current;
             private T m_CurrentValue;
 
@@ -147,8 +147,8 @@ namespace DEngine
                     throw new DEngineException("Range is invalid.");
                 }
 
-                m_GameFrameworkLinkedListRange = range;
-                m_Current = m_GameFrameworkLinkedListRange.m_First;
+                m_DEngineLinkedListRange = range;
+                m_Current = m_DEngineLinkedListRange.m_First;
                 m_CurrentValue = default(T);
             }
 
@@ -187,7 +187,7 @@ namespace DEngine
             /// <returns>返回下一个结点。</returns>
             public bool MoveNext()
             {
-                if (m_Current == null || m_Current == m_GameFrameworkLinkedListRange.m_Terminal)
+                if (m_Current == null || m_Current == m_DEngineLinkedListRange.m_Terminal)
                 {
                     return false;
                 }
@@ -202,7 +202,7 @@ namespace DEngine
             /// </summary>
             void IEnumerator.Reset()
             {
-                m_Current = m_GameFrameworkLinkedListRange.m_First;
+                m_Current = m_DEngineLinkedListRange.m_First;
                 m_CurrentValue = default(T);
             }
         }

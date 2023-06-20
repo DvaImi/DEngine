@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using DEngine.Download;
+﻿using DEngine.Download;
 using DEngine.FileSystem;
 using DEngine.ObjectPool;
 using System;
@@ -19,9 +12,9 @@ namespace DEngine.Resource
     /// </summary>
     internal sealed partial class ResourceManager : DEngineModule, IResourceManager
     {
-        private const string RemoteVersionListFileName = "GameFrameworkVersion.dat";
-        private const string LocalVersionListFileName = "GameFrameworkList.dat";
-        private const string DefaultExtension = "dat";
+        private const string RemoteVersionListFileName = "DEngineVersion.block";
+        private const string LocalVersionListFileName = "DEngineList.block";
+        private const string DefaultExtension = "block";
         private const string TempExtension = "tmp";
         private const int FileSystemMaxFileCount = 1024 * 16;
         private const int FileSystemMaxBlockCount = 1024 * 256;

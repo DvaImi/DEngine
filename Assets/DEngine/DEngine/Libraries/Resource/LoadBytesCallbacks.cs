@@ -1,12 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://
-// .cn/
-// Feedback: mailto:ellan@DEngine.cn
-//------------------------------------------------------------
-
-namespace DEngine.Resource
+﻿namespace DEngine.Resource
 {
     /// <summary>
     /// 加载数据流回调函数集。

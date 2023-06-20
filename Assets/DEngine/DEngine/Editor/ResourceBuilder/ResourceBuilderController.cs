@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using DEngine;
+﻿using DEngine;
 using DEngine.FileSystem;
 using DEngine.Resource;
 using System;
@@ -21,9 +14,9 @@ namespace DEngine.Editor.ResourceTools
 {
     public sealed partial class ResourceBuilderController
     {
-        private const string RemoteVersionListFileName = "GameFrameworkVersion.dat";
-        private const string LocalVersionListFileName = "GameFrameworkList.dat";
-        private const string DefaultExtension = "dat";
+        private const string RemoteVersionListFileName = "DEngineVersion.block";
+        private const string LocalVersionListFileName = "DEngineList.block";
+        private const string DefaultExtension = "block";
         private const string NoneOptionName = "<None>";
         private static readonly int AssetsStringLength = "Assets".Length;
 
@@ -41,7 +34,7 @@ namespace DEngine.Editor.ResourceTools
 
         public ResourceBuilderController()
         {
-            m_ConfigurationPath = Type.GetConfigurationPath<ResourceBuilderConfigPathAttribute>() ?? Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "GameFramework/Configs/ResourceBuilder.xml"));
+            m_ConfigurationPath = Type.GetConfigurationPath<ResourceBuilderConfigPathAttribute>() ?? Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "DEngine/Configs/ResourceBuilder.xml"));
 
             m_ResourceCollection = new ResourceCollection();
             m_ResourceCollection.OnLoadingResource += delegate (int index, int count)
@@ -309,6 +302,18 @@ namespace DEngine.Editor.ResourceTools
             }
         }
 
+        public bool Difference
+        {
+            get;
+            set;
+        }
+
+        public string LastBuildReportXml
+        {
+            get;
+            set;
+        }
+
         public event DEngineAction<int, int> OnLoadingResource = null;
 
         public event DEngineAction<int, int> OnLoadingAsset = null;
@@ -338,7 +343,7 @@ namespace DEngine.Editor.ResourceTools
             {
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(m_ConfigurationPath);
-                XmlNode xmlRoot = xmlDocument.SelectSingleNode("UnityGameFramework");
+                XmlNode xmlRoot = xmlDocument.SelectSingleNode("DEngine");
                 XmlNode xmlEditor = xmlRoot.SelectSingleNode("ResourceBuilder");
                 XmlNode xmlSettings = xmlEditor.SelectSingleNode("Settings");
 
@@ -396,6 +401,7 @@ namespace DEngine.Editor.ResourceTools
                             break;
                     }
                 }
+                LastBuildReportXml = GetLastBuildBuildReportPath();
             }
             catch
             {
@@ -413,7 +419,7 @@ namespace DEngine.Editor.ResourceTools
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.AppendChild(xmlDocument.CreateXmlDeclaration("1.0", "UTF-8", null));
 
-                XmlElement xmlRoot = xmlDocument.CreateElement("UnityGameFramework");
+                XmlElement xmlRoot = xmlDocument.CreateElement("DEngine");
                 xmlDocument.AppendChild(xmlRoot);
 
                 XmlElement xmlBuilder = xmlDocument.CreateElement("ResourceBuilder");
@@ -558,6 +564,40 @@ namespace DEngine.Editor.ResourceTools
             return retVal;
         }
 
+        public void CheckDifference()
+        {
+
+        }
+
+        public string GetLastBuildBuildReportPath()
+        {
+            string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
+            string lastVeisionBundlesDirectory = string.Empty;
+            List<DirectoryInfo> directoryInfo = new();
+            if (Directory.Exists(buildReportDirectory))
+            {
+                string[] dirs = Directory.GetDirectories(buildReportDirectory);
+                for (int i = 0, length = dirs.Length; i < length; i++)
+                {
+                    DirectoryInfo directory = new(dirs[i]);
+                    directoryInfo.Add(directory);
+                }
+                directoryInfo.Sort((a, b) => { return a.LastWriteTime < b.LastWriteTime ? 1 : -1; });
+            }
+            if (directoryInfo.Count > 0)
+            {
+                lastVeisionBundlesDirectory = Utility.Path.GetRegularPath(directoryInfo[0].FullName);
+                string version = lastVeisionBundlesDirectory[(lastVeisionBundlesDirectory.LastIndexOf("/") + 1)..];
+                string FullPath = Utility.Path.GetRegularPath(Path.Combine(OutputDirectory, "Full", version));
+                if (!Directory.Exists(FullPath))
+                {
+                    Directory.Delete(lastVeisionBundlesDirectory, true);
+                    return GetLastBuildBuildReportPath();
+                }
+            }
+            return lastVeisionBundlesDirectory;
+        }
+
         public bool BuildResources()
         {
             if (!IsValidOutputDirectory)
@@ -599,6 +639,11 @@ namespace DEngine.Editor.ResourceTools
 
             try
             {
+                if (Difference && LastBuildReportXml != null)
+                {
+                    m_BuildReport.LogLastReport(Platforms, LastBuildReportXml);
+                }
+
                 m_BuildReport.LogInfo("Build Start Time: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.UtcNow.ToLocalTime());
 
                 if (m_BuildEventHandler != null)
@@ -1453,8 +1498,9 @@ namespace DEngine.Editor.ResourceTools
 
                 byte[] assetBytes = File.ReadAllBytes(assetFileFullName);
                 int assetHashCode = Utility.Verifier.GetCrc32(assetBytes);
-
                 List<string> dependencyAssetNames = new List<string>();
+                byte[] metaAssetBytes = File.ReadAllBytes(assetFileFullName + ".meta");
+                int metaAssetHashCode = Utility.Verifier.GetCrc32(metaAssetBytes);
                 DependencyData dependencyData = m_ResourceAnalyzerController.GetDependencyData(assetName);
                 Asset[] dependencyAssets = dependencyData.GetDependencyAssets();
                 foreach (Asset dependencyAsset in dependencyAssets)
@@ -1464,7 +1510,7 @@ namespace DEngine.Editor.ResourceTools
 
                 dependencyAssetNames.Sort();
 
-                m_ResourceDatas[asset.Resource.FullName].AddAssetData(asset.Guid, assetName, assetBytes.Length, assetHashCode, dependencyAssetNames.ToArray());
+                m_ResourceDatas[asset.Resource.FullName].AddAssetData(asset.Guid, assetName, assetBytes.Length, assetHashCode, dependencyAssetNames.ToArray(), metaAssetBytes.Length, metaAssetHashCode);
             }
 
             List<AssetBundleBuild> assetBundleBuildDataList = new List<AssetBundleBuild>();
@@ -1477,7 +1523,28 @@ namespace DEngine.Editor.ResourceTools
                     m_BuildReport.LogError("Resource '{0}' has no asset.", GetResourceFullName(resourceData.Name, resourceData.Variant));
                     return false;
                 }
+            }
 
+            List<ResourceData> buildList;
+            if (Difference)
+            {
+                var difference = m_BuildReport.GetDifference(m_ResourceDatas);
+                if (difference == null || difference.Count <= 0)
+                {
+                    buildList = m_ResourceDatas.Values.ToList();
+                }
+                else
+                {
+                    buildList = difference;
+                }
+            }
+            else
+            {
+                buildList = m_ResourceDatas.Values.ToList();
+            }
+
+            foreach (ResourceData resourceData in buildList)
+            {
                 if (resourceData.IsLoadFromBinary)
                 {
                     binaryResourceDataList.Add(resourceData);
