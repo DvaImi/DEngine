@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2020 Jiang Yin. All rights reserved.
-// Homepage: https://DEngine.cn/
-// Feedback: mailto:ellan@DEngine.cn
-//------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.IO;
 
 namespace Game.Editor.DataTableTools

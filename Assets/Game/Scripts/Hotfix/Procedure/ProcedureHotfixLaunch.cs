@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://DEngine.cn/
-// Feedback: mailto:ellan@DEngine.cn
-//------------------------------------------------------------
-
-using DEngine.Procedure;
+﻿using DEngine.Procedure;
 using DEngine.Runtime;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
@@ -31,6 +24,9 @@ namespace Game.Hotfix
         {
             base.OnEnter(procedureOwner);
             Log.Info("ProcedureHotfix  Launch  ");
+            Log.Info("差异包测试..");
+            Log.Info("差异包测试...");
+            Log.Info("差异包测试....");
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

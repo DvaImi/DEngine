@@ -77,15 +77,8 @@ namespace Game.Editor.Builder
             return (Platform)Enum.Parse(typeof(Platform), PlatformNames[platformIndex]);
         }
 
-        /// <summary>
-        /// 由 UnityGameFramework.Editor.ResourceTools.Platform 得到 平台标识符。
-        /// </summary>
-        /// <param name="platform">UnityGameFramework.Editor.ResourceTools.Platform。</param>
-        /// <returns>平台标识符。</returns>
         public static string GetPlatformPath(Platform platform)
         {
-            // 这里和 ProcedureVersionCheck.GetPlatformPath() 对应。
-            // 使用 平台标识符 关联 UnityEngine.RuntimePlatform 和 UnityGameFramework.Editor.ResourceTools.Platform
             switch (platform)
             {
                 case Platform.Windows:

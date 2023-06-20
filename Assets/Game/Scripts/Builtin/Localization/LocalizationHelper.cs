@@ -10,7 +10,6 @@ namespace Game.Helper
 {
     /// <summary>
     /// 默认本地化辅助器。
-    /// 改编自 UnityGameFramework.Runtime.DefaultLocalizationHelper。
     /// 修改可以读取单个表格中的多列语言。从第4列开始。
     /// </summary>
     public class LocalizationHelper : LocalizationHelperBase

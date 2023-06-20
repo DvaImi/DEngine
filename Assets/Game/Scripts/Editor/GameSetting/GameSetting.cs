@@ -37,6 +37,10 @@ namespace Game.Editor
         /// </summary>
         public int ResourceModeIndex;
         /// <summary>
+        /// 差异化打包
+        /// </summary>
+        public bool Difference;
+        /// <summary>
         /// 应用发布路径
         /// </summary>
         public string AppOutput = "Assets/../AppOutput";

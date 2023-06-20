@@ -14,7 +14,7 @@ namespace Game
     {
         private static readonly StringBuilder m_StringBuilder = new StringBuilder();
         private static readonly string m_NameColor = "#1E90FF";
-        private static readonly string m_Header = "Dvim";
+        private static readonly string m_Header = "DEngine";
         /// <summary>
         /// 打印信息日志
         /// </summary>

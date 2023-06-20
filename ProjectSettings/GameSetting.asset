@@ -18,10 +18,11 @@ MonoBehaviour:
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
   BuildPlatform: 0
   ResourceModeIndex: 1
+  Difference: 0
   AppOutput: F:/Project/Unity/Work/GameClient/AppOutput
-  BundlesOutput: F:/Project/Unity/Work/DEngine/Bundles
+  BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0
-  InternalResourceVersion: 0
+  InternalResourceVersion: 1
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: http://192.168.1.102/GameClient/{0}/{1}/{2}
   BuildInfo:

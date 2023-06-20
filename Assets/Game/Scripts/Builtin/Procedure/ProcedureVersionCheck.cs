@@ -49,7 +49,6 @@ namespace Game
         private async void CheckVersionList()
         {
             string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.BuildInfo.LatestGameVersion, GetPlatformPath());
-
             // 向服务器请求版本信息
             WebRequestResult result = await GameEntry.WebRequest.AddWebRequestAsync(checkVersionUrl);
             if (result.Success)
@@ -57,14 +56,13 @@ namespace Game
 
                 // 解析版本信息
                 byte[] versionInfoBytes = result.Bytes;
-                string versionInfoString =Utility.Converter.GetString(versionInfoBytes);
+                string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
                 m_VersionInfo = Utility.Json.ToObject<VersionInfo>(versionInfoString);
                 if (m_VersionInfo == null)
                 {
                     Log.Error("Parse VersionInfo failure.");
                     return;
                 }
-
                 Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
 
                 m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(m_VersionInfo.InternalResourceVersion) == CheckVersionListResult.NeedUpdate;
@@ -84,7 +82,7 @@ namespace Game
                     return;
                 }
                 // 设置资源更新下载地址
-                GameEntry.Resource.UpdatePrefixUri =Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
+                GameEntry.Resource.UpdatePrefixUri = Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
                 m_CheckVersionComplete = true;
             }
             else
@@ -115,7 +113,7 @@ namespace Game
         private string GetPlatformPath()
         {
             // 这里和 GameBuildEventHandler.GetPlatformPath() 对应。
-            // 使用 平台标识符 关联 UnityEngine.RuntimePlatform 和 UnityGameFramework.Editor.ResourceTools.Platform
+            // 使用 平台标识符 关联 UnityEngine.RuntimePlatform 和 DEngine.Editor.ResourceTools.Platform
             switch (Application.platform)
             {
                 case RuntimePlatform.WindowsEditor:

@@ -138,7 +138,7 @@ namespace Game.Editor
         /// </summary>
         /// <param name="rawRow"></param>
         /// <returns></returns>
-        /// <exception cref="GameFrameworkException"></exception>
+        /// <exception cref="DEngineException"></exception>
         public bool IsCommentRow(int rawRow)
         {
             if (rawRow < 0 || rawRow >= RawRowCount)
@@ -154,7 +154,7 @@ namespace Game.Editor
         /// </summary>
         /// <param name="rawColumn"></param>
         /// <returns></returns>
-        /// <exception cref="GameFrameworkException"></exception>
+        /// <exception cref="DEngineException"></exception>
         public bool IsCommentColumn(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
@@ -171,7 +171,7 @@ namespace Game.Editor
         /// </summary>
         /// <param name="rawColumn"></param>
         /// <returns></returns>
-        /// <exception cref="GameFrameworkException"></exception>
+        /// <exception cref="DEngineException"></exception>
         public string GetName(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
@@ -188,7 +188,7 @@ namespace Game.Editor
         /// <param name="rawRow">原始行索引。</param>
         /// <param name="rawColumn">原始列索引。</param>
         /// <returns>值。</returns>
-        /// <exception cref="GameFrameworkException"></exception>
+        /// <exception cref="DEngineException"></exception>
         public string GetValue(int rawRow, int rawColumn)
         {
             if (rawRow < 0 || rawRow >= RawRowCount)

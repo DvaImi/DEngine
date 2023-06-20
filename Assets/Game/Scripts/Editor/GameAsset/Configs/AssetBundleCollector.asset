@@ -16,60 +16,60 @@ MonoBehaviour:
   - valid: 1
     name: data
     variant: 
-    fileSystem: 
+    fileSystem: data
     groups: 
     assetPath: Assets/Game/Configs
     loadType: 0
-    packed: 0
+    packed: 1
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
     name: data
     variant: 
-    fileSystem: 
+    fileSystem: data
     groups: 
     assetPath: Assets/Game/DataTables
     loadType: 0
-    packed: 0
+    packed: 1
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
     name: runtime
     variant: 
-    fileSystem: 
+    fileSystem: runtime
     groups: 
     assetPath: Assets/Game/HybridCLRData
     loadType: 0
-    packed: 0
+    packed: 1
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
     name: localization
     variant: 
-    fileSystem: 
+    fileSystem: localization
     groups: 
     assetPath: Assets/Game/Localization
     loadType: 0
-    packed: 0
+    packed: 1
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
     name: level
     variant: 
-    fileSystem: 
+    fileSystem: level
     groups: 
     assetPath: Assets/Game/Scenes
     loadType: 0
-    packed: 0
+    packed: 1
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
     name: ui
     variant: 
-    fileSystem: 
+    fileSystem: ui
     groups: 
     assetPath: Assets/Game/UI
     loadType: 0
-    packed: 0
+    packed: 1
     filterType: 1
     searchPatterns: '*.*'

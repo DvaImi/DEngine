@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using DEngine;
 using DEngine.Editor.ResourceTools;
@@ -18,12 +19,12 @@ namespace Game.Editor.Builder
             return Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, GameSetting.Instance.LatestGameVersion, GameSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
         }
 
-        public static void BuildBundle()
+        public static void BuildBundle(bool difference = false)
         {
             IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
             IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
             Platform platform = (Platform)Enum.Parse(typeof(Platform), PlatformNames[GameSetting.Instance.BuildPlatform]);
-            BuildBundle(platform, GameSetting.Instance.BundlesOutput);
+            BuildBundle(platform, GameSetting.Instance.BundlesOutput, difference);
             if (GameSetting.Instance.ForceUpdateGame)
             {
                 Debug.Log($"<color=#1E90FF>[Dvim] ►</color> " + "强制更新资源版本构建完成,打包新版本app时，务必更新版本号，避免冲突!!!");
@@ -49,7 +50,7 @@ namespace Game.Editor.Builder
             Debug.Log("Clear success");
         }
 
-        public static void BuildBundle(Platform platform, string outputDirectory)
+        public static void BuildBundle(Platform platform, string outputDirectory, bool difference = false)
         {
             ResourceBuilderController builderController = new();
             builderController.OnLoadingResource += OnLoadingResource;
@@ -74,10 +75,15 @@ namespace Game.Editor.Builder
                     builderController.OutputDirectory = outputDirectory;
                 }
                 Debug.Log("Load configuration success.");
-
+                builderController.CompressionHelperTypeName = typeof(DEngine.Runtime.DefaultCompressionHelper).FullName;
                 builderController.RefreshCompressionHelper();
                 builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
                 builderController.RefreshBuildEventHandler();
+                if (difference)
+                {
+                    builderController.Difference = difference;
+                    builderController.CheckDifference();
+                }
             }
             else
             {
@@ -127,6 +133,35 @@ namespace Game.Editor.Builder
             {
                 controller.OutputDirectory = outputDirectory;
                 controller.Save();
+            }
+        }
+
+        public static void GetLastBuildBuildPath(out string version, out string FullPath)
+        {
+            string OutputDirectory = GameSetting.Instance.BundlesOutput;
+            version = FullPath = null;
+            string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
+            string lastVeisionBundlesDirectory = string.Empty;
+            List<DirectoryInfo> dirInfos = new();
+            if (Directory.Exists(buildReportDirectory))
+            {
+                string[] dirs = Directory.GetDirectories(buildReportDirectory);
+                for (int i = 0, length = dirs.Length; i < length; i++)
+                {
+                    DirectoryInfo directory = new(dirs[i]);
+                    dirInfos.Add(directory);
+                }
+                dirInfos.Sort((a, b) => { return a.LastWriteTime < b.LastWriteTime ? 1 : -1; });
+            }
+            if (dirInfos.Count > 0)
+            {
+                lastVeisionBundlesDirectory = Utility.Path.GetRegularPath(dirInfos[0].FullName);
+                version = lastVeisionBundlesDirectory[(lastVeisionBundlesDirectory.LastIndexOf("/") + 1)..];
+                FullPath = Utility.Path.GetRegularPath(Path.Combine(OutputDirectory, "Full", version));
+                if (!Directory.Exists(FullPath))
+                {
+                    Debug.LogWarning($"{lastVeisionBundlesDirectory} is invalid");
+                }
             }
         }
 

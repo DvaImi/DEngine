@@ -102,7 +102,7 @@ namespace Game.Editor.Builder
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
-                GameBuilder.BuildBundle();
+                GameBuilder.BuildBundle(GameSetting.Instance.Difference);
             }
 
             if (m_IsAotGeneric)
@@ -230,6 +230,8 @@ namespace Game.Editor.Builder
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
+
+                GameSetting.Instance.Difference = EditorGUILayout.ToggleLeft("Difference", GameSetting.Instance.Difference, GUILayout.Width(120));
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
                 int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameBuilder.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)
@@ -259,6 +261,7 @@ namespace Game.Editor.Builder
                 GUI.enabled = false;
                 EditorGUILayout.LabelField(GameSetting.Instance.BundlesOutput);
                 GUI.enabled = true;
+
                 if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
                 {
                     string directory = EditorUtility.OpenFolderPanel("Select Output Directory", GameSetting.Instance.BundlesOutput, string.Empty);
