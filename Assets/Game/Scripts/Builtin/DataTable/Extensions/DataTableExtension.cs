@@ -25,7 +25,7 @@ namespace Game
                 return;
             }
 
-            string dataRowClassName = "Game.Hotfix.DR" + splitedNames[0];
+            string dataRowClassName = "Game.Update.DR" + splitedNames[0];
             Type dataRowType = DEngine.Utility.Assembly.GetType(dataRowClassName);
             if (dataRowType == null)
             {

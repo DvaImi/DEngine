@@ -14,62 +14,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Collector:
   - valid: 1
-    name: data
+    name: 
     variant: 
     fileSystem: data
     groups: 
     assetPath: Assets/Game/Configs
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
-    name: data
+    name: 
     variant: 
     fileSystem: data
     groups: 
     assetPath: Assets/Game/DataTables
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
-    name: runtime
+    name: 
     variant: 
     fileSystem: runtime
     groups: 
     assetPath: Assets/Game/HybridCLRData
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
-    name: localization
+    name: 
     variant: 
     fileSystem: localization
     groups: 
     assetPath: Assets/Game/Localization
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
-    name: level
+    name: 
     variant: 
     fileSystem: level
     groups: 
     assetPath: Assets/Game/Scenes
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
-    name: ui
+    name: 
     variant: 
     fileSystem: ui
     groups: 
     assetPath: Assets/Game/UI
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 1
     searchPatterns: '*.*'

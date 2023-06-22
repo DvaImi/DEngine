@@ -65,14 +65,9 @@ namespace Game.Editor
                 return;
             }
 
-            if (GameSetting.Instance.ResourceModeIndex == (int)ResourceMode.Package)
-            {
-                GameBuilder.CopyFileToStreamingAssets(outputPackagePath);
-            }
-            else if (GameSetting.Instance.ResourceModeIndex == (int)ResourceMode.Updatable || GameSetting.Instance.ResourceModeIndex == (int)ResourceMode.UpdatableWhilePlaying)
-            {
-                GameBuilder.CopyFileToStreamingAssets(outputPackedPath);
-            }
+            int resourceMode = GameSetting.Instance.ResourceModeIndex;
+            string copyFilePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
+            GameBuilder.CopyFileToStreamingAssets(copyFilePath);
 
             if (GameSetting.Instance.AutoCopyToVirtualServer)
             {

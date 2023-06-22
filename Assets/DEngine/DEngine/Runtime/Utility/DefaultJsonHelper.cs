@@ -1,6 +1,5 @@
-﻿using DEngine;
-using System;
-using UnityEngine;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace DEngine.Runtime
 {
@@ -16,7 +15,7 @@ namespace DEngine.Runtime
         /// <returns>序列化后的 JSON 字符串。</returns>
         public string ToJson(object obj)
         {
-            return JsonUtility.ToJson(obj);
+            return JsonConvert.SerializeObject(obj);
         }
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace DEngine.Runtime
         /// <returns>反序列化后的对象。</returns>
         public T ToObject<T>(string json)
         {
-            return JsonUtility.FromJson<T>(json);
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace DEngine.Runtime
         /// <returns>反序列化后的对象。</returns>
         public object ToObject(Type objectType, string json)
         {
-            return JsonUtility.FromJson(json, objectType);
+            return JsonConvert.DeserializeObject(json, objectType);
         }
     }
 }

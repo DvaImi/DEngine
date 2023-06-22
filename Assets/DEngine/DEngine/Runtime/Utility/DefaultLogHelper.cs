@@ -1,38 +1,29 @@
-﻿using DEngine;
-using UnityEngine;
-
-namespace DEngine.Runtime
+﻿namespace DEngine.Runtime
 {
     /// <summary>
     /// 默认游戏框架日志辅助器。
     /// </summary>
     public class DefaultLogHelper : DEngineLog.ILogHelper
     {
-        /// <summary>
-        /// 记录日志。
-        /// </summary>
-        /// <param name="level">日志等级。</param>
-        /// <param name="message">日志内容。</param>
         public void Log(DEngineLogLevel level, object message)
         {
             switch (level)
             {
                 case DEngineLogLevel.Debug:
-                    Debug.Log(Utility.Text.Format("<color=#888888>{0}</color>", message));
+                    Logger.Debug(message.ToString(), true);
                     break;
-
                 case DEngineLogLevel.Info:
-                    Debug.Log(message.ToString());
+                    Logger.Info(message.ToString(), true);
                     break;
-
                 case DEngineLogLevel.Warning:
-                    Debug.LogWarning(message.ToString());
+                    Logger.Warning(message.ToString(), true);
                     break;
-
                 case DEngineLogLevel.Error:
-                    Debug.LogError(message.ToString());
+                    Logger.Error(message.ToString(), true);
                     break;
-
+                case DEngineLogLevel.Fatal:
+                    Logger.Fatal(message.ToString(), true);
+                    break;
                 default:
                     throw new DEngineException(message.ToString());
             }

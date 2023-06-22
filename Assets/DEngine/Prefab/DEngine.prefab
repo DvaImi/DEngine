@@ -104,9 +104,9 @@ MonoBehaviour:
   m_GenerateReadWriteVersionListLength: 1048576
   m_UpdateRetryCount: 3
   m_InstanceRoot: {fileID: 0}
-  m_ResourceHelperTypeName: UnityGameFramework.Runtime.DefaultResourceHelper
+  m_ResourceHelperTypeName: DEngine.Runtime.DefaultResourceHelper
   m_CustomResourceHelper: {fileID: 0}
-  m_LoadResourceAgentHelperTypeName: UnityGameFramework.Runtime.DefaultLoadResourceAgentHelper
+  m_LoadResourceAgentHelperTypeName: DEngine.Runtime.DefaultLoadResourceAgentHelper
   m_CustomLoadResourceAgentHelper: {fileID: 0}
   m_LoadResourceAgentHelperCount: 3
 --- !u!1 &109252
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EnableLoadDictionaryUpdateEvent: 0
   m_EnableLoadDictionaryDependencyAssetEvent: 0
-  m_LocalizationHelperTypeName: UnityGameFramework.Runtime.DefaultLocalizationHelper
+  m_LocalizationHelperTypeName: DEngine.Runtime.DefaultLocalizationHelper
   m_CustomLocalizationHelper: {fileID: 0}
   m_CachedBytesSize: 0
 --- !u!1 &109548
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InstanceRoot: {fileID: 0}
-  m_DownloadAgentHelperTypeName: UnityGameFramework.Runtime.UnityWebRequestDownloadAgentHelper
+  m_DownloadAgentHelperTypeName: DEngine.Runtime.UnityWebRequestDownloadAgentHelper
   m_CustomDownloadAgentHelper: {fileID: 0}
   m_DownloadAgentHelperCount: 3
   m_Timeout: 30
@@ -255,9 +255,9 @@ MonoBehaviour:
   m_EnableShowEntityUpdateEvent: 0
   m_EnableShowEntityDependencyAssetEvent: 0
   m_InstanceRoot: {fileID: 0}
-  m_EntityHelperTypeName: UnityGameFramework.Runtime.DefaultEntityHelper
+  m_EntityHelperTypeName: DEngine.Runtime.DefaultEntityHelper
   m_CustomEntityHelper: {fileID: 0}
-  m_EntityGroupHelperTypeName: UnityGameFramework.Runtime.DefaultEntityGroupHelper
+  m_EntityGroupHelperTypeName: DEngine.Runtime.DefaultEntityGroupHelper
   m_CustomEntityGroupHelper: {fileID: 0}
   m_EntityGroups: []
 --- !u!1 &116470
@@ -327,11 +327,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorResourceMode: 1
   m_EditorLanguage: 0
-  m_TextHelperTypeName: UnityGameFramework.Runtime.DefaultTextHelper
-  m_VersionHelperTypeName: UnityGameFramework.Runtime.DefaultVersionHelper
-  m_LogHelperTypeName: UnityGameFramework.Runtime.DefaultLogHelper
-  m_CompressionHelperTypeName: UnityGameFramework.Runtime.DefaultCompressionHelper
-  m_JsonHelperTypeName: UnityGameFramework.Runtime.DefaultJsonHelper
+  m_TextHelperTypeName: DEngine.Runtime.DefaultTextHelper
+  m_VersionHelperTypeName: DEngine.Runtime.DefaultVersionHelper
+  m_LogHelperTypeName: DEngine.Runtime.DefaultLogHelper
+  m_CompressionHelperTypeName: DEngine.Runtime.DefaultCompressionHelper
+  m_JsonHelperTypeName: DEngine.Runtime.DefaultJsonHelper
   m_FrameRate: 30
   m_GameSpeed: 1
   m_RunInBackground: 1
@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc49d78dad061a2418e134fc48856bc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FileSystemHelperTypeName: UnityGameFramework.Runtime.DefaultFileSystemHelper
+  m_FileSystemHelperTypeName: DEngine.Runtime.DefaultFileSystemHelper
   m_CustomFileSystemHelper: {fileID: 0}
 --- !u!1 &119488
 GameObject:
@@ -509,7 +509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InstanceRoot: {fileID: 0}
-  m_WebRequestAgentHelperTypeName: UnityGameFramework.Runtime.UnityWebRequestAgentHelper
+  m_WebRequestAgentHelperTypeName: DEngine.Runtime.UnityWebRequestAgentHelper
   m_CustomWebRequestAgentHelper: {fileID: 0}
   m_WebRequestAgentHelperCount: 1
   m_Timeout: 30
@@ -557,7 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c6e05d8d843cd94bb9aa026ed5dc517, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SettingHelperTypeName: UnityGameFramework.Runtime.DefaultSettingHelper
+  m_SettingHelperTypeName: DEngine.Runtime.DefaultSettingHelper
   m_CustomSettingHelper: {fileID: 0}
 --- !u!1 &137260
 GameObject:
@@ -605,7 +605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EnableLoadConfigUpdateEvent: 0
   m_EnableLoadConfigDependencyAssetEvent: 0
-  m_ConfigHelperTypeName: UnityGameFramework.Runtime.DefaultConfigHelper
+  m_ConfigHelperTypeName: DEngine.Runtime.DefaultConfigHelper
   m_CustomConfigHelper: {fileID: 0}
   m_CachedBytesSize: 0
 --- !u!1 &139170
@@ -702,11 +702,11 @@ MonoBehaviour:
   m_EnablePlaySoundDependencyAssetEvent: 0
   m_InstanceRoot: {fileID: 0}
   m_AudioMixer: {fileID: 0}
-  m_SoundHelperTypeName: UnityGameFramework.Runtime.DefaultSoundHelper
+  m_SoundHelperTypeName: DEngine.Runtime.DefaultSoundHelper
   m_CustomSoundHelper: {fileID: 0}
-  m_SoundGroupHelperTypeName: UnityGameFramework.Runtime.DefaultSoundGroupHelper
+  m_SoundGroupHelperTypeName: DEngine.Runtime.DefaultSoundGroupHelper
   m_CustomSoundGroupHelper: {fileID: 0}
-  m_SoundAgentHelperTypeName: UnityGameFramework.Runtime.DefaultSoundAgentHelper
+  m_SoundAgentHelperTypeName: DEngine.Runtime.DefaultSoundAgentHelper
   m_CustomSoundAgentHelper: {fileID: 0}
   m_SoundGroups: []
 --- !u!1 &151938
@@ -851,9 +851,9 @@ MonoBehaviour:
   m_InstanceExpireTime: 60
   m_InstancePriority: 0
   m_InstanceRoot: {fileID: 0}
-  m_UIFormHelperTypeName: UnityGameFramework.Runtime.DefaultUIFormHelper
+  m_UIFormHelperTypeName: DEngine.Runtime.DefaultUIFormHelper
   m_CustomUIFormHelper: {fileID: 0}
-  m_UIGroupHelperTypeName: UnityGameFramework.Runtime.DefaultUIGroupHelper
+  m_UIGroupHelperTypeName: DEngine.Runtime.DefaultUIGroupHelper
   m_CustomUIGroupHelper: {fileID: 0}
   m_UIGroups: []
 --- !u!1 &176370
@@ -990,7 +990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EnableLoadDataTableUpdateEvent: 0
   m_EnableLoadDataTableDependencyAssetEvent: 0
-  m_DataTableHelperTypeName: UnityGameFramework.Runtime.DefaultDataTableHelper
+  m_DataTableHelperTypeName: DEngine.Runtime.DefaultDataTableHelper
   m_CustomDataTableHelper: {fileID: 0}
   m_CachedBytesSize: 0
 --- !u!1 &180508

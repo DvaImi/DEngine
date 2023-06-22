@@ -16,6 +16,9 @@ using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Path = System.IO.Path;
+using System.Reflection;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Game.Editor.Builder
 {
@@ -198,8 +201,21 @@ namespace Game.Editor.Builder
                     {
                         if (GUILayout.Button("Editor"))
                         {
-                            SelectAssembly odinEditor = GetWindow<SelectAssembly>();
-                            odinEditor.Open();
+                            SelectAssembly assemblyEditor = GetWindow<SelectAssembly>();
+
+                            void Save(string[] aotdll)
+                            {
+                                GameSetting.Instance.AOTDllNames = aotdll;
+                                GameSetting.Instance.SaveSetting();
+                                Repaint();
+                            }
+
+                            bool WherePredicate(Assembly assembly)
+                            {
+                                return !assembly.FullName.Contains("Editor");
+                            }
+                            HashSet<string> hasSelect = new(GameSetting.Instance.AOTDllNames.Select(item => item.Replace(".dll", null)));
+                            assemblyEditor.Open(hasSelect, Save, WherePredicate);
                         }
                     }
                     EditorGUILayout.EndHorizontal();
@@ -224,6 +240,7 @@ namespace Game.Editor.Builder
             }
             EditorGUILayout.EndHorizontal();
         }
+
 
         private void GUIResources()
         {

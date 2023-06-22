@@ -17,12 +17,12 @@ MonoBehaviour:
   ResourceEditorConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
   BuildPlatform: 0
-  ResourceModeIndex: 1
+  ResourceModeIndex: 2
   Difference: 0
   AppOutput: F:/Project/Unity/Work/GameClient/AppOutput
   BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0
-  InternalResourceVersion: 1
+  InternalResourceVersion: 9
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: http://192.168.1.102/GameClient/{0}/{1}/{2}
   BuildInfo:
@@ -36,18 +36,11 @@ MonoBehaviour:
   HotUpdateAssemblyDefinition: {fileID: 5897886265953266890, guid: 1b482ecb56af90e4188a38330b70f1e0, type: 3}
   AOtDllPath: Assets/Game/HybridCLRData/AOT
   AOTDllNames:
-  - mscorlib.dll
-  - UnityEngine.CoreModule.dll
-  - UnityEngine.UIModule.dll
-  - System.Core.dll
-  - System.dll
-  - Game.Runtime.dll
-  - HybridCLR.Runtime.dll
-  - UniTask.dll
-  - UniTask.Linq.dll
   - DEngine.dll
   - DEngine.Runtime.dll
-  - Newtonsoft.Json.dll
+  - mscorlib.dll
+  - UniTask.dll
+  - UnityEngine.CoreModule.dll
   VirtualServerAddress: F:/DvalmiService/GameClient
   AutoCopyToVirtualServer: 1
   PreserveHotfixDllNames: []
