@@ -1447,7 +1447,7 @@ namespace DEngine.Editor.ResourceTools
 
         private BuildAssetBundleOptions GetBuildAssetBundleOptions()
         {
-            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.DeterministicAssetBundle;
+            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.AppendHashToAssetBundleName;
 
             if (ForceRebuildAssetBundleSelected)
             {
@@ -1616,7 +1616,7 @@ namespace DEngine.Editor.ResourceTools
                 int position = assetName.LastIndexOf('.');
                 if (position >= 0)
                 {
-                    return assetName.Substring(position + 1);
+                    return assetName[(position + 1)..];
                 }
             }
 
