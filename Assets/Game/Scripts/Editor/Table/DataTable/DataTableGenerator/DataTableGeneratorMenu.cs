@@ -35,7 +35,7 @@ namespace Game.Editor.DataTableTools
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("DataTable/Generate/DataTables", priority = 1)]
+        [MenuItem("Table/Generate/DataTables", priority = 1)]
         public static void GenerateDataTablesFormExcel()
         {
             DataTableSetting.Instance.RefreshDataTables("*.bytes");
@@ -77,7 +77,7 @@ namespace Game.Editor.DataTableTools
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("DataTable/Editor/DataTables", priority = 1)]
+        [MenuItem("Table/Editor/DataTables", priority = 1)]
         public static void EditorDataTable()
         {
             OpenFolder.Execute(DataTableSetting.Instance.DataTableExcelsFolder);

@@ -9,11 +9,11 @@ using OfficeOpenXml;
 using UnityEditor;
 using UnityEngine;
 
-namespace Game.Editor
+namespace Game.Editor.DataTableTools
 {
     public sealed class DictionaryGenerator
     {
-        [MenuItem("DataTable/Generate/Localizations", priority = 2)]
+        [MenuItem("Table/Generate/Localizations", priority = 2)]
         public static void GenerateLocalizationsFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -35,7 +35,7 @@ namespace Game.Editor
                                 ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
                                 string dictionaryName = workCount > 1 ? excelName + "_" + sheet.Name : excelName;
                                 DictionaryProcessor processor = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
-                                string binaryDataFileName =Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName + ".bytes"));
+                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName + ".bytes"));
                                 if (!processor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
                                 {
                                     File.Delete(binaryDataFileName);
@@ -45,7 +45,7 @@ namespace Game.Editor
                         }
                     }
                 }
-                string mainfest =Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, "LocalizationMainfest" + ".bytes"));
+                string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, "LocalizationMainfest" + ".bytes"));
                 GameMainfestUitlity.CreatMainfest(dictionaryNames.ToArray(), mainfest);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
@@ -54,7 +54,7 @@ namespace Game.Editor
             }
         }
 
-        [MenuItem("DataTable/Generate/Config", priority = 3)]
+        [MenuItem("Table/Generate/Config", priority = 3)]
         public static void GenerateConfigFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -95,13 +95,13 @@ namespace Game.Editor
             }
         }
 
-        [MenuItem("DataTable/Editor/Localization", priority = 2)]
+        [MenuItem("Table/Editor/Localization", priority = 2)]
         public static void EditorLocalization()
         {
             OpenFolder.Execute(DataTableSetting.Instance.LocalizationExcelsFolder);
         }
 
-        [MenuItem("DataTable/Editor/Config", priority = 3)]
+        [MenuItem("Table/Editor/Config", priority = 3)]
         public static void EditorConfig()
         {
             OpenFolder.Execute(DataTableSetting.Instance.ConfigExcelsFolder);

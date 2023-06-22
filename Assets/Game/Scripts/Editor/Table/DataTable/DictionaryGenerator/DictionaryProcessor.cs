@@ -6,7 +6,7 @@ using DEngine;
 using OfficeOpenXml;
 using UnityEngine;
 
-namespace Game.Editor
+namespace Game.Editor.DataTableTools
 {
     public sealed class DictionaryProcessor
     {

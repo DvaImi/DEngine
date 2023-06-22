@@ -24,9 +24,6 @@ namespace Game.Update
         {
             base.OnEnter(procedureOwner);
             Log.Info("ProcedureHotfix  Launch  ");
-            Log.Info("差异包测试..");
-            Log.Info("差异包测试...");
-            Log.Info("差异包测试....");
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

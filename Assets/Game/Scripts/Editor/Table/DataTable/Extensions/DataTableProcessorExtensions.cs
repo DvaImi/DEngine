@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Game.Editor
+namespace Game.Editor.DataTableTools
 {
     public static class DataTableProcessorExtensions
     {

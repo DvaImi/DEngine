@@ -17,12 +17,12 @@ MonoBehaviour:
   ResourceEditorConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
   BuildPlatform: 0
-  ResourceModeIndex: 2
+  ResourceModeIndex: 1
   Difference: 0
   AppOutput: F:/Project/Unity/Work/GameClient/AppOutput
   BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0
-  InternalResourceVersion: 9
+  InternalResourceVersion: 3
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: http://192.168.1.102/GameClient/{0}/{1}/{2}
   BuildInfo:
@@ -42,5 +42,5 @@ MonoBehaviour:
   - UniTask.dll
   - UnityEngine.CoreModule.dll
   VirtualServerAddress: F:/DvalmiService/GameClient
-  AutoCopyToVirtualServer: 1
+  AutoCopyToVirtualServer: 0
   PreserveHotfixDllNames: []

@@ -4,7 +4,7 @@ using System.Linq;
 using DEngine;
 using UnityEditor;
 
-namespace Game.Editor
+namespace Game.Editor.DataTableTools
 {
     /// <summary>
     /// 数据表编辑器配置相关数据

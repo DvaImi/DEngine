@@ -107,7 +107,7 @@ namespace DEngine.Runtime
                 return;
             }
 
-            m_UnityWebRequest = UnityWebRequest.Post(webRequestUri, Utility.Converter.GetString(postData));
+            m_UnityWebRequest = UnityWebRequest.PostWwwForm(webRequestUri, Utility.Converter.GetString(postData));
 
 
             WWWFormInfo wwwFormInfo = (WWWFormInfo)userData;
