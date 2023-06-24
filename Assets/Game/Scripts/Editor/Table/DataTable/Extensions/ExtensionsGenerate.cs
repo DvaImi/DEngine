@@ -382,8 +382,17 @@ namespace Game.Editor.DataTableTools
 
         private static void GenerateCodeFile(string fileName, string value)
         {
-            var filePath =  Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, fileName + ".cs"));
-            if (File.Exists(filePath)) File.Delete(filePath);
+            var filePath = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, fileName + ".cs"));
+            FileInfo fileInfo = new FileInfo(filePath);
+            if (!fileInfo.Directory.Exists)
+            {
+                fileInfo.Directory.Create();
+            }
+
+            if (fileInfo.Exists)
+            {
+                File.Delete(filePath);
+            }
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {

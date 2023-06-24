@@ -24,6 +24,10 @@ namespace Game.Editor.Builder
             IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
             IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
             Platform platform = (Platform)Enum.Parse(typeof(Platform), PlatformNames[GameSetting.Instance.BuildPlatform]);
+            if (difference)
+            {
+                SetLastVersion();
+            }
             BuildBundle(platform, GameSetting.Instance.BundlesOutput, difference);
             if (GameSetting.Instance.ForceUpdateGame)
             {

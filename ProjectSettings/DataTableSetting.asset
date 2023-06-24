@@ -17,8 +17,8 @@ MonoBehaviour:
   CSharpCodePath: Assets/Game/Scripts/Update/DataTable
   CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/Table/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Update/DataTable/Extensions
-  UIFormIdCSharpFilePath: 
-  NameSpace: Game.Hotfix
+  GenerateDataTableEnum: 1
+  NameSpace: Game.Update
   AssemblyNames:
   - DEngine.Runtime.dll
   - DEngine.Editor.dll

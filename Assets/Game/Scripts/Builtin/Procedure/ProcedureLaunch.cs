@@ -33,13 +33,13 @@ namespace Game
             {
                 // 单机模式
                 Log.Info("Package resource mode detected.");
-                ChangeState<ProcedureResourcesInit>(procedureOwner);
+                ChangeState<ProcedureInitResources>(procedureOwner);
             }
             else
             {
                 // 可更新模式
                 Log.Info("Updatable resource mode detected.");
-                ChangeState<ProcedureVersionCheck>(procedureOwner);
+                ChangeState<ProcedureCheckVersion>(procedureOwner);
             }
         }
     }

@@ -16,31 +16,31 @@ MonoBehaviour:
   - valid: 1
     name: 
     variant: 
-    fileSystem: data
+    fileSystem: 
     groups: 
     assetPath: Assets/Game/Configs
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
     name: 
     variant: 
-    fileSystem: data
+    fileSystem: 
     groups: 
     assetPath: Assets/Game/DataTables
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
     name: 
     variant: 
-    fileSystem: aot
+    fileSystem: runtime
     groups: 
     assetPath: Assets/Game/HybridCLRData/AOT
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 1
     searchPatterns: '*.*'
   - valid: 1
@@ -50,36 +50,36 @@ MonoBehaviour:
     groups: 
     assetPath: Assets/Game/HybridCLRData/HotUpdate
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
     variant: 
-    fileSystem: luncher
+    fileSystem: runtime
     groups: 
     assetPath: Assets/Game/HybridCLRData/UpdateLuncher.prefab
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 4
     searchPatterns: '*.*'
   - valid: 1
     name: 
     variant: 
-    fileSystem: localization
+    fileSystem: 
     groups: 
     assetPath: Assets/Game/Localization
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
     variant: 
-    fileSystem: ui
+    fileSystem: 
     groups: 
     assetPath: Assets/Game/UI
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 1
     searchPatterns: '*.*'

@@ -1,10 +1,14 @@
 ﻿//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023-05-31 22:34:14.671
+// 生成时间：2023-06-23 22:47:18.827
 //------------------------------------------------------------
 
+using DEngine;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnityEngine;
 using DEngine.Runtime;
 
 
@@ -49,7 +53,7 @@ namespace Game.Update
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-            AssetName = columnStrings[index++];
+			AssetName = columnStrings[index++];
             GeneratePropertyArray();
             return true;
         }

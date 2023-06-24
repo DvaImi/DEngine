@@ -5,7 +5,10 @@ using DEngine.Runtime;
 
 namespace Game
 {
-    public class ProcedureResourcesVerify : ProcedureBase
+    /// <summary>
+    /// 使用可更新模式校验资源流程
+    /// </summary>
+    public class ProcedureVerifyResources : ProcedureBase
     {
         private bool m_VerifyResourcesComplete = false;
 
@@ -39,7 +42,7 @@ namespace Game
                 return;
             }
 
-            ChangeState<ProcedureResourcesCheck>(procedureOwner);
+            ChangeState<ProcedureCheckResources>(procedureOwner);
         }
 
         private void OnVerifyResourcesComplete(bool result)

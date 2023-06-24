@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class ProcedureVersionCheck : ProcedureBase
+    public class ProcedureCheckVersion : ProcedureBase
     {
         private bool m_CheckVersionComplete = false;
         private bool m_NeedUpdateVersion = false;
@@ -38,11 +38,11 @@ namespace Game
                 procedureOwner.SetData<VarInt32>("VersionListHashCode", m_VersionInfo.VersionListHashCode);
                 procedureOwner.SetData<VarInt32>("VersionListCompressedLength", m_VersionInfo.VersionListCompressedLength);
                 procedureOwner.SetData<VarInt32>("VersionListCompressedHashCode", m_VersionInfo.VersionListCompressedHashCode);
-                ChangeState<ProcedureVersionUpdate>(procedureOwner);
+                ChangeState<ProcedureUpdateVersionList>(procedureOwner);
             }
             else
             {
-                ChangeState<ProcedureResourcesVerify>(procedureOwner);
+                ChangeState<ProcedureVerifyResources>(procedureOwner);
             }
         }
 

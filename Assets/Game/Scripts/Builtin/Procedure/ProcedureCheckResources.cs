@@ -4,7 +4,7 @@ using DEngine.Runtime;
 
 namespace Game
 {
-    public class ProcedureResourcesCheck : ProcedureBase
+    public class ProcedureCheckResources : ProcedureBase
     {
         private bool m_CheckResourcesComplete = false;
         private bool m_NeedUpdateResources = false;
@@ -36,7 +36,7 @@ namespace Game
             {
                 procedureOwner.SetData<VarInt32>("UpdateResourceCount", m_UpdateResourceCount);
                 procedureOwner.SetData<VarInt64>("UpdateResourceTotalCompressedLength", m_UpdateResourceTotalCompressedLength);
-                ChangeState<ProcedureResourcesUpdate>(procedureOwner);
+                ChangeState<ProcedureUpdateResources>(procedureOwner);
             }
             else
             {

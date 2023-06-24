@@ -64,9 +64,9 @@ namespace Game.Editor.DataTableTools
                             DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
                             DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
                             dataTableNames.Add(dataTableName);
-                            if (dataTableName == "UIForm")
+                            if (DataTableSetting.Instance.GenerateDataTableEnum)
                             {
-                                GenerateUIFormEnumFile(dataTableProcessor);
+                                GenerateDataTableEnumFile(dataTableProcessor, dataTableName);
                             }
                         }
                     }
@@ -96,14 +96,15 @@ namespace Game.Editor.DataTableTools
             AssetDatabase.Refresh();
         }
 
-        public static void GenerateUIFormEnumFile(DataTableProcessor dataTableProcessor)
+        public static void GenerateDataTableEnumFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
+            string fileName = $"{dataTableName}Id";
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("//this file is generate by tools,do not alter it...")
-                .AppendLine("namespace Game.Update")
+                .AppendLine($"namespace {DataTableSetting.Instance.NameSpace}")
                 .AppendLine("{")
                 .AppendLine($"\t// {dataTableProcessor.GetValue(3, 1)}")
-                .AppendLine("\tpublic enum UIFormId : byte")
+                .AppendLine($"\tpublic enum {fileName} : byte")
                 .AppendLine("\t{");
 
             for (int i = 4; i < dataTableProcessor.RawRowCount; i++)
@@ -112,7 +113,12 @@ namespace Game.Editor.DataTableTools
             }
             stringBuilder.AppendLine("\t}").AppendLine("}");
 
-            string outputFileName = Utility.Path.GetRegularPath(DataTableSetting.Instance.UIFormIdCSharpFilePath);
+            string outputFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, "TableEnum", fileName + ".cs"));
+            FileInfo fileInfo = new FileInfo(outputFileName);
+            if (!fileInfo.Directory.Exists)
+            {
+                fileInfo.Directory.Create();
+            }
             using (FileStream fileStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
             {
                 using (StreamWriter stream = new StreamWriter(fileStream, Encoding.UTF8))

@@ -2,23 +2,23 @@
 <DEngine>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Game/Configs" FileSystem="data" LoadType="0" Packed="True" />
-      <Resource Name="Game/DataTables" FileSystem="data" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/AOT/AOTMetadataMainfest" FileSystem="aot" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/AOT/DEngine.dll" FileSystem="aot" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/AOT/DEngine.Runtime.dll" FileSystem="aot" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/AOT/mscorlib.dll" FileSystem="aot" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/AOT/UniTask.dll" FileSystem="aot" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/AOT/UnityEngine.CoreModule.dll" FileSystem="aot" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/HotUpdate/Game.Update.dll" FileSystem="runtime" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/HotUpdate/UpdataDllMainfest" FileSystem="runtime" LoadType="0" Packed="True" />
-      <Resource Name="Game/HybridCLRData/UpdateLuncher" FileSystem="luncher" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/ChineseSimplified" FileSystem="localization" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/ChineseTraditional" FileSystem="localization" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/English" FileSystem="localization" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/Korean" FileSystem="localization" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/LanguageBuiltin" FileSystem="localization" LoadType="0" Packed="True" />
-      <Resource Name="Game/Localization/LocalizationMainfest" FileSystem="localization" LoadType="0" Packed="True" />
+      <Resource Name="Game/Configs" LoadType="0" Packed="False" />
+      <Resource Name="Game/DataTables" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/AOT/AOTMetadataMainfest" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/AOT/DEngine.dll" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/AOT/DEngine.Runtime.dll" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/AOT/mscorlib.dll" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/AOT/UniTask.dll" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/AOT/UnityEngine.CoreModule.dll" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/HotUpdate/Game.Update.dll" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/HotUpdate/UpdataDllMainfest" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/HybridCLRData/UpdateLuncher" FileSystem="runtime" LoadType="0" Packed="False" />
+      <Resource Name="Game/Localization/ChineseSimplified" LoadType="0" Packed="False" />
+      <Resource Name="Game/Localization/ChineseTraditional" LoadType="0" Packed="False" />
+      <Resource Name="Game/Localization/English" LoadType="0" Packed="False" />
+      <Resource Name="Game/Localization/Korean" LoadType="0" Packed="False" />
+      <Resource Name="Game/Localization/LanguageBuiltin" LoadType="0" Packed="False" />
+      <Resource Name="Game/Localization/LocalizationMainfest" LoadType="0" Packed="False" />
     </Resources>
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="Game/DataTables" />

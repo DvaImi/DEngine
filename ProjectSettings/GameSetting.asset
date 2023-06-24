@@ -17,21 +17,21 @@ MonoBehaviour:
   ResourceEditorConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
   BuildPlatform: 0
-  ResourceModeIndex: 1
-  Difference: 0
+  ResourceModeIndex: 2
+  Difference: 1
   AppOutput: F:/Project/Unity/Work/GameClient/AppOutput
   BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0
-  InternalResourceVersion: 3
+  InternalResourceVersion: 2
   LatestGameVersion: 0.1.0
-  UpdatePrefixUri: http://192.168.1.102/GameClient/{0}/{1}/{2}
+  UpdatePrefixUri: http://192.168.1.102/CDN/{0}/{1}/{2}
   BuildInfo:
     LatestGameVersion: 0.1.0
-    CheckVersionUrl: http://192.168.1.102/GameClient/{0}/{1}Version.json
-    WindowsAppUrl: http://192.168.1.102/GameClient/WindowsApp/Game.zip
+    CheckVersionUrl: http://192.168.1.102/CDN/{0}/{1}Version.json
+    WindowsAppUrl: http://192.168.1.102/CDN/WindowsApp/Game.zip
     MacOSAppUrl: http://192.168.1.102/MacOSApp
     IOSAppUrl: http://192.168.1.102/IOSApp
-    AndroidAppUrl: http://192.168.1.102/GameClient/AndroidApp/Game.apk
+    AndroidAppUrl: http://192.168.1.102/CDN/AndroidApp/Game.apk
   HotupdateDllPath: Assets/Game/HybridCLRData/HotUpdate
   HotUpdateAssemblyDefinition: {fileID: 5897886265953266890, guid: 1b482ecb56af90e4188a38330b70f1e0, type: 3}
   AOtDllPath: Assets/Game/HybridCLRData/AOT
@@ -41,6 +41,6 @@ MonoBehaviour:
   - mscorlib.dll
   - UniTask.dll
   - UnityEngine.CoreModule.dll
-  VirtualServerAddress: F:/DvalmiService/GameClient
-  AutoCopyToVirtualServer: 0
+  VirtualServerAddress: F:/DvalmiService/CDN
+  AutoCopyToVirtualServer: 1
   PreserveHotfixDllNames: []

@@ -69,7 +69,7 @@ namespace Game.Editor
                 }
                 else
                 {
-                    EditorGUILayout.HelpBox("勾选需要添加到AOT元数据补充的dll,然后点击保存生效.", MessageType.Info);
+                    EditorGUILayout.HelpBox("勾选需要添加的dll,然后点击保存生效.", MessageType.Info);
                 }
                 m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, false, true);
                 for (int i = 0; i < m_AssemblyDataList.Count; i++)

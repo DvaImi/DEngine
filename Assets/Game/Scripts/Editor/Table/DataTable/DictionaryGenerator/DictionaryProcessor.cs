@@ -223,7 +223,7 @@ namespace Game.Editor.DataTableTools
                             {
                                 continue;
                             }
-
+                          
                             for (int rawColumn = 0; rawColumn < RawColumnCount; rawColumn++)
                             {
                                 if (IsCommentColumn(rawColumn))

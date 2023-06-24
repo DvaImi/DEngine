@@ -118,6 +118,7 @@ namespace Game.Editor.DataTableTools
                     DataTableSetting.Instance.TypeRow = EditorGUILayout.IntField("类型名所在行", DataTableSetting.Instance.TypeRow);
                     DataTableSetting.Instance.CommentRow = EditorGUILayout.IntField("注释所在行", DataTableSetting.Instance.CommentRow);
                     DataTableSetting.Instance.ContentStartRow = EditorGUILayout.IntField("内容所在行", DataTableSetting.Instance.ContentStartRow);
+                    DataTableSetting.Instance.GenerateDataTableEnum = EditorGUILayout.Toggle("是否生成枚举", DataTableSetting.Instance.GenerateDataTableEnum);
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();

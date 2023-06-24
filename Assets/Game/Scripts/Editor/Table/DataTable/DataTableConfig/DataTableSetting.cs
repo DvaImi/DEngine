@@ -39,9 +39,9 @@ namespace Game.Editor.DataTableTools
         public string ExtensionDirectoryPath= "Assets/Game/Scripts/Hotfix/DataTable/Extensions";
 
         /// <summary>
-        /// 界面id枚举生成路径
+        /// 是否生成枚举
         /// </summary>
-        public string UIFormIdCSharpFilePath = "";
+        public bool GenerateDataTableEnum;
 
         /// <summary>
         /// 数据表命名空间
@@ -61,7 +61,7 @@ namespace Game.Editor.DataTableTools
         /// </summary>
         public string[] EditorAssemblyNames =
         {
-            "UnityDEngine.Editor",
+            "DEngine.Editor",
             "Game.Editor",
             "Assembly-CSharp-Editor"
         };
@@ -135,7 +135,6 @@ namespace Game.Editor.DataTableTools
         /// Excel存放的文件夹路径
         /// </summary>
         public string LocalizationExcelsFolder = "Assets/../Excels/Localization";
-
         #endregion
 
         #region Config

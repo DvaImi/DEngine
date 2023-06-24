@@ -8,7 +8,10 @@ using DEngine.Runtime;
 
 namespace Game
 {
-    public class ProcedureResourcesUpdate : ProcedureBase
+    /// <summary>
+    /// 使用可更新模式更新所有资源流程
+    /// </summary>
+    public class ProcedureUpdateResources : ProcedureBase
     {
         private bool m_UpdateResourcesComplete = false;
         private int m_UpdateCount = 0;
@@ -65,7 +68,7 @@ namespace Game
             ChangeState<ProcedureLoadAotMetadData>(procedureOwner);
         }
 
-        private void StartUpdateResources(string resourceGroupName = null)
+        private void StartUpdateResources()
         {
             if (m_UpdateResourceForm == null)
             {
@@ -73,7 +76,7 @@ namespace Game
             }
 
             Log.Info("Start update resources...");
-            GameEntry.Resource.UpdateResources(resourceGroupName, OnUpdateResourcesComplete);
+            GameEntry.Resource.UpdateResources(OnUpdateResourcesComplete);
         }
 
         private void RefreshProgress()

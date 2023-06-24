@@ -5,7 +5,10 @@ using DEngine.Runtime;
 
 namespace Game
 {
-    public class ProcedureVersionUpdate : ProcedureBase
+    /// <summary>
+    /// 使用可更新模式更新版本资源列表流程
+    /// </summary>
+    public class ProcedureUpdateVersionList : ProcedureBase
     {
         private bool m_UpdateVersionComplete = false;
         private UpdateVersionListCallbacks m_UpdateVersionListCallbacks = null;
@@ -39,7 +42,7 @@ namespace Game
                 return;
             }
 
-            ChangeState<ProcedureResourcesVerify>(procedureOwner);
+            ChangeState<ProcedureVerifyResources>(procedureOwner);
         }
 
         private void OnUpdateVersionListSuccess(string downloadPath, string downloadUri)

@@ -4,7 +4,7 @@ using DEngine.Runtime;
 
 namespace Game
 {
-    public class ProcedureResourcesInit : ProcedureBase
+    public class ProcedureInitResources : ProcedureBase
     {
         private bool m_InitResourcesComplete = false;
 
