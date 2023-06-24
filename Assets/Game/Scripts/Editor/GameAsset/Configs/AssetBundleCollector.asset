@@ -21,7 +21,7 @@ MonoBehaviour:
     assetPath: Assets/Game/Configs
     loadType: 0
     packed: 0
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 
@@ -31,7 +31,7 @@ MonoBehaviour:
     assetPath: Assets/Game/DataTables
     loadType: 0
     packed: 0
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 

@@ -18,7 +18,7 @@ MonoBehaviour:
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
   BuildPlatform: 0
   ResourceModeIndex: 2
-  Difference: 1
+  Difference: 0
   AppOutput: F:/Project/Unity/Work/GameClient/AppOutput
   BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0

@@ -9,9 +9,9 @@ using UnityEngine;
 using DEngine.Editor.ResourceTools;
 using Object = UnityEngine.Object;
 
-namespace Game.Editor.Builder
+namespace Game.Editor.BuildPipeline
 {
-    public static partial class GameBuilder
+    public static partial class BuildPipeline
     {
         public static void SaveBuildInfo()
         {
@@ -46,7 +46,7 @@ namespace Game.Editor.Builder
                 options = BuildOptions.None
             };
 
-            return BuildPipeline.BuildPlayer(buildPlayerOptions);
+            return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
         public static string GetFileExtensionForPlatform(BuildTarget platform)

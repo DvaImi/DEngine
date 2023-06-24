@@ -314,6 +314,7 @@ namespace DEngine.Editor.ResourceTools
             set;
         }
 
+
         public event DEngineAction<int, int> OnLoadingResource = null;
 
         public event DEngineAction<int, int> OnLoadingAsset = null;
@@ -572,30 +573,32 @@ namespace DEngine.Editor.ResourceTools
         public string GetLastBuildBuildReportPath()
         {
             string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
-            string lastVeisionBundlesDirectory = string.Empty;
-            List<DirectoryInfo> directoryInfo = new();
-            if (Directory.Exists(buildReportDirectory))
+            if (!Directory.Exists(buildReportDirectory))
             {
-                string[] dirs = Directory.GetDirectories(buildReportDirectory);
-                for (int i = 0, length = dirs.Length; i < length; i++)
-                {
-                    DirectoryInfo directory = new(dirs[i]);
-                    directoryInfo.Add(directory);
-                }
-                directoryInfo.Sort((a, b) => { return a.LastWriteTime < b.LastWriteTime ? 1 : -1; });
+                throw new DEngineException("BuildReport path is invalid.");
             }
-            if (directoryInfo.Count > 0)
+            string[] allBuildReport = Directory.GetFiles(buildReportDirectory, "*.xml", SearchOption.AllDirectories);
+            int[] internalResourceVersion = new int[allBuildReport.Length];
+            for (int i = 0; i < allBuildReport.Length; i++)
             {
-                lastVeisionBundlesDirectory = Utility.Path.GetRegularPath(directoryInfo[0].FullName);
-                string version = lastVeisionBundlesDirectory[(lastVeisionBundlesDirectory.LastIndexOf("/") + 1)..];
-                string FullPath = Utility.Path.GetRegularPath(Path.Combine(OutputDirectory, "Full", version));
-                if (!Directory.Exists(FullPath))
-                {
-                    Directory.Delete(lastVeisionBundlesDirectory, true);
-                    return GetLastBuildBuildReportPath();
-                }
+                string item = allBuildReport[i];
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(item);
+                XmlNode xmlRoot = xmlDocument.SelectSingleNode("DEngine");
+                XmlNode xmlBuildReport = xmlRoot.SelectSingleNode("BuildReport");
+                XmlNode xmlSummary = xmlBuildReport.SelectSingleNode("Summary");
+                XmlNode xmlLastFullBuildVersion = xmlSummary.SelectSingleNode("InternalResourceVersion");
+                internalResourceVersion[i] = int.Parse(xmlLastFullBuildVersion.InnerText);
             }
-            return lastVeisionBundlesDirectory;
+            //找到最新的版本号
+            int maxVersion = internalResourceVersion.Max();
+            string FullPath = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/", OutputDirectory, ApplicableGameVersion, maxVersion)).FullName);
+            if (!Directory.Exists(FullPath))
+            {
+                return null;
+            }
+            string lastVeisionBuildReportDirectory = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/BuildReport/{1}.{2}/", OutputDirectory, ApplicableGameVersion, maxVersion)).FullName);
+            return !Directory.Exists(lastVeisionBuildReportDirectory) ? throw new DEngineException("BuildReport path is invalid.") : lastVeisionBuildReportDirectory;
         }
 
         public bool BuildResources()
@@ -639,9 +642,16 @@ namespace DEngine.Editor.ResourceTools
 
             try
             {
-                if (Difference && LastBuildReportXml != null)
+                if (Difference)
                 {
-                    m_BuildReport.LogLastReport(Platforms, LastBuildReportXml);
+                    if (LastBuildReportXml != null)
+                    {
+                        m_BuildReport.GetResourceDatasFromLastReport(Platforms, LastBuildReportXml);
+                    }
+                }
+                else
+                {
+                    m_BuildReport.ReportLastFullBuildVersion(InternalResourceVersion);
                 }
 
                 m_BuildReport.LogInfo("Build Start Time: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.UtcNow.ToLocalTime());

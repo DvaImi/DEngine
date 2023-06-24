@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
-using Game.Editor.Builder;
+using Game.Editor.BuildPipeline;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,8 +20,8 @@ namespace Game.Editor
             IOUtility.Delete(Application.streamingAssetsPath);
             GameSetting.Instance.InternalResourceVersion = internalResourceVersion;
             GameSetting.Instance.SaveSetting();
-            GameBuilder.RefreshResourceCollection();
-            GameBuilder.SaveBuildInfo();
+            BuildPipeline.BuildPipeline.RefreshResourceCollection();
+            BuildPipeline.BuildPipeline.SaveBuildInfo();
             AssetDatabase.Refresh();
             AssetDatabase.SaveAssets();
         }
@@ -40,11 +40,11 @@ namespace Game.Editor
 
         public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength, int versionListHashCode, int versionListCompressedLength, int versionListCompressedHashCode)
         {
-            string platformPath = GameBuilder.GetPlatformPath(platform);
+            string platformPath = BuildPipeline.BuildPipeline.GetPlatformPath(platform);
             VersionInfo versionInfo = new()
             {
                 ForceUpdateGame = GameSetting.Instance.ForceUpdateGame,
-                UpdatePrefixUri = GameBuilder.GetUpdatePrefixUri(platform),
+                UpdatePrefixUri = BuildPipeline.BuildPipeline.GetUpdatePrefixUri(platform),
                 LatestGameVersion = GameSetting.Instance.LatestGameVersion,
                 InternalGameVersion = 1,
                 InternalResourceVersion = GameSetting.Instance.InternalResourceVersion,
@@ -64,14 +64,17 @@ namespace Game.Editor
             {
                 return;
             }
-
+            if (GameSetting.Instance.Difference)
+            {
+                BuildPipeline.BuildPipeline.OutputDifferenceBundles(platform);
+            }
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
             string copyFilePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
-            GameBuilder.CopyFileToStreamingAssets(copyFilePath);
+            BuildPipeline.BuildPipeline.CopyFileToStreamingAssets(copyFilePath);
 
             if (GameSetting.Instance.AutoCopyToVirtualServer)
             {
-                GameBuilder.PutToLocalSimulator(platform, outputFullPath);
+                BuildPipeline.BuildPipeline.PutToLocalSimulator(platform, outputFullPath);
             }
         }
     }

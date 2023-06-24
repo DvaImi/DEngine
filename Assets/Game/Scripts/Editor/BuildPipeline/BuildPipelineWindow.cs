@@ -20,9 +20,9 @@ using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Game.Editor.Builder
+namespace Game.Editor.BuildPipeline
 {
-    public class GameBuilderWindow : EditorWindow
+    public class BuildPipelineWindow : EditorWindow
     {
         private bool m_BeginBuildPlayer = false;
         private bool m_BeginBuildResources = false;
@@ -33,10 +33,10 @@ namespace Game.Editor.Builder
         private bool m_FoldoutPatchAOTDllGroup = false;
         private Vector2 m_ScrollPosition;
 
-        [MenuItem("Game/Builder", false, 0)]
+        [MenuItem("Game/BuildPipeline", false, 0)]
         private static void Open()
         {
-            GameBuilderWindow window = GetWindow<GameBuilderWindow>("Builder", true);
+            BuildPipelineWindow window = GetWindow<BuildPipelineWindow>("BuildPipeline", true);
             window.minSize = new Vector2(800f, 300f);
         }
 
@@ -81,7 +81,7 @@ namespace Game.Editor.Builder
                 if (GUILayout.Button("Save"))
                 {
                     GameSetting.Instance.SaveSetting();
-                    GameBuilder.SaveBuildInfo();
+                    BuildPipeline.SaveBuildInfo();
                     Debug.Log("Save success");
                 }
             }
@@ -105,7 +105,7 @@ namespace Game.Editor.Builder
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
-                GameBuilder.BuildBundle(GameSetting.Instance.Difference);
+                BuildPipeline.BuildBundle(GameSetting.Instance.Difference);
             }
 
             if (m_IsAotGeneric)
@@ -123,7 +123,7 @@ namespace Game.Editor.Builder
                 EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUILayout.LabelField("Platform", EditorStyles.boldLabel);
-                    int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, GameBuilder.PlatformNames, GUILayout.Width(100));
+                    int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, BuildPipeline.PlatformNames, GUILayout.Width(100));
 
                     if (hotfixPlatformIndex != GameSetting.Instance.BuildPlatform)
                     {
@@ -248,9 +248,11 @@ namespace Game.Editor.Builder
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
 
+                GUI.enabled = BuildPipeline.CanDifference();
                 GameSetting.Instance.Difference = EditorGUILayout.ToggleLeft("Difference", GameSetting.Instance.Difference, GUILayout.Width(120));
+                GUI.enabled = true;
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
-                int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameBuilder.ResourceMode, GUILayout.Width(160));
+                int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, BuildPipeline.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)
                 {
                     //由于跳过了 ResourceMode.Unspecified 保存时索引+1
@@ -267,7 +269,7 @@ namespace Game.Editor.Builder
 
                 if (GUILayout.Button("Clear", GUILayout.Width(100)))
                 {
-                    GameBuilder.ClearBundles();
+                    BuildPipeline.ClearBundles();
                 }
             }
 
@@ -288,7 +290,7 @@ namespace Game.Editor.Builder
                         {
                             GameSetting.Instance.BundlesOutput = directory;
                         }
-                        GameBuilder.SaveOutputDirectory(GameSetting.Instance.BundlesOutput);
+                        BuildPipeline.SaveOutputDirectory(GameSetting.Instance.BundlesOutput);
                     }
                 }
 
@@ -423,7 +425,7 @@ namespace Game.Editor.Builder
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
             {
-                string locationPathName = GameBuilder.GetBuildAppFullName();
+                string locationPathName = BuildPipeline.GetBuildAppFullName();
                 if (File.Exists(locationPathName))
                 {
                     GUI.enabled = false;
@@ -448,8 +450,8 @@ namespace Game.Editor.Builder
 
         private void BuildPlayer(bool completeOpenFolder = true)
         {
-            GameBuilder.SaveBuildInfo();
-            BuildReport report = GameBuilder.BuildApplication(GameBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform));
+            BuildPipeline.SaveBuildInfo();
+            BuildReport report = BuildPipeline.BuildApplication(BuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform));
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
@@ -462,7 +464,7 @@ namespace Game.Editor.Builder
 
                 if (GameSetting.Instance.ForceUpdateGame)
                 {
-                    GameBuilder.PutLastVserionApp(GameBuilder.GetPlatform(GameSetting.Instance.BuildPlatform));
+                    BuildPipeline.PutLastVserionApp(BuildPipeline.GetPlatform(GameSetting.Instance.BuildPlatform));
                 }
             }
 
@@ -474,7 +476,7 @@ namespace Game.Editor.Builder
 
         private void CompileHotfixDll()
         {
-            BuildTarget buildTarget = GameBuilder.GetBuildTarget(GameSetting.Instance.BuildPlatform);
+            BuildTarget buildTarget = BuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform);
             CompileDllCommand.CompileDll(buildTarget);
             CopyDllAssets(buildTarget);
         }

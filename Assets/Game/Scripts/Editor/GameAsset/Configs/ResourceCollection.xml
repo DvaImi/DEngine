@@ -2,8 +2,15 @@
 <DEngine>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Game/Configs" LoadType="0" Packed="False" />
-      <Resource Name="Game/DataTables" LoadType="0" Packed="False" />
+      <Resource Name="Game/Configs/ConfigMainfest" LoadType="0" Packed="False" />
+      <Resource Name="Game/Configs/DefaultConfig" LoadType="0" Packed="False" />
+      <Resource Name="Game/DataTables/DataTableMainfest" LoadType="0" Packed="False" />
+      <Resource Name="Game/DataTables/Entity" LoadType="0" Packed="False" />
+      <Resource Name="Game/DataTables/Music" LoadType="0" Packed="False" />
+      <Resource Name="Game/DataTables/Scene" LoadType="0" Packed="False" />
+      <Resource Name="Game/DataTables/Sound" LoadType="0" Packed="False" />
+      <Resource Name="Game/DataTables/UIForm" LoadType="0" Packed="False" />
+      <Resource Name="Game/DataTables/UISound" LoadType="0" Packed="False" />
       <Resource Name="Game/HybridCLRData/AOT/AOTMetadataMainfest" FileSystem="runtime" LoadType="0" Packed="False" />
       <Resource Name="Game/HybridCLRData/AOT/DEngine.dll" FileSystem="runtime" LoadType="0" Packed="False" />
       <Resource Name="Game/HybridCLRData/AOT/DEngine.Runtime.dll" FileSystem="runtime" LoadType="0" Packed="False" />
@@ -21,28 +28,28 @@
       <Resource Name="Game/Localization/LocalizationMainfest" LoadType="0" Packed="False" />
     </Resources>
     <Assets>
-      <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="Game/DataTables" />
+      <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="Game/DataTables/Sound" />
       <Asset Guid="0bf51f5e6cf690246a48a92e62e60e93" ResourceName="Game/HybridCLRData/HotUpdate/Game.Update.dll" />
       <Asset Guid="18ffa7b29de8e694ea259f48d525b596" ResourceName="Game/HybridCLRData/AOT/DEngine.dll" />
-      <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="Game/DataTables" />
+      <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="Game/DataTables/UIForm" />
       <Asset Guid="2a580f3ee0b575b4da1cd6527f93cad5" ResourceName="Game/Localization/LocalizationMainfest" />
       <Asset Guid="3273c77b30efb1b43be2b4c620319dd3" ResourceName="Game/HybridCLRData/AOT/mscorlib.dll" />
       <Asset Guid="422e141665b02074da78221b2b6efbbf" ResourceName="Game/HybridCLRData/AOT/DEngine.Runtime.dll" />
-      <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="Game/DataTables" />
+      <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="Game/DataTables/Entity" />
       <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="Game/HybridCLRData/UpdateLuncher" />
       <Asset Guid="502dbd8454b80064b825d2cc3aa41fa4" ResourceName="Game/HybridCLRData/AOT/UnityEngine.CoreModule.dll" />
-      <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="Game/Configs" />
-      <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="Game/DataTables" />
-      <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="Game/DataTables" />
+      <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="Game/Configs/DefaultConfig" />
+      <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="Game/DataTables/Music" />
+      <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="Game/DataTables/UISound" />
       <Asset Guid="62d5c748b4061814ba495f687fb8ea58" ResourceName="Game/Localization/ChineseSimplified" />
-      <Asset Guid="6d99a6fb6d9891c488979efffc78e49c" ResourceName="Game/DataTables" />
+      <Asset Guid="6d99a6fb6d9891c488979efffc78e49c" ResourceName="Game/DataTables/DataTableMainfest" />
       <Asset Guid="8655916a38d7578458011f3f7c530912" ResourceName="Game/HybridCLRData/AOT/AOTMetadataMainfest" />
       <Asset Guid="94c6ff02ddf768c48963cfd97b6fbf18" ResourceName="Game/Localization/ChineseTraditional" />
       <Asset Guid="9f3f80b59dbaeef4aa4ce726e7123be9" ResourceName="Game/Localization/Korean" />
       <Asset Guid="b84b18dde3f867e47983c5a3c0b27883" ResourceName="Game/HybridCLRData/HotUpdate/UpdataDllMainfest" />
-      <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="Game/DataTables" />
+      <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="Game/DataTables/Scene" />
       <Asset Guid="c25eaf03fa8abf9419f0c98d5a46ebf4" ResourceName="Game/Localization/LanguageBuiltin" />
-      <Asset Guid="c57fbfa79805fa345afb3ca1de249a70" ResourceName="Game/Configs" />
+      <Asset Guid="c57fbfa79805fa345afb3ca1de249a70" ResourceName="Game/Configs/ConfigMainfest" />
       <Asset Guid="ceaaca8536175884eb0322b1d349be89" ResourceName="Game/HybridCLRData/AOT/UniTask.dll" />
       <Asset Guid="f245b52998352c14c9136e8b082b667d" ResourceName="Game/Localization/English" />
     </Assets>

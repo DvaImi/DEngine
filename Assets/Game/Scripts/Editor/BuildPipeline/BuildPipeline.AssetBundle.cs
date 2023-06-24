@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Xml;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using Game.Editor.ResourceTools;
 using UnityEditor;
 using UnityEngine;
 
-namespace Game.Editor.Builder
+namespace Game.Editor.BuildPipeline
 {
     /// <summary>
     /// 资源生成器。
     /// </summary>
-    public static partial class GameBuilder
+    public static partial class BuildPipeline
     {
         public static string GetUpdatePrefixUri(Platform platform)
         {
@@ -24,10 +26,6 @@ namespace Game.Editor.Builder
             IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
             IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
             Platform platform = (Platform)Enum.Parse(typeof(Platform), PlatformNames[GameSetting.Instance.BuildPlatform]);
-            if (difference)
-            {
-                SetLastVersion();
-            }
             BuildBundle(platform, GameSetting.Instance.BundlesOutput, difference);
             if (GameSetting.Instance.ForceUpdateGame)
             {
@@ -140,7 +138,7 @@ namespace Game.Editor.Builder
             }
         }
 
-        public static void GetLastBuildBuildPath(out string version, out string FullPath)
+        public static void GetLastBuildPath(out string version, out string FullPath)
         {
             string OutputDirectory = GameSetting.Instance.BundlesOutput;
             version = FullPath = null;
@@ -168,6 +166,33 @@ namespace Game.Editor.Builder
                 }
             }
         }
+
+        public static void GetLastFullBuildPath(out string lastFullVersionOutputFullPath)
+        {
+            lastFullVersionOutputFullPath = string.Empty;
+            string OutputDirectory = GameSetting.Instance.BundlesOutput;
+            string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
+            if (!Directory.Exists(buildReportDirectory))
+            {
+                return;
+            }
+            string[] allBuildReport = Directory.GetFiles(buildReportDirectory, "*.xml", SearchOption.AllDirectories);
+            int[] lastFullBuildVersions = new int[allBuildReport.Length];
+            for (int i = 0; i < allBuildReport.Length; i++)
+            {
+                string item = allBuildReport[i];
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(item);
+                XmlNode xmlRoot = xmlDocument.SelectSingleNode("DEngine");
+                XmlNode xmlBuildReport = xmlRoot.SelectSingleNode("BuildReport");
+                XmlNode xmlSummary = xmlBuildReport.SelectSingleNode("Summary");
+                XmlNode xmlLastFullBuildVersion = xmlSummary.SelectSingleNode("LastFullBuildVersion");
+                lastFullBuildVersions[i] = int.Parse(xmlLastFullBuildVersion.InnerText);
+            }
+            int maxVersion = lastFullBuildVersions.Max();
+            lastFullVersionOutputFullPath = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/", OutputDirectory, Application.version, maxVersion)).FullName);
+        }
+
 
         private static void GetBuildMessage(ResourceBuilderController builderController, out string message, out MessageType messageType)
         {

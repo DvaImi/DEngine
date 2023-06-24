@@ -5,15 +5,15 @@ using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
 using UnityEditor;
 
-namespace Game.Editor.Builder
+namespace Game.Editor.BuildPipeline
 {
-    public static partial class GameBuilder
+    public static partial class BuildPipeline
     {
         private static Platform m_OriginalPlatform;
         public static string[] ResourceMode { get; }
         public static string[] PlatformNames { get; }
 
-        static GameBuilder()
+        static BuildPipeline()
         {
             ResourceMode = Enum.GetNames(typeof(ResourceMode)).Skip(1).ToArray();
             PlatformNames = Enum.GetNames(typeof(Platform)).Skip(1).ToArray();
