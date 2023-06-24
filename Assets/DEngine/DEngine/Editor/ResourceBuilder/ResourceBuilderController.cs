@@ -1447,7 +1447,7 @@ namespace DEngine.Editor.ResourceTools
 
         private BuildAssetBundleOptions GetBuildAssetBundleOptions()
         {
-            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.AppendHashToAssetBundleName;
+            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.DisableWriteTypeTree;
 
             if (ForceRebuildAssetBundleSelected)
             {
