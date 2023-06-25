@@ -19,10 +19,10 @@ MonoBehaviour:
   BuildPlatform: 0
   ResourceModeIndex: 2
   Difference: 0
-  AppOutput: F:/Project/Unity/Work/GameClient/AppOutput
+  AppOutput: F:/Project/Unity/Work/AppOutput
   BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0
-  InternalResourceVersion: 2
+  InternalResourceVersion: 0
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: http://192.168.1.102/CDN/{0}/{1}/{2}
   BuildInfo:

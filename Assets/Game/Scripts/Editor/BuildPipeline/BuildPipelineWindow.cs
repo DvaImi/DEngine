@@ -248,9 +248,14 @@ namespace Game.Editor.BuildPipeline
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
 
-                GUI.enabled = BuildPipeline.CanDifference();
+                bool canDifference = BuildPipeline.CanDifference();
+                GUI.enabled = canDifference;
                 GameSetting.Instance.Difference = EditorGUILayout.ToggleLeft("Difference", GameSetting.Instance.Difference, GUILayout.Width(120));
                 GUI.enabled = true;
+                if (!canDifference)
+                {
+                    GameSetting.Instance.Difference = false;
+                }
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
                 int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, BuildPipeline.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)

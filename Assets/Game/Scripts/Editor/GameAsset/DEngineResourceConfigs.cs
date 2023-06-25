@@ -4,7 +4,7 @@ using DEngine.Editor.ResourceTools;
 
 namespace Game.Editor
 {
-    public static class DEngineConfigs
+    public static class DEngineResourceConfigs
     {
         [BuildSettingsConfigPath]
         public static string BuildSettingsConfig = Utility.Path.GetRegularPath(GameSetting.Instance.BuildSettingsConfig);

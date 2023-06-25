@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Xml;
 using DEngine;
 using DEngine.Editor.ResourceTools;
+using DEngine.Runtime;
 using Game.Editor.ResourceTools;
 using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -23,13 +23,22 @@ namespace Game.Editor.BuildPipeline
 
         public static void BuildBundle(bool difference = false)
         {
+            GameSetting.Instance.SaveSetting();
             IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
             IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
-            Platform platform = (Platform)Enum.Parse(typeof(Platform), PlatformNames[GameSetting.Instance.BuildPlatform]);
-            BuildBundle(platform, GameSetting.Instance.BundlesOutput, difference);
+            RemoveUnknownAssets();
+            RefreshResourceCollection();
+            SaveBuildInfo();
+            AssetDatabase.Refresh();
+            AssetDatabase.SaveAssets();
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), GameSetting.Instance.BundlesOutput, difference);
+            stopwatch.Stop();
+            Debug.Log($"资源包构建成功:耗时:{stopwatch.Elapsed.Hours}时{stopwatch.Elapsed.Minutes}分{stopwatch.Elapsed.Seconds}秒");
             if (GameSetting.Instance.ForceUpdateGame)
             {
-                Debug.Log($"<color=#1E90FF>[Dvim] ►</color> " + "强制更新资源版本构建完成,打包新版本app时，务必更新版本号，避免冲突!!!");
+                Debug.Log($"<color=#1E90FF>[DEngine] ►</color> " + "强制更新资源版本构建完成,打包新版本app时，务必更新版本号，避免冲突!!!");
             }
         }
 
@@ -64,34 +73,22 @@ namespace Game.Editor.BuildPipeline
             builderController.ProcessingBinary += OnProcessingBinary;
             builderController.ProcessResourceComplete += OnProcessResourceComplete;
             builderController.BuildResourceError += OnBuildResourceError;
-
+            builderController.Platforms = platform;
+            builderController.OutputDirectory = outputDirectory;
+            builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
+            builderController.RefreshCompressionHelper();
+            builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
+            builderController.RefreshBuildEventHandler();
+            builderController.AdditionalCompressionSelected = true;
+            builderController.Difference = difference;
             if (builderController.Load())
             {
-                m_OriginalPlatform = builderController.Platforms;
-                if (platform != Platform.Undefined)
-                {
-                    builderController.Platforms = platform;
-                }
-                if (builderController.OutputDirectory != outputDirectory)
-                {
-                    builderController.OutputDirectory = outputDirectory;
-                }
-                Debug.Log("Load configuration success.");
-                builderController.CompressionHelperTypeName = typeof(DEngine.Runtime.DefaultCompressionHelper).FullName;
-                builderController.RefreshCompressionHelper();
-                builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
-                builderController.RefreshBuildEventHandler();
                 if (difference)
                 {
-                    builderController.Difference = difference;
-                    builderController.CheckDifference();
+                    builderController.ProcessDifferenceComplete += OnPostprocessDifference;
                 }
+                builderController.Save();
             }
-            else
-            {
-                Debug.LogWarning("Load configuration failure.");
-            }
-
             string buildMessage = string.Empty;
             MessageType buildMessageType = MessageType.None;
             GetBuildMessage(builderController, out buildMessage, out buildMessageType);
@@ -138,61 +135,16 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static void GetLastBuildPath(out string version, out string FullPath)
+        public static void RemoveUnknownAssets()
         {
-            string OutputDirectory = GameSetting.Instance.BundlesOutput;
-            version = FullPath = null;
-            string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
-            string lastVeisionBundlesDirectory = string.Empty;
-            List<DirectoryInfo> dirInfos = new();
-            if (Directory.Exists(buildReportDirectory))
+            ResourceEditorController resourceEditorController = new ResourceEditorController();
+            if (resourceEditorController.Load())
             {
-                string[] dirs = Directory.GetDirectories(buildReportDirectory);
-                for (int i = 0, length = dirs.Length; i < length; i++)
-                {
-                    DirectoryInfo directory = new(dirs[i]);
-                    dirInfos.Add(directory);
-                }
-                dirInfos.Sort((a, b) => { return a.LastWriteTime < b.LastWriteTime ? 1 : -1; });
-            }
-            if (dirInfos.Count > 0)
-            {
-                lastVeisionBundlesDirectory = Utility.Path.GetRegularPath(dirInfos[0].FullName);
-                version = lastVeisionBundlesDirectory[(lastVeisionBundlesDirectory.LastIndexOf("/") + 1)..];
-                FullPath = Utility.Path.GetRegularPath(Path.Combine(OutputDirectory, "Full", version));
-                if (!Directory.Exists(FullPath))
-                {
-                    Debug.LogWarning($"{lastVeisionBundlesDirectory} is invalid");
-                }
+                int unknownAssetCount = resourceEditorController.RemoveUnknownAssets();
+                int unusedResourceCount = resourceEditorController.RemoveUnusedResources();
+                Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets and {1} unused resources has been removed.", unknownAssetCount, unusedResourceCount));
             }
         }
-
-        public static void GetLastFullBuildPath(out string lastFullVersionOutputFullPath)
-        {
-            lastFullVersionOutputFullPath = string.Empty;
-            string OutputDirectory = GameSetting.Instance.BundlesOutput;
-            string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
-            if (!Directory.Exists(buildReportDirectory))
-            {
-                return;
-            }
-            string[] allBuildReport = Directory.GetFiles(buildReportDirectory, "*.xml", SearchOption.AllDirectories);
-            int[] lastFullBuildVersions = new int[allBuildReport.Length];
-            for (int i = 0; i < allBuildReport.Length; i++)
-            {
-                string item = allBuildReport[i];
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.Load(item);
-                XmlNode xmlRoot = xmlDocument.SelectSingleNode("DEngine");
-                XmlNode xmlBuildReport = xmlRoot.SelectSingleNode("BuildReport");
-                XmlNode xmlSummary = xmlBuildReport.SelectSingleNode("Summary");
-                XmlNode xmlLastFullBuildVersion = xmlSummary.SelectSingleNode("LastFullBuildVersion");
-                lastFullBuildVersions[i] = int.Parse(xmlLastFullBuildVersion.InnerText);
-            }
-            int maxVersion = lastFullBuildVersions.Max();
-            lastFullVersionOutputFullPath = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/", OutputDirectory, Application.version, maxVersion)).FullName);
-        }
-
 
         private static void GetBuildMessage(ResourceBuilderController builderController, out string message, out MessageType messageType)
         {
@@ -275,7 +227,6 @@ namespace Game.Editor.BuildPipeline
             if (builderController.BuildResources())
             {
                 Debug.Log("Build resources success.");
-                builderController.Platforms = m_OriginalPlatform;
                 if (builderController.Save())
                 {
                     Debug.Log("Save configuration success.");

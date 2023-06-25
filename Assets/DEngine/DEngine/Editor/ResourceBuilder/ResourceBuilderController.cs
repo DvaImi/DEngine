@@ -333,6 +333,8 @@ namespace DEngine.Editor.ResourceTools
 
         public event DEngineAction<string> BuildResourceError = null;
 
+        public event DEngineAction<Platform> ProcessDifferenceComplete = null;
+
         public bool Load()
         {
             if (!File.Exists(m_ConfigurationPath))
@@ -565,11 +567,6 @@ namespace DEngine.Editor.ResourceTools
             return retVal;
         }
 
-        public void CheckDifference()
-        {
-
-        }
-
         public string GetLastBuildBuildReportPath()
         {
             string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
@@ -776,7 +773,10 @@ namespace DEngine.Editor.ResourceTools
 
                 m_BuildReport.LogInfo("Build resources for selected platforms complete.");
                 m_BuildReport.SaveReport();
-
+                if (Difference)
+                {
+                    ProcessDifferenceComplete?.Invoke(Platforms);
+                }
                 return true;
             }
             catch (Exception exception)

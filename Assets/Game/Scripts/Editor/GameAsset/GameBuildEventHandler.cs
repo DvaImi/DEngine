@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using DEngine.Editor.ResourceTools;
-using DEngine.Resource;
-using Game.Editor.BuildPipeline;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,15 +17,14 @@ namespace Game.Editor
         {
             IOUtility.Delete(Application.streamingAssetsPath);
             GameSetting.Instance.InternalResourceVersion = internalResourceVersion;
-            GameSetting.Instance.SaveSetting();
-            BuildPipeline.BuildPipeline.RefreshResourceCollection();
-            BuildPipeline.BuildPipeline.SaveBuildInfo();
-            AssetDatabase.Refresh();
-            AssetDatabase.SaveAssets();
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, int internalResourceVersion, Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
+            if (GameSetting.Instance.AutoCopyToVirtualServer)
+            {
+                BuildPipeline.BuildPipeline.PutToLocalSimulator(platforms, outputFullPath);
+            }
         }
 
         public void OnPreprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath)
@@ -64,18 +61,10 @@ namespace Game.Editor
             {
                 return;
             }
-            if (GameSetting.Instance.Difference)
-            {
-                BuildPipeline.BuildPipeline.OutputDifferenceBundles(platform);
-            }
+            
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
             string copyFilePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
             BuildPipeline.BuildPipeline.CopyFileToStreamingAssets(copyFilePath);
-
-            if (GameSetting.Instance.AutoCopyToVirtualServer)
-            {
-                BuildPipeline.BuildPipeline.PutToLocalSimulator(platform, outputFullPath);
-            }
         }
     }
 }
