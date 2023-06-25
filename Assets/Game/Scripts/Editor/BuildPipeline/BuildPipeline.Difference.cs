@@ -75,7 +75,6 @@ namespace Game.Editor.BuildPipeline
             string[] filteredPackageFiles = lastPackageVersionFiles.Where(file => !regex.IsMatch(file)).ToArray();
             string[] filteredPackedFiles = lastPackedVersionFiles.Where(file => !regex.IsMatch(file)).ToArray();
 
-
             CopyUpdatableVersionList(platform, currentVersionFullPath, lastFullVersionOutputFullPath, filteredFullFiles);
             CopyPackageVersionList(platform, currentVersionPackage, lastPackageVersionOutpuPath, filteredPackageFiles);
             CopyPackedVersionList(platform, currentVersionPacked, lastPackedVersionOutputPath, filteredPackedFiles);
@@ -175,9 +174,8 @@ namespace Game.Editor.BuildPipeline
                 packageVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
             }
 
-            for (int i = 0; i < filteredPackageFiles.Length; i++)
+            foreach (string lastFilePackageName in filteredPackageFiles)
             {
-                string lastFilePackageName = filteredPackageFiles[i];
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(lastFilePackageName);
                 if (File.Exists(lastFilePackageName))
                 {
@@ -197,7 +195,7 @@ namespace Game.Editor.BuildPipeline
         }
 
         /// <summary>
-        /// 拷贝可更新模式本地资源
+        /// 拷贝可更新模式本地只读资源
         /// </summary>
         /// <param name="platform"></param>
         /// <param name="currentVersionPackedPath"></param>
@@ -205,29 +203,49 @@ namespace Game.Editor.BuildPipeline
         /// <param name="filteredPackedFiles"></param>
         private static void CopyPackedVersionList(Platform platform, string currentVersionPackedPath, string lastFullVersionOutputPackedPath, string[] filteredPackedFiles)
         {
-            ////拷贝可更新模式本地资源
-            //for (int i = 0; i < filteredPackedFiles.Length; i++)
-            //{
-            //    string lastFilePackedName = filteredPackedFiles[i];
-            //    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(lastFilePackedName);
-            //    if (File.Exists(lastFilePackedName))
-            //    {
-            //        string fileNameWithoutCrcHashCode = fileNameWithoutExtension[..fileNameWithoutExtension.IndexOf(".")];
-            //        if (updatableVersionList.Contains(fileNameWithoutCrcHashCode))
-            //        {
-            //            index++;
-            //            EditorUtility.DisplayProgressBar("Copy Difference", Utility.Text.Format("Copy Difference, {0}/{1} copy.", index, count), (float)index / count);
-            //            string destFileName = Utility.Path.GetRegularPath(Path.Combine(currentVersionPacked, lastFilePackedName[lastPackedVersionOutputPath.Length..]));
-            //            FileInfo destFileInfo = new(destFileName);
-            //            if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
-            //            {
-            //                destFileInfo.Directory.Create();
-            //            }
+            ReadOnlyVersionListSerializer serializer = new ReadOnlyVersionListSerializer();
+            serializer.RegisterDeserializeCallback(0, BuiltinVersionListSerializer.LocalVersionListDeserializeCallback_V0);
+            serializer.RegisterDeserializeCallback(1, BuiltinVersionListSerializer.LocalVersionListDeserializeCallback_V1);
+            serializer.RegisterDeserializeCallback(2, BuiltinVersionListSerializer.LocalVersionListDeserializeCallback_V2);
+            string sourcePath = Utility.Path.GetRegularPath(Path.Combine(currentVersionPackedPath, GetPlatformPath(platform)));
+            DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(sourcePath);
+            FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("DEngineList.block", SearchOption.TopDirectoryOnly);
+            byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
+            LocalVersionList versionList = default;
 
-            //            File.Copy(lastFilePackedName, destFileName, true);
-            //        }
-            //    }
-            //}
+            using (Stream stream = new MemoryStream(sourceVersionListBytes))
+            {
+                versionList = serializer.Deserialize(stream);
+            }
+
+            List<string> readOnlyVersionList = new List<string>();
+
+            LocalVersionList.Resource[] resources = versionList.GetResources();
+
+            foreach (LocalVersionList.Resource resource in resources)
+            {
+                string fullName = resource.Variant != null ? Utility.Text.Format("{0}.{1}.{2}", resource.Name, resource.Variant, resource.Extension) : Utility.Text.Format("{0}.{1}", resource.Name, resource.Extension);
+                readOnlyVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
+            }
+
+            foreach (string lastFilePackedName in filteredPackedFiles)
+            {
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(lastFilePackedName);
+                if (File.Exists(lastFilePackedName))
+                {
+                    if (readOnlyVersionList.Contains(fileNameWithoutExtension))
+                    {
+                        string destFileName = Utility.Path.GetRegularPath(Path.Combine(currentVersionPackedPath, lastFilePackedName[lastFullVersionOutputPackedPath.Length..]));
+                        FileInfo destFileInfo = new(destFileName);
+                        if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
+                        {
+                            destFileInfo.Directory.Create();
+                        }
+
+                        File.Copy(lastFilePackedName, destFileName, true);
+                    }
+                }
+            }
         }
 
 
