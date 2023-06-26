@@ -95,10 +95,6 @@ namespace Game
             return result;
         }
 
-        /// <summary>
-        /// 删除指定目录下的文件以及文件夹
-        /// </summary>
-        /// <param name="directoryPath"></param>
         public static void Delete(string directoryPath)
         {
             if (!Directory.Exists(directoryPath))
@@ -154,5 +150,148 @@ namespace Game
                 File.Copy(filePath, filePath.Replace(sourceDir, targetDir), true);
             }
         }
+
+        /// <summary>
+		/// 文件重命名
+		/// </summary>
+		public static void FileRename(string filePath, string newName)
+        {
+            string dirPath = Path.GetDirectoryName(filePath);
+            string destPath;
+            if (Path.HasExtension(filePath))
+            {
+                string extentsion = Path.GetExtension(filePath);
+                destPath = $"{dirPath}/{newName}{extentsion}";
+            }
+            else
+            {
+                destPath = $"{dirPath}/{newName}";
+            }
+            FileInfo fileInfo = new FileInfo(filePath);
+            fileInfo.MoveTo(destPath);
+        }
+
+        /// <summary>
+        /// 移动文件
+        /// </summary>
+        public static void MoveFile(string filePath, string destPath)
+        {
+            if (File.Exists(destPath))
+                File.Delete(destPath);
+
+            FileInfo fileInfo = new FileInfo(filePath);
+            fileInfo.MoveTo(destPath);
+        }
+        /// <summary>
+        /// 清空文件夹
+        /// </summary>
+        /// <param name="folderPath">要清理的文件夹路径</param>
+        public static void ClearFolder(string directoryPath)
+        {
+            if (Directory.Exists(directoryPath) == false)
+                return;
+
+            // 删除文件
+            string[] allFiles = Directory.GetFiles(directoryPath);
+            for (int i = 0; i < allFiles.Length; i++)
+            {
+                File.Delete(allFiles[i]);
+            }
+
+            // 删除文件夹
+            string[] allFolders = Directory.GetDirectories(directoryPath);
+            for (int i = 0; i < allFolders.Length; i++)
+            {
+                Directory.Delete(allFolders[i], true);
+            }
+        }
+
+        /// <summary>
+        /// 获取文件字节大小
+        /// </summary>
+        public static long GetFileSize(string filePath)
+        {
+            FileInfo fileInfo = new FileInfo(filePath);
+            return fileInfo.Length;
+        }
+
+        /// <summary>
+        /// 读取文件的所有文本内容
+        /// </summary>
+        public static string ReadFileAllText(string filePath)
+        {
+            if (File.Exists(filePath) == false)
+                return string.Empty;
+
+            return File.ReadAllText(filePath, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// 读取文本的所有文本内容
+        /// </summary>
+        public static string[] ReadFileAllLine(string filePath)
+        {
+            if (File.Exists(filePath) == false)
+                return null;
+
+            return File.ReadAllLines(filePath, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// 获取项目工程路径
+        /// </summary>
+        public static string GetProjectPath()
+        {
+            string projectPath = Path.GetDirectoryName(Application.dataPath);
+            return Utility.Path.GetRegularPath(projectPath);
+        }
+
+        /// <summary>
+        /// 转换文件的绝对路径为Unity资源路径
+        /// 例如 D:\\YourPorject\\Assets\\Works\\file.txt 替换为 Assets/Works/file.txt
+        /// </summary>
+        public static string AbsolutePathToAssetPath(string absolutePath)
+        {
+            string content = Utility.Path.GetRegularPath(absolutePath);
+            return StringUtility.Substring(content, "Assets/", true);
+        }
+
+        /// <summary>
+        /// 转换Unity资源路径为文件的绝对路径
+        /// 例如：Assets/Works/file.txt 替换为 D:\\YourPorject/Assets/Works/file.txt
+        /// </summary>
+        public static string AssetPathToAbsolutePath(string assetPath)
+        {
+            string projectPath = GetProjectPath();
+            return $"{projectPath}/{assetPath}";
+        }
+
+        /// <summary>
+        /// 递归查找目标文件夹路径
+        /// </summary>
+        /// <param name="root">搜索的根目录</param>
+        /// <param name="folderName">目标文件夹名称</param>
+        /// <returns>返回找到的文件夹路径，如果没有找到返回空字符串</returns>
+        public static string FindFolder(string root, string folderName)
+        {
+            DirectoryInfo rootInfo = new DirectoryInfo(root);
+            DirectoryInfo[] infoList = rootInfo.GetDirectories();
+            for (int i = 0; i < infoList.Length; i++)
+            {
+                string fullPath = infoList[i].FullName;
+                if (infoList[i].Name == folderName)
+                {
+                    return fullPath;
+                }
+
+                string result = FindFolder(fullPath, folderName);
+                if (string.IsNullOrEmpty(result) == false)
+                {
+                    return result;
+                }
+            }
+            return string.Empty;
+        }
+              
     }
 }

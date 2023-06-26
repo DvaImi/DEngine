@@ -1457,7 +1457,7 @@ namespace DEngine.Editor.ResourceTools
 
         private BuildAssetBundleOptions GetBuildAssetBundleOptions()
         {
-            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.DisableWriteTypeTree;
+            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.ChunkBasedCompression;
 
             if (ForceRebuildAssetBundleSelected)
             {

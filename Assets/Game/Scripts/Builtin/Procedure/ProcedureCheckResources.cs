@@ -1,4 +1,5 @@
-﻿using DEngine.Fsm;
+﻿using DEngine;
+using DEngine.Fsm;
 using DEngine.Procedure;
 using DEngine.Runtime;
 
@@ -46,10 +47,25 @@ namespace Game
 
         private void OnCheckResourcesComplete(int movedCount, int removedCount, int updateCount, long updateTotalLength, long updateTotalCompressedLength)
         {
-            m_CheckResourcesComplete = true;
-            m_NeedUpdateResources = updateCount > 0;
-            m_UpdateResourceCount = updateCount;
-            m_UpdateResourceTotalCompressedLength = updateTotalCompressedLength;
+            string size = StringUtility.GetByteLengthString(updateTotalCompressedLength);
+            GameEntry.BuiltinData.OpenDialog(new DialogParams
+            {
+                Mode = 2,
+                Message = Utility.Text.Format("Need update resource size :{0}", size),
+                ConfirmText = "Update",
+                OnClickConfirm = ConfirmUpdate,
+                CancelText = " Cancel",
+                OnClickCancel = delegate (object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+            });
+
+            void ConfirmUpdate(object parm)
+            {
+                GameEntry.BuiltinData.DestroyDialog();
+                m_CheckResourcesComplete = true;
+                m_NeedUpdateResources = updateCount > 0;
+                m_UpdateResourceCount = updateCount;
+                m_UpdateResourceTotalCompressedLength = updateTotalCompressedLength;
+            }
             Log.Info("Check resources complete, '{0}' resources need to update, compressed length is '{1}', uncompressed length is '{2}'.", updateCount.ToString(), updateTotalCompressedLength.ToString(), updateTotalLength.ToString());
         }
     }
