@@ -254,8 +254,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     destFileInfo.Directory.Create();
                 }
-
-                File.Copy(fileName, destFileName);
+                File.Copy(fileName, destFileName, true);
             }
         }
 

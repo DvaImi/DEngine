@@ -21,10 +21,6 @@ namespace Game.Editor
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, int internalResourceVersion, Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
-            if (GameSetting.Instance.AutoCopyToVirtualServer)
-            {
-                BuildPipeline.BuildPipeline.PutToLocalSimulator(platforms, outputFullPath);
-            }
         }
 
         public void OnPreprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath)
@@ -57,14 +53,18 @@ namespace Game.Editor
 
         public void OnPostprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, bool isSuccess)
         {
-            if (!outputPackageSelected)
+            //差异化打包特殊处理
+            if (!outputPackageSelected || GameSetting.Instance.Difference)
             {
                 return;
             }
-            
+            if (GameSetting.Instance.AutoCopyToVirtualServer)
+            {
+                BuildPipeline.BuildPipeline.PutToLocalSimulator(platform, outputFullPath);
+            }
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
-            string copyFilePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
-            BuildPipeline.BuildPipeline.CopyFileToStreamingAssets(copyFilePath);
+            string sourcePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
+            BuildPipeline.BuildPipeline.CopyFileToStreamingAssets(sourcePath);
         }
     }
 }

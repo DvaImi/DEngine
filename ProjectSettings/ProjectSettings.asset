@@ -155,7 +155,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.DvaEnnStudio.Game
-    Standalone: com.DvaStudio.Game
+    Standalone: com.DvaEnnStudio.Game
   buildNumber:
     Bratwurst: 0
     Standalone: 0

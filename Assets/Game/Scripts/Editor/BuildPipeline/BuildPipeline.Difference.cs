@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Xml;
 using DEngine;
 using DEngine.Editor.ResourceTools;
@@ -61,11 +60,11 @@ namespace Game.Editor.BuildPipeline
             GetBuildVersions(true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutpuPath, out string lastPackedVersionOutputPath);
 
             //获取当前版本的资源列表
-            GetBuildVersions(false, out string currentVersionFullPath, out string currentVersionPackage, out string currentVersionPacked);
+            GetBuildVersions(false, out string currentVersionFullPath, out string currentVersionPackagePath, out string currentVersionPackedPath);
 
             //特殊字符需要转义
             string pattern = @"DEngineVersion\..*\.block";
-            Regex regex = new Regex(pattern);
+            Regex regex = new(pattern);
             string[] lastFullVersionFiles = Directory.GetFiles(lastFullVersionOutputFullPath, "*", SearchOption.AllDirectories);
             string[] lastPackageVersionFiles = Directory.GetFiles(lastPackageVersionOutpuPath, "*", SearchOption.AllDirectories);
             string[] lastPackedVersionFiles = Directory.GetFiles(lastPackedVersionOutputPath, "*", SearchOption.AllDirectories);
@@ -76,9 +75,20 @@ namespace Game.Editor.BuildPipeline
             string[] filteredPackedFiles = lastPackedVersionFiles.Where(file => !regex.IsMatch(file)).ToArray();
 
             CopyUpdatableVersionList(platform, currentVersionFullPath, lastFullVersionOutputFullPath, filteredFullFiles);
-            CopyPackageVersionList(platform, currentVersionPackage, lastPackageVersionOutpuPath, filteredPackageFiles);
-            CopyPackedVersionList(platform, currentVersionPacked, lastPackedVersionOutputPath, filteredPackedFiles);
+            CopyPackageVersionList(platform, currentVersionPackagePath, lastPackageVersionOutpuPath, filteredPackageFiles);
+            CopyPackedVersionList(platform, currentVersionPackedPath, lastPackedVersionOutputPath, filteredPackedFiles);
 
+            if (GameSetting.Instance.AutoCopyToVirtualServer)
+            {
+                string sourceFullPath = Utility.Text.Format("{0}{1}/", currentVersionFullPath, GetPlatformPath(platform));
+                PutToLocalSimulator(platform, sourceFullPath);
+            }
+
+            string sourcePackagePath = Utility.Text.Format("{0}{1}/", currentVersionPackagePath, GetPlatformPath(platform));
+            string sourcePackedPath = Utility.Text.Format("{0}{1}/", currentVersionPackedPath, GetPlatformPath(platform));
+            int resourceMode = GameSetting.Instance.ResourceModeIndex;
+            string sourcePath = resourceMode <= 1 ? sourcePackagePath : sourcePackedPath;
+            CopyFileToStreamingAssets(sourcePath);
             Debug.Log("Difference postprocess complete.");
             EditorUtility.ClearProgressBar();
         }
@@ -247,7 +257,6 @@ namespace Game.Editor.BuildPipeline
                 }
             }
         }
-
 
         /// <summary>
         /// 判断是否可以进行差异化打包
