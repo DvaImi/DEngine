@@ -37,7 +37,7 @@ MonoBehaviour:
     name: 
     variant: 
     fileSystem: runtime
-    groups: 
+    groups: runtime
     assetPath: Assets/Game/HybridCLRData/AOT
     loadType: 0
     packed: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
     name: 
     variant: 
     fileSystem: runtime
-    groups: 
+    groups: runtime
     assetPath: Assets/Game/HybridCLRData/HotUpdate
     loadType: 0
     packed: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
     name: 
     variant: 
     fileSystem: runtime
-    groups: 
+    groups: runtime
     assetPath: Assets/Game/HybridCLRData/UpdateLuncher.prefab
     loadType: 0
     packed: 0

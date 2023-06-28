@@ -5,7 +5,7 @@
     /// </summary>
     public sealed class ReadOnlyVersionListSerializer : DEngineSerializer<LocalVersionList>
     {
-        private static readonly byte[] Header = new byte[] { (byte)'G', (byte)'F', (byte)'R' };
+        private static readonly byte[] Header = new byte[] { (byte)'D', (byte)'E', (byte)'R' };
 
         /// <summary>
         /// 初始化本地只读区版本资源列表序列化器的新实例。

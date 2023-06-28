@@ -5,7 +5,7 @@
     /// </summary>
     public sealed class UpdatableVersionListSerializer : DEngineSerializer<UpdatableVersionList>
     {
-        private static readonly byte[] Header = new byte[] { (byte)'G', (byte)'F', (byte)'U' };
+        private static readonly byte[] Header = new byte[] { (byte)'D', (byte)'E', (byte)'U' };
 
         /// <summary>
         /// 初始化可更新模式版本资源列表序列化器的新实例。

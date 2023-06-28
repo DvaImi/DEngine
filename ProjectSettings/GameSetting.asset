@@ -16,7 +16,7 @@ MonoBehaviour:
   ResourceCollectionConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
-  BuildPlatform: 0
+  BuildPlatform: 5
   ResourceModeIndex: 2
   Difference: 0
   AppOutput: F:/Project/Unity/Work/AppOutput

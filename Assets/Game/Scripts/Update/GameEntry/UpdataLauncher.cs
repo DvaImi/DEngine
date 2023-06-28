@@ -12,7 +12,7 @@ namespace Game.Update
     {
         private void Start()
         {
-            Log.Info("启动器加载成功...");
+            Log.Info("UpdataLauncher...");
             StartHotfixProcedure();
         }
 

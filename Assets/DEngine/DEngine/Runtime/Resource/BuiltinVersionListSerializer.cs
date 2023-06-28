@@ -7,7 +7,7 @@ namespace DEngine.Runtime
     /// </summary>
     public static partial class BuiltinVersionListSerializer
     {
-        private const string DefaultExtension = "dat";
+        private const string DefaultExtension = "block";
         private const int CachedHashBytesLength = 4;
         private static readonly byte[] s_CachedHashBytes = new byte[CachedHashBytesLength];
 

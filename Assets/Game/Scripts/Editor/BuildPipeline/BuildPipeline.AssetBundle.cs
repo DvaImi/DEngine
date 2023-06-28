@@ -111,13 +111,13 @@ namespace Game.Editor.BuildPipeline
 
         public static void RefreshResourceCollection()
         {
-            AssetBundleCollectorWindow ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollectorWindow>();
+            AssetBundleCollectorWindow ruleEditor = GameEditorUtility.GetWindowDontShow<AssetBundleCollectorWindow>();
             ruleEditor.RefreshResourceCollection();
         }
 
         public static void RefreshResourceCollection(string configPath)
         {
-            AssetBundleCollectorWindow ruleEditor = ScriptableObject.CreateInstance<AssetBundleCollectorWindow>();
+            AssetBundleCollectorWindow ruleEditor = GameEditorUtility.GetWindowDontShow<AssetBundleCollectorWindow>();
             ruleEditor.RefreshResourceCollection(configPath);
         }
 

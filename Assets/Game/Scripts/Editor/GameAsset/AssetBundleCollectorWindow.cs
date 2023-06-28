@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using DEngine;
+using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using DEngine.Editor.ResourceTools;
 using GFResource = DEngine.Editor.ResourceTools.Resource;
 
 namespace Game.Editor.ResourceTools
@@ -34,10 +33,6 @@ namespace Game.Editor.ResourceTools
         private List<string> m_AllConfigPaths;
         private string[] m_ConfigNames;
         private SerializedObject m_SerializedObject;
-
-        private bool m_AllActive;
-        private bool m_AllPackage;
-
 
         private void OnEnable()
         {
@@ -326,7 +321,7 @@ namespace Game.Editor.ResourceTools
 
         private void DrawReorderableListHeader(Rect rect)
         {
-            
+
         }
 
         private void DrawElementLabelGUI()

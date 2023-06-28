@@ -5,7 +5,7 @@
     /// </summary>
     public sealed class PackageVersionListSerializer : DEngineSerializer<PackageVersionList>
     {
-        private static readonly byte[] Header = new byte[] { (byte)'G', (byte)'F', (byte)'P' };
+        private static readonly byte[] Header = new byte[] { (byte)'D', (byte)'E', (byte)'P' };
 
         /// <summary>
         /// 初始化单机模式版本资源列表序列化器的新实例。
