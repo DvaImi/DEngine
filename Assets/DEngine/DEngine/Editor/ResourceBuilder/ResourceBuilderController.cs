@@ -1457,7 +1457,7 @@ namespace DEngine.Editor.ResourceTools
 
         private BuildAssetBundleOptions GetBuildAssetBundleOptions()
         {
-            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.ChunkBasedCompression;
+            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.DeterministicAssetBundle;
 
             if (ForceRebuildAssetBundleSelected)
             {
