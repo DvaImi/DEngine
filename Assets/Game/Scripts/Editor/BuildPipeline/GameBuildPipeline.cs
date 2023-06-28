@@ -7,13 +7,13 @@ using UnityEditor;
 
 namespace Game.Editor.BuildPipeline
 {
-    public static partial class BuildPipeline
+    public static partial class GameBuildPipeline
     {
         private static Platform m_OriginalPlatform;
         public static string[] ResourceMode { get; }
         public static string[] PlatformNames { get; }
 
-        static BuildPipeline()
+        static GameBuildPipeline()
         {
             ResourceMode = Enum.GetNames(typeof(ResourceMode)).Skip(1).ToArray();
             PlatformNames = Enum.GetNames(typeof(Platform)).Skip(1).ToArray();

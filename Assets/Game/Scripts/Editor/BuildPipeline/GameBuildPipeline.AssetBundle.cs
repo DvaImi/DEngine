@@ -14,7 +14,7 @@ namespace Game.Editor.BuildPipeline
     /// <summary>
     /// 资源生成器。
     /// </summary>
-    public static partial class BuildPipeline
+    public static partial class GameBuildPipeline
     {
         public static string GetUpdatePrefixUri(Platform platform)
         {

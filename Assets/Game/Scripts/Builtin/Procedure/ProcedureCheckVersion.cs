@@ -20,6 +20,20 @@ namespace Game
             m_CheckVersionComplete = false;
             m_NeedUpdateVersion = false;
             m_VersionInfo = null;
+
+            //检测连网状态
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                Log.Warning("The device is not connected to the network");
+                GameEntry.BuiltinData.OpenDialog(new DialogParams
+                {
+                    Mode = 1,
+                    Message = "The device is not connected to the network",
+                    ConfirmText = "Quit",
+                    OnClickConfirm = delegate (object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                });
+                return;
+            }
             CheckVersionList();
         }
 

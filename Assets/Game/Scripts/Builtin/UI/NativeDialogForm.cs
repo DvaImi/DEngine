@@ -40,20 +40,20 @@ namespace Game
 
         public void OnConfirmButtonClick()
         {
+            Close();
             if (m_OnClickConfirm != null)
             {
                 m_OnClickConfirm(m_UserData);
             }
-            Close();
         }
 
         public void OnCancelButtonClick()
         {
+            Close();
             if (m_OnClickCancel != null)
             {
                 m_OnClickCancel(m_UserData);
             }
-            Close();
         }
 
         public void OnOtherButtonClick()
@@ -102,20 +102,7 @@ namespace Game
                 GameEntry.Base.ResumeGame();
             }
 
-            m_DialogMode = 1;
-            m_TitleText.text = string.Empty;
-            m_MessageText.text = string.Empty;
-            m_PauseGame = false;
-            m_UserData = null;
-
-            RefreshConfirmText(string.Empty);
-            m_OnClickConfirm = null;
-
-            RefreshCancelText(string.Empty);
-            m_OnClickCancel = null;
-
-            RefreshOtherText(string.Empty);
-            m_OnClickOther = null;
+            Destroy(gameObject);
         }
 
         private void RefreshDialogMode()

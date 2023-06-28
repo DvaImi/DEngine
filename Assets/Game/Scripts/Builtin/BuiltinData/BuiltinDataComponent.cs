@@ -148,8 +148,6 @@ namespace Game
             {
                 return;
             }
-
-            Destroy(m_NativeDialogForm.gameObject);
             Destroy(m_NativeDialogForm);
         }
     }

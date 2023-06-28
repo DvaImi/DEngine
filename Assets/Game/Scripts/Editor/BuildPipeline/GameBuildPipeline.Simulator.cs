@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Editor.BuildPipeline
 {
-    public static partial class BuildPipeline
+    public static partial class GameBuildPipeline
     {
         public static void PutToLocalSimulator(Platform platform, string outputFullPath)
         {

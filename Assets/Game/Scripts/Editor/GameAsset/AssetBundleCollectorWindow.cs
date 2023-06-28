@@ -5,7 +5,7 @@ using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using GFResource = DEngine.Editor.ResourceTools.Resource;
+using DEResource = DEngine.Editor.ResourceTools.Resource;
 
 namespace Game.Editor.ResourceTools
 {
@@ -34,6 +34,14 @@ namespace Game.Editor.ResourceTools
         private string[] m_ConfigNames;
         private SerializedObject m_SerializedObject;
 
+        [MenuItem("Game/AssetCollector", false, 1)]
+        static void Open()
+        {
+            EditorWindow window = GetWindow<AssetBundleCollectorWindow>(false, "AssetBundleCollector");
+            window.minSize = new Vector2(1640f, 420f);
+            window.Show();
+        }
+
         private void OnEnable()
         {
             m_SerializedObject = new SerializedObject(this);
@@ -49,7 +57,6 @@ namespace Game.Editor.ResourceTools
                 onSelectCallback = Select
             };
         }
-
 
         private void OnGUI()
         {
@@ -404,12 +411,12 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        public bool AssetPathvalid(AssetCollector resourceRule)
+        private bool AssetPathvalid(AssetCollector resourceRule)
         {
             return resourceRule != null && (resourceRule.filterType == FilterType.FileOnly ? File.Exists(resourceRule.assetPath) : Directory.Exists(resourceRule.assetPath));
         }
 
-        private GFResource[] GetResources()
+        private DEResource[] GetResources()
         {
             return m_ResourceCollection.GetResources();
         }
@@ -563,7 +570,7 @@ namespace Game.Editor.ResourceTools
             {
                 signedResourceList.Add(Path.Combine(resourceRule.assetPath, resourceName));
 
-                foreach (GFResource oldResource in GetResources())
+                foreach (DEResource oldResource in GetResources())
                 {
                     if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
                     {

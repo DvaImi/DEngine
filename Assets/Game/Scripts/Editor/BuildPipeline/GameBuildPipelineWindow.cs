@@ -5,24 +5,19 @@
 // 版 本：1.0
 // ========================================================
 
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Game.Editor.ResourceTools;
-using DEngine;
-using HybridCLR.Editor;
-using HybridCLR.Editor.Commands;
 using UnityEditor;
-using UnityEditor.Build.Reporting;
 using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using Path = System.IO.Path;
-using System.Reflection;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace Game.Editor.BuildPipeline
 {
-    public class BuildPipelineWindow : EditorWindow
+    public class GameBuildPipelineWindow : EditorWindow
     {
         private bool m_BeginBuildPlayer = false;
         private bool m_BeginBuildResources = false;
@@ -36,7 +31,7 @@ namespace Game.Editor.BuildPipeline
         [MenuItem("Game/BuildPipeline", false, 0)]
         private static void Open()
         {
-            BuildPipelineWindow window = GetWindow<BuildPipelineWindow>("BuildPipeline", true);
+            GameBuildPipelineWindow window = GetWindow<GameBuildPipelineWindow>("BuildPipeline", true);
             window.minSize = new Vector2(800f, 300f);
         }
 
@@ -81,7 +76,7 @@ namespace Game.Editor.BuildPipeline
                 if (GUILayout.Button("Save"))
                 {
                     GameSetting.Instance.SaveSetting();
-                    BuildPipeline.SaveBuildInfo();
+                    GameBuildPipeline.SaveBuildInfo();
                     Debug.Log("Save success");
                 }
             }
@@ -99,19 +94,19 @@ namespace Game.Editor.BuildPipeline
             if (m_BeginBuildPlayer)
             {
                 m_BeginBuildPlayer = false;
-                BuildPlayer();
+                GameBuildPipeline.BuildPlayer(false);
             }
 
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
-                BuildPipeline.BuildBundle(GameSetting.Instance.Difference);
+                GameBuildPipeline.BuildBundle(GameSetting.Instance.Difference);
             }
 
             if (m_IsAotGeneric)
             {
                 m_IsAotGeneric = false;
-                BuildPlayer(false);
+                GameBuildPipeline.BuildPlayer(true);
             }
         }
 
@@ -123,7 +118,7 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUILayout.LabelField("Platform", EditorStyles.boldLabel);
-                    int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, BuildPipeline.PlatformNames, GUILayout.Width(100));
+                    int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, GameBuildPipeline.PlatformNames, GUILayout.Width(100));
 
                     if (hotfixPlatformIndex != GameSetting.Instance.BuildPlatform)
                     {
@@ -234,13 +229,12 @@ namespace Game.Editor.BuildPipeline
 
                 if (GUILayout.Button("Compile"))
                 {
-                    CompileHotfixDll();
+                    GameBuildPipeline.CompileHotfixDll();
                 }
                 GUI.backgroundColor = bc;
             }
             EditorGUILayout.EndHorizontal();
         }
-
 
         private void GUIResources()
         {
@@ -248,7 +242,7 @@ namespace Game.Editor.BuildPipeline
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
 
-                bool canDifference = BuildPipeline.CanDifference();
+                bool canDifference = GameBuildPipeline.CanDifference();
                 GUI.enabled = canDifference;
                 GameSetting.Instance.Difference = EditorGUILayout.ToggleLeft("Difference", GameSetting.Instance.Difference, GUILayout.Width(120));
                 GUI.enabled = true;
@@ -257,24 +251,17 @@ namespace Game.Editor.BuildPipeline
                     GameSetting.Instance.Difference = false;
                 }
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
-                int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, BuildPipeline.ResourceMode, GUILayout.Width(160));
+                int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameBuildPipeline.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)
                 {
                     //由于跳过了 ResourceMode.Unspecified 保存时索引+1
                     GameSetting.Instance.ResourceModeIndex = resourceModeIndex + 1;
                     GameSetting.Instance.SaveSetting();
                 }
-                if (GUILayout.Button("Edit", GUILayout.Width(100)))
-                {
-                    EditorWindow window = GetWindow<AssetBundleCollectorWindow>(false, "AssetBundleCollector");
-                    window.minSize = new Vector2(1640f, 420f);
-                    window.Show();
-                    EditorUtility.ClearProgressBar();
-                }
-
+              
                 if (GUILayout.Button("Clear", GUILayout.Width(100)))
                 {
-                    BuildPipeline.ClearBundles();
+                    GameBuildPipeline.ClearBundles();
                 }
             }
 
@@ -295,7 +282,7 @@ namespace Game.Editor.BuildPipeline
                         {
                             GameSetting.Instance.BundlesOutput = directory;
                         }
-                        BuildPipeline.SaveOutputDirectory(GameSetting.Instance.BundlesOutput);
+                        GameBuildPipeline.SaveOutputDirectory(GameSetting.Instance.BundlesOutput);
                     }
                 }
 
@@ -430,7 +417,7 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
             {
-                string locationPathName = BuildPipeline.GetBuildAppFullName();
+                string locationPathName = GameBuildPipeline.GetBuildAppFullName();
                 if (File.Exists(locationPathName))
                 {
                     GUI.enabled = false;
@@ -451,99 +438,6 @@ namespace Game.Editor.BuildPipeline
                 m_BeginBuildPlayer = true;
             }
             GUI.backgroundColor = bc;
-        }
-
-        private void BuildPlayer(bool completeOpenFolder = true)
-        {
-            BuildPipeline.SaveBuildInfo();
-            BuildReport report = BuildPipeline.BuildApplication(BuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform));
-            BuildSummary summary = report.summary;
-
-            if (summary.result == BuildResult.Succeeded)
-            {
-                Debug.Log("Build succeeded: " + StringUtility.GetByteLengthString((long)summary.totalSize));
-                if (completeOpenFolder)
-                {
-                    DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
-                }
-
-                if (GameSetting.Instance.ForceUpdateGame)
-                {
-                    BuildPipeline.PutLastVserionApp(BuildPipeline.GetPlatform(GameSetting.Instance.BuildPlatform));
-                }
-            }
-
-            if (summary.result == BuildResult.Failed)
-            {
-                Debug.Log("Build failed");
-            }
-        }
-
-        private void CompileHotfixDll()
-        {
-            BuildTarget buildTarget = BuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform);
-            CompileDllCommand.CompileDll(buildTarget);
-            CopyDllAssets(buildTarget);
-        }
-
-        private void CopyDllAssets(BuildTarget buildTarget)
-        {
-            if (string.IsNullOrEmpty(GameSetting.Instance.HotupdateDllPath))
-            {
-                Debug.LogError("Directory path is null.");
-                return;
-            }
-
-            if (Directory.Exists(GameSetting.Instance.HotupdateDllPath))
-            {
-                IOUtility.Delete(GameSetting.Instance.HotupdateDllPath);
-            }
-            else
-            {
-                Directory.CreateDirectory(GameSetting.Instance.HotupdateDllPath);
-            }
-
-            if (Directory.Exists(GameSetting.Instance.AOtDllPath))
-            {
-                IOUtility.Delete(GameSetting.Instance.AOtDllPath);
-            }
-            else
-            {
-                Directory.CreateDirectory(GameSetting.Instance.AOtDllPath);
-            }
-
-
-            string hotUpdateAssemblyDefinitionFullName = GameSetting.Instance.HotUpdateAssemblyDefinition.name + ".dll";
-            //Copy Hotfix Dll
-            string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), hotUpdateAssemblyDefinitionFullName);
-
-            //加bytes 后缀让Unity识别为TextAsset 文件
-            string desFileName = Path.Combine(GameSetting.Instance.HotupdateDllPath, hotUpdateAssemblyDefinitionFullName + ".bytes");
-            File.Copy(oriFileName, desFileName, true);
-            string updataDllMainfest = Path.Combine(GameSetting.Instance.HotupdateDllPath, "UpdataDllMainfest" + ".bytes");
-            GameMainfestUitlity.CreatMainfest(hotUpdateAssemblyDefinitionFullName, updataDllMainfest);
-            Debug.Log("Copy hotfix dll success.");
-
-            // Copy AOT Dll
-            string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
-            foreach (var dllName in GameSetting.Instance.AOTDllNames)
-            {
-                oriFileName = Path.Combine(aotDllPath, dllName);
-                if (!File.Exists(oriFileName))
-                {
-                    Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOT dll.");
-                    continue;
-                }
-                desFileName = Path.Combine(GameSetting.Instance.AOtDllPath, dllName + ".bytes");
-                File.Copy(oriFileName, desFileName, true);
-            }
-
-            Debug.Log("Copy Aot dll success.");
-
-            string aotMainfest = Path.Combine(GameSetting.Instance.AOtDllPath, "AOTMetadataMainfest" + ".bytes");
-            GameMainfestUitlity.CreatMainfest(GameSetting.Instance.AOTDllNames, aotMainfest);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
     }
 }

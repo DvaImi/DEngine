@@ -33,11 +33,11 @@ namespace Game.Editor
 
         public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength, int versionListHashCode, int versionListCompressedLength, int versionListCompressedHashCode)
         {
-            string platformPath = BuildPipeline.BuildPipeline.GetPlatformPath(platform);
+            string platformPath = BuildPipeline.GameBuildPipeline.GetPlatformPath(platform);
             VersionInfo versionInfo = new()
             {
                 ForceUpdateGame = GameSetting.Instance.ForceUpdateGame,
-                UpdatePrefixUri = BuildPipeline.BuildPipeline.GetUpdatePrefixUri(platform),
+                UpdatePrefixUri = BuildPipeline.GameBuildPipeline.GetUpdatePrefixUri(platform),
                 LatestGameVersion = GameSetting.Instance.LatestGameVersion,
                 InternalGameVersion = 1,
                 InternalResourceVersion = GameSetting.Instance.InternalResourceVersion,
@@ -60,11 +60,11 @@ namespace Game.Editor
             }
             if (GameSetting.Instance.AutoCopyToVirtualServer)
             {
-                BuildPipeline.BuildPipeline.PutToLocalSimulator(platform, outputFullPath);
+                BuildPipeline.GameBuildPipeline.PutToLocalSimulator(platform, outputFullPath);
             }
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
             string sourcePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
-            BuildPipeline.BuildPipeline.CopyFileToStreamingAssets(sourcePath);
+            BuildPipeline.GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);
         }
     }
 }

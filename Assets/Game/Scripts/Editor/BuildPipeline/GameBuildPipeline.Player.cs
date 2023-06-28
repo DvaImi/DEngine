@@ -2,16 +2,16 @@
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using DEngine.Editor.ResourceTools;
 using Object = UnityEngine.Object;
 
 namespace Game.Editor.BuildPipeline
 {
-    public static partial class BuildPipeline
+    public static partial class GameBuildPipeline
     {
         public static void SaveBuildInfo()
         {
@@ -27,7 +27,29 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static BuildReport BuildApplication(BuildTarget platform)
+        public static void BuildPlayer(bool aotGeneric)
+        {
+            SaveBuildInfo();
+            BuildReport report = BuildApplication(GetBuildTarget(GameSetting.Instance.BuildPlatform), aotGeneric);
+            BuildSummary summary = report.summary;
+
+            if (summary.result == BuildResult.Succeeded)
+            {
+                Debug.Log("Build succeeded: " + StringUtility.GetByteLengthString((long)summary.totalSize));
+
+                if (GameSetting.Instance.ForceUpdateGame)
+                {
+                    PutLastVserionApp(GetPlatform(GameSetting.Instance.BuildPlatform));
+                }
+            }
+
+            if (summary.result == BuildResult.Failed)
+            {
+                Debug.Log("Build failed");
+            }
+        }
+
+        public static BuildReport BuildApplication(BuildTarget platform, bool aotGeneric)
         {
             string outputExtension = GetFileExtensionForPlatform(platform);
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
@@ -43,9 +65,13 @@ namespace Game.Editor.BuildPipeline
                 scenes = new string[] { EditorBuildSettings.scenes[0].path },
                 locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
                 target = platform,
-                options = BuildOptions.None
+                options = BuildOptions.CompressWithLz4 | BuildOptions.ShowBuiltPlayer
             };
 
+            if (aotGeneric)
+            {
+                buildPlayerOptions.options = BuildOptions.CompressWithLz4;
+            }
             return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 

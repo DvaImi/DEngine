@@ -47,16 +47,24 @@ namespace Game
 
         private void OnCheckResourcesComplete(int movedCount, int removedCount, int updateCount, long updateTotalLength, long updateTotalCompressedLength)
         {
+            Log.Info("Check resources complete, '{0}' resources need to update, compressed length is '{1}', uncompressed length is '{2}'.", updateCount.ToString(), updateTotalCompressedLength.ToString(), updateTotalLength.ToString());
+
             string size = StringUtility.GetByteLengthString(updateTotalCompressedLength);
-            GameEntry.BuiltinData.OpenDialog(new DialogParams
+
+            if (updateCount > 0 && updateTotalCompressedLength > 0)
             {
-                Mode = 2,
-                Message = Utility.Text.Format("Need update resource size :{0}", size),
-                ConfirmText = "Update",
-                OnClickConfirm = ConfirmUpdate,
-                CancelText = " Cancel",
-                OnClickCancel = delegate (object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
-            });
+                GameEntry.BuiltinData.OpenDialog(new DialogParams
+                {
+                    Mode = 2,
+                    Message = Utility.Text.Format("Need update resource size :{0}", size),
+                    ConfirmText = "Update",
+                    OnClickConfirm = ConfirmUpdate,
+                    CancelText = " Cancel",
+                    OnClickCancel = delegate (object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                });
+
+                return;
+            }
 
             void ConfirmUpdate(object parm)
             {
@@ -66,7 +74,8 @@ namespace Game
                 m_UpdateResourceCount = updateCount;
                 m_UpdateResourceTotalCompressedLength = updateTotalCompressedLength;
             }
-            Log.Info("Check resources complete, '{0}' resources need to update, compressed length is '{1}', uncompressed length is '{2}'.", updateCount.ToString(), updateTotalCompressedLength.ToString(), updateTotalLength.ToString());
+
+            ConfirmUpdate(null);
         }
     }
 }

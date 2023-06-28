@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Game.Editor.BuildPipeline
 {
-    public static partial class BuildPipeline
+    public static partial class GameBuildPipeline
     {
         /// <summary>
         /// 获取最新的资源构建列表

@@ -47,7 +47,7 @@ namespace Game
                     using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
                     {
                         m_HotUpdateDllNameMain = binaryReader.ReadString();
-                        Log.Info("hybridclr is Ready.");
+                        Log.Info("Hybridclr is Ready.");
 #if UNITY_EDITOR
                         HotfixLauncher();
 #else
