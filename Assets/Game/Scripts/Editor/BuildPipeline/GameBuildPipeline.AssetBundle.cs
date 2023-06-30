@@ -23,15 +23,14 @@ namespace Game.Editor.BuildPipeline
 
         public static void BuildBundle(bool difference = false)
         {
-            GameSetting.Instance.SaveSetting();
-            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
-            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
             RemoveUnknownAssets();
             RefreshResourceCollection();
-            SaveBuildInfo();
-            AssetDatabase.Refresh();
+            GameSetting.Instance.SaveSetting();
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
 
+            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
+            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
             Stopwatch stopwatch = Stopwatch.StartNew();
             BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), GameSetting.Instance.BundlesOutput, difference);
             stopwatch.Stop();
@@ -48,9 +47,8 @@ namespace Game.Editor.BuildPipeline
             ResourceBuilderController controller = new ResourceBuilderController();
             if (controller.Load())
             {
-                controller.InternalResourceVersion = 0;
+                controller.InternalResourceVersion = GameSetting.Instance.InternalResourceVersion = 0;
                 controller.Save();
-                GameSetting.Instance.InternalResourceVersion = 0;
                 GameSetting.Instance.SaveSetting();
             }
 
@@ -58,6 +56,7 @@ namespace Game.Editor.BuildPipeline
             {
                 IOUtility.Delete(GameSetting.Instance.VirtualServerAddress);
             }
+            AssetDatabase.Refresh();
             Debug.Log("Clear success");
         }
 
@@ -111,13 +110,13 @@ namespace Game.Editor.BuildPipeline
 
         public static void RefreshResourceCollection()
         {
-            AssetBundleCollectorWindow ruleEditor = GameEditorUtility.GetWindowDontShow<AssetBundleCollectorWindow>();
+            AssetBundleCollectorWindow ruleEditor = GameEditorUtility.GetScriptableObject<AssetBundleCollectorWindow>();
             ruleEditor.RefreshResourceCollection();
         }
 
         public static void RefreshResourceCollection(string configPath)
         {
-            AssetBundleCollectorWindow ruleEditor = GameEditorUtility.GetWindowDontShow<AssetBundleCollectorWindow>();
+            AssetBundleCollectorWindow ruleEditor = GameEditorUtility.GetScriptableObject<AssetBundleCollectorWindow>();
             ruleEditor.RefreshResourceCollection(configPath);
         }
 

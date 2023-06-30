@@ -104,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 3
+    serializedVersion: 2
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    buildHeightMesh: 0
+    accuratePlacement: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -287,17 +287,9 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
-  m_Iso: 200
-  m_ShutterSpeed: 0.005
-  m_Aperture: 16
-  m_FocusDistance: 10
-  m_FocalLength: 50
-  m_BladeCount: 5
-  m_Curvature: {x: 2, y: 11}
-  m_BarrelClipping: 0.25
-  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -376,7 +368,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
     m_TransformParent: {fileID: 8983371}
     m_Modifications:
     - target: {fileID: 116470, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
@@ -665,7 +656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ResourceMode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ReadWritePathType
@@ -724,9 +715,6 @@ PrefabInstance:
       value: DEngine.Runtime.DefaultCompressionHelper
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
 --- !u!4 &628678049 stripped
 Transform:
@@ -777,13 +765,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfb0b001fcb30fe45ac95ddb8c28ba57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LanguageBuiltin: {fileID: 4900000, guid: c25eaf03fa8abf9419f0c98d5a46ebf4, type: 3}
-  m_UpdateResourceFormTemplate: {fileID: 4863827266948120156, guid: 1a28f36a920aad544bac449fb4127126, type: 3}
-  m_NativeDialogFormTemplate: {fileID: -7793811446997299701, guid: a91171fb30298464b95cd0e975dd83c7, type: 3}
-  m_BuildInfo:
-    LatestGameVersion: 0.1.0
-    CheckVersionUrl: http://192.168.1.102/CDN/{0}/{1}Version.json
-    WindowsAppUrl: http://192.168.1.102/CDN/WindowsApp/Game.zip
-    MacOSAppUrl: http://192.168.1.102/MacOSApp
-    IOSAppUrl: http://192.168.1.102/IOSApp
-    AndroidAppUrl: http://192.168.1.102/CDN/AndroidApp/Game.apk
+  m_BuiltinData: {fileID: 11400000, guid: ff069b2864695684ab599d59cd5a685c, type: 2}

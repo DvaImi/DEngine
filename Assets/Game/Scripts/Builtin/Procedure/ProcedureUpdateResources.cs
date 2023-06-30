@@ -1,10 +1,11 @@
-﻿using DEngine;
-using DEngine.Event;
+﻿using System;
 using System.Collections.Generic;
+using DEngine.Event;
 using DEngine.Fsm;
 using DEngine.Procedure;
-using UnityEngine;
 using DEngine.Runtime;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Game
 {
@@ -17,6 +18,7 @@ namespace Game
         private int m_UpdateCount = 0;
         private long m_UpdateTotalCompressedLength = 0L;
         private int m_UpdateSuccessCount = 0;
+        private float m_LastUpdateTime;
         private List<UpdateLengthData> m_UpdateLengthData = new List<UpdateLengthData>();
         private UpdateResourceForm m_UpdateResourceForm = null;
 
@@ -72,7 +74,7 @@ namespace Game
         {
             if (m_UpdateResourceForm == null)
             {
-                m_UpdateResourceForm = Object.Instantiate(GameEntry.BuiltinData.UpdateResourceFormTemplate);
+                m_UpdateResourceForm = Object.Instantiate(GameEntry.BuiltinData.Data.UpdateResourceFormTemplate);
             }
 
             Log.Info("Start update resources...");
@@ -86,9 +88,14 @@ namespace Game
             {
                 currentTotalUpdateLength += m_UpdateLengthData[i].Length;
             }
-
             float progressTotal = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
-            string descriptionText = GameEntry.Localization.GetString("UpdateResource.Tips", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), StringUtility.GetByteLengthString(currentTotalUpdateLength), StringUtility.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("F2"), StringUtility.GetByteLengthString((int)GameEntry.Download.CurrentSpeed));
+            string descriptionText = GameEntry.Localization.GetString("UpdateResource.Tips", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), StringUtility.GetByteLengthString(currentTotalUpdateLength), StringUtility.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("F2"), StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
+            descriptionText += "\n";
+            m_LastUpdateTime = Time.time;
+            int needTime = (int)((m_UpdateTotalCompressedLength - currentTotalUpdateLength) / GameEntry.Download.CurrentSpeed);
+            TimeSpan timespan = new(0, 0, needTime);
+            string timeFormat = timespan.ToString(@"mm\:ss");
+            descriptionText += string.Format("剩余时间 {0}({1}/s)", timeFormat, StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed)); ;
             m_UpdateResourceForm.SetProgress(progressTotal, descriptionText);
             Log.Info(descriptionText);
         }

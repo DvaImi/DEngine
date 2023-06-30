@@ -215,7 +215,7 @@ namespace Game.Editor.ResourceTools
                 rule.filterType = isFile ? FilterType.FileOnly : rule.filterType;
             }
 
-            r.xMin = r.xMax + GAP - 20;
+            r.xMin = r.xMax + GAP;
             r.xMax = r.xMin + 25;
             GUI.enabled = valid;
             if (GUI.Button(r, valid ? EditorGUIUtility.IconContent("pick") : EditorGUIUtility.IconContent("console.erroricon")))
@@ -354,7 +354,7 @@ namespace Game.Editor.ResourceTools
             GUILayout.Space(GAP);
             EditorGUILayout.TextField("Filter Type", GUILayout.Width(85), GUILayout.Height(20));
             GUILayout.Space(GAP);
-            EditorGUILayout.TextField("Patterns", GUILayout.Width(250), GUILayout.Height(20));
+            EditorGUILayout.TextField("Patterns", GUILayout.Width(230), GUILayout.Height(20));
             GUI.enabled = true;
         }
 

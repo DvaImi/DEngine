@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d04fd420b9c8114fb849745eb9c7155, type: 3}
+  m_Name: DefaultBuiltinData
+  m_EditorClassIdentifier: 
+  LanguageBuiltin: {fileID: 4900000, guid: c25eaf03fa8abf9419f0c98d5a46ebf4, type: 3}
+  UpdateResourceFormTemplate: {fileID: 4863827266948120156, guid: 1a28f36a920aad544bac449fb4127126, type: 3}
+  NativeDialogFormTemplate: {fileID: -7793811446997299701, guid: a91171fb30298464b95cd0e975dd83c7, type: 3}
+  BuildInfo:
+    LatestGameVersion: 0.1.0
+    CheckVersionUrl: http://192.168.1.102/CDN/{0}/{1}Version.json
+    WindowsAppUrl: http://192.168.1.102/CDN/WindowsApp/Game.zip
+    MacOSAppUrl: http://192.168.1.102/MacOSApp
+    IOSAppUrl: http://192.168.1.102/IOSApp
+    AndroidAppUrl: http://192.168.1.102/CDN/AndroidApp/Game.apk

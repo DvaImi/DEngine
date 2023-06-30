@@ -62,7 +62,7 @@ namespace Game
 
         private async void CheckVersionList()
         {
-            string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.BuildInfo.LatestGameVersion, GetPlatformPath());
+            string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.Data.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.Data.BuildInfo.LatestGameVersion, GetPlatformPath());
             // 向服务器请求版本信息
             WebRequestResult result = await GameEntry.WebRequest.AddWebRequestAsync(checkVersionUrl);
             if (result.Success)
@@ -109,13 +109,13 @@ namespace Game
         {
             string url = null;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            url = GameEntry.BuiltinData.BuildInfo.WindowsAppUrl;
+            url = GameEntry.BuiltinData.Data.BuildInfo.WindowsAppUrl;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            url = GameEntry.BuiltinData.BuildInfo.MacOSAppUrl;
+            url = GameEntry.BuiltinData.Data.BuildInfo.MacOSAppUrl;
 #elif UNITY_IOS
-            url = GameEntry.BuiltinData.BuildInfo.IOSAppUrl;
+            url = GameEntry.BuiltinData.Data.BuildInfo.IOSAppUrl;
 #elif UNITY_ANDROID
-            url = GameEntry.BuiltinData.BuildInfo.AndroidAppUrl;
+            url = GameEntry.BuiltinData.Data.BuildInfo.AndroidAppUrl;
 #endif
             if (!string.IsNullOrEmpty(url))
             {

@@ -8,43 +8,21 @@ namespace Game
     public class BuiltinDataComponent : DEngineComponent
     {
         [SerializeField]
-        private TextAsset m_LanguageBuiltin;
-
-        [SerializeField]
-        private UpdateResourceForm m_UpdateResourceFormTemplate = null;
-        public UpdateResourceForm UpdateResourceFormTemplate
-        {
-            get
-            {
-                return m_UpdateResourceFormTemplate;
-            }
-        }
+        private BuiltinData m_BuiltinData;
 
         private NativeDialogForm m_NativeDialogForm;
 
-        [SerializeField]
-        private NativeDialogForm m_NativeDialogFormTemplate = null;
-
-        [SerializeField]
-        private BuildInfo m_BuildInfo;
-
-        /// <summary>
-        /// 获取内置信息
-        /// </summary>
-        public BuildInfo BuildInfo
-        {
-            get => m_BuildInfo;
-        }
+        public BuiltinData Data { get => m_BuiltinData; }
 
         public void InitLanguageBuiltin()
         {
-            if (m_LanguageBuiltin == null || m_LanguageBuiltin.bytes == null)
+            if (Data.LanguageBuiltin == null || Data.LanguageBuiltin.bytes == null)
             {
                 Log.Info("LanguageBuiltin can not be found or empty.");
                 return;
             }
 
-            if (!GameEntry.Localization.ParseData(m_LanguageBuiltin.bytes))
+            if (!GameEntry.Localization.ParseData(Data.LanguageBuiltin.bytes))
             {
                 Log.Warning("Parse LanguageBuiltin failure.");
                 return;
@@ -136,7 +114,7 @@ namespace Game
         {
             if (m_NativeDialogForm == null)
             {
-                m_NativeDialogForm = Instantiate(m_NativeDialogFormTemplate);
+                m_NativeDialogForm = Instantiate(Data.NativeDialogFormTemplate);
             }
 
             m_NativeDialogForm.OnOpen(dialogParams);

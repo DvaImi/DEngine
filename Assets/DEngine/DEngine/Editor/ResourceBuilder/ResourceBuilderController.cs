@@ -572,7 +572,7 @@ namespace DEngine.Editor.ResourceTools
             string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
             if (!Directory.Exists(buildReportDirectory))
             {
-                throw new DEngineException("BuildReport path is invalid.");
+                return null;
             }
             string[] allBuildReport = Directory.GetFiles(buildReportDirectory, "*.xml", SearchOption.AllDirectories);
             int[] internalResourceVersion = new int[allBuildReport.Length];

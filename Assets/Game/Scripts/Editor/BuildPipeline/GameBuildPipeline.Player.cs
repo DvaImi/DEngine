@@ -15,16 +15,10 @@ namespace Game.Editor.BuildPipeline
     {
         public static void SaveBuildInfo()
         {
-            //绑定到内置对象
-            BuiltinDataComponent builtinDataComponent = Object.FindObjectOfType<BuiltinDataComponent>();
-            if (builtinDataComponent != null)
-            {
-                Type type = typeof(BuiltinDataComponent);
-                FieldInfo buildInfo = type.GetField("m_BuildInfo", BindingFlags.NonPublic | BindingFlags.Instance);
-                buildInfo?.SetValue(builtinDataComponent, GameSetting.Instance.BuildInfo);
-                EditorUtility.SetDirty(builtinDataComponent);
-                EditorSceneManager.SaveOpenScenes();
-            }
+            BuiltinData builtinData = GameEditorUtility.GetScriptableObject<BuiltinData>();
+            builtinData.BuildInfo = GameSetting.Instance.BuildInfo;
+            EditorUtility.SetDirty(builtinData);
+            AssetDatabase.SaveAssets();
         }
 
         public static void BuildPlayer(bool aotGeneric)
