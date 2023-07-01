@@ -42,9 +42,5 @@ namespace Game.Editor.ResourceTools
         /// 指定文件夹下的子文件夹的文件分别打成一个Resource。
         /// </summary>
         ChildrenFilesOnly,
-        /// <summary>
-        /// 指定文件
-        /// </summary>
-        FileOnly,
     }
 }

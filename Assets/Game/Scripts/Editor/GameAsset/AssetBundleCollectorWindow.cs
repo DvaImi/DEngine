@@ -35,7 +35,7 @@ namespace Game.Editor.ResourceTools
         private SerializedObject m_SerializedObject;
 
         [MenuItem("Game/AssetCollector", false, 1)]
-        static void Open()
+        internal static void Open()
         {
             EditorWindow window = GetWindow<AssetBundleCollectorWindow>(false, "AssetBundleCollector");
             window.minSize = new Vector2(1640f, 420f);
@@ -46,7 +46,6 @@ namespace Game.Editor.ResourceTools
         {
             m_SerializedObject = new SerializedObject(this);
             Load();
-
             m_RuleList = new ReorderableList(m_Configuration.Collector, typeof(AssetCollector))
             {
                 drawElementCallback = OnListElementGUI,
@@ -61,7 +60,7 @@ namespace Game.Editor.ResourceTools
         private void OnGUI()
         {
             m_SerializedObject.Update();
-
+            GUILayout.Space(10);
             GUILayout.BeginHorizontal();
             {
                 DrawElementLabelGUI();
@@ -209,10 +208,9 @@ namespace Game.Editor.ResourceTools
             rule.assetPath = EditorGUI.TextField(r, rule.assetPath);
             GUI.contentColor = bc;
 
-            if (PathUtility.DropPathOutType(r, out string assetsPath, out bool isFile))
+            if (PathUtility.DropPath(r, out string assetsPath))
             {
                 rule.assetPath = assetsPath;
-                rule.filterType = isFile ? FilterType.FileOnly : rule.filterType;
             }
 
             r.xMin = r.xMax + GAP;
@@ -228,9 +226,7 @@ namespace Game.Editor.ResourceTools
             r.xMax = r.xMin + 60;
             if (GUI.Button(r, "Browse"))
             {
-                string newAssetPath = rule.filterType == FilterType.FileOnly
-                    ? EditorUtility.OpenFilePanel("Select AssetPath Folder", rule.assetPath, rule.searchPatterns)
-                    : EditorUtility.OpenFolderPanel("Select AssetPath Folder", rule.assetPath, string.Empty);
+                string newAssetPath = EditorUtility.OpenFolderPanel("Select AssetPath Folder", rule.assetPath, string.Empty);
                 rule.assetPath = PathUtility.ConvertToAssetPath(newAssetPath);
             }
 
@@ -311,6 +307,12 @@ namespace Game.Editor.ResourceTools
             GUILayout.FlexibleSpace();
             Color bc = GUI.backgroundColor;
             GUI.backgroundColor = Color.green;
+
+            if (GUILayout.Button("Preview", GUILayout.Width(100)))
+            {
+                AssetBundlePreviewWindow.Open();
+            }
+
             if (GUILayout.Button(EditorGUIUtility.IconContent("Save"), GUILayout.Width(100)))
             {
                 Save();
@@ -413,7 +415,7 @@ namespace Game.Editor.ResourceTools
 
         private bool AssetPathvalid(AssetCollector resourceRule)
         {
-            return resourceRule != null && (resourceRule.filterType == FilterType.FileOnly ? File.Exists(resourceRule.assetPath) : Directory.Exists(resourceRule.assetPath));
+            return resourceRule != null && Directory.Exists(resourceRule.assetPath);
         }
 
         private DEResource[] GetResources()
@@ -547,18 +549,6 @@ namespace Game.Editor.ResourceTools
                                 }
                             }
                             break;
-                        case FilterType.FileOnly:
-                            FileInfo assetFile = new FileInfo(assetCollector.assetPath);
-                            string assetFileName = assetFile.FullName.Substring(Application.dataPath.Length + 1);
-                            string assetNameWithoutExtension = DEngine.Utility.Path.GetRegularPath(assetFileName[..assetFileName.LastIndexOf('.')]);
-                            assetFileName = Path.Combine("Assets", assetFileName);
-                            string assetFileGUID = AssetDatabase.AssetPathToGUID(assetFileName);
-
-                            if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetFileGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetFileGUID))
-                            {
-                                ApplyResourceFilter(ref signedAssetBundleList, assetCollector, assetNameWithoutExtension, assetFileGUID);
-                            }
-                            break;
                     }
                 }
             }
@@ -625,7 +615,6 @@ namespace Game.Editor.ResourceTools
 
                     case FilterType.Children:
                     case FilterType.ChildrenFilesOnly:
-                    case FilterType.FileOnly:
                         {
                             AssignAsset(singleAssetGUID, resourceName, resourceRule.variant);
                         }

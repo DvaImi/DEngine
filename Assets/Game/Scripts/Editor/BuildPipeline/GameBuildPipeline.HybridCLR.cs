@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Game.Editor.ResourceTools;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
-using NUnit.Framework;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace Game.Editor.BuildPipeline
@@ -15,8 +12,6 @@ namespace Game.Editor.BuildPipeline
     {
         public static void SaveHybridCLR()
         {
-            // !!!preserveHotUpdateAssemblies 并不是预留给HybridCLR 的程序集 而是游戏按需加载的程序集
-            //var union = GameSetting.Instance.HotUpdateAssemblies.Union(GameSetting.Instance.PreserveAssemblies).ToArray();
             HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
             HybridCLRSettings.Instance.preserveHotUpdateAssemblies = GameSetting.Instance.PreserveAssemblies;
             HybridCLRSettings.Save();
@@ -68,7 +63,7 @@ namespace Game.Editor.BuildPipeline
             string desFileName;
             string oriFileName;
 
-            List<string> assembliesMainfest = new List<string>(); 
+            List<string> assembliesMainfest = new List<string>();
             //Copy HotUpdateAssemblies
             foreach (string hotUpdateAssemblyFullName in GameSetting.Instance.HotUpdateAssemblies)
             {
@@ -79,9 +74,12 @@ namespace Game.Editor.BuildPipeline
                 assembliesMainfest.Add(hotUpdateAssemblyFullName);
             }
 
-            string hotUpdateAssembliesMainfest = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, "HotUpdateAssembliesMainfest" + ".bytes");
-            GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), hotUpdateAssembliesMainfest);
-            Debug.Log("Copy HotUpdateAssemblies success.");
+            if (assembliesMainfest.Count > 0)
+            {
+                string hotUpdateAssembliesMainfest = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, "HotUpdateAssembliesMainfest" + ".bytes");
+                GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), hotUpdateAssembliesMainfest);
+                Debug.Log("Copy HotUpdateAssemblies success.");
+            }
             assembliesMainfest.Clear();
 
             //Copy PreserveAssemblies
@@ -93,10 +91,12 @@ namespace Game.Editor.BuildPipeline
                 File.Copy(oriFileName, desFileName, true);
                 assembliesMainfest.Add(preserveAssemblyFullName);
             }
-
-            string preserveAssembliesMainfest = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, "PreserveAssembliesMainfest" + ".bytes");
-            GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), preserveAssembliesMainfest);
-            Debug.Log("Copy PreserveAssemblies success.");
+            if (assembliesMainfest.Count > 0)
+            {
+                string preserveAssembliesMainfest = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, "PreserveAssembliesMainfest" + ".bytes");
+                GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), preserveAssembliesMainfest);
+                Debug.Log("Copy PreserveAssemblies success.");
+            }
             assembliesMainfest.Clear();
 
             // Copy AOTAssemblies
@@ -113,11 +113,13 @@ namespace Game.Editor.BuildPipeline
                 File.Copy(oriFileName, desFileName, true);
                 assembliesMainfest.Add(aotAssemblyFullName);
             }
-            Debug.Log("Copy AOTAssemblies success.");
 
-            string aotAssembliesMainfest = Path.Combine(GameSetting.Instance.AOTAssembliesPath, "AOTMetadataMainfest" + ".bytes");
-            GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), aotAssembliesMainfest);
-            AssetDatabase.SaveAssets();
+            if (assembliesMainfest.Count > 0)
+            {
+                string aotAssembliesMainfest = Path.Combine(GameSetting.Instance.AOTAssembliesPath, "AOTMetadataMainfest" + ".bytes");
+                GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), aotAssembliesMainfest);
+                Debug.Log("Copy AOTAssemblies success.");
+            }
             AssetDatabase.Refresh();
         }
     }

@@ -22,7 +22,7 @@ MonoBehaviour:
   AppOutput: F:/Project/Unity/Work/AppOutput
   BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0
-  InternalResourceVersion: 0
+  InternalResourceVersion: 4
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: http://192.168.1.102/CDN/{0}/{1}/{2}
   BuildInfo:
@@ -32,15 +32,19 @@ MonoBehaviour:
     MacOSAppUrl: http://192.168.1.102/MacOSApp
     IOSAppUrl: http://192.168.1.102/IOSApp
     AndroidAppUrl: http://192.168.1.102/CDN/AndroidApp/Game.apk
-  HotupdateDllPath: Assets/Game/HybridCLRData/HotUpdate
-  HotUpdateAssemblyDefinition: {fileID: 5897886265953266890, guid: 1b482ecb56af90e4188a38330b70f1e0, type: 3}
-  AOtDllPath: Assets/Game/HybridCLRData/AOT
-  AOTDllNames:
-  - DEngine.dll
-  - DEngine.Runtime.dll
-  - mscorlib.dll
-  - UniTask.dll
-  - UnityEngine.CoreModule.dll
+  HotupdateAssembliesPath: Assets/Game/HybridCLRData/HotUpdate
+  HotUpdateAssemblies:
+  - Game.Update
+  AOTAssembliesPath: Assets/Game/HybridCLRData/AOT
+  AOTAssemblies:
+  - DEngine
+  - DEngine.Runtime
+  - mscorlib
+  - System
+  - System.Core
+  - UniTask
+  - UnityEngine.CoreModule
+  PreserveAssembliesPath: Assets/Game/HybridCLRData/Preserve
+  PreserveAssemblies: []
   VirtualServerAddress: F:/DvalmiService/CDN
   AutoCopyToVirtualServer: 1
-  PreserveHotfixDllNames: []

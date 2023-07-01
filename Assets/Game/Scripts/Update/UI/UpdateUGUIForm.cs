@@ -175,7 +175,7 @@ namespace Game.Update
         {
             int oldDepth = Depth;
             base.OnDepthChanged(uiGroupDepth, depthInUIGroup);
-            int deltaDepth = UGuiGroupHelper.DepthFactor * uiGroupDepth + DepthFactor * depthInUIGroup - oldDepth + OriginalDepth;
+            int deltaDepth = UGUIGroupHelper.DepthFactor * uiGroupDepth + DepthFactor * depthInUIGroup - oldDepth + OriginalDepth;
             GetComponentsInChildren(true, m_CachedCanvasContainer);
             for (int i = 0; i < m_CachedCanvasContainer.Count; i++)
             {
