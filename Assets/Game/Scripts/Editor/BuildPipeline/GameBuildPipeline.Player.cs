@@ -1,13 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
-using System.Reflection;
 using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -19,6 +15,7 @@ namespace Game.Editor.BuildPipeline
             builtinData.BuildInfo = GameSetting.Instance.BuildInfo;
             EditorUtility.SetDirty(builtinData);
             AssetDatabase.SaveAssets();
+            Debug.Log("Save builtinData success");
         }
 
         public static void BuildPlayer(bool aotGeneric)

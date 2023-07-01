@@ -56,6 +56,11 @@ namespace Game.Editor.BuildPipeline
             {
                 IOUtility.Delete(GameSetting.Instance.VirtualServerAddress);
             }
+
+            if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))
+            {
+                IOUtility.Delete(Application.streamingAssetsPath);
+            }
             AssetDatabase.Refresh();
             Debug.Log("Clear success");
         }

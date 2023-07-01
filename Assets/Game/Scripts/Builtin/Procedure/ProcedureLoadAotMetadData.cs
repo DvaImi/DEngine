@@ -33,7 +33,7 @@ namespace Game
                 return;
             }
 
-            ChangeState<ProcedureLoadHotfix>(procedureOwner);
+            ChangeState<ProcedureLoadHotUpdate>(procedureOwner);
         }
 
         /// <summary>

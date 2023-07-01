@@ -25,7 +25,9 @@ namespace Game.Editor.BuildPipeline
         private bool m_FoldoutBuildConfigGroup = false;
         private bool m_FoldoutBuiltInfoGroup = false;
         private bool m_FoldoutSimulatorGroup = false;
-        private bool m_FoldoutPatchAOTDllGroup = false;
+        private bool m_FoldoutHotUpdateAssembliesGroup = false;
+        private bool m_FoldoutPreserveAssembliesGroup = false;
+        private bool m_FoldoutPatchAOTAssembliesGroup = false;
         private Vector2 m_ScrollPosition;
 
         [MenuItem("Game/BuildPipeline", false, 0)]
@@ -77,16 +79,11 @@ namespace Game.Editor.BuildPipeline
                 {
                     GameSetting.Instance.SaveSetting();
                     GameBuildPipeline.SaveBuildInfo();
-                    Debug.Log("Save success");
+                    GameBuildPipeline.SaveHybridCLR();
+                    GameBuildPipeline.RefreshResourceCollection();
                 }
             }
             GUILayout.EndHorizontal();
-
-            if (GUI.changed)
-            {
-                GameSetting.Instance.SaveSetting();
-                Repaint();
-            }
         }
 
         private void Update()
@@ -138,55 +135,144 @@ namespace Game.Editor.BuildPipeline
             }
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);
+
             EditorGUILayout.BeginHorizontal();
             {
-                GameSetting.Instance.HotupdateDllPath = EditorGUILayout.TextField("HotUpdate Dll Path", GameSetting.Instance.HotupdateDllPath);
+                GameSetting.Instance.HotupdateAssembliesPath = EditorGUILayout.TextField("HotUpdate Dll Path", GameSetting.Instance.HotupdateAssembliesPath);
                 Rect hotUpdateRect = GUILayoutUtility.GetLastRect();
                 if (PathUtility.DropPath(hotUpdateRect, out string hotDatePath))
                 {
-                    if (hotDatePath != GameSetting.Instance.HotupdateDllPath)
+                    if (hotDatePath != GameSetting.Instance.HotupdateAssembliesPath)
                     {
-                        GameSetting.Instance.HotupdateDllPath = hotDatePath;
+                        GameSetting.Instance.HotupdateAssembliesPath = hotDatePath;
                     }
                 }
 
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.HotupdateDllPath));
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.HotupdateAssembliesPath));
                 }
             }
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);
-            EditorGUILayout.BeginHorizontal();
+
+            m_FoldoutHotUpdateAssembliesGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutHotUpdateAssembliesGroup, "HotUpdateAssemblies");
             {
-                GameSetting.Instance.HotUpdateAssemblyDefinition = (AssemblyDefinitionAsset)EditorGUILayout.ObjectField("HotUpdateAssembly", GameSetting.Instance.HotUpdateAssemblyDefinition, typeof(AssemblyDefinitionAsset), false);
+                if (m_FoldoutHotUpdateAssembliesGroup)
+                {
+                    foreach (var item in GameSetting.Instance.HotUpdateAssemblies)
+                    {
+                        EditorGUILayout.TextField(item);
+                    }
+
+                    GUILayout.Space(5f);
+                    EditorGUILayout.BeginHorizontal("box");
+                    {
+                        if (GUILayout.Button("Editor"))
+                        {
+                            SelectAssembly assemblyEditor = GetWindow<SelectAssembly>();
+
+                            void Save(string[] hotUpdateAssemblies)
+                            {
+                                GameSetting.Instance.HotUpdateAssemblies = hotUpdateAssemblies.Select(item => item.Replace(".dll", null)).ToArray();
+                                GameSetting.Instance.SaveSetting();
+                                Repaint();
+                            }
+
+                            bool WherePredicate(Assembly assembly)
+                            {
+                                return !assembly.FullName.Contains("Editor");
+                            }
+                            HashSet<string> hasSelect = new(GameSetting.Instance.HotUpdateAssemblies.Select(item => item.Replace(".dll", null)));
+                            assemblyEditor.Open(hasSelect, Save, WherePredicate);
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
             }
-            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
             GUILayout.Space(5f);
             EditorGUILayout.BeginHorizontal();
             {
-                GameSetting.Instance.AOtDllPath = EditorGUILayout.TextField("AOT Dll Path", GameSetting.Instance.AOtDllPath);
+                GameSetting.Instance.PreserveAssembliesPath = EditorGUILayout.TextField("PreserveDll Path", GameSetting.Instance.PreserveAssembliesPath);
+                Rect preservePathRect = GUILayoutUtility.GetLastRect();
+                if (PathUtility.DropPath(preservePathRect, out string preservePath))
+                {
+                    if (preservePath != GameSetting.Instance.PreserveAssembliesPath)
+                    {
+                        GameSetting.Instance.PreserveAssembliesPath = preservePath;
+                    }
+                }
+
+                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                {
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.PreserveAssembliesPath));
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            m_FoldoutPreserveAssembliesGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutPreserveAssembliesGroup, "PreserveAssemblies");
+            {
+                if (m_FoldoutPreserveAssembliesGroup)
+                {
+                    foreach (var item in GameSetting.Instance.PreserveAssemblies)
+                    {
+                        EditorGUILayout.TextField(item);
+                    }
+
+                    GUILayout.Space(5f);
+                    EditorGUILayout.BeginHorizontal("box");
+                    {
+                        if (GUILayout.Button("Editor"))
+                        {
+                            SelectAssembly assemblyEditor = GetWindow<SelectAssembly>();
+
+                            void Save(string[] preserveDll)
+                            {
+                                GameSetting.Instance.PreserveAssemblies = preserveDll.Select(item => item.Replace(".dll", null)).ToArray();
+                                GameSetting.Instance.SaveSetting();
+                                Repaint();
+                            }
+
+                            bool WherePredicate(Assembly assembly)
+                            {
+                                return !assembly.FullName.Contains("Editor");
+                            }
+                            HashSet<string> hasSelect = new(GameSetting.Instance.PreserveAssemblies.Select(item => item.Replace(".dll", null)));
+                            assemblyEditor.Open(hasSelect, Save, WherePredicate);
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
+            {
+                GameSetting.Instance.AOTAssembliesPath = EditorGUILayout.TextField("AOT Dll Path", GameSetting.Instance.AOTAssembliesPath);
                 Rect aotPathRect = GUILayoutUtility.GetLastRect();
                 if (PathUtility.DropPath(aotPathRect, out string aotPath))
                 {
-                    if (aotPath != GameSetting.Instance.AOtDllPath)
+                    if (aotPath != GameSetting.Instance.AOTAssembliesPath)
                     {
-                        GameSetting.Instance.AOtDllPath = aotPath;
+                        GameSetting.Instance.AOTAssembliesPath = aotPath;
                     }
                 }
 
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.AOtDllPath));
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.AOTAssembliesPath));
                 }
             }
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);
-            m_FoldoutPatchAOTDllGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutPatchAOTDllGroup, "PatchAOTDll");
+            m_FoldoutPatchAOTAssembliesGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutPatchAOTAssembliesGroup, "PatchAOTAssemblies");
             {
-                if (m_FoldoutPatchAOTDllGroup)
+                if (m_FoldoutPatchAOTAssembliesGroup)
                 {
-                    foreach (var item in GameSetting.Instance.AOTDllNames)
+                    foreach (var item in GameSetting.Instance.AOTAssemblies)
                     {
                         EditorGUILayout.TextField(item);
                     }
@@ -200,7 +286,7 @@ namespace Game.Editor.BuildPipeline
 
                             void Save(string[] aotdll)
                             {
-                                GameSetting.Instance.AOTDllNames = aotdll;
+                                GameSetting.Instance.AOTAssemblies = aotdll.Select(item => item.Replace(".dll", null)).ToArray();
                                 GameSetting.Instance.SaveSetting();
                                 Repaint();
                             }
@@ -209,7 +295,7 @@ namespace Game.Editor.BuildPipeline
                             {
                                 return !assembly.FullName.Contains("Editor");
                             }
-                            HashSet<string> hasSelect = new(GameSetting.Instance.AOTDllNames.Select(item => item.Replace(".dll", null)));
+                            HashSet<string> hasSelect = new(GameSetting.Instance.AOTAssemblies.Select(item => item.Replace(".dll", null)));
                             assemblyEditor.Open(hasSelect, Save, WherePredicate);
                         }
                     }
@@ -258,7 +344,7 @@ namespace Game.Editor.BuildPipeline
                     GameSetting.Instance.ResourceModeIndex = resourceModeIndex + 1;
                     GameSetting.Instance.SaveSetting();
                 }
-              
+
                 if (GUILayout.Button("Clear", GUILayout.Width(100)))
                 {
                     GameBuildPipeline.ClearBundles();

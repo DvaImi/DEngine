@@ -17,45 +17,45 @@ using Object = UnityEngine.Object;
 
 namespace Game
 {
-    public class ProcedureLoadHotfix : ProcedureBase
+    public class ProcedureLoadHotUpdate : ProcedureBase
     {
-        private static bool m_HasLoadHotfixDll;
-
-        /// <summary>
-        /// 主热更程序集
-        /// </summary>
-        private string m_HotUpdateDllNameMain;
-
+        private static bool m_HasLoadHotUpdateAssemblies;
+        private int m_HotUpdateAssembliesLength;
+        private int m_LoadedHotUpdateAssembly;
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-
+            m_HotUpdateAssembliesLength = 0;
             LoadUpdateMainfest();
         }
 
         private void LoadUpdateMainfest()
         {
-            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRUpdateAsset("UpdataDllMainfest"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateMainfestLoadSuccess)));
+            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRUpdateAsset("HotUpdateAssembliesMainfest"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateMainfestLoadSuccess)));
         }
 
         private void OnUpdateMainfestLoadSuccess(string assetName, object asset, float duration, object userData)
         {
+#if UNITY_EDITOR
+            HotfixLauncher();
+#else
             if (asset is TextAsset updateMainfest)
             {
                 using (Stream stream = new MemoryStream(updateMainfest.bytes))
                 {
                     using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
                     {
-                        m_HotUpdateDllNameMain = binaryReader.ReadString();
-                        Log.Info("Hybridclr is Ready.");
-#if UNITY_EDITOR
-                        HotfixLauncher();
-#else
-                        LoadHotfixDll();
-#endif
+                        int count = binaryReader.ReadInt32();
+                        m_HotUpdateAssembliesLength = count;
+                        for (int i = 0; i < count; i++)
+                        {
+                            string aotFullName = AssetUtility.GetCLRUpdateAsset(binaryReader.ReadString());
+                            LoadHotfixDll(aotFullName);
+                        }
                     }
                 }
             }
+#endif
         }
 
         private void HotfixLauncher()
@@ -68,15 +68,15 @@ namespace Game
             Object.Instantiate((GameObject)asset);
         }
 
-        private void LoadHotfixDll()
+        private void LoadHotfixDll(string hotUpdateAssemblies)
         {
-            if (m_HasLoadHotfixDll)
+            if (m_HasLoadHotUpdateAssemblies)
             {
                 Log.Info("已经加载过热更新dll ，暂时无法重复加载");
                 HotfixLauncher();
                 return;
             }
-            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRUpdateAsset(m_HotUpdateDllNameMain), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnHotUpdateDllLoadSuccess)));
+            GameEntry.Resource.LoadAsset(hotUpdateAssemblies, new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnHotUpdateDllLoadSuccess)));
         }
 
         private void OnHotUpdateDllLoadSuccess(string assetName, object asset, float duration, object userData)
@@ -86,12 +86,17 @@ namespace Game
                 Assembly hotfixAssembly = Assembly.Load(hotUpdate.bytes);
                 if (hotfixAssembly == null)
                 {
-                    Log.Fatal(Utility.Text.Format("Load hotfix dll {0} is Fail", m_HotUpdateDllNameMain));
+                    Log.Fatal(Utility.Text.Format("Load hotfix dll {0} is Fail", assetName));
                     return;
                 }
-                Log.Info("load hotfix dll OK.");
-                HotfixLauncher();
-                m_HasLoadHotfixDll = true;
+
+                m_LoadedHotUpdateAssembly++;
+                if (m_LoadedHotUpdateAssembly == m_HotUpdateAssembliesLength)
+                {
+                    Log.Info("{0} Load Success.", assetName);
+                    m_HasLoadHotUpdateAssemblies = true;
+                    HotfixLauncher();
+                }
             }
         }
     }

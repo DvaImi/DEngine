@@ -1,77 +1,122 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Game.Editor.ResourceTools;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
+using NUnit.Framework;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
+        public static void SaveHybridCLR()
+        {
+            // !!!preserveHotUpdateAssemblies 并不是预留给HybridCLR 的程序集 而是游戏按需加载的程序集
+            //var union = GameSetting.Instance.HotUpdateAssemblies.Union(GameSetting.Instance.PreserveAssemblies).ToArray();
+            HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
+            HybridCLRSettings.Instance.preserveHotUpdateAssemblies = GameSetting.Instance.PreserveAssemblies;
+            HybridCLRSettings.Save();
+            Debug.Log("Save HybridCLR success");
+        }
         public static void CompileHotfixDll()
         {
-            BuildTarget buildTarget = GameBuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform);
+            BuildTarget buildTarget = GetBuildTarget(GameSetting.Instance.BuildPlatform);
             CompileDllCommand.CompileDll(buildTarget);
             CopyDllAssets(buildTarget);
         }
 
         private static void CopyDllAssets(BuildTarget buildTarget)
         {
-            if (string.IsNullOrEmpty(GameSetting.Instance.HotupdateDllPath))
+            if (string.IsNullOrEmpty(GameSetting.Instance.HotupdateAssembliesPath))
             {
                 Debug.LogError("Directory path is null.");
                 return;
             }
 
-            if (Directory.Exists(GameSetting.Instance.HotupdateDllPath))
+            if (Directory.Exists(GameSetting.Instance.HotupdateAssembliesPath))
             {
-                IOUtility.Delete(GameSetting.Instance.HotupdateDllPath);
+                IOUtility.Delete(GameSetting.Instance.HotupdateAssembliesPath);
             }
             else
             {
-                Directory.CreateDirectory(GameSetting.Instance.HotupdateDllPath);
+                Directory.CreateDirectory(GameSetting.Instance.HotupdateAssembliesPath);
             }
 
-            if (Directory.Exists(GameSetting.Instance.AOtDllPath))
+            if (Directory.Exists(GameSetting.Instance.PreserveAssembliesPath))
             {
-                IOUtility.Delete(GameSetting.Instance.AOtDllPath);
+                IOUtility.Delete(GameSetting.Instance.PreserveAssembliesPath);
             }
             else
             {
-                Directory.CreateDirectory(GameSetting.Instance.AOtDllPath);
+                Directory.CreateDirectory(GameSetting.Instance.PreserveAssembliesPath);
+            }
+
+            if (Directory.Exists(GameSetting.Instance.AOTAssembliesPath))
+            {
+                IOUtility.Delete(GameSetting.Instance.AOTAssembliesPath);
+            }
+            else
+            {
+                Directory.CreateDirectory(GameSetting.Instance.AOTAssembliesPath);
             }
 
 
-            string hotUpdateAssemblyDefinitionFullName = GameSetting.Instance.HotUpdateAssemblyDefinition.name + ".dll";
-            //Copy Hotfix Dll
-            string oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), hotUpdateAssemblyDefinitionFullName);
+            string desFileName;
+            string oriFileName;
 
-            //加bytes 后缀让Unity识别为TextAsset 文件
-            string desFileName = Path.Combine(GameSetting.Instance.HotupdateDllPath, hotUpdateAssemblyDefinitionFullName + ".bytes");
-            File.Copy(oriFileName, desFileName, true);
-            string updataDllMainfest = Path.Combine(GameSetting.Instance.HotupdateDllPath, "UpdataDllMainfest" + ".bytes");
-            GameMainfestUitlity.CreatMainfest(hotUpdateAssemblyDefinitionFullName, updataDllMainfest);
-            Debug.Log("Copy hotfix dll success.");
+            List<string> assembliesMainfest = new List<string>(); 
+            //Copy HotUpdateAssemblies
+            foreach (string hotUpdateAssemblyFullName in GameSetting.Instance.HotUpdateAssemblies)
+            {
+                oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), hotUpdateAssemblyFullName + ".dll");
+                //加bytes 后缀让Unity识别为TextAsset 文件
+                desFileName = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, hotUpdateAssemblyFullName + ".bytes");
+                File.Copy(oriFileName, desFileName, true);
+                assembliesMainfest.Add(hotUpdateAssemblyFullName);
+            }
 
-            // Copy AOT Dll
+            string hotUpdateAssembliesMainfest = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, "HotUpdateAssembliesMainfest" + ".bytes");
+            GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), hotUpdateAssembliesMainfest);
+            Debug.Log("Copy HotUpdateAssemblies success.");
+            assembliesMainfest.Clear();
+
+            //Copy PreserveAssemblies
+            foreach (string preserveAssemblyFullName in GameSetting.Instance.PreserveAssemblies)
+            {
+                oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), preserveAssemblyFullName + ".dll");
+                //加bytes 后缀让Unity识别为TextAsset 文件
+                desFileName = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, preserveAssemblyFullName + ".bytes");
+                File.Copy(oriFileName, desFileName, true);
+                assembliesMainfest.Add(preserveAssemblyFullName);
+            }
+
+            string preserveAssembliesMainfest = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, "PreserveAssembliesMainfest" + ".bytes");
+            GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), preserveAssembliesMainfest);
+            Debug.Log("Copy PreserveAssemblies success.");
+            assembliesMainfest.Clear();
+
+            // Copy AOTAssemblies
             string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
-            foreach (var dllName in GameSetting.Instance.AOTDllNames)
+            foreach (var aotAssemblyFullName in GameSetting.Instance.AOTAssemblies)
             {
-                oriFileName = Path.Combine(aotDllPath, dllName);
+                oriFileName = Path.Combine(aotDllPath, aotAssemblyFullName + ".dll");
                 if (!File.Exists(oriFileName))
                 {
-                    Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOT dll.");
+                    Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOTAssemblies.");
                     continue;
                 }
-                desFileName = Path.Combine(GameSetting.Instance.AOtDllPath, dllName + ".bytes");
+                desFileName = Path.Combine(GameSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
+                assembliesMainfest.Add(aotAssemblyFullName);
             }
+            Debug.Log("Copy AOTAssemblies success.");
 
-            Debug.Log("Copy Aot dll success.");
-
-            string aotMainfest = Path.Combine(GameSetting.Instance.AOtDllPath, "AOTMetadataMainfest" + ".bytes");
-            GameMainfestUitlity.CreatMainfest(GameSetting.Instance.AOTDllNames, aotMainfest);
+            string aotAssembliesMainfest = Path.Combine(GameSetting.Instance.AOTAssembliesPath, "AOTMetadataMainfest" + ".bytes");
+            GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), aotAssembliesMainfest);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

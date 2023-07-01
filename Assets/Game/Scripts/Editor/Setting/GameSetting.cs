@@ -5,6 +5,7 @@
 // 版 本：1.0
 // ========================================================
 using UnityEditorInternal;
+using UnityEngine;
 
 namespace Game.Editor
 {
@@ -71,19 +72,27 @@ namespace Game.Editor
         /// <summary>
         /// 热更程序集生成路径
         /// </summary>
-        public string HotupdateDllPath = "Assets/Game/HybridCLRDate/HotUpdate";
+        public string HotupdateAssembliesPath = "Assets/Game/HybridCLRDate/HotUpdate";
         /// <summary>
         /// 主热更程序集
         /// </summary>
-        public AssemblyDefinitionAsset HotUpdateAssemblyDefinition;
+        public string[] HotUpdateAssemblies = new string[] { };
         /// <summary>
         /// AOT 元数据生成路径
         /// </summary>
-        public string AOtDllPath = "Assets/Game/HybridCLRData/AOT";
+        public string AOTAssembliesPath = "Assets/Game/HybridCLRData/AOT";
         /// <summary>
         /// AOT 程序集
         /// </summary>
-        public string[] AOTDllNames = { "mscorlib.dll", "System.dll", "System.Core.dll" };
+        public string[] AOTAssemblies = { "mscorlib.dll", "System.dll", "System.Core.dll" };
+        /// <summary>
+        /// 其他预留程序集生成路径
+        /// </summary>
+        public string PreserveAssembliesPath = "Assets/Game/HybridCLRData/Preserve";
+        /// <summary>
+        /// 其他预留按需加载程序集
+        /// </summary>
+        public string[] PreserveAssemblies = new string[] { };
         /// <summary>
         /// 虚拟服务器地址
         /// </summary>
@@ -92,14 +101,10 @@ namespace Game.Editor
         /// 自动拷贝最新资源包
         /// </summary>
         public bool AutoCopyToVirtualServer;
-
-        /// <summary>
-        /// 其他预留热更新程序集
-        /// </summary>
-        public string[] PreserveHotfixDllNames;
         public void SaveSetting()
         {
             Save();
+            Debug.Log("Save setting success");
         }
     }
 }
