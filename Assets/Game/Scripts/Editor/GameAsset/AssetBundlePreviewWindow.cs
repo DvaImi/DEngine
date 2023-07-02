@@ -11,10 +11,11 @@ namespace Game.Editor.ResourceTools
     public class AssetBundlePreviewWindow : EditorWindow
     {
         public const float GAP = 2;
-        private  AssetBundlePreview m_AssetBundlePreview;
+        private AssetBundlePreview m_AssetBundlePreview;
         private bool[] m_AssetsFoldouts;
         private GUIStyle m_MidLabelStyle;
         private GUIStyle m_ToolBarLabelStyle;
+        private Vector2 m_ScrollPosition;
 
         [MenuItem("Game/AssetPreview", false, 2)]
         internal static void Open()
@@ -52,45 +53,47 @@ namespace Game.Editor.ResourceTools
             {
                 return;
             }
-
-            GUILayout.BeginVertical();
+            m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, false, false);
             {
-                // 绘制 assetPreviews 中的每个 AssetPreview
-                for (int i = 0; i < m_AssetBundlePreview.assetPreviews.Count; i++)
+                GUILayout.BeginVertical();
                 {
-                    AssetPreview assetPreview = m_AssetBundlePreview.assetPreviews[i];
+                    // 绘制 assetPreviews 中的每个 AssetPreview
+                    for (int i = 0; i < m_AssetBundlePreview.assetPreviews.Count; i++)
+                    {
+                        AssetPreview assetPreview = m_AssetBundlePreview.assetPreviews[i];
 
-                    GUILayout.BeginHorizontal();
-                    {
-                        // 绘制 assetPath 作为折叠按钮
-                        m_AssetsFoldouts[i] = EditorGUILayout.Foldout(m_AssetsFoldouts[i], assetPreview.assetPath);
-                        EditorGUILayout.TextField(assetPreview.groups, EditorStyles.boldLabel, GUILayout.Width(200));
-                        EditorGUILayout.LabelField(assetPreview.Count.ToString(), m_MidLabelStyle, GUILayout.Width(80));
-                        EditorGUILayout.LabelField(StringUtility.GetByteLengthString(assetPreview.Length), GUILayout.Width(80));
-                    }
-                    GUILayout.EndHorizontal();
-                    // 如果折叠按钮展开，则绘制 assets
-                    if (m_AssetsFoldouts[i])
-                    {
-                        EditorGUI.indentLevel++;
-                        foreach (Object obj in assetPreview.assets)
+                        GUILayout.BeginHorizontal();
                         {
-                            string assetPath = AssetDatabase.GetAssetPath(obj);
-                            GUILayout.BeginHorizontal();
-                            {
-                                EditorGUILayout.ObjectField(obj, typeof(Object), false, GUILayout.Width(400));
-                                EditorGUILayout.LabelField(StringUtility.GetByteLengthString(GameEditorUtility.CalculateAssetSize(obj)), GUILayout.Width(80));
-                            }
-                            GUILayout.EndHorizontal();
+                            // 绘制 assetPath 作为折叠按钮
+                            m_AssetsFoldouts[i] = EditorGUILayout.Foldout(m_AssetsFoldouts[i], assetPreview.assetPath);
+                            EditorGUILayout.TextField(assetPreview.groups, m_MidLabelStyle, GUILayout.Width(200));
+                            EditorGUILayout.LabelField(assetPreview.Count.ToString(), m_MidLabelStyle, GUILayout.Width(80));
+                            EditorGUILayout.LabelField(StringUtility.GetByteLengthString(assetPreview.Length), m_MidLabelStyle, GUILayout.Width(80));
                         }
-                        EditorGUI.indentLevel--;
+                        GUILayout.EndHorizontal();
+                        // 如果折叠按钮展开，则绘制 assets
+                        if (m_AssetsFoldouts[i])
+                        {
+                            EditorGUI.indentLevel++;
+                            foreach (Object obj in assetPreview.assets)
+                            {
+                                string assetPath = AssetDatabase.GetAssetPath(obj);
+                                GUILayout.BeginHorizontal();
+                                {
+                                    EditorGUILayout.ObjectField(obj, typeof(Object), false, GUILayout.Width(400));
+                                    EditorGUILayout.LabelField(StringUtility.GetByteLengthString(GameEditorUtility.CalculateAssetSize(obj)), GUILayout.Width(80));
+                                }
+                                GUILayout.EndHorizontal();
+                            }
+                            EditorGUI.indentLevel--;
+                        }
+
+                        GUILayout.Space(5);
                     }
-
-                    GUILayout.Space(5);
                 }
+                GUILayout.EndVertical();
             }
-            GUILayout.EndVertical();
-
+            EditorGUILayout.EndScrollView();
         }
 
         private static AssetBundlePreview GetAssetBundlePreview()

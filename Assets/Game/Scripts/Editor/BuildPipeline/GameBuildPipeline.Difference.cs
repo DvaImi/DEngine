@@ -78,9 +78,9 @@ namespace Game.Editor.BuildPipeline
             CopyPackageVersionList(currentVersionPackagePath, lastPackageVersionOutpuPath, filteredPackageFiles);
             CopyPackedVersionList(currentVersionPackedPath, lastPackedVersionOutputPath, filteredPackedFiles);
 
-            if (GameSetting.Instance.AutoCopyToVirtualServer)
+            if (GameSetting.Instance.AutoCopyToFileServer)
             {
-                PutToLocalSimulator(platform, currentVersionFullPath);
+                PutToLocalFileServer(platform, currentVersionFullPath);
             }
 
             int resourceMode = GameSetting.Instance.ResourceModeIndex;

@@ -88,7 +88,7 @@ namespace Game.Editor.BuildPipeline
         {
             if (platform == Platform.Windows || platform == Platform.Windows64)
             {
-                string virtualFilePath = GameSetting.Instance.VirtualServerAddress + "/" + platform.ToString() + "App/" + platform.ToString();
+                string virtualFilePath = GameSetting.Instance.FileServerAddress + "/" + platform.ToString() + "App/" + platform.ToString();
                 IOUtility.CreateDirectoryIfNotExists(virtualFilePath);
 
                 string sourceFileName = GameSetting.Instance.AppOutput + "/" + platform.ToString();
@@ -118,7 +118,7 @@ namespace Game.Editor.BuildPipeline
 
             else if (platform == Platform.Android)
             {
-                string virtualFilePath = GameSetting.Instance.VirtualServerAddress + "/" + platform.ToString() + "App/";
+                string virtualFilePath = GameSetting.Instance.FileServerAddress + "/" + platform.ToString() + "App/";
                 IOUtility.CreateDirectoryIfNotExists(virtualFilePath);
                 string sourceFileName = Path.Combine(GameSetting.Instance.AppOutput, platform.ToString(), Application.productName + ".apk");
                 File.Copy(sourceFileName, virtualFilePath + "/" + Application.productName + ".apk", true);

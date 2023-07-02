@@ -7,14 +7,19 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        public static void PutToLocalSimulator(Platform platform, string outputFullPath)
+        /// <summary>
+        /// 上传到本地资源服务器
+        /// </summary>
+        /// <param name="platform"></param>
+        /// <param name="outputFullPath"></param>
+        public static void PutToLocalFileServer(Platform platform, string outputFullPath)
         {
-            if (!GameSetting.Instance.AutoCopyToVirtualServer)
+            if (!GameSetting.Instance.AutoCopyToFileServer)
             {
                 return;
             }
 
-            string virtualServerAddress = GameSetting.Instance.VirtualServerAddress;
+            string virtualServerAddress = GameSetting.Instance.FileServerAddress;
 
             if (!Directory.Exists(virtualServerAddress))
             {

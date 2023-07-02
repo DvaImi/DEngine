@@ -52,9 +52,9 @@ namespace Game.Editor.BuildPipeline
                 GameSetting.Instance.SaveSetting();
             }
 
-            if (Directory.Exists(GameSetting.Instance.VirtualServerAddress))
+            if (Directory.Exists(GameSetting.Instance.FileServerAddress))
             {
-                IOUtility.Delete(GameSetting.Instance.VirtualServerAddress);
+                IOUtility.Delete(GameSetting.Instance.FileServerAddress);
             }
 
             if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))

@@ -58,9 +58,9 @@ namespace Game.Editor
             {
                 return;
             }
-            if (GameSetting.Instance.AutoCopyToVirtualServer)
+            if (GameSetting.Instance.AutoCopyToFileServer)
             {
-                BuildPipeline.GameBuildPipeline.PutToLocalSimulator(platform, outputFullPath);
+                BuildPipeline.GameBuildPipeline.PutToLocalFileServer(platform, outputFullPath);
             }
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
             string sourcePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;

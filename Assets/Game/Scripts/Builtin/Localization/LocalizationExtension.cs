@@ -15,6 +15,7 @@ namespace Game
         public static async UniTask<bool> ChangeLanguage(this LocalizationComponent localization, Language language)
         {
             localization.RemoveAllRawStrings();
+            GameEntry.BuiltinData.InitLanguageBuiltin();
             Language result = await localization.LoadDictionaryAsync(language);
             if (result == language)
             {
