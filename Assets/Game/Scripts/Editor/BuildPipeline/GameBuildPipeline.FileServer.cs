@@ -52,5 +52,17 @@ namespace Game.Editor.BuildPipeline
 
             Debug.Log("Copy Bundles to virtualServer success");
         }
+
+        /// <summary>
+        /// 上传到远端服务器
+        /// </summary>
+        /// <param name="platform"></param>
+        /// <param name="outputFullPath"></param>
+        /// <param name="fileNames"></param>
+        public static void PutToRemoteFileServer(Platform platform, string outputFullPath, string[] fileNames)
+        {
+
+
+        }
     }
 }

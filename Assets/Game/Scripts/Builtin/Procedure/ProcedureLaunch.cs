@@ -42,5 +42,11 @@ namespace Game
                 ChangeState<ProcedureCheckVersion>(procedureOwner);
             }
         }
+
+        protected override void OnDestroy(IFsm<IProcedureManager> procedureOwner)
+        {
+            base.OnDestroy(procedureOwner);
+            AwaitableUtility.Unsubscribe();
+        }
     }
 }

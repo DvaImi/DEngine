@@ -7,7 +7,8 @@ namespace Game
     public static class LocalizationExtension
     {
         /// <summary>
-        /// 修改系统本地化语言
+        /// 修改本地化语言
+        /// 非变体资源
         /// </summary>
         /// <param name="localization"></param>
         /// <param name="language">将要修改的语言</param>

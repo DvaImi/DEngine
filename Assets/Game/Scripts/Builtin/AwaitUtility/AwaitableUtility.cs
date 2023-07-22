@@ -54,6 +54,38 @@ namespace Game
 
             eventComponent.Subscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
             eventComponent.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
+        } 
+        
+        public static void Unsubscribe()
+        {
+            EventComponent eventComponent = DEngine.Runtime.GameEntry.GetComponent<EventComponent>();
+
+            if (eventComponent == null)
+            {
+                Log.Fatal("Event manager is invalid.");
+                return;
+            }
+
+            eventComponent.Unsubscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
+            eventComponent.Unsubscribe(OpenUIFormFailureEventArgs.EventId, OnOpenUIFormFailure);
+
+            eventComponent.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
+            eventComponent.Unsubscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
+
+            eventComponent.Unsubscribe(LoadSceneSuccessEventArgs.EventId, OnLoadSceneSuccess);
+            eventComponent.Unsubscribe(LoadSceneFailureEventArgs.EventId, OnLoadSceneFailure);
+
+            eventComponent.Unsubscribe(UnloadSceneSuccessEventArgs.EventId, OnUnloadSceneSuccess);
+            eventComponent.Unsubscribe(UnloadSceneFailureEventArgs.EventId, OnUnloadSceneFailure);
+
+            eventComponent.Unsubscribe(WebRequestSuccessEventArgs.EventId, OnWebRequestSuccess);
+            eventComponent.Unsubscribe(WebRequestFailureEventArgs.EventId, OnWebRequestFailure);
+
+            eventComponent.Unsubscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
+            eventComponent.Unsubscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
+
+            eventComponent.Unsubscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
+            eventComponent.Unsubscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
         }
 
 
@@ -107,7 +139,6 @@ namespace Game
             entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
             return result.Task;
         }
-
 
         private static void OnShowEntitySuccess(object sender, GameEventArgs e)
         {
@@ -283,21 +314,12 @@ namespace Game
                 return null;
             }
 
-            T[] assets = new T[assetName.Length];
-            UniTask<T>[] tasks = new UniTask<T>[assets.Length];
+            UniTask<T>[] tasks = new UniTask<T>[assetName.Length];
             for (int i = 0; i < tasks.Length; i++)
             {
                 tasks[i] = resourceComponent.LoadAssetAsync<T>(assetName[i]);
             }
-
-            await UniTask.WhenAll(tasks);
-
-            for (int i = 0; i < assets.Length; i++)
-            {
-                assets[i] = tasks[i].GetAwaiter().GetResult();
-            }
-
-            return assets;
+            return await UniTask.WhenAll(tasks);
         }
 
         #endregion

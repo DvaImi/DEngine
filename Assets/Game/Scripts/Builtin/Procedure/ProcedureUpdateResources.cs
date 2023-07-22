@@ -89,7 +89,7 @@ namespace Game
                 currentTotalUpdateLength += m_UpdateLengthData[i].Length;
             }
             float progressTotal = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
-            string descriptionText = GameEntry.Localization.GetString("UpdateResource.Tips", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), StringUtility.GetByteLengthString(currentTotalUpdateLength), StringUtility.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("F2"), StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
+            string descriptionText = GameEntry.Localization.GetString("UpdateResource.Tips", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), StringUtility.GetByteLengthString(currentTotalUpdateLength), StringUtility.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("P2"), StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
             descriptionText += "\n";
             m_LastUpdateTime = Time.time;
             int needTime = (int)((m_UpdateTotalCompressedLength - currentTotalUpdateLength) / GameEntry.Download.CurrentSpeed);

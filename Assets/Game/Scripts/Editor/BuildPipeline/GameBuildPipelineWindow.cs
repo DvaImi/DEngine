@@ -98,6 +98,7 @@ namespace Game.Editor.BuildPipeline
             {
                 m_BeginBuildResources = false;
                 GameBuildPipeline.BuildBundle(GameSetting.Instance.Difference);
+                // GameBuildPipeline.BuildBundleWithUniTask(GameSetting.Instance.Difference);
             }
 
             if (m_IsAotGeneric)
@@ -330,12 +331,9 @@ namespace Game.Editor.BuildPipeline
 
                 bool canDifference = GameBuildPipeline.CanDifference();
                 GUI.enabled = canDifference;
-                GameSetting.Instance.Difference = EditorGUILayout.ToggleLeft("Difference", GameSetting.Instance.Difference, GUILayout.Width(120));
+                GameSetting.Instance.Difference = canDifference && EditorGUILayout.ToggleLeft("Difference", GameSetting.Instance.Difference, GUILayout.Width(120));
                 GUI.enabled = true;
-                if (!canDifference)
-                {
-                    GameSetting.Instance.Difference = false;
-                }
+              
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
                 int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameBuildPipeline.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)

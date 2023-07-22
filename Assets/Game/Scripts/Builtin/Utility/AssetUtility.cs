@@ -66,7 +66,7 @@
 
         public static string GetCLRLanuchAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/HybridCLRData/{0}.{1}", assetName, "prefab");
+            return DEngine.Utility.Text.Format("Assets/Game/HybridCLRData/Luncher/{0}.{1}", assetName, "prefab");
         }
     }
 }

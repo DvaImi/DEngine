@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using DEngine;
 using DEngine.Editor.ResourceTools;
@@ -23,22 +22,8 @@ namespace Game.Editor.BuildPipeline
 
         public static void BuildBundle(bool difference = false)
         {
-            RemoveUnknownAssets();
-            RefreshResourceCollection();
-            GameSetting.Instance.SaveSetting();
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
-            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            OnPreprocess();
             BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), GameSetting.Instance.BundlesOutput, difference);
-            stopwatch.Stop();
-            Debug.Log($"资源包构建成功:耗时:{stopwatch.Elapsed.Hours}时{stopwatch.Elapsed.Minutes}分{stopwatch.Elapsed.Seconds}秒");
-            if (GameSetting.Instance.ForceUpdateGame)
-            {
-                Debug.Log($"<color=#1E90FF>[DEngine] ►</color> " + "强制更新资源版本构建完成,打包新版本app时，务必更新版本号，避免冲突!!!");
-            }
         }
 
         public static void ClearBundles()
@@ -150,6 +135,18 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
+        private static void OnPreprocess()
+        {
+            RemoveUnknownAssets();
+            RefreshResourceCollection();
+            GameSetting.Instance.SaveSetting();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
+            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
+        }
+
         private static void GetBuildMessage(ResourceBuilderController builderController, out string message, out MessageType messageType)
         {
             message = string.Empty;
@@ -238,6 +235,10 @@ namespace Game.Editor.BuildPipeline
                 else
                 {
                     Debug.LogWarning("Save configuration failure.");
+                }
+                if (GameSetting.Instance.ForceUpdateGame)
+                {
+                    Debug.Log($"<color=#1E90FF>[DEngine] ►</color> " + "强制更新资源版本构建完成,打包新版本app时，务必更新版本号，避免冲突!!!");
                 }
             }
             else
