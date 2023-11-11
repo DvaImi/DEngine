@@ -3,6 +3,7 @@ using System.IO;
 using Game.Editor.ResourceTools;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
+using HybridCLR.Editor.Settings;
 using UnityEditor;
 using UnityEngine;
 

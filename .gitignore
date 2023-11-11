@@ -74,3 +74,5 @@ crashlytics-build.properties
 HybridCLRData/hybridclr_repo/
 HybridCLRData/il2cpp_plus_repo/
 HybridCLRData
+HotUpdate
+AOT

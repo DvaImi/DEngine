@@ -60,7 +60,7 @@ namespace Game.Editor
             }
             if (GameSetting.Instance.AutoCopyToFileServer)
             {
-                BuildPipeline.GameBuildPipeline.PutToLocalFileServer(platform, outputFullPath);
+                BuildPipeline.GameBuildPipeline.PutToLocalFileServer(platform, outputPackedPath);
             }
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
             string sourcePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;

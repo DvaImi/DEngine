@@ -542,5 +542,5 @@ MonoBehaviour:
     m_RichText: 0
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
-    m_LineSpacing: 10
-  m_Text: "\u66F4\u65B0\u8FDB\u5EA6"
+    m_LineSpacing: 1
+  m_Text: 

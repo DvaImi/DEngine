@@ -16,13 +16,13 @@ MonoBehaviour:
   ResourceCollectionConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Scripts/Editor/GameAsset/Configs/ResourceBuilder.xml
-  BuildPlatform: 5
-  ResourceModeIndex: 2
+  BuildPlatform: 0
+  ResourceModeIndex: 1
   Difference: 0
   AppOutput: F:/Project/Unity/Work/AppOutput
   BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0
-  InternalResourceVersion: 4
+  InternalResourceVersion: 0
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: http://192.168.1.102/CDN/{0}/{1}/{2}
   BuildInfo:
@@ -46,5 +46,5 @@ MonoBehaviour:
   - UnityEngine.CoreModule
   PreserveAssembliesPath: Assets/Game/HybridCLRData/Preserve
   PreserveAssemblies: []
-  VirtualServerAddress: F:/DvalmiService/CDN
-  AutoCopyToVirtualServer: 1
+  FileServerAddress: F:/DvalmiService/CDN
+  AutoCopyToFileServer: 1

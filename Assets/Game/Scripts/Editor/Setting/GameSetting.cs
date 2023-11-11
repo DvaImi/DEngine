@@ -4,7 +4,6 @@
 // 创建时间：2023-04-15 11:24:21
 // 版 本：1.0
 // ========================================================
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace Game.Editor
@@ -96,11 +95,11 @@ namespace Game.Editor
         /// <summary>
         /// 虚拟服务器地址
         /// </summary>
-        public string VirtualServerAddress;
+        public string FileServerAddress;
         /// <summary>
         /// 自动拷贝最新资源包
         /// </summary>
-        public bool AutoCopyToVirtualServer;
+        public bool AutoCopyToFileServer;
         public void SaveSetting()
         {
             Save();

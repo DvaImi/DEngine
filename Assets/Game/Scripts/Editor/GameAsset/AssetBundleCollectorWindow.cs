@@ -308,11 +308,6 @@ namespace Game.Editor.ResourceTools
             Color bc = GUI.backgroundColor;
             GUI.backgroundColor = Color.green;
 
-            if (GUILayout.Button("Preview", GUILayout.Width(100)))
-            {
-                AssetBundlePreviewWindow.Open();
-            }
-
             if (GUILayout.Button(EditorGUIUtility.IconContent("Save"), GUILayout.Width(100)))
             {
                 Save();
