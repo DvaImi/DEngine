@@ -56,6 +56,9 @@
     <type fullname="Game.DataTableExtension" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
   </assembly>
+  <assembly fullname="System">
+    <type fullname="System.Diagnostics.Process" preserve="all" />
+  </assembly>
   <assembly fullname="UniTask">
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
@@ -64,6 +67,7 @@
     <type fullname="Cysharp.Threading.Tasks.YieldAwaitable/Awaiter" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
+    <type fullname="UnityEngine.Application" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
     <type fullname="UnityEngine.Coroutine" preserve="all" />
     <type fullname="UnityEngine.Debug" preserve="all" />

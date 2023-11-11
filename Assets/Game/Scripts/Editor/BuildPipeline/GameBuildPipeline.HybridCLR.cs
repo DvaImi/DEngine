@@ -79,7 +79,7 @@ namespace Game.Editor.BuildPipeline
             {
                 string hotUpdateAssembliesMainfest = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, "HotUpdateAssembliesMainfest" + ".bytes");
                 GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), hotUpdateAssembliesMainfest);
-                Debug.Log("Copy HotUpdateAssemblies success.");
+                Debug.Log($"Copy {buildTarget} HotUpdateAssemblies success.");
             }
             assembliesMainfest.Clear();
 
@@ -96,7 +96,7 @@ namespace Game.Editor.BuildPipeline
             {
                 string preserveAssembliesMainfest = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, "PreserveAssembliesMainfest" + ".bytes");
                 GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), preserveAssembliesMainfest);
-                Debug.Log("Copy PreserveAssemblies success.");
+                Debug.Log($"Copy {buildTarget} PreserveAssemblies success.");
             }
             assembliesMainfest.Clear();
 
@@ -119,7 +119,7 @@ namespace Game.Editor.BuildPipeline
             {
                 string aotAssembliesMainfest = Path.Combine(GameSetting.Instance.AOTAssembliesPath, "AOTMetadataMainfest" + ".bytes");
                 GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), aotAssembliesMainfest);
-                Debug.Log("Copy AOTAssemblies success.");
+                Debug.Log($"Copy {buildTarget} AOTAssemblies success.");
             }
             AssetDatabase.Refresh();
         }

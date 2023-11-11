@@ -62,16 +62,16 @@ namespace Game.Editor.BuildPipeline
             builderController.ProcessingBinary += OnProcessingBinary;
             builderController.ProcessResourceComplete += OnProcessResourceComplete;
             builderController.BuildResourceError += OnBuildResourceError;
-            builderController.Platforms = platform;
-            builderController.OutputDirectory = outputDirectory;
-            builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
-            builderController.RefreshCompressionHelper();
-            builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
-            builderController.RefreshBuildEventHandler();
-            builderController.AdditionalCompressionSelected = true;
-            builderController.Difference = difference;
             if (builderController.Load())
             {
+                builderController.Platforms = platform;
+                builderController.OutputDirectory = outputDirectory;
+                builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
+                builderController.RefreshCompressionHelper();
+                builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
+                builderController.RefreshBuildEventHandler();
+                builderController.AdditionalCompressionSelected = true;
+                builderController.Difference = difference;
                 if (difference)
                 {
                     builderController.ProcessDifferenceComplete += OnPostprocessDifference;

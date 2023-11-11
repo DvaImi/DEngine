@@ -47,4 +47,4 @@ MonoBehaviour:
   PreserveAssembliesPath: Assets/Game/HybridCLRData/Preserve
   PreserveAssemblies: []
   FileServerAddress: F:/DvalmiService/CDN
-  AutoCopyToFileServer: 1
+  AutoCopyToFileServer: 0
