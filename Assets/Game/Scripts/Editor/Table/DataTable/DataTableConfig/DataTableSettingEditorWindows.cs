@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using DEngine.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -201,7 +202,7 @@ namespace Game.Editor.DataTableTools
 
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
+                    OpenFolder.Execute(content);
                 }
             }
             EditorGUILayout.EndHorizontal();
