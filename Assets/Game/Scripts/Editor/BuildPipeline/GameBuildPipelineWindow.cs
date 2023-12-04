@@ -497,6 +497,12 @@ namespace Game.Editor.BuildPipeline
                 {
                     DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
                 }
+
+                if (GUILayout.Button("Clear",GUILayout.Width(80f)))
+                {
+                    IOUtility.ClearFolder(GameSetting.Instance.AppOutput);
+                    Debug.Log($"Clear{GameSetting.Instance.AppOutput} success !");
+                }
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
