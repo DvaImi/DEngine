@@ -7,5 +7,6 @@ namespace Game
 {
     public static class WebRequestExtension
     {
+        
     }
 }

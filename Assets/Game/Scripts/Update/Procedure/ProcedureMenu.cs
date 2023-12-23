@@ -1,4 +1,5 @@
 ﻿using DEngine.Procedure;
+using DEngine.Runtime;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
 namespace Game.Update
@@ -8,6 +9,7 @@ namespace Game.Update
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
+            Log.Info($"welcome {GameEntry.Localization.GetString("Game.Name")}");
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

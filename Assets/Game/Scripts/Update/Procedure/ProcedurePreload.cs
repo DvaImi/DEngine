@@ -26,7 +26,6 @@ namespace Game.Update
             GameEntry.Event.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
 
             m_LoadedFlag.Clear();
-
             PreloadResources();
         }
 
@@ -54,17 +53,17 @@ namespace Game.Update
                 }
             }
 
-            procedureOwner.SetData<VarInt32>("NextSceneId", GameEntry.Config.GetInt("Scene.Menu"));
-
-            ChangeState<ProcedureChangeScene>(procedureOwner);
+            ChangeState<ProcedureMenu>(procedureOwner);
         }
 
         private void PreloadResources()
         {
             m_LoadedFlag.Add("ConfigMainfest", false);
             m_LoadedFlag.Add("DataTableMainfest", false);
-            GameEntry.Resource.LoadAsset(AssetUtility.GetConfigAsset("ConfigMainfest", true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnConfigMainfestLoadSuccess)));
-            GameEntry.Resource.LoadAsset(AssetUtility.GetDataTableAsset("DataTableMainfest", true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableMainfestLoadSuccess)));
+            GameEntry.Resource.LoadAsset(AssetUtility.GetConfigAsset("ConfigMainfest", true),
+                new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnConfigMainfestLoadSuccess)));
+            GameEntry.Resource.LoadAsset(AssetUtility.GetDataTableAsset("DataTableMainfest", true),
+                new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableMainfestLoadSuccess)));
             LoadLocalization(GameEntry.Localization.Language.ToString());
         }
 
@@ -93,6 +92,7 @@ namespace Game.Update
                     }
                 }
             }
+
             m_LoadedFlag["ConfigMainfest"] = true;
         }
 
@@ -110,6 +110,7 @@ namespace Game.Update
                             LoadDataTable(binaryReader.ReadString());
                         }
                     }
+
                     m_LoadedFlag["DataTableMainfest"] = true;
                 }
             }
@@ -156,7 +157,8 @@ namespace Game.Update
                 return;
             }
 
-            Log.Error("Can not load config '{0}' from '{1}' with error message '{2}'.", ne.ConfigAssetName, ne.ConfigAssetName, ne.ErrorMessage);
+            Log.Error("Can not load config '{0}' from '{1}' with error message '{2}'.", ne.ConfigAssetName,
+                ne.ConfigAssetName, ne.ErrorMessage);
         }
 
         private void OnLoadDataTableSuccess(object sender, GameEventArgs e)
@@ -179,7 +181,8 @@ namespace Game.Update
                 return;
             }
 
-            Log.Error("Can not load data table '{0}' from '{1}' with error message '{2}'.", ne.DataTableAssetName, ne.DataTableAssetName, ne.ErrorMessage);
+            Log.Error("Can not load data table '{0}' from '{1}' with error message '{2}'.", ne.DataTableAssetName,
+                ne.DataTableAssetName, ne.ErrorMessage);
         }
 
         private void OnLoadDictionarySuccess(object sender, GameEventArgs e)
@@ -202,7 +205,8 @@ namespace Game.Update
                 return;
             }
 
-            Log.Error("Can not load dictionary '{0}' from '{1}' with error message '{2}'.", ne.DictionaryAssetName, ne.DictionaryAssetName, ne.ErrorMessage);
+            Log.Error("Can not load dictionary '{0}' from '{1}' with error message '{2}'.", ne.DictionaryAssetName,
+                ne.DictionaryAssetName, ne.ErrorMessage);
         }
     }
 }

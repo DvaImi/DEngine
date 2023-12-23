@@ -4,6 +4,7 @@
 // 创建时间：2023-04-16 12:44:18
 // 版 本：1.0
 // ========================================================
+
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -13,10 +14,10 @@ using DEngine.Procedure;
 using DEngine.Resource;
 using DEngine.Runtime;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Game
 {
+    
     public class ProcedureLoadHotUpdate : ProcedureBase
     {
         private static bool m_HasLoadHotUpdateAssemblies;
@@ -36,7 +37,7 @@ namespace Game
 
         private void OnUpdateMainfestLoadSuccess(string assetName, object asset, float duration, object userData)
         {
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
             HotfixLauncher();
 #else
             if (asset is TextAsset updateMainfest)

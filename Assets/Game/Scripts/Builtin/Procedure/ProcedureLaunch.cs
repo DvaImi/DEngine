@@ -11,7 +11,6 @@ namespace Game
         {
             base.OnEnter(procedureOwner);
             AwaitableUtility.Subscribe();
-            GameEntry.BuiltinData.InitLanguageBuiltin();
             GameEntry.BuiltinData.InitLanguageSettings();
             GameEntry.BuiltinData.InitSoundSettings();
         }

@@ -6,10 +6,6 @@ namespace Game
     public class BuiltinData : ScriptableObject
     {
         /// <summary>
-        /// 内置语言
-        /// </summary>
-        public TextAsset LanguageBuiltin;
-        /// <summary>
         /// 内置资源更新界面
         /// </summary>
         public UpdateResourceForm UpdateResourceFormTemplate = null;

@@ -1,33 +1,22 @@
 ﻿using System;
+using DEngine;
 using DEngine.Localization;
+using DEngine.Resource;
 using DEngine.Runtime;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Game
 {
     public class BuiltinDataComponent : DEngineComponent
     {
-        [SerializeField]
-        private BuiltinData m_BuiltinData;
+        [SerializeField] private BuiltinData m_BuiltinData;
 
         private NativeDialogForm m_NativeDialogForm;
 
-        public BuiltinData Data { get => m_BuiltinData; }
-
-        public void InitLanguageBuiltin()
+        public BuiltinData Data
         {
-            if (Data.LanguageBuiltin == null || Data.LanguageBuiltin.bytes == null)
-            {
-                Log.Info("LanguageBuiltin can not be found or empty.");
-                return;
-            }
-
-            if (!GameEntry.Localization.ParseData(Data.LanguageBuiltin.bytes))
-            {
-                Log.Warning("Parse LanguageBuiltin failure.");
-                return;
-            }
-            Log.Info("LanguageBuiltin Load Complete");
+            get => m_BuiltinData;
         }
 
         public void InitLanguageSettings()
@@ -51,7 +40,8 @@ namespace Game
                 }
             }
 
-            if (language != Language.English && language != Language.ChineseSimplified && language != Language.ChineseTraditional && language != Language.Korean)
+            if (language != Language.English && language != Language.ChineseSimplified &&
+                language != Language.ChineseTraditional && language != Language.Korean)
             {
                 // 若是暂不支持的语言，则使用英语
                 language = Language.ChineseSimplified;
@@ -126,6 +116,7 @@ namespace Game
             {
                 return;
             }
+
             Destroy(m_NativeDialogForm);
         }
     }

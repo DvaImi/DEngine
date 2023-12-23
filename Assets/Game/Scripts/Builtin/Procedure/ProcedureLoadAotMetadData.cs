@@ -64,6 +64,7 @@ namespace Game
                         for (int i = 0; i < count; i++)
                         {
                             string aotFullName = AssetUtility.GetCLRAOTAsset(binaryReader.ReadString());
+                            Log.Info($"补充的元数据是：[{aotFullName}]");
                             GameEntry.Resource.LoadAsset(aotFullName, new LoadAssetCallbacks(OndAotMetadDataLoadSuccess));
                         }
                     }
