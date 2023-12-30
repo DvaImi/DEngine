@@ -65,7 +65,6 @@ namespace Game
 
                 return;
             }
-
             void ConfirmUpdate(object parm)
             {
                 GameEntry.BuiltinData.DestroyDialog();

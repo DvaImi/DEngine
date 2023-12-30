@@ -5,6 +5,7 @@
 // 版 本：1.0
 // ========================================================
 
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -17,29 +18,38 @@ using UnityEngine;
 
 namespace Game
 {
-    
+
     public class ProcedureLoadHotUpdate : ProcedureBase
     {
-        private static bool m_HasLoadHotUpdateAssemblies;
-        private int m_HotUpdateAssembliesLength;
-        private int m_LoadedHotUpdateAssembly;
+        private Dictionary<string, bool> m_LoadedFlag = new Dictionary<string, bool>();
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            m_HotUpdateAssembliesLength = 0;
             LoadUpdateMainfest();
         }
+        protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+        {
+            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
+            foreach (KeyValuePair<string, bool> loadedFlag in m_LoadedFlag)
+            {
+                if (!loadedFlag.Value)
+                {
+                    return;
+                }
+            }
+
+            ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
+
+        }
         private void LoadUpdateMainfest()
         {
+            m_LoadedFlag.Add(AssetUtility.GetCLRUpdateAsset("HotUpdateAssembliesMainfest"), false);
             GameEntry.Resource.LoadAsset(AssetUtility.GetCLRUpdateAsset("HotUpdateAssembliesMainfest"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateMainfestLoadSuccess)));
         }
 
         private void OnUpdateMainfestLoadSuccess(string assetName, object asset, float duration, object userData)
         {
-#if !UNITY_EDITOR
-            HotfixLauncher();
-#else
             if (asset is TextAsset updateMainfest)
             {
                 using (Stream stream = new MemoryStream(updateMainfest.bytes))
@@ -47,36 +57,20 @@ namespace Game
                     using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
                     {
                         int count = binaryReader.ReadInt32();
-                        m_HotUpdateAssembliesLength = count;
                         for (int i = 0; i < count; i++)
                         {
                             string aotFullName = AssetUtility.GetCLRUpdateAsset(binaryReader.ReadString());
+                            m_LoadedFlag.Add(aotFullName, false);
                             LoadHotfixDll(aotFullName);
                         }
                     }
                 }
             }
-#endif
-        }
-
-        private void HotfixLauncher()
-        {
-            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRLanuchAsset("UpdateLuncher"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateLuncherLoadSuccess)));
-        }
-
-        private void OnUpdateLuncherLoadSuccess(string assetName, object asset, float duration, object userData)
-        {
-            Object.Instantiate((GameObject)asset);
+            m_LoadedFlag[assetName] = true;
         }
 
         private void LoadHotfixDll(string hotUpdateAssemblies)
         {
-            if (m_HasLoadHotUpdateAssemblies)
-            {
-                Log.Info("已经加载过热更新dll ，暂时无法重复加载");
-                HotfixLauncher();
-                return;
-            }
             GameEntry.Resource.LoadAsset(hotUpdateAssemblies, new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnHotUpdateDllLoadSuccess)));
         }
 
@@ -91,13 +85,8 @@ namespace Game
                     return;
                 }
 
-                m_LoadedHotUpdateAssembly++;
-                if (m_LoadedHotUpdateAssembly == m_HotUpdateAssembliesLength)
-                {
-                    Log.Info("{0} Load Success.", assetName);
-                    m_HasLoadHotUpdateAssemblies = true;
-                    HotfixLauncher();
-                }
+                Log.Info("{0} Load Success.", assetName);
+                m_LoadedFlag[assetName] = true;
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DEngine;
 using DEngine.Event;
 using DEngine.Fsm;
 using DEngine.Procedure;
@@ -18,7 +19,6 @@ namespace Game
         private int m_UpdateCount = 0;
         private long m_UpdateTotalCompressedLength = 0L;
         private int m_UpdateSuccessCount = 0;
-        private float m_LastUpdateTime;
         private List<UpdateLengthData> m_UpdateLengthData = new List<UpdateLengthData>();
         private UpdateResourceForm m_UpdateResourceForm = null;
 
@@ -89,15 +89,13 @@ namespace Game
                 currentTotalUpdateLength += m_UpdateLengthData[i].Length;
             }
             float progressTotal = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
-            string descriptionText = GameEntry.Localization.GetString("UpdateResource.Tips", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), StringUtility.GetByteLengthString(currentTotalUpdateLength), StringUtility.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("P2"), StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
+            string descriptionText = Utility.Text.Format("{0}/{1},{2}/{3}, {4:P0},{5}/s", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), StringUtility.GetByteLengthString(currentTotalUpdateLength), StringUtility.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("P2"), StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
             descriptionText += "\n";
-            m_LastUpdateTime = Time.time;
             int needTime = (int)((m_UpdateTotalCompressedLength - currentTotalUpdateLength) / GameEntry.Download.CurrentSpeed);
             TimeSpan timespan = new(0, 0, needTime);
             string timeFormat = timespan.ToString(@"mm\:ss");
             descriptionText += string.Format("剩余时间 {0}({1}/s)", timeFormat, StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed)); ;
             m_UpdateResourceForm.SetProgress(progressTotal, descriptionText);
-            Log.Info(descriptionText);
         }
 
         private void OnUpdateResourcesComplete(DEngine.Resource.IResourceGroup resourceGroup, bool result)
