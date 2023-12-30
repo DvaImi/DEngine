@@ -1,5 +1,6 @@
 ﻿using DEngine.Procedure;
 using DEngine.Runtime;
+using UnityEngine;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
 namespace Game.Update
@@ -16,10 +17,6 @@ namespace Game.Update
         {
             base.OnLeave(procedureOwner, isShutdown);
         }
-
-        protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
-        {
-            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-        }
+       
     }
 }

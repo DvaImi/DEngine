@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Game.Editor.ResourceTools;
+using HybridCLR.Editor;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -91,20 +92,29 @@ namespace Game.Editor.BuildPipeline
             if (m_BeginBuildPlayer)
             {
                 m_BeginBuildPlayer = false;
+                Close();
                 GameBuildPipeline.BuildPlayer(false);
+                Open();
             }
 
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
+                Close();
                 GameBuildPipeline.BuildBundle(GameSetting.Instance.Difference);
-                // GameBuildPipeline.BuildBundleWithUniTask(GameSetting.Instance.Difference);
+                Open();
             }
 
             if (m_IsAotGeneric)
             {
                 m_IsAotGeneric = false;
-                GameBuildPipeline.BuildPlayer(true);
+                Close();
+                HybridCLR.Editor.Commands.Il2CppDefGeneratorCommand.GenerateIl2CppDef();
+                HybridCLR.Editor.Commands.LinkGeneratorCommand.GenerateLinkXml();
+                HybridCLR.Editor.Commands.StripAOTDllCommand.GenerateStripedAOTDlls();
+                HybridCLR.Editor.Commands.MethodBridgeGeneratorCommand.CompileAndGenerateMethodBridge();
+                HybridCLR.Editor.Commands.AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
+                Open();
             }
         }
 

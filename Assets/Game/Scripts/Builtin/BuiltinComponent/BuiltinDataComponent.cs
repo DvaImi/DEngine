@@ -1,10 +1,7 @@
 ﻿using System;
-using DEngine;
 using DEngine.Localization;
-using DEngine.Resource;
 using DEngine.Runtime;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Game
 {
@@ -40,10 +37,8 @@ namespace Game
                 }
             }
 
-            if (language != Language.English && language != Language.ChineseSimplified &&
-                language != Language.ChineseTraditional && language != Language.Korean)
+            if (language != Language.English && language != Language.ChineseSimplified && language != Language.ChineseTraditional && language != Language.Korean)
             {
-                // 若是暂不支持的语言，则使用英语
                 language = Language.ChineseSimplified;
                 GameEntry.Setting.SetString(Constant.Setting.Language, language.ToString());
                 GameEntry.Setting.Save();
