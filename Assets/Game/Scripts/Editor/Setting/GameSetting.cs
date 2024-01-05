@@ -43,11 +43,11 @@ namespace Game.Editor
         /// <summary>
         /// 应用发布路径
         /// </summary>
-        public string AppOutput = "Assets/../AppOutput";
+        public string AppOutput => "Assets/../AppOutput";
         /// <summary>
         /// 资源打包路径
         /// </summary>
-        public string BundlesOutput = "Assets/../BundlesOutput";
+        public string BundlesOutput => "Assets/../BundlesOutput";
         /// <summary>
         /// 是否需要强制更新应用
         /// </summary>

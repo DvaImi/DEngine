@@ -19,8 +19,6 @@ MonoBehaviour:
   BuildPlatform: 0
   ResourceModeIndex: 1
   Difference: 0
-  AppOutput: F:/Project/Unity/Work/AppOutput
-  BundlesOutput: F:/Project/Unity/Work/Bundles
   ForceUpdateGame: 0
   InternalResourceVersion: 0
   LatestGameVersion: 0.1.0

@@ -43,6 +43,16 @@ namespace Game.Editor.BuildPipeline
             m_BeginBuildPlayer = false;
             m_IsAotGeneric = false;
             m_ScrollPosition = Vector2.zero;
+
+            if (!Directory.Exists(GameSetting.Instance.AppOutput))
+            {
+                Directory.CreateDirectory(GameSetting.Instance.AppOutput);
+            }
+
+            if (!Directory.Exists(GameSetting.Instance.BundlesOutput))
+            {
+                Directory.CreateDirectory(GameSetting.Instance.BundlesOutput);
+            }
         }
 
         private void OnGUI()
@@ -353,10 +363,6 @@ namespace Game.Editor.BuildPipeline
                     GameSetting.Instance.SaveSetting();
                 }
 
-                if (GUILayout.Button("Clear", GUILayout.Width(100)))
-                {
-                    GameBuildPipeline.ClearBundles();
-                }
             }
 
             EditorGUILayout.EndHorizontal();
@@ -367,22 +373,14 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.LabelField(GameSetting.Instance.BundlesOutput);
                 GUI.enabled = true;
 
-                if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
-                {
-                    string directory = EditorUtility.OpenFolderPanel("Select Output Directory", GameSetting.Instance.BundlesOutput, string.Empty);
-                    if (!string.IsNullOrEmpty(directory))
-                    {
-                        if (Directory.Exists(directory) && directory != GameSetting.Instance.BundlesOutput)
-                        {
-                            GameSetting.Instance.BundlesOutput = directory;
-                        }
-                        GameBuildPipeline.SaveOutputDirectory(GameSetting.Instance.BundlesOutput);
-                    }
-                }
-
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
                     DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.BundlesOutput);
+                }
+                
+                if (GUILayout.Button("Clear", GUILayout.Width(80)))
+                {
+                    GameBuildPipeline.ClearBundles();
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -490,18 +488,6 @@ namespace Game.Editor.BuildPipeline
                 GUI.enabled = false;
                 EditorGUILayout.LabelField(GameSetting.Instance.AppOutput);
                 GUI.enabled = true;
-
-                if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
-                {
-                    string directory = EditorUtility.OpenFolderPanel("Select Output Directory", GameSetting.Instance.AppOutput, string.Empty);
-                    if (!string.IsNullOrEmpty(directory))
-                    {
-                        if (Directory.Exists(directory) && directory != GameSetting.Instance.AppOutput)
-                        {
-                            GameSetting.Instance.AppOutput = directory;
-                        }
-                    }
-                }
 
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
