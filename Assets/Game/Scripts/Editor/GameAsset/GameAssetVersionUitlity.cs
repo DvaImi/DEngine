@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Game.Editor.ResourceTools
 {
-    public static class GameMainfestUitlity
+    public static class GameAssetVersionUitlity
     {
         public static void CreatMainfest(string mainfest, string writePath)
         {
@@ -17,7 +17,7 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        public static void CreatMainfest(string[] mainfests, string writePath)
+        public static void CreatAssetVersion(string[] mainfests, string writePath)
         {
             using (FileStream stream = new(writePath, FileMode.Create, FileAccess.Write))
             {

@@ -96,7 +96,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void DEngine.Fsm.Fsm<object>.ChangeState<object>()
 		// System.Void DEngine.Fsm.FsmState<object>.ChangeState<object>(DEngine.Fsm.IFsm<object>)
 		// object DEngine.Fsm.IFsm<object>.GetData<object>(string)
-		// System.Void DEngine.Fsm.IFsm<object>.SetData<object>(string,object)
 		// bool DEngine.Fsm.IFsmManager.DestroyFsm<object>()
 		// System.Void DEngine.Procedure.IProcedureManager.StartProcedure<object>()
 		// DEngine.DataTable.IDataTable<object> DEngine.Runtime.DataTableComponent.GetDataTable<object>()

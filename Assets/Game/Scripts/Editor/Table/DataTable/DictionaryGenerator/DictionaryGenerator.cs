@@ -45,8 +45,8 @@ namespace Game.Editor.DataTableTools
                         }
                     }
                 }
-                string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, "LocalizationMainfest" + ".bytes"));
-                GameMainfestUitlity.CreatMainfest(dictionaryNames.ToArray(), mainfest);
+                string version = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, Constant.AssetVersion.LocalizationVersion + ".bytes"));
+                GameAssetVersionUitlity.CreatAssetVersion(dictionaryNames.ToArray(), version);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 AssetDatabase.Refresh();
@@ -86,8 +86,8 @@ namespace Game.Editor.DataTableTools
                         }
                     }
                 }
-                string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, "ConfigMainfest" + ".bytes"));
-                GameMainfestUitlity.CreatMainfest(dictionaryNames.ToArray(), mainfest);
+                string version = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, Constant.AssetVersion.ConfigVersion + ".bytes"));
+                GameAssetVersionUitlity.CreatAssetVersion(dictionaryNames.ToArray(), version);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 AssetDatabase.Refresh();

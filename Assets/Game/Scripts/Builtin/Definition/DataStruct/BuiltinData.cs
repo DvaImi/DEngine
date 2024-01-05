@@ -17,5 +17,9 @@ namespace Game
         /// 构建信息
         /// </summary>
         public BuildInfo BuildInfo;
+        /// <summary>
+        /// 系统内置语言提示
+        /// </summary>
+        public TextAsset BuildinLanguage;
     }
 }

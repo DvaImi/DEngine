@@ -58,16 +58,14 @@ namespace Game.Update
 
         private void PreloadResources()
         {
-            m_LoadedFlag.Add("ConfigMainfest", false);
-            m_LoadedFlag.Add("DataTableMainfest", false);
-            GameEntry.Resource.LoadAsset(AssetUtility.GetConfigAsset("ConfigMainfest", true),
-                new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnConfigMainfestLoadSuccess)));
-            GameEntry.Resource.LoadAsset(AssetUtility.GetDataTableAsset("DataTableMainfest", true),
-                new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableMainfestLoadSuccess)));
+            m_LoadedFlag.Add(AssetUtility.GetConfigAsset(Constant.AssetVersion.ConfigVersion,true), false);
+            m_LoadedFlag.Add(AssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), false);
+            GameEntry.Resource.LoadAsset(AssetUtility.GetConfigAsset(Constant.AssetVersion.ConfigVersion, true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnConfigVersionLoadSuccess)));
+            GameEntry.Resource.LoadAsset(AssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableVersionLoadSuccess)));
             LoadLocalization(GameEntry.Localization.Language.ToString());
         }
 
-        private void OnConfigMainfestLoadSuccess(string assetName, object asset, float duration, object userData)
+        private void OnConfigVersionLoadSuccess(string assetName, object asset, float duration, object userData)
         {
             if (asset is TextAsset textAsset)
             {
@@ -80,12 +78,12 @@ namespace Game.Update
                         {
                             if (stream.Position < stream.Length)
                             {
-                                string manifest = binaryReader.ReadString();
-                                LoadConfig(manifest);
+                                string version = binaryReader.ReadString();
+                                LoadConfig(version);
                             }
                             else
                             {
-                                Debug.LogError("Attempted to read beyond the end of the stream.");
+                                Log.Error("Attempted to read beyond the end of the stream.");
                                 break;
                             }
                         }
@@ -93,10 +91,10 @@ namespace Game.Update
                 }
             }
 
-            m_LoadedFlag["ConfigMainfest"] = true;
+            m_LoadedFlag[assetName] = true;
         }
 
-        private void OnDataTableMainfestLoadSuccess(string assetName, object asset, float duration, object userData)
+        private void OnDataTableVersionLoadSuccess(string assetName, object asset, float duration, object userData)
         {
             if (asset is TextAsset textAsset)
             {
@@ -111,7 +109,7 @@ namespace Game.Update
                         }
                     }
 
-                    m_LoadedFlag["DataTableMainfest"] = true;
+                    m_LoadedFlag[assetName] = true;
                 }
             }
         }
@@ -157,8 +155,7 @@ namespace Game.Update
                 return;
             }
 
-            Log.Error("Can not load config '{0}' from '{1}' with error message '{2}'.", ne.ConfigAssetName,
-                ne.ConfigAssetName, ne.ErrorMessage);
+            Log.Error("Can not load config '{0}' from '{1}' with error message '{2}'.", ne.ConfigAssetName, ne.ConfigAssetName, ne.ErrorMessage);
         }
 
         private void OnLoadDataTableSuccess(object sender, GameEventArgs e)
@@ -181,8 +178,7 @@ namespace Game.Update
                 return;
             }
 
-            Log.Error("Can not load data table '{0}' from '{1}' with error message '{2}'.", ne.DataTableAssetName,
-                ne.DataTableAssetName, ne.ErrorMessage);
+            Log.Error("Can not load data table '{0}' from '{1}' with error message '{2}'.", ne.DataTableAssetName, ne.DataTableAssetName, ne.ErrorMessage);
         }
 
         private void OnLoadDictionarySuccess(object sender, GameEventArgs e)
@@ -205,8 +201,7 @@ namespace Game.Update
                 return;
             }
 
-            Log.Error("Can not load dictionary '{0}' from '{1}' with error message '{2}'.", ne.DictionaryAssetName,
-                ne.DictionaryAssetName, ne.ErrorMessage);
+            Log.Error("Can not load dictionary '{0}' from '{1}' with error message '{2}'.", ne.DictionaryAssetName, ne.DictionaryAssetName, ne.ErrorMessage);
         }
     }
 }

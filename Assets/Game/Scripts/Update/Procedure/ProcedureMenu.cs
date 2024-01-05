@@ -11,12 +11,16 @@ namespace Game.Update
         {
             base.OnEnter(procedureOwner);
             Log.Info($"welcome {GameEntry.Localization.GetString("Game.Name")}");
+            Log.Info($"Current Version {Application.version}");
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
         {
             base.OnLeave(procedureOwner, isShutdown);
         }
-       
+        protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
+        {
+            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+        }
     }
 }

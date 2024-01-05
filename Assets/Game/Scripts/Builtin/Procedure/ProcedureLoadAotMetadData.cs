@@ -48,11 +48,11 @@ namespace Game
         private void LoadMetadataForAOTAssemblies()
         {
             Log.Info("补充元数据...");
-            m_LoadedFlag.Add(AssetUtility.GetCLRAOTAsset("AOTMetadataMainfest"), false);
-            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRAOTAsset("AOTMetadataMainfest"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnAOTMetadataMainfestLoadSuccessAsync)));
+            m_LoadedFlag.Add(AssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion), false);
+            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnAOTMetadataVersionLoadSuccessAsync)));
         }
 
-        private void OnAOTMetadataMainfestLoadSuccessAsync(string assetName, object asset, float duration, object userData)
+        private void OnAOTMetadataVersionLoadSuccessAsync(string assetName, object asset, float duration, object userData)
         {
             TextAsset result = (TextAsset)asset;
             if (result != null && result.bytes != null)

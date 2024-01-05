@@ -72,8 +72,8 @@ namespace Game.Editor.DataTableTools
                     }
                 }
             }
-            string mainfest = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, "DataTableMainfest" + ".bytes"));
-            GameMainfestUitlity.CreatMainfest(dataTableNames.ToArray(), mainfest);
+            string version = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, Constant.AssetVersion.DataTableVersion + ".bytes"));
+            GameAssetVersionUitlity.CreatAssetVersion(dataTableNames.ToArray(), version);
             AssetDatabase.Refresh();
         }
 

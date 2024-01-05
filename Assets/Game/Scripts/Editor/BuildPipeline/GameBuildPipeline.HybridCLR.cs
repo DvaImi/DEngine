@@ -64,7 +64,7 @@ namespace Game.Editor.BuildPipeline
             string desFileName;
             string oriFileName;
 
-            List<string> assembliesMainfest = new List<string>();
+            List<string> assembliesVersion = new List<string>();
             //Copy HotUpdateAssemblies
             foreach (string hotUpdateAssemblyFullName in GameSetting.Instance.HotUpdateAssemblies)
             {
@@ -72,16 +72,16 @@ namespace Game.Editor.BuildPipeline
                 //加bytes 后缀让Unity识别为TextAsset 文件
                 desFileName = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, hotUpdateAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
-                assembliesMainfest.Add(hotUpdateAssemblyFullName);
+                assembliesVersion.Add(hotUpdateAssemblyFullName);
             }
 
-            if (assembliesMainfest.Count > 0)
+            if (assembliesVersion.Count > 0)
             {
-                string hotUpdateAssembliesMainfest = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, "HotUpdateAssembliesMainfest" + ".bytes");
-                GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), hotUpdateAssembliesMainfest);
+                string hotUpdateAssembliesVersion = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, Constant.AssetVersion.HotUpdateAssembliesVersion + ".bytes");
+                GameAssetVersionUitlity.CreatAssetVersion(assembliesVersion.ToArray(), hotUpdateAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} HotUpdateAssemblies success.");
             }
-            assembliesMainfest.Clear();
+            assembliesVersion.Clear();
 
             //Copy PreserveAssemblies
             foreach (string preserveAssemblyFullName in GameSetting.Instance.PreserveAssemblies)
@@ -90,15 +90,15 @@ namespace Game.Editor.BuildPipeline
                 //加bytes 后缀让Unity识别为TextAsset 文件
                 desFileName = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, preserveAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
-                assembliesMainfest.Add(preserveAssemblyFullName);
+                assembliesVersion.Add(preserveAssemblyFullName);
             }
-            if (assembliesMainfest.Count > 0)
+            if (assembliesVersion.Count > 0)
             {
-                string preserveAssembliesMainfest = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, "PreserveAssembliesMainfest" + ".bytes");
-                GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), preserveAssembliesMainfest);
+                string preserveAssembliesVersion = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, Constant.AssetVersion.PreserveAssembliesVersion + ".bytes");
+                GameAssetVersionUitlity.CreatAssetVersion(assembliesVersion.ToArray(), preserveAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} PreserveAssemblies success.");
             }
-            assembliesMainfest.Clear();
+            assembliesVersion.Clear();
 
             // Copy AOTAssemblies
             string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
@@ -112,13 +112,13 @@ namespace Game.Editor.BuildPipeline
                 }
                 desFileName = Path.Combine(GameSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
-                assembliesMainfest.Add(aotAssemblyFullName);
+                assembliesVersion.Add(aotAssemblyFullName);
             }
 
-            if (assembliesMainfest.Count > 0)
+            if (assembliesVersion.Count > 0)
             {
-                string aotAssembliesMainfest = Path.Combine(GameSetting.Instance.AOTAssembliesPath, "AOTMetadataMainfest" + ".bytes");
-                GameMainfestUitlity.CreatMainfest(assembliesMainfest.ToArray(), aotAssembliesMainfest);
+                string aotAssembliesVersion = Path.Combine(GameSetting.Instance.AOTAssembliesPath, Constant.AssetVersion.AOTMetadataVersion + ".bytes");
+                GameAssetVersionUitlity.CreatAssetVersion(assembliesVersion.ToArray(), aotAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} AOTAssemblies success.");
             }
             AssetDatabase.Refresh();

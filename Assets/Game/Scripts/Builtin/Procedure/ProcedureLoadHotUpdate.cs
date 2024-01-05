@@ -44,11 +44,11 @@ namespace Game
         }
         private void LoadUpdateMainfest()
         {
-            m_LoadedFlag.Add(AssetUtility.GetCLRUpdateAsset("HotUpdateAssembliesMainfest"), false);
-            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRUpdateAsset("HotUpdateAssembliesMainfest"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateMainfestLoadSuccess)));
+            m_LoadedFlag.Add(AssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), false);
+            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateAssembliesVersionLoadSuccess)));
         }
 
-        private void OnUpdateMainfestLoadSuccess(string assetName, object asset, float duration, object userData)
+        private void OnUpdateAssembliesVersionLoadSuccess(string assetName, object asset, float duration, object userData)
         {
             if (asset is TextAsset updateMainfest)
             {

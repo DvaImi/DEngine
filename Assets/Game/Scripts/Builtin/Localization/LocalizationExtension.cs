@@ -19,6 +19,7 @@ namespace Game
             Language result = await localization.LoadDictionaryAsync(language);
             if (result == language)
             {
+                Log.Info("Change language success");
                 GameEntry.Setting.SetString(Constant.Setting.Language, language.ToString());
                 GameEntry.Setting.Save();
                 return true;

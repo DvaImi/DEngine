@@ -13,6 +13,7 @@ namespace Game
             AwaitableUtility.Subscribe();
             GameEntry.BuiltinData.InitLanguageSettings();
             GameEntry.BuiltinData.InitSoundSettings();
+            GameEntry.BuiltinData.InitCurrentVariant();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
