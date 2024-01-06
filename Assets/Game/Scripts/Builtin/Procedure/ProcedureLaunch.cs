@@ -10,11 +10,10 @@ namespace Game
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            AwaitableUtility.Subscribe();
             GameEntry.BuiltinData.InitLanguageSettings();
             GameEntry.BuiltinData.InitSoundSettings();
-            GameEntry.BuiltinData.InitCurrentVariant();
             GameEntry.BuiltinData.InitLanguageDebugger();
+            GameEntry.BuiltinData.InitExtensionEventHandle();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -42,12 +41,6 @@ namespace Game
                 Log.Info("Updatable resource mode detected.");
                 ChangeState<ProcedureCheckVersion>(procedureOwner);
             }
-        }
-
-        protected override void OnDestroy(IFsm<IProcedureManager> procedureOwner)
-        {
-            base.OnDestroy(procedureOwner);
-            AwaitableUtility.Unsubscribe();
         }
     }
 }

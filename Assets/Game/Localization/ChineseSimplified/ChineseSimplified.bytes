@@ -1,1 +1,1 @@
-	Game.NameDengineMenu.StartButton开始Menu.SettingButton设置Menu.AboutButton关于Menu.QuitButton退出AskQuitGame.Title确认退出AskQuitGame.Message是否确认退出游戏？Setting.Title设置Setting.Music音乐Setting.Sound音效Setting.UISound界面音效Setting.Language语言Setting.LanguageTips更改语言需要重启游戏UpdateResource.Tips{0}/{1}, {2}/{3}, {4:P0}, {5}/s
+Game.Language中文简体

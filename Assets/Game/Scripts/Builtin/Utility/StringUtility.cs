@@ -6,11 +6,40 @@
 // ========================================================
 
 using DEngine;
+using DEngine.Localization;
 
 namespace Game
 {
     public static class StringUtility
     {
+        public static string GetVariant()
+        {
+            string currentVariant;
+            switch (GameEntry.Localization.Language)
+            {
+                case Language.English:
+                    currentVariant = "en-us";
+                    break;
+
+                case Language.ChineseSimplified:
+                    currentVariant = "zh-cn";
+                    break;
+
+                case Language.ChineseTraditional:
+                    currentVariant = "zh-tw";
+                    break;
+
+                case Language.Korean:
+                    currentVariant = "ko-kr";
+                    break;
+
+                default:
+                    currentVariant = "zh-cn";
+                    break;
+            }
+            return currentVariant;
+        }
+
         public static string GetByteLengthString(long byteLength)
         {
             if (byteLength < 1024L) // 2 ^ 10

@@ -18,18 +18,12 @@ namespace Game.Editor.DataTableTools
 
         public static DataTableProcessor CreateDataTableProcessor(string dataTableName)
         {
-            return new DataTableProcessor(
-                DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + ".txt")),
-                Encoding.UTF8, 1, 2,
-                null, 3, 4, 1);
+            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + ".txt")), Encoding.UTF8, 1, 2, null, 3, 4, 1);
         }
 
         public static DataTableProcessor CreateExcelDataTableProcessor(ExcelWorksheet sheet)
         {
-            return new DataTableProcessor(
-                sheet,
-                1, 2,
-                null, 3, 4, 1);
+            return new DataTableProcessor(sheet, 1, 2, null, 3, 4, 1);
         }
 
         public static bool CheckRawData(DataTableProcessor dataTableProcessor, string dataTableName)
@@ -37,12 +31,14 @@ namespace Game.Editor.DataTableTools
             for (var i = 0; i < dataTableProcessor.RawColumnCount; i++)
             {
                 var name = dataTableProcessor.GetName(i);
-                if (string.IsNullOrEmpty(name) || name == "#") continue;
+                if (string.IsNullOrEmpty(name) || name == "#")
+                {
+                    continue;
+                }
 
                 if (!NameRegex.IsMatch(name))
                 {
-                    Debug.LogWarning(DEngine.Utility.Text.Format("Check raw data failure. DataTableName='{0}' Name='{1}'",
-                        dataTableName, name));
+                    Debug.LogWarning(DEngine.Utility.Text.Format("Check raw data failure. DataTableName='{0}' Name='{1}'", dataTableName, name));
                     return false;
                 }
             }
@@ -52,11 +48,11 @@ namespace Game.Editor.DataTableTools
 
         public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
-            var binaryDataFileName =
-                DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath,
-                    dataTableName + ".bytes"));
+            var binaryDataFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + ".bytes"));
             if (!dataTableProcessor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
+            {
                 File.Delete(binaryDataFileName);
+            }
         }
 
         public static void GenerateCodeFile(DataTableProcessor dataTableProcessor, string dataTableName)

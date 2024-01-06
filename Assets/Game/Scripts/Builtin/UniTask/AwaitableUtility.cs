@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DEngine;
 using DEngine.Event;
-using DEngine.Localization;
 using DEngine.Resource;
 using DEngine.Runtime;
 using UnityEngine;
@@ -17,7 +16,6 @@ namespace Game
         private static readonly Dictionary<int, UniTaskCompletionSource<Entity>> m_EntityResult = new Dictionary<int, UniTaskCompletionSource<Entity>>();
         private static readonly Dictionary<string, UniTaskCompletionSource<bool>> m_LoadSceneResult = new Dictionary<string, UniTaskCompletionSource<bool>>();
         private static readonly Dictionary<string, UniTaskCompletionSource<bool>> m_UnLoadSceneResult = new Dictionary<string, UniTaskCompletionSource<bool>>();
-        private static readonly Dictionary<Language, UniTaskCompletionSource<Language>> m_LoadDictionaryResult = new Dictionary<Language, UniTaskCompletionSource<Language>>();
         private static readonly Dictionary<int, UniTaskCompletionSource<WebRequestResult>> m_WebRequestResult = new Dictionary<int, UniTaskCompletionSource<WebRequestResult>>();
         private static readonly Dictionary<int, UniTaskCompletionSource<DownLoadResult>> m_DownloadResult = new Dictionary<int, UniTaskCompletionSource<DownLoadResult>>();
 
@@ -51,11 +49,8 @@ namespace Game
 
             eventComponent.Subscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
             eventComponent.Subscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
+        }
 
-            eventComponent.Subscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
-            eventComponent.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
-        } 
-        
         public static void Unsubscribe()
         {
             EventComponent eventComponent = DEngine.Runtime.GameEntry.GetComponent<EventComponent>();
@@ -83,9 +78,6 @@ namespace Game
 
             eventComponent.Unsubscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
             eventComponent.Unsubscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
-
-            eventComponent.Unsubscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
-            eventComponent.Unsubscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
         }
 
 
@@ -452,52 +444,6 @@ namespace Game
             }
         }
 
-        #endregion
-
-        #region Dictionary
-
-
-        public static UniTask<Language> LoadDictionaryAsync(this LocalizationComponent localization, Language language)
-        {
-            localization.ReadData(AssetUtility.GetDictionaryAsset(language.ToString(), true), language);
-            UniTaskCompletionSource<Language> tcs = new UniTaskCompletionSource<Language>();
-            m_LoadDictionaryResult.Add(language, tcs);
-            return tcs.Task;
-        }
-
-        private static void OnLoadDictionarySuccess(object sender, GameEventArgs e)
-        {
-            LoadDictionarySuccessEventArgs ne = (LoadDictionarySuccessEventArgs)e;
-
-            if (ne.UserData is Language language)
-            {
-                if (m_LoadDictionaryResult.TryGetValue(language, out var tcs))
-                {
-                    if (tcs != null)
-                    {
-                        tcs.TrySetResult(language);
-                        m_LoadDictionaryResult.Remove(language);
-                    }
-                }
-            }
-        }
-
-        private static void OnLoadDictionaryFailure(object sender, GameEventArgs e)
-        {
-            LoadDictionaryFailureEventArgs ne = (LoadDictionaryFailureEventArgs)e;
-
-            if (ne.UserData is Language language)
-            {
-                if (m_LoadDictionaryResult.TryGetValue(language, out var tcs))
-                {
-                    if (tcs != null)
-                    {
-                        tcs.TrySetException(new DEngineException(ne.ErrorMessage));
-                        m_LoadDictionaryResult.Remove(language);
-                    }
-                }
-            }
-        }
         #endregion
     }
 }

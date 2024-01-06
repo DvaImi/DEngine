@@ -51,7 +51,6 @@ namespace Game.Editor.ResourceTools
                 drawElementCallback = OnListElementGUI,
                 drawHeaderCallback = DrawReorderableListHeader,
                 draggable = true,
-                elementHeight = 22,
                 onAddCallback = Add,
                 onSelectCallback = Select
             };
@@ -190,15 +189,7 @@ namespace Game.Editor.ResourceTools
             rule.groups = EditorGUI.TextField(r, rule.groups);
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 85;
-            rule.variant = EditorGUI.TextField(r, rule.variant);
-            if (!string.IsNullOrEmpty(rule.variant))
-            {
-                rule.variant = rule.variant.ToLower();
-            }
-
-            r.xMin = r.xMax + GAP;
-            r.xMax = rect.xMax - 420;
+            r.xMax = rect.xMax - 355;
             Color bc = GUI.contentColor;
             if (!valid)
             {
@@ -215,21 +206,13 @@ namespace Game.Editor.ResourceTools
 
             r.xMin = r.xMax + GAP;
             r.xMax = r.xMin + 25;
+
             GUI.enabled = valid;
             if (GUI.Button(r, valid ? EditorGUIUtility.IconContent("pick") : EditorGUIUtility.IconContent("console.erroricon")))
             {
                 EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(rule.assetPath));
             }
             GUI.enabled = true;
-
-            r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 60;
-            if (GUI.Button(r, "Browse"))
-            {
-                string newAssetPath = EditorUtility.OpenFolderPanel("Select AssetPath Folder", rule.assetPath, string.Empty);
-                rule.assetPath = PathUtility.ConvertToAssetPath(newAssetPath);
-            }
-
             r.xMin = r.xMax + GAP;
             r.xMax = r.xMin + 85;
             rule.filterType = (FilterType)EditorGUI.EnumPopup(r, rule.filterType);
@@ -344,8 +327,6 @@ namespace Game.Editor.ResourceTools
             GUILayout.Space(GAP);
             EditorGUILayout.TextField("Groups", GUILayout.Width(85), GUILayout.Height(20));
             GUILayout.Space(GAP);
-            EditorGUILayout.TextField("Variant", GUILayout.Width(85), GUILayout.Height(20));
-            GUILayout.Space(GAP);
             GUILayoutOption[] textFieldOptions = { GUILayout.ExpandWidth(true), GUILayout.MinWidth(100f), GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth - (2 * GAP)) };
             EditorGUILayout.TextField("AssetPath", textFieldOptions);
             GUILayout.Space(GAP);
@@ -445,11 +426,6 @@ namespace Game.Editor.ResourceTools
 
             foreach (AssetCollector assetCollector in m_Configuration.Collector)
             {
-                if (assetCollector.variant == "")
-                {
-                    assetCollector.variant = null;
-                }
-
                 if (assetCollector.valid)
                 {
                     if (!AssetPathvalid(assetCollector))
@@ -559,19 +535,19 @@ namespace Game.Editor.ResourceTools
                 {
                     if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
                     {
-                        RenameResource(oldResource.Name, oldResource.Variant, resourceName, resourceRule.variant);
+                        RenameResource(oldResource.Name, oldResource.Variant, resourceName, null);
                         break;
                     }
                 }
 
-                if (!HasResource(resourceName, resourceRule.variant))
+                if (!HasResource(resourceName, null))
                 {
                     if (string.IsNullOrEmpty(resourceRule.fileSystem))
                     {
                         resourceRule.fileSystem = null;
                     }
 
-                    AddResource(resourceName, resourceRule.variant, resourceRule.fileSystem, resourceRule.loadType, resourceRule.packed, resourceRule.groups.Split(';', ',', '|'));
+                    AddResource(resourceName, null, resourceRule.fileSystem, resourceRule.loadType, resourceRule.packed, resourceRule.groups.Split(';', ',', '|'));
                 }
 
                 switch (resourceRule.filterType)
@@ -601,7 +577,7 @@ namespace Game.Editor.ResourceTools
 
                                 if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                                 {
-                                    AssignAsset(assetGUID, resourceName, resourceRule.variant);
+                                    AssignAsset(assetGUID, resourceName, null);
                                 }
                             }
                         }
@@ -611,7 +587,7 @@ namespace Game.Editor.ResourceTools
                     case FilterType.Children:
                     case FilterType.ChildrenFilesOnly:
                         {
-                            AssignAsset(singleAssetGUID, resourceName, resourceRule.variant);
+                            AssignAsset(singleAssetGUID, resourceName, null);
                         }
                         break;
                 }

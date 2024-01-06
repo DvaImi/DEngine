@@ -23,7 +23,7 @@ namespace Game.Update
             
             if (Input.GetKeyDown(KeyCode.L))
             {
-                Log.Info($"welcome {GameEntry.Localization.GetString("Game.Name")}");
+                Log.Info($"{GameEntry.Localization.GetString("Game.Language")}");
             }
         }
     }

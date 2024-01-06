@@ -48,17 +48,6 @@ namespace Game
             Log.Info("Init language settings complete, current language is '{0}'.", language.ToString());
         }
 
-        public void InitCurrentVariant()
-        {
-            if (GameEntry.Base.EditorResourceMode)
-            {
-                // 编辑器资源模式不使用 AssetBundle，也就没有变体了
-                return;
-            }
-            GameEntry.Resource.SetCurrentVariant(GetVariant());
-            Log.Info("Init current variant complete.");
-        }
-
         public void InitSoundSettings()
         {
             GameEntry.Sound.Mute("Music", GameEntry.Setting.GetBool(Constant.Setting.MusicMuted, false));
@@ -70,37 +59,16 @@ namespace Game
             Log.Info("Init sound settings complete.");
         }
 
-        public string GetVariant()
-        {
-            string currentVariant;
-            switch (GameEntry.Localization.Language)
-            {
-                case Language.English:
-                    currentVariant = "en-us";
-                    break;
-
-                case Language.ChineseSimplified:
-                    currentVariant = "zh-cn";
-                    break;
-
-                case Language.ChineseTraditional:
-                    currentVariant = "zh-tw";
-                    break;
-
-                case Language.Korean:
-                    currentVariant = "ko-kr";
-                    break;
-
-                default:
-                    currentVariant = "zh-cn";
-                    break;
-            }
-            return currentVariant;
-        }
         public void InitLanguageDebugger()
         {
             ChangeLanguageDebuggerWindow changeLanguage = new ChangeLanguageDebuggerWindow();
             GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", changeLanguage);
+        }
+
+        public void InitExtensionEventHandle()
+        {
+            AwaitableUtility.Subscribe();
+            LocalizationExtension.Subscribe();
         }
 
         public void OpenDialog(DialogParams dialogParams)
@@ -122,5 +90,7 @@ namespace Game
 
             Destroy(m_NativeDialogForm);
         }
+
+       
     }
 }

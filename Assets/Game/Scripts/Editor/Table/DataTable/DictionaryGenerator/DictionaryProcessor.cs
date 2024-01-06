@@ -223,7 +223,7 @@ namespace Game.Editor.DataTableTools
                             {
                                 continue;
                             }
-                          
+
                             for (int rawColumn = 0; rawColumn < RawColumnCount; rawColumn++)
                             {
                                 if (IsCommentColumn(rawColumn))
@@ -234,11 +234,16 @@ namespace Game.Editor.DataTableTools
                                 try
                                 {
                                     string value = GetValue(rawRow, rawColumn);
+                                    if (string.IsNullOrEmpty(value))
+                                    {
+                                        Debug.LogWarning(Utility.Text.Format("Generate dictionary file failure. OutputFileName='{0}' RawRow='{1}' RowColumn='{2}' value is Empty.", outputFileName, rawRow.ToString(), rawColumn.ToString()));
+                                        continue;
+                                    }
                                     binaryWriter.Write(value);
                                 }
                                 catch
                                 {
-                                    Debug.LogError(Utility.Text.Format("Generate config file failure. OutputFileName='{0}' RawRow='{1}' RowColumn='{2}'.", outputFileName, rawRow.ToString(), rawColumn.ToString()));
+                                    Debug.LogError(Utility.Text.Format("Generate dictionary file failure. OutputFileName='{0}' RawRow='{1}' RowColumn='{2}'.", outputFileName, rawRow.ToString(), rawColumn.ToString()));
                                     return false;
                                 }
                             }

@@ -1,14 +1,12 @@
 ﻿using DEngine.Debugger;
 using DEngine.Localization;
 using UnityEngine;
-using DEngine.Runtime;
 
 namespace Game
 {
     public class ChangeLanguageDebuggerWindow : IDebuggerWindow
     {
         private Vector2 m_ScrollPosition = Vector2.zero;
-        private bool m_NeedRestart = false;
 
         public void Initialize(params object[] args)
         {
@@ -28,11 +26,7 @@ namespace Game
 
         public void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
-            if (m_NeedRestart)
-            {
-                m_NeedRestart = false;
-                DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
-            }
+
         }
 
         public void OnDraw()
@@ -71,8 +65,9 @@ namespace Game
         private void SaveLanguage()
         {
             GameEntry.Setting.SetString(Constant.Setting.Language, GameEntry.Localization.Language.ToString());
+            GameEntry.Localization.HotReloadLocalization(GameEntry.Localization.Language);
             GameEntry.Setting.Save();
-            m_NeedRestart = true;
+
         }
     }
 }
