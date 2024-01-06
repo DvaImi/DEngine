@@ -14,6 +14,7 @@ namespace Game
             GameEntry.BuiltinData.InitLanguageSettings();
             GameEntry.BuiltinData.InitSoundSettings();
             GameEntry.BuiltinData.InitCurrentVariant();
+            GameEntry.BuiltinData.InitLanguageDebugger();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

@@ -55,7 +55,23 @@ namespace Game
                 // 编辑器资源模式不使用 AssetBundle，也就没有变体了
                 return;
             }
+            GameEntry.Resource.SetCurrentVariant(GetVariant());
+            Log.Info("Init current variant complete.");
+        }
 
+        public void InitSoundSettings()
+        {
+            GameEntry.Sound.Mute("Music", GameEntry.Setting.GetBool(Constant.Setting.MusicMuted, false));
+            GameEntry.Sound.SetVolume("Music", GameEntry.Setting.GetFloat(Constant.Setting.MusicVolume, 0.3f));
+            GameEntry.Sound.Mute("Sound", GameEntry.Setting.GetBool(Constant.Setting.SoundMuted, false));
+            GameEntry.Sound.SetVolume("Sound", GameEntry.Setting.GetFloat(Constant.Setting.SoundVolume, 1f));
+            GameEntry.Sound.Mute("UISound", GameEntry.Setting.GetBool(Constant.Setting.UISoundMuted, false));
+            GameEntry.Sound.SetVolume("UISound", GameEntry.Setting.GetFloat(Constant.Setting.UISoundVolume, 1f));
+            Log.Info("Init sound settings complete.");
+        }
+
+        public string GetVariant()
+        {
             string currentVariant;
             switch (GameEntry.Localization.Language)
             {
@@ -79,20 +95,12 @@ namespace Game
                     currentVariant = "zh-cn";
                     break;
             }
-
-            GameEntry.Resource.SetCurrentVariant(currentVariant);
-            Log.Info("Init current variant complete.");
+            return currentVariant;
         }
-
-        public void InitSoundSettings()
+        public void InitLanguageDebugger()
         {
-            GameEntry.Sound.Mute("Music", GameEntry.Setting.GetBool(Constant.Setting.MusicMuted, false));
-            GameEntry.Sound.SetVolume("Music", GameEntry.Setting.GetFloat(Constant.Setting.MusicVolume, 0.3f));
-            GameEntry.Sound.Mute("Sound", GameEntry.Setting.GetBool(Constant.Setting.SoundMuted, false));
-            GameEntry.Sound.SetVolume("Sound", GameEntry.Setting.GetFloat(Constant.Setting.SoundVolume, 1f));
-            GameEntry.Sound.Mute("UISound", GameEntry.Setting.GetBool(Constant.Setting.UISoundMuted, false));
-            GameEntry.Sound.SetVolume("UISound", GameEntry.Setting.GetFloat(Constant.Setting.UISoundVolume, 1f));
-            Log.Info("Init sound settings complete.");
+            ChangeLanguageDebuggerWindow changeLanguage = new ChangeLanguageDebuggerWindow();
+            GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", changeLanguage);
         }
 
         public void OpenDialog(DialogParams dialogParams)

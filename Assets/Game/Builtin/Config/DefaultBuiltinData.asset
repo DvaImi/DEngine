@@ -21,4 +21,4 @@ MonoBehaviour:
     MacOSAppUrl: 
     IOSAppUrl: 
     AndroidAppUrl: 
-  BuildinLanguage: {fileID: 11400000, guid: 05afb19b2140e294f811fa04918c11ad, type: 2}
+  BuildinLanguage: {fileID: 0}

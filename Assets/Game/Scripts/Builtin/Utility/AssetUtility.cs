@@ -16,7 +16,7 @@
 
         public static string GetDictionaryAsset(string assetName, bool fromBytes)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Localization/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");
+            return DEngine.Utility.Text.Format("Assets/Game/Localization/{0}/{1}.{2}", assetName, assetName, fromBytes ? "bytes" : "txt");
         }
 
         public static string GetFontAsset(string assetName)

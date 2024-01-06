@@ -18,15 +18,6 @@ namespace Game
         }
 
         /// <summary>
-        /// 获取配置组件。
-        /// </summary>
-        public static ConfigComponent Config
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// 获取数据结点组件。
         /// </summary>
         public static DataNodeComponent DataNode
@@ -197,7 +188,6 @@ namespace Game
         private static void InitBuiltinComponents()
         {
             Base = DEngine.Runtime.GameEntry.GetComponent<BaseComponent>();
-            Config = DEngine.Runtime.GameEntry.GetComponent<ConfigComponent>();
             DataNode = DEngine.Runtime.GameEntry.GetComponent<DataNodeComponent>();
             DataTable = DEngine.Runtime.GameEntry.GetComponent<DataTableComponent>();
             Debugger = DEngine.Runtime.GameEntry.GetComponent<DebuggerComponent>();

@@ -10,7 +10,6 @@ namespace Game.Update
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            Log.Info($"welcome {GameEntry.Localization.GetString("Game.Name")}");
             Log.Info($"Current Version {Application.version}");
         }
 
@@ -21,6 +20,11 @@ namespace Game.Update
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+            
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                Log.Info($"welcome {GameEntry.Localization.GetString("Game.Name")}");
+            }
         }
     }
 }

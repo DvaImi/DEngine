@@ -44,13 +44,6 @@ namespace Game.Editor.DataTableTools
             }
             EditorGUILayout.EndHorizontal();
 
-            GUILayout.Space(5f);
-            EditorGUILayout.BeginVertical("box");
-            {
-                GUIConfig();
-            }
-            EditorGUILayout.EndHorizontal();
-
             GUILayout.FlexibleSpace();
 
             EditorGUILayout.BeginHorizontal();
@@ -133,19 +126,6 @@ namespace Game.Editor.DataTableTools
                 {
                     GUIAssetPath("字典导出路径", ref DataTableSetting.Instance.LocalizationPath);
                     GUIOutPath("字典表格路径", ref DataTableSetting.Instance.LocalizationExcelsFolder);
-                }
-            }
-            EditorGUILayout.EndFoldoutHeaderGroup();
-        }
-
-        private void GUIConfig()
-        {
-            m_FoldoutConfigGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutConfigGroup, "配置");
-            {
-                if (m_FoldoutConfigGroup)
-                {
-                    GUIAssetPath("字典导出路径", ref DataTableSetting.Instance.ConfigPath);
-                    GUIOutPath("字典表格路径", ref DataTableSetting.Instance.ConfigExcelsFolder);
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();

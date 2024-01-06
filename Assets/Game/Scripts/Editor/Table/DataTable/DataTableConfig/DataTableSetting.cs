@@ -137,17 +137,6 @@ namespace Game.Editor.DataTableTools
         public string LocalizationExcelsFolder = "Assets/../Excels/Localization";
         #endregion
 
-        #region Config
-        /// <summary>
-        /// 数据表存放文件夹路径
-        /// </summary>
-        public string ConfigPath= "Assets/Game/Configs";
-        /// <summary>
-        /// Excel存放的文件夹路径
-        /// </summary>
-        public string ConfigExcelsFolder = "Assets/../Excels/Config";
-        #endregion
-
         internal void SaveSetting()
         {
             Save();

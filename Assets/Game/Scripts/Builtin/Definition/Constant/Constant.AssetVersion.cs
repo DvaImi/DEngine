@@ -12,7 +12,6 @@
             public const string AOTMetadataVersion = "AOTMetadataVersion";
             public const string DataTableVersion = "DataTableVersion";
             public const string LocalizationVersion = "LocalizationVersion";
-            public const string ConfigVersion = "ConfigVersion";
         }
     }
 }

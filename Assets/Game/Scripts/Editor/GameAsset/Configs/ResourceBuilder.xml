@@ -2,14 +2,14 @@
 <DEngine>
   <ResourceBuilder>
     <Settings>
-      <InternalResourceVersion>1</InternalResourceVersion>
+      <InternalResourceVersion>4</InternalResourceVersion>
       <Platforms>1</Platforms>
       <AssetBundleCompression>1</AssetBundleCompression>
       <CompressionHelperTypeName>DEngine.Runtime.DefaultCompressionHelper</CompressionHelperTypeName>
       <AdditionalCompressionSelected>True</AdditionalCompressionSelected>
       <ForceRebuildAssetBundleSelected>False</ForceRebuildAssetBundleSelected>
       <BuildEventHandlerTypeName>Game.Editor.GameBuildEventHandler</BuildEventHandlerTypeName>
-      <OutputDirectory>F:/Project/Unity/Work/Bundles</OutputDirectory>
+      <OutputDirectory>Assets/../BundlesOutput</OutputDirectory>
       <OutputPackageSelected>True</OutputPackageSelected>
       <OutputFullSelected>True</OutputFullSelected>
       <OutputPackedSelected>True</OutputPackedSelected>

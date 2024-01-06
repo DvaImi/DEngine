@@ -35,7 +35,12 @@ namespace Game.Editor.DataTableTools
                                 ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
                                 string dictionaryName = workCount > 1 ? excelName + "_" + sheet.Name : excelName;
                                 DictionaryProcessor processor = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
-                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName + ".bytes"));
+                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName, dictionaryName + ".bytes"));
+                                FileInfo fileInfo = new(binaryDataFileName);
+                                if (!fileInfo.Directory.Exists)
+                                {
+                                    fileInfo.Directory.Create();
+                                }
                                 if (!processor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
                                 {
                                     File.Delete(binaryDataFileName);
@@ -54,57 +59,10 @@ namespace Game.Editor.DataTableTools
             }
         }
 
-        [MenuItem("Table/Generate/Config", priority = 3)]
-        public static void GenerateConfigFormExcel()
-        {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            if (Directory.Exists(DataTableSetting.Instance.ConfigExcelsFolder))
-            {
-                DirectoryInfo excelFolder = new(DataTableSetting.Instance.ConfigExcelsFolder);
-                List<string> dictionaryNames = new List<string>();
-                string[] ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(_ => !_.Name.StartsWith("~$")).Select(_ => Utility.Path.GetRegularPath(_.FullName)).ToArray();
-                foreach (var excelFile in ExcelFilePaths)
-                {
-                    string excelName = Path.GetFileNameWithoutExtension(excelFile);
-                    using (FileStream fileStream = new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    {
-                        using (ExcelPackage excelPackage = new ExcelPackage(fileStream))
-                        {
-                            int workCount = excelPackage.Workbook.Worksheets.Count;
-                            for (int i = 0; i < workCount; i++)
-                            {
-                                ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
-                                string dictionaryName = workCount > 1 ? excelName + "_" + sheet.Name : excelName;
-                                DictionaryProcessor processor = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
-                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, dictionaryName + ".bytes"));
-                                if (!processor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
-                                {
-                                    File.Delete(binaryDataFileName);
-                                }
-                                dictionaryNames.Add(dictionaryName);
-                            }
-                        }
-                    }
-                }
-                string version = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ConfigPath, Constant.AssetVersion.ConfigVersion + ".bytes"));
-                GameAssetVersionUitlity.CreatAssetVersion(dictionaryNames.ToArray(), version);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-                AssetDatabase.Refresh();
-                Debug.Log("Config Data File Generated !");
-            }
-        }
-
         [MenuItem("Table/Editor/Localization", priority = 2)]
         public static void EditorLocalization()
         {
             OpenFolder.Execute(DataTableSetting.Instance.LocalizationExcelsFolder);
-        }
-
-        [MenuItem("Table/Editor/Config", priority = 3)]
-        public static void EditorConfig()
-        {
-            OpenFolder.Execute(DataTableSetting.Instance.ConfigExcelsFolder);
         }
     }
 }
