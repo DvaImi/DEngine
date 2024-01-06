@@ -76,3 +76,12 @@ MonoBehaviour:
     packed: 0
     filterType: 0
     searchPatterns: '*.*'
+  - valid: 1
+    name: ui
+    fileSystem: 
+    groups: 
+    assetPath: Assets/Game/UI/UIForms
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'

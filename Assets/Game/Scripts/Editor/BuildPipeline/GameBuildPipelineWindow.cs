@@ -104,15 +104,13 @@ namespace Game.Editor.BuildPipeline
                 m_BeginBuildPlayer = false;
                 Close();
                 GameBuildPipeline.BuildPlayer(false);
-                Open();
             }
 
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
                 Close();
-                GameBuildPipeline.BuildBundle(GameSetting.Instance.Difference);
-                Open();
+                GameBuildPipeline.BuildBundle(GameSetting.Instance.ForceRebuild, GameSetting.Instance.BundlesOutput, GameSetting.Instance.Difference);
             }
 
             if (m_IsAotGeneric)
@@ -124,7 +122,6 @@ namespace Game.Editor.BuildPipeline
                 HybridCLR.Editor.Commands.StripAOTDllCommand.GenerateStripedAOTDlls();
                 HybridCLR.Editor.Commands.MethodBridgeGeneratorCommand.CompileAndGenerateMethodBridge();
                 HybridCLR.Editor.Commands.AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
-                Open();
             }
         }
 
@@ -348,12 +345,12 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
-
+                GameSetting.Instance.ForceRebuild = EditorGUILayout.ToggleLeft("ForceRebuild", GameSetting.Instance.ForceRebuild, GUILayout.Width(120));
                 bool canDifference = GameBuildPipeline.CanDifference();
                 GUI.enabled = canDifference;
                 GameSetting.Instance.Difference = canDifference && EditorGUILayout.ToggleLeft("Difference", GameSetting.Instance.Difference, GUILayout.Width(120));
                 GUI.enabled = true;
-              
+
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
                 int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameBuildPipeline.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)
@@ -377,7 +374,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.BundlesOutput);
                 }
-                
+
                 if (GUILayout.Button("Clear", GUILayout.Width(80)))
                 {
                     GameBuildPipeline.ClearBundles();
@@ -494,7 +491,7 @@ namespace Game.Editor.BuildPipeline
                     DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.AppOutput);
                 }
 
-                if (GUILayout.Button("Clear",GUILayout.Width(80f)))
+                if (GUILayout.Button("Clear", GUILayout.Width(80f)))
                 {
                     IOUtility.ClearFolder(GameSetting.Instance.AppOutput);
                     Debug.Log($"Clear{GameSetting.Instance.AppOutput} success !");

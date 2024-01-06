@@ -20,10 +20,10 @@ namespace Game.Editor.BuildPipeline
             return Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, GameSetting.Instance.LatestGameVersion, GameSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
         }
 
-        public static void BuildBundle(bool difference = false)
+        public static void BuildBundle(bool forceRebuild, string output, bool difference)
         {
             OnPreprocess();
-            BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), GameSetting.Instance.BundlesOutput, difference);
+            BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), output, forceRebuild, difference);
         }
 
         public static void ClearBundles()
@@ -50,7 +50,7 @@ namespace Game.Editor.BuildPipeline
             Debug.Log("Clear success");
         }
 
-        public static void BuildBundle(Platform platform, string outputDirectory, bool difference = false)
+        public static void BuildBundle(Platform platform, string outputDirectory, bool forceRebuild = false, bool difference = false)
         {
             ResourceBuilderController builderController = new();
             builderController.OnLoadingResource += OnLoadingResource;
@@ -72,6 +72,7 @@ namespace Game.Editor.BuildPipeline
                 builderController.RefreshBuildEventHandler();
                 builderController.AdditionalCompressionSelected = true;
                 builderController.Difference = difference;
+                builderController.ForceRebuildAssetBundleSelected = forceRebuild;
                 if (difference)
                 {
                     builderController.ProcessDifferenceComplete += OnPostprocessDifference;

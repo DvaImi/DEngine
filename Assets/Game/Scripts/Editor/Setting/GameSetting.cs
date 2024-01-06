@@ -41,6 +41,10 @@ namespace Game.Editor
         /// </summary>
         public bool Difference;
         /// <summary>
+        /// 强制重建资源包
+        /// </summary>
+        public bool ForceRebuild;
+        /// <summary>
         /// 应用发布路径
         /// </summary>
         public string AppOutput => "Assets/../AppOutput";
