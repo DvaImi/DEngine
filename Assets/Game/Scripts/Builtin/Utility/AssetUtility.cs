@@ -2,13 +2,6 @@
 {
     public static class AssetUtility
     {
-
-        public static string GetConfigAsset(string assetName, bool fromBytes)
-        {
-            return DEngine.Utility.Text.Format("Assets/Game/Configs/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");
-        }
-
-
         public static string GetDataTableAsset(string assetName, bool fromBytes)
         {
             return DEngine.Utility.Text.Format("Assets/Game/DataTables/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");

@@ -50,7 +50,7 @@ namespace Game.Editor.BuildPipeline
                 File.Copy(fileName, destFileName);
             }
 
-            Debug.Log("Copy Bundles to virtualServer success");
+            Debug.Log("Copy Bundles to local file server success");
         }
 
         /// <summary>

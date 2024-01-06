@@ -18,16 +18,6 @@ MonoBehaviour:
     variant: 
     fileSystem: 
     groups: 
-    assetPath: Assets/Game/Configs
-    loadType: 0
-    packed: 0
-    filterType: 1
-    searchPatterns: '*.*'
-  - valid: 1
-    name: 
-    variant: 
-    fileSystem: 
-    groups: 
     assetPath: Assets/Game/DataTables
     loadType: 0
     packed: 0
@@ -102,16 +92,6 @@ MonoBehaviour:
     loadType: 0
     packed: 0
     filterType: 0
-    searchPatterns: '*.*'
-  - valid: 1
-    name: 
-    variant: 
-    fileSystem: 
-    groups: 
-    assetPath: Assets/Game/Localization
-    loadType: 0
-    packed: 0
-    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: 

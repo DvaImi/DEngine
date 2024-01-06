@@ -11,7 +11,6 @@
             public const string PreserveAssembliesVersion = "PreserveAssembliesVersion";
             public const string AOTMetadataVersion = "AOTMetadataVersion";
             public const string DataTableVersion = "DataTableVersion";
-            public const string LocalizationVersion = "LocalizationVersion";
         }
     }
 }

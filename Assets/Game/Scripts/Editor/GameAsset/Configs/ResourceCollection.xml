@@ -2,8 +2,6 @@
 <DEngine>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Game/Configs/ConfigVersion" LoadType="0" Packed="False" />
-      <Resource Name="Game/Configs/DefaultConfig" LoadType="0" Packed="False" />
       <Resource Name="Game/DataTables/DataTableVersion" LoadType="0" Packed="False" />
       <Resource Name="Game/DataTables/Entity" LoadType="0" Packed="False" />
       <Resource Name="Game/DataTables/Music" LoadType="0" Packed="False" />
@@ -26,7 +24,6 @@
       <Resource Name="Game/Localization/ChineseTraditional" Variant="zh-tw" LoadType="0" Packed="False" />
       <Resource Name="Game/Localization/English" Variant="en-us" LoadType="0" Packed="False" />
       <Resource Name="Game/Localization/Korean" Variant="ko-kr" LoadType="0" Packed="False" />
-      <Resource Name="Game/Localization/LocalizationVersion" LoadType="0" Packed="False" />
     </Resources>
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="Game/DataTables/Sound" />
@@ -37,7 +34,6 @@
       <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="Game/HybridCLRData/Luncher/UpdateLuncher" />
       <Asset Guid="4da5235c15000f34f9eb69011f36b2ae" ResourceName="Game/DataTables/DataTableVersion" />
       <Asset Guid="5202f3984dc53b3448ad5168e55e4de4" ResourceName="Game/HybridCLRData/AOT/AOTMetadataVersion" />
-      <Asset Guid="5923cf86beac9d746ab0360d8a1299f7" ResourceName="Game/Configs/DefaultConfig" />
       <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="Game/DataTables/Music" />
       <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="Game/DataTables/UISound" />
       <Asset Guid="6e0cc6463dd35bb4cb996e979a310e53" ResourceName="Game/HybridCLRData/AOT/System.Core" />
@@ -46,10 +42,8 @@
       <Asset Guid="7fcebeb931973e44681b55b6aef8126a" ResourceName="Game/HybridCLRData/HotUpdate/Game.Update" />
       <Asset Guid="853065540f2cc46458c85643d01bb818" ResourceName="Game/HybridCLRData/AOT/DEngine.Runtime" />
       <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="Game/Localization/ChineseTraditional" ResourceVariant="zh-tw" />
-      <Asset Guid="a5b37d865d8f9304898f63dfb1a8242b" ResourceName="Game/Localization/LocalizationVersion" />
       <Asset Guid="a7e359e62b6d45f489afd4e342686803" ResourceName="Game/HybridCLRData/AOT/DEngine" />
       <Asset Guid="b0322478b8ba5014194d03b7b2692ec7" ResourceName="Game/HybridCLRData/AOT/mscorlib" />
-      <Asset Guid="b5829e5fcc6d1e8438cbd96030acecdb" ResourceName="Game/Configs/ConfigVersion" />
       <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="Game/Localization/English" ResourceVariant="en-us" />
       <Asset Guid="b813e22959d705c489e46644eb4e2dc9" ResourceName="Game/HybridCLRData/AOT/UniTask" />
       <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="Game/DataTables/Scene" />
