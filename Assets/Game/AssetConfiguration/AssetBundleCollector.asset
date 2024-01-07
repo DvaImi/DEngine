@@ -13,34 +13,56 @@ MonoBehaviour:
   m_Name: AssetBundleCollector
   m_EditorClassIdentifier: 
   Groups:
-  - GroupName: Default
+  - GroupName: table
     EnableGroup: 1
-    Description: "\u9ED8\u8BA4\u8D44\u6E90"
+    Description: "\u6570\u636E\u8868"
     AssetCollectors:
     - Enable: 1
       Name: table
       FileSystem: 
-      Groups: Default
+      Groups: table
       Variant: 
       AssetPath: Assets/Game/DataTables
       LoadType: 0
       Packed: 1
       FilterType: 0
       SearchPatterns: '*.*'
+  - GroupName: scripts
+    EnableGroup: 1
+    Description: "\u70ED\u66F4\u7A0B\u5E8F"
+    AssetCollectors:
     - Enable: 1
       Name: scripts
       FileSystem: 
-      Groups: Default
+      Groups: scripts
       Variant: 
       AssetPath: Assets/Game/HybridCLRData
       LoadType: 0
       Packed: 1
       FilterType: 0
       SearchPatterns: '*.*'
+  - GroupName: ui
+    EnableGroup: 1
+    Description: "\u754C\u9762"
+    AssetCollectors:
+    - Enable: 1
+      Name: ui
+      FileSystem: 
+      Groups: ui
+      Variant: 
+      AssetPath: Assets/Game/UI
+      LoadType: 0
+      Packed: 1
+      FilterType: 0
+      SearchPatterns: '*.*'
+  - GroupName: localization
+    EnableGroup: 1
+    Description: "\u672C\u5730\u5316"
+    AssetCollectors:
     - Enable: 1
       Name: zh-cn
       FileSystem: 
-      Groups: Default
+      Groups: localization
       Variant: 
       AssetPath: Assets/Game/Localization/ChineseSimplified
       LoadType: 0
@@ -50,7 +72,7 @@ MonoBehaviour:
     - Enable: 1
       Name: zh-tw
       FileSystem: 
-      Groups: Default
+      Groups: localization
       Variant: 
       AssetPath: Assets/Game/Localization/ChineseTraditional
       LoadType: 0
@@ -60,20 +82,10 @@ MonoBehaviour:
     - Enable: 1
       Name: en-us
       FileSystem: 
-      Groups: Default
+      Groups: localization
       Variant: 
       AssetPath: Assets/Game/Localization/English
       LoadType: 0
       Packed: 1
       FilterType: 0
-      SearchPatterns: '*.*'
-    - Enable: 1
-      Name: ui
-      FileSystem: 
-      Groups: Default
-      Variant: 
-      AssetPath: Assets/Game/UI
-      LoadType: 0
-      Packed: 1
-      FilterType: 2
       SearchPatterns: '*.*'

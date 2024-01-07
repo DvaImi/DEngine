@@ -33,7 +33,7 @@ namespace Game.Editor
         [MenuItem("Game/Asset Collector", false, 1)]
         public static void OpenWindow()
         {
-            var window = GetWindow<AssetCollectorEditor>("资源收集");
+            var window = GetWindow<AssetCollectorEditor>("资源收集器");
             window.minSize = new Vector2(1300f, 420f);
         }
 
@@ -137,6 +137,12 @@ namespace Game.Editor
                 GUILayout.FlexibleSpace();
                 Color originalColor = GUI.backgroundColor;
                 GUI.backgroundColor = Color.green;
+
+                if (GUILayout.Button("Ping"))
+                {
+                    EditorGUIUtility.PingObject(m_Configuration);
+                }
+
                 if (GUILayout.Button("导出"))
                 {
                     AssetCollectorEditorUtility.RefreshResourceCollection(m_Configuration);
@@ -243,14 +249,12 @@ namespace Game.Editor
                     {
                         group.EnableGroup = !group.EnableGroup;
                     }
-                    string groupName = EditorGUILayout.DelayedTextField("分组名", group.GroupName);
-
+                    string groupName = EditorGUILayout.DelayedTextField("分组名(按 ; , | 分割)", group.GroupName);
                     if (group.GroupName != groupName)
                     {
                         group.SetGroupName(groupName);
                         m_SelectedItem.displayName = GetDisplayName(group);
                     }
-
 
                     string description = EditorGUILayout.TextField("分组描述", group.Description);
 
@@ -340,70 +344,76 @@ namespace Game.Editor
         /// <returns></returns>
         private List<TableColumn<AssetCollector>> GetAssetCollectorColumns()
         {
-            var ruleColumns = new List<TableColumn<AssetCollector>>();
+            var columns = new List<TableColumn<AssetCollector>>();
 
             TableColumn<AssetCollector> column1 = CreateColumn(new GUIContent("Enable", "启用资产"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
                     data.Enable = EditorGUI.Toggle(cellRect, data.Enable);
                 }, 50, 50, 60);
-            ruleColumns.Add(column1);
+            columns.Add(column1);
 
             TableColumn<AssetCollector> column2 = CreateColumn(new GUIContent("Name", "资产命名"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
                     data.Name = EditorGUI.TextField(cellRect, data.Name);
                 }, 100, 50, 150);
-            ruleColumns.Add(column2);
+            columns.Add(column2);
 
             TableColumn<AssetCollector> column3 = CreateColumn(new GUIContent("LoadType", "加载类型"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
                     data.LoadType = (LoadType)EditorGUI.EnumPopup(cellRect, data.LoadType);
                 }, 150, 110, 200);
-            ruleColumns.Add(column3);
+            columns.Add(column3);
 
-            TableColumn<AssetCollector> column4 = CreateColumn(new GUIContent("Packed", "是否随包（这些资源将会跟随包体一起发布，作为基础资源）"),
+            TableColumn<AssetCollector> column4 = CreateColumn(new GUIContent("Packed", "是否为本地资源（这些资源将会跟随包体一起发布，作为基础资源）"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
                     data.Packed = EditorGUI.Toggle(cellRect, data.Packed);
                 }, 50, 50, 60);
-            ruleColumns.Add(column4);
+            columns.Add(column4);
 
             TableColumn<AssetCollector> column5 = CreateColumn(new GUIContent("FileSystem", "文件系统（可为空）"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
                     data.FileSystem = EditorGUI.TextField(cellRect, data.FileSystem);
                 }, 100, 50, 150);
-            ruleColumns.Add(column5);
+            columns.Add(column5);
             TableColumn<AssetCollector> column6 = CreateColumn(new GUIContent("Variant", "资源变体（可为空）"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
                     data.Variant = EditorGUI.TextField(cellRect, data.Variant);
                 }, 100, 50, 150);
-            ruleColumns.Add(column6);
-            TableColumn<AssetCollector> column7 = CreateColumn(new GUIContent("AssetsDirectoryPath", "资源目录"),
+            columns.Add(column6);
+            TableColumn<AssetCollector> column7 = CreateColumn(new GUIContent("AssetPath", "资源目录"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
-                    Rect folderButtonRect = new Rect(cellRect.x, cellRect.y, 20, 20);
-                    Rect textFildRect = new Rect(cellRect.x + 20, cellRect.y, cellRect.width - 20, cellRect.height);
+                    Rect textFildRect = new Rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
                     data.AssetPath = EditorGUI.TextField(textFildRect, data.AssetPath);
-                    if (GUI.Button(folderButtonRect, m_FolderBtnContent, m_FolderBtnStyle))
+                    Event currentEvent = Event.current;
+                    if (currentEvent.type == EventType.MouseDown && GUILayoutUtility.GetLastRect().Contains(currentEvent.mousePosition))
                     {
                         EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(data.AssetPath));
                     }
-
                 }, 300, 200, 400);
-            ruleColumns.Add(column7);
+            columns.Add(column7);
 
             TableColumn<AssetCollector> column8 = CreateColumn(new GUIContent("FilterType", "资源筛选类型"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
                     data.FilterType = (FilterType)EditorGUI.EnumPopup(cellRect, data.FilterType);
                 }, 150, 120, 160);
-            ruleColumns.Add(column8);
+            columns.Add(column8);
 
-            return ruleColumns;
+            TableColumn<AssetCollector> column9 = CreateColumn(new GUIContent("SearchPatterns", "资源筛选模式"),
+                (cellRect, data, rowIndex, isSelected, isFocused) =>
+                {
+                    data.SearchPatterns = EditorGUI.TextField(cellRect, data.SearchPatterns);
+                }, 100, 100, 160);
+            columns.Add(column9);
+
+            return columns;
         }
 
         /// <summary>

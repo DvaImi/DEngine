@@ -2,12 +2,12 @@
 <DEngine>
   <ResourceCollection>
     <Resources>
-      <Resource Name="en-us" LoadType="0" Packed="True" ResourceGroups="Default" />
-      <Resource Name="scripts" LoadType="0" Packed="True" ResourceGroups="Default" />
-      <Resource Name="table" LoadType="0" Packed="True" ResourceGroups="Default" />
-      <Resource Name="ui" LoadType="0" Packed="True" ResourceGroups="Default" />
-      <Resource Name="zh-cn" LoadType="0" Packed="True" ResourceGroups="Default" />
-      <Resource Name="zh-tw" LoadType="0" Packed="True" ResourceGroups="Default" />
+      <Resource Name="en-us" LoadType="0" Packed="True" ResourceGroups="localization" />
+      <Resource Name="scripts" LoadType="0" Packed="True" ResourceGroups="scripts" />
+      <Resource Name="table" LoadType="0" Packed="True" ResourceGroups="table" />
+      <Resource Name="ui" LoadType="0" Packed="True" ResourceGroups="ui" />
+      <Resource Name="zh-cn" LoadType="0" Packed="True" ResourceGroups="localization" />
+      <Resource Name="zh-tw" LoadType="0" Packed="True" ResourceGroups="localization" />
     </Resources>
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="table" />
