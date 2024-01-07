@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using DEngine.DataTable;
 using DEngine.Event;
 using DEngine.Procedure;
 using DEngine.Resource;
@@ -48,7 +49,7 @@ namespace Game.Update
                     return;
                 }
             }
-
+            PreloadComplete();
             ChangeState<ProcedureMenu>(procedureOwner);
         }
 
@@ -57,6 +58,16 @@ namespace Game.Update
             m_LoadedFlag.Add(AssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), false);
             GameEntry.Resource.LoadAsset(AssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableVersionLoadSuccess)));
             LoadLocalization(GameEntry.Localization.Language.ToString());
+        }
+
+        private void PreloadComplete()
+        {
+            DRUIGroup[] uiGroups = GameEntry.DataTable.GetDataTable<DRUIGroup>().GetAllDataRows();
+
+            for (int i = 0; i < uiGroups.Length; i++)
+            {
+                GameEntry.UI.AddUIGroup(uiGroups[i].UIGroupName, uiGroups[i].UIGroupDepth);
+            }
         }
 
         private void OnDataTableVersionLoadSuccess(string assetName, object asset, float duration, object userData)

@@ -1,10 +1,10 @@
 ﻿//this file is generate by tools,do not alter it...
 namespace Game.Update
 {
-	// 界面编号
-	public enum UIFormId : byte
+	// 界面组编号
+	public enum UIGroupId : byte
 	{
 		// 
-		DemoForm = 1,
+		Default = 1,
 	}
 }

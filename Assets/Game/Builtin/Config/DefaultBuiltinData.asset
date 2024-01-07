@@ -17,7 +17,7 @@ MonoBehaviour:
   BuildInfo:
     LatestGameVersion: 0.1.0
     CheckVersionUrl: http://localhost:8080/CDN/DEngine/{0}/{1}Version.json
-    WindowsAppUrl: 
+    WindowsAppUrl: http://localhost:8080/CDN/WindowsApp/Game.zip
     MacOSAppUrl: 
     IOSAppUrl: 
     AndroidAppUrl: 

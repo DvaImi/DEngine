@@ -14,19 +14,19 @@ namespace Game.Editor
         /// <summary>
         /// 
         /// </summary>
-        public string BuildSettingsConfig = "Game/Configs/Editor/BuildSettings.xml";
+        public string BuildSettingsConfig = "Assets/Game/AssetConfiguration/BuildSetting.xml";
         /// <summary>
         /// 
         /// </summary>
-        public string ResourceCollectionConfig = "Game/Configs/Editor/ResourceCollection.xml";
+        public string ResourceCollectionConfig = "Assets/Game/AssetConfiguration/ResourceCollection.xml";
         /// <summary>
         /// 
         /// </summary>
-        public string ResourceEditorConfig = "Game/Configs/Editor/ResourceEditor.xml";
+        public string ResourceEditorConfig = "Assets/Game/AssetConfiguration/ResourceEditor.xml";
         /// <summary>
         /// 
         /// </summary>
-        public string ResourceBuilderConfig = "Game/Configs/Editor/ResourceBuilder.xml";
+        public string ResourceBuilderConfig = "Assets/Game/AssetConfiguration/ResourceBuilder.xml";
 
         /// <summary>
         /// 记录打包平台

@@ -101,14 +101,7 @@ namespace Game.Editor.BuildPipeline
 
         public static void RefreshResourceCollection()
         {
-            AssetBundleCollectorWindow ruleEditor = GameEditorUtility.GetScriptableObject<AssetBundleCollectorWindow>();
-            ruleEditor.RefreshResourceCollection();
-        }
-
-        public static void RefreshResourceCollection(string configPath)
-        {
-            AssetBundleCollectorWindow ruleEditor = GameEditorUtility.GetScriptableObject<AssetBundleCollectorWindow>();
-            ruleEditor.RefreshResourceCollection(configPath);
+            AssetCollectorEditorUtility.RefreshResourceCollection();
         }
 
         public static void SaveOutputDirectory(string outputDirectory)

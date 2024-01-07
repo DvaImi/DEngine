@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<DEngine>
+  <ResourceCollection>
+    <Resources>
+      <Resource Name="en-us" LoadType="0" Packed="True" ResourceGroups="Default" />
+      <Resource Name="scripts" LoadType="0" Packed="True" ResourceGroups="Default" />
+      <Resource Name="table" LoadType="0" Packed="True" ResourceGroups="Default" />
+      <Resource Name="ui" LoadType="0" Packed="True" ResourceGroups="Default" />
+      <Resource Name="zh-cn" LoadType="0" Packed="True" ResourceGroups="Default" />
+      <Resource Name="zh-tw" LoadType="0" Packed="True" ResourceGroups="Default" />
+    </Resources>
+    <Assets>
+      <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="table" />
+      <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="zh-cn" />
+      <Asset Guid="22156b94f4be2054cad2bd5db8bf4298" ResourceName="scripts" />
+      <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="table" />
+      <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="table" />
+      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="scripts" />
+      <Asset Guid="4da5235c15000f34f9eb69011f36b2ae" ResourceName="table" />
+      <Asset Guid="5202f3984dc53b3448ad5168e55e4de4" ResourceName="scripts" />
+      <Asset Guid="52c6c208c18a96142898d670f5aae2df" ResourceName="table" />
+      <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="table" />
+      <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="table" />
+      <Asset Guid="6e0cc6463dd35bb4cb996e979a310e53" ResourceName="scripts" />
+      <Asset Guid="6fbd3fc70dde5ad40a86bf2a1e2a7847" ResourceName="scripts" />
+      <Asset Guid="7d802148556f9e7419a2e05a2bd0dd26" ResourceName="scripts" />
+      <Asset Guid="7fcebeb931973e44681b55b6aef8126a" ResourceName="scripts" />
+      <Asset Guid="853065540f2cc46458c85643d01bb818" ResourceName="scripts" />
+      <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="zh-tw" />
+      <Asset Guid="a7e359e62b6d45f489afd4e342686803" ResourceName="scripts" />
+      <Asset Guid="b0322478b8ba5014194d03b7b2692ec7" ResourceName="scripts" />
+      <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="en-us" />
+      <Asset Guid="b813e22959d705c489e46644eb4e2dc9" ResourceName="scripts" />
+      <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="table" />
+      <Asset Guid="dd1e5497e76657e468029f63307f50d0" ResourceName="ui" />
+    </Assets>
+  </ResourceCollection>
+</DEngine>

@@ -11,6 +11,7 @@ namespace Game.Update
         {
             base.OnEnter(procedureOwner);
             Log.Info($"Current Version {Application.version}");
+            GameEntry.UI.OpenUIForm(UIFormId.DemoForm);
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -20,7 +21,7 @@ namespace Game.Update
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            
+
             if (Input.GetKeyDown(KeyCode.L))
             {
                 Log.Info($"{GameEntry.Localization.GetString("Game.Language")}");
