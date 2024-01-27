@@ -1,6 +1,7 @@
 ﻿using System;
 using DEngine.Localization;
 using DEngine.Runtime;
+using Game.Debugger;
 using UnityEngine;
 
 namespace Game
@@ -59,10 +60,12 @@ namespace Game
             Log.Info("Init sound settings complete.");
         }
 
-        public void InitLanguageDebugger()
+        public void InitDebugger()
         {
             ChangeLanguageDebuggerWindow changeLanguage = new ChangeLanguageDebuggerWindow();
+            CommonLineDebuggerWindow commonLine = new CommonLineDebuggerWindow();
             GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", changeLanguage);
+            GameEntry.Debugger.RegisterDebuggerWindow("Other/CommonLine", commonLine);
         }
 
         public void InitExtensionEventHandle()
