@@ -87,8 +87,6 @@ namespace Game.Editor
             SetFocusAndEnsureSelectedItem();
         }
 
-
-
         protected override void OnGUI()
         {
             GUIToolbar();
@@ -142,7 +140,7 @@ namespace Game.Editor
                 Color originalColor = GUI.backgroundColor;
                 GUI.backgroundColor = Color.green;
 
-                if (GUILayout.Button("Ping"))
+                if (GUILayout.Button("Go"))
                 {
                     EditorGUIUtility.PingObject(m_AssetBundlePackageCollector);
                 }
@@ -220,12 +218,18 @@ namespace Game.Editor
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("-", GUILayout.Width(30)))
                     {
-                        if (m_SelectAssetBundleCollector != null)
+
+                        void ConfirmDeletion()
                         {
-                            m_AssetBundlePackageCollector.PackagesCollector.Remove(m_SelectAssetBundleCollector);
-                            m_MenuTreePackagesView.RemoveItem(m_PackageSelectedItem);
+                            if (m_SelectAssetBundleCollector != null)
+                            {
+                                m_AssetBundlePackageCollector.PackagesCollector.Remove(m_SelectAssetBundleCollector);
+                                m_MenuTreePackagesView.RemoveItem(m_PackageSelectedItem);
+                            }
+
+                            SetFocusAndEnsureSelectedItem();
                         }
-                        SetFocusAndEnsureSelectedItem();
+                        GameEditorUtility.EditorDisplay("提示", $"确定要删除{m_PackageSelectedItem?.Data?.PackageName}?", "确认", "取消", ConfirmDeletion);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -251,13 +255,18 @@ namespace Game.Editor
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("-", GUILayout.Width(30)))
                     {
-                        if (m_GroupSelectedItem != null)
+                        void ConfirmDeletion()
                         {
-                            m_MenuTreeGroupsView.RemoveItem(m_GroupSelectedItem);
-                            m_SelectAssetBundleCollector.Groups.Remove(m_GroupSelectedItem.Data);
-                            m_GroupSelectedItem = null;
+                            if (m_GroupSelectedItem != null)
+                            {
+                                m_MenuTreeGroupsView.RemoveItem(m_GroupSelectedItem);
+                                m_SelectAssetBundleCollector.Groups.Remove(m_GroupSelectedItem.Data);
+                                m_GroupSelectedItem = null;
+                            }
+                            SetFocusAndEnsureSelectedItem();
                         }
-                        SetFocusAndEnsureSelectedItem();
+
+                        GameEditorUtility.EditorDisplay("提示", $"确定要删除{m_GroupSelectedItem?.Data?.GroupName}?", "确认", "取消", ConfirmDeletion);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -356,7 +365,6 @@ namespace Game.Editor
         protected override void OnGroupSelectionChanged(IList<int> selectedIds)
         {
             m_GroupSelectedItem = m_MenuTreeGroupsView.GetItemById(selectedIds[0]);
-
             m_AssetCollectorTableView.SetTableViewData(m_GroupSelectedItem.Data.AssetCollectors, m_AssetCollectorColumns);
         }
 

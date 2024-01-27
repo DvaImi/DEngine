@@ -85,5 +85,13 @@ namespace Game.Editor
             FileInfo fileInfo = new(filePath);
             return fileInfo.Length;
         }
+
+        public static void EditorDisplay(string title, string message, string ok, string cancel, System.Action action)
+        {
+            if (EditorUtility.DisplayDialog(title, message, ok, cancel))
+            {
+                action?.Invoke();
+            }
+        }
     }
 }
