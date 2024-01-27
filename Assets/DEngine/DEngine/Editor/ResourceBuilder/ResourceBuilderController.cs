@@ -15,8 +15,8 @@ namespace DEngine.Editor.ResourceTools
 {
     public sealed partial class ResourceBuilderController
     {
-        private const string RemoteVersionListFileName = "DEngineVersion.block";
-        private const string LocalVersionListFileName = "DEngineList.block";
+        private const string RemoteVersionListFileName = "RemoteVersionList.block";
+        private const string LocalVersionListFileName = "LocalVersionList.block";
         private const string DefaultExtension = "block";
         private const string NoneOptionName = "<None>";
         private static readonly int AssetsStringLength = "Assets".Length;

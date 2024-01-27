@@ -12,8 +12,8 @@ namespace DEngine.Resource
     /// </summary>
     internal sealed partial class ResourceManager : DEngineModule, IResourceManager
     {
-        private const string RemoteVersionListFileName = "DEngineVersion.block";
-        private const string LocalVersionListFileName = "DEngineList.block";
+        private const string RemoteVersionListFileName = "RemoteVersionList.block";
+        private const string LocalVersionListFileName = "LocalVersionList.block";
         private const string DefaultExtension = "block";
         private const string TempExtension = "tmp";
         private const int FileSystemMaxFileCount = 1024 * 16;
