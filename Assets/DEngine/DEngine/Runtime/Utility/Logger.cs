@@ -296,7 +296,7 @@ namespace DEngine
             return m_StringBuilder;
         }
 
-        private static string GetColor(ColorType colorType)
+        public static string GetColor(ColorType colorType)
         {
             int color = (int)colorType;
             string colorString = Convert.ToString(color, 16);
