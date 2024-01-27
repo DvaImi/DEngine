@@ -21,7 +21,6 @@
   <assembly fullname="DEngine.Runtime">
     <type fullname="BinaryExtension" preserve="all" />
     <type fullname="DEngine.Runtime.BaseComponent" preserve="all" />
-    <type fullname="DEngine.Runtime.ConfigComponent" preserve="all" />
     <type fullname="DEngine.Runtime.DataRowBase" preserve="all" />
     <type fullname="DEngine.Runtime.DataTableComponent" preserve="all" />
     <type fullname="DEngine.Runtime.Entity" preserve="all" />
@@ -29,8 +28,6 @@
     <type fullname="DEngine.Runtime.EntityLogic" preserve="all" />
     <type fullname="DEngine.Runtime.EventComponent" preserve="all" />
     <type fullname="DEngine.Runtime.FsmComponent" preserve="all" />
-    <type fullname="DEngine.Runtime.LoadConfigFailureEventArgs" preserve="all" />
-    <type fullname="DEngine.Runtime.LoadConfigSuccessEventArgs" preserve="all" />
     <type fullname="DEngine.Runtime.LoadDataTableFailureEventArgs" preserve="all" />
     <type fullname="DEngine.Runtime.LoadDataTableSuccessEventArgs" preserve="all" />
     <type fullname="DEngine.Runtime.LoadDictionaryFailureEventArgs" preserve="all" />
@@ -65,20 +62,40 @@
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
     <type fullname="UnityEngine.Application" preserve="all" />
+    <type fullname="UnityEngine.Bounds" preserve="all" />
+    <type fullname="UnityEngine.Camera" preserve="all" />
+    <type fullname="UnityEngine.Color" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
     <type fullname="UnityEngine.Coroutine" preserve="all" />
-    <type fullname="UnityEngine.Debug" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
+    <type fullname="UnityEngine.Gizmos" preserve="all" />
+    <type fullname="UnityEngine.HeaderAttribute" preserve="all" />
+    <type fullname="UnityEngine.KeyCode" preserve="all" />
+    <type fullname="UnityEngine.LayerMask" preserve="all" />
     <type fullname="UnityEngine.Mathf" preserve="all" />
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
     <type fullname="UnityEngine.Object" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.RectTransform" preserve="all" />
+    <type fullname="UnityEngine.SerializeField" preserve="all" />
+    <type fullname="UnityEngine.SpriteRenderer" preserve="all" />
     <type fullname="UnityEngine.TextAsset" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
+    <type fullname="UnityEngine.Transform" preserve="all" />
     <type fullname="UnityEngine.Vector2" preserve="all" />
     <type fullname="UnityEngine.Vector3" preserve="all" />
     <type fullname="UnityEngine.WaitForEndOfFrame" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.InputLegacyModule">
+    <type fullname="UnityEngine.Input" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.Physics2DModule">
+    <type fullname="UnityEngine.BoxCollider2D" preserve="all" />
+    <type fullname="UnityEngine.Collider2D" preserve="all" />
+    <type fullname="UnityEngine.ForceMode2D" preserve="all" />
+    <type fullname="UnityEngine.Physics2D" preserve="all" />
+    <type fullname="UnityEngine.RaycastHit2D" preserve="all" />
+    <type fullname="UnityEngine.Rigidbody2D" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.UI">
     <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />

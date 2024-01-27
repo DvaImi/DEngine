@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a492a5e66434f844bbce52db8c7d58b8, type: 3}
+  m_Name: AssetBundlePackageCollector
+  m_EditorClassIdentifier: 
+  PackagesCollector:
+  - PackageName: Game_V1.0
+    Description: "\u9996\u5305\u8D44\u6E90"
+    Groups:
+    - GroupName: Base
+      EnableGroup: 1
+      Description: 
+      AssetCollectors:
+      - Enable: 1
+        Name: table
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        AssetPath: Assets/Game/DataTables
+        LoadType: 0
+        Packed: 1
+        FilterType: 0
+        SearchPatterns: '*.*'
+      - Enable: 1
+        Name: prog
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        AssetPath: Assets/Game/HybridCLRData
+        LoadType: 0
+        Packed: 1
+        FilterType: 0
+        SearchPatterns: '*.*'
+      - Enable: 1
+        Name: local
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        AssetPath: Assets/Game/Localization
+        LoadType: 0
+        Packed: 1
+        FilterType: 0
+        SearchPatterns: '*.*'
+  - PackageName: "\u8865\u4E01\u8D44\u6E90"
+    Description: 
+    Groups:
+    - GroupName: GamePatch
+      EnableGroup: 1
+      Description: 
+      AssetCollectors:
+      - Enable: 1
+        Name: 
+        FileSystem: 
+        Groups: GamePatch
+        Variant: 
+        AssetPath: Assets/Game/HybridCLRData/HotUpdate
+        LoadType: 0
+        Packed: 1
+        FilterType: 0
+        SearchPatterns: '*.*'

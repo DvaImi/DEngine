@@ -31,7 +31,7 @@ namespace Game.Editor.BuildPipeline
         private bool m_FoldoutPatchAOTAssembliesGroup = false;
         private Vector2 m_ScrollPosition;
 
-        [MenuItem("Game/BuildPipeline", false, 0)]
+        [MenuItem("Game/Build Pipeline", false, 0)]
         private static void Open()
         {
             GameBuildPipelineWindow window = GetWindow<GameBuildPipelineWindow>("BuildPipeline", true);
@@ -88,13 +88,15 @@ namespace Game.Editor.BuildPipeline
             {
                 if (GUILayout.Button("Save"))
                 {
-                    GameSetting.Instance.SaveSetting();
-                    GameBuildPipeline.SaveBuildInfo();
-                    GameBuildPipeline.SaveHybridCLR();
-                    GameBuildPipeline.RefreshResourceCollection();
+                    SaveAll();
                 }
             }
             GUILayout.EndHorizontal();
+
+            if (GUI.changed)
+            {
+                GameSetting.Instance.SaveSetting();
+            }
         }
 
         private void Update()
@@ -102,27 +104,31 @@ namespace Game.Editor.BuildPipeline
             if (m_BeginBuildPlayer)
             {
                 m_BeginBuildPlayer = false;
-                Close();
                 GameBuildPipeline.BuildPlayer(false);
             }
 
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
-                Close();
                 GameBuildPipeline.BuildBundle(GameSetting.Instance.ForceRebuild, GameSetting.Instance.BundlesOutput, GameSetting.Instance.Difference);
             }
 
             if (m_IsAotGeneric)
             {
                 m_IsAotGeneric = false;
-                Close();
                 HybridCLR.Editor.Commands.Il2CppDefGeneratorCommand.GenerateIl2CppDef();
                 HybridCLR.Editor.Commands.LinkGeneratorCommand.GenerateLinkXml();
                 HybridCLR.Editor.Commands.StripAOTDllCommand.GenerateStripedAOTDlls();
                 HybridCLR.Editor.Commands.MethodBridgeGeneratorCommand.CompileAndGenerateMethodBridge();
                 HybridCLR.Editor.Commands.AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
             }
+        }
+
+        private void SaveAll()
+        {
+            GameSetting.Instance.SaveSetting();
+            GameBuildPipeline.SaveBuildInfo();
+            GameBuildPipeline.SaveHybridCLR();
         }
 
         private void GUIPlatform()
@@ -360,6 +366,13 @@ namespace Game.Editor.BuildPipeline
                     GameSetting.Instance.SaveSetting();
                 }
 
+                int assetBundleCollectorIndex = GameSetting.Instance.AssetBundleCollectorIndex;
+                int tempBundleCollectorIndex = EditorGUILayout.Popup(assetBundleCollectorIndex, GameBuildPipeline.PackagesNames, GUILayout.Width(160));
+                if (tempBundleCollectorIndex != assetBundleCollectorIndex)
+                {
+                    GameSetting.Instance.AssetBundleCollectorIndex = tempBundleCollectorIndex;
+                    GameSetting.Instance.SaveSetting();
+                }
             }
 
             EditorGUILayout.EndHorizontal();
@@ -518,7 +531,21 @@ namespace Game.Editor.BuildPipeline
             GUI.backgroundColor = Color.green;
             if (GUILayout.Button("Build", GUILayout.Height(30)))
             {
-                m_BeginBuildPlayer = true;
+                BuildTarget buildTarget = GameBuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform);
+                if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
+                {
+                    if (EditorUtility.DisplayDialog("提示", "当前平台与目标平台不符，是否进行切换?", "确认", "取消"))
+                    {
+                        if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(buildTarget), buildTarget))
+                        {
+                            m_BeginBuildPlayer = true;
+                        }
+                    }
+                }
+                else
+                {
+                    m_BeginBuildPlayer = true;
+                }
             }
             GUI.backgroundColor = bc;
         }

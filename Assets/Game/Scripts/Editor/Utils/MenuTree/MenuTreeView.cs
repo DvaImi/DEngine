@@ -376,6 +376,16 @@ namespace Game.Editor
             Reload();
         }
 
+        public void RemoveAll()
+        {
+            int count = m_Items.Count;
+            for (int i = count - 1; i >= 0; i--)
+            {
+                RemoveItem(m_Items[i]);
+            }
+            m_Items.Clear();
+        }
+
         /// <summary>
         /// 根据Id获取菜单元素
         /// </summary>

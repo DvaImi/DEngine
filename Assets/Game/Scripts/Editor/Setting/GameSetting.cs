@@ -53,6 +53,10 @@ namespace Game.Editor
         /// </summary>
         public string BundlesOutput => "Assets/../BundlesOutput";
         /// <summary>
+        /// 选择打包的包裹
+        /// </summary>
+        public int AssetBundleCollectorIndex;
+        /// <summary>
         /// 是否需要强制更新应用
         /// </summary>
         public bool ForceUpdateGame = false;

@@ -3,6 +3,7 @@ using System.Linq;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
+using Game.Editor.ResourceTools;
 using UnityEditor;
 
 namespace Game.Editor.BuildPipeline
@@ -12,11 +13,13 @@ namespace Game.Editor.BuildPipeline
         private static Platform m_OriginalPlatform;
         public static string[] ResourceMode { get; }
         public static string[] PlatformNames { get; }
+        public static string[] PackagesNames { get; }
 
         static GameBuildPipeline()
         {
             ResourceMode = Enum.GetNames(typeof(ResourceMode)).Skip(1).ToArray();
             PlatformNames = Enum.GetNames(typeof(Platform)).Skip(1).ToArray();
+            PackagesNames = AssetBundlePackageCollector.GetPackageCollector().PackagesCollector.Select(x => x.PackageName).ToArray();
         }
 
         public static BuildTarget GetBuildTarget(int platformIndex)

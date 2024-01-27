@@ -21,7 +21,12 @@ namespace Game.Editor.BuildPipeline
         public static void BuildPlayer(bool aotGeneric)
         {
             SaveBuildInfo();
-            BuildReport report = BuildApplication(GetBuildTarget(GameSetting.Instance.BuildPlatform), aotGeneric);
+            BuildTarget target = GetBuildTarget(GameSetting.Instance.BuildPlatform);
+            if (target != EditorUserBuildSettings.activeBuildTarget)
+            {
+                EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target),target);
+            }
+            BuildReport report = BuildApplication(target, aotGeneric);
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)

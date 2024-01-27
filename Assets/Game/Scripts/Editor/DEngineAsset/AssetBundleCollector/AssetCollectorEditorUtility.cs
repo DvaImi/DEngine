@@ -25,18 +25,15 @@ namespace Game.Editor.ResourceTools
         // 根路径
         private static string m_RootPath;
 
-        public static void RefreshResourceCollection(AssetBundleCollector collectorData = null)
+        public static void RefreshResourceCollection(AssetBundleCollector collectorData)
         {
             if (m_ResourceEditorController == null)
             {
                 m_ResourceEditorController = new ResourceEditorController();
                 m_ResourceEditorController.Load();
             }
-            if (collectorData == null)
-            {
-                collectorData = AssetBundleCollector.Load();
-            }
 
+            collectorData ??= AssetBundlePackageCollector.GetBundleCollectorByIndex(GameSetting.Instance.AssetBundleCollectorIndex);
             m_RootPath = Utility.Text.Format("{0}/{1}", Application.dataPath, m_ResourceEditorController.SourceAssetRootPath.Replace("Assets/", string.Empty));
 
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_ResourceEditorController.SourceAssetExceptTypeFilter);

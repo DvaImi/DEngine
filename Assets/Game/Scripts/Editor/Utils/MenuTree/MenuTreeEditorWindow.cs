@@ -18,7 +18,7 @@ namespace Game.Editor
         // 启用菜单树宽度拖拽
         protected bool m_EnabelDrag;
         // 菜单树矩形
-        protected Rect m_MenuRect;
+        protected Rect m_MenuGroupRect;
         // 间隙矩形
         protected Rect m_SpaceRect;
         // 内容矩形
@@ -41,7 +41,7 @@ namespace Game.Editor
         /// </summary>
         protected virtual void OnGUIMenuTree()
         {
-            m_MenuRect = new Rect(0, 0, m_MenuTreeWidth, position.height);
+            m_MenuGroupRect = new Rect(0, 0, m_MenuTreeWidth, position.height);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Game.Editor
         /// 选择改变
         /// </summary>
         /// <param name="selectedIds"></param>
-        protected virtual void SelectionChanged(IList<int> selectedIds)
+        protected virtual void OnGroupSelectionChanged(IList<int> selectedIds)
         {
 
         }

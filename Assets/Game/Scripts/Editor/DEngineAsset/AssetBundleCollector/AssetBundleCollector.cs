@@ -4,14 +4,11 @@ using UnityEngine;
 
 namespace Game.Editor.ResourceTools
 {
-    [CreateAssetMenu]
-    public class AssetBundleCollector : ScriptableObject
+    [Serializable]
+    public class AssetBundleCollector 
     {
+        public string PackageName = "Default";
+        public string Description;
         public List<AssetBundleGroupCollector> Groups = new();
-
-        internal static AssetBundleCollector Load()
-        {
-            return GameEditorUtility.GetScriptableObject<AssetBundleCollector>();
-        }
     }
 }

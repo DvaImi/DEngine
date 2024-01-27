@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using Game.Editor.ResourceTools;
@@ -11,24 +12,26 @@ namespace Game.Editor
 {
     public class AssetCollectorEditor : MenuTreeEditorWindow
     {
-        private readonly string m_DefaultConfigurationPath = "Assets/Game/AssetConfiguration/AssetBundleCollector.asset";
-        private MenuTreeView<AssetBundleGroupCollector> m_MenuTreeView;
-        private MenuTreeViewItem<AssetBundleGroupCollector> m_SelectedItem;
+        private readonly string m_DefaultConfigurationPath = "Assets/Game/AssetConfiguration/AssetBundlePackageCollector.asset";
+        private MenuTreeView<AssetBundleCollector> m_MenuTreePackagesView;
+        private MenuTreeViewItem<AssetBundleCollector> m_PackageSelectedItem;
+        private MenuTreeView<AssetBundleGroupCollector> m_MenuTreeGroupsView;
+        private MenuTreeViewItem<AssetBundleGroupCollector> m_GroupSelectedItem;
         private AssetCollectorTableView<AssetCollector> m_AssetCollectorTableView;
         private List<TableColumn<AssetCollector>> m_AssetCollectorColumns;
         private ResourceEditorController m_ResourceEditorController;
 
-        private AssetBundleCollector m_Configuration;
+        private AssetBundlePackageCollector m_AssetBundlePackageCollector;
+        private AssetBundleCollector m_SelectAssetBundleCollector;
         private Rect m_ToolbarRect = new Rect();
-        private Rect m_AddGroupRect = new Rect();
+        private Rect m_PackageMenuRect = new Rect();
         private Rect m_RuleRect = new Rect();
         private GUIStyle m_LineStyle;
         private GUIStyle m_FolderBtnStyle;
-        private GUIStyle m_AddMenuStyle;
         private GUIContent m_FolderBtnContent;
-        private readonly float m_AddGroupRectHeight = 50f;
+        private readonly float m_AddRectHeight = 50f;
         private bool m_IsDirty = false;
-
+        private float PackageSpace => 200;
 
         [MenuItem("Game/Asset Collector", false, 1)]
         public static void OpenWindow()
@@ -49,12 +52,18 @@ namespace Game.Editor
                 m_ResourceEditorController.Load();
             }
 
-            // 菜单树视图
-            m_MenuTreeView = new MenuTreeView<AssetBundleGroupCollector>(false, true, true);
+            m_MenuTreePackagesView = new MenuTreeView<AssetBundleCollector>(false, true, true);
             {
-                m_MenuTreeView.onDrawFoldout = DrawFoldoutCallback;
-                m_MenuTreeView.onDrawRowContent = DrawMenuRowContentCallback;
-                m_MenuTreeView.onSelectionChanged = SelectionChanged;
+                m_MenuTreePackagesView.onDrawFoldout = DrawFoldoutCallback;
+                m_MenuTreePackagesView.onDrawRowContent = DrawPackagesMenuRowContentCallback;
+                m_MenuTreePackagesView.onSelectionChanged = OnPackageSelectionChanged;
+            }
+            // 绘制包裹资源分组列表
+            m_MenuTreeGroupsView = new MenuTreeView<AssetBundleGroupCollector>(false, true, true);
+            {
+                m_MenuTreeGroupsView.onDrawFoldout = DrawFoldoutCallback;
+                m_MenuTreeGroupsView.onDrawRowContent = DrawGroupMenuRowContentCallback;
+                m_MenuTreeGroupsView.onSelectionChanged = OnGroupSelectionChanged;
             }
 
             if (m_AssetCollectorColumns == null)
@@ -65,15 +74,19 @@ namespace Game.Editor
             m_AssetCollectorTableView = new AssetCollectorTableView<AssetCollector>(null, m_AssetCollectorColumns);
             {
                 m_AssetCollectorTableView.OnRightAddRow = OnTreeViewRightAddRowCallback;
+                m_AssetCollectorTableView.OnSelectionChanged += OnTreeViewSelectionChanged;
             }
 
-            for (int i = 0; i < m_Configuration.Groups.Count; i++)
+            for (int i = 0; i < m_AssetBundlePackageCollector.PackagesCollector.Count; i++)
             {
-                AssetBundleGroupCollector resourceGroup = m_Configuration.Groups[i];
-                m_MenuTreeView.AddItem(GetDisplayName(resourceGroup), resourceGroup);
+                AssetBundleCollector package = m_AssetBundlePackageCollector.PackagesCollector[i];
+                m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
             }
+            m_SelectAssetBundleCollector = m_AssetBundlePackageCollector.PackagesCollector.FirstOrDefault();
+            RefreshAssetGroups();
             SetFocusAndEnsureSelectedItem();
         }
+
 
 
         protected override void OnGUI()
@@ -84,6 +97,7 @@ namespace Game.Editor
             {
                 m_IsDirty = true;
             }
+            Repaint();
         }
 
 
@@ -98,29 +112,19 @@ namespace Game.Editor
 
         private void Load()
         {
-            m_Configuration = LoadAssetAtPath<AssetBundleCollector>(m_DefaultConfigurationPath);
-            if (m_Configuration == null)
+            m_AssetBundlePackageCollector = LoadAssetAtPath<AssetBundlePackageCollector>(m_DefaultConfigurationPath);
+            if (m_AssetBundlePackageCollector == null)
             {
-                m_Configuration = CreateInstance<AssetBundleCollector>();
-                FileInfo fileInfo = new FileInfo(m_DefaultConfigurationPath);
-                if (!fileInfo.Directory.Exists)
-                {
-                    fileInfo.Directory.Create();
-                }
-                Save();
+                m_AssetBundlePackageCollector = CreateInstance<AssetBundlePackageCollector>();
+                m_AssetBundlePackageCollector.PackagesCollector.Add(new AssetBundleCollector());
+                AssetDatabase.CreateAsset(m_AssetBundlePackageCollector, m_DefaultConfigurationPath);
+                AssetDatabase.SaveAssets();
             }
         }
 
         private void Save()
         {
-            if (LoadAssetAtPath<AssetBundleCollector>(m_DefaultConfigurationPath) == null)
-            {
-                AssetDatabase.CreateAsset(m_Configuration, m_DefaultConfigurationPath);
-            }
-            else
-            {
-                EditorUtility.SetDirty(m_Configuration);
-            }
+            EditorUtility.SetDirty(m_AssetBundlePackageCollector);
             AssetDatabase.SaveAssets();
         }
 
@@ -140,17 +144,17 @@ namespace Game.Editor
 
                 if (GUILayout.Button("Ping"))
                 {
-                    EditorGUIUtility.PingObject(m_Configuration);
+                    EditorGUIUtility.PingObject(m_AssetBundlePackageCollector);
                 }
 
                 if (GUILayout.Button("导出"))
                 {
-                    AssetCollectorEditorUtility.RefreshResourceCollection(m_Configuration);
+                    AssetCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
                 if (GUILayout.Button("Save"))
                 {
                     Save();
-                    AssetCollectorEditorUtility.RefreshResourceCollection(m_Configuration);
+                    AssetCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
                 GUI.backgroundColor = originalColor;
             }
@@ -159,55 +163,106 @@ namespace Game.Editor
 
         protected override void OnGUIMenuTree()
         {
-            m_MenuRect = new Rect(0, m_ToolbarRect.height, m_MenuTreeWidth, position.height - m_AddGroupRectHeight - m_ToolbarRect.height);
-            m_AddGroupRect = new Rect(0, m_ToolbarRect.height + m_MenuRect.height, m_MenuTreeWidth, m_AddGroupRectHeight);
-
             m_LineStyle ??= new GUIStyle("EyeDropperHorizontalLine");
             m_FolderBtnStyle ??= new GUIStyle("SettingsIconButton");
             m_FolderBtnContent ??= new GUIContent(SourceFolder.Icon);
-            m_AddMenuStyle ??= new GUIStyle(GUI.skin.button);
 
-            m_MenuTreeView.OnGUI(m_MenuRect);
-
-            Rect btnRect = new Rect(m_AddGroupRect.width * 0.15f, m_MenuRect.height + m_AddGroupRect.height, 50f, 20f);
-            m_AddMenuStyle.fontSize = 16;
-            if (GUI.Button(btnRect, "+", m_AddMenuStyle))
+            EditorGUILayout.BeginVertical("box", GUILayout.Height(40));
             {
-                AssetBundleGroupCollector resourceGroup = new();
-                m_Configuration.Groups.Add(resourceGroup);
-                m_MenuTreeView.AddItem(GetDisplayName(resourceGroup), resourceGroup);
-                SetFocusAndEnsureSelectedItem();
-            }
-            btnRect.Set((m_AddGroupRect.width * 0.85f) - 50f, btnRect.y, btnRect.width, btnRect.height);
-            if (GUI.Button(btnRect, "-", m_AddMenuStyle))
-            {
-                if (m_SelectedItem != null)
+                GUILayout.Label("PackageName");
+                if (m_SelectAssetBundleCollector != null)
                 {
-                    m_MenuTreeView.RemoveItem(m_SelectedItem);
-                    m_Configuration.Groups.Remove(m_SelectedItem.Data);
-                    m_SelectedItem = null;
+                    string packageName = EditorGUILayout.DelayedTextField(m_SelectAssetBundleCollector.PackageName, GUILayout.Width(150));
+                    if (packageName != m_SelectAssetBundleCollector.PackageName)
+                    {
+                        m_SelectAssetBundleCollector.PackageName = packageName;
+                        m_PackageSelectedItem.displayName = GetPackageDisplayName(m_SelectAssetBundleCollector);
+                    }
                 }
+                else
+                {
+                    EditorGUILayout.LabelField("<None>", GUILayout.Width(150));
+                }
+                GUILayout.Label("Description");
+                if (m_SelectAssetBundleCollector != null)
+                {
+                    string description = EditorGUILayout.DelayedTextField(m_SelectAssetBundleCollector.Description, GUILayout.Width(150));
+                    if (description != m_SelectAssetBundleCollector.Description)
+                    {
+                        m_SelectAssetBundleCollector.Description = description;
+                        m_PackageSelectedItem.displayName = GetPackageDisplayName(m_SelectAssetBundleCollector);
+                    }
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("<None>", GUILayout.Width(150));
+                }
+            }
+            EditorGUILayout.EndVertical();
+            m_PackageMenuRect = new Rect(0, m_ToolbarRect.height + m_AddRectHeight + 40, m_MenuTreeWidth, position.height - m_AddRectHeight - m_ToolbarRect.height - 90);
+            m_MenuTreePackagesView.OnGUI(m_PackageMenuRect);
+
+            if (!m_MenuTreePackagesView.HasSelection())
+            {
                 SetFocusAndEnsureSelectedItem();
             }
-
-            Color color = new Color(0.6f, 0.6f, 0.6f, 1.333f);
-            if (EditorGUIUtility.isProSkin)
+            GUILayout.BeginArea(new Rect(m_PackageMenuRect.width * 0.2F, m_PackageMenuRect.height + m_AddRectHeight + 90, m_PackageMenuRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
             {
-                color.r = 0.12f;
-                color.g = 0.12f;
-                color.b = 0.12f;
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("+", GUILayout.Width(30)))
+                    {
+                        AssetBundleCollector package = new AssetBundleCollector();
+                        m_AssetBundlePackageCollector.PackagesCollector.Add(package);
+                        m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
+                        SetFocusAndEnsureSelectedItem();
+                    }
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("-", GUILayout.Width(30)))
+                    {
+                        if (m_SelectAssetBundleCollector != null)
+                        {
+                            m_AssetBundlePackageCollector.PackagesCollector.Remove(m_SelectAssetBundleCollector);
+                            m_MenuTreePackagesView.RemoveItem(m_PackageSelectedItem);
+                        }
+                        SetFocusAndEnsureSelectedItem();
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
             }
+            GUILayout.EndArea();
 
-            if (Event.current.type != EventType.Repaint)
+
+            m_MenuGroupRect = new Rect(PackageSpace, m_ToolbarRect.height, m_MenuTreeWidth, position.height - m_AddRectHeight - m_ToolbarRect.height);
+            m_MenuTreeGroupsView.OnGUI(m_MenuGroupRect);
+
+            GUILayout.BeginArea(new Rect(PackageSpace + m_MenuGroupRect.width * 0.2F, m_MenuGroupRect.height + m_AddRectHeight, m_MenuGroupRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
             {
-                return;
-            }
 
-            Color orgColor = GUI.color;
-            GUI.color = GUI.color * color;
-            GUI.DrawTexture(new Rect(m_AddGroupRect.x, m_AddGroupRect.y + 1, 1, m_AddGroupRect.height - 2 * 1), EditorGUIUtility.whiteTexture);
-            GUI.DrawTexture(new Rect(m_AddGroupRect.xMax - 1, m_AddGroupRect.y + 1, 1, m_AddGroupRect.height - 2 * 1), EditorGUIUtility.whiteTexture);
-            GUI.color = orgColor;
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("+", GUILayout.Width(30)))
+                    {
+                        AssetBundleGroupCollector resourceGroup = new();
+                        m_SelectAssetBundleCollector.Groups.Add(resourceGroup);
+                        m_MenuTreeGroupsView.AddItem(GetGroupDisplayName(resourceGroup), resourceGroup);
+                        SetFocusAndEnsureSelectedItem();
+                    }
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("-", GUILayout.Width(30)))
+                    {
+                        if (m_GroupSelectedItem != null)
+                        {
+                            m_MenuTreeGroupsView.RemoveItem(m_GroupSelectedItem);
+                            m_SelectAssetBundleCollector.Groups.Remove(m_GroupSelectedItem.Data);
+                            m_GroupSelectedItem = null;
+                        }
+                        SetFocusAndEnsureSelectedItem();
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            GUILayout.EndArea();
         }
 
         protected override void OnGUISpace()
@@ -236,13 +291,13 @@ namespace Game.Editor
 
         protected override void OnGUIContent()
         {
-            m_ContentRect = new Rect(m_MenuTreeWidth + m_SpaceWidth, m_ToolbarRect.height, position.width - m_MenuTreeWidth - m_SpaceWidth, position.height - m_ToolbarRect.height);
+            m_ContentRect = new Rect(m_MenuTreeWidth + m_SpaceWidth + PackageSpace, m_ToolbarRect.height, position.width - m_MenuTreeWidth - m_SpaceWidth, position.height - m_ToolbarRect.height);
 
-            m_RuleRect.Set(m_ContentRect.x, 120f, m_ContentRect.width, m_ContentRect.height - 90);
+            m_RuleRect.Set(m_ContentRect.x, 120, m_ContentRect.width, m_ContentRect.height - 90);
 
-            if (m_SelectedItem != null)
+            if (m_GroupSelectedItem != null)
             {
-                AssetBundleGroupCollector group = m_SelectedItem.Data;
+                AssetBundleGroupCollector group = m_GroupSelectedItem.Data;
                 GUILayout.BeginArea(m_ContentRect);
                 {
                     if (group.EnableGroup != EditorGUILayout.Toggle("启用分组", group.EnableGroup))
@@ -253,7 +308,7 @@ namespace Game.Editor
                     if (group.GroupName != groupName)
                     {
                         group.SetGroupName(groupName);
-                        m_SelectedItem.displayName = GetDisplayName(group);
+                        m_GroupSelectedItem.displayName = GetGroupDisplayName(group);
                     }
 
                     string description = EditorGUILayout.TextField("分组描述", group.Description);
@@ -262,7 +317,7 @@ namespace Game.Editor
                     {
 
                         group.Description = description;
-                        m_SelectedItem.displayName = GetDisplayName(group);
+                        m_GroupSelectedItem.displayName = GetGroupDisplayName(group);
                     }
                 }
                 GUILayout.EndArea();
@@ -286,19 +341,48 @@ namespace Game.Editor
             }
         }
 
+        private void OnPackageSelectionChanged(IList<int> selectedIds)
+        {
+            m_PackageSelectedItem = m_MenuTreePackagesView.GetItemById(selectedIds[0]);
+            m_SelectAssetBundleCollector = m_PackageSelectedItem.Data;
+            RefreshAssetGroups();
+            SetFocusAndEnsureSelectedItem();
+        }
+
         /// <summary>
         /// 菜单项选择改变
         /// </summary>
         /// <param name="selectedIds"></param>
-        protected override void SelectionChanged(IList<int> selectedIds)
+        protected override void OnGroupSelectionChanged(IList<int> selectedIds)
         {
-            m_SelectedItem = m_MenuTreeView.GetItemById(selectedIds[0]);
+            m_GroupSelectedItem = m_MenuTreeGroupsView.GetItemById(selectedIds[0]);
 
-            m_AssetCollectorTableView.SetTableViewData(m_SelectedItem.Data.AssetCollectors, m_AssetCollectorColumns);
+            m_AssetCollectorTableView.SetTableViewData(m_GroupSelectedItem.Data.AssetCollectors, m_AssetCollectorColumns);
+        }
+
+        private void OnTreeViewSelectionChanged(List<AssetCollector> list)
+        {
+            if (list != null && list.Count > 0)
+            {
+                EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(list[0].AssetPath));
+            }
+        }
+
+        private void RefreshAssetGroups()
+        {
+            m_MenuTreeGroupsView.RemoveAll();
+            if (m_SelectAssetBundleCollector != null)
+            {
+                for (int i = 0; i < m_SelectAssetBundleCollector.Groups.Count; i++)
+                {
+                    AssetBundleGroupCollector resourceGroup = m_SelectAssetBundleCollector.Groups[i];
+                    m_MenuTreeGroupsView.AddItem(GetGroupDisplayName(resourceGroup), resourceGroup);
+                }
+            }
         }
 
         /// <summary>
-        /// 绘制行内容回调
+        /// 绘制包裹行内容回调
         /// </summary>
         /// <param name="rect"></param>
         /// <param name="row"></param>
@@ -308,7 +392,26 @@ namespace Game.Editor
         /// <param name="focused"></param>
         /// <param name="useBoldFont"></param>
         /// <param name="isPinging"></param>
-        private void DrawMenuRowContentCallback(Rect rect, int row, MenuTreeViewItem<AssetBundleGroupCollector> item, string label, bool selected, bool focused, bool useBoldFont, bool isPinging)
+        private void DrawPackagesMenuRowContentCallback(Rect rect, int row, MenuTreeViewItem<AssetBundleCollector> item, string label, bool selected, bool focused, bool useBoldFont, bool isPinging)
+        {
+            GUI.Box(rect, "", m_LineStyle);
+            float space = 5f + item.depth * 15f;
+            Rect lableRect = new Rect(rect.x + space, rect.y, rect.width - space, rect.height);
+            GUI.Label(lableRect, item.displayName);
+        }
+
+        /// <summary>
+        /// 绘制分组行内容回调
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="row"></param>
+        /// <param name="item"></param>
+        /// <param name="label"></param>
+        /// <param name="selected"></param>
+        /// <param name="focused"></param>
+        /// <param name="useBoldFont"></param>
+        /// <param name="isPinging"></param>
+        private void DrawGroupMenuRowContentCallback(Rect rect, int row, MenuTreeViewItem<AssetBundleGroupCollector> item, string label, bool selected, bool focused, bool useBoldFont, bool isPinging)
         {
             GUI.Box(rect, "", m_LineStyle);
             float space = 5f + item.depth * 15f;
@@ -325,17 +428,28 @@ namespace Game.Editor
 
         private void SetFocusAndEnsureSelectedItem()
         {
-            m_MenuTreeView.SetFocusAndEnsureSelectedItem();
+            m_MenuTreePackagesView.SetFocusAndEnsureSelectedItem();
+            m_MenuTreeGroupsView.SetFocusAndEnsureSelectedItem();
         }
 
         /// <summary>
-        /// 获取显示名字
+        /// 获取包裹显示名字
         /// </summary>
-        /// <param name="resourceGroup"></param>
+        /// <param name="packages"></param>
         /// <returns></returns>
-        private string GetDisplayName(AssetBundleGroupCollector resourceGroup)
+        private string GetPackageDisplayName(AssetBundleCollector packages)
         {
-            return string.IsNullOrEmpty(resourceGroup.Description) ? resourceGroup.GroupName : string.Format("{0}({1})", resourceGroup.GroupName, resourceGroup.Description);
+            return string.IsNullOrEmpty(packages.Description) ? packages.PackageName : string.Format("{0}({1})", packages.PackageName, packages.Description);
+        }
+
+        /// <summary>
+        /// 获取分组显示名字
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        private string GetGroupDisplayName(AssetBundleGroupCollector group)
+        {
+            return string.IsNullOrEmpty(group.Description) ? group.GroupName : string.Format("{0}({1})", group.GroupName, group.Description);
         }
 
         /// <summary>
@@ -390,12 +504,7 @@ namespace Game.Editor
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
                     Rect textFildRect = new Rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
-                    data.AssetPath = EditorGUI.TextField(textFildRect, data.AssetPath);
-                    Event currentEvent = Event.current;
-                    if (currentEvent.type == EventType.MouseDown && GUILayoutUtility.GetLastRect().Contains(currentEvent.mousePosition))
-                    {
-                        EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(data.AssetPath));
-                    }
+                    data.AssetPath = EditorGUI.DelayedTextField(textFildRect, data.AssetPath);
                 }, 300, 200, 400);
             columns.Add(column7);
 
@@ -412,7 +521,6 @@ namespace Game.Editor
                     data.SearchPatterns = EditorGUI.TextField(cellRect, data.SearchPatterns);
                 }, 100, 100, 160);
             columns.Add(column9);
-
             return columns;
         }
 
@@ -427,7 +535,7 @@ namespace Game.Editor
         /// <param name="canSort"></param>
         /// <param name="autoResize"></param>
         /// <returns></returns>
-        private TableColumn<AssetCollector> CreateColumn(GUIContent content, DrawCellMethod<AssetCollector> drawCellMethod, float width, float minWidth, float maxWidth, bool canSort = false, bool autoResize = true)
+        private TableColumn<AssetCollector> CreateColumn(GUIContent content, DrawCellMethod<AssetCollector> drawCellMethod, float width, float minWidth, float maxWidth, bool canSort = true, bool autoResize = true)
         {
             TableColumn<AssetCollector> column = new TableColumn<AssetCollector>();
             {
@@ -450,7 +558,7 @@ namespace Game.Editor
         {
             AssetCollector assetCollector = new()
             {
-                Groups = m_SelectedItem.Data.GroupName,
+                Groups = m_GroupSelectedItem.Data.GroupName,
                 AssetPath = path
             };
             m_AssetCollectorTableView.AddData(assetCollector);

@@ -412,6 +412,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d0a1c834faed4a44baa9947b0c0bf7f0, type: 2}
     - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_ActiveWindow
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_ShowFullWindow
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ConsoleWindow.m_LockScroll
       value: 0
       objectReference: {fileID: 0}
@@ -532,8 +540,12 @@ PrefabInstance:
       value: DEngine.Runtime.DefaultFileSystemHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11420954, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_Timeout
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 11420954, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_DownloadAgentHelperCount
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 11420954, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_DownloadAgentHelperTypeName
@@ -573,11 +585,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_UIGroups.Array.data[0].m_Depth
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11459312, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SettingHelperTypeName
       value: DEngine.Runtime.DefaultSettingHelper
+      objectReference: {fileID: 0}
+    - target: {fileID: 11461470, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_CachedBytesSize
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11461470, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_LocalizationHelperTypeName
@@ -661,7 +677,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ResourceMode
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ReadWritePathType

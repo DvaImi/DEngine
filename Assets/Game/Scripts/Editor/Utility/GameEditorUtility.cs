@@ -27,6 +27,22 @@ namespace Game.Editor
             return newObject;
         }
 
+        public static T[] GetScriptableObjects<T>() where T : ScriptableObject
+        {
+            string[] guids = AssetDatabase.FindAssets("t:" + typeof(T).Name);
+            T[] result = new T[] { };
+            if (guids.Length != 0)
+            {
+                result = new T[guids.Length];
+                for (int i = 0; i < guids.Length; i++)
+                {
+                    string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                    result[i] = AssetDatabase.LoadAssetAtPath<T>(path);
+                }
+            }
+            return result;
+        }
+
         public static long CalculateAssetsSize(Object[] assetObjects)
         {
             long size = 0;

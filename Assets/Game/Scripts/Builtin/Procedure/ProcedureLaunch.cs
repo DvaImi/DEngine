@@ -12,7 +12,7 @@ namespace Game
             base.OnEnter(procedureOwner);
             GameEntry.BuiltinData.InitLanguageSettings();
             GameEntry.BuiltinData.InitSoundSettings();
-            GameEntry.BuiltinData.InitLanguageDebugger();
+            GameEntry.BuiltinData.InitDebugger();
             GameEntry.BuiltinData.InitExtensionEventHandle();
         }
 

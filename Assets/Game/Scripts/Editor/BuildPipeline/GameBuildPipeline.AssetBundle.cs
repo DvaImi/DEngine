@@ -99,11 +99,6 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static void RefreshResourceCollection()
-        {
-            AssetCollectorEditorUtility.RefreshResourceCollection();
-        }
-
         public static void SaveOutputDirectory(string outputDirectory)
         {
             if (!Directory.Exists(outputDirectory))
@@ -131,8 +126,8 @@ namespace Game.Editor.BuildPipeline
 
         private static void OnPreprocess()
         {
+            AssetCollectorEditorUtility.RefreshResourceCollection(null);
             RemoveUnknownAssets();
-            RefreshResourceCollection();
             GameSetting.Instance.SaveSetting();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
