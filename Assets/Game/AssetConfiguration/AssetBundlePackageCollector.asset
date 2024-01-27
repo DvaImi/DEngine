@@ -18,52 +18,59 @@ MonoBehaviour:
     Groups:
     - GroupName: Base
       EnableGroup: 1
-      Description: 
+      Description: "\u57FA\u7840\u8D44\u6E90\u7EC4"
       AssetCollectors:
       - Enable: 1
-        Name: table
+        Name: 
         FileSystem: 
         Groups: Base
         Variant: 
         AssetPath: Assets/Game/DataTables
         LoadType: 0
         Packed: 1
-        FilterType: 0
-        SearchPatterns: '*.*'
+        FilterRule: 0
       - Enable: 1
-        Name: prog
+        Name: dat
         FileSystem: 
         Groups: Base
         Variant: 
         AssetPath: Assets/Game/HybridCLRData
         LoadType: 0
         Packed: 1
-        FilterType: 0
-        SearchPatterns: '*.*'
+        FilterRule: 0
       - Enable: 1
-        Name: local
+        Name: zh-cn
         FileSystem: 
         Groups: Base
         Variant: 
-        AssetPath: Assets/Game/Localization
+        AssetPath: Assets/Game/Localization/ChineseSimplified
         LoadType: 0
         Packed: 1
-        FilterType: 0
-        SearchPatterns: '*.*'
-  - PackageName: "\u8865\u4E01\u8D44\u6E90"
-    Description: 
-    Groups:
-    - GroupName: GamePatch
-      EnableGroup: 1
-      Description: 
-      AssetCollectors:
+        FilterRule: 0
       - Enable: 1
-        Name: 
+        Name: zh-tw
         FileSystem: 
-        Groups: GamePatch
+        Groups: Base
         Variant: 
-        AssetPath: Assets/Game/HybridCLRData/HotUpdate
+        AssetPath: Assets/Game/Localization/ChineseTraditional
         LoadType: 0
         Packed: 1
-        FilterType: 0
-        SearchPatterns: '*.*'
+        FilterRule: 0
+      - Enable: 1
+        Name: en-us
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        AssetPath: Assets/Game/Localization/English
+        LoadType: 0
+        Packed: 1
+        FilterRule: 0
+      - Enable: 1
+        Name: ui
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        AssetPath: Assets/Game/UI/UIForms
+        LoadType: 0
+        Packed: 1
+        FilterRule: 2

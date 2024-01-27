@@ -339,10 +339,7 @@ namespace Game.Editor
                         for (int i = 0; i < DragAndDrop.paths.Length; i++)
                         {
                             string path = DragAndDrop.paths[i];
-                            if (IsFolderPath(path))
-                            {
-                                AddAssetCollectorRow(path);
-                            }
+                            AddAssetCollectorRow(path);
                         }
                     }
                 }
@@ -519,16 +516,9 @@ namespace Game.Editor
             TableColumn<AssetCollector> column8 = CreateColumn(new GUIContent("FilterType", "资源筛选类型"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
-                    data.FilterType = (FilterType)EditorGUI.EnumPopup(cellRect, data.FilterType);
+                    data.FilterRule = EditorGUI.Popup(cellRect, data.FilterRule, AssetCollectorEditorUtility.FilterRules);
                 }, 150, 120, 160);
             columns.Add(column8);
-
-            TableColumn<AssetCollector> column9 = CreateColumn(new GUIContent("SearchPatterns", "资源筛选模式"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    data.SearchPatterns = EditorGUI.TextField(cellRect, data.SearchPatterns);
-                }, 100, 100, 160);
-            columns.Add(column9);
             return columns;
         }
 
@@ -572,17 +562,6 @@ namespace Game.Editor
             m_AssetCollectorTableView.AddData(assetCollector);
             m_IsDirty = true;
         }
-
-        /// <summary>
-        /// 是否是文件夹路径
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private bool IsFolderPath(string path)
-        {
-            return Directory.Exists(path);
-        }
-
         private void OnDestroy()
         {
             Save();

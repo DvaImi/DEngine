@@ -20,10 +20,15 @@ namespace Game.Editor.ResourceTools
         private static string[] m_SourceAssetExceptTypeFilterGUIDArray;
         // 排除的标签
         private static string[] m_SourceAssetExceptLabelFilterGUIDArray;
-        // 文件搜索模式
-        private const string m_SearchPattern = "*.*";
-        // 根路径
-        private static string m_RootPath;
+        /// <summary>
+        /// 资源收集规则
+        /// </summary>
+        public static string[] FilterRules { get; }
+
+        static AssetCollectorEditorUtility()
+        {
+            FilterRules = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule)).Select(x => x.Name).ToArray();
+        }
 
         public static void RefreshResourceCollection(AssetBundleCollector collectorData)
         {
@@ -34,7 +39,6 @@ namespace Game.Editor.ResourceTools
             }
 
             collectorData ??= AssetBundlePackageCollector.GetBundleCollectorByIndex(GameSetting.Instance.AssetBundleCollectorIndex);
-            m_RootPath = Utility.Text.Format("{0}/{1}", Application.dataPath, m_ResourceEditorController.SourceAssetRootPath.Replace("Assets/", string.Empty));
 
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_ResourceEditorController.SourceAssetExceptTypeFilter);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_ResourceEditorController.SourceAssetExceptLabelFilter);
@@ -80,7 +84,7 @@ namespace Game.Editor.ResourceTools
         {
             m_ResourceCollection = new ResourceCollection();
             List<string> signedAssetBundleList = new List<string>();
-
+            List<Type> filteRuleType = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule));
             for (int x = 0; x < collectorData.Groups.Count; x++)
             {
                 var resourceGroup = collectorData.Groups[x];
@@ -98,98 +102,40 @@ namespace Game.Editor.ResourceTools
                             resourceCollector.Variant = null;
                         }
 
-                        switch (resourceCollector.FilterType)
+                        string fileRuleName = FilterRules[resourceCollector.FilterRule];
+                        Type filterRuleType = filteRuleType.Find(x => x.Name == fileRuleName);
+                        if (filterRuleType != null)
                         {
-                            case FilterType.Root:
+                            IFilterRule filterRule = (IFilterRule)Activator.CreateInstance(filterRuleType);
+                            if (filterRule != null)
+                            {
+                                if (AssetDatabase.IsValidFolder(resourceCollector.AssetPath) || File.Exists(resourceCollector.AssetPath))
                                 {
+                                    string resourceName;
                                     if (string.IsNullOrEmpty(resourceCollector.Name))
                                     {
-                                        string relativeDirectoryName = resourceCollector.AssetPath.Replace(m_ResourceEditorController.SourceAssetRootPath + "/", "");
-                                        ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, Utility.Path.GetRegularPath(relativeDirectoryName));
+                                        resourceName = AssetDatabase.IsValidFolder(resourceCollector.AssetPath) ? Path.GetFileName(resourceCollector.AssetPath).ToLower() : Path.GetFileNameWithoutExtension(resourceCollector.AssetPath).ToLower();
                                     }
                                     else
                                     {
-                                        ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, resourceCollector.Name);
+                                        resourceName = resourceCollector.Name;
                                     }
-                                }
-                                break;
 
-                            case FilterType.Children:
+                                    ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, resourceName, filterRule);
+                                }
+                                else
                                 {
-                                    FileInfo[] assetFiles = new DirectoryInfo(resourceCollector.AssetPath).GetFiles(m_SearchPattern, SearchOption.AllDirectories);
-                                    foreach (FileInfo file in assetFiles)
-                                    {
-                                        if (file.Extension.Contains("meta"))
-                                        {
-                                            continue;
-                                        }
-
-                                        string relativeAssetName = file.FullName.Substring(m_RootPath.Length + 1);
-                                        string relativeAssetNameWithoutExtension = Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
-
-                                        string assetName = Path.Combine(m_ResourceEditorController.SourceAssetRootPath, relativeAssetName);
-                                        string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-
-                                        if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
-                                        {
-                                            ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, relativeAssetNameWithoutExtension, assetGUID);
-                                        }
-                                    }
+                                    Debug.LogWarningFormat("assetPath {0} is invalid.", resourceCollector.AssetPath);
                                 }
-                                break;
 
-                            case FilterType.ChildrenFoldersOnly:
-                                {
-                                    DirectoryInfo[] assetDirectories = new DirectoryInfo(resourceCollector.AssetPath).GetDirectories();
-                                    foreach (DirectoryInfo directory in assetDirectories)
-                                    {
-                                        if (string.IsNullOrEmpty(resourceCollector.Name))
-                                        {
-                                            string relativeDirectoryName = directory.FullName.Substring(m_RootPath.Length + 1);
-                                            ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, Utility.Path.GetRegularPath(relativeDirectoryName), string.Empty, directory.FullName);
-                                        }
-                                        else
-                                        {
-                                            ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, resourceCollector.Name, string.Empty, directory.FullName);
-                                        }
-                                    }
-                                }
-                                break;
-
-                            case FilterType.ChildrenFilesOnly:
-                                {
-                                    DirectoryInfo[] assetDirectories = new DirectoryInfo(resourceCollector.AssetPath).GetDirectories();
-                                    foreach (DirectoryInfo directory in assetDirectories)
-                                    {
-                                        FileInfo[] assetFiles = new DirectoryInfo(directory.FullName).GetFiles(m_SearchPattern, SearchOption.AllDirectories);
-                                        foreach (FileInfo file in assetFiles)
-                                        {
-                                            if (file.Extension.Contains("meta"))
-                                            {
-                                                continue;
-                                            }
-                                            string relativeAssetName =
-                                            file.FullName.Substring(m_RootPath.Length + 1);
-                                            string relativeAssetNameWithoutExtension = Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
-
-                                            string assetName = Path.Combine(m_ResourceEditorController.SourceAssetRootPath, relativeAssetName);
-                                            string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-
-                                            if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
-                                            {
-                                                ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, relativeAssetNameWithoutExtension, assetGUID);
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
+                            }
                         }
                     }
                 }
             }
         }
 
-        private static void ApplyResourceFilter(ref List<string> signedResourceList, AssetCollector assetCollector, string resourceName, string singleAssetGUID = "", string childDirectoryPath = "")
+        private static void ApplyResourceFilter(ref List<string> signedResourceList, AssetCollector assetCollector, string resourceName, IFilterRule filterRule)
         {
             if (!signedResourceList.Contains(Path.Combine(assetCollector.AssetPath, resourceName)))
             {
@@ -214,46 +160,32 @@ namespace Game.Editor.ResourceTools
                     AddResource(resourceName, null, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split(';', ',', '|'));
                 }
 
-                switch (assetCollector.FilterType)
+                if (AssetDatabase.IsValidFolder(assetCollector.AssetPath))
                 {
-                    case FilterType.Root:
-                    case FilterType.ChildrenFoldersOnly:
-                        string[] patterns = assetCollector.SearchPatterns.Split(';', ',', '|');
-                        if (childDirectoryPath == "")
+                    FileInfo[] assetFiles = new DirectoryInfo(assetCollector.AssetPath).GetFiles("*.*", SearchOption.AllDirectories);
+                    foreach (FileInfo file in assetFiles)
+                    {
+                        if (filterRule.IsCollectAsset(file.FullName))
                         {
-                            childDirectoryPath = assetCollector.AssetPath;
-                        }
-
-                        for (int i = 0; i < patterns.Length; i++)
-                        {
-                            FileInfo[] assetFiles = new DirectoryInfo(childDirectoryPath).GetFiles(patterns[i], SearchOption.AllDirectories);
-                            foreach (FileInfo file in assetFiles)
+                            string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
+                            string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
+                            if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                             {
-                                if (file.Extension.Contains("meta"))
-                                {
-                                    continue;
-                                }
-
-                                string assetName = Path.Combine("Assets",
-                                file.FullName[(Application.dataPath.Length + 1)..]);
-
-                                string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-
-                                if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
-                                {
-                                    AssignAsset(assetGUID, resourceName, null);
-                                }
+                                AssignAsset(assetGUID, resourceName, null);
                             }
                         }
 
-                        break;
-
-                    case FilterType.Children:
-                    case FilterType.ChildrenFilesOnly:
-                        {
-                            AssignAsset(singleAssetGUID, resourceName, null);
-                        }
-                        break;
+                    }
+                }
+                else
+                {
+                    FileInfo file = new(assetCollector.AssetPath);
+                    string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
+                    string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
+                    if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                    {
+                        AssignAsset(assetGUID, resourceName, null);
+                    }
                 }
             }
         }

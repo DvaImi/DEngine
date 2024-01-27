@@ -1,6 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Game.Editor
 {
@@ -92,6 +96,12 @@ namespace Game.Editor
             {
                 action?.Invoke();
             }
+        }
+     
+        public static List<Type> GetAssignableTypes(Type parentType)
+        {
+            TypeCache.TypeCollection collection = TypeCache.GetTypesDerivedFrom(parentType);
+            return collection.ToList();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Game.Editor.BuildPipeline
         {
             OnPreprocess();
             BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), output, forceRebuild, difference);
+            OnPostprocess();
         }
 
         public static void ClearBundles()
@@ -134,6 +135,11 @@ namespace Game.Editor.BuildPipeline
 
             IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
             IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
+        }
+
+        private static void OnPostprocess()
+        {
+            EditorUtility.UnloadUnusedAssetsImmediate();
         }
 
         private static void GetBuildMessage(ResourceBuilderController builderController, out string message, out MessageType messageType)

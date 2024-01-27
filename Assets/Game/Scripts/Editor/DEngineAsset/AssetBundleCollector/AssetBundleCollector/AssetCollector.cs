@@ -14,7 +14,6 @@ namespace Game.Editor.ResourceTools
         public string AssetPath = string.Empty;
         public LoadType LoadType = LoadType.LoadFromFile;
         public bool Packed = true;
-        public FilterType FilterType = FilterType.Root;
-        public string SearchPatterns = "*.*";
+        public int FilterRule = default;
     }
 }
