@@ -11,7 +11,7 @@ namespace DEngine.Runtime
     /// </summary>
     public class DefaultSettingHelper : SettingHelperBase
     {
-        private const string SettingFileName = "DEngineSetting.block";
+        private readonly string SettingFileName = "{0}Setting.block";
 
         private string m_FilePath = null;
         private DefaultSetting m_Settings = null;
@@ -358,7 +358,7 @@ namespace DEngine.Runtime
 
         private void Awake()
         {
-            m_FilePath = Utility.Path.GetRegularPath(Path.Combine(Application.persistentDataPath, SettingFileName));
+            m_FilePath = Utility.Path.GetRegularPath(Path.Combine(Application.persistentDataPath, Utility.Text.Format(SettingFileName, Application.productName)));
             m_Settings = new DefaultSetting();
             m_Serializer = new DefaultSettingSerializer();
             m_Serializer.RegisterSerializeCallback(0, SerializeDefaultSettingCallback);
