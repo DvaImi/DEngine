@@ -114,7 +114,7 @@ namespace Game.Editor.ResourceTools
                                     string resourceName;
                                     if (string.IsNullOrEmpty(resourceCollector.Name))
                                     {
-                                        resourceName = AssetDatabase.IsValidFolder(resourceCollector.AssetPath) ? Path.GetFileName(resourceCollector.AssetPath).ToLower() : Path.GetFileNameWithoutExtension(resourceCollector.AssetPath).ToLower();
+                                        resourceName = Path.GetFileNameWithoutExtension(resourceCollector.AssetPath).ToLower();
                                     }
                                     else
                                     {
@@ -174,17 +174,19 @@ namespace Game.Editor.ResourceTools
                                 AssignAsset(assetGUID, resourceName, null);
                             }
                         }
-
                     }
                 }
                 else
                 {
                     FileInfo file = new(assetCollector.AssetPath);
-                    string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
-                    string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-                    if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                    if (filterRule.IsCollectAsset(file.FullName))
                     {
-                        AssignAsset(assetGUID, resourceName, null);
+                        string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
+                        string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
+                        if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                        {
+                            AssignAsset(assetGUID, resourceName, null);
+                        }
                     }
                 }
             }
