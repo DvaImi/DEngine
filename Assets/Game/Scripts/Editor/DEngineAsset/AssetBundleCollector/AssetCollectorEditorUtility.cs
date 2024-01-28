@@ -114,7 +114,7 @@ namespace Game.Editor.ResourceTools
                                     string resourceName;
                                     if (string.IsNullOrEmpty(resourceCollector.Name))
                                     {
-                                        resourceName = Path.GetFileNameWithoutExtension(resourceCollector.AssetPath).ToLower();
+                                        resourceName = AssetDatabase.AssetPathToGUID(resourceCollector.AssetPath);
                                     }
                                     else
                                     {
