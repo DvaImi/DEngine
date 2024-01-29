@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DEngine;
@@ -213,7 +214,6 @@ namespace Game.Editor
                         AssetBundleCollector package = new AssetBundleCollector();
                         m_AssetBundlePackageCollector.PackagesCollector.Add(package);
                         m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
-                        SetFocusAndEnsureSelectedItem();
                     }
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("-", GUILayout.Width(30)))
@@ -378,10 +378,18 @@ namespace Game.Editor
             m_MenuTreeGroupsView.RemoveAll();
             if (m_SelectAssetBundleCollector != null)
             {
-                for (int i = 0; i < m_SelectAssetBundleCollector.Groups.Count; i++)
+                int groupsCount = m_SelectAssetBundleCollector.Groups.Count;
+                if (groupsCount > 0)
                 {
-                    AssetBundleGroupCollector resourceGroup = m_SelectAssetBundleCollector.Groups[i];
-                    m_MenuTreeGroupsView.AddItem(GetGroupDisplayName(resourceGroup), resourceGroup);
+                    for (int i = 0; i < groupsCount; i++)
+                    {
+                        AssetBundleGroupCollector resourceGroup = m_SelectAssetBundleCollector.Groups[i];
+                        m_MenuTreeGroupsView.AddItem(GetGroupDisplayName(resourceGroup), resourceGroup);
+                    }
+                }
+                else
+                {
+                    m_AssetCollectorTableView.SetTableViewData(null, m_AssetCollectorColumns);
                 }
             }
         }
@@ -516,7 +524,16 @@ namespace Game.Editor
             TableColumn<AssetCollector> column8 = CreateColumn(new GUIContent("FilterType", "资源筛选类型"),
                 (cellRect, data, rowIndex, isSelected, isFocused) =>
                 {
-                    data.FilterRule = EditorGUI.Popup(cellRect, data.FilterRule, AssetCollectorEditorUtility.FilterRules);
+                    int index = Array.IndexOf(AssetCollectorEditorUtility.FilterRules, data.FilterRule);
+                    if (index == -1)
+                    {
+                        index = 0;
+                    }
+                    var tempIndex = EditorGUI.Popup(cellRect, index, AssetCollectorEditorUtility.FilterRules);
+                    if (tempIndex != index)
+                    {
+                        data.FilterRule = AssetCollectorEditorUtility.FilterRules[tempIndex];
+                    }
                 }, 150, 120, 160);
             columns.Add(column8);
             return columns;

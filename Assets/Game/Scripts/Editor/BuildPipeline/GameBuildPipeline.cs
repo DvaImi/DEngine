@@ -13,12 +13,17 @@ namespace Game.Editor.BuildPipeline
         private static Platform m_OriginalPlatform;
         public static string[] ResourceMode { get; }
         public static string[] PlatformNames { get; }
-        public static string[] PackagesNames { get; }
+        public static string[] PackagesNames { get; private set; }
 
         static GameBuildPipeline()
         {
             ResourceMode = Enum.GetNames(typeof(ResourceMode)).Skip(1).ToArray();
             PlatformNames = Enum.GetNames(typeof(Platform)).Skip(1).ToArray();
+            RefreshPackages();
+        }
+
+        public static void RefreshPackages()
+        {
             PackagesNames = AssetBundlePackageCollector.GetPackageCollector().PackagesCollector.Select(x => x.PackageName).ToArray();
         }
 

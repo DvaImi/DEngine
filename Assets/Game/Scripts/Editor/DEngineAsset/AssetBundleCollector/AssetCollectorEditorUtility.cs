@@ -14,8 +14,7 @@ namespace Game.Editor.ResourceTools
     {
         // 资源规则
         private static ResourceCollection m_ResourceCollection;
-        // 资源筛选控制
-        private static ResourceEditorController m_ResourceEditorController;
+
         // 排除的类型
         private static string[] m_SourceAssetExceptTypeFilterGUIDArray;
         // 排除的标签
@@ -32,16 +31,14 @@ namespace Game.Editor.ResourceTools
 
         public static void RefreshResourceCollection(AssetBundleCollector collectorData)
         {
-            if (m_ResourceEditorController == null)
-            {
-                m_ResourceEditorController = new ResourceEditorController();
-                m_ResourceEditorController.Load();
-            }
+            ResourceEditorController resourceEditorController = new();
+            resourceEditorController.Load();
 
             collectorData ??= AssetBundlePackageCollector.GetBundleCollectorByIndex(GameSetting.Instance.AssetBundleCollectorIndex);
+            Debug.Log($"Export {collectorData.PackageName} ...");
 
-            m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_ResourceEditorController.SourceAssetExceptTypeFilter);
-            m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_ResourceEditorController.SourceAssetExceptLabelFilter);
+            m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
+            m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptLabelFilter);
 
             AnalysisResourceFilters(collectorData);
 
@@ -102,8 +99,7 @@ namespace Game.Editor.ResourceTools
                             resourceCollector.Variant = null;
                         }
 
-                        string fileRuleName = FilterRules[resourceCollector.FilterRule];
-                        Type filterRuleType = filteRuleType.Find(x => x.Name == fileRuleName);
+                        Type filterRuleType = filteRuleType.Find(x => x.Name == resourceCollector.FilterRule);
                         if (filterRuleType != null)
                         {
                             IFilterRule filterRule = (IFilterRule)Activator.CreateInstance(filterRuleType);
@@ -114,7 +110,8 @@ namespace Game.Editor.ResourceTools
                                     string resourceName;
                                     if (string.IsNullOrEmpty(resourceCollector.Name))
                                     {
-                                        resourceName = AssetDatabase.AssetPathToGUID(resourceCollector.AssetPath);
+                                        FileInfo fileInfo = new FileInfo(resourceCollector.AssetPath);
+                                        resourceName = fileInfo.Name.ToLower() + "_" + AssetDatabase.AssetPathToGUID(resourceCollector.AssetPath);
                                     }
                                     else
                                     {

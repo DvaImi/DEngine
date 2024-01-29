@@ -53,6 +53,8 @@ namespace Game.Editor.BuildPipeline
             {
                 Directory.CreateDirectory(GameSetting.Instance.BundlesOutput);
             }
+
+            GameBuildPipeline.RefreshPackages();
         }
 
         private void OnGUI()
