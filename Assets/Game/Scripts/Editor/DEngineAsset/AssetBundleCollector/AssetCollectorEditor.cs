@@ -313,7 +313,7 @@ namespace Game.Editor
                     {
                         group.EnableGroup = !group.EnableGroup;
                     }
-                    string groupName = EditorGUILayout.DelayedTextField("分组名(按 ; , | 分割)", group.GroupName);
+                    string groupName = EditorGUILayout.DelayedTextField("分组名(按 | 分割)", group.GroupName);
                     if (group.GroupName != groupName)
                     {
                         group.SetGroupName(groupName);

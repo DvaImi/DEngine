@@ -23,7 +23,6 @@ namespace Game.Editor.ResourceTools
 
     public class CollectAll : IFilterRule
     {
-
         public bool IsCollectAsset(string assetPath)
         {
             return true;

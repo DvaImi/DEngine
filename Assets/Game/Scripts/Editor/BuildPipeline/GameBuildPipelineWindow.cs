@@ -112,7 +112,7 @@ namespace Game.Editor.BuildPipeline
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
-                GameBuildPipeline.BuildBundle(GameSetting.Instance.ForceRebuild, GameSetting.Instance.BundlesOutput, GameSetting.Instance.Difference);
+                GameBuildPipeline.BuildBundle(GameSetting.Instance.BundlesOutput, GameSetting.Instance.Difference);
             }
 
             if (m_IsAotGeneric)
@@ -353,10 +353,13 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
-                GameSetting.Instance.ForceRebuild = EditorGUILayout.ToggleLeft("ForceRebuild", GameSetting.Instance.ForceRebuild, GUILayout.Width(120));
                 bool canDifference = GameBuildPipeline.CanDifference();
                 GUI.enabled = canDifference;
-                GameSetting.Instance.Difference = canDifference && EditorGUILayout.ToggleLeft("Difference", GameSetting.Instance.Difference, GUILayout.Width(120));
+                bool diff = EditorGUILayout.ToggleLeft("Difference", canDifference && GameSetting.Instance.Difference, GUILayout.Width(120));
+                if (diff != GameSetting.Instance.Difference)
+                {
+                    GameSetting.Instance.Difference = diff;
+                }
                 GUI.enabled = true;
 
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;

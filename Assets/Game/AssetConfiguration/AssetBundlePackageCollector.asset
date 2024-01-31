@@ -27,50 +27,75 @@ MonoBehaviour:
         Variant: 
         AssetPath: Assets/Game/DataTables
         LoadType: 0
-        Packed: 1
-        FilterRule: 0
+        Packed: 0
+        FilterRule: CollectAll
       - Enable: 1
-        Name: dat
+        Name: 
         FileSystem: 
         Groups: Base
         Variant: 
         AssetPath: Assets/Game/HybridCLRData
         LoadType: 0
-        Packed: 1
-        FilterRule: 0
+        Packed: 0
+        FilterRule: CollectAll
       - Enable: 1
-        Name: zh-cn
+        Name: 
         FileSystem: 
         Groups: Base
         Variant: 
         AssetPath: Assets/Game/Localization/ChineseSimplified
         LoadType: 0
-        Packed: 1
-        FilterRule: 0
+        Packed: 0
+        FilterRule: CollectAll
       - Enable: 1
-        Name: zh-tw
+        Name: 
         FileSystem: 
         Groups: Base
         Variant: 
         AssetPath: Assets/Game/Localization/ChineseTraditional
         LoadType: 0
-        Packed: 1
-        FilterRule: 0
+        Packed: 0
+        FilterRule: CollectAll
       - Enable: 1
-        Name: en-us
+        Name: 
         FileSystem: 
         Groups: Base
         Variant: 
         AssetPath: Assets/Game/Localization/English
         LoadType: 0
-        Packed: 1
-        FilterRule: 0
+        Packed: 0
+        FilterRule: CollectAll
+  - PackageName: WebGL
+    Description: "\u5C0F\u6E38\u620F\u8D44\u6E90"
+    Groups:
+    - GroupName: Base
+      EnableGroup: 1
+      Description: "\u57FA\u7840\u8D44\u6E90"
+      AssetCollectors:
       - Enable: 1
-        Name: ui
+        Name: 
         FileSystem: 
         Groups: Base
         Variant: 
-        AssetPath: Assets/Game/UI/UIForms
-        LoadType: 0
+        AssetPath: Assets/Game/DataTables
+        LoadType: 1
         Packed: 1
-        FilterRule: 2
+        FilterRule: CollectAll
+      - Enable: 1
+        Name: 
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        AssetPath: Assets/Game/HybridCLRData
+        LoadType: 1
+        Packed: 1
+        FilterRule: CollectAll
+      - Enable: 1
+        Name: 
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        AssetPath: Assets/Game/Localization
+        LoadType: 1
+        Packed: 1
+        FilterRule: CollectAll

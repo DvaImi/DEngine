@@ -14,6 +14,7 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
+
         /// <summary>
         /// 获取最新的资源构建列表
         /// </summary>
@@ -21,10 +22,10 @@ namespace Game.Editor.BuildPipeline
         /// <param name="fullPath">整包列表</param>
         /// <param name="package">单机资源列表</param>
         /// <param name="packed">为可更新模式生成的本地资源列表</param>
-        public static void GetBuildVersions(Platform platform, bool lastFull, out string fullPath, out string package, out string packed)
+        public static void GetBuildVersions(Platform platform, bool lastFull, out string fullPath, out string package, out string packed, out string patch)
         {
             string OutputDirectory = GameSetting.Instance.BundlesOutput;
-            fullPath = package = packed = null;
+            fullPath = package = packed = patch = null;
             string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
             if (!Directory.Exists(buildReportDirectory))
             {
@@ -48,35 +49,29 @@ namespace Game.Editor.BuildPipeline
             fullPath = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
             package = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Package/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
             packed = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Packed/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
+            patch = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Patch/{4}/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform), "*patch")).FullName);
         }
 
         /// <summary>
         /// 差异打包后处理
+        /// 合并资源包
         /// </summary>
         /// <param name="platform"></param>
         public static void OnPostprocessDifference(Platform platform)
         {
             //获取上次整包的资源列表
-            GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutpuPath, out string lastPackedVersionOutputPath);
+            GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutpuPath, out string lastPackedVersionOutputPath, out _);
 
             //获取当前版本的资源列表
-            GetBuildVersions(platform, false, out string currentVersionFullPath, out string currentVersionPackagePath, out string currentVersionPackedPath);
+            GetBuildVersions(platform, false, out string currentVersionFullPath, out string currentVersionPackagePath, out string currentVersionPackedPath, out string patchVersionPath);
 
-            //特殊字符需要转义
-            string pattern = @"DEngineVersion\..*\.block";
-            Regex regex = new(pattern);
             string[] lastFullVersionFiles = Directory.GetFiles(lastFullVersionOutputFullPath, "*", SearchOption.AllDirectories);
             string[] lastPackageVersionFiles = Directory.GetFiles(lastPackageVersionOutpuPath, "*", SearchOption.AllDirectories);
             string[] lastPackedVersionFiles = Directory.GetFiles(lastPackedVersionOutputPath, "*", SearchOption.AllDirectories);
 
-            //过滤版本文件
-            string[] filteredFullFiles = lastFullVersionFiles.Where(file => !regex.IsMatch(file)).ToArray();
-            string[] filteredPackageFiles = lastPackageVersionFiles.Where(file => !regex.IsMatch(file)).ToArray();
-            string[] filteredPackedFiles = lastPackedVersionFiles.Where(file => !regex.IsMatch(file)).ToArray();
-
-            CopyUpdatableVersionList(currentVersionFullPath, lastFullVersionOutputFullPath, filteredFullFiles);
-            CopyPackageVersionList(currentVersionPackagePath, lastPackageVersionOutpuPath, filteredPackageFiles);
-            CopyPackedVersionList(currentVersionPackedPath, lastPackedVersionOutputPath, filteredPackedFiles);
+            MergeFullVersionList(currentVersionFullPath, lastFullVersionOutputFullPath, patchVersionPath.Replace("*patch", "Full"), lastFullVersionFiles);
+            MergePackageVersionList(currentVersionPackagePath, lastPackageVersionOutpuPath, patchVersionPath.Replace("*patch", "Package"), lastPackageVersionFiles);
+            MergePackedVersionList(currentVersionPackedPath, lastPackedVersionOutputPath, patchVersionPath.Replace("*patch", "Packed"), lastPackedVersionFiles);
 
             if (GameSetting.Instance.AutoCopyToFileServer)
             {
@@ -97,7 +92,7 @@ namespace Game.Editor.BuildPipeline
         /// <param name="currentVersionFullPath"></param>
         /// <param name="lastFullVersionOutputFullPath"></param>
         /// <param name="filteredFullFiles"></param>
-        private static void CopyUpdatableVersionList(string currentVersionFullPath, string lastFullVersionOutputFullPath, string[] filteredFullFiles)
+        private static void MergeFullVersionList(string currentVersionFullPath, string lastFullVersionOutputFullPath, string patchVersionPath, string[] filteredFullFiles)
         {
             UpdatableVersionListSerializer updatableVersionListSerializer = new UpdatableVersionListSerializer();
             updatableVersionListSerializer.RegisterDeserializeCallback(0, BuiltinVersionListSerializer.UpdatableVersionListDeserializeCallback_V0);
@@ -106,23 +101,29 @@ namespace Game.Editor.BuildPipeline
 
             string sourcePath = Utility.Path.GetRegularPath(Path.Combine(currentVersionFullPath));
             DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(sourcePath);
-            FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("DEngineVersion.*.block", SearchOption.TopDirectoryOnly);
-            byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
-            sourceVersionListBytes = Utility.Compression.Decompress(sourceVersionListBytes);
-
-            UpdatableVersionList sourceUpdatableVersionList = default;
-            using (Stream stream = new MemoryStream(sourceVersionListBytes))
-            {
-                sourceUpdatableVersionList = updatableVersionListSerializer.Deserialize(stream);
-            }
+            FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("RemoteVersionList.*.block", SearchOption.TopDirectoryOnly);
             List<string> updatableVersionList = new List<string>();
-
-            UpdatableVersionList.Resource[] array = sourceUpdatableVersionList.GetResources();
-
-            foreach (UpdatableVersionList.Resource resource in array)
+            if (sourceVersionListFiles.Length > 0)
             {
-                string fullName = resource.Variant != null ? Utility.Text.Format("{0}.{1}.{2}", resource.Name, resource.Variant, resource.Extension) : Utility.Text.Format("{0}.{1}", resource.Name, resource.Extension);
-                updatableVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
+                UpdatableVersionList sourceUpdatableVersionList = default;
+                byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
+                sourceVersionListBytes = Utility.Compression.Decompress(sourceVersionListBytes);
+                using Stream stream = new MemoryStream(sourceVersionListBytes);
+                sourceUpdatableVersionList = updatableVersionListSerializer.Deserialize(stream);
+                UpdatableVersionList.Resource[] array = sourceUpdatableVersionList.GetResources();
+
+                foreach (UpdatableVersionList.Resource resource in array)
+                {
+                    string fullName = resource.Variant != null ? Utility.Text.Format("{0}.{1}.{2}", resource.Name, resource.Variant, resource.Extension) : Utility.Text.Format("{0}.{1}", resource.Name, resource.Extension);
+                    updatableVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
+                }
+                string destFileName = Utility.Path.GetRegularPath(Path.Combine(patchVersionPath, sourceVersionListFiles[0].FullName[lastFullVersionOutputFullPath.Length..]));
+                FileInfo destFileInfo = new(destFileName);
+                if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
+                {
+                    destFileInfo.Directory.Create();
+                }
+                File.Copy(sourceVersionListFiles[0].FullName, destFileName, true);
             }
 
             foreach (string lastFileFullName in filteredFullFiles)
@@ -133,7 +134,7 @@ namespace Game.Editor.BuildPipeline
                     string fileNameWithoutCrcHashCode = fileNameWithoutExtension[..fileNameWithoutExtension.IndexOf(".")];
                     if (updatableVersionList.Contains(fileNameWithoutCrcHashCode))
                     {
-                        string destFileName = Utility.Path.GetRegularPath(Path.Combine(currentVersionFullPath, lastFileFullName[lastFullVersionOutputFullPath.Length..]));
+                        string destFileName = Utility.Path.GetRegularPath(Path.Combine(patchVersionPath, lastFileFullName[lastFullVersionOutputFullPath.Length..]));
                         FileInfo destFileInfo = new(destFileName);
                         if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
                         {
@@ -153,7 +154,7 @@ namespace Game.Editor.BuildPipeline
         /// <param name="currentVersionPackagePath"></param>
         /// <param name="lastFullVersionOutputPackagePath"></param>
         /// <param name="filteredPackageFiles"></param>
-        private static void CopyPackageVersionList(string currentVersionPackagePath, string lastFullVersionOutputPackagePath, string[] filteredPackageFiles)
+        private static void MergePackageVersionList(string currentVersionPackagePath, string lastFullVersionOutputPackagePath, string patchVersionPath, string[] filteredPackageFiles)
         {
             PackageVersionListSerializer packageVersionListSerializer = new PackageVersionListSerializer();
             packageVersionListSerializer.RegisterDeserializeCallback(0, BuiltinVersionListSerializer.PackageVersionListDeserializeCallback_V0);
@@ -162,23 +163,33 @@ namespace Game.Editor.BuildPipeline
 
             string sourcePath = Utility.Path.GetRegularPath(Path.Combine(currentVersionPackagePath));
             DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(sourcePath);
-            FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("DEngineVersion.block", SearchOption.TopDirectoryOnly);
-            byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
-
-            PackageVersionList sourcePackageVersionList = default;
-            using (Stream stream = new MemoryStream(sourceVersionListBytes))
-            {
-                sourcePackageVersionList = packageVersionListSerializer.Deserialize(stream);
-            }
-
+            FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("RemoteVersionList.block", SearchOption.TopDirectoryOnly);
             List<string> packageVersionList = new List<string>();
-
-            PackageVersionList.Resource[] array = sourcePackageVersionList.GetResources();
-
-            foreach (PackageVersionList.Resource resource in array)
+            if (sourceVersionListFiles.Length > 0)
             {
-                string fullName = resource.Variant != null ? Utility.Text.Format("{0}.{1}.{2}", resource.Name, resource.Variant, resource.Extension) : Utility.Text.Format("{0}.{1}", resource.Name, resource.Extension);
-                packageVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
+                byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
+
+                PackageVersionList sourcePackageVersionList = default;
+                using (Stream stream = new MemoryStream(sourceVersionListBytes))
+                {
+                    sourcePackageVersionList = packageVersionListSerializer.Deserialize(stream);
+                }
+
+                PackageVersionList.Resource[] array = sourcePackageVersionList.GetResources();
+
+                foreach (PackageVersionList.Resource resource in array)
+                {
+                    string fullName = resource.Variant != null ? Utility.Text.Format("{0}.{1}.{2}", resource.Name, resource.Variant, resource.Extension) : Utility.Text.Format("{0}.{1}", resource.Name, resource.Extension);
+                    packageVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
+                }
+
+                string destFileName = Utility.Path.GetRegularPath(Path.Combine(patchVersionPath, sourceVersionListFiles[0].FullName[lastFullVersionOutputPackagePath.Length..]));
+                FileInfo destFileInfo = new(destFileName);
+                if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
+                {
+                    destFileInfo.Directory.Create();
+                }
+                File.Copy(sourceVersionListFiles[0].FullName, destFileName, true);
             }
 
             foreach (string lastFilePackageName in filteredPackageFiles)
@@ -188,7 +199,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     if (packageVersionList.Contains(fileNameWithoutExtension))
                     {
-                        string destFileName = Utility.Path.GetRegularPath(Path.Combine(currentVersionPackagePath, lastFilePackageName[lastFullVersionOutputPackagePath.Length..]));
+                        string destFileName = Utility.Path.GetRegularPath(Path.Combine(patchVersionPath, lastFilePackageName[lastFullVersionOutputPackagePath.Length..]));
                         FileInfo destFileInfo = new(destFileName);
                         if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
                         {
@@ -208,7 +219,7 @@ namespace Game.Editor.BuildPipeline
         /// <param name="currentVersionPackedPath"></param>
         /// <param name="lastFullVersionOutputPackedPath"></param>
         /// <param name="filteredPackedFiles"></param>
-        private static void CopyPackedVersionList(string currentVersionPackedPath, string lastFullVersionOutputPackedPath, string[] filteredPackedFiles)
+        private static void MergePackedVersionList(string currentVersionPackedPath, string lastFullVersionOutputPackedPath, string patchVersionPath, string[] filteredPackedFiles)
         {
             ReadOnlyVersionListSerializer serializer = new ReadOnlyVersionListSerializer();
             serializer.RegisterDeserializeCallback(0, BuiltinVersionListSerializer.LocalVersionListDeserializeCallback_V0);
@@ -216,23 +227,34 @@ namespace Game.Editor.BuildPipeline
             serializer.RegisterDeserializeCallback(2, BuiltinVersionListSerializer.LocalVersionListDeserializeCallback_V2);
             string sourcePath = Utility.Path.GetRegularPath(Path.Combine(currentVersionPackedPath));
             DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(sourcePath);
-            FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("DEngineList.block", SearchOption.TopDirectoryOnly);
-            byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
-            LocalVersionList versionList = default;
-
-            using (Stream stream = new MemoryStream(sourceVersionListBytes))
-            {
-                versionList = serializer.Deserialize(stream);
-            }
-
+            FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("LocalVersionList.block", SearchOption.TopDirectoryOnly);
             List<string> readOnlyVersionList = new List<string>();
-
-            LocalVersionList.Resource[] resources = versionList.GetResources();
-
-            foreach (LocalVersionList.Resource resource in resources)
+            if (sourceVersionListFiles.Length > 0)
             {
-                string fullName = resource.Variant != null ? Utility.Text.Format("{0}.{1}.{2}", resource.Name, resource.Variant, resource.Extension) : Utility.Text.Format("{0}.{1}", resource.Name, resource.Extension);
-                readOnlyVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
+                byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
+                LocalVersionList versionList = default;
+
+                using (Stream stream = new MemoryStream(sourceVersionListBytes))
+                {
+                    versionList = serializer.Deserialize(stream);
+                }
+
+
+                LocalVersionList.Resource[] resources = versionList.GetResources();
+
+                foreach (LocalVersionList.Resource resource in resources)
+                {
+                    string fullName = resource.Variant != null ? Utility.Text.Format("{0}.{1}.{2}", resource.Name, resource.Variant, resource.Extension) : Utility.Text.Format("{0}.{1}", resource.Name, resource.Extension);
+                    readOnlyVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
+                }
+
+                string destFileName = Utility.Path.GetRegularPath(Path.Combine(patchVersionPath, sourceVersionListFiles[0].FullName[lastFullVersionOutputPackedPath.Length..]));
+                FileInfo destFileInfo = new(destFileName);
+                if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
+                {
+                    destFileInfo.Directory.Create();
+                }
+                File.Copy(sourceVersionListFiles[0].FullName, destFileName, true);
             }
 
             foreach (string lastFilePackedName in filteredPackedFiles)
@@ -242,7 +264,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     if (readOnlyVersionList.Contains(fileNameWithoutExtension))
                     {
-                        string destFileName = Utility.Path.GetRegularPath(Path.Combine(currentVersionPackedPath, lastFilePackedName[lastFullVersionOutputPackedPath.Length..]));
+                        string destFileName = Utility.Path.GetRegularPath(Path.Combine(patchVersionPath, lastFilePackedName[lastFullVersionOutputPackedPath.Length..]));
                         FileInfo destFileInfo = new(destFileName);
                         if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
                         {
@@ -263,7 +285,7 @@ namespace Game.Editor.BuildPipeline
         public static bool CanDifference()
         {
             Platform platform = GetPlatform(GameSetting.Instance.BuildPlatform);
-            GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutputFullPath, out string lastPackedVersionOutputFullPath);
+            GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutputFullPath, out string lastPackedVersionOutputFullPath, out _);
             return !string.IsNullOrEmpty(lastFullVersionOutputFullPath)
                    && Directory.Exists(lastFullVersionOutputFullPath)
                    && !string.IsNullOrEmpty(lastPackageVersionOutputFullPath)

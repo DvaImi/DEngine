@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using DEngine;
 using DEngine.Editor.ResourceTools;
-using Game.Editor.ResourceTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,21 +10,61 @@ namespace Game.Editor.ResourceTools
 {
     internal static class AssetCollectorEditorUtility
     {
-        // 资源规则
+        /// <summary>
+        /// 资源规则
+        /// </summary>
         private static ResourceCollection m_ResourceCollection;
-
-        // 排除的类型
+        /// <summary>
+        /// 排除的类型
+        /// </summary>
         private static string[] m_SourceAssetExceptTypeFilterGUIDArray;
-        // 排除的标签
+        /// <summary>
+        /// 排除的标签
+        /// </summary>
         private static string[] m_SourceAssetExceptLabelFilterGUIDArray;
         /// <summary>
-        /// 资源收集规则
+        /// 缓存收集规则类型
         /// </summary>
-        public static string[] FilterRules { get; }
+        private static Dictionary<string, Type> m_CacheFilterRuleTypes = new Dictionary<string, Type>();
+        /// <summary>
+        /// 缓存收集规则实例
+        /// </summary>
+        private static Dictionary<string, IFilterRule> m_CacheFilterRuleInstence = new Dictionary<string, IFilterRule>();
+
+        /// <summary>
+        /// 资源收集规则名称
+        /// </summary>
+        public static string[] FilterRules
+        {
+            get;
+        }
 
         static AssetCollectorEditorUtility()
         {
-            FilterRules = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule)).Select(x => x.Name).ToArray();
+            Debug.Log(nameof(AssetCollectorEditorUtility));
+            m_CacheFilterRuleTypes.Clear();
+            m_CacheFilterRuleInstence.Clear();
+            List<Type> types = new List<Type>()
+            {
+                typeof(CollectAll),
+                typeof (CollectScene),
+                typeof (CollectPrefab),
+                typeof (CollectSprite),
+            };
+            var customTypes = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule));
+            types.AddRange(customTypes);
+
+            FilterRules = new string[types.Count];
+            for (int i = 0; i < types.Count; i++)
+            {
+                Type type = types[i];
+                if (m_CacheFilterRuleTypes.ContainsKey(type.Name))
+                {
+                    continue;
+                }
+                m_CacheFilterRuleTypes.Add(type.Name, type);
+                FilterRules[i] = type.Name;
+            }
         }
 
         public static void RefreshResourceCollection(AssetBundleCollector collectorData)
@@ -50,6 +88,23 @@ namespace Game.Editor.ResourceTools
             {
                 Debug.Log("Refresh ResourceCollection.xml fail");
             }
+        }
+
+        public static IFilterRule GetFilterRuleInstance(string ruleName)
+        {
+            if (m_CacheFilterRuleInstence.TryGetValue(ruleName, out IFilterRule instance))
+            {
+                return instance;
+            }
+
+            if (m_CacheFilterRuleTypes.TryGetValue(ruleName, out Type type))
+            {
+                instance = (IFilterRule)Activator.CreateInstance(type);
+                m_CacheFilterRuleInstence.Add(ruleName, instance);
+                return instance;
+            }
+
+            throw new Exception($"{nameof(IFilterRule)}类型无效:{ruleName}");
         }
 
         private static Resource[] GetResources()
@@ -81,15 +136,12 @@ namespace Game.Editor.ResourceTools
         {
             m_ResourceCollection = new ResourceCollection();
             List<string> signedAssetBundleList = new List<string>();
-            List<Type> filteRuleType = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule));
-            for (int x = 0; x < collectorData.Groups.Count; x++)
+            foreach (var resourceGroup in collectorData.Groups)
             {
-                var resourceGroup = collectorData.Groups[x];
                 if (resourceGroup.EnableGroup)
                 {
-                    for (int y = 0; y < resourceGroup.AssetCollectors.Count; y++)
+                    foreach (var resourceCollector in resourceGroup.AssetCollectors)
                     {
-                        var resourceCollector = resourceGroup.AssetCollectors[y];
                         if (!resourceCollector.Enable)
                         {
                             continue;
@@ -99,34 +151,26 @@ namespace Game.Editor.ResourceTools
                             resourceCollector.Variant = null;
                         }
 
-                        Type filterRuleType = filteRuleType.Find(x => x.Name == resourceCollector.FilterRule);
-                        if (filterRuleType != null)
+                        if (AssetDatabase.IsValidFolder(resourceCollector.AssetPath) || File.Exists(resourceCollector.AssetPath))
                         {
-                            IFilterRule filterRule = (IFilterRule)Activator.CreateInstance(filterRuleType);
-                            if (filterRule != null)
+                            string resourceName;
+                            if (string.IsNullOrEmpty(resourceCollector.Name))
                             {
-                                if (AssetDatabase.IsValidFolder(resourceCollector.AssetPath) || File.Exists(resourceCollector.AssetPath))
-                                {
-                                    string resourceName;
-                                    if (string.IsNullOrEmpty(resourceCollector.Name))
-                                    {
-                                        FileInfo fileInfo = new FileInfo(resourceCollector.AssetPath);
-                                        resourceName = fileInfo.Name.ToLower() + "_" + AssetDatabase.AssetPathToGUID(resourceCollector.AssetPath);
-                                    }
-                                    else
-                                    {
-                                        resourceName = resourceCollector.Name;
-                                    }
-
-                                    ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, resourceName, filterRule);
-                                }
-                                else
-                                {
-                                    Debug.LogWarningFormat("assetPath {0} is invalid.", resourceCollector.AssetPath);
-                                }
-
+                                FileInfo fileInfo = new FileInfo(resourceCollector.AssetPath);
+                                resourceName = fileInfo.Name.ToLower() + "_" + AssetDatabase.AssetPathToGUID(resourceCollector.AssetPath);
                             }
+                            else
+                            {
+                                resourceName = resourceCollector.Name;
+                            }
+
+                            ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));
                         }
+                        else
+                        {
+                            Debug.LogWarningFormat("assetPath {0} is invalid.", resourceCollector.AssetPath);
+                        }
+
                     }
                 }
             }
@@ -154,7 +198,7 @@ namespace Game.Editor.ResourceTools
                         assetCollector.FileSystem = null;
                     }
 
-                    AddResource(resourceName, null, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split(';', ',', '|'));
+                    AddResource(resourceName, null, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split('|'));
                 }
 
                 if (AssetDatabase.IsValidFolder(assetCollector.AssetPath))

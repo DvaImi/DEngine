@@ -20,10 +20,10 @@ namespace Game.Editor.BuildPipeline
             return Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, GameSetting.Instance.LatestGameVersion, GameSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
         }
 
-        public static void BuildBundle(bool forceRebuild, string output, bool difference)
+        public static void BuildBundle(string output, bool difference)
         {
             OnPreprocess();
-            BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), output, forceRebuild, difference);
+            BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), output, difference);
             OnPostprocess();
         }
 

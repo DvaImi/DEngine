@@ -283,7 +283,7 @@ namespace DEngine.Editor.ResourceTools
                     continue;
                 }
 
-                FileInfo[] versionListFiles = platformDirectoryInfo.GetFiles("DEngineVersion.*.block", SearchOption.TopDirectoryOnly);
+                FileInfo[] versionListFiles = platformDirectoryInfo.GetFiles("RemoteVersionList.*.block", SearchOption.TopDirectoryOnly);
                 if (versionListFiles.Length != 1)
                 {
                     continue;
@@ -390,7 +390,7 @@ namespace DEngine.Editor.ResourceTools
                 if (sourceVersion != null)
                 {
                     DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(Path.Combine(Path.Combine(SourcePath, sourceVersion), Platform.ToString()));
-                    FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("DEngineVersion.*.block", SearchOption.TopDirectoryOnly);
+                    FileInfo[] sourceVersionListFiles = sourceDirectoryInfo.GetFiles("RemoteVersionList.*.block", SearchOption.TopDirectoryOnly);
                     byte[] sourceVersionListBytes = File.ReadAllBytes(sourceVersionListFiles[0].FullName);
                     sourceVersionListBytes = Utility.Compression.Decompress(sourceVersionListBytes);
                     using (Stream stream = new MemoryStream(sourceVersionListBytes))
@@ -401,7 +401,7 @@ namespace DEngine.Editor.ResourceTools
 
                 UpdatableVersionList targetUpdatableVersionList = default(UpdatableVersionList);
                 DirectoryInfo targetDirectoryInfo = new DirectoryInfo(Path.Combine(Path.Combine(SourcePath, targetVersion), Platform.ToString()));
-                FileInfo[] targetVersionListFiles = targetDirectoryInfo.GetFiles("DEngineVersion.*.block", SearchOption.TopDirectoryOnly);
+                FileInfo[] targetVersionListFiles = targetDirectoryInfo.GetFiles("RemoteVersionList.*.block", SearchOption.TopDirectoryOnly);
                 byte[] targetVersionListBytes = File.ReadAllBytes(targetVersionListFiles[0].FullName);
                 targetVersionListBytes = Utility.Compression.Decompress(targetVersionListBytes);
                 using (Stream stream = new MemoryStream(targetVersionListBytes))
