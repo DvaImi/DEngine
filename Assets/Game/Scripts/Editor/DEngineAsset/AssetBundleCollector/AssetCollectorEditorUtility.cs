@@ -44,16 +44,7 @@ namespace Game.Editor.ResourceTools
             Debug.Log(nameof(AssetCollectorEditorUtility));
             m_CacheFilterRuleTypes.Clear();
             m_CacheFilterRuleInstence.Clear();
-            List<Type> types = new List<Type>()
-            {
-                typeof(CollectAll),
-                typeof (CollectScene),
-                typeof (CollectPrefab),
-                typeof (CollectSprite),
-            };
-            var customTypes = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule));
-            types.AddRange(customTypes);
-
+            List<Type> types = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule));
             FilterRules = new string[types.Count];
             for (int i = 0; i < types.Count; i++)
             {
