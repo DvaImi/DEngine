@@ -30,6 +30,17 @@ namespace Game.Editor
         private GUIStyle m_LineStyle;
         private GUIStyle m_FolderBtnStyle;
         private GUIContent m_FolderBtnContent;
+
+        private GUIContent m_EmptyContent;
+        private GUIContent m_EnableContent;
+        private GUIContent m_NameContent;
+        private GUIContent m_LoadTypeContent;
+        private GUIContent m_PackedContent;
+        private GUIContent m_FileSystemContent;
+        private GUIContent m_VariantContent;
+        private GUIContent m_AssetContent;
+        private GUIContent m_FilterTypeContent;
+        private GUIContent m_AssetPathContent;
         private readonly float m_AddRectHeight = 50f;
         private bool m_IsDirty = false;
         private float PackageSpace => 200;
@@ -44,6 +55,16 @@ namespace Game.Editor
         protected override void OnEnable()
         {
             base.OnEnable();
+            m_EmptyContent = new GUIContent("");
+            m_EnableContent = new GUIContent("Enable", "启用资产");
+            m_NameContent = new GUIContent("Name", "资产命名");
+            m_LoadTypeContent = new GUIContent("LoadType", "加载类型");
+            m_PackedContent = new GUIContent("Packed", "是否为本地资源（这些资源将会跟随包体一起发布，作为基础资源）");
+            m_FileSystemContent = new GUIContent("FileSystem", "文件系统（可为空）");
+            m_VariantContent = new GUIContent("Variant", "资源变体（可为空）");
+            m_AssetContent = new GUIContent("AssetObject", "资源目录");
+            m_FilterTypeContent = new GUIContent("FilterType", "资源筛选类型");
+            m_AssetPathContent = new GUIContent("AssetPath", "资源路径");
 
             Load();
 
@@ -75,7 +96,6 @@ namespace Game.Editor
             m_AssetCollectorTableView = new AssetCollectorTableView<AssetCollector>(null, m_AssetCollectorColumns);
             {
                 m_AssetCollectorTableView.OnRightAddRow = OnTreeViewRightAddRowCallback;
-                m_AssetCollectorTableView.OnSelectionChanged += OnTreeViewSelectionChanged;
             }
 
             for (int i = 0; i < m_AssetBundlePackageCollector.PackagesCollector.Count; i++)
@@ -339,6 +359,10 @@ namespace Game.Editor
                         for (int i = 0; i < DragAndDrop.paths.Length; i++)
                         {
                             string path = DragAndDrop.paths[i];
+                            if (DetectDuplicates(path))
+                            {
+                                continue;
+                            }
                             AddAssetCollectorRow(path);
                         }
                     }
@@ -363,14 +387,6 @@ namespace Game.Editor
         {
             m_GroupSelectedItem = m_MenuTreeGroupsView.GetItemById(selectedIds[0]);
             m_AssetCollectorTableView.SetTableViewData(m_GroupSelectedItem.Data.AssetCollectors, m_AssetCollectorColumns);
-        }
-
-        private void OnTreeViewSelectionChanged(List<AssetCollector> list)
-        {
-            if (list != null && list.Count > 0)
-            {
-                EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(list[0].AssetPath));
-            }
         }
 
         private void RefreshAssetGroups()
@@ -465,6 +481,7 @@ namespace Game.Editor
             return string.IsNullOrEmpty(group.Description) ? group.GroupName : string.Format("{0}({1})", group.GroupName, group.Description);
         }
 
+        #region DrawItem
         /// <summary>
         /// 获取资产列
         /// </summary>
@@ -472,72 +489,84 @@ namespace Game.Editor
         private List<TableColumn<AssetCollector>> GetAssetCollectorColumns()
         {
             var columns = new List<TableColumn<AssetCollector>>();
-
-            TableColumn<AssetCollector> column1 = CreateColumn(new GUIContent("Enable", "启用资产"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    data.Enable = EditorGUI.Toggle(cellRect, data.Enable);
-                }, 50, 50, 60);
+            TableColumn<AssetCollector> column1 = CreateColumn(m_EnableContent, DrawEnableItem, 50, 50, 60);
             columns.Add(column1);
-
-            TableColumn<AssetCollector> column2 = CreateColumn(new GUIContent("Name", "资产命名"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    data.Name = EditorGUI.TextField(cellRect, data.Name);
-                }, 100, 50, 150);
+            TableColumn<AssetCollector> column2 = CreateColumn(m_NameContent, DrawNameItem, 100, 50, 150);
             columns.Add(column2);
-
-            TableColumn<AssetCollector> column3 = CreateColumn(new GUIContent("LoadType", "加载类型"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    data.LoadType = (LoadType)EditorGUI.EnumPopup(cellRect, data.LoadType);
-                }, 150, 110, 200);
+            TableColumn<AssetCollector> column3 = CreateColumn(m_LoadTypeContent, DrawLoadTypeItem, 150, 110, 200);
             columns.Add(column3);
-
-            TableColumn<AssetCollector> column4 = CreateColumn(new GUIContent("Packed", "是否为本地资源（这些资源将会跟随包体一起发布，作为基础资源）"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    data.Packed = EditorGUI.Toggle(cellRect, data.Packed);
-                }, 50, 50, 60);
+            TableColumn<AssetCollector> column4 = CreateColumn(m_PackedContent, DrawPackedItem, 50, 50, 60);
             columns.Add(column4);
-
-            TableColumn<AssetCollector> column5 = CreateColumn(new GUIContent("FileSystem", "文件系统（可为空）"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    data.FileSystem = EditorGUI.TextField(cellRect, data.FileSystem);
-                }, 100, 50, 150);
+            TableColumn<AssetCollector> column5 = CreateColumn(m_FileSystemContent, DrawFileSystemItem, 100, 50, 150);
             columns.Add(column5);
-            TableColumn<AssetCollector> column6 = CreateColumn(new GUIContent("Variant", "资源变体（可为空）"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    data.Variant = EditorGUI.TextField(cellRect, data.Variant);
-                }, 100, 50, 150);
+            TableColumn<AssetCollector> column6 = CreateColumn(m_VariantContent, DrawVariantItem, 100, 50, 150);
             columns.Add(column6);
-            TableColumn<AssetCollector> column7 = CreateColumn(new GUIContent("AssetPath", "资源目录"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    Rect textFildRect = new Rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
-                    data.AssetPath = EditorGUI.DelayedTextField(textFildRect, data.AssetPath);
-                }, 300, 200, 400);
+            TableColumn<AssetCollector> column7 = CreateColumn(m_AssetContent, DrawAssetObjectItem, 150, 120, 160);
             columns.Add(column7);
-
-            TableColumn<AssetCollector> column8 = CreateColumn(new GUIContent("FilterType", "资源筛选类型"),
-                (cellRect, data, rowIndex, isSelected, isFocused) =>
-                {
-                    int index = Array.IndexOf(AssetCollectorEditorUtility.FilterRules, data.FilterRule);
-                    if (index == -1)
-                    {
-                        index = 0;
-                    }
-                    var tempIndex = EditorGUI.Popup(cellRect, index, AssetCollectorEditorUtility.FilterRules);
-                    if (tempIndex != index)
-                    {
-                        data.FilterRule = AssetCollectorEditorUtility.FilterRules[tempIndex];
-                    }
-                }, 150, 120, 160);
+            TableColumn<AssetCollector> column8 = CreateColumn(m_FilterTypeContent, DrawFilterTypeItem, 150, 120, 160);
             columns.Add(column8);
+            TableColumn<AssetCollector> column9 = CreateColumn(m_AssetPathContent, DrawAssetPathItem, 300, 200, 400);
+            columns.Add(column9);
             return columns;
         }
+
+        private void DrawEnableItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            Rect enableRect = new Rect(cellRect.x + (cellRect.width / 2), cellRect.y, cellRect.width, cellRect.height);
+            data.Enable = EditorGUI.Toggle(enableRect, data.Enable);
+        }
+
+        private void DrawNameItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            data.Name = EditorGUI.TextField(cellRect, data.Name);
+        }
+
+        private void DrawLoadTypeItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            data.LoadType = (LoadType)EditorGUI.EnumPopup(cellRect, data.LoadType);
+        }
+
+        private void DrawPackedItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            Rect packedRect = new Rect(cellRect.x + (cellRect.width / 2), cellRect.y, cellRect.width, cellRect.height);
+            data.Packed = EditorGUI.Toggle(packedRect, data.Packed);
+        }
+
+        private void DrawFileSystemItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            data.FileSystem = EditorGUI.TextField(cellRect, data.FileSystem);
+        }
+
+        private void DrawVariantItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            data.Variant = EditorGUI.TextField(cellRect, data.Variant);
+        }
+
+        private void DrawAssetObjectItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            data.Asset = EditorGUI.ObjectField(cellRect, m_EmptyContent, data.Asset, typeof(Object), false);
+        }
+
+        private void DrawFilterTypeItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            int index = Array.IndexOf(AssetCollectorEditorUtility.FilterRules, data.FilterRule);
+            if (index == -1)
+            {
+                index = 0;
+            }
+            var tempIndex = EditorGUI.Popup(cellRect, index, AssetCollectorEditorUtility.FilterRules);
+            if (tempIndex != index)
+            {
+                data.FilterRule = AssetCollectorEditorUtility.FilterRules[tempIndex];
+            }
+        }
+
+        private void DrawAssetPathItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        {
+            EditorGUI.LabelField(cellRect, data.AssetPath);
+        }
+
+        #endregion
 
         /// <summary>
         /// 创建列
@@ -574,11 +603,17 @@ namespace Game.Editor
             AssetCollector assetCollector = new()
             {
                 Groups = m_GroupSelectedItem.Data.GroupName,
-                AssetPath = path
+                Asset = AssetDatabase.LoadAssetAtPath<Object>(path)
             };
             m_AssetCollectorTableView.AddData(assetCollector);
             m_IsDirty = true;
         }
+
+        private bool DetectDuplicates(string path)
+        {
+            return m_SelectAssetBundleCollector != null && m_SelectAssetBundleCollector.DetectDuplicates(path);
+        }
+
         private void OnDestroy()
         {
             Save();

@@ -34,6 +34,10 @@ namespace Game
             return webRequestResult;
         }
 
+        public override string ToString()
+        {
+            return Success ? Utility.Converter.GetString(Bytes) : ErrorMessage;
+        }
         public void Clear()
         {
             Bytes = null;

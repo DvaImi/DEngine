@@ -19,5 +19,10 @@ namespace Game.Editor.ResourceTools
                 AssetCollectors[i].Groups = groupName;
             }
         }
+
+        internal bool DetectDuplicates(string assetPath)
+        {
+            return AssetCollectors.Exists(o => o.AssetPath == assetPath);
+        }
     }
 }
