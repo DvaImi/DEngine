@@ -549,6 +549,7 @@ namespace Game.Editor
 
         private void DrawFilterTypeItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            GUI.enabled = AssetDatabase.IsValidFolder(data.AssetPath);
             int index = Array.IndexOf(AssetCollectorEditorUtility.FilterRules, data.FilterRule);
             if (index == -1)
             {
@@ -559,6 +560,7 @@ namespace Game.Editor
             {
                 data.FilterRule = AssetCollectorEditorUtility.FilterRules[tempIndex];
             }
+            GUI.enabled = true;
         }
 
         private void DrawAssetPathItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
