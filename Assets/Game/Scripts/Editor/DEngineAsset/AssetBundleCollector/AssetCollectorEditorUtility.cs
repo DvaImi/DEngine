@@ -126,7 +126,6 @@ namespace Game.Editor.ResourceTools
         private static void AnalysisResourceFilters(AssetBundleCollector collectorData)
         {
             m_ResourceCollection = new ResourceCollection();
-            List<string> signedAssetBundleList = new List<string>();
             foreach (var resourceGroup in collectorData.Groups)
             {
                 if (resourceGroup.EnableGroup)
@@ -155,7 +154,7 @@ namespace Game.Editor.ResourceTools
                                 resourceName = resourceCollector.Name;
                             }
 
-                            ApplyResourceFilter(ref signedAssetBundleList, resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));
+                            ApplyResourceFilter(resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));
                         }
                         else
                         {
@@ -167,50 +166,32 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        private static void ApplyResourceFilter(ref List<string> signedResourceList, AssetCollector assetCollector, string resourceName, IFilterRule filterRule)
+        private static void ApplyResourceFilter(AssetCollector assetCollector, string resourceName, IFilterRule filterRule)
         {
-            if (!signedResourceList.Contains(Path.Combine(assetCollector.AssetPath, resourceName)))
+            foreach (var oldResource in GetResources())
             {
-                signedResourceList.Add(Path.Combine(assetCollector.AssetPath, resourceName));
-
-                foreach (var oldResource in GetResources())
+                if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
                 {
-                    if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
-                    {
-                        RenameResource(oldResource.Name, oldResource.Variant, resourceName, null);
-                        break;
-                    }
+                    RenameResource(oldResource.Name, oldResource.Variant, resourceName, null);
+                    break;
+                }
+            }
+
+            if (!HasResource(resourceName, null))
+            {
+                if (string.IsNullOrEmpty(assetCollector.FileSystem))
+                {
+                    assetCollector.FileSystem = null;
                 }
 
-                if (!HasResource(resourceName, null))
-                {
-                    if (string.IsNullOrEmpty(assetCollector.FileSystem))
-                    {
-                        assetCollector.FileSystem = null;
-                    }
+                AddResource(resourceName, null, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split('|'));
+            }
 
-                    AddResource(resourceName, null, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split('|'));
-                }
-
-                if (AssetDatabase.IsValidFolder(assetCollector.AssetPath))
+            if (AssetDatabase.IsValidFolder(assetCollector.AssetPath))
+            {
+                FileInfo[] assetFiles = new DirectoryInfo(assetCollector.AssetPath).GetFiles("*.*", SearchOption.AllDirectories);
+                foreach (FileInfo file in assetFiles)
                 {
-                    FileInfo[] assetFiles = new DirectoryInfo(assetCollector.AssetPath).GetFiles("*.*", SearchOption.AllDirectories);
-                    foreach (FileInfo file in assetFiles)
-                    {
-                        if (filterRule.IsCollectAsset(file.FullName))
-                        {
-                            string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
-                            string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-                            if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
-                            {
-                                AssignAsset(assetGUID, resourceName, null);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    FileInfo file = new(assetCollector.AssetPath);
                     if (filterRule.IsCollectAsset(file.FullName))
                     {
                         string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
@@ -220,6 +201,23 @@ namespace Game.Editor.ResourceTools
                             AssignAsset(assetGUID, resourceName, null);
                         }
                     }
+                }
+            }
+            else
+            {
+                FileInfo file = new(assetCollector.AssetPath);
+                if (filterRule.IsCollectAsset(file.FullName))
+                {
+                    string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
+                    string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
+                    if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                    {
+                        AssignAsset(assetGUID, resourceName, null);
+                    }
+                }
+                else
+                {
+                    Debug.LogWarningFormat("The resource collection rule is incorrect  AssetPath is {0},FilterRule is {1}", assetCollector.AssetPath, filterRule);
                 }
             }
         }
