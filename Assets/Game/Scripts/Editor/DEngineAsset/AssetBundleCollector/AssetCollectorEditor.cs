@@ -549,7 +549,12 @@ namespace Game.Editor
 
         private void DrawFilterTypeItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
-            GUI.enabled = AssetDatabase.IsValidFolder(data.AssetPath);
+            bool isValidFolderAsset = AssetDatabase.IsValidFolder(data.AssetPath);
+            GUI.enabled = isValidFolderAsset;
+            if (!isValidFolderAsset)
+            {
+                data.FilterRule = nameof(CollectAll);
+            }
             int index = Array.IndexOf(AssetCollectorEditorUtility.FilterRules, data.FilterRule);
             if (index == -1)
             {
