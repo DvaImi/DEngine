@@ -12,7 +12,7 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        private const string EnableHybridCLRDefineSymbol = "ENABLE_HybridCLR";
+        private const string EnableHybridCLRDefineSymbol = "ENABLE_HYBRIDCLR";
 
         public static void SaveHybridCLR()
         {
