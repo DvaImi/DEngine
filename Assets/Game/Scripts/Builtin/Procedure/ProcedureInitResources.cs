@@ -28,7 +28,11 @@ namespace Game
                 return;
             }
 
+#if ENABLE_HYBRIDCLR
             ChangeState<ProcedureLoadAotMetadData>(procedureOwner);
+#else
+            ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
+#endif
         }
 
         private void OnInitResourcesComplete()

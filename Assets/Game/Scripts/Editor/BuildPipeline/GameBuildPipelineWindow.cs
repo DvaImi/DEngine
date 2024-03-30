@@ -9,10 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Game.Editor.ResourceTools;
 using HybridCLR.Editor;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -23,6 +21,7 @@ namespace Game.Editor.BuildPipeline
         private bool m_BeginBuildPlayer = false;
         private bool m_BeginBuildResources = false;
         private bool m_IsAotGeneric = false;
+        private bool m_EnableHybridCLR = false;
         private bool m_FoldoutBuildConfigGroup = false;
         private bool m_FoldoutBuiltInfoGroup = false;
         private bool m_FoldoutFileServerGroup = false;
@@ -42,6 +41,7 @@ namespace Game.Editor.BuildPipeline
         {
             m_BeginBuildPlayer = false;
             m_IsAotGeneric = false;
+            m_EnableHybridCLR = SettingsUtil.Enable;
             m_ScrollPosition = Vector2.zero;
 
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
@@ -158,6 +158,19 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("HyBridCLR", EditorStyles.boldLabel);
+                bool enableHybridCLR = EditorGUILayout.ToggleLeft("EnableHybridCLR", m_EnableHybridCLR);
+                if (m_EnableHybridCLR != enableHybridCLR)
+                {
+                    m_EnableHybridCLR = enableHybridCLR;
+                    if (m_EnableHybridCLR)
+                    {
+                        GameBuildPipeline.EnableHybridCLR();
+                    }
+                    else
+                    {
+                        GameBuildPipeline.DisableHybridCLR();
+                    }
+                }
             }
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);

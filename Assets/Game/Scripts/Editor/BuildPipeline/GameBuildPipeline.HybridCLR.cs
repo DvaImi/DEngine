@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using DEngine.Editor;
 using Game.Editor.ResourceTools;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
@@ -11,6 +12,8 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
+        private const string EnableHybridCLRDefineSymbol = "ENABLE_HybridCLR";
+
         public static void SaveHybridCLR()
         {
             HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
@@ -18,6 +21,7 @@ namespace Game.Editor.BuildPipeline
             HybridCLRSettings.Save();
             Debug.Log("Save HybridCLR success");
         }
+
         public static void CompileHotfixDll()
         {
             BuildTarget buildTarget = GetBuildTarget(GameSetting.Instance.BuildPlatform);
@@ -122,6 +126,19 @@ namespace Game.Editor.BuildPipeline
                 Debug.Log($"Copy {buildTarget} AOTAssemblies success.");
             }
             AssetDatabase.Refresh();
+        }
+
+        public static void EnableHybridCLR()
+        {
+            DisableHybridCLR();
+            ScriptingDefineSymbols.AddScriptingDefineSymbol(EnableHybridCLRDefineSymbol);
+            SettingsUtil.Enable = true;
+        } 
+
+        public static void DisableHybridCLR()
+        {
+            ScriptingDefineSymbols.RemoveScriptingDefineSymbol(EnableHybridCLRDefineSymbol);
+            SettingsUtil.Enable = false;
         }
     }
 }

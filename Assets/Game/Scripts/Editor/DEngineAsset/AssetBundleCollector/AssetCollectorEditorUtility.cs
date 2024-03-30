@@ -41,7 +41,6 @@ namespace Game.Editor.ResourceTools
 
         static AssetCollectorEditorUtility()
         {
-            Debug.Log(nameof(AssetCollectorEditorUtility));
             m_CacheFilterRuleTypes.Clear();
             m_CacheFilterRuleInstence.Clear();
             List<Type> types = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule));
