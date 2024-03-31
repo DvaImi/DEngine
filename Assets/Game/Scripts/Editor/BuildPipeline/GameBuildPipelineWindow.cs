@@ -161,14 +161,17 @@ namespace Game.Editor.BuildPipeline
                 bool enableHybridCLR = EditorGUILayout.ToggleLeft("EnableHybridCLR", m_EnableHybridCLR);
                 if (m_EnableHybridCLR != enableHybridCLR)
                 {
-                    m_EnableHybridCLR = enableHybridCLR;
-                    if (m_EnableHybridCLR)
+                    if (EditorUtility.DisplayDialog("HybridCLR", $"{(enableHybridCLR ? "开启" : "关闭")} HybridCLR时，请{(enableHybridCLR ? "激活" : "关闭")}资源收集器有关HybridCLR的资源", "确定", "取消"))
                     {
-                        GameBuildPipeline.EnableHybridCLR();
-                    }
-                    else
-                    {
-                        GameBuildPipeline.DisableHybridCLR();
+                        m_EnableHybridCLR = enableHybridCLR;
+                        if (m_EnableHybridCLR)
+                        {
+                            GameBuildPipeline.EnableHybridCLR();
+                        }
+                        else
+                        {
+                            GameBuildPipeline.DisableHybridCLR();
+                        }
                     }
                 }
             }
