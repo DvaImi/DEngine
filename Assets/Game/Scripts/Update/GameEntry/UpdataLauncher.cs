@@ -1,4 +1,7 @@
-﻿using DEngine.Fsm;
+﻿using System;
+using System.Collections.Generic;
+using DEngine;
+using DEngine.Fsm;
 using DEngine.Procedure;
 using DEngine.Runtime;
 using UnityEngine;
@@ -21,16 +24,20 @@ namespace Game.Update
             GameEntry.BuiltinData.DestroyDialog();
             // 重置流程组件，初始化热更新流程。
             GameEntry.Fsm.DestroyFsm<IProcedureManager>();
-            var procedureManager = DEngine.DEngineEntry.GetModule<IProcedureManager>();
-            ProcedureBase[] procedures =
-            {
-                new ProcedureHotfixLaunch(),
-                new ProcedurePreload(),
-                new ProcedureChangeScene(),
-                new ProcedureMenu(),
-            };
-            procedureManager.Initialize(DEngine.DEngineEntry.GetModule<IFsmManager>(), procedures);
+            Type[] types = Utility.Assembly.GetTypes();
 
+            List<ProcedureBase> procedures = new List<ProcedureBase>();
+            foreach (var item in types)
+            {
+                if (item.Assembly.GetName().FullName == GetType().Assembly.FullName && typeof(ProcedureBase).IsAssignableFrom(item) && !item.IsAbstract)
+                {
+                    ProcedureBase procedure = (ProcedureBase)Activator.CreateInstance(item);
+                    procedures.Add(procedure);
+                }
+            }
+
+            var procedureManager = DEngineEntry.GetModule<IProcedureManager>();
+            procedureManager.Initialize(DEngineEntry.GetModule<IFsmManager>(), procedures.ToArray());
             //在此进入热更新启动流程
             procedureManager.StartProcedure<ProcedureHotfixLaunch>();
             UnLoadLauncher();
