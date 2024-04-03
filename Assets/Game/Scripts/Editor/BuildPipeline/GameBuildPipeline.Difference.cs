@@ -14,7 +14,6 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-
         /// <summary>
         /// 获取最新的资源构建列表
         /// </summary>
@@ -31,7 +30,13 @@ namespace Game.Editor.BuildPipeline
             {
                 return;
             }
+
             string[] allBuildReport = Directory.GetFiles(buildReportDirectory, "*.xml", SearchOption.AllDirectories);
+
+            if (allBuildReport == null || allBuildReport.Length == 0)
+            {
+                return;
+            }
             int[] lastBuildVersions = new int[allBuildReport.Length];
             for (int i = 0; i < allBuildReport.Length; i++)
             {
@@ -45,6 +50,7 @@ namespace Game.Editor.BuildPipeline
                 XmlNode xmlLastFullBuildVersion = xmlSummary.SelectSingleNode("LastFullBuildVersion");
                 lastBuildVersions[i] = lastFull ? int.Parse(xmlLastFullBuildVersion.InnerText) : int.Parse(xmlInternalResourceVersion.InnerText);
             }
+
             int maxVersion = lastBuildVersions.Max();
             fullPath = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
             package = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Package/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
@@ -117,12 +123,14 @@ namespace Game.Editor.BuildPipeline
                     string fullName = resource.Variant != null ? Utility.Text.Format("{0}.{1}.{2}", resource.Name, resource.Variant, resource.Extension) : Utility.Text.Format("{0}.{1}", resource.Name, resource.Extension);
                     updatableVersionList.Add(Path.GetFileNameWithoutExtension(fullName));
                 }
+
                 string destFileName = Utility.Path.GetRegularPath(Path.Combine(patchVersionPath, sourceVersionListFiles[0].FullName[lastFullVersionOutputFullPath.Length..]));
                 FileInfo destFileInfo = new(destFileName);
                 if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
                 {
                     destFileInfo.Directory.Create();
                 }
+
                 File.Copy(sourceVersionListFiles[0].FullName, destFileName, true);
             }
 
@@ -189,6 +197,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     destFileInfo.Directory.Create();
                 }
+
                 File.Copy(sourceVersionListFiles[0].FullName, destFileName, true);
             }
 
@@ -254,6 +263,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     destFileInfo.Directory.Create();
                 }
+
                 File.Copy(sourceVersionListFiles[0].FullName, destFileName, true);
             }
 
