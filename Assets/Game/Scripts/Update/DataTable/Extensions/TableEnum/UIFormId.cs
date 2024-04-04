@@ -4,7 +4,5 @@ namespace Game.Update
 	// 界面编号
 	public enum UIFormId : byte
 	{
-		// 
-		DemoForm = 1,
 	}
 }
