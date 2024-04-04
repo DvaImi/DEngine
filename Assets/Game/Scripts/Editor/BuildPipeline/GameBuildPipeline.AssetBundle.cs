@@ -54,6 +54,15 @@ namespace Game.Editor.BuildPipeline
         public static void BuildBundle(Platform platform, string outputDirectory, bool forceRebuild = false, bool difference = false)
         {
             ResourceBuilderController builderController = new();
+            builderController.Platforms = platform;
+            builderController.OutputDirectory = outputDirectory;
+            builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
+            builderController.RefreshCompressionHelper();
+            builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
+            builderController.RefreshBuildEventHandler();
+            builderController.AdditionalCompressionSelected = true;
+            builderController.Difference = difference;
+            builderController.ForceRebuildAssetBundleSelected = forceRebuild;
             builderController.OnLoadingResource += OnLoadingResource;
             builderController.OnLoadingAsset += OnLoadingAsset;
             builderController.OnLoadCompleted += OnLoadCompleted;
@@ -63,23 +72,9 @@ namespace Game.Editor.BuildPipeline
             builderController.ProcessingBinary += OnProcessingBinary;
             builderController.ProcessResourceComplete += OnProcessResourceComplete;
             builderController.BuildResourceError += OnBuildResourceError;
-            if (builderController.Load())
-            {
-                builderController.Platforms = platform;
-                builderController.OutputDirectory = outputDirectory;
-                builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
-                builderController.RefreshCompressionHelper();
-                builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
-                builderController.RefreshBuildEventHandler();
-                builderController.AdditionalCompressionSelected = true;
-                builderController.Difference = difference;
-                builderController.ForceRebuildAssetBundleSelected = forceRebuild;
-                if (difference)
-                {
-                    builderController.ProcessDifferenceComplete += OnPostprocessDifference;
-                }
-                builderController.Save();
-            }
+            builderController.ProcessDifferenceComplete += OnPostprocessDifference;
+            builderController.Save();
+            builderController.Load();
             string buildMessage = string.Empty;
             MessageType buildMessageType = MessageType.None;
             GetBuildMessage(builderController, out buildMessage, out buildMessageType);
