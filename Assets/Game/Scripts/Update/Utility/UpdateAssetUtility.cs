@@ -42,6 +42,7 @@
         /// 获取场景路径
         /// </summary>
         /// <param name="assetName"></param>
+        /// 
         /// <returns></returns>
         public static string GetSceneAsset(string assetName)
         {

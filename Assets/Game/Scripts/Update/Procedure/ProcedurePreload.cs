@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
-using DEngine.DataTable;
+using DEngine;
 using DEngine.Event;
 using DEngine.Procedure;
 using DEngine.Resource;
@@ -49,7 +51,7 @@ namespace Game.Update
                     return;
                 }
             }
-            PreloadComplete();
+            PreloadCompleteHandle();
             ChangeState<ProcedureMenu>(procedureOwner);
         }
 
@@ -60,13 +62,16 @@ namespace Game.Update
             LoadLocalization(GameEntry.Localization.Language.ToString());
         }
 
-        private void PreloadComplete()
+        private void PreloadCompleteHandle()
         {
-            DRUIGroup[] uiGroups = GameEntry.DataTable.GetDataTable<DRUIGroup>().GetAllDataRows();
+            Type[] types = Utility.Assembly.GetTypes();
 
-            for (int i = 0; i < uiGroups.Length; i++)
+            IEnumerable<Type> preloadEventHandlerTypes = types.Where(t => typeof(IPreloadEventHandler).IsAssignableFrom(t) && !t.IsInterface);
+
+            foreach (var type in preloadEventHandlerTypes)
             {
-                GameEntry.UI.AddUIGroup(uiGroups[i].UIGroupName, uiGroups[i].UIGroupDepth);
+                IPreloadEventHandler instance = Activator.CreateInstance(type) as IPreloadEventHandler;
+                instance?.Run();
             }
         }
 

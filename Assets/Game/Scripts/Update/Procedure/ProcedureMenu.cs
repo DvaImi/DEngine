@@ -8,7 +8,6 @@ namespace Game.Update
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            procedureOwner.SetData<VarProcedure>(ProceureConstant.NextProcedure, typeof(ProcedureMain));
         }
     }
 }
