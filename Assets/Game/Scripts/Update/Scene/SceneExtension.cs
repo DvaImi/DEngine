@@ -6,7 +6,7 @@ namespace Game.Update
 {
     public static class SceneExtension
     {
-        public static void LoadScene(this SceneComponent self, SceneId sceneId)
+        public static void LoadScene(this SceneComponent self, SceneId sceneId, object userData = null)
         {
             IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
             DRScene drScene = dtScene.GetDataRow((int)sceneId);
@@ -16,10 +16,10 @@ namespace Game.Update
                 return;
             }
 
-            self.LoadScene(UpdateAssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset);
+            self.LoadScene(UpdateAssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, userData);
         }
 
-        public static async UniTask LoadSceneAsync(this SceneComponent self, SceneId sceneId)
+        public static async UniTask LoadSceneAsync(this SceneComponent self, SceneId sceneId, object userData = null)
         {
             IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
             DRScene drScene = dtScene.GetDataRow((int)sceneId);
@@ -29,7 +29,7 @@ namespace Game.Update
                 return;
             }
 
-            await self.LoadSceneAsync(UpdateAssetUtility.GetSceneAsset(drScene.AssetName));
+            await self.LoadSceneAsync(UpdateAssetUtility.GetSceneAsset(drScene.AssetName), userData);
         }
 
         public static void UnloadScene(this SceneComponent self, SceneId sceneId)

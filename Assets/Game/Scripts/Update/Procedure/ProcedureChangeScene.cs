@@ -42,15 +42,7 @@ namespace Game.Update
 
             int sceneId = procedureOwner.GetData<VarInt32>(ProceureConstant.NextSceneId);
             m_NextProcedureType = procedureOwner.GetData<VarProcedure>(ProceureConstant.NextProcedure);
-            IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
-            DRScene drScene = dtScene.GetDataRow(sceneId);
-            if (drScene == null)
-            {
-                Log.Warning("Can not load scene '{0}' from data table.", sceneId.ToString());
-                return;
-            }
-
-            GameEntry.Scene.LoadScene(UpdateAssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
+            GameEntry.Scene.LoadScene((SceneId)sceneId, this);
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

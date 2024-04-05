@@ -162,7 +162,7 @@ namespace Game
         /// <summary>
         /// 加载场景（可等待）
         /// </summary>
-        public static async UniTask<bool> LoadSceneAsync(this SceneComponent self, string sceneAssetName)
+        public static async UniTask<bool> LoadSceneAsync(this SceneComponent self, string sceneAssetName, object userData = null)
         {
             UniTaskCompletionSource<bool> result = new UniTaskCompletionSource<bool>();
             var isUnLoadScene = m_UnLoadSceneResult.TryGetValue(sceneAssetName, out var unloadSceneTcs);
@@ -175,7 +175,7 @@ namespace Game
 
             try
             {
-                self.LoadScene(sceneAssetName);
+                self.LoadScene(sceneAssetName, userData);
             }
             catch (Exception e)
             {
