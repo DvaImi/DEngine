@@ -44,8 +44,8 @@ namespace Game
         }
         private void LoadUpdateMainfest()
         {
-            m_LoadedFlag.Add(AssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), false);
-            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateAssembliesVersionLoadSuccess)));
+            m_LoadedFlag.Add(BuiltinAssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), false);
+            GameEntry.Resource.LoadAsset(BuiltinAssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateAssembliesVersionLoadSuccess)));
         }
 
         private void OnUpdateAssembliesVersionLoadSuccess(string assetName, object asset, float duration, object userData)
@@ -59,7 +59,7 @@ namespace Game
                         int count = binaryReader.ReadInt32();
                         for (int i = 0; i < count; i++)
                         {
-                            string aotFullName = AssetUtility.GetCLRUpdateAsset(binaryReader.ReadString());
+                            string aotFullName = BuiltinAssetUtility.GetCLRUpdateAsset(binaryReader.ReadString());
                             m_LoadedFlag.Add(aotFullName, false);
                             LoadHotfixDll(aotFullName);
                         }

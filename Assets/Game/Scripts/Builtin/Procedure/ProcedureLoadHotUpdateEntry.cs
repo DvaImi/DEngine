@@ -16,7 +16,7 @@ namespace Game
 
         private void HotfixLauncher()
         {
-            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRLanuchAsset("UpdateLuncher"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateLuncherLoadSuccess)));
+            GameEntry.Resource.LoadAsset(BuiltinAssetUtility.GetCLRLanuchAsset("UpdateLuncher"), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateLuncherLoadSuccess)));
         }
 
         private void OnUpdateLuncherLoadSuccess(string assetName, object asset, float duration, object userData)

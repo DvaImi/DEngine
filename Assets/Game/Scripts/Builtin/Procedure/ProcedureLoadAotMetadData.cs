@@ -48,8 +48,8 @@ namespace Game
         private void LoadMetadataForAOTAssemblies()
         {
             Log.Info("补充元数据...");
-            m_LoadedFlag.Add(AssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion), false);
-            GameEntry.Resource.LoadAsset(AssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnAOTMetadataVersionLoadSuccessAsync)));
+            m_LoadedFlag.Add(BuiltinAssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion), false);
+            GameEntry.Resource.LoadAsset(BuiltinAssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnAOTMetadataVersionLoadSuccessAsync)));
         }
 
         private void OnAOTMetadataVersionLoadSuccessAsync(string assetName, object asset, float duration, object userData)
@@ -65,7 +65,7 @@ namespace Game
                         int count = binaryReader.ReadInt32();
                         for (int i = 0; i < count; i++)
                         {
-                            string aotFullName = AssetUtility.GetCLRAOTAsset(binaryReader.ReadString());
+                            string aotFullName = BuiltinAssetUtility.GetCLRAOTAsset(binaryReader.ReadString());
                             Log.Info($"补充的元数据是：[{aotFullName}]");
                             m_LoadedFlag.Add(aotFullName, false);
                             GameEntry.Resource.LoadAsset(aotFullName, new LoadAssetCallbacks(OndAotMetadDataLoadSuccess));

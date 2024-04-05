@@ -133,7 +133,7 @@ namespace Game.Editor.BuildPipeline
             DisableHybridCLR();
             ScriptingDefineSymbols.AddScriptingDefineSymbol(EnableHybridCLRDefineSymbol);
             SettingsUtil.Enable = true;
-        } 
+        }
 
         public static void DisableHybridCLR()
         {

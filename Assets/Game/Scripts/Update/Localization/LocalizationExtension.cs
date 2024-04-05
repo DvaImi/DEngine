@@ -3,7 +3,7 @@ using DEngine.Event;
 using DEngine.Localization;
 using DEngine.Runtime;
 
-namespace Game
+namespace Game.Update
 {
     public static class LocalizationExtension
     {
@@ -33,7 +33,7 @@ namespace Game
         public static void HotReloadLocalization(this LocalizationComponent localization, Language language)
         {
             localization.RemoveAllRawStrings();
-            localization.ReadData(AssetUtility.GetDictionaryAsset(language.ToString(), true), language);
+            localization.ReadData(UpdateAssetUtility.GetDictionaryAsset(language.ToString(), true), language);
         }
 
         private static void OnLoadDictionarySuccess(object sender, GameEventArgs e)

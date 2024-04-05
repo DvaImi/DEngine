@@ -1,4 +1,5 @@
-﻿using DEngine.DataTable;
+﻿using System;
+using DEngine.DataTable;
 using DEngine.Event;
 using DEngine.Procedure;
 using DEngine.Runtime;
@@ -7,9 +8,8 @@ namespace Game.Update
 {
     public class ProcedureChangeScene : ProcedureBase
     {
-        private const int MenuSceneId = 1;
-        private bool m_ChangeToMenu = false;
         private bool m_IsChangeSceneComplete = false;
+        private Type m_NextProcedureType;
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -40,8 +40,8 @@ namespace Game.Update
             // 还原游戏速度
             GameEntry.Base.ResetNormalGameSpeed();
 
-            int sceneId = procedureOwner.GetData<VarInt32>("NextSceneId");
-            m_ChangeToMenu = sceneId == MenuSceneId;
+            int sceneId = procedureOwner.GetData<VarInt32>(ProceureConstant.NextSceneId);
+            m_NextProcedureType = procedureOwner.GetData<VarProcedure>(ProceureConstant.NextProcedure);
             IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
             DRScene drScene = dtScene.GetDataRow(sceneId);
             if (drScene == null)
@@ -50,7 +50,7 @@ namespace Game.Update
                 return;
             }
 
-            GameEntry.Scene.LoadScene(AssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
+            GameEntry.Scene.LoadScene(UpdateAssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -72,14 +72,12 @@ namespace Game.Update
                 return;
             }
 
-            if (m_ChangeToMenu)
+            if (m_NextProcedureType == null)
             {
-                ChangeState<ProcedureMenu>(procedureOwner);
+                return;
             }
-            else
-            {
-                ChangeState<ProcedureHotfixLaunch>(procedureOwner);
-            }
+
+            ChangeState(procedureOwner, m_NextProcedureType);
         }
 
         private void OnLoadSceneSuccess(object sender, GameEventArgs e)

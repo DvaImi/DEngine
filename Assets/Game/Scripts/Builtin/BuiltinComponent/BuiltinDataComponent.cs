@@ -71,7 +71,6 @@ namespace Game
         public void InitExtensionEventHandle()
         {
             AwaitableUtility.Subscribe();
-            LocalizationExtension.Subscribe();
         }
 
         public void OpenDialog(DialogParams dialogParams)

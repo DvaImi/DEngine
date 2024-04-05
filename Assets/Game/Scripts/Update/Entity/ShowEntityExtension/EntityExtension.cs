@@ -28,7 +28,7 @@ namespace Game.Update
                 return;
             }
 
-            entityComponent.ShowEntity(data.Id, logicType, AssetUtility.GetEntityAsset(drEntity.AssetName), entityGroup, priority, data);
+            entityComponent.ShowEntity(data.Id, logicType, UpdateAssetUtility.GetEntityAsset(drEntity.AssetName), entityGroup, priority, data);
         }
 
         public static int GenerateSerialId(this EntityComponent entityComponent)

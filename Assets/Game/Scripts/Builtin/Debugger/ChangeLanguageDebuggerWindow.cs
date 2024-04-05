@@ -67,9 +67,7 @@ namespace Game.Debugger
         private void SaveLanguage()
         {
             GameEntry.Setting.SetString(Constant.Setting.Language, GameEntry.Localization.Language.ToString());
-            GameEntry.Localization.HotReloadLocalization(GameEntry.Localization.Language);
             GameEntry.Setting.Save();
-
         }
     }
 }

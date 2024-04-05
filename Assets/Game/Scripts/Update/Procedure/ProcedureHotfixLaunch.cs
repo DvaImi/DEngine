@@ -24,6 +24,7 @@ namespace Game.Update
         {
             base.OnEnter(procedureOwner);
             Log.Info("ProcedureHotfix  Launch  ");
+            LocalizationExtension.Subscribe();
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

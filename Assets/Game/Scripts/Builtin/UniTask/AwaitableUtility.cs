@@ -86,9 +86,9 @@ namespace Game
         /// <summary>
         /// 打开界面（可等待）
         /// </summary>
-        public static UniTask<UIForm> OpenUIFormAsync(this UIComponent uiComponent, string uiFormAssetName, string uiGroupName, int priority, bool pauseCoveredUIForm, object userData)
+        public static UniTask<UIForm> OpenUIFormAsync(this UIComponent self, string uiFormAssetName, string uiGroupName, int priority, bool pauseCoveredUIForm, object userData)
         {
-            int serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
+            int serialId = self.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
             UniTaskCompletionSource<UIForm> result = new UniTaskCompletionSource<UIForm>();
             m_UIFormResult.Add(serialId, result);
             return result.Task;
@@ -124,11 +124,11 @@ namespace Game
         /// <summary>
         /// 显示实体（可等待）
         /// </summary>
-        public static UniTask<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityId, Type entityLogicType, string entityAssetName, string entityGroupName, int priority, object userData)
+        public static UniTask<Entity> ShowEntityAsync(this EntityComponent self, int entityId, Type entityLogicType, string entityAssetName, string entityGroupName, int priority, object userData)
         {
             UniTaskCompletionSource<Entity> result = new UniTaskCompletionSource<Entity>();
             m_EntityResult.Add(entityId, result);
-            entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
+            self.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
             return result.Task;
         }
 
@@ -162,7 +162,7 @@ namespace Game
         /// <summary>
         /// 加载场景（可等待）
         /// </summary>
-        public static async UniTask<bool> LoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName)
+        public static async UniTask<bool> LoadSceneAsync(this SceneComponent self, string sceneAssetName)
         {
             UniTaskCompletionSource<bool> result = new UniTaskCompletionSource<bool>();
             var isUnLoadScene = m_UnLoadSceneResult.TryGetValue(sceneAssetName, out var unloadSceneTcs);
@@ -175,7 +175,7 @@ namespace Game
 
             try
             {
-                sceneComponent.LoadScene(sceneAssetName);
+                self.LoadScene(sceneAssetName);
             }
             catch (Exception e)
             {
@@ -213,7 +213,7 @@ namespace Game
         /// <summary>
         /// 卸载场景（可等待）
         /// </summary>
-        public static async UniTask<bool> UnLoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName)
+        public static async UniTask<bool> UnLoadSceneAsync(this SceneComponent self, string sceneAssetName)
         {
             var result = new UniTaskCompletionSource<bool>();
             var isLoadSceneTcs = m_LoadSceneResult.TryGetValue(sceneAssetName, out var loadSceneTcs);
@@ -226,7 +226,7 @@ namespace Game
             m_UnLoadSceneResult.Add(sceneAssetName, result);
             try
             {
-                sceneComponent.UnloadScene(sceneAssetName);
+                self.UnloadScene(sceneAssetName);
             }
             catch (Exception e)
             {
@@ -268,10 +268,10 @@ namespace Game
         /// <summary>
         /// 加载资源（可等待）
         /// </summary>
-        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName) where T : Object
+        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent self, string assetName) where T : Object
         {
             UniTaskCompletionSource<T> loadAssetTcs = new UniTaskCompletionSource<T>();
-            resourceComponent.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks((tempAssetName, asset, duration, userdata) =>
+            self.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks((tempAssetName, asset, duration, userdata) =>
             {
                 var source = loadAssetTcs;
                 loadAssetTcs = null;
@@ -299,7 +299,7 @@ namespace Game
         /// <summary>
         /// 加载多个资源（可等待）
         /// </summary>
-        public static async UniTask<T[]> LoadAssetsAsync<T>(this ResourceComponent resourceComponent, string[] assetName) where T : Object
+        public static async UniTask<T[]> LoadAssetsAsync<T>(this ResourceComponent self, string[] assetName) where T : Object
         {
             if (assetName == null)
             {
@@ -309,7 +309,7 @@ namespace Game
             UniTask<T>[] tasks = new UniTask<T>[assetName.Length];
             for (int i = 0; i < tasks.Length; i++)
             {
-                tasks[i] = resourceComponent.LoadAssetAsync<T>(assetName[i]);
+                tasks[i] = self.LoadAssetAsync<T>(assetName[i]);
             }
             return await UniTask.WhenAll(tasks);
         }
@@ -325,9 +325,9 @@ namespace Game
         /// <param name="wwwForm">WWW 表单</param>
         /// <param name="userdata">用户自定义数据。</param>
         /// <returns></returns>
-        public static UniTask<WebRequestResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri, WWWForm wwwForm = null, object userdata = null)
+        public static UniTask<WebRequestResult> AddWebRequestAsync(this WebRequestComponent self, string webRequestUri, WWWForm wwwForm = null, object userdata = null)
         {
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm, userdata);
+            int serialId = self.AddWebRequest(webRequestUri, wwwForm, userdata);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;
@@ -340,9 +340,9 @@ namespace Game
         /// <param name="wwwForm">WWW 表单</param>
         /// <param name="requestParams">自定义请求参数。</param>
         /// <returns></returns>
-        public static UniTask<WebRequestResult> AddWebRequestWithHeaderAsync(this WebRequestComponent webRequestComponent, string webRequestUri, UnityWebRequestHeader requestParams = null, WWWForm wwwForm = null)
+        public static UniTask<WebRequestResult> AddWebRequestWithHeaderAsync(this WebRequestComponent self, string webRequestUri, UnityWebRequestHeader requestParams = null, WWWForm wwwForm = null)
         {
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm, requestParams);
+            int serialId = self.AddWebRequest(webRequestUri, wwwForm, requestParams);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;
@@ -351,9 +351,9 @@ namespace Game
         /// <summary>
         /// 增加Web请求任务（可等待）
         /// </summary>
-        public static UniTask<WebRequestResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri, byte[] postData, object userdata = null)
+        public static UniTask<WebRequestResult> AddWebRequestAsync(this WebRequestComponent self, string webRequestUri, byte[] postData, object userdata = null)
         {
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData, userdata);
+            int serialId = self.AddWebRequest(webRequestUri, postData, userdata);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;
@@ -362,9 +362,9 @@ namespace Game
         /// <summary>
         /// 增加Web请求任务（可等待）
         /// </summary>
-        public static UniTask<WebRequestResult> AddWebRequestWithHeaderAsync(this WebRequestComponent webRequestComponent, string webRequestUri, byte[] postData, UnityWebRequestHeader requestParams = null)
+        public static UniTask<WebRequestResult> AddWebRequestWithHeaderAsync(this WebRequestComponent self, string webRequestUri, byte[] postData, UnityWebRequestHeader requestParams = null)
         {
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData, requestParams);
+            int serialId = self.AddWebRequest(webRequestUri, postData, requestParams);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;
@@ -411,9 +411,9 @@ namespace Game
         /// <param name="downloadPath">下载后存放路径。</param>
         /// <param name="downloadUri">原始下载地址。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public static UniTask<DownLoadResult> AddDownloadAsync(this DownloadComponent downloadComponent, string downloadPath, string downloadUri, object userdata = null)
+        public static UniTask<DownLoadResult> AddDownloadAsync(this DownloadComponent self, string downloadPath, string downloadUri, object userdata = null)
         {
-            int serialId = downloadComponent.AddDownload(downloadPath, downloadUri, userdata);
+            int serialId = self.AddDownload(downloadPath, downloadUri, userdata);
             UniTaskCompletionSource<DownLoadResult> result = new UniTaskCompletionSource<DownLoadResult>();
             m_DownloadResult.Add(serialId, result);
             return result.Task;

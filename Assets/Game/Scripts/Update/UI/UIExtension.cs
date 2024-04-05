@@ -75,7 +75,7 @@ namespace Game.Update
                 return null;
             }
 
-            string assetName = AssetUtility.GetUIFormAsset(drUIForm.AssetName);
+            string assetName = UpdateAssetUtility.GetUIFormAsset(drUIForm.AssetName);
             UIForm uiForm = null;
             if (string.IsNullOrEmpty(uiGroupName))
             {
@@ -123,7 +123,7 @@ namespace Game.Update
                 return null;
             }
 
-            string assetName = AssetUtility.GetUIFormAsset(drUIForm.AssetName);
+            string assetName = UpdateAssetUtility.GetUIFormAsset(drUIForm.AssetName);
             if (!drUIForm.AllowMultiInstance)
             {
                 if (uiComponent.IsLoadingUIForm(assetName))

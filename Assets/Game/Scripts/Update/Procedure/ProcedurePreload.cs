@@ -55,8 +55,8 @@ namespace Game.Update
 
         private void PreloadResources()
         {
-            m_LoadedFlag.Add(AssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), false);
-            GameEntry.Resource.LoadAsset(AssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableVersionLoadSuccess)));
+            m_LoadedFlag.Add(UpdateAssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), false);
+            GameEntry.Resource.LoadAsset(UpdateAssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableVersionLoadSuccess)));
             LoadLocalization(GameEntry.Localization.Language.ToString());
         }
 
@@ -92,14 +92,14 @@ namespace Game.Update
 
         private void LoadDataTable(string dataTableName)
         {
-            string dataTableAssetName = AssetUtility.GetDataTableAsset(dataTableName, true);
+            string dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName, true);
             m_LoadedFlag.Add(dataTableAssetName, false);
             GameEntry.DataTable.LoadDataTable(dataTableName, dataTableAssetName, this);
         }
 
         private void LoadLocalization(string dictionaryName)
         {
-            string dictionaryAssetName = AssetUtility.GetDictionaryAsset(dictionaryName, true);
+            string dictionaryAssetName = UpdateAssetUtility.GetDictionaryAsset(dictionaryName, true);
             m_LoadedFlag.Add(dictionaryAssetName, false);
             GameEntry.Localization.ReadData(dictionaryAssetName, this);
         }
