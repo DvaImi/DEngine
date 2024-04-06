@@ -74,7 +74,6 @@ namespace Game.Editor.BuildPipeline
             builderController.BuildResourceError += OnBuildResourceError;
             builderController.ProcessDifferenceComplete += OnPostprocessDifference;
             builderController.Load();
-            builderController.Save();
             string buildMessage = string.Empty;
             MessageType buildMessageType = MessageType.None;
             GetBuildMessage(builderController, out buildMessage, out buildMessageType);
@@ -93,6 +92,8 @@ namespace Game.Editor.BuildPipeline
                     Debug.LogError(buildMessage);
                     break;
             }
+
+            builderController.Save();
         }
 
         public static void SaveOutputDirectory(string outputDirectory)
