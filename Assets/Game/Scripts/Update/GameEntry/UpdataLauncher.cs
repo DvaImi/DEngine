@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using DEngine;
 using DEngine.Fsm;
 using DEngine.Procedure;
@@ -15,16 +16,19 @@ namespace Game.Update
     {
         private void Start()
         {
-            Log.Info("UpdataLauncher...");
             StartHotfixProcedure();
         }
 
-        private void StartHotfixProcedure()
+        private async void StartHotfixProcedure()
         {
+            Log.Info("StartHotfixProcedure...");
+
             GameEntry.BuiltinData.DestroyDialog();
             // 重置流程组件，初始化热更新流程。
             GameEntry.Fsm.DestroyFsm<IProcedureManager>();
-            Type[] types = Utility.Assembly.GetTypes();
+
+            //使用当前程序集获取流程Type
+            Type[] types = GetType().Assembly.GetTypes();
 
             List<ProcedureBase> procedures = new List<ProcedureBase>();
             foreach (var item in types)
@@ -33,13 +37,23 @@ namespace Game.Update
                 {
                     ProcedureBase procedure = (ProcedureBase)Activator.CreateInstance(item);
                     procedures.Add(procedure);
+                    Log.Info("自动注册流程: " + procedure.GetType().Name);
                 }
             }
+            if (procedures == null || procedures.Count <= 0)
+            {
+                Log.Warning("procedures is invalid");
+                return;
+            }
+            IProcedureManager procedureManager = DEngineEntry.GetModule<IProcedureManager>();
+            IFsmManager manager = DEngineEntry.GetModule<IFsmManager>();
+            procedureManager.Initialize(manager, procedures.ToArray());
 
-            var procedureManager = DEngineEntry.GetModule<IProcedureManager>();
-            procedureManager.Initialize(DEngineEntry.GetModule<IFsmManager>(), procedures.ToArray());
+            await UniTask.NextFrame();
+
             //在此进入热更新启动流程
             procedureManager.StartProcedure<ProcedureHotfixLaunch>();
+
             UnLoadLauncher();
         }
 
@@ -48,6 +62,7 @@ namespace Game.Update
         /// </summary>
         private void UnLoadLauncher()
         {
+            Log.Info("UnLoadLauncher...");
             Destroy(gameObject);
         }
     }

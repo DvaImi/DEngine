@@ -73,8 +73,8 @@ namespace Game.Editor.BuildPipeline
             builderController.ProcessResourceComplete += OnProcessResourceComplete;
             builderController.BuildResourceError += OnBuildResourceError;
             builderController.ProcessDifferenceComplete += OnPostprocessDifference;
-            builderController.Save();
             builderController.Load();
+            builderController.Save();
             string buildMessage = string.Empty;
             MessageType buildMessageType = MessageType.None;
             GetBuildMessage(builderController, out buildMessage, out buildMessageType);
