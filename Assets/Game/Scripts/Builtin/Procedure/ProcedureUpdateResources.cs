@@ -74,7 +74,7 @@ namespace Game
         {
             if (m_UpdateResourceForm == null)
             {
-                m_UpdateResourceForm = Object.Instantiate(GameEntry.BuiltinData.Data.UpdateResourceFormTemplate);
+                m_UpdateResourceForm = Object.Instantiate(GameEntry.BuiltinData.Builtin.UpdateResourceFormTemplate);
             }
 
             Log.Info("Start update resources...");

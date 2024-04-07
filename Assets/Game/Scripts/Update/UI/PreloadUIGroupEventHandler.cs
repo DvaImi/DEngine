@@ -12,11 +12,11 @@ namespace Game.Update
             {
                 if (GameEntry.UI.AddUIGroup(uiGroups[i].UIGroupName, uiGroups[i].UIGroupDepth))
                 {
-                    Log.Info("add ui group [{0}] success", uiGroups[i].UIGroupName);
+                    Log.Info("Add ui group [{0}] success", uiGroups[i].UIGroupName);
                 }
                 else
                 {
-                    Log.Warning("add ui group [{0}] failure", uiGroups[i].UIGroupName);
+                    Log.Warning("Add ui group [{0}] failure", uiGroups[i].UIGroupName);
                 }
             }
         }

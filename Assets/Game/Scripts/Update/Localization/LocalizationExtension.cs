@@ -30,10 +30,14 @@ namespace Game.Update
         /// <param name="localization"></param>
         /// <param name="language">将要修改的语言</param>
         /// <returns>是否修改成功</returns>
-        public static void HotReloadLocalization(this LocalizationComponent localization, Language language)
+        public static void HotReloadLocalization(this LocalizationComponent localization, Language language, bool readBuiltinLanguage = true)
         {
             localization.RemoveAllRawStrings();
             localization.ReadData(UpdateAssetUtility.GetDictionaryAsset(language.ToString(), true), language);
+            if (readBuiltinLanguage)
+            {
+                GameEntry.BuiltinData.ReadLanguage(language);
+            }
         }
 
         private static void OnLoadDictionarySuccess(object sender, GameEventArgs e)

@@ -12,7 +12,7 @@ namespace Game
 
         private NativeDialogForm m_NativeDialogForm;
 
-        public BuiltinData Data
+        public BuiltinData Builtin
         {
             get => m_BuiltinData;
         }
@@ -40,13 +40,26 @@ namespace Game
 
             if (language != Language.English && language != Language.ChineseSimplified && language != Language.ChineseTraditional && language != Language.Korean)
             {
-                language = Language.ChineseSimplified;
+                // 若是暂不支持的语言，则使用英语
+                language = Language.English;
+
                 GameEntry.Setting.SetString(Constant.Setting.Language, language.ToString());
                 GameEntry.Setting.Save();
             }
 
             GameEntry.Localization.Language = language;
             Log.Info("Init language settings complete, current language is '{0}'.", language.ToString());
+            ReadLanguage(language);
+        }
+
+        public void ReadLanguage(Language language)
+        {
+            if (Builtin.BuildinLanguage == null)
+            {
+                return;
+            }
+
+            GameEntry.Localization.ParseData(Builtin.BuildinLanguage[language]);
         }
 
         public void InitSoundSettings()
@@ -77,7 +90,7 @@ namespace Game
         {
             if (m_NativeDialogForm == null)
             {
-                m_NativeDialogForm = Instantiate(Data.NativeDialogFormTemplate);
+                m_NativeDialogForm = Instantiate(Builtin.NativeDialogFormTemplate);
             }
 
             m_NativeDialogForm.OnOpen(dialogParams);
@@ -92,7 +105,5 @@ namespace Game
 
             Destroy(m_NativeDialogForm);
         }
-
-       
     }
 }
