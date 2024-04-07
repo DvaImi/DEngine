@@ -77,143 +77,74 @@ namespace DEngine
             UnityEngine.Debug.DrawRay(new Vector3(startX, startY, startZ), new Vector3(endX, endY, endZ), color);
         }
 
-        public static void Debug(string message, bool isSystem = false)
+        public static void Debug(string message)
         {
-            if (isSystem)
-            {
-                OutLog(LogLevel.DEBUG, message);
-            }
-            else
-            {
-                Log.Debug(message);
-            }
+            OutLog(LogLevel.DEBUG, message);
         }
 
-        public static void Debug<T>(string message, bool isSystem = false)
+        public static void Debug<T>(string message)
         {
             message = $"{typeof(T).Name}:{message}";
-            if (isSystem)
-            {
-                OutLog(LogLevel.DEBUG, message);
-            }
-            else
-            {
-                Log.Debug(message);
-            }
+            OutLog(LogLevel.DEBUG, message);
         }
 
-        public static void Info(string message, bool isSystem = false)
+        public static void Info(string message)
         {
-            if (isSystem)
-            {
-                OutLog(LogLevel.INFO, message);
-            }
-            else
-            {
-                Log.Info(message);
-            }
+            OutLog(LogLevel.INFO, message);
         }
 
-        public static void Info<T>(string message, bool isSystem = false)
+        public static void Info<T>(string message)
         {
             message = $"{typeof(T).Name}:{message}";
-            if (isSystem)
-            {
-                OutLog(LogLevel.INFO, message);
-            }
-            else
-            {
-                Log.Info(message);
-            }
+            OutLog(LogLevel.INFO, message);
         }
 
-        public static void Assert(string message, bool isSystem = false)
+        public static void Assert(string message)
         {
             OutLog(LogLevel.ASSERT, message);
         }
 
-        public static void Assert<T>(string message, bool isSystem = false)
+        public static void Assert<T>(string message)
         {
             message = $"{typeof(T).Name}:{message}";
             OutLog(LogLevel.ASSERT, message);
         }
 
-        public static void Warning(string message, bool isSystem = false)
+        public static void Warning(string message)
         {
-            if (isSystem)
-            {
-                OutLog(LogLevel.WARNING, message);
-            }
-            else
-            {
-                Log.Warning(message);
-            }
+            OutLog(LogLevel.WARNING, message);
         }
 
-        public static void Warning<T>(string message, bool isSystem = false)
+        public static void Warning<T>(string message)
         {
             message = $"{typeof(T).Name}:{message}";
-            if (isSystem)
-            {
-                OutLog(LogLevel.WARNING, message);
-            }
-            else
-            {
-                Log.Warning(message);
-            }
+            OutLog(LogLevel.WARNING, message);
         }
 
-        public static void Error(string message, bool isSystem = false)
+        public static void Error(string message)
         {
-            if (isSystem)
-            {
-                OutLog(LogLevel.ERROR, message);
-            }
-            else
-            {
-                Log.Error(message);
-            }
+            OutLog(LogLevel.ERROR, message);
         }
 
-        public static void Error<T>(string message, bool isSystem = false)
+        public static void Error<T>(string message)
         {
             message = $"{typeof(T).Name}:{message}";
-            if (isSystem)
-            {
-                OutLog(LogLevel.ERROR, message);
-            }
-            else
-            {
-                Log.Error(message);
-            }
+
+            OutLog(LogLevel.ERROR, message);
         }
 
-        public static void Fatal(string message, bool isSystem = false)
+        public static void Fatal(string message)
         {
-            if (isSystem)
-            {
-                OutLog(LogLevel.FATAL, message);
-            }
-            else
-            {
-                Log.Fatal(message);
-            }
+            OutLog(LogLevel.FATAL, message);
         }
 
-        public static void Fatal<T>(string message, bool isSystem = false)
+        public static void Fatal<T>(string message)
         {
             message = $"{typeof(T).Name}:{message}";
-            if (isSystem)
-            {
-                OutLog(LogLevel.FATAL, message);
-            }
-            else
-            {
-                Log.Fatal(message);
-            }
+            OutLog(LogLevel.FATAL, message);
         }
 
-        private static void OutLog(LogLevel logLevel, string message, bool isSystem = false)
+        private static void OutLog(LogLevel logLevel, string message)
         {
             StringBuilder infoBuilder = GetStringByColor(logLevel, message);
             //获取C#堆栈,Warning以上级别日志才获取堆栈
@@ -265,32 +196,25 @@ namespace DEngine
             m_StringBuilder.Clear();
             string[] logStrings = logString.Split('\n', 2);
             logString = logStrings[0].Trim();
-            string logString1;
             switch (logLevel)
             {
                 case LogLevel.DEBUG:
-                    logString1 = logStrings.Length > 1 ? $"<color=#{GetColor(ColorType.gray)}>{logStrings[1].Trim()}</color>" : "";
-                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.gray)}><b>[DEBUG] ► </b> {logString}</color>" + logString1);
+                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.gray)}><b>[DEBUG] ► </b> {logString}</color>");
                     break;
                 case LogLevel.INFO:
-                    logString1 = logStrings.Length > 1 ? $"<color=#{GetColor(ColorType.white)}>{logStrings[1].Trim()}</color>" : "";
-                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.white)}><b>[INFO] ► </b> {logString}</color>" + logString1);
+                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.white)}><b>[INFO] ► </b> {logString}</color>");
                     break;
                 case LogLevel.ASSERT:
-                    logString1 = logStrings.Length > 1 ? $"<color=#{GetColor(ColorType.green)}>{logStrings[1].Trim()}</color>" : "";
-                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.green)}><b>[ASSERT] ► </b> {logString}</color>" + logString1);
+                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.green)}><b>[ASSERT] ► </b> {logString}</color>");
                     break;
                 case LogLevel.WARNING:
-                    logString1 = logStrings.Length > 1 ? $"<color=#{GetColor(ColorType.yellow)}>{logStrings[1].Trim()}</color>" : "";
-                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.yellow)}><b>[WARNING] ► </b> {logString}</color>" + logString1);
+                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.yellow)}><b>[WARNING] ► </b> {logString}</color>");
                     break;
                 case LogLevel.ERROR:
-                    logString1 = logStrings.Length > 1 ? $"<color=#{GetColor(ColorType.orangered)}>{logStrings[1].Trim()}</color>" : "";
                     m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.orangered)}><b>[ERROR] ► </b> {logString}</color>");
                     break;
                 case LogLevel.FATAL:
-                    logString1 = logStrings.Length > 1 ? $"<color=#{GetColor(ColorType.violet)}>{logStrings[1].Trim()}</color>" : "";
-                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.violet)}><b>[FATAL] ► </b> {logString}</color>" + logString1);
+                    m_StringBuilder.Append($"<color={m_NameColor}><b>[{m_Header}] ► </b></color><color=#{GetColor(ColorType.violet)}><b>[FATAL] ► </b> {logString}</color>");
                     break;
             }
             return m_StringBuilder;

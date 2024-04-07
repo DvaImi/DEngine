@@ -10,19 +10,19 @@
             switch (level)
             {
                 case DEngineLogLevel.Debug:
-                    Logger.Debug(message.ToString(), true);
+                    Logger.Debug(message.ToString());
                     break;
                 case DEngineLogLevel.Info:
-                    Logger.Info(message.ToString(), true);
+                    Logger.Info(message.ToString());
                     break;
                 case DEngineLogLevel.Warning:
-                    Logger.Warning(message.ToString(), true);
+                    Logger.Warning(message.ToString());
                     break;
                 case DEngineLogLevel.Error:
-                    Logger.Error(message.ToString(), true);
+                    Logger.Error(message.ToString());
                     break;
                 case DEngineLogLevel.Fatal:
-                    Logger.Fatal(message.ToString(), true);
+                    Logger.Fatal(message.ToString());
                     break;
                 default:
                     throw new DEngineException(message.ToString());
