@@ -13,7 +13,7 @@ namespace Game.Editor.DataTableTools
 {
     public sealed class DictionaryGenerator
     {
-        [MenuItem("Table/Generate/Localizations", priority = 2)]
+        [MenuItem("DataTable/Generate/Localizations", priority = 2)]
         public static void GenerateLocalizationsFormExcel()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -33,7 +33,7 @@ namespace Game.Editor.DataTableTools
                             for (int i = 0; i < workCount; i++)
                             {
                                 ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
-                                string dictionaryName = workCount > 1 ? excelName + "_" + sheet.Name : excelName;
+                                string dictionaryName = workCount > 1 ? sheet.Name : excelName;
                                 DictionaryProcessor processor = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
                                 string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName, dictionaryName + ".bytes"));
                                 FileInfo fileInfo = new(binaryDataFileName);
@@ -57,7 +57,7 @@ namespace Game.Editor.DataTableTools
             }
         }
 
-        [MenuItem("Table/Editor/Localization", priority = 2)]
+        [MenuItem("DataTable/Editor/Localization", priority = 2)]
         public static void EditorLocalization()
         {
             OpenFolder.Execute(DataTableSetting.Instance.LocalizationExcelsFolder);

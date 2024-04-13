@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DataTableFolderPath: Assets/Game/DataTables
   DataTableExcelsFolder: Excels/Datable
-  CSharpCodePath: Assets/Game/Scripts/Update/DataTable
+  CSharpCodePath: Assets/Game/Scripts/Update/DataTable/DRCode
   CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/Table/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Update/DataTable/Extensions
   GenerateDataTableEnum: 1
@@ -36,5 +36,3 @@ MonoBehaviour:
   IdColumn: 1
   LocalizationPath: Assets/Game/Localization
   LocalizationExcelsFolder: Excels/Localization
-  ConfigPath: Assets/Game/Configs
-  ConfigExcelsFolder: Excels/Config

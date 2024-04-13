@@ -12,30 +12,8 @@ namespace Game.Editor.DataTableTools
 {
     public sealed class DataTableGeneratorMenu
     {
-        // [MenuItem("DataTable/Generate DataTables/From Txt", priority = 2)]
-        public static void GenerateDataTablesFromTxt()
-        {
-            DataTableSetting.Instance.RefreshDataTables();
 
-            ExtensionsGenerate.GenerateExtensionByAnalysis(ExtensionsGenerate.DataTableType.Txt,
-                DataTableSetting.Instance.TxtFilePaths, 2);
-            foreach (var dataTableName in DataTableSetting.Instance.DataTableNames)
-            {
-                var dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
-                if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
-                {
-                    Debug.LogError(DEngine.Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
-                    break;
-                }
-
-                DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
-                DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
-            }
-
-            AssetDatabase.Refresh();
-        }
-
-        [MenuItem("Table/Generate/DataTables", priority = 1)]
+        [MenuItem("DataTable/Generate/DataTables", priority = 1)]
         public static void GenerateDataTablesFormExcel()
         {
             DataTableSetting.Instance.RefreshDataTables("*.bytes");
@@ -53,7 +31,7 @@ namespace Game.Editor.DataTableTools
                         for (int i = 0; i < workCount; i++)
                         {
                             ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
-                            string dataTableName = workCount > 1 ? excelName + "_" + sheet.Name : excelName;
+                            string dataTableName = workCount > 1 ? sheet.Name : excelName;
                             var dataTableProcessor = DataTableGenerator.CreateExcelDataTableProcessor(sheet);
                             if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
                             {
@@ -77,23 +55,10 @@ namespace Game.Editor.DataTableTools
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("Table/Editor/DataTables", priority = 1)]
+        [MenuItem("DataTable/Editor/DataTables", priority = 1)]
         public static void EditorDataTable()
         {
             OpenFolder.Execute(DataTableSetting.Instance.DataTableExcelsFolder);
-        }
-        //[MenuItem("DataTable/Generate DataTables/Excel To Txt", priority = 32)]
-        public static void ExcelToTxt()
-        {
-            DataTableSetting.Instance.RefreshDataTables();
-            if (!Directory.Exists(DataTableSetting.Instance.DataTableExcelsFolder))
-            {
-                Debug.LogError($"{DataTableSetting.Instance.DataTableExcelsFolder} is not exist!");
-                return;
-            }
-
-            ExcelExtension.ExcelToTxt(DataTableSetting.Instance.DataTableExcelsFolder, DataTableSetting.Instance.DataTableFolderPath);
-            AssetDatabase.Refresh();
         }
 
         public static void GenerateDataTableEnumFile(DataTableProcessor dataTableProcessor, string dataTableName)

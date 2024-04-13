@@ -1,6 +1,10 @@
-﻿//------------------------------------------------------------
+// ========================================================
+// 作者：Dvalmi 
+// 创建时间：2024-04-13 11:41:33
+// ========================================================
+//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023-06-23 22:53:17.009
+// 生成时间：2024-04-13 11:41:33.148
 //------------------------------------------------------------
 
 using DEngine;
@@ -15,14 +19,14 @@ using DEngine.Runtime;
 namespace Game.Update
 {
     /// <summary>
-    /// 界面声音配置表。
+    /// 界面组配置表。
     /// </summary>
-    public class DRUISound : DataRowBase
+    public class DRUIGroup : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取界面声音编号。
+        /// 获取界面组编号。
         /// </summary>
         public override int Id
         {
@@ -33,27 +37,18 @@ namespace Game.Update
         }
 
         /// <summary>
-        /// 获取资源名称。
+        /// 获取界面组名称。
         /// </summary>
-        public string AssetName
+        public string UIGroupName
         {
             get;
             private set;
         }
 
         /// <summary>
-        /// 获取优先级（默认0，128最高，-128最低）。
+        /// 获取界面组深度。
         /// </summary>
-        public int Priority
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// 获取音量（0~1）。
-        /// </summary>
-        public float Volume
+        public int UIGroupDepth
         {
             get;
             private set;
@@ -71,9 +66,8 @@ namespace Game.Update
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-			AssetName = columnStrings[index++];
-			Priority = int.Parse(columnStrings[index++]);
-			Volume = float.Parse(columnStrings[index++]);
+			UIGroupName = columnStrings[index++];
+			UIGroupDepth = int.Parse(columnStrings[index++]);
             GeneratePropertyArray();
             return true;
         }
@@ -85,9 +79,8 @@ namespace Game.Update
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
-                    AssetName = binaryReader.ReadString();
-                    Priority = binaryReader.Read7BitEncodedInt32();
-                    Volume = binaryReader.ReadSingle();
+                    UIGroupName = binaryReader.ReadString();
+                    UIGroupDepth = binaryReader.Read7BitEncodedInt32();
                 }
             }
 

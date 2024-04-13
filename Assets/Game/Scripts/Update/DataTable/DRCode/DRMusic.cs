@@ -1,6 +1,10 @@
-﻿//------------------------------------------------------------
+// ========================================================
+// 作者：Dvalmi 
+// 创建时间：2024-04-13 11:41:33
+// ========================================================
+//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023-06-23 22:47:18.911
+// 生成时间：2024-04-13 11:41:33.138
 //------------------------------------------------------------
 
 using DEngine;
@@ -15,14 +19,14 @@ using DEngine.Runtime;
 namespace Game.Update
 {
     /// <summary>
-    /// 界面配置表。
+    /// 音乐配置表。
     /// </summary>
-    public class DRUIForm : DataRowBase
+    public class DRMusic : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取界面编号。
+        /// 获取音乐编号。
         /// </summary>
         public override int Id
         {
@@ -41,33 +45,6 @@ namespace Game.Update
             private set;
         }
 
-        /// <summary>
-        /// 获取界面组名称。
-        /// </summary>
-        public string UIGroupName
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// 获取是否允许多个界面实例。
-        /// </summary>
-        public bool AllowMultiInstance
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// 获取是否暂停被其覆盖的界面。
-        /// </summary>
-        public bool PauseCoveredUIForm
-        {
-            get;
-            private set;
-        }
-
         public override bool ParseDataRow(string dataRowString, object userData)
         {
             string[] columnStrings = dataRowString.Split(Game.DataTableExtension.DataSplitSeparators);
@@ -81,9 +58,6 @@ namespace Game.Update
             m_Id = int.Parse(columnStrings[index++]);
             index++;
 			AssetName = columnStrings[index++];
-			UIGroupName = columnStrings[index++];
-			AllowMultiInstance = bool.Parse(columnStrings[index++]);
-			PauseCoveredUIForm = bool.Parse(columnStrings[index++]);
             GeneratePropertyArray();
             return true;
         }
@@ -96,9 +70,6 @@ namespace Game.Update
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
                     AssetName = binaryReader.ReadString();
-                    UIGroupName = binaryReader.ReadString();
-                    AllowMultiInstance = binaryReader.ReadBoolean();
-                    PauseCoveredUIForm = binaryReader.ReadBoolean();
                 }
             }
 

@@ -1,6 +1,10 @@
-﻿//------------------------------------------------------------
+// ========================================================
+// 作者：Dvalmi 
+// 创建时间：2024-04-13 11:41:33
+// ========================================================
+//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-01-07 11:45:55.078
+// 生成时间：2024-04-13 11:41:33.140
 //------------------------------------------------------------
 
 using DEngine;
@@ -15,14 +19,14 @@ using DEngine.Runtime;
 namespace Game.Update
 {
     /// <summary>
-    /// 界面组配置表。
+    /// 场景配置表。
     /// </summary>
-    public class DRUIGroup : DataRowBase
+    public class DRScene : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取界面组编号。
+        /// 获取场景编号。
         /// </summary>
         public override int Id
         {
@@ -33,18 +37,18 @@ namespace Game.Update
         }
 
         /// <summary>
-        /// 获取界面组名称。
+        /// 获取资源名称。
         /// </summary>
-        public string UIGroupName
+        public string AssetName
         {
             get;
             private set;
         }
 
         /// <summary>
-        /// 获取界面组深度。
+        /// 获取背景音乐编号（没有就设置为0）。
         /// </summary>
-        public int UIGroupDepth
+        public int BackgroundMusicId
         {
             get;
             private set;
@@ -62,8 +66,8 @@ namespace Game.Update
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-			UIGroupName = columnStrings[index++];
-			UIGroupDepth = int.Parse(columnStrings[index++]);
+			AssetName = columnStrings[index++];
+			BackgroundMusicId = int.Parse(columnStrings[index++]);
             GeneratePropertyArray();
             return true;
         }
@@ -75,8 +79,8 @@ namespace Game.Update
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
-                    UIGroupName = binaryReader.ReadString();
-                    UIGroupDepth = binaryReader.Read7BitEncodedInt32();
+                    AssetName = binaryReader.ReadString();
+                    BackgroundMusicId = binaryReader.Read7BitEncodedInt32();
                 }
             }
 

@@ -1,6 +1,10 @@
-﻿//------------------------------------------------------------
+// ========================================================
+// 作者：Dvalmi 
+// 创建时间：2024-04-13 11:41:33
+// ========================================================
+//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023-06-23 22:47:18.876
+// 生成时间：2024-04-13 11:41:33.145
 //------------------------------------------------------------
 
 using DEngine;
@@ -15,14 +19,14 @@ using DEngine.Runtime;
 namespace Game.Update
 {
     /// <summary>
-    /// 场景配置表。
+    /// 界面配置表。
     /// </summary>
-    public class DRScene : DataRowBase
+    public class DRUIForm : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取场景编号。
+        /// 获取界面编号。
         /// </summary>
         public override int Id
         {
@@ -42,9 +46,27 @@ namespace Game.Update
         }
 
         /// <summary>
-        /// 获取背景音乐编号（没有就设置为0）。
+        /// 获取界面组名称。
         /// </summary>
-        public int BackgroundMusicId
+        public string UIGroupName
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 获取是否允许多个界面实例。
+        /// </summary>
+        public bool AllowMultiInstance
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 获取是否暂停被其覆盖的界面。
+        /// </summary>
+        public bool PauseCoveredUIForm
         {
             get;
             private set;
@@ -63,7 +85,9 @@ namespace Game.Update
             m_Id = int.Parse(columnStrings[index++]);
             index++;
 			AssetName = columnStrings[index++];
-			BackgroundMusicId = int.Parse(columnStrings[index++]);
+			UIGroupName = columnStrings[index++];
+			AllowMultiInstance = bool.Parse(columnStrings[index++]);
+			PauseCoveredUIForm = bool.Parse(columnStrings[index++]);
             GeneratePropertyArray();
             return true;
         }
@@ -76,7 +100,9 @@ namespace Game.Update
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
                     AssetName = binaryReader.ReadString();
-                    BackgroundMusicId = binaryReader.Read7BitEncodedInt32();
+                    UIGroupName = binaryReader.ReadString();
+                    AllowMultiInstance = binaryReader.ReadBoolean();
+                    PauseCoveredUIForm = binaryReader.ReadBoolean();
                 }
             }
 

@@ -49,6 +49,12 @@ namespace Game.Editor.DataTableTools
         public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
             var binaryDataFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + ".bytes"));
+
+            FileInfo fileInfo = new FileInfo(binaryDataFileName);
+            if (!fileInfo.Directory.Exists)
+            {
+                fileInfo.Directory.Create();
+            }
             if (!dataTableProcessor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
             {
                 File.Delete(binaryDataFileName);
@@ -67,6 +73,12 @@ namespace Game.Editor.DataTableTools
             }
 
             var csharpCodeFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.CSharpCodePath, "DR" + dataTableName + ".cs"));
+            FileInfo fileInfo = new FileInfo(csharpCodeFileName);
+            if (!fileInfo.Directory.Exists)
+            {
+                fileInfo.Directory.Create();
+            }
+
             if (!dataTableProcessor.GenerateCodeFile(csharpCodeFileName, Encoding.UTF8, dataTableName) && File.Exists(csharpCodeFileName))
             {
                 File.Delete(csharpCodeFileName);

@@ -26,7 +26,7 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表C#实体类生成文件夹路径
         /// </summary>
-        public string CSharpCodePath= "Assets/Game/Scripts/Hotfix/DataTable";
+        public string CSharpCodePath= "Assets/Game/Scripts/Update/DataTable/DRCode";
 
         /// <summary>
         /// 数据表C#实体类模板存放路径
@@ -36,7 +36,7 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表扩展类文件夹路径
         /// </summary>
-        public string ExtensionDirectoryPath= "Assets/Game/Scripts/Hotfix/DataTable/Extensions";
+        public string ExtensionDirectoryPath= "Assets/Game/Scripts/Update/DataTable/Extensions";
 
         /// <summary>
         /// 是否生成枚举

@@ -14,7 +14,8 @@ namespace Game.Editor.DataTableTools
         private bool m_FoldoutLocalizationGroup;
         private bool m_FoldoutConfigGroup;
         private bool m_FoldoutAssemblyNamesGroup;
-        [MenuItem("Table/Setting", priority = 10)]
+
+        [MenuItem("DataTable/Setting", priority = 10)]
         private static void OpenWindow()
         {
             var window = GetWindow<DataTableSettingEditorWindows>("Game Setting");

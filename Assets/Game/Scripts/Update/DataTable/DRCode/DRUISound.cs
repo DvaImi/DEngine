@@ -1,6 +1,10 @@
-﻿//------------------------------------------------------------
+// ========================================================
+// 作者：Dvalmi 
+// 创建时间：2024-04-13 11:41:33
+// ========================================================
+//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023-06-23 22:47:18.842
+// 生成时间：2024-04-13 11:41:33.150
 //------------------------------------------------------------
 
 using DEngine;
@@ -15,14 +19,14 @@ using DEngine.Runtime;
 namespace Game.Update
 {
     /// <summary>
-    /// 音乐配置表。
+    /// 界面声音配置表。
     /// </summary>
-    public class DRMusic : DataRowBase
+    public class DRUISound : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取音乐编号。
+        /// 获取界面声音编号。
         /// </summary>
         public override int Id
         {
@@ -41,6 +45,24 @@ namespace Game.Update
             private set;
         }
 
+        /// <summary>
+        /// 获取优先级（默认0，128最高，-128最低）。
+        /// </summary>
+        public int Priority
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 获取音量（0~1）。
+        /// </summary>
+        public float Volume
+        {
+            get;
+            private set;
+        }
+
         public override bool ParseDataRow(string dataRowString, object userData)
         {
             string[] columnStrings = dataRowString.Split(Game.DataTableExtension.DataSplitSeparators);
@@ -54,6 +76,8 @@ namespace Game.Update
             m_Id = int.Parse(columnStrings[index++]);
             index++;
 			AssetName = columnStrings[index++];
+			Priority = int.Parse(columnStrings[index++]);
+			Volume = float.Parse(columnStrings[index++]);
             GeneratePropertyArray();
             return true;
         }
@@ -66,6 +90,8 @@ namespace Game.Update
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
                     AssetName = binaryReader.ReadString();
+                    Priority = binaryReader.Read7BitEncodedInt32();
+                    Volume = binaryReader.ReadSingle();
                 }
             }
 
