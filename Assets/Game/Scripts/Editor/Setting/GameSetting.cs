@@ -67,11 +67,11 @@ namespace Game.Editor
         /// <summary>
         /// 最新的游戏版本号
         /// </summary>
-        public string LatestGameVersion;
+        public string LatestGameVersion=string.Empty;
         /// <summary>
         /// 资源更新下载地址
         /// </summary>
-        public string UpdatePrefixUri;
+        public string UpdatePrefixUri = string.Empty;
         /// <summary>
         /// 内置信息
         /// </summary>
@@ -103,11 +103,12 @@ namespace Game.Editor
         /// <summary>
         /// 虚拟服务器地址
         /// </summary>
-        public string FileServerAddress;
+        public string FileServerAddress=string.Empty;
         /// <summary>
         /// 自动拷贝最新资源包
         /// </summary>
         public bool AutoCopyToFileServer;
+
         public void SaveSetting()
         {
             Save();
