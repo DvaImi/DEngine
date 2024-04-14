@@ -51,22 +51,12 @@ namespace Game.Update
             canvasGroup.alpha = alpha;
         }
 
-        public static bool HasUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)
-        {
-            return uiComponent.HasUIForm((int)uiFormId, uiGroupName);
-        }
-
-        public static bool HasUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
-        {
-            return uiComponent.HasUIForm(uiFormId, uiGroupName);
-        }
-
-        public static UpdateUGUIForm GetUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)
+        public static UIFormLogic GetUIForm(this UIComponent uiComponent, UIFormId uiFormId, string uiGroupName = null)
         {
             return uiComponent.GetUIForm((int)uiFormId, uiGroupName);
         }
 
-        public static UpdateUGUIForm GetUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
+        public static UIFormLogic GetUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
         {
             IDataTable<DRUIForm> dtUIForm = GameEntry.DataTable.GetDataTable<DRUIForm>();
             DRUIForm drUIForm = dtUIForm.GetDataRow(uiFormId);
@@ -76,16 +66,11 @@ namespace Game.Update
             }
 
             string assetName = UpdateAssetUtility.GetUIFormAsset(drUIForm.AssetName);
-            UIForm uiForm = null;
+            UIForm uiForm;
             if (string.IsNullOrEmpty(uiGroupName))
             {
                 uiForm = uiComponent.GetUIForm(assetName);
-                if (uiForm == null)
-                {
-                    return null;
-                }
-
-                return (UpdateUGUIForm)uiForm.Logic;
+                return uiForm == null ? null : uiForm.Logic;
             }
 
             IUIGroup uiGroup = uiComponent.GetUIGroup(uiGroupName);
@@ -95,17 +80,7 @@ namespace Game.Update
             }
 
             uiForm = (UIForm)uiGroup.GetUIForm(assetName);
-            if (uiForm == null)
-            {
-                return null;
-            }
-
-            return (UpdateUGUIForm)uiForm.Logic;
-        }
-
-        public static void CloseUIForm(this UIComponent uiComponent, UpdateUGUIForm uiForm)
-        {
-            uiComponent.CloseUIForm(uiForm.UIForm);
+            return uiForm == null ? null : uiForm.Logic;
         }
 
         public static int? OpenUIForm(this UIComponent uiComponent, UIFormId uiFormId, object userData = null)
@@ -138,6 +113,22 @@ namespace Game.Update
             }
 
             return uiComponent.OpenUIForm(assetName, drUIForm.UIGroupName, Constant.AssetPriority.UIFormAsset, drUIForm.PauseCoveredUIForm, userData);
+        }
+
+        public static void CloseUIForm(this UIComponent uiComponent, UIFormLogic uiForm)
+        {
+            uiComponent.CloseUIForm(uiForm.UIForm);
+        }
+
+        public static void CloseUIForm(this UIComponent uiComponent, UIFormId uiFormId, object userData = null)
+        {
+            var uiform = uiComponent.GetUIForm(uiFormId);
+            if (uiform == null)
+            {
+                return;
+            }
+
+            uiComponent.CloseUIForm(uiform.UIForm);
         }
     }
 }

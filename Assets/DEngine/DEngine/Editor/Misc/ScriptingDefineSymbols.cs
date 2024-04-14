@@ -43,6 +43,33 @@ namespace DEngine.Editor
         }
 
         /// <summary>
+        /// 检查指定平台是否存在指定的脚本宏定义。
+        /// </summary>
+        /// <param name="scriptingDefineSymbol">要检查的脚本宏定义。</param>
+        /// <returns>指定平台是否存在指定的脚本宏定义。</returns>
+        public static bool HasScriptingDefineSymbol(string scriptingDefineSymbol)
+        {
+            if (string.IsNullOrEmpty(scriptingDefineSymbol))
+            {
+                return false;
+            }
+
+            foreach (BuildTargetGroup buildTargetGroup in BuildTargetGroups)
+            {
+                string[] scriptingDefineSymbols = GetScriptingDefineSymbols(buildTargetGroup);
+                foreach (string i in scriptingDefineSymbols)
+                {
+                    if (i == scriptingDefineSymbol)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// 为指定平台增加指定的脚本宏定义。
         /// </summary>
         /// <param name="buildTargetGroup">要增加脚本宏定义的平台。</param>

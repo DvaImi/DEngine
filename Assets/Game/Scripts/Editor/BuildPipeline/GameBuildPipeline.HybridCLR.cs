@@ -128,6 +128,18 @@ namespace Game.Editor.BuildPipeline
             AssetDatabase.Refresh();
         }
 
+        public static void CheckEnableHybridCLR()
+        {
+            if (SettingsUtil.Enable)
+            {
+                if (ScriptingDefineSymbols.HasScriptingDefineSymbol(EnableHybridCLRDefineSymbol))
+                {
+                    return;
+                }
+                EnableHybridCLR();
+            }
+        }
+
         public static void EnableHybridCLR()
         {
             DisableHybridCLR();

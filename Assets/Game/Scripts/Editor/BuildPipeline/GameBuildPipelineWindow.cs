@@ -55,6 +55,7 @@ namespace Game.Editor.BuildPipeline
             }
 
             GameBuildPipeline.RefreshPackages();
+            GameBuildPipeline.CheckEnableHybridCLR();
         }
 
         private void OnGUI()
