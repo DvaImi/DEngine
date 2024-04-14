@@ -82,7 +82,7 @@ namespace Game.Editor.BuildPipeline
             if (assembliesVersion.Count > 0)
             {
                 string hotUpdateAssembliesVersion = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, Constant.AssetVersion.HotUpdateAssembliesVersion + ".bytes");
-                GameAssetVersionUitlity.CreatAssetVersion(assembliesVersion.ToArray(), hotUpdateAssembliesVersion);
+                GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), hotUpdateAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} HotUpdateAssemblies success.");
             }
             assembliesVersion.Clear();
@@ -99,7 +99,7 @@ namespace Game.Editor.BuildPipeline
             if (assembliesVersion.Count > 0)
             {
                 string preserveAssembliesVersion = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, Constant.AssetVersion.PreserveAssembliesVersion + ".bytes");
-                GameAssetVersionUitlity.CreatAssetVersion(assembliesVersion.ToArray(), preserveAssembliesVersion);
+                GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), preserveAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} PreserveAssemblies success.");
             }
             assembliesVersion.Clear();
@@ -122,7 +122,7 @@ namespace Game.Editor.BuildPipeline
             if (assembliesVersion.Count > 0)
             {
                 string aotAssembliesVersion = Path.Combine(GameSetting.Instance.AOTAssembliesPath, Constant.AssetVersion.AOTMetadataVersion + ".bytes");
-                GameAssetVersionUitlity.CreatAssetVersion(assembliesVersion.ToArray(), aotAssembliesVersion);
+                GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), aotAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} AOTAssemblies success.");
             }
             AssetDatabase.Refresh();

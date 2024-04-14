@@ -5,7 +5,7 @@ namespace Game.Editor.ResourceTools
 {
     public static class GameAssetVersionUitlity
     {
-        public static void CreatAssetVersion(string[] mainfests, string writePath)
+        public static void CreateAssetVersion(string[] mainfests, string writePath)
         {
             using (FileStream stream = new(writePath, FileMode.Create, FileAccess.Write))
             {
