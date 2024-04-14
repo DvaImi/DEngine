@@ -64,7 +64,8 @@ namespace Game.Update
 
         private void PreloadCompleteHandle()
         {
-            Type[] types = Utility.Assembly.GetTypes();
+            //此处需要用热更程序集获取类型
+            Type[] types = AssemblyUtility.GetTypes();
 
             IEnumerable<Type> preloadEventHandlerTypes = types.Where(t => typeof(IPreloadEventHandler).IsAssignableFrom(t) && !t.IsInterface);
 
