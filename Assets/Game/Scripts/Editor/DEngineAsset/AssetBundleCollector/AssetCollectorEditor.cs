@@ -359,10 +359,6 @@ namespace Game.Editor
                         for (int i = 0; i < DragAndDrop.paths.Length; i++)
                         {
                             string path = DragAndDrop.paths[i];
-                            if (DetectDuplicates(path))
-                            {
-                                continue;
-                            }
                             AddAssetCollectorRow(path);
                         }
                     }
@@ -614,11 +610,6 @@ namespace Game.Editor
             };
             m_AssetCollectorTableView.AddData(assetCollector);
             m_IsDirty = true;
-        }
-
-        private bool DetectDuplicates(string path)
-        {
-            return m_SelectAssetBundleCollector != null && m_SelectAssetBundleCollector.DetectDuplicates(path);
         }
 
         private void OnDestroy()

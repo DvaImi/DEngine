@@ -10,10 +10,5 @@ namespace Game.Editor.ResourceTools
         public string PackageName = "Default";
         public string Description;
         public List<AssetBundleGroupCollector> Groups = new();
-
-        internal bool DetectDuplicates(string assetPath)
-        {
-            return Groups.Exists(o => o.DetectDuplicates(assetPath));
-        }
     }
 }

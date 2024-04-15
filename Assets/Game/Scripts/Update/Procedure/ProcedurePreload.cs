@@ -64,15 +64,18 @@ namespace Game.Update
 
         private void PreloadCompleteHandle()
         {
-            //此处需要用热更程序集获取类型
-            Type[] types = AssemblyUtility.GetTypes();
+            DRUIGroup[] uiGroups = GameEntry.DataTable.GetDataTable<DRUIGroup>().GetAllDataRows();
 
-            IEnumerable<Type> preloadEventHandlerTypes = types.Where(t => typeof(IPreloadEventHandler).IsAssignableFrom(t) && !t.IsInterface);
-
-            foreach (var type in preloadEventHandlerTypes)
+            for (int i = 0; i < uiGroups.Length; i++)
             {
-                IPreloadEventHandler instance = Activator.CreateInstance(type) as IPreloadEventHandler;
-                instance?.Run();
+                if (GameEntry.UI.AddUIGroup(uiGroups[i].UIGroupName, uiGroups[i].UIGroupDepth))
+                {
+                    Log.Info("Add ui group [{0}] success", uiGroups[i].UIGroupName);
+                }
+                else
+                {
+                    Log.Warning("Add ui group [{0}] failure", uiGroups[i].UIGroupName);
+                }
             }
         }
 
