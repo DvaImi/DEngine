@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using DEngine;
 using DEngine.Editor.ResourceTools;
 using Game.Editor.ResourceTools;
 using UnityEditor;
@@ -13,7 +11,7 @@ namespace Game.Editor
 {
     public class ResourceCollectorEditor : MenuTreeEditorWindow
     {
-        private readonly string m_DefaultConfigurationPath = "Assets/Game/AssetConfiguration/ResourcePackageCollector.asset";
+        private readonly string m_DefaultConfigurationPath = "Assets/Game/Configuration/ResourcePackageCollector.asset";
         private MenuTreeView<ResourceGroupsCollector> m_MenuTreePackagesView;
         private MenuTreeViewItem<ResourceGroupsCollector> m_PackageSelectedItem;
         private MenuTreeView<ResourceGroupCollector> m_MenuTreeGroupsView;

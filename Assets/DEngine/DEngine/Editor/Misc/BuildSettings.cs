@@ -1,5 +1,4 @@
-﻿using DEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using UnityEditor;
@@ -31,7 +30,7 @@ namespace DEngine.Editor
             {
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(s_ConfigurationPath);
-                XmlNode xmlRoot = xmlDocument.SelectSingleNode("UnityDEngine");
+                XmlNode xmlRoot = xmlDocument.SelectSingleNode("DEngine");
                 XmlNode xmlBuildSettings = xmlRoot.SelectSingleNode("BuildSettings");
                 XmlNode xmlDefaultScenes = xmlBuildSettings.SelectSingleNode("DefaultScenes");
                 XmlNode xmlSearchScenePaths = xmlBuildSettings.SelectSingleNode("SearchScenePaths");
