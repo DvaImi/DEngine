@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Editor.ResourceTools
 {
-    internal static class AssetCollectorEditorUtility
+    internal static class ResourceCollectorEditorUtility
     {
         /// <summary>
         /// 资源规则
@@ -39,7 +39,7 @@ namespace Game.Editor.ResourceTools
             get;
         }
 
-        static AssetCollectorEditorUtility()
+        static ResourceCollectorEditorUtility()
         {
             m_CacheFilterRuleTypes.Clear();
             m_CacheFilterRuleInstence.Clear();
@@ -57,12 +57,12 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        public static void RefreshResourceCollection(AssetBundleCollector collectorData)
+        public static void RefreshResourceCollection(ResourceGroupsCollector collectorData)
         {
             ResourceEditorController resourceEditorController = new();
             resourceEditorController.Load();
 
-            collectorData ??= AssetBundlePackageCollector.GetBundleCollectorByIndex(GameSetting.Instance.AssetBundleCollectorIndex);
+            collectorData ??= ResourcePackagesCollector.GetBundleCollectorByIndex(GameSetting.Instance.AssetBundleCollectorIndex);
             Debug.Log($"Export {collectorData.PackageName} ...");
 
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
@@ -122,7 +122,7 @@ namespace Game.Editor.ResourceTools
             return m_ResourceCollection.AssignAsset(assetGuid, resourceName, resourceVariant);
         }
 
-        private static void AnalysisResourceFilters(AssetBundleCollector collectorData)
+        private static void AnalysisResourceFilters(ResourceGroupsCollector collectorData)
         {
             m_ResourceCollection = new ResourceCollection();
             foreach (var resourceGroup in collectorData.Groups)
@@ -165,7 +165,7 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-        private static void ApplyResourceFilter(AssetCollector assetCollector, string resourceName, IFilterRule filterRule)
+        private static void ApplyResourceFilter(ResourceCollector assetCollector, string resourceName, IFilterRule filterRule)
         {
             foreach (var oldResource in GetResources())
             {

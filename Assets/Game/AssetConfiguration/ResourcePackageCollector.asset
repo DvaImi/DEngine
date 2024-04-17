@@ -9,30 +9,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a492a5e66434f844bbce52db8c7d58b8, type: 3}
-  m_Name: AssetBundlePackageCollector
+  m_Script: {fileID: 11500000, guid: ba3d823840013a4429ea895596b60a1b, type: 3}
+  m_Name: ResourcePackageCollector
   m_EditorClassIdentifier: 
   PackagesCollector:
-  - PackageName: Game_V1.0
-    Description: "\u8D44\u6E90"
+  - PackageName: Game
+    Description: 
     Groups:
-    - GroupName: Base
+    - GroupName: base
       EnableGroup: 1
-      Description: "\u57FA\u7840\u8D44\u6E90\u7EC4"
+      Description: "\u57FA\u7840\u6570\u636E\u8D44\u6E90"
       AssetCollectors:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: Base
+        Groups: base
         Variant: 
         Asset: {fileID: 102900000, guid: be6134754f035424aadfe7828332fed0, type: 3}
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll
+    - GroupName: logic
+      EnableGroup: 1
+      Description: "\u6E38\u620F\u53EF\u70ED\u66F4\u7684\u903B\u8F91\u4EE3\u7801"
+      AssetCollectors:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: Base
+        Groups: logic
         Variant: 
         Asset: {fileID: 102900000, guid: 36d161e297c33aa48bcdaf7b513fbed4, type: 3}
         LoadType: 0
@@ -41,7 +45,7 @@ MonoBehaviour:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: Base
+        Groups: logic
         Variant: 
         Asset: {fileID: 102900000, guid: 650bab57f1e4fdf4c915ac6042b17f9c, type: 3}
         LoadType: 0
@@ -50,34 +54,38 @@ MonoBehaviour:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: Base
+        Groups: logic
         Variant: 
         Asset: {fileID: 102900000, guid: fe5c9a35e05887b48a28c2554b4668e8, type: 3}
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll
+    - GroupName: localization
+      EnableGroup: 1
+      Description: "\u672C\u5730\u5316\u8D44\u6E90"
+      AssetCollectors:
       - Enable: 1
-        Name: zh-cn
+        Name: 
         FileSystem: 
-        Groups: Base
+        Groups: localization
         Variant: 
         Asset: {fileID: 102900000, guid: 11f2c913956269540987ff4d8220690f, type: 3}
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll
       - Enable: 1
-        Name: zh-tw
+        Name: 
         FileSystem: 
-        Groups: Base
+        Groups: localization
         Variant: 
         Asset: {fileID: 102900000, guid: 99b4813375565a8409dedd11e2797474, type: 3}
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll
       - Enable: 1
-        Name: en-us
+        Name: 
         FileSystem: 
-        Groups: Base
+        Groups: localization
         Variant: 
         Asset: {fileID: 102900000, guid: 4fc38d301ae29c34faccf58b7ab86874, type: 3}
         LoadType: 0

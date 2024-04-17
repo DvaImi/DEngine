@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Game.Editor.ResourceTools
 {
-    public class AssetBundlePackageCollector : ScriptableObject
+    public class ResourcePackagesCollector : ScriptableObject
     {
-        public List<AssetBundleCollector> PackagesCollector = new List<AssetBundleCollector>();
+        public List<ResourceGroupsCollector> PackagesCollector = new List<ResourceGroupsCollector>();
 
-        public static AssetBundlePackageCollector GetPackageCollector()
+        public static ResourcePackagesCollector GetPackageCollector()
         {
-            return GameEditorUtility.GetScriptableObject<AssetBundlePackageCollector>();
+            return GameEditorUtility.GetScriptableObject<ResourcePackagesCollector>();
         }
 
-        public static AssetBundleCollector GetBundleCollectorByIndex(int index)
+        public static ResourceGroupsCollector GetBundleCollectorByIndex(int index)
         {
             if (index < 0)
             {

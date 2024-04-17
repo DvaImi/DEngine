@@ -2,15 +2,14 @@
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 
-namespace Game.Editor
+namespace Game.Editor.ResourceTools
 {
-    public class AssetCollectorTableView<T> : TableView<T> where T : class, new()
+    public class ResourceCollectorTableView<T> : TableView<T> where T : class, new()
     {
-        public AssetCollectorTableView(List<T> datas, List<TableColumn<T>> columns) : base(datas, columns)
+        public ResourceCollectorTableView(List<T> datas, List<TableColumn<T>> columns) : base(datas, columns)
         {
 
         }
-
 
         protected override bool CanBeParent(TreeViewItem item)
         {

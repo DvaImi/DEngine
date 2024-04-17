@@ -4,12 +4,12 @@ using System.Collections.Generic;
 namespace Game.Editor.ResourceTools
 {
     [Serializable]
-    public class AssetBundleGroupCollector
+    public class ResourceGroupCollector
     {
         public string GroupName = "Default";
         public bool EnableGroup = true;
         public string Description;
-        public List<AssetCollector> AssetCollectors = new();
+        public List<ResourceCollector> AssetCollectors = new();
 
         internal void SetGroupName(string groupName)
         {

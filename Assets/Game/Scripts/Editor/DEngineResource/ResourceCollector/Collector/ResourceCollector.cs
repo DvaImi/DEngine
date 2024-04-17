@@ -5,7 +5,7 @@ using UnityEditor;
 namespace Game.Editor.ResourceTools
 {
     [Serializable]
-    public class AssetCollector
+    public class ResourceCollector
     {
         /// <summary>
         /// 是否启用资源

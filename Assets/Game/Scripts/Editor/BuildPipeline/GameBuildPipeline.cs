@@ -24,7 +24,7 @@ namespace Game.Editor.BuildPipeline
 
         public static void RefreshPackages()
         {
-            PackagesNames = AssetBundlePackageCollector.GetPackageCollector().PackagesCollector.Select(x => x.PackageName).ToArray();
+            PackagesNames = ResourcePackagesCollector.GetPackageCollector().PackagesCollector.Select(x => x.PackageName).ToArray();
         }
 
         public static BuildTarget GetBuildTarget(int platformIndex)

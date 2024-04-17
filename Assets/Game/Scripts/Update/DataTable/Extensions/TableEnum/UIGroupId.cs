@@ -4,7 +4,5 @@ namespace Game.Update
 	// 界面组编号
 	public enum UIGroupId : byte
 	{
-		// 
-		Default = 1,
 	}
 }

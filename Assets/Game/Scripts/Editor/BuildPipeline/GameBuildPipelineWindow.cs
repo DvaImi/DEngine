@@ -132,6 +132,7 @@ namespace Game.Editor.BuildPipeline
             GameSetting.Instance.SaveSetting();
             GameBuildPipeline.SaveBuildInfo();
             GameBuildPipeline.SaveHybridCLR();
+            GameBuildPipeline.SaveResource();
         }
 
         private void GUIPlatform()

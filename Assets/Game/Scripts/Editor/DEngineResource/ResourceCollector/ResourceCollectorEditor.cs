@@ -11,19 +11,19 @@ using Object = UnityEngine.Object;
 
 namespace Game.Editor
 {
-    public class AssetCollectorEditor : MenuTreeEditorWindow
+    public class ResourceCollectorEditor : MenuTreeEditorWindow
     {
-        private readonly string m_DefaultConfigurationPath = "Assets/Game/AssetConfiguration/AssetBundlePackageCollector.asset";
-        private MenuTreeView<AssetBundleCollector> m_MenuTreePackagesView;
-        private MenuTreeViewItem<AssetBundleCollector> m_PackageSelectedItem;
-        private MenuTreeView<AssetBundleGroupCollector> m_MenuTreeGroupsView;
-        private MenuTreeViewItem<AssetBundleGroupCollector> m_GroupSelectedItem;
-        private AssetCollectorTableView<AssetCollector> m_AssetCollectorTableView;
-        private List<TableColumn<AssetCollector>> m_AssetCollectorColumns;
+        private readonly string m_DefaultConfigurationPath = "Assets/Game/AssetConfiguration/ResourcePackageCollector.asset";
+        private MenuTreeView<ResourceGroupsCollector> m_MenuTreePackagesView;
+        private MenuTreeViewItem<ResourceGroupsCollector> m_PackageSelectedItem;
+        private MenuTreeView<ResourceGroupCollector> m_MenuTreeGroupsView;
+        private MenuTreeViewItem<ResourceGroupCollector> m_GroupSelectedItem;
+        private ResourceCollectorTableView<ResourceCollector> m_AssetCollectorTableView;
+        private List<TableColumn<ResourceCollector>> m_AssetCollectorColumns;
         private ResourceEditorController m_ResourceEditorController;
 
-        private AssetBundlePackageCollector m_AssetBundlePackageCollector;
-        private AssetBundleCollector m_SelectAssetBundleCollector;
+        private ResourcePackagesCollector m_AssetBundlePackageCollector;
+        private ResourceGroupsCollector m_SelectAssetBundleCollector;
         private Rect m_ToolbarRect = new Rect();
         private Rect m_PackageMenuRect = new Rect();
         private Rect m_RuleRect = new Rect();
@@ -45,10 +45,10 @@ namespace Game.Editor
         private bool m_IsDirty = false;
         private float PackageSpace => 200;
 
-        [MenuItem("Game/Asset Collector", false, 1)]
+        [MenuItem("DEngine/Resource Tools/Resource Collector", false, 42)]
         public static void OpenWindow()
         {
-            var window = GetWindow<AssetCollectorEditor>("资源收集器");
+            var window = GetWindow<ResourceCollectorEditor>("资源收集器");
             window.minSize = new Vector2(1300f, 420f);
         }
 
@@ -74,14 +74,14 @@ namespace Game.Editor
                 m_ResourceEditorController.Load();
             }
 
-            m_MenuTreePackagesView = new MenuTreeView<AssetBundleCollector>(false, true, true);
+            m_MenuTreePackagesView = new MenuTreeView<ResourceGroupsCollector>(false, true, true);
             {
                 m_MenuTreePackagesView.onDrawFoldout = DrawFoldoutCallback;
                 m_MenuTreePackagesView.onDrawRowContent = DrawPackagesMenuRowContentCallback;
                 m_MenuTreePackagesView.onSelectionChanged = OnPackageSelectionChanged;
             }
             // 绘制包裹资源分组列表
-            m_MenuTreeGroupsView = new MenuTreeView<AssetBundleGroupCollector>(false, true, true);
+            m_MenuTreeGroupsView = new MenuTreeView<ResourceGroupCollector>(false, true, true);
             {
                 m_MenuTreeGroupsView.onDrawFoldout = DrawFoldoutCallback;
                 m_MenuTreeGroupsView.onDrawRowContent = DrawGroupMenuRowContentCallback;
@@ -93,14 +93,14 @@ namespace Game.Editor
                 m_AssetCollectorColumns = GetAssetCollectorColumns();
             }
 
-            m_AssetCollectorTableView = new AssetCollectorTableView<AssetCollector>(null, m_AssetCollectorColumns);
+            m_AssetCollectorTableView = new ResourceCollectorTableView<ResourceCollector>(null, m_AssetCollectorColumns);
             {
                 m_AssetCollectorTableView.OnRightAddRow = OnTreeViewRightAddRowCallback;
             }
 
             for (int i = 0; i < m_AssetBundlePackageCollector.PackagesCollector.Count; i++)
             {
-                AssetBundleCollector package = m_AssetBundlePackageCollector.PackagesCollector[i];
+                ResourceGroupsCollector package = m_AssetBundlePackageCollector.PackagesCollector[i];
                 m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
             }
             m_SelectAssetBundleCollector = m_AssetBundlePackageCollector.PackagesCollector.FirstOrDefault();
@@ -131,11 +131,11 @@ namespace Game.Editor
 
         private void Load()
         {
-            m_AssetBundlePackageCollector = LoadAssetAtPath<AssetBundlePackageCollector>(m_DefaultConfigurationPath);
+            m_AssetBundlePackageCollector = LoadAssetAtPath<ResourcePackagesCollector>(m_DefaultConfigurationPath);
             if (m_AssetBundlePackageCollector == null)
             {
-                m_AssetBundlePackageCollector = CreateInstance<AssetBundlePackageCollector>();
-                m_AssetBundlePackageCollector.PackagesCollector.Add(new AssetBundleCollector());
+                m_AssetBundlePackageCollector = CreateInstance<ResourcePackagesCollector>();
+                m_AssetBundlePackageCollector.PackagesCollector.Add(new ResourceGroupsCollector());
                 AssetDatabase.CreateAsset(m_AssetBundlePackageCollector, m_DefaultConfigurationPath);
                 AssetDatabase.SaveAssets();
             }
@@ -168,12 +168,12 @@ namespace Game.Editor
 
                 if (GUILayout.Button("导出"))
                 {
-                    AssetCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
+                    ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
                 if (GUILayout.Button("Save"))
                 {
                     Save();
-                    AssetCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
+                    ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
                 GUI.backgroundColor = originalColor;
             }
@@ -231,7 +231,7 @@ namespace Game.Editor
                 {
                     if (GUILayout.Button("+", GUILayout.Width(30)))
                     {
-                        AssetBundleCollector package = new AssetBundleCollector();
+                        ResourceGroupsCollector package = new ResourceGroupsCollector();
                         m_AssetBundlePackageCollector.PackagesCollector.Add(package);
                         m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
                     }
@@ -267,7 +267,7 @@ namespace Game.Editor
                 {
                     if (GUILayout.Button("+", GUILayout.Width(30)))
                     {
-                        AssetBundleGroupCollector resourceGroup = new();
+                        ResourceGroupCollector resourceGroup = new();
                         m_SelectAssetBundleCollector.Groups.Add(resourceGroup);
                         m_MenuTreeGroupsView.AddItem(GetGroupDisplayName(resourceGroup), resourceGroup);
                         SetFocusAndEnsureSelectedItem();
@@ -326,7 +326,7 @@ namespace Game.Editor
 
             if (m_GroupSelectedItem != null)
             {
-                AssetBundleGroupCollector group = m_GroupSelectedItem.Data;
+                ResourceGroupCollector group = m_GroupSelectedItem.Data;
                 GUILayout.BeginArea(m_ContentRect);
                 {
                     if (group.EnableGroup != EditorGUILayout.Toggle("启用分组", group.EnableGroup))
@@ -395,7 +395,7 @@ namespace Game.Editor
                 {
                     for (int i = 0; i < groupsCount; i++)
                     {
-                        AssetBundleGroupCollector resourceGroup = m_SelectAssetBundleCollector.Groups[i];
+                        ResourceGroupCollector resourceGroup = m_SelectAssetBundleCollector.Groups[i];
                         m_MenuTreeGroupsView.AddItem(GetGroupDisplayName(resourceGroup), resourceGroup);
                     }
                 }
@@ -417,7 +417,7 @@ namespace Game.Editor
         /// <param name="focused"></param>
         /// <param name="useBoldFont"></param>
         /// <param name="isPinging"></param>
-        private void DrawPackagesMenuRowContentCallback(Rect rect, int row, MenuTreeViewItem<AssetBundleCollector> item, string label, bool selected, bool focused, bool useBoldFont, bool isPinging)
+        private void DrawPackagesMenuRowContentCallback(Rect rect, int row, MenuTreeViewItem<ResourceGroupsCollector> item, string label, bool selected, bool focused, bool useBoldFont, bool isPinging)
         {
             GUI.Box(rect, "", m_LineStyle);
             float space = 5f + item.depth * 15f;
@@ -436,7 +436,7 @@ namespace Game.Editor
         /// <param name="focused"></param>
         /// <param name="useBoldFont"></param>
         /// <param name="isPinging"></param>
-        private void DrawGroupMenuRowContentCallback(Rect rect, int row, MenuTreeViewItem<AssetBundleGroupCollector> item, string label, bool selected, bool focused, bool useBoldFont, bool isPinging)
+        private void DrawGroupMenuRowContentCallback(Rect rect, int row, MenuTreeViewItem<ResourceGroupCollector> item, string label, bool selected, bool focused, bool useBoldFont, bool isPinging)
         {
             GUI.Box(rect, "", m_LineStyle);
             float space = 5f + item.depth * 15f;
@@ -462,7 +462,7 @@ namespace Game.Editor
         /// </summary>
         /// <param name="packages"></param>
         /// <returns></returns>
-        private string GetPackageDisplayName(AssetBundleCollector packages)
+        private string GetPackageDisplayName(ResourceGroupsCollector packages)
         {
             return string.IsNullOrEmpty(packages.Description) ? packages.PackageName : string.Format("{0}({1})", packages.PackageName, packages.Description);
         }
@@ -472,7 +472,7 @@ namespace Game.Editor
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        private string GetGroupDisplayName(AssetBundleGroupCollector group)
+        private string GetGroupDisplayName(ResourceGroupCollector group)
         {
             return string.IsNullOrEmpty(group.Description) ? group.GroupName : string.Format("{0}({1})", group.GroupName, group.Description);
         }
@@ -482,68 +482,68 @@ namespace Game.Editor
         /// 获取资产列
         /// </summary>
         /// <returns></returns>
-        private List<TableColumn<AssetCollector>> GetAssetCollectorColumns()
+        private List<TableColumn<ResourceCollector>> GetAssetCollectorColumns()
         {
-            var columns = new List<TableColumn<AssetCollector>>();
-            TableColumn<AssetCollector> column1 = CreateColumn(m_EnableContent, DrawEnableItem, 50, 50, 60);
+            var columns = new List<TableColumn<ResourceCollector>>();
+            TableColumn<ResourceCollector> column1 = CreateColumn(m_EnableContent, DrawEnableItem, 50, 50, 60);
             columns.Add(column1);
-            TableColumn<AssetCollector> column2 = CreateColumn(m_NameContent, DrawNameItem, 100, 50, 150);
+            TableColumn<ResourceCollector> column2 = CreateColumn(m_NameContent, DrawNameItem, 100, 50, 150);
             columns.Add(column2);
-            TableColumn<AssetCollector> column3 = CreateColumn(m_LoadTypeContent, DrawLoadTypeItem, 150, 110, 200);
+            TableColumn<ResourceCollector> column3 = CreateColumn(m_LoadTypeContent, DrawLoadTypeItem, 150, 110, 200);
             columns.Add(column3);
-            TableColumn<AssetCollector> column4 = CreateColumn(m_PackedContent, DrawPackedItem, 50, 50, 60);
+            TableColumn<ResourceCollector> column4 = CreateColumn(m_PackedContent, DrawPackedItem, 50, 50, 60);
             columns.Add(column4);
-            TableColumn<AssetCollector> column5 = CreateColumn(m_FileSystemContent, DrawFileSystemItem, 100, 50, 150);
+            TableColumn<ResourceCollector> column5 = CreateColumn(m_FileSystemContent, DrawFileSystemItem, 100, 50, 150);
             columns.Add(column5);
-            TableColumn<AssetCollector> column6 = CreateColumn(m_VariantContent, DrawVariantItem, 100, 50, 150);
+            TableColumn<ResourceCollector> column6 = CreateColumn(m_VariantContent, DrawVariantItem, 100, 50, 150);
             columns.Add(column6);
-            TableColumn<AssetCollector> column7 = CreateColumn(m_AssetContent, DrawAssetObjectItem, 150, 120, 160);
+            TableColumn<ResourceCollector> column7 = CreateColumn(m_AssetContent, DrawAssetObjectItem, 150, 120, 160);
             columns.Add(column7);
-            TableColumn<AssetCollector> column8 = CreateColumn(m_FilterTypeContent, DrawFilterTypeItem, 150, 120, 160);
+            TableColumn<ResourceCollector> column8 = CreateColumn(m_FilterTypeContent, DrawFilterTypeItem, 150, 120, 160);
             columns.Add(column8);
-            TableColumn<AssetCollector> column9 = CreateColumn(m_AssetPathContent, DrawAssetPathItem, 300, 200, 400);
+            TableColumn<ResourceCollector> column9 = CreateColumn(m_AssetPathContent, DrawAssetPathItem, 300, 200, 400);
             columns.Add(column9);
             return columns;
         }
 
-        private void DrawEnableItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawEnableItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             Rect enableRect = new Rect(cellRect.x + (cellRect.width / 2), cellRect.y, cellRect.width, cellRect.height);
             data.Enable = EditorGUI.Toggle(enableRect, data.Enable);
         }
 
-        private void DrawNameItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawNameItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             data.Name = EditorGUI.TextField(cellRect, data.Name);
         }
 
-        private void DrawLoadTypeItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawLoadTypeItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             data.LoadType = (LoadType)EditorGUI.EnumPopup(cellRect, data.LoadType);
         }
 
-        private void DrawPackedItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawPackedItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             Rect packedRect = new Rect(cellRect.x + (cellRect.width / 2), cellRect.y, cellRect.width, cellRect.height);
             data.Packed = EditorGUI.Toggle(packedRect, data.Packed);
         }
 
-        private void DrawFileSystemItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawFileSystemItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             data.FileSystem = EditorGUI.TextField(cellRect, data.FileSystem);
         }
 
-        private void DrawVariantItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawVariantItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             data.Variant = EditorGUI.TextField(cellRect, data.Variant);
         }
 
-        private void DrawAssetObjectItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawAssetObjectItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             data.Asset = EditorGUI.ObjectField(cellRect, m_EmptyContent, data.Asset, typeof(Object), false);
         }
 
-        private void DrawFilterTypeItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawFilterTypeItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             bool isValidFolderAsset = AssetDatabase.IsValidFolder(data.AssetPath);
             GUI.enabled = isValidFolderAsset;
@@ -551,20 +551,20 @@ namespace Game.Editor
             {
                 data.FilterRule = nameof(CollectAll);
             }
-            int index = Array.IndexOf(AssetCollectorEditorUtility.FilterRules, data.FilterRule);
+            int index = Array.IndexOf(ResourceCollectorEditorUtility.FilterRules, data.FilterRule);
             if (index == -1)
             {
                 index = 0;
             }
-            var tempIndex = EditorGUI.Popup(cellRect, index, AssetCollectorEditorUtility.FilterRules);
+            var tempIndex = EditorGUI.Popup(cellRect, index, ResourceCollectorEditorUtility.FilterRules);
             if (tempIndex != index)
             {
-                data.FilterRule = AssetCollectorEditorUtility.FilterRules[tempIndex];
+                data.FilterRule = ResourceCollectorEditorUtility.FilterRules[tempIndex];
             }
             GUI.enabled = true;
         }
 
-        private void DrawAssetPathItem(Rect cellRect, AssetCollector data, int rowIndex, bool isSelected, bool isFocused)
+        private void DrawAssetPathItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             EditorGUI.LabelField(cellRect, data.AssetPath);
         }
@@ -582,9 +582,9 @@ namespace Game.Editor
         /// <param name="canSort"></param>
         /// <param name="autoResize"></param>
         /// <returns></returns>
-        private TableColumn<AssetCollector> CreateColumn(GUIContent content, DrawCellMethod<AssetCollector> drawCellMethod, float width, float minWidth, float maxWidth, bool canSort = true, bool autoResize = true)
+        private TableColumn<ResourceCollector> CreateColumn(GUIContent content, DrawCellMethod<ResourceCollector> drawCellMethod, float width, float minWidth, float maxWidth, bool canSort = true, bool autoResize = true)
         {
-            TableColumn<AssetCollector> column = new TableColumn<AssetCollector>();
+            TableColumn<ResourceCollector> column = new TableColumn<ResourceCollector>();
             {
                 column.headerContent = content;
                 column.width = width;
@@ -603,7 +603,7 @@ namespace Game.Editor
         /// <param name="path"></param>
         private void AddAssetCollectorRow(string path)
         {
-            AssetCollector assetCollector = new()
+            ResourceCollector assetCollector = new()
             {
                 Groups = m_GroupSelectedItem.Data.GroupName,
                 Asset = AssetDatabase.LoadAssetAtPath<Object>(path)

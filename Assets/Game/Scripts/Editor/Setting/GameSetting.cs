@@ -67,7 +67,7 @@ namespace Game.Editor
         /// <summary>
         /// 最新的游戏版本号
         /// </summary>
-        public string LatestGameVersion=string.Empty;
+        public string LatestGameVersion = string.Empty;
         /// <summary>
         /// 资源更新下载地址
         /// </summary>
@@ -103,7 +103,7 @@ namespace Game.Editor
         /// <summary>
         /// 虚拟服务器地址
         /// </summary>
-        public string FileServerAddress=string.Empty;
+        public string FileServerAddress = string.Empty;
         /// <summary>
         /// 自动拷贝最新资源包
         /// </summary>
