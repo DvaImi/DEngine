@@ -20,14 +20,14 @@ namespace Game.Editor.BuildPipeline
             return Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, GameSetting.Instance.LatestGameVersion, GameSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
         }
 
-        public static void BuildBundle(string output, bool difference)
+        public static void BuildResource(string output, bool difference)
         {
             OnPreprocess();
-            BuildBundle(GetPlatform(GameSetting.Instance.BuildPlatform), output, difference);
+            BuildResource(GetPlatform(GameSetting.Instance.BuildPlatform), output, difference);
             OnPostprocess();
         }
 
-        public static void ClearBundles()
+        public static void ClearResource()
         {
             IOUtility.Delete(GameSetting.Instance.BundlesOutput);
             ResourceBuilderController controller = new ResourceBuilderController();
@@ -38,11 +38,6 @@ namespace Game.Editor.BuildPipeline
                 GameSetting.Instance.SaveSetting();
             }
 
-            if (Directory.Exists(GameSetting.Instance.FileServerAddress))
-            {
-                IOUtility.Delete(GameSetting.Instance.FileServerAddress);
-            }
-
             if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))
             {
                 IOUtility.Delete(Application.streamingAssetsPath);
@@ -51,7 +46,7 @@ namespace Game.Editor.BuildPipeline
             Debug.Log("Clear success");
         }
 
-        public static void BuildBundle(Platform platform, string outputDirectory, bool forceRebuild = false, bool difference = false)
+        public static void BuildResource(Platform platform, string outputDirectory, bool forceRebuild = false, bool difference = false)
         {
             ResourceBuilderController builderController = new();
             if (builderController.Load())

@@ -58,10 +58,7 @@ namespace Game.Editor
             {
                 return;
             }
-            if (GameSetting.Instance.AutoCopyToFileServer)
-            {
-                BuildPipeline.GameBuildPipeline.PutToLocalFileServer(platform, outputFullPath);
-            }
+
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
             string sourcePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
             BuildPipeline.GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);

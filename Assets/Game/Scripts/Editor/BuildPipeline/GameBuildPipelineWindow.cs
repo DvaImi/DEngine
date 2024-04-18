@@ -24,7 +24,6 @@ namespace Game.Editor.BuildPipeline
         private bool m_EnableHybridCLR = false;
         private bool m_FoldoutBuildConfigGroup = false;
         private bool m_FoldoutBuiltInfoGroup = false;
-        private bool m_FoldoutFileServerGroup = false;
         private bool m_FoldoutHotUpdateAssembliesGroup = false;
         private bool m_FoldoutPreserveAssembliesGroup = false;
         private bool m_FoldoutPatchAOTAssembliesGroup = false;
@@ -113,7 +112,7 @@ namespace Game.Editor.BuildPipeline
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
-                GameBuildPipeline.BuildBundle(GameSetting.Instance.BundlesOutput, GameSetting.Instance.Difference);
+                GameBuildPipeline.BuildResource(GameSetting.Instance.BundlesOutput, GameSetting.Instance.Difference);
             }
 
             if (m_IsAotGeneric)
@@ -413,7 +412,7 @@ namespace Game.Editor.BuildPipeline
 
                 if (GUILayout.Button("Clear", GUILayout.Width(80)))
                 {
-                    GameBuildPipeline.ClearBundles();
+                    GameBuildPipeline.ClearResource();
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -459,40 +458,6 @@ namespace Game.Editor.BuildPipeline
                     GameSetting.Instance.BuildInfo.MacOSAppUrl = EditorGUILayout.TextField("MacOS下载应用地址", GameSetting.Instance.BuildInfo.MacOSAppUrl);
                     GameSetting.Instance.BuildInfo.IOSAppUrl = EditorGUILayout.TextField("IOS下载应用地址", GameSetting.Instance.BuildInfo.IOSAppUrl);
                     GameSetting.Instance.BuildInfo.LatestGameVersion = GameSetting.Instance.LatestGameVersion;
-                }
-                EditorGUILayout.EndFoldoutHeaderGroup();
-
-                GUILayout.Space(5f);
-                m_FoldoutFileServerGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutFileServerGroup, "FileServer");
-                if (m_FoldoutFileServerGroup)
-                {
-                    GUI.enabled = GameSetting.Instance.ResourceModeIndex > 1;
-                    GameSetting.Instance.AutoCopyToFileServer = EditorGUILayout.Toggle("自动上传资源", GameSetting.Instance.AutoCopyToFileServer);
-                    if (GameSetting.Instance.ResourceModeIndex <= 1)
-                    {
-                        GameSetting.Instance.AutoCopyToFileServer = false;
-                    }
-                    EditorGUILayout.BeginHorizontal();
-                    {
-                        EditorGUILayout.LabelField("本地虚拟服务器地址", GameSetting.Instance.FileServerAddress);
-                        GUI.enabled = true;
-                        if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
-                        {
-                            string directory = EditorUtility.OpenFolderPanel("Select Output Directory", GameSetting.Instance.FileServerAddress, string.Empty);
-                            if (!string.IsNullOrEmpty(directory))
-                            {
-                                if (Directory.Exists(directory) && directory != GameSetting.Instance.FileServerAddress)
-                                {
-                                    GameSetting.Instance.FileServerAddress = directory;
-                                }
-                            }
-                        }
-                        if (GUILayout.Button("Go", GUILayout.Width(30)))
-                        {
-                            DEngine.Editor.OpenFolder.Execute(GameSetting.Instance.FileServerAddress);
-                        }
-                    }
-                    EditorGUILayout.EndHorizontal();
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }

@@ -78,12 +78,7 @@ namespace Game.Editor.BuildPipeline
             MergeFullVersionList(currentVersionFullPath, lastFullVersionOutputFullPath, patchVersionPath.Replace("*patch", "Full"), lastFullVersionFiles);
             MergePackageVersionList(currentVersionPackagePath, lastPackageVersionOutpuPath, patchVersionPath.Replace("*patch", "Package"), lastPackageVersionFiles);
             MergePackedVersionList(currentVersionPackedPath, lastPackedVersionOutputPath, patchVersionPath.Replace("*patch", "Packed"), lastPackedVersionFiles);
-
-            if (GameSetting.Instance.AutoCopyToFileServer)
-            {
-                PutToLocalFileServer(platform, currentVersionFullPath);
-            }
-
+          
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
             string sourcePath = resourceMode <= 1 ? currentVersionPackagePath : currentVersionPackedPath;
             CopyFileToStreamingAssets(sourcePath);
@@ -296,12 +291,7 @@ namespace Game.Editor.BuildPipeline
         {
             Platform platform = GetPlatform(GameSetting.Instance.BuildPlatform);
             GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutputFullPath, out string lastPackedVersionOutputFullPath, out _);
-            return !string.IsNullOrEmpty(lastFullVersionOutputFullPath)
-                   && Directory.Exists(lastFullVersionOutputFullPath)
-                   && !string.IsNullOrEmpty(lastPackageVersionOutputFullPath)
-                   && Directory.Exists(lastPackageVersionOutputFullPath)
-                   && !string.IsNullOrEmpty(lastPackedVersionOutputFullPath)
-                   && Directory.Exists(lastPackedVersionOutputFullPath);
+            return !string.IsNullOrEmpty(lastFullVersionOutputFullPath) && Directory.Exists(lastFullVersionOutputFullPath) && !string.IsNullOrEmpty(lastPackageVersionOutputFullPath) && Directory.Exists(lastPackageVersionOutputFullPath) && !string.IsNullOrEmpty(lastPackedVersionOutputFullPath) && Directory.Exists(lastPackedVersionOutputFullPath);
         }
     }
 }

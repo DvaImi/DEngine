@@ -24,7 +24,7 @@ namespace Game.Editor.BuildPipeline
             BuildTarget target = GetBuildTarget(GameSetting.Instance.BuildPlatform);
             if (target != EditorUserBuildSettings.activeBuildTarget)
             {
-                EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target),target);
+                EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target);
             }
             BuildReport report = BuildApplication(target, aotGeneric);
             BuildSummary summary = report.summary;
@@ -32,16 +32,10 @@ namespace Game.Editor.BuildPipeline
             if (summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Build succeeded: " + StringUtility.GetByteLengthString((long)summary.totalSize));
-
-                if (GameSetting.Instance.ForceUpdateGame)
-                {
-                    PutLastVserionApp(GetPlatform(GameSetting.Instance.BuildPlatform));
-                }
             }
-
-            if (summary.result == BuildResult.Failed)
+            else
             {
-                Debug.Log("Build failed");
+                Debug.Log("Build failed ");
             }
         }
 
@@ -87,53 +81,6 @@ namespace Game.Editor.BuildPipeline
         public static string GetBuildAppFullName()
         {
             return Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform], Application.productName + GetFileExtensionForPlatform(GetBuildTarget((int)m_OriginalPlatform)));
-        }
-
-        public static void PutLastVserionApp(Platform platform)
-        {
-            if (platform == Platform.Windows || platform == Platform.Windows64)
-            {
-                string virtualFilePath = GameSetting.Instance.FileServerAddress + "/" + platform.ToString() + "App/" + platform.ToString();
-                IOUtility.CreateDirectoryIfNotExists(virtualFilePath);
-
-                string sourceFileName = GameSetting.Instance.AppOutput + "/" + platform.ToString();
-                if (!Directory.Exists(sourceFileName))
-                {
-                    return;
-                }
-                // 获取源路径的目录名作为压缩包名称
-                string packageName = Application.productName + ".zip";
-                string packagePath = Path.Combine(virtualFilePath, packageName);
-
-                // 创建临时目录，用于保存过滤后的文件
-                string tempPath = Path.Combine(Path.GetTempPath(), "PackageTemp");
-                Directory.CreateDirectory(tempPath);
-
-                // 复制源路径下的文件到临时目录，过滤掉指定文件夹
-                IOUtility.CopyFiles(sourceFileName, tempPath, Application.productName + "_BackUpThisFolder_ButDontShipItWithYourGame");
-
-                // 创建压缩包
-                ZipFile.CreateFromDirectory(tempPath, packagePath);
-
-                // 删除临时目录
-                Directory.Delete(tempPath, true);
-
-                Debug.Log($"Package '{packageName}' created at '{packagePath}'");
-            }
-
-            else if (platform == Platform.Android)
-            {
-                string virtualFilePath = GameSetting.Instance.FileServerAddress + "/" + platform.ToString() + "App/";
-                IOUtility.CreateDirectoryIfNotExists(virtualFilePath);
-                string sourceFileName = Path.Combine(GameSetting.Instance.AppOutput, platform.ToString(), Application.productName + ".apk");
-                File.Copy(sourceFileName, virtualFilePath + "/" + Application.productName + ".apk", true);
-
-                Debug.Log($"New Apk Put to '{sourceFileName}'");
-            }
-            else
-            {
-                Debug.Log("待扩展...");
-            }
         }
     }
 }

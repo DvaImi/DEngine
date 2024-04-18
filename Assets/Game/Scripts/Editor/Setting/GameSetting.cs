@@ -100,14 +100,6 @@ namespace Game.Editor
         /// 其他预留按需加载程序集
         /// </summary>
         public string[] PreserveAssemblies = new string[] { };
-        /// <summary>
-        /// 虚拟服务器地址
-        /// </summary>
-        public string FileServerAddress = string.Empty;
-        /// <summary>
-        /// 自动拷贝最新资源包
-        /// </summary>
-        public bool AutoCopyToFileServer;
 
         public void SaveSetting()
         {
