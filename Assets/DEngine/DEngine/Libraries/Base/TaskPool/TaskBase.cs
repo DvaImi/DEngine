@@ -3,7 +3,7 @@
     /// <summary>
     /// 任务基类。
     /// </summary>
-    internal abstract class TaskBase : IReference
+    public abstract class TaskBase : IReference
     {
         /// <summary>
         /// 任务默认优先级。

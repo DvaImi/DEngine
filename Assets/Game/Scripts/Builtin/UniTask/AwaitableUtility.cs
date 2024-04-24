@@ -5,6 +5,7 @@ using DEngine;
 using DEngine.Event;
 using DEngine.Resource;
 using DEngine.Runtime;
+using DEngine.Sound;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -443,6 +444,10 @@ namespace Game
                 m_DownloadResult.Remove(ne.SerialId);
             }
         }
+
+        #endregion
+
+        #region Sound
 
         #endregion
     }

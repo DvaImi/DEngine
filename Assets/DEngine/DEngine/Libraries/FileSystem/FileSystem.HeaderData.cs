@@ -13,7 +13,7 @@ namespace DEngine.FileSystem
             private const int HeaderLength = 3;
             private const int FileSystemVersion = 0;
             private const int EncryptBytesLength = 4;
-            private static readonly byte[] Header = new byte[HeaderLength] { (byte)'G', (byte)'F', (byte)'F' };
+            private static readonly byte[] Header = new byte[HeaderLength] { (byte)'D', (byte)'E', (byte)'F' };
 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = HeaderLength)]
             private readonly byte[] m_Header;

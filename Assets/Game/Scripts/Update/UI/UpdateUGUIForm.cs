@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DEngine.Runtime;
+using DEngine;
 
 namespace Game.Update
 {
@@ -30,6 +31,8 @@ namespace Game.Update
                 return m_CachedCanvas.sortingOrder;
             }
         }
+
+        public EventSubscriber EventSubscriber { get; private set; }
 
         public void Close()
         {
@@ -76,6 +79,7 @@ namespace Game.Update
             transform.sizeDelta = Vector2.zero;
 
             gameObject.GetOrAddComponent<GraphicRaycaster>();
+            EventSubscriber = EventSubscriber.Create(this);
         }
 
 #if UNITY_2017_3_OR_NEWER
@@ -107,6 +111,12 @@ namespace Game.Update
 #endif
         {
             base.OnClose(isShutdown, userData);
+            if (EventSubscriber != null)
+            {
+                EventSubscriber.UnSubscribeAll();
+                ReferencePool.Release(EventSubscriber);
+                EventSubscriber = null;
+            }
         }
 
 #if UNITY_2017_3_OR_NEWER

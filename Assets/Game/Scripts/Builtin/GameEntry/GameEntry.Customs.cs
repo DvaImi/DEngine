@@ -10,6 +10,7 @@ namespace Game
             private set;
         }
 
+
         private static void InitCustomsComponents()
         {
             Timer = DEngine.Runtime.GameEntry.GetComponent<TimerComponent>();

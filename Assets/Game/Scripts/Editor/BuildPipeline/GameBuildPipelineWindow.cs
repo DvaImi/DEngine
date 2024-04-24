@@ -22,8 +22,8 @@ namespace Game.Editor.BuildPipeline
         private bool m_BeginBuildResources = false;
         private bool m_IsAotGeneric = false;
         private bool m_EnableHybridCLR = false;
-        private bool m_FoldoutBuildConfigGroup = false;
-        private bool m_FoldoutBuiltInfoGroup = false;
+        private bool m_FoldoutBuildConfigGroup = true;
+        private bool m_FoldoutBuiltInfoGroup = true;
         private bool m_FoldoutHotUpdateAssembliesGroup = false;
         private bool m_FoldoutPreserveAssembliesGroup = false;
         private bool m_FoldoutPatchAOTAssembliesGroup = false;

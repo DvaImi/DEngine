@@ -68,7 +68,7 @@ MonoBehaviour:
         Name: 
         FileSystem: 
         Groups: localization
-        Variant: 
+        Variant: zh-cn
         Asset: {fileID: 102900000, guid: 11f2c913956269540987ff4d8220690f, type: 3}
         LoadType: 0
         Packed: 1
@@ -77,7 +77,7 @@ MonoBehaviour:
         Name: 
         FileSystem: 
         Groups: localization
-        Variant: 
+        Variant: zh-tw
         Asset: {fileID: 102900000, guid: 99b4813375565a8409dedd11e2797474, type: 3}
         LoadType: 0
         Packed: 1
@@ -86,7 +86,7 @@ MonoBehaviour:
         Name: 
         FileSystem: 
         Groups: localization
-        Variant: 
+        Variant: en-us
         Asset: {fileID: 102900000, guid: 4fc38d301ae29c34faccf58b7ab86874, type: 3}
         LoadType: 0
         Packed: 1

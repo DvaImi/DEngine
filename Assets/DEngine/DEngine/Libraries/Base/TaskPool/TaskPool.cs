@@ -6,7 +6,7 @@ namespace DEngine
     /// 任务池。
     /// </summary>
     /// <typeparam name="T">任务类型。</typeparam>
-    internal sealed class TaskPool<T> where T : TaskBase
+    public sealed class TaskPool<T> where T : TaskBase
     {
         private readonly Stack<ITaskAgent<T>> m_FreeAgents;
         private readonly DEngineLinkedList<ITaskAgent<T>> m_WorkingAgents;

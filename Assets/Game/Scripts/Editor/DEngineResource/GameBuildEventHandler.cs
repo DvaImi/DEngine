@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using DEngine;
 using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEngine;
@@ -58,7 +59,6 @@ namespace Game.Editor
             {
                 return;
             }
-
             int resourceMode = GameSetting.Instance.ResourceModeIndex;
             string sourcePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
             BuildPipeline.GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);
