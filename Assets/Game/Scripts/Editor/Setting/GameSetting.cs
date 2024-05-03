@@ -31,11 +31,11 @@ namespace Game.Editor
         /// <summary>
         /// 记录打包平台
         /// </summary>
-        public int BuildPlatform;
+        public int BuildPlatform = 1;
         /// <summary>
         /// 资源打包模式
         /// </summary>
-        public int ResourceModeIndex;
+        public int ResourceModeIndex = 1;
         /// <summary>
         /// 差异化打包
         /// </summary>
