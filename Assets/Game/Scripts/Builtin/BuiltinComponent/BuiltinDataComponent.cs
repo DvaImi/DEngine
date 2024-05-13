@@ -76,8 +76,10 @@ namespace Game
         public void InitDebugger()
         {
             ChangeLanguageDebuggerWindow changeLanguage = new ChangeLanguageDebuggerWindow();
-            CommonLineDebuggerWindow commonLine = new CommonLineDebuggerWindow();
             GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", changeLanguage);
+
+
+            CommonLineDebuggerWindow commonLine = new CommonLineDebuggerWindow();
             GameEntry.Debugger.RegisterDebuggerWindow("Other/CommonLine", commonLine);
         }
 

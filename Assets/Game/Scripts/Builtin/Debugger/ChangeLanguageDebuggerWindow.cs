@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace Game.Debugger
 {
-
-
     public class ChangeLanguageDebuggerWindow : IDebuggerWindow
     {
         private Vector2 m_ScrollPosition = Vector2.zero;
