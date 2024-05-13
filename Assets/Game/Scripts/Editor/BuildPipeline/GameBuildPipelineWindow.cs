@@ -5,6 +5,7 @@
 // 版 本：1.0
 // ========================================================
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,6 +59,11 @@ namespace Game.Editor.BuildPipeline
             GameBuildPipeline.CheckEnableHybridCLR();
         }
 
+        private void OnDisable()
+        {
+           SaveAll();
+        }
+
         private void OnGUI()
         {
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, false, false);
@@ -95,11 +101,6 @@ namespace Game.Editor.BuildPipeline
                 }
             }
             GUILayout.EndHorizontal();
-
-            if (GUI.changed)
-            {
-                GameSetting.Instance.SaveSetting();
-            }
         }
 
         private void Update()
