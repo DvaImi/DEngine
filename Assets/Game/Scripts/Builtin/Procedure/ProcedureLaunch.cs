@@ -25,7 +25,7 @@ namespace Game
             {
                 // 编辑器模式
                 Log.Info("Editor resource mode detected.");
-                ChangeState<ProcedureLoadHotUpdate>(procedureOwner);
+                ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
                 return;
             }
 #endif
