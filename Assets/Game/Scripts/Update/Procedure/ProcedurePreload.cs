@@ -8,6 +8,7 @@ using DEngine.Event;
 using DEngine.Procedure;
 using DEngine.Resource;
 using DEngine.Runtime;
+using Game.Update.Network;
 using UnityEngine;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
@@ -76,6 +77,13 @@ namespace Game.Update
                 {
                     Log.Warning("Add ui group [{0}] failure", uiGroups[i].UIGroupName);
                 }
+            }
+
+            DRNetworkChannel[] networkChannels = GameEntry.DataTable.GetDataTable<DRNetworkChannel>().GetAllDataRows();
+
+            foreach (var channel in networkChannels)
+            {
+                GameEntry.Network.CreateNetworkChannel(channel.ChannelName, DEngine.Network.ServiceType.Tcp, new GeekNetworkChannelHelper());
             }
         }
 

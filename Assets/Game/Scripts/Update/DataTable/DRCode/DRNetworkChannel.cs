@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-05-13 23:48:52.272
+// 生成时间：2024-05-13 23:48:52.308
 //------------------------------------------------------------
 
 using DEngine;
@@ -15,14 +15,14 @@ using DEngine.Runtime;
 namespace Game.Update
 {
     /// <summary>
-    /// 实体表。
+    /// 网络频道配置表。
     /// </summary>
-    public class DREntity : DataRowBase
+    public class DRNetworkChannel : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取实体编号。
+        /// 获取网络频道编号。
         /// </summary>
         public override int Id
         {
@@ -33,9 +33,27 @@ namespace Game.Update
         }
 
         /// <summary>
-        /// 获取资源名称。
+        /// 获取网络频道名称。
         /// </summary>
-        public string AssetName
+        public string ChannelName
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 获取IP地址。
+        /// </summary>
+        public string IPAddress
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 获取端口号。
+        /// </summary>
+        public int Port
         {
             get;
             private set;
@@ -53,7 +71,9 @@ namespace Game.Update
             index++;
             m_Id = int.Parse(columnStrings[index++]);
             index++;
-			AssetName = columnStrings[index++];
+			ChannelName = columnStrings[index++];
+			IPAddress = columnStrings[index++];
+			Port = int.Parse(columnStrings[index++]);
             GeneratePropertyArray();
             return true;
         }
@@ -65,7 +85,9 @@ namespace Game.Update
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
-                    AssetName = binaryReader.ReadString();
+                    ChannelName = binaryReader.ReadString();
+                    IPAddress = binaryReader.ReadString();
+                    Port = binaryReader.Read7BitEncodedInt32();
                 }
             }
 

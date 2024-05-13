@@ -1,10 +1,6 @@
-// ========================================================
-// 作者：Dvalmi 
-// 创建时间：2024-04-13 11:41:33
-// ========================================================
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-04-13 11:41:33.145
+// 生成时间：2024-05-13 23:48:52.283
 //------------------------------------------------------------
 
 using DEngine;
@@ -74,10 +70,10 @@ namespace Game.Update
 
         public override bool ParseDataRow(string dataRowString, object userData)
         {
-            string[] columnStrings = dataRowString.Split(Game.DataTableExtension.DataSplitSeparators);
+            string[] columnStrings = dataRowString.Split(DataTableExtension.DataSplitSeparators);
             for (int i = 0; i < columnStrings.Length; i++)
             {
-                columnStrings[i] = columnStrings[i].Trim(Game.DataTableExtension.DataTrimSeparators);
+                columnStrings[i] = columnStrings[i].Trim(DataTableExtension.DataTrimSeparators);
             }
 
             int index = 0;
