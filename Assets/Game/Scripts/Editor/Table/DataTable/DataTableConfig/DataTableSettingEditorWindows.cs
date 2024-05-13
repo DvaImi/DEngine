@@ -10,16 +10,16 @@ namespace Game.Editor.DataTableTools
 {
     public class DataTableSettingEditorWindows : EditorWindow
     {
-        private bool m_FoldoutDataTableGroup;
-        private bool m_FoldoutLocalizationGroup;
-        private bool m_FoldoutConfigGroup;
-        private bool m_FoldoutAssemblyNamesGroup;
+        private bool m_FoldoutDataTableGroup = true;
+        private bool m_FoldoutLocalizationGroup = true;
+        private bool m_FoldoutAssemblyNamesGroup = true;
 
         [MenuItem("DataTable/Setting", priority = 10)]
         private static void OpenWindow()
         {
-            var window = GetWindow<DataTableSettingEditorWindows>("Game Setting");
+            var window = GetWindow<DataTableSettingEditorWindows>("DataTable Setting");
             window.minSize = new Vector2(800, 600);
+            DataTableSetting.Instance.SaveSetting();
         }
 
         private void OnGUI()

@@ -146,11 +146,11 @@ namespace Game.Editor.ResourceTools
                             if (string.IsNullOrEmpty(resourceCollector.Name))
                             {
                                 FileInfo fileInfo = new FileInfo(resourceCollector.AssetPath);
-                                resourceName = Path.GetFileNameWithoutExtension(fileInfo.FullName).ToLower() + "_" + AssetDatabase.AssetPathToGUID(resourceCollector.AssetPath);
+                                resourceName = Path.GetFileNameWithoutExtension(fileInfo.FullName).ToLowerInvariant() + "_" + AssetDatabase.AssetPathToGUID(resourceCollector.AssetPath);
                             }
                             else
                             {
-                                resourceName = resourceCollector.Name;
+                                resourceName = resourceCollector.Name.ToLowerInvariant();
                             }
 
                             ApplyResourceFilter(resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));

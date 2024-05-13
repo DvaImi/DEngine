@@ -8,25 +8,25 @@ using UnityEngine;
 
 namespace Game.Editor
 {
-    [GameFilePath("ProjectSettings/GameSetting.asset")]
+    [GameFilePath("Assets/Game/Configuration/GameSetting.asset")]
     public class GameSetting : ScriptableSingleton<GameSetting>
     {
         /// <summary>
         /// 
         /// </summary>
-        public string BuildSettingsConfig = "Assets/Game/AssetConfiguration/BuildSetting.xml";
+        public string BuildSettingsConfig = "Assets/Game/Configuration/BuildSetting.xml";
         /// <summary>
         /// 
         /// </summary>
-        public string ResourceCollectionConfig = "Assets/Game/AssetConfiguration/ResourceCollection.xml";
+        public string ResourceCollectionConfig = "Assets/Game/Configuration/ResourceCollection.xml";
         /// <summary>
         /// 
         /// </summary>
-        public string ResourceEditorConfig = "Assets/Game/AssetConfiguration/ResourceEditor.xml";
+        public string ResourceEditorConfig = "Assets/Game/Configuration/ResourceEditor.xml";
         /// <summary>
         /// 
         /// </summary>
-        public string ResourceBuilderConfig = "Assets/Game/AssetConfiguration/ResourceBuilder.xml";
+        public string ResourceBuilderConfig = "Assets/Game/Configuration/ResourceBuilder.xml";
 
         /// <summary>
         /// 记录打包平台
@@ -75,7 +75,7 @@ namespace Game.Editor
         /// <summary>
         /// 内置信息
         /// </summary>
-        public BuildInfo BuildInfo;
+        public BuildInfo BuildInfo = new();
         /// <summary>
         /// 热更程序集生成路径
         /// </summary>

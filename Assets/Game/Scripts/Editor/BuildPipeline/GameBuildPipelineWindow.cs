@@ -34,6 +34,7 @@ namespace Game.Editor.BuildPipeline
         {
             GameBuildPipelineWindow window = GetWindow<GameBuildPipelineWindow>("BuildPipeline", true);
             window.minSize = new Vector2(800f, 600f);
+            window.SaveAll();
         }
 
         private void OnEnable()

@@ -9,7 +9,7 @@ namespace Game.Editor.DataTableTools
     /// <summary>
     /// 数据表编辑器配置相关数据
     /// </summary>
-    [GameFilePath("ProjectSettings/DataTableSetting.asset")]
+    [GameFilePath("Assets/Game/Configuration/DataTableSetting.asset")]
     public class DataTableSetting : ScriptableSingleton<DataTableSetting>
     {
         #region DataTable
@@ -31,7 +31,7 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表C#实体类模板存放路径
         /// </summary>
-        public string CSharpCodeTemplateFileName= "Assets/Game/Scripts/Builtin/Editor/ExcelUtility/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt";
+        public string CSharpCodeTemplateFileName= "Assets/Game/Scripts/Editor/Table/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt";
 
         /// <summary>
         /// 数据表扩展类文件夹路径
@@ -46,14 +46,17 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表命名空间
         /// </summary>
-        public string NameSpace="Game";
+        public string NameSpace="Game.Update";
 
         /// <summary>
         /// 数据表中使用类型 所在的所有程序集
         /// </summary>
         public string[] AssemblyNames =
         {
-            "Assembly-CSharp"
+            "Assembly-CSharp",
+            "DEngine",
+            "DEngine.Runtime",
+            "Game.Update"
         };
 
         /// <summary>
@@ -140,6 +143,7 @@ namespace Game.Editor.DataTableTools
         internal void SaveSetting()
         {
             Save();
+            AssetDatabase.Refresh();
         }
     }
 }

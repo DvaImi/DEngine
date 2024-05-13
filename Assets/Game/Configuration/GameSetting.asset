@@ -10,39 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0ee0b9678739e54fb24dfff12f65674, type: 3}
-  m_Name: 
+  m_Name: GameSetting
   m_EditorClassIdentifier: 
-  BuildSettingsConfig: Assets/Game/Configuration/BuildSettings.xml
+  BuildSettingsConfig: Assets/Game/Configuration/BuildSetting.xml
   ResourceCollectionConfig: Assets/Game/Configuration/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Configuration/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Configuration/ResourceBuilder.xml
-  BuildPlatform: 0
-  ResourceModeIndex: 2
+  BuildPlatform: 1
+  ResourceModeIndex: 1
   Difference: 0
   ForceRebuild: 0
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 4
+  InternalResourceVersion: 0
   LatestGameVersion: 0.1.0
-  UpdatePrefixUri: http://192.168.86.4:8080/CDN/{0}/{1}/{2}
+  UpdatePrefixUri: 
   BuildInfo:
     LatestGameVersion: 0.1.0
-    CheckVersionUrl: http://192.168.86.4:8080/CDN/{0}/{1}Version.json
-    WindowsAppUrl: http://192.168.1.102/CDN/WindowsApp/Game.zip
-    MacOSAppUrl: http://192.168.1.102/MacOSApp
-    IOSAppUrl: http://192.168.1.102/IOSApp
-    AndroidAppUrl: http://192.168.1.102/CDN/AndroidApp/Game.apk
-  HotupdateAssembliesPath: Assets/Game/HybridCLRData/HotUpdate
-  HotUpdateAssemblies:
-  - Game.Update
+    CheckVersionUrl: 
+    WindowsAppUrl: 
+    MacOSAppUrl: 
+    IOSAppUrl: 
+    AndroidAppUrl: 
+  HotupdateAssembliesPath: Assets/Game/HybridCLRDate/HotUpdate
+  HotUpdateAssemblies: []
   AOTAssembliesPath: Assets/Game/HybridCLRData/AOT
   AOTAssemblies:
-  - DEngine
-  - DEngine.Runtime
-  - mscorlib
-  - System
-  - System.Core
-  - UniTask
-  - UnityEngine.CoreModule
+  - mscorlib.dll
+  - System.dll
+  - System.Core.dll
   PreserveAssembliesPath: Assets/Game/HybridCLRData/Preserve
   PreserveAssemblies: []

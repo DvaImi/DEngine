@@ -169,11 +169,11 @@ namespace Game.Editor.DataTableTools
                 .AppendLine("        public override bool ParseDataRow(string dataRowString, object userData)")
                 .AppendLine("        {")
                 .AppendLine(
-                    "            string[] columnStrings = dataRowString.Split(Game.DataTableExtension.DataSplitSeparators);")
+                    "            string[] columnStrings = dataRowString.Split(DataTableExtension.DataSplitSeparators);")
                 .AppendLine("            for (int i = 0; i < columnStrings.Length; i++)")
                 .AppendLine("            {")
                 .AppendLine(
-                    "                columnStrings[i] = columnStrings[i].Trim(Game.DataTableExtension.DataTrimSeparators);")
+                    "                columnStrings[i] = columnStrings[i].Trim(DataTableExtension.DataTrimSeparators);")
                 .AppendLine("            }")
                 .AppendLine()
                 .AppendLine("            int index = 0;");

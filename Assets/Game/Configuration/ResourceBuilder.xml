@@ -2,8 +2,8 @@
 <DEngine>
   <ResourceBuilder>
     <Settings>
-      <InternalResourceVersion>7</InternalResourceVersion>
-      <Platforms>1</Platforms>
+      <InternalResourceVersion>14</InternalResourceVersion>
+      <Platforms>2</Platforms>
       <AssetBundleCompression>1</AssetBundleCompression>
       <CompressionHelperTypeName>DEngine.Runtime.DefaultCompressionHelper</CompressionHelperTypeName>
       <AdditionalCompressionSelected>True</AdditionalCompressionSelected>

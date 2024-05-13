@@ -1,4 +1,4 @@
-// ========================================================
+﻿// ========================================================
 // 描述：
 // 作者：Dvalmi 
 // 创建时间：2023-04-15 11:40:26
@@ -33,6 +33,7 @@ namespace Game.Editor
             {
                 var arr = InternalEditorUtility.LoadSerializedFileAndForget(filePath);
                 m_Instance = arr.Length > 0 ? arr[0] as T : m_Instance ?? CreateInstance<T>();
+                m_Instance.name = typeof(T).Name;
             }
             else
             {

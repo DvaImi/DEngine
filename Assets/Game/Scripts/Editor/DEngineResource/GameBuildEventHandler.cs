@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using DEngine;
 using DEngine.Editor.ResourceTools;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ namespace Game.Editor
                 VersionListCompressedLength = versionListCompressedLength,
                 VersionListCompressedHashCode = versionListCompressedHashCode
             };
-            string versionJson = Newtonsoft.Json.JsonConvert.SerializeObject(versionInfo);
+            string versionJson = JsonConvert.SerializeObject(versionInfo);
             string versionFilePath = Path.Combine(GameSetting.Instance.BundlesOutput, platformPath + "Version.json");
             File.WriteAllText(versionFilePath, versionJson);
         }
