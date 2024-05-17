@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using DEngine;
 using DEngine.Event;
 using DEngine.Procedure;
 using DEngine.Resource;
 using DEngine.Runtime;
-using Game.Update.Network;
 using UnityEngine;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
@@ -79,12 +75,6 @@ namespace Game.Update
                 }
             }
 
-            DRNetworkChannel[] networkChannels = GameEntry.DataTable.GetDataTable<DRNetworkChannel>().GetAllDataRows();
-
-            foreach (var channel in networkChannels)
-            {
-                GameEntry.Network.CreateNetworkChannel(channel.ChannelName, DEngine.Network.ServiceType.Tcp, new GeekNetworkChannelHelper());
-            }
         }
 
         private void OnDataTableVersionLoadSuccess(string assetName, object asset, float duration, object userData)
