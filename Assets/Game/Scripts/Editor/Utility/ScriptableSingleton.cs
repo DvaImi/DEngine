@@ -75,6 +75,7 @@ namespace Game.Editor
                   ?.filepath;
         }
     }
+    
     [AttributeUsage(AttributeTargets.Class)]
     public class GameFilePathAttribute : Attribute
     {

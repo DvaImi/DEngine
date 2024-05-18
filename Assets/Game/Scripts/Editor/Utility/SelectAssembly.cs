@@ -58,7 +58,6 @@ namespace Game.Editor
             RefreshListData();
         }
 
-
         private void OnGUI()
         {
             EditorGUILayout.BeginVertical();

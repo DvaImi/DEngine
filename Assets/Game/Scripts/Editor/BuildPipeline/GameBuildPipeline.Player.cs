@@ -31,7 +31,7 @@ namespace Game.Editor.BuildPipeline
 
             if (summary.result == BuildResult.Succeeded)
             {
-                Debug.Log("Build succeeded: " + StringUtility.GetByteLengthString((long)summary.totalSize));
+                Debug.Log("Build succeeded: " + GameUtility.String.GetByteLengthString((long)summary.totalSize));
             }
             else
             {
@@ -44,12 +44,12 @@ namespace Game.Editor.BuildPipeline
             string outputExtension = GetFileExtensionForPlatform(platform);
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
             {
-                IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.AppOutput);
+                GameUtility.IO.CreateDirectoryIfNotExists(GameSetting.Instance.AppOutput);
                 GameSetting.Instance.SaveSetting();
             }
 
             string locationPath = Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform]);
-            IOUtility.CreateDirectoryIfNotExists(locationPath);
+            GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
             BuildPlayerOptions buildPlayerOptions = new()
             {
                 scenes = new string[] { EditorBuildSettings.scenes[0].path },

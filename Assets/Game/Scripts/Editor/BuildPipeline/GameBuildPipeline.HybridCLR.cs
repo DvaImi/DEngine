@@ -39,7 +39,7 @@ namespace Game.Editor.BuildPipeline
 
             if (Directory.Exists(GameSetting.Instance.HotupdateAssembliesPath))
             {
-                IOUtility.Delete(GameSetting.Instance.HotupdateAssembliesPath);
+                GameUtility.IO.Delete(GameSetting.Instance.HotupdateAssembliesPath);
             }
             else
             {
@@ -48,7 +48,7 @@ namespace Game.Editor.BuildPipeline
 
             if (Directory.Exists(GameSetting.Instance.PreserveAssembliesPath))
             {
-                IOUtility.Delete(GameSetting.Instance.PreserveAssembliesPath);
+                GameUtility.IO.Delete(GameSetting.Instance.PreserveAssembliesPath);
             }
             else
             {
@@ -57,7 +57,7 @@ namespace Game.Editor.BuildPipeline
 
             if (Directory.Exists(GameSetting.Instance.AOTAssembliesPath))
             {
-                IOUtility.Delete(GameSetting.Instance.AOTAssembliesPath);
+                GameUtility.IO.Delete(GameSetting.Instance.AOTAssembliesPath);
             }
             else
             {

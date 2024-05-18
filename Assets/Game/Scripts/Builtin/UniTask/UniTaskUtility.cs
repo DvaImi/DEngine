@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 
 namespace Game
 {
-    public static partial class AwaitableUtility
+    public static partial class UniTaskUtility
     {
         private static readonly Dictionary<int, UniTaskCompletionSource<UIForm>> m_UIFormResult = new Dictionary<int, UniTaskCompletionSource<UIForm>>();
         private static readonly Dictionary<int, UniTaskCompletionSource<Entity>> m_EntityResult = new Dictionary<int, UniTaskCompletionSource<Entity>>();
@@ -320,29 +320,23 @@ namespace Game
 
         #region WebRequest
 
-        /// <summary>
-        /// 增加Web请求任务（可等待）
-        /// </summary>
-        /// <param name="webRequestUri">Web 请求地址</param>
-        /// <param name="wwwForm">WWW 表单</param>
-        /// <param name="userdata">用户自定义数据。</param>
-        /// <returns></returns>
-        public static UniTask<WebRequestResult> AddWebRequestAsync(this WebRequestComponent self, string webRequestUri, WWWForm wwwForm = null, object userdata = null)
+        public static UniTask<WebRequestResult> Get(this WebRequestComponent self, string webRequestUri)
         {
-            int serialId = self.AddWebRequest(webRequestUri, wwwForm, userdata);
+            int serialId = self.AddWebRequest(webRequestUri);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;
         }
 
-        /// <summary>
-        /// 增加Web请求任务，带请求头（可等待）
-        /// </summary>
-        /// <param name="webRequestUri">Web 请求地址</param>
-        /// <param name="wwwForm">WWW 表单</param>
-        /// <param name="requestParams">自定义请求参数。</param>
-        /// <returns></returns>
-        public static UniTask<WebRequestResult> AddWebRequestWithHeaderAsync(this WebRequestComponent self, string webRequestUri, UnityWebRequestHeader requestParams = null, WWWForm wwwForm = null)
+        public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, WWWForm wwwForm = null)
+        {
+            int serialId = self.AddWebRequest(webRequestUri, wwwForm);
+            UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
+            m_WebRequestResult.Add(serialId, result);
+            return result.Task;
+        }
+
+        public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, WWWForm wwwForm = null, UnityWebRequestHeader requestParams = null)
         {
             int serialId = self.AddWebRequest(webRequestUri, wwwForm, requestParams);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
@@ -350,21 +344,15 @@ namespace Game
             return result.Task;
         }
 
-        /// <summary>
-        /// 增加Web请求任务（可等待）
-        /// </summary>
-        public static UniTask<WebRequestResult> AddWebRequestAsync(this WebRequestComponent self, string webRequestUri, byte[] postData, object userdata = null)
+        public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, byte[] postData)
         {
-            int serialId = self.AddWebRequest(webRequestUri, postData, userdata);
+            int serialId = self.AddWebRequest(webRequestUri, postData);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;
         }
 
-        /// <summary>
-        /// 增加Web请求任务（可等待）
-        /// </summary>
-        public static UniTask<WebRequestResult> AddWebRequestWithHeaderAsync(this WebRequestComponent self, string webRequestUri, byte[] postData, UnityWebRequestHeader requestParams = null)
+        public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, byte[] postData, UnityWebRequestHeader requestParams = null)
         {
             int serialId = self.AddWebRequest(webRequestUri, postData, requestParams);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();

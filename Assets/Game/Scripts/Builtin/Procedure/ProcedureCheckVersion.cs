@@ -64,7 +64,7 @@ namespace Game
         {
             string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.Builtin.BuildInfo.LatestGameVersion, GetPlatformPath());
             // 向服务器请求版本信息
-            WebRequestResult result = await GameEntry.WebRequest.AddWebRequestAsync(checkVersionUrl);
+            WebRequestResult result = await GameEntry.WebRequest.Get(checkVersionUrl);
             if (result.Success)
             {
 

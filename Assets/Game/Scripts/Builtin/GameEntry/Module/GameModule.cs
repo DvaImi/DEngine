@@ -18,6 +18,11 @@
         }
 
         /// <summary>
+        /// 初始化游戏模块
+        /// </summary>
+        internal abstract void Initialize();
+
+        /// <summary>
         /// 游戏模块轮询。
         /// </summary>
         /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>

@@ -29,7 +29,7 @@ namespace Game.Editor.BuildPipeline
 
         public static void ClearResource()
         {
-            IOUtility.Delete(GameSetting.Instance.BundlesOutput);
+            GameUtility.IO.Delete(GameSetting.Instance.BundlesOutput);
             ResourceBuilderController controller = new ResourceBuilderController();
             if (controller.Load())
             {
@@ -40,7 +40,7 @@ namespace Game.Editor.BuildPipeline
 
             if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))
             {
-                IOUtility.Delete(Application.streamingAssetsPath);
+                GameUtility.IO.Delete(Application.streamingAssetsPath);
             }
             AssetDatabase.Refresh();
             Debug.Log("Clear success");
@@ -141,8 +141,8 @@ namespace Game.Editor.BuildPipeline
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            IOUtility.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
-            IOUtility.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
+            GameUtility.IO.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
+            GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
         }
 
         private static void OnPostprocess()

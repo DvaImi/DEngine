@@ -143,7 +143,7 @@ namespace Game.Editor.DataTableTools
             {
                 content = EditorGUILayout.TextField(header, content);
                 Rect rect = GUILayoutUtility.GetLastRect();
-                if (PathUtility.DropPath(rect, out string path, files))
+                if (DropPathUtility.DropPath(rect, out string path, files))
                 {
                     if (path != content)
                     {

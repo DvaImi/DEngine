@@ -185,7 +185,7 @@ namespace Game.Editor.BuildPipeline
             {
                 GameSetting.Instance.HotupdateAssembliesPath = EditorGUILayout.TextField("HotUpdate Dll Path", GameSetting.Instance.HotupdateAssembliesPath);
                 Rect hotUpdateRect = GUILayoutUtility.GetLastRect();
-                if (PathUtility.DropPath(hotUpdateRect, out string hotDatePath))
+                if (DropPathUtility.DropPath(hotUpdateRect, out string hotDatePath))
                 {
                     if (hotDatePath != GameSetting.Instance.HotupdateAssembliesPath)
                     {
@@ -242,7 +242,7 @@ namespace Game.Editor.BuildPipeline
             {
                 GameSetting.Instance.PreserveAssembliesPath = EditorGUILayout.TextField("PreserveDll Path", GameSetting.Instance.PreserveAssembliesPath);
                 Rect preservePathRect = GUILayoutUtility.GetLastRect();
-                if (PathUtility.DropPath(preservePathRect, out string preservePath))
+                if (DropPathUtility.DropPath(preservePathRect, out string preservePath))
                 {
                     if (preservePath != GameSetting.Instance.PreserveAssembliesPath)
                     {
@@ -298,7 +298,7 @@ namespace Game.Editor.BuildPipeline
             {
                 GameSetting.Instance.AOTAssembliesPath = EditorGUILayout.TextField("AOT Dll Path", GameSetting.Instance.AOTAssembliesPath);
                 Rect aotPathRect = GUILayoutUtility.GetLastRect();
-                if (PathUtility.DropPath(aotPathRect, out string aotPath))
+                if (DropPathUtility.DropPath(aotPathRect, out string aotPath))
                 {
                     if (aotPath != GameSetting.Instance.AOTAssembliesPath)
                     {
@@ -427,10 +427,10 @@ namespace Game.Editor.BuildPipeline
 
                 if (m_FoldoutBuildConfigGroup)
                 {
-                    PathUtility.DropAssetPath("BuildSetting", ref GameSetting.Instance.BuildSettingsConfig);
-                    PathUtility.DropAssetPath("ResourceCollectionConfig", ref GameSetting.Instance.ResourceCollectionConfig);
-                    PathUtility.DropAssetPath("ResourceEditorConfig", ref GameSetting.Instance.ResourceEditorConfig);
-                    PathUtility.DropAssetPath("ResourceBuilderConfig", ref GameSetting.Instance.ResourceBuilderConfig);
+                    DropPathUtility.DropAssetPath("BuildSetting", ref GameSetting.Instance.BuildSettingsConfig);
+                    DropPathUtility.DropAssetPath("ResourceCollectionConfig", ref GameSetting.Instance.ResourceCollectionConfig);
+                    DropPathUtility.DropAssetPath("ResourceEditorConfig", ref GameSetting.Instance.ResourceEditorConfig);
+                    DropPathUtility.DropAssetPath("ResourceBuilderConfig", ref GameSetting.Instance.ResourceBuilderConfig);
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
                 GUILayout.Space(5f);
@@ -496,7 +496,7 @@ namespace Game.Editor.BuildPipeline
 
                 if (GUILayout.Button("Clear", GUILayout.Width(80f)))
                 {
-                    IOUtility.ClearFolder(GameSetting.Instance.AppOutput);
+                    GameUtility.IO.ClearFolder(GameSetting.Instance.AppOutput);
                     Debug.Log($"Clear{GameSetting.Instance.AppOutput} success !");
                 }
             }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Editor
 {
-    public static class PathUtility
+    public static class DropPathUtility
     {
         public static bool DropPathOutType(Rect dropArea, out string assetPath, out bool isFile)
         {

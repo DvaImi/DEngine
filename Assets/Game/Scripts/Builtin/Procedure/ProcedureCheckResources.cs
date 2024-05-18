@@ -49,7 +49,7 @@ namespace Game
         {
             Log.Info("Check resources complete, '{0}' resources need to update, compressed length is '{1}', uncompressed length is '{2}'.", updateCount.ToString(), updateTotalCompressedLength.ToString(), updateTotalLength.ToString());
 
-            string size = StringUtility.GetByteLengthString(updateTotalCompressedLength);
+            string size = GameUtility.String.GetByteLengthString(updateTotalCompressedLength);
             if (updateCount > 0 && updateTotalCompressedLength > 0)
             {
                 GameEntry.BuiltinData.OpenDialog(new DialogParams

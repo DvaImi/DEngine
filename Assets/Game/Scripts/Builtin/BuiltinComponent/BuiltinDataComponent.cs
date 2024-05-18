@@ -85,7 +85,7 @@ namespace Game
 
         public void InitExtensionEventHandle()
         {
-            AwaitableUtility.Subscribe();
+            UniTaskUtility.Subscribe();
         }
 
         public void OpenDialog(DialogParams dialogParams)

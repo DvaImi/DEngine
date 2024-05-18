@@ -88,13 +88,16 @@ namespace Game
             {
                 currentTotalUpdateLength += m_UpdateLengthData[i].Length;
             }
+
             float progressTotal = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
-            string descriptionText = Utility.Text.Format("{0}/{1},{2}/{3}, {4:P0},{5}/s", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), StringUtility.GetByteLengthString(currentTotalUpdateLength), StringUtility.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("P2"), StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
+            string descriptionText = Utility.Text.Format("{0}/{1},{2}/{3}, {4:P0},{5}/s", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), GameUtility.String.GetByteLengthString(currentTotalUpdateLength), GameUtility.String.GetByteLengthString(m_UpdateTotalCompressedLength),
+                progressTotal.ToString("P2"), GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
             descriptionText += "\n";
             int needTime = (int)((m_UpdateTotalCompressedLength - currentTotalUpdateLength) / GameEntry.Download.CurrentSpeed);
             TimeSpan timespan = new(0, 0, needTime);
             string timeFormat = timespan.ToString(@"mm\:ss");
-            descriptionText += string.Format("剩余时间 {0}({1}/s)", timeFormat, StringUtility.GetByteLengthString((long)GameEntry.Download.CurrentSpeed)); ;
+            descriptionText += string.Format("剩余时间 {0}({1}/s)", timeFormat, GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
+            ;
             m_UpdateResourceForm.SetProgress(progressTotal, descriptionText);
         }
 
@@ -202,17 +205,10 @@ namespace Game
 
             public string Name
             {
-                get
-                {
-                    return m_Name;
-                }
+                get { return m_Name; }
             }
 
-            public int Length
-            {
-                get;
-                set;
-            }
+            public int Length { get; set; }
         }
     }
 }
