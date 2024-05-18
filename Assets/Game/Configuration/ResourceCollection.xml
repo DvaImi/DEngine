@@ -5,7 +5,7 @@
       <Resource Name="aot_36d161e297c33aa48bcdaf7b513fbed4" FileSystem="logic" LoadType="0" Packed="True" ResourceGroups="logic" />
       <Resource Name="chinesesimplified_11f2c913956269540987ff4d8220690f" LoadType="0" Packed="True" ResourceGroups="localization" />
       <Resource Name="chinesetraditional_99b4813375565a8409dedd11e2797474" LoadType="0" Packed="True" ResourceGroups="localization" />
-      <Resource Name="datatables_be6134754f035424aadfe7828332fed0" LoadType="0" Packed="True" ResourceGroups="base" />
+      <Resource Name="datatables_be6134754f035424aadfe7828332fed0" LoadType="0" Packed="True" ResourceGroups="mainPackage" />
       <Resource Name="english_4fc38d301ae29c34faccf58b7ab86874" LoadType="0" Packed="True" ResourceGroups="localization" />
       <Resource Name="hotupdate_650bab57f1e4fdf4c915ac6042b17f9c" FileSystem="logic" LoadType="0" Packed="True" ResourceGroups="logic" />
       <Resource Name="luncher_fe5c9a35e05887b48a28c2554b4668e8" FileSystem="logic" LoadType="0" Packed="True" ResourceGroups="logic" />

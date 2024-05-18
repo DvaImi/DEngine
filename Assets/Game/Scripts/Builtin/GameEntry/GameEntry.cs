@@ -12,5 +12,10 @@ namespace Game
             InitBuiltinComponents();
             InitCustomsComponents();
         }
+
+        private void Update()
+        {
+            UpdateModule(Time.deltaTime, Time.unscaledDeltaTime);
+        }
     }
 }

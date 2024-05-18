@@ -16,14 +16,14 @@ MonoBehaviour:
   - PackageName: Game
     Description: 
     Groups:
-    - GroupName: base
+    - GroupName: mainPackage
       EnableGroup: 1
-      Description: "\u57FA\u7840\u6570\u636E\u8D44\u6E90"
+      Description: "\u57FA\u7840\u8D44\u6E90"
       AssetCollectors:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: base
+        Groups: mainPackage
         Variant: 
         Asset: {fileID: 102900000, guid: be6134754f035424aadfe7828332fed0, type: 3}
         LoadType: 0
