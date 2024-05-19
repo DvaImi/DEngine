@@ -15,7 +15,6 @@ namespace Game.Editor.BuildPipeline
             builtinData.BuildInfo = GameSetting.Instance.BuildInfo;
             EditorUtility.SetDirty(builtinData);
             AssetDatabase.SaveAssets();
-            Debug.Log("Save builtinData success");
         }
 
         public static void BuildPlayer(bool aotGeneric)

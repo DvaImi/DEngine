@@ -19,7 +19,6 @@ namespace Game.Editor.BuildPipeline
             HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
             HybridCLRSettings.Instance.preserveHotUpdateAssemblies = GameSetting.Instance.PreserveAssemblies;
             HybridCLRSettings.Save();
-            Debug.Log("Save HybridCLR success");
         }
 
         public static void CompileHotfixDll()

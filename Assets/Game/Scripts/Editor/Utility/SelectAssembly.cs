@@ -71,10 +71,9 @@ namespace Game.Editor
                     EditorGUILayout.HelpBox("勾选需要添加的dll,然后点击保存生效.", MessageType.Info);
                 }
                 m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, false, true);
-                for (int i = 0; i < m_AssemblyDataList.Count; i++)
+                foreach (var item in m_AssemblyDataList)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    var item = m_AssemblyDataList[i];
                     item.isSelect = EditorGUILayout.ToggleLeft(item.dllName, item.isSelect, item.isSelect ? m_SelectedStyle : m_NormalStyle);
                     EditorGUILayout.EndHorizontal();
                 }

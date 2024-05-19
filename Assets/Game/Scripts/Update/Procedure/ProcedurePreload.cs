@@ -14,6 +14,8 @@ namespace Game.Update
     {
         private Dictionary<string, bool> m_LoadedFlag = new Dictionary<string, bool>();
 
+        private int m_SlotCount;
+
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
@@ -23,6 +25,7 @@ namespace Game.Update
             GameEntry.Event.Subscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
             GameEntry.Event.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
 
+            m_SlotCount = procedureOwner.GetData<VarInt32>("ArchiveSlotCount");
             m_LoadedFlag.Clear();
             PreloadResources();
         }
@@ -48,6 +51,7 @@ namespace Game.Update
                     return;
                 }
             }
+
             PreloadCompleteHandle();
             ChangeState<ProcedureMenu>(procedureOwner);
         }
@@ -63,18 +67,31 @@ namespace Game.Update
         {
             DRUIGroup[] uiGroups = GameEntry.DataTable.GetDataTable<DRUIGroup>().GetAllDataRows();
 
-            for (int i = 0; i < uiGroups.Length; i++)
+            foreach (var group in uiGroups)
             {
-                if (GameEntry.UI.AddUIGroup(uiGroups[i].UIGroupName, uiGroups[i].UIGroupDepth))
+                if (GameEntry.UI.AddUIGroup(group.UIGroupName, group.UIGroupDepth))
                 {
-                    Log.Info("Add ui group [{0}] success", uiGroups[i].UIGroupName);
+                    Log.Info("Add ui group [{0}] success", group.UIGroupName);
                 }
                 else
                 {
-                    Log.Warning("Add ui group [{0}] failure", uiGroups[i].UIGroupName);
+                    Log.Warning("Add ui group [{0}] failure", group.UIGroupName);
                 }
             }
 
+            DRArchiveSlot[] slots = GameEntry.DataTable.GetDataTable<DRArchiveSlot>().GetAllDataRows();
+
+            foreach (var slot in slots)
+            {
+                if (GameEntry.Archive.AddArchiveSlot(slot.SlotName))
+                {
+                    Log.Info("Add slot  [{0}] success", slot.SlotName);
+                }
+                else
+                {
+                    Log.Warning("Add slot [{0}] failure", slot.SlotName);
+                }
+            }
         }
 
         private void OnDataTableVersionLoadSuccess(string assetName, object asset, float duration, object userData)

@@ -104,7 +104,6 @@ namespace Game.Editor
         public void SaveSetting()
         {
             Save();
-            Debug.Log("Save setting success");
         }
     }
 }

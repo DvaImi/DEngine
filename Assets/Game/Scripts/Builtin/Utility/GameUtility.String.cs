@@ -5,6 +5,8 @@
 // 版 本：1.0
 // ========================================================
 
+using System.Security.Cryptography;
+using System.Text;
 using DEngine;
 using DEngine.Localization;
 
@@ -97,6 +99,21 @@ namespace Game
 
                 // 如果没有找到匹配的关键字
                 return startIndex == -1 ? content : includeKey ? content[startIndex..] : content[(startIndex + key.Length)..];
+            }
+            
+            public static string GetHashString(string input)
+            {
+                using (SHA256 sha256 = SHA256.Create())
+                {
+                    byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+        
+                    StringBuilder builder = new StringBuilder();
+                    foreach (byte b in bytes)
+                    {
+                        builder.Append(b.ToString("x2"));
+                    }
+                    return builder.ToString();
+                }
             }
         }
     }

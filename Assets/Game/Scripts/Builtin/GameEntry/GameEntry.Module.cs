@@ -69,7 +69,6 @@ namespace Game
         private static GameModule CreateModule(Type moduleType)
         {
             GameModule module = (GameModule)Activator.CreateInstance(moduleType) ?? throw new DEngineException(Utility.Text.Format("Can not create module '{0}'.", moduleType.FullName));
-            module.Initialize();
             LinkedListNode<GameModule> current = m_GameModules.First;
             while (current != null)
             {
