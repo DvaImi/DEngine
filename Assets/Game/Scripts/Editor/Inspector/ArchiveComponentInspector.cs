@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using DEngine;
 using DEngine.Editor;
 using Game.Archive;
 using UnityEditor;
+using UnityEngine;
 
 namespace Game.Editor
 {
@@ -11,13 +13,10 @@ namespace Game.Editor
     public class ArchiveComponentInspector : DEngineInspector
     {
         private const string NoneOptionName = "<None>";
-        private static readonly string[] PathOptionNames = new string[] { "PersistentDataPath", "<Custom>" };
         private SerializedProperty m_ArchiveSerializerTypeName = null;
         private SerializedProperty m_ArchiveHelperTypeName = null;
         private SerializedProperty m_EncryptorTypeName = null;
         private SerializedProperty m_MaxSlotCount = null;
-        private SerializedProperty m_PathOption = null;
-        private SerializedProperty m_ArchiveUrl = null;
         private SerializedProperty m_UserIdentifier = null;
         private SerializedProperty m_UserEncryptor = null;
 
@@ -34,31 +33,12 @@ namespace Game.Editor
             base.OnInspectorGUI();
 
             ArchiveComponent t = (ArchiveComponent)target;
+
+
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
                 EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
                 {
-                    int selectedIndex = EditorGUILayout.Popup("Path Option", m_PathOptionIndex, PathOptionNames);
-                    if (selectedIndex != m_PathOptionIndex)
-                    {
-                        m_PathOptionIndex = selectedIndex;
-                        m_PathOption.enumValueIndex = selectedIndex;
-                    }
-
-                    if (selectedIndex == (int)PathOption.Custom)
-                    {
-                        string archivePath = EditorGUILayout.DelayedTextField("ArchiveUrl", m_ArchiveUrl.stringValue);
-                        if (archivePath != m_ArchiveUrl.stringValue)
-                        {
-                            m_ArchiveUrl.stringValue = archivePath;
-                        }
-
-                        if (string.IsNullOrEmpty(archivePath))
-                        {
-                            var displayName = FieldNameForDisplay("Archive");
-                            EditorGUILayout.HelpBox(Utility.Text.Format("You must set a {0} Url.", displayName), MessageType.Error);
-                        }
-                    }
                 }
                 EditorGUI.EndDisabledGroup();
 
@@ -131,6 +111,21 @@ namespace Game.Editor
             }
             EditorGUI.EndDisabledGroup();
 
+            if (EditorApplication.isPlaying)
+            {
+                EditorGUILayout.BeginVertical("box");
+                {
+                    EditorGUILayout.LabelField("Archive Slot Count", t.MaxSlotCount.ToString());
+                    // IArchiveSlot[] archiveSlots = t.GetAllArchiveSlots();
+                    // foreach (var archiveSlot in archiveSlots)
+                    // {
+                    //     DrawArchiveSlot(archiveSlot);
+                    // }
+                }
+                EditorGUILayout.EndVertical();
+            }
+
+            EditorGUILayout.Space(10);
             serializedObject.ApplyModifiedProperties();
 
             Repaint();
@@ -149,13 +144,8 @@ namespace Game.Editor
             m_ArchiveHelperTypeName = serializedObject.FindProperty("m_ArchiveHelperTypeName");
             m_EncryptorTypeName = serializedObject.FindProperty("m_EncryptorTypeName");
             m_MaxSlotCount = serializedObject.FindProperty("m_MaxSlotCount");
-            m_PathOption = serializedObject.FindProperty("m_Option");
-            m_ArchiveUrl = serializedObject.FindProperty("m_ArchiveUrl");
             m_UserIdentifier = serializedObject.FindProperty("m_UserIdentifier");
             m_UserEncryptor = serializedObject.FindProperty("m_UserEncryptor");
-
-            m_PathOptionIndex = m_PathOption.enumValueIndex;
-
             RefreshTypeNames();
         }
 
@@ -228,6 +218,42 @@ namespace Game.Editor
             string str = Regex.Replace(fieldName, @"^m_", string.Empty);
             str = Regex.Replace(str, @"((?<=[a-z])[A-Z]|[A-Z](?=[a-z]))", @" $1").TrimStart();
             return str;
+        }
+
+        private void DrawArchiveSlot(IArchiveSlot archiveSlot)
+        {
+            EditorGUILayout.BeginVertical("box");
+            {
+                EditorGUILayout.LabelField(archiveSlot.Name);
+                EditorGUILayout.LabelField("Timestamp", new DateTime(archiveSlot.SlotMetadata.Timestamp).ToString("HH:m:s zzz"));
+                EditorGUILayout.LabelField("Version", archiveSlot.SlotMetadata.Version.ToString());
+                EditorGUILayout.LabelField("Hash", archiveSlot.SlotMetadata.Hash);
+
+                foreach (var addition in archiveSlot.SlotMetadata.AdditionalData)
+                {
+                    EditorGUILayout.LabelField(addition.Key, addition.Value);
+                }
+
+                if (GUILayout.Button("Save"))
+                {
+                    archiveSlot.Save();
+                }
+
+                if (GUILayout.Button("Delete"))
+                {
+                    archiveSlot.Delete();
+                }
+
+                if (GUILayout.Button("Backup"))
+                {
+                    archiveSlot.Backup();
+                }
+
+                EditorGUI.EndDisabledGroup();
+            }
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Separator();
         }
     }
 }

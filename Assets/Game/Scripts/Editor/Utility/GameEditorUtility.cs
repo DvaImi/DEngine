@@ -10,43 +10,38 @@ namespace Game.Editor
 {
     public static class GameEditorUtility
     {
-        public static T GetScriptableObject<T>() where T : ScriptableObject
+        public static TScriptableObject LoadScriptableObject<TScriptableObject>() where TScriptableObject : ScriptableObject
         {
-            string[] guids = AssetDatabase.FindAssets("t:" + typeof(T).Name);
-            if (guids.Length != 0)
+            var settingType = typeof(TScriptableObject);
+            var guids = AssetDatabase.FindAssets($"t:{settingType.Name}");
+            if (guids.Length == 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                T obj = AssetDatabase.LoadAssetAtPath<T>(path);
-                if (obj != null)
+                Debug.LogWarning($"Create new {settingType.Name}.asset");
+                var setting = ScriptableObject.CreateInstance<TScriptableObject>();
+                string filePath = $"Assets/{settingType.Name}.asset";
+                AssetDatabase.CreateAsset(setting, filePath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                return setting;
+            }
+            else
+            {
+                if (guids.Length != 1)
                 {
-                    return obj;
+                    foreach (var guid in guids)
+                    {
+                        string path = AssetDatabase.GUIDToAssetPath(guid);
+                        Debug.LogWarning($"Found multiple file : {path}");
+                    }
+                    throw new System.Exception($"Found multiple {settingType.Name} files !");
                 }
-            }
 
-            T newObject = ScriptableObject.CreateInstance<T>();
-            if (newObject == null)
-            {
-                Debug.LogError("Failed to create a new ScriptableObject of type " + typeof(T));
+                string filePath = AssetDatabase.GUIDToAssetPath(guids[0]);
+                var setting = AssetDatabase.LoadAssetAtPath<TScriptableObject>(filePath);
+                return setting;
             }
-            return newObject;
         }
-
-        public static T[] GetScriptableObjects<T>() where T : ScriptableObject
-        {
-            string[] guids = AssetDatabase.FindAssets("t:" + typeof(T).Name);
-            T[] result = new T[] { };
-            if (guids.Length != 0)
-            {
-                result = new T[guids.Length];
-                for (int i = 0; i < guids.Length; i++)
-                {
-                    string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                    result[i] = AssetDatabase.LoadAssetAtPath<T>(path);
-                }
-            }
-            return result;
-        }
-
+        
         public static long CalculateAssetsSize(Object[] assetObjects)
         {
             long size = 0;

@@ -11,7 +11,6 @@ namespace Game.Editor
 {
     public class ResourceCollectorEditor : MenuTreeEditorWindow
     {
-        private readonly string m_DefaultConfigurationPath = "Assets/Game/Configuration/ResourcePackageCollector.asset";
         private MenuTreeView<ResourceGroupsCollector> m_MenuTreePackagesView;
         private MenuTreeViewItem<ResourceGroupsCollector> m_PackageSelectedItem;
         private MenuTreeView<ResourceGroupCollector> m_MenuTreeGroupsView;
@@ -101,6 +100,7 @@ namespace Game.Editor
                 ResourceGroupsCollector package = m_AssetBundlePackageCollector.PackagesCollector[i];
                 m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
             }
+
             m_SelectAssetBundleCollector = m_AssetBundlePackageCollector.PackagesCollector.FirstOrDefault();
             RefreshAssetGroups();
             SetFocusAndEnsureSelectedItem();
@@ -114,6 +114,7 @@ namespace Game.Editor
             {
                 m_IsDirty = true;
             }
+
             Repaint();
         }
 
@@ -129,25 +130,14 @@ namespace Game.Editor
 
         private void Load()
         {
-            m_AssetBundlePackageCollector = LoadAssetAtPath<ResourcePackagesCollector>(m_DefaultConfigurationPath);
-            if (m_AssetBundlePackageCollector == null)
-            {
-                m_AssetBundlePackageCollector = CreateInstance<ResourcePackagesCollector>();
-                m_AssetBundlePackageCollector.PackagesCollector.Add(new ResourceGroupsCollector());
-                AssetDatabase.CreateAsset(m_AssetBundlePackageCollector, m_DefaultConfigurationPath);
-                AssetDatabase.SaveAssets();
-            }
+            m_AssetBundlePackageCollector = GameEditorUtility.LoadScriptableObject<ResourcePackagesCollector>();
         }
 
         private void Save()
         {
             EditorUtility.SetDirty(m_AssetBundlePackageCollector);
             AssetDatabase.SaveAssets();
-        }
-
-        private T LoadAssetAtPath<T>(string path) where T : Object
-        {
-            return (T)AssetDatabase.LoadAssetAtPath(path, typeof(T));
+            AssetDatabase.Refresh();
         }
 
         private void GUIToolbar()
@@ -168,11 +158,13 @@ namespace Game.Editor
                 {
                     ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
+
                 if (GUILayout.Button("Save"))
                 {
                     Save();
                     ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
+
                 GUI.backgroundColor = originalColor;
             }
             GUILayout.EndHorizontal();
@@ -200,6 +192,7 @@ namespace Game.Editor
                 {
                     EditorGUILayout.LabelField("<None>", GUILayout.Width(150));
                 }
+
                 GUILayout.Label("Description");
                 if (m_SelectAssetBundleCollector != null)
                 {
@@ -223,6 +216,7 @@ namespace Game.Editor
             {
                 SetFocusAndEnsureSelectedItem();
             }
+
             GUILayout.BeginArea(new Rect(m_PackageMenuRect.width * 0.2F, m_PackageMenuRect.height + m_AddRectHeight + 90, m_PackageMenuRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
             {
                 EditorGUILayout.BeginHorizontal();
@@ -233,10 +227,10 @@ namespace Game.Editor
                         m_AssetBundlePackageCollector.PackagesCollector.Add(package);
                         m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
                     }
+
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("-", GUILayout.Width(30)))
                     {
-
                         void ConfirmDeletion()
                         {
                             if (m_SelectAssetBundleCollector != null)
@@ -247,6 +241,7 @@ namespace Game.Editor
 
                             SetFocusAndEnsureSelectedItem();
                         }
+
                         GameEditorUtility.EditorDisplay("提示", $"确定要删除{m_PackageSelectedItem?.Data?.PackageName}?", "确认", "取消", ConfirmDeletion);
                     }
                 }
@@ -260,7 +255,6 @@ namespace Game.Editor
 
             GUILayout.BeginArea(new Rect(PackageSpace + m_MenuGroupRect.width * 0.2F, m_MenuGroupRect.height + m_AddRectHeight, m_MenuGroupRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
             {
-
                 EditorGUILayout.BeginHorizontal();
                 {
                     if (GUILayout.Button("+", GUILayout.Width(30)))
@@ -270,6 +264,7 @@ namespace Game.Editor
                         m_MenuTreeGroupsView.AddItem(GetGroupDisplayName(resourceGroup), resourceGroup);
                         SetFocusAndEnsureSelectedItem();
                     }
+
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("-", GUILayout.Width(30)))
                     {
@@ -281,6 +276,7 @@ namespace Game.Editor
                                 m_SelectAssetBundleCollector.Groups.Remove(m_GroupSelectedItem.Data);
                                 m_GroupSelectedItem = null;
                             }
+
                             SetFocusAndEnsureSelectedItem();
                         }
 
@@ -331,6 +327,7 @@ namespace Game.Editor
                     {
                         group.EnableGroup = !group.EnableGroup;
                     }
+
                     string groupName = EditorGUILayout.DelayedTextField("分组名(按 | 分割)", group.GroupName);
                     if (group.GroupName != groupName)
                     {
@@ -342,7 +339,6 @@ namespace Game.Editor
 
                     if (group.Description != description)
                     {
-
                         group.Description = description;
                         m_GroupSelectedItem.displayName = GetGroupDisplayName(group);
                     }
@@ -361,6 +357,7 @@ namespace Game.Editor
                         }
                     }
                 }
+
                 m_AssetCollectorTableView.OnGUI(m_RuleRect);
             }
         }
@@ -476,6 +473,7 @@ namespace Game.Editor
         }
 
         #region DrawItem
+
         /// <summary>
         /// 获取资产列
         /// </summary>
@@ -549,16 +547,19 @@ namespace Game.Editor
             {
                 data.FilterRule = nameof(CollectAll);
             }
+
             int index = Array.IndexOf(ResourceCollectorEditorUtility.FilterRules, data.FilterRule);
             if (index == -1)
             {
                 index = 0;
             }
+
             var tempIndex = EditorGUI.Popup(cellRect, index, ResourceCollectorEditorUtility.FilterRules);
             if (tempIndex != index)
             {
                 data.FilterRule = ResourceCollectorEditorUtility.FilterRules[tempIndex];
             }
+
             GUI.enabled = true;
         }
 
