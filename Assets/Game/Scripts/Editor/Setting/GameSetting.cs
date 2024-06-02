@@ -79,7 +79,7 @@ namespace Game.Editor
         /// <summary>
         /// 热更程序集生成路径
         /// </summary>
-        public string HotupdateAssembliesPath = "Assets/Game/HybridCLRDate/HotUpdate";
+        public string HotupdateAssembliesPath = "Assets/Game/HybridCLRData/HotUpdate";
         /// <summary>
         /// 主热更程序集
         /// </summary>

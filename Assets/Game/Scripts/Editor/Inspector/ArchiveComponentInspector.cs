@@ -115,6 +115,12 @@ namespace Game.Editor
 
             if (EditorApplication.isPlaying)
             {
+                if (t.CurrentSlot != null)
+                {
+                    EditorGUILayout.LabelField("Current Slot", t.CurrentSlot.Name);
+                    EditorGUILayout.Space(5);
+                }
+
                 ArchiveSlot[] archiveSlots = t.GetArchiveSlots();
                 foreach (var archiveSlot in archiveSlots)
                 {
