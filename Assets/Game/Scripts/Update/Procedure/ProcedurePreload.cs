@@ -14,7 +14,6 @@ namespace Game.Update
     {
         private Dictionary<string, bool> m_LoadedFlag = new Dictionary<string, bool>();
 
-        private int m_SlotCount;
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -25,7 +24,6 @@ namespace Game.Update
             GameEntry.Event.Subscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
             GameEntry.Event.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
 
-            m_SlotCount = procedureOwner.GetData<VarInt32>("ArchiveSlotCount");
             m_LoadedFlag.Clear();
             PreloadResources();
         }
@@ -76,20 +74,6 @@ namespace Game.Update
                 else
                 {
                     Log.Warning("Add ui group [{0}] failure", group.UIGroupName);
-                }
-            }
-
-            DRArchiveSlot[] slots = GameEntry.DataTable.GetDataTable<DRArchiveSlot>().GetAllDataRows();
-
-            foreach (var slot in slots)
-            {
-                if (GameEntry.Archive.AddArchiveSlot(slot.SlotName))
-                {
-                    Log.Info("Add slot  [{0}] success", slot.SlotName);
-                }
-                else
-                {
-                    Log.Warning("Add slot [{0}] failure", slot.SlotName);
                 }
             }
         }

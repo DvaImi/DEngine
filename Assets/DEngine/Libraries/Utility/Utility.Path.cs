@@ -41,6 +41,23 @@ namespace DEngine
             }
 
             /// <summary>
+            /// 获取规范的组合路径
+            /// </summary>
+            /// <param name="paths"></param>
+            /// <returns></returns>
+            public static string GetRegularCombinePath(params string[] paths)
+            {
+
+                if (paths == null)
+                {
+                    return null;
+                }
+
+
+                return GetRegularPath(System.IO.Path.Combine(paths));
+            }
+
+            /// <summary>
             /// 移除空文件夹。
             /// </summary>
             /// <param name="directoryName">要处理的文件夹名称。</param>

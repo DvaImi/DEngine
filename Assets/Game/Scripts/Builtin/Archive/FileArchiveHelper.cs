@@ -1,91 +1,36 @@
-using System.IO;
+﻿using System.IO;
+using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks;
 
 namespace Game.Archive
 {
     public sealed class FileArchiveHelper : IArchiveHelper
     {
-        private IEncryptorHelper m_EncryptorHelper;
-        private string m_ArchiveUrl;
+        private readonly Regex m_Regex = new(@"^[a-zA-Z0-9_]{3,16}$");
 
-        public string ArchiveUrl => m_ArchiveUrl;
-
-        public bool UserEncryptor
+        public bool Query(string fileUri)
         {
-            get => m_EncryptorHelper != null;
+            return File.Exists(fileUri);
         }
 
-        public IArchiveSlot CreateArchiveSlot()
+        public async UniTask SaveAsync(string fileName, byte[] bytes)
         {
-            return new DefaultArchiveSlot();
-        }
-
-        public void SetArchiveUrl(string archiveUrl)
-        {
-            m_ArchiveUrl = archiveUrl;
-            DirectoryInfo directoryInfo = new DirectoryInfo(archiveUrl);
-            if (directoryInfo.Exists)
-            {
-                return;
-            }
-            
-            directoryInfo.Create();
-        }
-
-        public void SetEncryptor(IEncryptorHelper encryptorHelper)
-        {
-            m_EncryptorHelper = encryptorHelper;
-        }
-
-        public byte[] Load(string filePath)
-        {
-            var data = File.ReadAllBytes(filePath);
-            return UserEncryptor ? m_EncryptorHelper.Decrypt(data) : data;
-        }
-
-        public void Save(string filePath, byte[] data)
-        {
-            if (UserEncryptor)
-            {
-                var encryptedData = m_EncryptorHelper.Encrypt(data);
-                GameUtility.IO.SaveFileSafe(filePath, encryptedData);
-            }
-            else
-            {
-                GameUtility.IO.SaveFileSafe(filePath, data);
-            }
-        }
-
-        public async UniTask<byte[]> LoadAsync(string filePath)
-        {
-            await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            var buffer = new byte[stream.Length];
-            _ = await stream.ReadAsync(buffer, 0, (int)stream.Length);
-            return UserEncryptor ? m_EncryptorHelper.Decrypt(buffer) : buffer;
-        }
-
-        public async UniTask SaveAsync(string filePath, byte[] data)
-        {
-            FileInfo fileInfo = new FileInfo(filePath);
-            if (fileInfo.Directory is { Exists: false })
+            FileInfo fileInfo = new(fileName);
+            if (!fileInfo.Directory.Exists)
             {
                 fileInfo.Directory.Create();
             }
-            var buffer =UserEncryptor ? m_EncryptorHelper.Decrypt(data) : data;
-            await using var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-            await stream.WriteAsync(buffer, 0, buffer.Length);
+            await File.WriteAllBytesAsync(fileName, bytes);
         }
 
-
-        public void Delete(string filePath)
+        public async UniTask<byte[]> LoadAsync(string fileUri)
         {
-            File.Delete(filePath);
+            return await File.ReadAllBytesAsync(fileUri);
         }
 
-
-        public void Backup(string sourcePath, string destinationPath)
+        public bool Match(string userIdentifier)
         {
-            File.Copy(sourcePath, destinationPath);
+            return m_Regex.IsMatch(userIdentifier);
         }
     }
 }

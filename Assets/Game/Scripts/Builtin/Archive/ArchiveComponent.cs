@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using DEngine;
@@ -9,11 +9,9 @@ namespace Game.Archive
 {
     public sealed class ArchiveComponent : DEngineComponent
     {
-        private const string ArchiveFolder = "user/save";
+        private const string ArchiveFolder = "save";
 
         private IArchiveManager m_ArchiveManager;
-
-        [SerializeField] private string m_ArchiveUrl;
 
         [SerializeField] private int m_MaxSlotCount = 1;
 
@@ -23,34 +21,16 @@ namespace Game.Archive
 
         [SerializeField] private string m_EncryptorTypeName = "Game.Archive.DefaultEncryptorHelper";
 
-        [SerializeField] private PathOption m_Option = PathOption.PersistentDataPath;
-
         [SerializeField] private string m_UserIdentifier;
 
         [SerializeField] private bool m_UserEncryptor;
 
+        private string m_ArchiveUri;
+
         public int MaxSlotCount
         {
-            get => m_ArchiveManager.MaxSlotCount;
-            set => m_ArchiveManager.MaxSlotCount = m_MaxSlotCount = value;
-        }
-
-
-        public bool EnableAutoSave
-        {
-            get => m_ArchiveManager.EnableAutoSave;
-            set => m_ArchiveManager.EnableAutoSave = value;
-        }
-
-        public float AutoSaveInterval
-        {
-            get => m_ArchiveManager.AutoSaveInterval;
-            set => m_ArchiveManager.AutoSaveInterval = value;
-        }
-
-        public PathOption PathOption
-        {
-            get => m_Option;
+            get => m_MaxSlotCount;
+            set => m_MaxSlotCount = value;
         }
 
         public string UserIdentifier
@@ -58,6 +38,8 @@ namespace Game.Archive
             get => m_UserIdentifier;
             set => m_UserIdentifier = value;
         }
+
+        public ArchiveSlot CurrentSlot { get => m_ArchiveManager.CurrentSlot; }
 
         private void Start()
         {
@@ -69,7 +51,7 @@ namespace Game.Archive
             }
 
             MaxSlotCount = m_MaxSlotCount;
-
+            m_ArchiveUri = Utility.Path.GetRegularPath(Path.Combine(Application.persistentDataPath, ArchiveFolder));
             var archiveHelperType = Utility.Assembly.GetType(m_ArchiveHelperTypeName);
             if (archiveHelperType == null)
             {
@@ -83,6 +65,8 @@ namespace Game.Archive
                 Log.Error("Can not create archive helper instance '{0}'.", m_ArchiveHelperTypeName);
                 return;
             }
+
+            m_ArchiveManager.SetArchiveHelper(archiveHelper);
 
             var serializerHelperType = Utility.Assembly.GetType(m_ArchiveSerializerTypeName);
             if (serializerHelperType == null)
@@ -98,29 +82,12 @@ namespace Game.Archive
                 return;
             }
 
-            SetArchiveHelper(archiveHelper);
-            SetSerializer(serializerHelper);
-
-            m_ArchiveUrl = m_Option switch
-            {
-                PathOption.PersistentDataPath => Utility.Path.GetRegularPath(Path.Combine(Application.persistentDataPath, ArchiveFolder, GameUtility.String.GetHashString(m_UserIdentifier))),
-                _ => m_ArchiveUrl
-            };
-
-            if (string.IsNullOrEmpty(m_ArchiveUrl))
-            {
-                Log.Error("archive url is invalid.");
-                return;
-            }
-
-            SetArchiveUrl(m_ArchiveUrl);
-
+            m_ArchiveManager.SetArchiveSerializerHelper(serializerHelper);
 
             if (!m_UserEncryptor)
             {
                 return;
             }
-
             var encryptorHelperType = Utility.Assembly.GetType(m_EncryptorTypeName);
             if (encryptorHelperType == null)
             {
@@ -129,18 +96,12 @@ namespace Game.Archive
             }
 
             var encryptorHelper = (IEncryptorHelper)Activator.CreateInstance(encryptorHelperType);
-            if (encryptorHelper == null)
-            {
-                Log.Error("Can not create encryptor helper instance '{0}'.", m_EncryptorTypeName);
-                return;
-            }
-
-            SetEncryptor(encryptorHelper);
+            m_ArchiveManager.SetEncryptorHelper(encryptorHelper);
         }
 
-        private void SetArchiveUrl(string archiveUrl)
+        public async UniTask Initialize()
         {
-            m_ArchiveManager.SetArchiveUrl(archiveUrl);
+            await m_ArchiveManager.Initialize(m_ArchiveUri, m_MaxSlotCount, m_UserIdentifier);
         }
 
         public void SetArchiveHelper(IArchiveHelper archiveHelper)
@@ -148,58 +109,69 @@ namespace Game.Archive
             m_ArchiveManager.SetArchiveHelper(archiveHelper);
         }
 
-        public void SetSerializer(IArchiveSerializerHelper serializerHelper)
+        public void SetArchiveSerializerHelper(IArchiveSerializerHelper serializerHelper)
         {
-            m_ArchiveManager.SetSerializer(serializerHelper);
+            m_ArchiveManager.SetArchiveSerializerHelper(serializerHelper);
         }
 
-        public void SetEncryptor(IEncryptorHelper encryptorHelper)
+        public void SetEncryptorHelper(IEncryptorHelper encryptorHelper)
         {
-            m_ArchiveManager.SetEncryptor(encryptorHelper);
+            m_ArchiveManager.SetEncryptorHelper(encryptorHelper);
         }
 
-        public void Initialize(InitArchiveCompleteCallback completeCallback)
+        public UniTask Initialize(string archiveUri, int maxSlotCount, string userIdentifier)
         {
-            m_ArchiveManager.Initialize(completeCallback);
+            return m_ArchiveManager.Initialize(archiveUri, maxSlotCount, userIdentifier);
         }
 
-        public bool AddArchiveSlot(string slotName)
+        public ArchiveSlot GetArchiveSlot(int index)
         {
-            return m_ArchiveManager.AddArchiveSlot(slotName);
+            return m_ArchiveManager.GetArchiveSlot(index);
         }
 
-        public void SaveData<T>(string slotName, string identifier, T data) where T : IArchiveData
+        public ArchiveSlot[] GetArchiveSlots()
         {
-            m_ArchiveManager.SaveData(slotName, identifier, data);
+            return m_ArchiveManager.GetArchiveSlots();
         }
 
-
-        public async UniTask SaveDataAsync<T>(string slotName, string identifier, T data) where T : IArchiveData
+        public void SelectSlot(int index)
         {
-            await m_ArchiveManager.SaveDataAsync(slotName, identifier, data);
+            m_ArchiveManager.SelectSlot(index);
         }
 
-        public T LoadData<T>(string slotName, string identifier) where T : IArchiveData
+        public void SetData<T>(T data) where T : IArchiveData
         {
-            return m_ArchiveManager.LoadData<T>(slotName, identifier);
+            m_ArchiveManager.SetData(data);
         }
 
-
-        public async UniTask<T> LoadDataAsync<T>(string slotName, string identifier) where T : IArchiveData
+        public T GetData<T>(string uniqueId) where T : IArchiveData
         {
-            return await m_ArchiveManager.LoadDataAsync<T>(slotName, identifier);
+            return m_ArchiveManager.GetData<T>(uniqueId);
         }
 
-
-        public void Delete(string slotName)
+        public T[] GetDatas<T>() where T : IArchiveData
         {
-            m_ArchiveManager.Delete(slotName);
+            return m_ArchiveManager.GetDatas<T>();
         }
 
-
-        public void Backup(string slotName)
+        public UniTask Save()
         {
-            m_ArchiveManager.Backup(slotName);
+            return m_ArchiveManager.Save();
+        }
+
+        public UniTask Load()
+        {
+            return m_ArchiveManager.Load();
+        }
+
+        public UniTask SaveSlotMeta()
+        {
+            return m_ArchiveManager.SaveSlotMeta();
+        }
+
+        public UniTask SaveSlotMeta(ArchiveSlot archiveSlot)
+        {
+            return m_ArchiveManager.SaveSlotMeta(archiveSlot);
         }
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using DEngine;
@@ -12,6 +12,8 @@ namespace Game.Editor
     [CustomEditor(typeof(ArchiveComponent))]
     public class ArchiveComponentInspector : DEngineInspector
     {
+        private readonly HashSet<string> m_OpenedItems = new HashSet<string>();
+
         private const string NoneOptionName = "<None>";
         private SerializedProperty m_ArchiveSerializerTypeName = null;
         private SerializedProperty m_ArchiveHelperTypeName = null;
@@ -113,16 +115,11 @@ namespace Game.Editor
 
             if (EditorApplication.isPlaying)
             {
-                EditorGUILayout.BeginVertical("box");
+                ArchiveSlot[] archiveSlots = t.GetArchiveSlots();
+                foreach (var archiveSlot in archiveSlots)
                 {
-                    EditorGUILayout.LabelField("Archive Slot Count", t.MaxSlotCount.ToString());
-                    // IArchiveSlot[] archiveSlots = t.GetAllArchiveSlots();
-                    // foreach (var archiveSlot in archiveSlots)
-                    // {
-                    //     DrawArchiveSlot(archiveSlot);
-                    // }
+                    DrawArchiveSlot(archiveSlot);
                 }
-                EditorGUILayout.EndVertical();
             }
 
             EditorGUILayout.Space(10);
@@ -220,39 +217,44 @@ namespace Game.Editor
             return str;
         }
 
-        private void DrawArchiveSlot(IArchiveSlot archiveSlot)
+        private void DrawArchiveSlot(ArchiveSlot archiveSlot)
         {
-            EditorGUILayout.BeginVertical("box");
+            bool lastState = m_OpenedItems.Contains(archiveSlot.Name);
+            bool currentState = EditorGUILayout.Foldout(lastState, archiveSlot.Name);
+            if (currentState != lastState)
             {
-                EditorGUILayout.LabelField(archiveSlot.Name);
-                EditorGUILayout.LabelField("Timestamp", new DateTime(archiveSlot.SlotMetadata.Timestamp).ToString("HH:m:s zzz"));
-                EditorGUILayout.LabelField("Version", archiveSlot.SlotMetadata.Version.ToString());
-                EditorGUILayout.LabelField("Hash", archiveSlot.SlotMetadata.Hash);
-
-                foreach (var addition in archiveSlot.SlotMetadata.AdditionalData)
+                if (currentState)
                 {
-                    EditorGUILayout.LabelField(addition.Key, addition.Value);
+                    m_OpenedItems.Add(archiveSlot.Name);
                 }
-
-                if (GUILayout.Button("Save"))
+                else
                 {
-                    archiveSlot.Save();
+                    m_OpenedItems.Remove(archiveSlot.Name);
                 }
-
-                if (GUILayout.Button("Delete"))
-                {
-                    archiveSlot.Delete();
-                }
-
-                if (GUILayout.Button("Backup"))
-                {
-                    archiveSlot.Backup();
-                }
-
-                EditorGUI.EndDisabledGroup();
             }
-            EditorGUILayout.EndVertical();
 
+            if (lastState)
+            {
+                EditorGUILayout.BeginVertical("box");
+                {
+                    EditorGUILayout.LabelField(archiveSlot.Name, EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField("Identifier", archiveSlot.Identifier);
+                    EditorGUILayout.LabelField("UserEncryptor", archiveSlot.UserEncryptor.ToString());
+                    EditorGUILayout.LabelField("Index", archiveSlot.Index.ToString());
+                    EditorGUILayout.LabelField("Description", archiveSlot.Description);
+                    EditorGUILayout.LabelField("Timestamp", new DateTime(archiveSlot.Timestamp).ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+                    EditorGUILayout.LabelField("Version", archiveSlot.Version.ToString());
+                    EditorGUILayout.LabelField("ThumbnailIdentifier", archiveSlot.ThumbnailIdentifier);
+                    EditorGUILayout.LabelField("IsAutoSave", archiveSlot.IsAutoSave.ToString());
+
+                    EditorGUILayout.LabelField("DataCatalog", EditorStyles.boldLabel);
+                    foreach (var addition in archiveSlot.DataCatalog)
+                    {
+                        EditorGUILayout.LabelField(addition.Key, addition.Value);
+                    }
+                }
+                EditorGUILayout.EndVertical();
+            }
             EditorGUILayout.Separator();
         }
     }

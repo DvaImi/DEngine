@@ -1,93 +1,49 @@
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using DEngine;
+using DEngine.Runtime;
+using UnityEngine;
 
 namespace Game.Archive
 {
     internal sealed class ArchiveManager : GameModule, IArchiveManager
     {
-        private const string ArchiveCatalogFileName = "achive.catalog";
-        private float m_LastAutoOperationElapseSeconds;
-
+        private const int Version = 1;
+        private const string DefaultExtension = ".sav";
+        private const string DefaultMetaExtension = "meta.meta";
+        private const string DefaultBackupExtension = ".bak";
         private bool m_RefuseSetFlag;
-
-        private readonly SortedDictionary<string, IArchiveSlot> m_Slots;
-        private readonly Queue<IArchiveSlot> m_ReadyToWrite;
-        private InitArchiveCompleteCallback m_InitArchiveCompleteCallback;
-        private string m_CatalogPath;
-        private ArchiveCatalog m_ArchiveCatalog;
+        private readonly List<ArchiveSlot> m_Slots;
+        private ArchiveSlot m_CurrentSlot;
+        private string m_ArchiveUri;
+        private int m_MaxSlotCount;
+        private string m_UserIdentifier;
         private IArchiveHelper m_ArchiveHelper;
-
-        public int MaxSlotCount { get; set; }
-
-        public bool EnableAutoSave { get; set; }
-
-        public float AutoSaveInterval { get; set; }
-
-        public IArchiveHelper ArchiveHelper
-        {
-            get => m_ArchiveHelper;
-        }
-
-        public string ArchiveUrl => ArchiveHelper.ArchiveUrl;
-        public IArchiveSerializerHelper ArchiveSerializerHelper { get; private set; }
-
+        private IArchiveSerializerHelper m_ArchiveSerializerHelper;
+        private IEncryptorHelper m_EncryptorHelper;
+        private readonly SortedDictionary<string, Dictionary<string, IArchiveData>> m_CacheArchiveData = null;
 
         public ArchiveManager()
         {
-            m_Slots = new SortedDictionary<string, IArchiveSlot>();
-            m_ReadyToWrite = new Queue<IArchiveSlot>();
-            m_LastAutoOperationElapseSeconds = 0;
             m_RefuseSetFlag = false;
-
-            m_ArchiveCatalog = new ArchiveCatalog
-            {
-                Slot = new List<string>(),
-                Version = 1
-            };
+            m_Slots = new List<ArchiveSlot>();
+            m_CacheArchiveData = new();
         }
 
+        public bool UserEncryptor => m_EncryptorHelper != null;
+
+        public ArchiveSlot CurrentSlot => m_CurrentSlot;
 
         internal override void Update(float elapseSeconds, float realElapseSeconds)
         {
-            if (!EnableAutoSave)
-            {
-                return;
-            }
 
-            if (AutoSaveInterval <= 0)
-            {
-                return;
-            }
-
-            m_LastAutoOperationElapseSeconds += realElapseSeconds;
-            if (m_LastAutoOperationElapseSeconds > AutoSaveInterval)
-            {
-                m_LastAutoOperationElapseSeconds = 0;
-            }
         }
 
         internal override void Shutdown()
         {
-            m_Slots.Clear();
-            m_ReadyToWrite.Clear();
-        }
 
-        public void SetArchiveUrl(string archiveUrl)
-        {
-            if (string.IsNullOrWhiteSpace(archiveUrl))
-            {
-                throw new DEngineException("Read write path is invalid.");
-            }
-
-            if (m_RefuseSetFlag)
-            {
-                throw new DEngineException("You can not set read-only path at this time.");
-            }
-
-            ArchiveHelper.SetArchiveUrl(archiveUrl);
-            m_CatalogPath = Utility.Path.GetRegularPath(Path.Combine(archiveUrl, ArchiveCatalogFileName));
         }
 
         public void SetArchiveHelper(IArchiveHelper archiveHelper)
@@ -105,7 +61,7 @@ namespace Game.Archive
             m_ArchiveHelper = archiveHelper;
         }
 
-        public void SetSerializer(IArchiveSerializerHelper serializerHelper)
+        public void SetArchiveSerializerHelper(IArchiveSerializerHelper serializerHelper)
         {
             if (serializerHelper == null)
             {
@@ -117,17 +73,17 @@ namespace Game.Archive
                 throw new DEngineException("You can not set archive serializer at this time.");
             }
 
-            ArchiveSerializerHelper = serializerHelper;
+            m_ArchiveSerializerHelper = serializerHelper;
         }
 
-        public void SetEncryptor(IEncryptorHelper encryptorHelper)
+        public void SetEncryptorHelper(IEncryptorHelper encryptorHelper)
         {
             if (encryptorHelper == null)
             {
                 throw new DEngineException("archive encryptor is invalid.");
             }
 
-            if (ArchiveHelper == null)
+            if (m_ArchiveHelper == null)
             {
                 throw new DEngineException("archive helper is invalid.");
             }
@@ -136,111 +92,246 @@ namespace Game.Archive
             {
                 throw new DEngineException("You can not set archive serializer at this time.");
             }
-
-            ArchiveHelper.SetEncryptor(encryptorHelper);
+            m_EncryptorHelper = encryptorHelper;
         }
 
-        public void Initialize(InitArchiveCompleteCallback completeCallback)
+        public async UniTask Initialize(string archiveUri, int maxSlotCount, string userIdentifier)
         {
-            if (completeCallback == null)
-            {
-                throw new DEngineException("Init completeCallback is invalid.");
-            }
-
-            if (m_ArchiveHelper == null)
-            {
-                throw new DEngineException("archive slot helper is invalid.");
-            }
-
             if (m_RefuseSetFlag)
             {
-                throw new DEngineException("You can not init archive at this time.");
+                throw new DEngineException("You can not init archive  at this time.");
+            }
+
+            if (string.IsNullOrWhiteSpace(archiveUri))
+            {
+                throw new DEngineException("Archive Url is invalid.");
+            }
+
+            if (maxSlotCount <= 0)
+            {
+                throw new DEngineException("Max slot count is invalid.");
+            }
+
+            if (string.IsNullOrWhiteSpace(userIdentifier))
+            {
+                throw new DEngineException("UserIdentifier is invalid.");
+            }
+
+            if (!m_ArchiveHelper.Match(userIdentifier))
+            {
+                throw new DEngineException("UserIdentifier match invalid.");
             }
 
             m_RefuseSetFlag = true;
-            m_InitArchiveCompleteCallback = completeCallback;
+            m_ArchiveUri = archiveUri;
+            m_MaxSlotCount = maxSlotCount;
+            m_UserIdentifier = userIdentifier;
+            m_Slots.Clear();
+            UniTask[] uniTasks = new UniTask[maxSlotCount];
+            for (var i = 0; i < maxSlotCount; i++)
+            {
+                uniTasks[i] = AddArchiveSlot(i);
+            }
 
-            LoadCatalog();
+            await UniTask.WhenAll(uniTasks);
+            m_Slots.Sort();
         }
 
-        private void LoadCatalog()
+        public ArchiveSlot GetArchiveSlot(int index)
         {
-            if (File.Exists(m_CatalogPath))
+            for (int i = 0; i < m_Slots.Count; i++)
             {
-                var catalogData = ArchiveHelper.Load(m_CatalogPath);
-                m_ArchiveCatalog = ArchiveSerializerHelper.Deserialize<ArchiveCatalog>(catalogData);
-                var slotCount = m_ArchiveCatalog.Slot.Count;
-                for (int i = 0; i < slotCount; i++)
+                if (m_Slots[i].Index == index)
                 {
-                    var slotId = m_ArchiveCatalog.Slot[i];
-                    AddArchiveSlot(slotId);
+                    return m_Slots[i];
+                }
+            }
+            return null;
+        }
+
+        private async UniTask AddArchiveSlot(int index)
+        {
+            string slotIdentifier = Utility.Text.Format("Slot_{0}", index.ToString("F00"));
+
+            if (m_Slots.Exists(o => o.Name == slotIdentifier))
+            {
+                throw new DEngineException($"Slot '{slotIdentifier}' is already exist.");
+            }
+
+            var slotPath = Utility.Path.GetRegularCombinePath(m_ArchiveUri, m_UserIdentifier, slotIdentifier);
+            string metaPath = Utility.Path.GetRegularCombinePath(slotPath, DefaultMetaExtension);
+            ArchiveSlot slot = null;
+            if (m_ArchiveHelper.Query(metaPath))
+            {
+                byte[] bytes = await m_ArchiveHelper.LoadAsync(metaPath);
+
+                if (UserEncryptor)
+                {
+                    bytes = m_EncryptorHelper.Decrypt(bytes);
                 }
 
-                m_InitArchiveCompleteCallback.Invoke(m_ArchiveCatalog.Version, slotCount);
-                return;
+                slot = m_ArchiveSerializerHelper.Deserialize<ArchiveSlot>(bytes);
             }
-
-            m_InitArchiveCompleteCallback.Invoke(m_ArchiveCatalog.Version, 0);
-        }
-
-        private void SaveCatalog()
-        {
-            var catalogData = ArchiveSerializerHelper.Serialize(m_ArchiveCatalog);
-            ArchiveHelper.Save(m_CatalogPath, catalogData);
-        }
-
-        private IArchiveSlot GetArchiveSlot(string slotName)
-        {
-            return !m_Slots.ContainsKey(slotName) ? null : m_Slots[slotName];
-        }
-
-        public bool AddArchiveSlot(string slotName)
-        {
-            if (m_Slots.ContainsKey(slotName))
+            else
             {
-                return false;
+                slot = new()
+                {
+                    Name = slotIdentifier,
+                    Identifier = Utility.Path.GetRegularCombinePath(m_UserIdentifier, slotIdentifier),
+                    UserEncryptor = UserEncryptor,
+                    Index = index,
+                    Timestamp = DateTime.UtcNow.Ticks,
+                    Version = Version
+                };
+
+                await SaveSlotMeta(slot);
+            }
+            m_Slots.Add(slot);
+        }
+
+        public ArchiveSlot[] GetArchiveSlots()
+        {
+            return m_Slots.ToArray();
+        }
+
+        public void SelectSlot(int index)
+        {
+            m_CurrentSlot = GetArchiveSlot(index);
+        }
+
+        public bool HasData<T>(string uniqueId) where T : IArchiveData
+        {
+            if (string.IsNullOrEmpty(uniqueId))
+            {
+                throw new DEngineException("uniqueId is invalid.");
             }
 
-            var slot = m_ArchiveHelper.CreateArchiveSlot();
-            slot.Initialize(this, slotName);
-            m_Slots.Add(slotName, slot);
-            m_ArchiveCatalog.Slot.Add(slotName);
-            SaveCatalog();
-            return true;
+            foreach (var item in m_CacheArchiveData)
+            {
+                if (item.Value.ContainsKey(uniqueId))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public void SaveData<T>(string slotName, string identifier, T data) where T : IArchiveData
+        public void SetData<T>(T data) where T : IArchiveData
         {
-            var slot = GetArchiveSlot(slotName);
-            m_ReadyToWrite.Enqueue(slot);
-            slot.SaveData(identifier, data);
+            if (m_CacheArchiveData.TryGetValue(data.Identifier, out Dictionary<string, IArchiveData> result))
+            {
+                result[data.UniqueId] = data;
+            }
+            else
+            {
+                Dictionary<string, IArchiveData> newArchiveData = new()
+                {
+                    { data.UniqueId, data }
+                };
+                m_CacheArchiveData.Add(data.Identifier, newArchiveData);
+            }
         }
 
-        public async UniTask SaveDataAsync<T>(string slotName, string identifier, T data) where T : IArchiveData
+        public T GetData<T>(string uniqueId) where T : IArchiveData
         {
-            var slot = GetArchiveSlot(slotName);
-            await slot.SaveDataAsync(identifier, data);
+            if (string.IsNullOrEmpty(uniqueId))
+            {
+                throw new DEngineException("uniqueId is invalid.");
+            }
+
+            foreach (var item in m_CacheArchiveData)
+            {
+                if (item.Value.TryGetValue(uniqueId, out var archiveData))
+                {
+                    return (T)archiveData;
+                }
+            }
+            throw new DEngineException($"Data '{uniqueId}' is not exist.");
         }
 
-        public T LoadData<T>(string slotName, string identifier) where T : IArchiveData
+        public T GetData<T>(string uniqueId, T defaultData) where T : IArchiveData
         {
-            var slot = GetArchiveSlot(slotName);
-            return slot.LoadData<T>(identifier);
+            return HasData<T>(uniqueId) ? GetData<T>(uniqueId) : defaultData;
         }
 
-        public async UniTask<T> LoadDataAsync<T>(string slotName, string identifier) where T : IArchiveData
+        public T[] GetDatas<T>() where T : IArchiveData
         {
-            var slot = GetArchiveSlot(slotName);
-            return await slot.LoadDataAsync<T>(identifier);
+            throw new NotImplementedException();
         }
 
-        public void Delete(string slotName)
+        public async UniTask Save()
         {
+            if (m_CurrentSlot == null)
+            {
+                throw new DEngineException("Current slot is invalid. ");
+            }
+
+            UniTask[] uniTasks = new UniTask[m_CacheArchiveData.Count];
+            int index = 0;
+            foreach (var data in m_CacheArchiveData)
+            {
+                string fileUri = Utility.Path.GetRegularCombinePath(m_ArchiveUri, m_CurrentSlot.Identifier, data.Key) + DefaultExtension;
+                m_CurrentSlot.DataCatalog[data.Key] = Utility.Path.GetRegularCombinePath(m_CurrentSlot.Identifier, data.Key);
+                byte[] bytes = m_ArchiveSerializerHelper.Serialize(data.Value);
+                if (UserEncryptor)
+                {
+                    bytes = m_EncryptorHelper.Encrypt(bytes);
+                }
+                uniTasks[index] = m_ArchiveHelper.SaveAsync(fileUri, bytes);
+                index++;
+            }
+
+            await UniTask.WhenAll(uniTasks);
+            m_CurrentSlot.Timestamp = DateTime.UtcNow.Ticks;
+            await SaveSlotMeta(m_CurrentSlot);
         }
 
-
-        public void Backup(string slotName)
+        public async UniTask Load()
         {
+            if (m_CurrentSlot == null)
+            {
+                throw new DEngineException("Current slot is invalid. ");
+            }
+
+            foreach (var slotCatlog in m_CurrentSlot.DataCatalog)
+            {
+                string fileUri = Utility.Path.GetRegularCombinePath(m_ArchiveUri, m_CurrentSlot.Identifier, slotCatlog.Key) + DefaultExtension;
+                byte[] bytes = await m_ArchiveHelper.LoadAsync(fileUri);
+                if (UserEncryptor)
+                {
+                    bytes = m_EncryptorHelper.Decrypt(bytes);
+                }
+                m_CacheArchiveData.Add(slotCatlog.Key, m_ArchiveSerializerHelper.Deserialize<Dictionary<string, IArchiveData>>(bytes));
+            }
+        }
+
+        public async UniTask SaveSlotMeta()
+        {
+            if (m_CurrentSlot == null)
+            {
+                throw new DEngineException("Current slot is invalid. ");
+            }
+            await SaveSlotMeta(m_CurrentSlot);
+        }
+
+        public async UniTask SaveSlotMeta(ArchiveSlot archiveSlot)
+        {
+            if (archiveSlot == null)
+            {
+                throw new DEngineException("archive Slot is invalid. ");
+            }
+
+            byte[] bytes = m_ArchiveSerializerHelper.Serialize(archiveSlot);
+            if (UserEncryptor)
+            {
+                bytes = m_EncryptorHelper.Encrypt(bytes);
+            }
+            await m_ArchiveHelper.SaveAsync(GetMetaPath(archiveSlot.Identifier), bytes);
+        }
+
+        private string GetMetaPath(string slotIdentifier)
+        {
+            return Utility.Path.GetRegularCombinePath(m_ArchiveUri, slotIdentifier, DefaultMetaExtension);
         }
     }
 }

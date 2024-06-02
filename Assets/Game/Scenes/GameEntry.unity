@@ -804,12 +804,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef9e48be96154924fb5a48df7ba5699e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ArchiveUrl: 
-  m_MaxSlotCount: 1
+  m_MaxSlotCount: 5
   m_ArchiveHelperTypeName: Game.Archive.FileArchiveHelper
   m_ArchiveSerializerTypeName: Game.Archive.DefaultArchiveSerializerHelper
   m_EncryptorTypeName: Game.Archive.DefaultEncryptorHelper
-  m_Option: 0
   m_UserIdentifier: dvalimi
   m_UserEncryptor: 0
 --- !u!1 &1557703573

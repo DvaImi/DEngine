@@ -1,124 +1,127 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 
 namespace Game.Archive
 {
-    /// <summary>
-    /// 存档管理器
-    /// </summary>
+    // 存档管理接口
     public interface IArchiveManager
     {
         /// <summary>
-        /// 存档路径
+        /// 使用加密
         /// </summary>
-        string ArchiveUrl { get; }
+        bool UserEncryptor { get; }
 
         /// <summary>
-        /// 最大存档数量
+        /// 获取当前存档栏
         /// </summary>
-        int MaxSlotCount { get; set; }
-
-        /// <summary>
-        /// 获取或者设置是否自动保存
-        /// </summary>
-        bool EnableAutoSave { get; set; }
-
-        /// <summary>
-        /// 获取或者设置自动更新到存储介质间隔
-        /// </summary>
-        float AutoSaveInterval { get; set; }
-
-        /// <summary>
-        /// 获取存档辅助器
-        /// </summary>
-        IArchiveHelper ArchiveHelper { get; }
-
-        /// <summary>
-        /// 获取存档序列化辅助器
-        /// </summary>
-        IArchiveSerializerHelper ArchiveSerializerHelper { get; }
-
-        /// <summary>
-        /// 设置存档路径
-        /// </summary>
-        /// <param name="archiveUrl"></param>
-        void SetArchiveUrl(string archiveUrl);
+        ArchiveSlot CurrentSlot { get; }
 
         /// <summary>
         /// 设置存档辅助器
         /// </summary>
-        /// <param name="archiveHelper"></param>
+        /// <param name="archiveHelper">存档辅助器</param>
         void SetArchiveHelper(IArchiveHelper archiveHelper);
 
         /// <summary>
-        /// 设置序列化辅助器
+        ///  设置序列化辅助器
         /// </summary>
-        /// <param name="serializerHelper"></param>
-        void SetSerializer(IArchiveSerializerHelper serializerHelper);
+        /// <param name="serializerHelper">序列化辅助器</param>
+        void SetArchiveSerializerHelper(IArchiveSerializerHelper serializerHelper);
 
         /// <summary>
-        /// 设置加密解密辅助器
+        ///  设置加密解密辅助器
         /// </summary>
-        /// <param name="encryptorHelper"></param>
-        void SetEncryptor(IEncryptorHelper encryptorHelper);
+        /// <param name="encryptorHelper">加密解密辅助器</param>
+        void SetEncryptorHelper(IEncryptorHelper encryptorHelper);
 
         /// <summary>
         /// 初始化存档系统
         /// </summary>
-        /// <param name="completeCallback"></param>
-        void Initialize(InitArchiveCompleteCallback completeCallback);
+        /// <param name="archiveUri"></param>
+        /// <param name="maxSlotCount"></param>
+        /// <param name="userIdentifier"></param>
+        /// <returns></returns>
+        UniTask Initialize(string archiveUri, int maxSlotCount, string userIdentifier);
 
         /// <summary>
-        /// 
+        /// 获取存档栏
         /// </summary>
-        bool AddArchiveSlot(string slotName);
+        /// <param name="index"></param>
+        /// <returns></returns>
+        ArchiveSlot GetArchiveSlot(int index);
 
         /// <summary>
-        /// 
+        /// 获取所有存档栏
         /// </summary>
-        /// <param name="slotName"></param>
-        /// <param name="identifier"></param>
+        /// <returns></returns>
+        ArchiveSlot[] GetArchiveSlots();
+
+        /// <summary>
+        /// 选择存档栏
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        void SelectSlot(int index);
+
+        /// <summary>
+        /// 设置存档数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
-        /// <typeparam name="T"></typeparam>
-        void SaveData<T>(string slotName, string identifier, T data) where T : IArchiveData;
+        void SetData<T>(T data) where T : IArchiveData;
 
         /// <summary>
-        /// 异步保存存档数据
+        /// 是否存在存档数据
         /// </summary>
-        /// <param name="slotName"></param>
-        /// <param name="identifier"></param>
-        /// <param name="data"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="uniqueId"></param>
+        /// <returns></returns>
+        bool HasData<T>(string uniqueId) where T : IArchiveData;
+
+        /// <summary>
+        /// 通过指定标识符获取存档数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="uniqueId">要获取的存档数据标识符</param>
+        /// <returns></returns>
+        T GetData<T>(string uniqueId) where T : IArchiveData;
+
+        /// <summary>
+        /// 通过指定标识符获取存档数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="uniqueId"></param>
+        /// <param name="defaultData">当指定的存档项不存在时，返回此默认值</param>
+        /// <returns></returns>
+        T GetData<T>(string uniqueId, T defaultData) where T : IArchiveData;
+
+        /// <summary>
+        /// 获取所有的存档数据
+        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        UniTask SaveDataAsync<T>(string slotName, string identifier, T data) where T : IArchiveData;
+        T[] GetDatas<T>() where T : IArchiveData;
 
         /// <summary>
-        /// 
+        /// 保存存档
         /// </summary>
-        /// <param name="slotName"></param>
-        /// <param name="identifier"></param>
-        /// <typeparam name="T"></typeparam>
+        UniTask Save();
+
+        /// <summary>
+        /// 加载存档
+        /// </summary>
+        UniTask Load();
+
+        /// <summary>
+        /// 保存当前<see cref="CurrentSlot"/>元数据
+        /// </summary>
         /// <returns></returns>
-        T LoadData<T>(string slotName, string identifier) where T : IArchiveData;
+        UniTask SaveSlotMeta();
 
         /// <summary>
-        /// 异步加载存档数据
+        /// 保存指定元数据
         /// </summary>
-        /// <param name="slotName"></param>
-        /// <param name="identifier"></param>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="archiveSlot"></param>
         /// <returns></returns>
-        UniTask<T> LoadDataAsync<T>(string slotName, string identifier) where T : IArchiveData;
-
-        /// <summary>
-        /// 删除存档
-        /// </summary>
-        /// <param name="slotName"></param>
-        void Delete(string slotName);
-
-        /// <summary>
-        ///  备份存档
-        /// </summary>
-        /// <param name="slotName"></param>
-        void Backup(string slotName);
+        UniTask SaveSlotMeta(ArchiveSlot archiveSlot);
     }
 }

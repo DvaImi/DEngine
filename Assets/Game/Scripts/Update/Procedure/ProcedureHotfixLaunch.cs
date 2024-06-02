@@ -1,4 +1,5 @@
-﻿using DEngine.Procedure;
+﻿using Cysharp.Threading.Tasks;
+using DEngine.Procedure;
 using DEngine.Runtime;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
@@ -6,9 +7,7 @@ namespace Game.Update
 {
     public class ProcedureHotfixLaunch : ProcedureBase
     {
-        private bool m_InitArchiveComplete;
-        private int m_SlotCount;
-
+        private UniTask m_InitArchiveTask;
         /// <summary>
         /// 热更新流程启动
         /// </summary>
@@ -16,15 +15,15 @@ namespace Game.Update
         protected override void OnInit(ProcedureOwner procedureOwner)
         {
             base.OnInit(procedureOwner);
-            m_InitArchiveComplete = false;
         }
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
             Log.Info("ProcedureHotfix  Launch  ");
-            GameEntry.Archive.Initialize(OnInitArchiveCompleteCallback);
+            m_InitArchiveTask = GameEntry.Archive.Initialize();
         }
+
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
         {
@@ -34,20 +33,11 @@ namespace Game.Update
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            if (!m_InitArchiveComplete)
+            if (m_InitArchiveTask.Status != UniTaskStatus.Succeeded)
             {
                 return;
             }
-
-            procedureOwner.SetData<VarInt32>("ArchiveSlotCount", m_SlotCount);
             ChangeState<ProcedurePreload>(procedureOwner);
-        }
-
-        private void OnInitArchiveCompleteCallback(int version, int slotCount)
-        {
-            Log.Info("Init archive complete, current version is  '{0}' slot count is  '{1}'.", version, slotCount);
-            m_SlotCount = slotCount;
-            m_InitArchiveComplete = true;
         }
     }
 }
