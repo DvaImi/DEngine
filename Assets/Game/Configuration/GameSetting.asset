@@ -32,12 +32,17 @@ MonoBehaviour:
     MacOSAppUrl: 
     IOSAppUrl: 
     AndroidAppUrl: 
-  HotupdateAssembliesPath: Assets/Game/HybridCLRDate/HotUpdate
-  HotUpdateAssemblies: []
+  HotupdateAssembliesPath: Assets/Game/HybridCLRData/HotUpdate
+  HotUpdateAssemblies:
+  - Game.Update
   AOTAssembliesPath: Assets/Game/HybridCLRData/AOT
   AOTAssemblies:
-  - mscorlib.dll
-  - System.dll
-  - System.Core.dll
+  - mscorlib
+  - System
+  - System.Core
+  - DEngine
+  - DEngine.Runtime
+  - UniTask
+  - UnityEngine.CoreModule
   PreserveAssembliesPath: Assets/Game/HybridCLRData/Preserve
   PreserveAssemblies: []

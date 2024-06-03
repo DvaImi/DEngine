@@ -7,7 +7,7 @@ namespace Game.Update
 {
     public class ProcedureHotfixLaunch : ProcedureBase
     {
-        private UniTask m_InitArchiveTask;
+        private bool m_InitializeComplete;
         /// <summary>
         /// 热更新流程启动
         /// </summary>
@@ -21,7 +21,8 @@ namespace Game.Update
         {
             base.OnEnter(procedureOwner);
             Log.Info("ProcedureHotfix  Launch  ");
-            m_InitArchiveTask = GameEntry.Archive.Initialize();
+            m_InitializeComplete = false;
+            InitializeArchive().Forget();
         }
 
 
@@ -33,11 +34,18 @@ namespace Game.Update
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            if (m_InitArchiveTask.Status != UniTaskStatus.Succeeded)
+            if (!m_InitializeComplete)
             {
                 return;
             }
             ChangeState<ProcedurePreload>(procedureOwner);
+        }
+
+        private async UniTask InitializeArchive()
+        {
+            await GameEntry.Archive.Initialize();
+            m_InitializeComplete = true;
+            Log.Info("Init Archive complete.");
         }
     }
 }

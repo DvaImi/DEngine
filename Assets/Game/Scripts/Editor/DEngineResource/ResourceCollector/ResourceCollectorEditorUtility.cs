@@ -135,6 +135,12 @@ namespace Game.Editor.ResourceTools
                         {
                             continue;
                         }
+
+                        FileInfo fileInfo = new(resourceCollector.AssetPath);
+                        if (DefaultFilterRule.IsIgnoreFile(fileInfo.Extension))
+                        {
+                            continue;
+                        }
                         if (string.IsNullOrEmpty(resourceCollector.Variant))
                         {
                             resourceCollector.Variant = null;
@@ -142,24 +148,13 @@ namespace Game.Editor.ResourceTools
 
                         if (AssetDatabase.IsValidFolder(resourceCollector.AssetPath) || File.Exists(resourceCollector.AssetPath))
                         {
-                            string resourceName;
-                            if (string.IsNullOrEmpty(resourceCollector.Name))
-                            {
-                                FileInfo fileInfo = new FileInfo(resourceCollector.AssetPath);
-                                resourceName = Path.GetFileNameWithoutExtension(fileInfo.FullName).ToLowerInvariant() + "_" + AssetDatabase.AssetPathToGUID(resourceCollector.AssetPath);
-                            }
-                            else
-                            {
-                                resourceName = resourceCollector.Name.ToLowerInvariant();
-                            }
-
+                            string resourceName = string.IsNullOrEmpty(resourceCollector.Name) ? Path.GetFileNameWithoutExtension(fileInfo.FullName).ToLowerInvariant() : resourceCollector.Name.ToLowerInvariant();
                             ApplyResourceFilter(resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));
                         }
                         else
                         {
                             Debug.LogWarningFormat("assetPath {0} is invalid.", resourceCollector.AssetPath);
                         }
-
                     }
                 }
             }
@@ -171,7 +166,7 @@ namespace Game.Editor.ResourceTools
             {
                 if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
                 {
-                    RenameResource(oldResource.Name, oldResource.Variant, resourceName, null);
+                    RenameResource(oldResource.Name, oldResource.Variant, resourceName, assetCollector.Variant);
                     break;
                 }
             }
@@ -183,7 +178,7 @@ namespace Game.Editor.ResourceTools
                     assetCollector.FileSystem = null;
                 }
 
-                AddResource(resourceName, null, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split('|'));
+                AddResource(resourceName, assetCollector.Variant, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split('|'));
             }
 
             if (AssetDatabase.IsValidFolder(assetCollector.AssetPath))
@@ -197,7 +192,7 @@ namespace Game.Editor.ResourceTools
                         string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
                         if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                         {
-                            AssignAsset(assetGUID, resourceName, null);
+                            AssignAsset(assetGUID, resourceName, assetCollector.Variant);
                         }
                     }
                 }
@@ -211,7 +206,7 @@ namespace Game.Editor.ResourceTools
                     string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
                     if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                     {
-                        AssignAsset(assetGUID, resourceName, null);
+                        AssignAsset(assetGUID, resourceName, assetCollector.Variant);
                     }
                 }
                 else

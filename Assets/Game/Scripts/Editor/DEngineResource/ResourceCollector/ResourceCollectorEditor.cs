@@ -149,11 +149,6 @@ namespace Game.Editor
                 Color originalColor = GUI.backgroundColor;
                 GUI.backgroundColor = Color.green;
 
-                if (GUILayout.Button("Go"))
-                {
-                    EditorGUIUtility.PingObject(m_AssetBundlePackageCollector);
-                }
-
                 if (GUILayout.Button("导出"))
                 {
                     ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
@@ -162,7 +157,6 @@ namespace Game.Editor
                 if (GUILayout.Button("Save"))
                 {
                     Save();
-                    ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
 
                 GUI.backgroundColor = originalColor;
@@ -179,6 +173,7 @@ namespace Game.Editor
             EditorGUILayout.BeginVertical("box", GUILayout.Height(40));
             {
                 GUILayout.Label("PackageName");
+                GUILayout.Space(10);
                 if (m_SelectAssetBundleCollector != null)
                 {
                     string packageName = EditorGUILayout.DelayedTextField(m_SelectAssetBundleCollector.PackageName, GUILayout.Width(150));
@@ -250,13 +245,17 @@ namespace Game.Editor
             GUILayout.EndArea();
 
 
+
             m_MenuGroupRect = new Rect(PackageSpace, m_ToolbarRect.height, m_MenuTreeWidth, position.height - m_AddRectHeight - m_ToolbarRect.height);
             m_MenuTreeGroupsView.OnGUI(m_MenuGroupRect);
+
+
 
             GUILayout.BeginArea(new Rect(PackageSpace + m_MenuGroupRect.width * 0.2F, m_MenuGroupRect.height + m_AddRectHeight, m_MenuGroupRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
             {
                 EditorGUILayout.BeginHorizontal();
                 {
+
                     if (GUILayout.Button("+", GUILayout.Width(30)))
                     {
                         ResourceGroupCollector resourceGroup = new();
