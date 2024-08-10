@@ -97,7 +97,17 @@
         /// <returns></returns>
         public static string GetUISoundAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/UI/UISounds/{0}.mp3", assetName);
+            return DEngine.Utility.Text.Format("Assets/Game/UI/UISounds/{0}.mp3", assetName);
+        }
+
+        /// <summary>
+        /// 获取ScriptableAssets 资源路径
+        /// </summary>
+        /// <param name="assetName"></param>
+        /// <returns></returns>
+        public static string GetScriptableAsset(string assetName)
+        {
+            return DEngine.Utility.Text.Format("Assets/Game/ScriptableAssets/{0}.asset", assetName);
         }
     }
 }

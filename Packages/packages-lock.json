@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "6d0ceaa4f5cac0b9269fd4b2c3a8e36f4de549a8"
+      "hash": "34df2799432d9dedd2c17d461c126a311fe12157"
     },
     "com.cysharp.memorypack": {
       "version": "https://gitee.com/game-for-all_0/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack",
@@ -23,17 +23,17 @@
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.ide.rider": {
-      "version": "3.0.28",
+    "com.unity.ide.visualstudio": {
+      "version": "2.0.22",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.ext.nunit": "1.0.6"
+        "com.unity.test-framework": "1.1.9"
       },
       "url": "https://packages.unity.com"
     },
@@ -58,6 +58,17 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.test-framework": {
+      "version": "1.1.33",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ext.nunit": "1.0.6",
+        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
@@ -89,6 +100,13 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "jillejr.newtonsoft.json-for-unity.converters": {
+      "version": "https://github.com/jilleJr/Newtonsoft.Json-for-Unity.Converters.git#1.6.3",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "464cdbbabb67661751cb73fd39c4e99e5b5eedb0"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

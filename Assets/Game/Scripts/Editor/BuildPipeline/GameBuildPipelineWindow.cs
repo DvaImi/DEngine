@@ -123,7 +123,7 @@ namespace Game.Editor.BuildPipeline
                 HybridCLR.Editor.Commands.Il2CppDefGeneratorCommand.GenerateIl2CppDef();
                 HybridCLR.Editor.Commands.LinkGeneratorCommand.GenerateLinkXml();
                 HybridCLR.Editor.Commands.StripAOTDllCommand.GenerateStripedAOTDlls();
-                HybridCLR.Editor.Commands.MethodBridgeGeneratorCommand.CompileAndGenerateMethodBridge();
+                HybridCLR.Editor.Commands.MethodBridgeGeneratorCommand.GenerateMethodBridgeAndReversePInvokeWrapper();
                 HybridCLR.Editor.Commands.AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
             }
         }
