@@ -22,7 +22,7 @@ MonoBehaviour:
   ForceRebuild: 0
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 0
+  InternalResourceVersion: 1
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: 
   BuildInfo:

@@ -7,19 +7,21 @@
       "dependencies": {},
       "hash": "34df2799432d9dedd2c17d461c126a311fe12157"
     },
-    "com.cysharp.memorypack": {
-      "version": "https://gitee.com/game-for-all_0/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "286a8caeacca6c0414b944a5ed01647a10435ec5"
-    },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,
       "source": "git",
       "dependencies": {},
       "hash": "fbe0bf85155f42f8832205f7b3ac3df571ada33e"
+    },
+    "com.fantasy.unity": {
+      "version": "https://github.com/DvaImi/Fantasy.git?path=Fantasy.Unity/Fantasy.Unity",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "hash": "f11fa21e40093ab252d234c1b38b0a0780460f4f"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",

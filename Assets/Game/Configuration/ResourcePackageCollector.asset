@@ -16,59 +16,33 @@ MonoBehaviour:
   - PackageName: Game
     Description: 
     Groups:
-    - GroupName: mainPackage
+    - GroupName: Base
       EnableGroup: 1
       Description: "\u57FA\u7840\u8D44\u6E90"
       AssetCollectors:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: mainPackage
+        Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: be6134754f035424aadfe7828332fed0, type: 3}
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll
-    - GroupName: logic
-      EnableGroup: 1
-      Description: "\u6E38\u620F\u53EF\u70ED\u66F4\u7684\u903B\u8F91\u4EE3\u7801"
-      AssetCollectors:
-      - Enable: 1
-        Name: 
-        FileSystem: logic
-        Groups: logic
-        Variant: 
-        Asset: {fileID: 102900000, guid: 36d161e297c33aa48bcdaf7b513fbed4, type: 3}
-        LoadType: 0
-        Packed: 1
-        FilterRule: CollectAll
-      - Enable: 1
-        Name: 
-        FileSystem: logic
-        Groups: logic
-        Variant: 
-        Asset: {fileID: 102900000, guid: 650bab57f1e4fdf4c915ac6042b17f9c, type: 3}
-        LoadType: 0
-        Packed: 1
-        FilterRule: CollectAll
-      - Enable: 1
-        Name: 
-        FileSystem: logic
-        Groups: logic
-        Variant: 
-        Asset: {fileID: 102900000, guid: fe5c9a35e05887b48a28c2554b4668e8, type: 3}
-        LoadType: 0
-        Packed: 1
-        FilterRule: CollectAll
-    - GroupName: localization
-      EnableGroup: 1
-      Description: "\u672C\u5730\u5316\u8D44\u6E90"
-      AssetCollectors:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: localization
-        Variant: zh-cn
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 102900000, guid: b6a9105023a7cf44ab66e5d45457478e, type: 3}
+        LoadType: 0
+        Packed: 1
+        FilterRule: CollectAll
+      - Enable: 1
+        Name: 
+        FileSystem: 
+        Groups: Base
+        Variant: 
         Asset: {fileID: 102900000, guid: 11f2c913956269540987ff4d8220690f, type: 3}
         LoadType: 0
         Packed: 1
@@ -76,8 +50,8 @@ MonoBehaviour:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: localization
-        Variant: zh-tw
+        Groups: Base
+        Variant: 
         Asset: {fileID: 102900000, guid: 99b4813375565a8409dedd11e2797474, type: 3}
         LoadType: 0
         Packed: 1
@@ -85,8 +59,8 @@ MonoBehaviour:
       - Enable: 1
         Name: 
         FileSystem: 
-        Groups: localization
-        Variant: en-us
+        Groups: Base
+        Variant: 
         Asset: {fileID: 102900000, guid: 4fc38d301ae29c34faccf58b7ab86874, type: 3}
         LoadType: 0
         Packed: 1
