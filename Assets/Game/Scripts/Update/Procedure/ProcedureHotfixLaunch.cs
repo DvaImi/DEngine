@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using DEngine.Procedure;
 using DEngine.Runtime;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
@@ -23,7 +24,9 @@ namespace Game.Update
             Log.Info("ProcedureHotfix  Launch  ");
             m_InitializeComplete = false;
             InitializeArchive().Forget();
+            InitializeNetwork().Forget();
         }
+
 
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -46,6 +49,12 @@ namespace Game.Update
             await GameEntry.Archive.Initialize();
             m_InitializeComplete = true;
             Log.Info("Init Archive complete.");
+        }
+
+        private async UniTask InitializeNetwork()
+        {
+            await GameEntry.Network.Initialize(GetType().Assembly);
+            Log.Info("Init Network complete.");
         }
     }
 }
