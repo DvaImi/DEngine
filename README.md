@@ -16,7 +16,8 @@ UNITY_2020_1_OR_NEWER
   - [x] 数据表支持多sheet导出  
   - [x] 本地化修改为数据表方式导出
   - [ ] 后续考虑接入Luban 
-- 接入hybridclr,热更流程已跑通[x]
+- 接入hybridclr
+  - [x] 拆分热更程序集和AOT程序集，流程已跑通 
 - 接入Unitask
   - [x] 扩充资源加载为await模式
   - [ ] 考虑扩充异步事件系统
