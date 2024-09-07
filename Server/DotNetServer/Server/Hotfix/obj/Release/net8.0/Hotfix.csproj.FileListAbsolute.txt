@@ -1,0 +1,6 @@
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Hotfix\obj\Release\net8.0\Hotfix.csproj.AssemblyReference.cache
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Hotfix\obj\Release\net8.0\Hotfix.GeneratedMSBuildEditorConfig.editorconfig
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Hotfix\obj\Release\net8.0\Hotfix.AssemblyInfoInputs.cache
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Hotfix\obj\Release\net8.0\Hotfix.AssemblyInfo.cs
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Hotfix\obj\Release\net8.0\Hotfix.csproj.CoreCompileInputs.cache
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Hotfix\obj\Release\net8.0\Hotfix.sourcelink.json

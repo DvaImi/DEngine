@@ -1,0 +1,175 @@
+{
+  "format": 1,
+  "restore": {
+    "F:\\Project\\Unity\\Work\\DEngine\\Server\\DotNetServer\\Server\\Entity\\Entity.csproj": {}
+  },
+  "projects": {
+    "F:\\Project\\Unity\\Work\\DEngine\\Server\\DotNetServer\\Server\\Entity\\Entity.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\Project\\Unity\\Work\\DEngine\\Server\\DotNetServer\\Server\\Entity\\Entity.csproj",
+        "projectName": "Entity",
+        "projectPath": "F:\\Project\\Unity\\Work\\DEngine\\Server\\DotNetServer\\Server\\Entity\\Entity.csproj",
+        "packagesPath": "C:\\Users\\ZHIHEN\\.nuget\\packages\\",
+        "outputPath": "F:\\Project\\Unity\\Work\\DEngine\\Server\\DotNetServer\\Server\\Entity\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\ZHIHEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "F:\\Project\\Unity\\Work\\DEngine\\Server\\Fantasy\\Fantasy.Net\\Fantasy.Net\\Fantasy.Net.csproj": {
+                "projectPath": "F:\\Project\\Unity\\Work\\DEngine\\Server\\Fantasy\\Fantasy.Net\\Fantasy.Net\\Fantasy.Net.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.304/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\Project\\Unity\\Work\\DEngine\\Server\\Fantasy\\Fantasy.Net\\Fantasy.Net\\Fantasy.Net.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\Project\\Unity\\Work\\DEngine\\Server\\Fantasy\\Fantasy.Net\\Fantasy.Net\\Fantasy.Net.csproj",
+        "projectName": "Fantasy.Net",
+        "projectPath": "F:\\Project\\Unity\\Work\\DEngine\\Server\\Fantasy\\Fantasy.Net\\Fantasy.Net\\Fantasy.Net.csproj",
+        "packagesPath": "C:\\Users\\ZHIHEN\\.nuget\\packages\\",
+        "outputPath": "F:\\Project\\Unity\\Work\\DEngine\\Server\\Fantasy\\Fantasy.Net\\Fantasy.Net\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\ZHIHEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true,
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "CommandLineParser": {
+              "target": "Package",
+              "version": "[2.9.1, )"
+            },
+            "MemoryPack": {
+              "target": "Package",
+              "version": "[1.21.1, )"
+            },
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[2.28.0, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.28.0, )"
+            },
+            "NLog": {
+              "target": "Package",
+              "version": "[5.3.2, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "System.IO.Pipelines": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "protobuf-net": {
+              "target": "Package",
+              "version": "[3.2.30, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.304/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

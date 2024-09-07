@@ -1,0 +1,22 @@
+﻿using System;
+using UnityEngine;
+
+namespace Game
+{
+    /// <summary>
+    /// 游戏入口。
+    /// </summary>
+    public partial class GameEntry : MonoBehaviour
+    {
+        private void Start()
+        {
+            InitBuiltinComponents();
+            InitCustomsComponents();
+        }
+
+        private void Update()
+        {
+            UpdateModule(Time.deltaTime, Time.unscaledDeltaTime);
+        }
+    }
+}
