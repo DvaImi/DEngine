@@ -39,7 +39,13 @@ namespace Game.Archive
             set => m_UserIdentifier = value;
         }
 
-        public ArchiveSlot CurrentSlot { get => m_ArchiveManager.CurrentSlot; }
+        public ArchiveSlot CurrentSlot
+        {
+            get
+            {
+                return m_ArchiveManager?.CurrentSlot;
+            }
+        }
 
         private void Start()
         {
@@ -88,6 +94,7 @@ namespace Game.Archive
             {
                 return;
             }
+
             var encryptorHelperType = Utility.Assembly.GetType(m_EncryptorTypeName);
             if (encryptorHelperType == null)
             {

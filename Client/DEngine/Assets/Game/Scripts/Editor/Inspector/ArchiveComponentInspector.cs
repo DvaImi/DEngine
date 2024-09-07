@@ -119,12 +119,12 @@ namespace Game.Editor
                 {
                     EditorGUILayout.LabelField("Current Slot", t.CurrentSlot.Name);
                     EditorGUILayout.Space(5);
-                }
 
-                ArchiveSlot[] archiveSlots = t.GetArchiveSlots();
-                foreach (var archiveSlot in archiveSlots)
-                {
-                    DrawArchiveSlot(archiveSlot);
+                    ArchiveSlot[] archiveSlots = t.GetArchiveSlots();
+                    foreach (var archiveSlot in archiveSlots)
+                    {
+                        DrawArchiveSlot(archiveSlot);
+                    }
                 }
             }
 
@@ -261,6 +261,7 @@ namespace Game.Editor
                 }
                 EditorGUILayout.EndVertical();
             }
+
             EditorGUILayout.Separator();
         }
     }
