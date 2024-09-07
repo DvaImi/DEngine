@@ -38,7 +38,7 @@ namespace DEngine.Editor.ResourceTools
             m_ConfigurationPath = Type.GetConfigurationPath<ResourceBuilderConfigPathAttribute>() ?? Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "DEngine/Configs/ResourceBuilder.xml"));
 
             m_ResourceCollection = new ResourceCollection();
-            m_ResourceCollection.OnLoadingResource += delegate (int index, int count)
+            m_ResourceCollection.OnLoadingResource += delegate(int index, int count)
             {
                 if (OnLoadingResource != null)
                 {
@@ -46,7 +46,7 @@ namespace DEngine.Editor.ResourceTools
                 }
             };
 
-            m_ResourceCollection.OnLoadingAsset += delegate (int index, int count)
+            m_ResourceCollection.OnLoadingAsset += delegate(int index, int count)
             {
                 if (OnLoadingAsset != null)
                 {
@@ -54,7 +54,7 @@ namespace DEngine.Editor.ResourceTools
                 }
             };
 
-            m_ResourceCollection.OnLoadCompleted += delegate ()
+            m_ResourceCollection.OnLoadCompleted += delegate()
             {
                 if (OnLoadCompleted != null)
                 {
@@ -64,7 +64,7 @@ namespace DEngine.Editor.ResourceTools
 
             m_ResourceAnalyzerController = new ResourceAnalyzerController(m_ResourceCollection);
 
-            m_ResourceAnalyzerController.OnAnalyzingAsset += delegate (int index, int count)
+            m_ResourceAnalyzerController.OnAnalyzingAsset += delegate(int index, int count)
             {
                 if (OnAnalyzingAsset != null)
                 {
@@ -72,7 +72,7 @@ namespace DEngine.Editor.ResourceTools
                 }
             };
 
-            m_ResourceAnalyzerController.OnAnalyzeCompleted += delegate ()
+            m_ResourceAnalyzerController.OnAnalyzeCompleted += delegate()
             {
                 if (OnAnalyzeCompleted != null)
                 {
@@ -112,18 +112,12 @@ namespace DEngine.Editor.ResourceTools
 
         public string ProductName
         {
-            get
-            {
-                return PlayerSettings.productName;
-            }
+            get { return PlayerSettings.productName; }
         }
 
         public string CompanyName
         {
-            get
-            {
-                return PlayerSettings.companyName;
-            }
+            get { return PlayerSettings.companyName; }
         }
 
         public string GameIdentifier
@@ -140,85 +134,35 @@ namespace DEngine.Editor.ResourceTools
 
         public string UnityVersion
         {
-            get
-            {
-                return Application.unityVersion;
-            }
+            get { return Application.unityVersion; }
         }
 
         public string ApplicableGameVersion
         {
-            get
-            {
-                return Application.version;
-            }
+            get { return Application.version; }
         }
 
-        public int InternalResourceVersion
-        {
-            get;
-            set;
-        }
+        public int InternalResourceVersion { get; set; }
 
-        public Platform Platforms
-        {
-            get;
-            set;
-        }
+        public Platform Platforms { get; set; }
 
-        public AssetBundleCompressionType AssetBundleCompression
-        {
-            get;
-            set;
-        }
+        public AssetBundleCompressionType AssetBundleCompression { get; set; }
 
-        public string CompressionHelperTypeName
-        {
-            get;
-            set;
-        }
+        public string CompressionHelperTypeName { get; set; }
 
-        public bool AdditionalCompressionSelected
-        {
-            get;
-            set;
-        }
+        public bool AdditionalCompressionSelected { get; set; }
 
-        public bool ForceRebuildAssetBundleSelected
-        {
-            get;
-            set;
-        }
+        public bool ForceRebuildAssetBundleSelected { get; set; }
 
-        public string BuildEventHandlerTypeName
-        {
-            get;
-            set;
-        }
+        public string BuildEventHandlerTypeName { get; set; }
 
-        public string OutputDirectory
-        {
-            get;
-            set;
-        }
+        public string OutputDirectory { get; set; }
 
-        public bool OutputPackageSelected
-        {
-            get;
-            set;
-        }
+        public bool OutputPackageSelected { get; set; }
 
-        public bool OutputFullSelected
-        {
-            get;
-            set;
-        }
+        public bool OutputFullSelected { get; set; }
 
-        public bool OutputPackedSelected
-        {
-            get;
-            set;
-        }
+        public bool OutputPackedSelected { get; set; }
 
         public bool IsValidOutputDirectory
         {
@@ -303,17 +247,9 @@ namespace DEngine.Editor.ResourceTools
             }
         }
 
-        public bool Difference
-        {
-            get;
-            set;
-        }
+        public bool Difference { get; set; }
 
-        public string LastBuildReportXml
-        {
-            get;
-            set;
-        }
+        public string LastBuildReportXml { get; set; }
 
 
         public event DEngineAction<int, int> OnLoadingResource = null;
@@ -405,6 +341,7 @@ namespace DEngine.Editor.ResourceTools
                             break;
                     }
                 }
+
                 LastBuildReportXml = GetLastBuildBuildReportPath();
             }
             catch
@@ -575,6 +512,7 @@ namespace DEngine.Editor.ResourceTools
             {
                 return null;
             }
+
             string[] allBuildReport = Directory.GetFiles(buildReportDirectory, "*.xml", SearchOption.AllDirectories);
             int[] internalResourceVersion = new int[allBuildReport.Length];
             for (int i = 0; i < allBuildReport.Length; i++)
@@ -588,6 +526,7 @@ namespace DEngine.Editor.ResourceTools
                 XmlNode xmlLastFullBuildVersion = xmlSummary.SelectSingleNode("InternalResourceVersion");
                 internalResourceVersion[i] = int.Parse(xmlLastFullBuildVersion.InnerText);
             }
+
             //找到最新的版本号
             int maxVersion = internalResourceVersion.Max();
             string FullPath = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/", OutputDirectory, ApplicableGameVersion, maxVersion)).FullName);
@@ -595,6 +534,7 @@ namespace DEngine.Editor.ResourceTools
             {
                 return null;
             }
+
             string lastVeisionBuildReportDirectory = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/BuildReport/{1}.{2}/", OutputDirectory, ApplicableGameVersion, maxVersion)).FullName);
             return !Directory.Exists(lastVeisionBuildReportDirectory) ? throw new DEngineException("BuildReport path is invalid.") : lastVeisionBuildReportDirectory;
         }
@@ -778,6 +718,7 @@ namespace DEngine.Editor.ResourceTools
                 {
                     ProcessDifferenceComplete?.Invoke(Platforms);
                 }
+
                 return true;
             }
             catch (Exception exception)
@@ -1458,7 +1399,12 @@ namespace DEngine.Editor.ResourceTools
 
         private BuildAssetBundleOptions GetBuildAssetBundleOptions()
         {
+            
+#if UNITY_2022_1_OR_NEWER
+            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.DisableWriteTypeTree;
+#else   
             BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.DeterministicAssetBundle;
+#endif
 
             if (ForceRebuildAssetBundleSelected)
             {

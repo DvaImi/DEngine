@@ -34,15 +34,6 @@ MonoBehaviour:
         FileSystem: 
         Groups: Base
         Variant: 
-        Asset: {fileID: 102900000, guid: b6a9105023a7cf44ab66e5d45457478e, type: 3}
-        LoadType: 0
-        Packed: 1
-        FilterRule: CollectAll
-      - Enable: 1
-        Name: 
-        FileSystem: 
-        Groups: Base
-        Variant: 
         Asset: {fileID: 102900000, guid: 11f2c913956269540987ff4d8220690f, type: 3}
         LoadType: 0
         Packed: 1
@@ -62,6 +53,15 @@ MonoBehaviour:
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: 4fc38d301ae29c34faccf58b7ab86874, type: 3}
+        LoadType: 0
+        Packed: 1
+        FilterRule: CollectAll
+      - Enable: 1
+        Name: 
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 3523361330751221004, guid: 47c57db2cbae5594a9872a084eb9be62, type: 3}
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll

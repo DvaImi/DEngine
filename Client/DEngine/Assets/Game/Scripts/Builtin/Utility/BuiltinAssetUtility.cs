@@ -12,7 +12,7 @@
         /// <returns></returns>
         public static string GetCLRUpdateAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/HybridCLRData/HotUpdate/{0}.{1}", assetName, "bytes");
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/DLL/HotUpdate/{0}.{1}", assetName, "bytes");
         }
 
         /// <summary>
@@ -22,7 +22,7 @@
         /// <returns></returns>
         public static string GetCLRAOTAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/HybridCLRData/AOT/{0}.{1}", assetName, "bytes");
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/DLL/AOT/{0}.{1}", assetName, "bytes");
         }
 
         /// <summary>
@@ -32,7 +32,7 @@
         /// <returns></returns>
         public static string GetCLRLanuchAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/HybridCLRData/Luncher/{0}.{1}", assetName, "prefab");
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Luncher/{0}.{1}", assetName, "prefab");
         }
     }
 }

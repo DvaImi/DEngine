@@ -8,14 +8,13 @@ using Fantasy.Async;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
 using Fantasy.Platform.Unity;
-using Log = Fantasy.Log;
+using Log = DEngine.Runtime.Log;
 
 namespace Game.Network
 {
     public class NetworkComponent : DEngineComponent
     {
-        [SerializeField]
-        private string m_RemoteAddress = "127.0.0.1:20000";
+        [SerializeField] private string m_RemoteAddress = "127.0.0.1:20000";
         private Scene m_Scene;
         private Session m_Session;
 
@@ -27,7 +26,7 @@ namespace Game.Network
         public async UniTask Initialize(params Assembly[] assemblies)
         {
             m_Scene = await Entry.Initialize(assemblies);
-            m_Session = m_Scene.Connect(m_RemoteAddress, NetworkProtocolType.KCP, OnConnectComplete, OnConnectFail, OnConnectDisconnect, false, 5000);
+            m_Session = m_Scene.Connect(m_RemoteAddress, NetworkProtocolType.KCP, OnConnectComplete, OnConnectFail, OnConnectDisconnect, false);
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace Game.Network
         /// </summary>
         private void OnConnectFail()
         {
-            Log.Info("Network channel connect failure, remote address '{0}'.", m_Session.RemoteEndPoint.ToString());
+            Log.Warning("Network channel connect failure, remote address '{0}'.", m_Session.RemoteEndPoint.ToString());
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace Game.Network
         /// </summary>
         private void OnConnectDisconnect()
         {
-            Log.Info("Network channel disconnect, remote address '{0}'.", m_Session.RemoteEndPoint.ToString());
+            Log.Warning("Network channel disconnect, remote address '{0}'.", m_Session.RemoteEndPoint.ToString());
         }
 
         /// <summary>
