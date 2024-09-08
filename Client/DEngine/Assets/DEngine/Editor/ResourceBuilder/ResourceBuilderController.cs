@@ -1401,7 +1401,7 @@ namespace DEngine.Editor.ResourceTools
         {
             
 #if UNITY_2022_1_OR_NEWER
-            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.DisableWriteTypeTree;
+            BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.None;
 #else   
             BuildAssetBundleOptions buildOptions = BuildAssetBundleOptions.DeterministicAssetBundle;
 #endif
