@@ -26,14 +26,8 @@ namespace DEngine.Runtime
         /// </summary>
         public override event EventHandler<WebRequestAgentHelperCompleteEventArgs> WebRequestAgentHelperComplete
         {
-            add
-            {
-                m_WebRequestAgentHelperCompleteEventHandler += value;
-            }
-            remove
-            {
-                m_WebRequestAgentHelperCompleteEventHandler -= value;
-            }
+            add { m_WebRequestAgentHelperCompleteEventHandler += value; }
+            remove { m_WebRequestAgentHelperCompleteEventHandler -= value; }
         }
 
         /// <summary>
@@ -41,14 +35,8 @@ namespace DEngine.Runtime
         /// </summary>
         public override event EventHandler<WebRequestAgentHelperErrorEventArgs> WebRequestAgentHelperError
         {
-            add
-            {
-                m_WebRequestAgentHelperErrorEventHandler += value;
-            }
-            remove
-            {
-                m_WebRequestAgentHelperErrorEventHandler -= value;
-            }
+            add { m_WebRequestAgentHelperErrorEventHandler += value; }
+            remove { m_WebRequestAgentHelperErrorEventHandler -= value; }
         }
 
         /// <summary>
@@ -83,6 +71,7 @@ namespace DEngine.Runtime
                         m_UnityWebRequest.SetRequestHeader(header.Key, header.Value);
                     }
                 }
+
                 ReferencePool.Release(requestParams);
             }
 
@@ -106,8 +95,11 @@ namespace DEngine.Runtime
                 Log.Fatal("Web request agent helper handler is invalid.");
                 return;
             }
-
+#if UNITY_2022_1_OR_NEWER
             m_UnityWebRequest = UnityWebRequest.PostWwwForm(webRequestUri, Utility.Converter.GetString(postData));
+#else
+            m_UnityWebRequest = UnityWebRequest.Post(webRequestUri, Utility.Converter.GetString(postData));
+#endif
 
 
             WWWFormInfo wwwFormInfo = (WWWFormInfo)userData;
@@ -121,6 +113,7 @@ namespace DEngine.Runtime
                         m_UnityWebRequest.SetRequestHeader(header.Key, header.Value);
                     }
                 }
+
                 ReferencePool.Release(requestParams);
             }
 

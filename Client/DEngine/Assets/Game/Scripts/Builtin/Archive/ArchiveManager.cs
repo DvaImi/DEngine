@@ -38,12 +38,10 @@ namespace Game.Archive
 
         internal override void Update(float elapseSeconds, float realElapseSeconds)
         {
-
         }
 
         internal override void Shutdown()
         {
-
         }
 
         public void SetArchiveHelper(IArchiveHelper archiveHelper)
@@ -92,6 +90,7 @@ namespace Game.Archive
             {
                 throw new DEngineException("You can not set archive serializer at this time.");
             }
+
             m_EncryptorHelper = encryptorHelper;
         }
 
@@ -112,14 +111,17 @@ namespace Game.Archive
                 throw new DEngineException("Max slot count is invalid.");
             }
 
-            if (string.IsNullOrWhiteSpace(userIdentifier))
+            if (UserEncryptor)
             {
-                throw new DEngineException("UserIdentifier is invalid.");
-            }
+                if (string.IsNullOrWhiteSpace(userIdentifier))
+                {
+                    throw new DEngineException("UserIdentifier is invalid.");
+                }
 
-            if (!m_ArchiveHelper.Match(userIdentifier))
-            {
-                throw new DEngineException("UserIdentifier match invalid.");
+                if (!m_ArchiveHelper.Match(userIdentifier))
+                {
+                    throw new DEngineException("UserIdentifier match invalid.");
+                }
             }
 
             m_RefuseSetFlag = true;
@@ -146,6 +148,7 @@ namespace Game.Archive
                     return m_Slots[i];
                 }
             }
+
             return null;
         }
 
@@ -186,6 +189,7 @@ namespace Game.Archive
 
                 await SaveSlotMeta(slot);
             }
+
             m_Slots.Add(slot);
         }
 
@@ -213,6 +217,7 @@ namespace Game.Archive
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -246,6 +251,7 @@ namespace Game.Archive
                     return (T)archiveData;
                 }
             }
+
             throw new DEngineException($"Data '{uniqueId}' is not exist.");
         }
 
@@ -277,6 +283,7 @@ namespace Game.Archive
                 {
                     bytes = m_EncryptorHelper.Encrypt(bytes);
                 }
+
                 uniTasks[index] = m_ArchiveHelper.SaveAsync(fileUri, bytes);
                 index++;
             }
@@ -301,6 +308,7 @@ namespace Game.Archive
                 {
                     bytes = m_EncryptorHelper.Decrypt(bytes);
                 }
+
                 m_CacheArchiveData.Add(slotCatlog.Key, m_ArchiveSerializerHelper.Deserialize<Dictionary<string, IArchiveData>>(bytes));
             }
         }
@@ -311,6 +319,7 @@ namespace Game.Archive
             {
                 throw new DEngineException("Current slot is invalid. ");
             }
+
             await SaveSlotMeta(m_CurrentSlot);
         }
 
@@ -326,6 +335,7 @@ namespace Game.Archive
             {
                 bytes = m_EncryptorHelper.Encrypt(bytes);
             }
+
             await m_ArchiveHelper.SaveAsync(GetMetaPath(archiveSlot.Identifier), bytes);
         }
 

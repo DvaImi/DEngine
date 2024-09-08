@@ -45,6 +45,7 @@
     <type fullname="DEngine.Runtime.LoadSceneSuccessEventArgs" preserve="all" />
     <type fullname="DEngine.Runtime.LoadSceneUpdateEventArgs" preserve="all" />
     <type fullname="DEngine.Runtime.LocalizationComponent" preserve="all" />
+    <type fullname="DEngine.Runtime.Log" preserve="all" />
     <type fullname="DEngine.Runtime.ResourceComponent" preserve="all" />
     <type fullname="DEngine.Runtime.SceneComponent" preserve="all" />
     <type fullname="DEngine.Runtime.SettingComponent" preserve="all" />
@@ -56,12 +57,25 @@
     <type fullname="UnityExtension" preserve="all" />
   </assembly>
   <assembly fullname="Fantasy.Unity">
-    <type fullname="Fantasy.AProto" preserve="all" />
-    <type fullname="Fantasy.FTask`1" preserve="all" />
-    <type fullname="Fantasy.IMessage" preserve="all" />
-    <type fullname="Fantasy.IRequest" preserve="all" />
-    <type fullname="Fantasy.IResponse" preserve="all" />
+    <type fullname="Fantasy.Async.FTask`1" preserve="all" />
+    <type fullname="Fantasy.Entitas.MessagePoolComponent" preserve="all" />
     <type fullname="Fantasy.Log" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IAddressableRouteMessage" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IAddressableRouteRequest" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IAddressableRouteResponse" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.ICustomRoute" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.ICustomRouteMessage" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.ICustomRouteRequest" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.ICustomRouteResponse" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IMessage" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IRequest" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IResponse" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IRouteMessage" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IRouteRequest" preserve="all" />
+    <type fullname="Fantasy.Network.Interface.IRouteResponse" preserve="all" />
+    <type fullname="Fantasy.Scene" preserve="all" />
+    <type fullname="Fantasy.Serialize.AMessage" preserve="all" />
+    <type fullname="Fantasy.Serialize.IProto" preserve="all" />
     <type fullname="ProtoBuf.ProtoContractAttribute" preserve="all" />
     <type fullname="ProtoBuf.ProtoIgnoreAttribute" preserve="all" />
     <type fullname="ProtoBuf.ProtoMemberAttribute" preserve="all" />
@@ -74,11 +88,19 @@
     <type fullname="Game.Network.NetworkComponent" preserve="all" />
     <type fullname="Game.UniTaskUtility" preserve="all" />
   </assembly>
+  <assembly fullname="MemoryPack.Core">
+    <type fullname="MemoryPack.GenerateType" preserve="all" />
+    <type fullname="MemoryPack.MemoryPackIgnoreAttribute" preserve="all" />
+    <type fullname="MemoryPack.MemoryPackOrderAttribute" preserve="all" />
+    <type fullname="MemoryPack.MemoryPackableAttribute" preserve="all" />
+  </assembly>
   <assembly fullname="UniTask">
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTaskVoid" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.YieldAwaitable" preserve="all" />
@@ -90,7 +112,6 @@
     <type fullname="UnityEngine.Component" preserve="all" />
     <type fullname="UnityEngine.Coroutine" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
-    <type fullname="UnityEngine.KeyCode" preserve="all" />
     <type fullname="UnityEngine.Mathf" preserve="all" />
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
     <type fullname="UnityEngine.Object" preserve="all" />
@@ -103,9 +124,6 @@
     <type fullname="UnityEngine.Vector3" preserve="all" />
     <type fullname="UnityEngine.Vector4" preserve="all" />
     <type fullname="UnityEngine.WaitForEndOfFrame" preserve="all" />
-  </assembly>
-  <assembly fullname="UnityEngine.InputLegacyModule">
-    <type fullname="UnityEngine.Input" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.UI">
     <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
@@ -151,6 +169,7 @@
     <type fullname="System.Object" preserve="all" />
     <type fullname="System.Reflection.Assembly" preserve="all" />
     <type fullname="System.Reflection.AssemblyName" preserve="all" />
+    <type fullname="System.Reflection.MemberInfo" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.AsyncStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.AsyncVoidMethodBuilder" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
