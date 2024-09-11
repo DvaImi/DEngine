@@ -24,7 +24,7 @@ public sealed class OnCreateSceneEvent : AsyncEventSystem<OnCreateScene>
     /// </summary>
     /// <param name="self">The OnCreateScene object.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public override async FTask Handler(OnCreateScene self)
+    protected override async FTask Handler(OnCreateScene self)
     {
         var scene = self.Scene;
 
