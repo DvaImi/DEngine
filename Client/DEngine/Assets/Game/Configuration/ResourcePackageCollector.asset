@@ -65,3 +65,12 @@ MonoBehaviour:
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll
+      - Enable: 1
+        Name: 
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 102900000, guid: b46604e8075d028449920e76b0765d60, type: 3}
+        LoadType: 0
+        Packed: 1
+        FilterRule: CollectAll

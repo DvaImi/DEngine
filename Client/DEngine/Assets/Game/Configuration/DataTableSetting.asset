@@ -17,13 +17,14 @@ MonoBehaviour:
   CSharpCodePath: Assets/Game/Scripts/Update/DataTable/DRCode
   CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/Table/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Update/DataTable/Extensions
-  GenerateDataTableEnum: 0
+  GenerateDataTableEnum: 1
   NameSpace: Game.Update
   AssemblyNames:
   - DEngine.dll
   - DEngine.Runtime.dll
   - Game.Runtime.dll
   - Game.Update.dll
+  - Fantasy.Unity.dll
   EditorAssemblyNames:
   - DEngine.Editor
   - Game.Editor

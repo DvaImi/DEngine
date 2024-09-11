@@ -38,7 +38,7 @@ namespace Game
                 throw new DEngineException(Utility.Text.Format("You must get module by interface, but '{0}' is not.", interfaceType.FullName));
             }
 
-            if (!interfaceType.FullName.StartsWith("Game.", StringComparison.Ordinal))
+            if (interfaceType.FullName != null && !interfaceType.FullName.StartsWith("Game.", StringComparison.Ordinal))
             {
                 throw new DEngineException(Utility.Text.Format("You must get a Game module, but '{0}' is not.", interfaceType.FullName));
             }

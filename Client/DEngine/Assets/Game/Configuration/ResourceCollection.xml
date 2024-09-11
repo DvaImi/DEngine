@@ -5,32 +5,33 @@
       <Resource Name="chinesesimplified" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="chinesetraditional" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="datatables" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="dll" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="english" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="hybridclrdata" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="updateluncher" LoadType="0" Packed="True" ResourceGroups="Base" />
     </Resources>
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="datatables" />
-      <Asset Guid="045a0772d54c75745ba16df17951da01" ResourceName="hybridclrdata" />
+      <Asset Guid="045a0772d54c75745ba16df17951da01" ResourceName="dll" />
       <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="chinesesimplified" />
-      <Asset Guid="26abac1a3a0cf364c95752a98911e3de" ResourceName="hybridclrdata" />
+      <Asset Guid="26abac1a3a0cf364c95752a98911e3de" ResourceName="dll" />
       <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="datatables" />
       <Asset Guid="288d0af1292d05c44b927549c1aed387" ResourceName="datatables" />
       <Asset Guid="301ad54a6bbc30246a45761701568221" ResourceName="datatables" />
-      <Asset Guid="467ef078cd2666e41af5b71898ee5435" ResourceName="hybridclrdata" />
+      <Asset Guid="467ef078cd2666e41af5b71898ee5435" ResourceName="dll" />
       <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="datatables" />
-      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="hybridclrdata" />
+      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="updateluncher" />
       <Asset Guid="4da5235c15000f34f9eb69011f36b2ae" ResourceName="datatables" />
       <Asset Guid="52c6c208c18a96142898d670f5aae2df" ResourceName="datatables" />
-      <Asset Guid="5ad2c6b56aaed754ebf51d07b2fc749e" ResourceName="hybridclrdata" />
+      <Asset Guid="5ad2c6b56aaed754ebf51d07b2fc749e" ResourceName="dll" />
       <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="datatables" />
       <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="datatables" />
-      <Asset Guid="65654b7c9ea1a3c4fa543467160d8eaa" ResourceName="hybridclrdata" />
-      <Asset Guid="77f28af2dbce0ba49ab22abdbbe60deb" ResourceName="hybridclrdata" />
-      <Asset Guid="78cb16e24e4b03e4abb1fa23112b430c" ResourceName="hybridclrdata" />
-      <Asset Guid="943df3dd5dfb96d49b14efddd2f99ce3" ResourceName="hybridclrdata" />
+      <Asset Guid="65654b7c9ea1a3c4fa543467160d8eaa" ResourceName="dll" />
+      <Asset Guid="77f28af2dbce0ba49ab22abdbbe60deb" ResourceName="dll" />
+      <Asset Guid="78cb16e24e4b03e4abb1fa23112b430c" ResourceName="dll" />
+      <Asset Guid="943df3dd5dfb96d49b14efddd2f99ce3" ResourceName="dll" />
       <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="chinesetraditional" />
-      <Asset Guid="a85dc8a121d7acc42839ebda6555b1f4" ResourceName="hybridclrdata" />
-      <Asset Guid="b26566fd60e4bd54fb80a8f5a4c9be81" ResourceName="hybridclrdata" />
+      <Asset Guid="a85dc8a121d7acc42839ebda6555b1f4" ResourceName="dll" />
+      <Asset Guid="b26566fd60e4bd54fb80a8f5a4c9be81" ResourceName="dll" />
       <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="english" />
       <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="datatables" />
     </Assets>

@@ -1,7 +1,9 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using DEngine;
 using DEngine.Procedure;
 using Fantasy;
+using Fantasy.Network;
 using UnityEngine;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
@@ -18,6 +20,15 @@ namespace Game.Update
 
         private async UniTaskVoid TestNetwork()
         {
+            var network = GameEntry.DataTable.GetDataTable<DRNetwork>().GetDataRow((int)NetworkId.Main);
+            if (network == null)
+            {
+                Log.Warning("can exist mian session.");
+                return;
+            }
+
+            await GameEntry.Network.ConnectMainSession(network.Name, Utility.Text.Format("{0}:{1}", network.Address, network.Port), (NetworkProtocolType)network.ProtocolType);
+
             GameEntry.Network.Send(new C2G_TestMessage()
             {
                 Tag = nameof(DEngine)

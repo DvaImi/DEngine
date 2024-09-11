@@ -1,0 +1,16 @@
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.csproj.AssemblyReference.cache
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.GeneratedMSBuildEditorConfig.editorconfig
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.AssemblyInfoInputs.cache
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.AssemblyInfo.cs
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.csproj.CoreCompileInputs.cache
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.sourcelink.json
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\bin\Release\net8.0\Entity.deps.json
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\bin\Release\net8.0\Entity.dll
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\bin\Release\net8.0\Entity.pdb
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\bin\Release\net8.0\Fantasy.Net.dll
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\bin\Release\net8.0\Fantasy.Net.pdb
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.csproj.Up2Date
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.dll
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\refint\Entity.dll
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\Entity.pdb
+F:\Project\Unity\Work\DEngine\Server\DotNetServer\Server\Entity\obj\Release\net8.0\ref\Entity.dll

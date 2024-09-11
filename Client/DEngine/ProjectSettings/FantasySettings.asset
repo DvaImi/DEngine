@@ -15,5 +15,7 @@ MonoBehaviour:
   autoCopyAssembly: 0
   hotUpdatePath: 
   hotUpdateAssemblyDefinitions: []
-  LinkXmlAssemblies:
-  - Game.Runtime
+  linkAssemblyDefinitions:
+  - {fileID: 5897886265953266890, guid: 844937d985828c648866dc5fe1dc749c, type: 3}
+  - {fileID: 5897886265953266890, guid: 363c5eb08ff8e6a439b85e37b8c20d96, type: 3}
+  - {fileID: 5897886265953266890, guid: 7bc98016d4aac29439a48a73d0e6dcf3, type: 3}

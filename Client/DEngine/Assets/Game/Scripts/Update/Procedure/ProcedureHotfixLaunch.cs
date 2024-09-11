@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using DEngine.Procedure;
 using DEngine.Runtime;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
@@ -9,6 +8,7 @@ namespace Game.Update
     public class ProcedureHotfixLaunch : ProcedureBase
     {
         private bool m_InitializeComplete;
+
         /// <summary>
         /// 热更新流程启动
         /// </summary>
@@ -28,7 +28,6 @@ namespace Game.Update
         }
 
 
-
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
         {
             base.OnLeave(procedureOwner, isShutdown);
@@ -41,6 +40,7 @@ namespace Game.Update
             {
                 return;
             }
+
             ChangeState<ProcedurePreload>(procedureOwner);
         }
 
