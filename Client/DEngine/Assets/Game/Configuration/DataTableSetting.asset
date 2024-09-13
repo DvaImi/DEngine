@@ -20,11 +20,11 @@ MonoBehaviour:
   GenerateDataTableEnum: 1
   NameSpace: Game.Update
   AssemblyNames:
-  - DEngine.dll
-  - DEngine.Runtime.dll
-  - Game.Runtime.dll
-  - Game.Update.dll
-  - Fantasy.Unity.dll
+  - DEngine
+  - DEngine.Runtime
+  - Fantasy.Unity
+  - Game.Runtime
+  - Game.Update
   EditorAssemblyNames:
   - DEngine.Editor
   - Game.Editor

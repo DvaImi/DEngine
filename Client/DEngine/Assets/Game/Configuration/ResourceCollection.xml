@@ -15,8 +15,6 @@
       <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="chinesesimplified" />
       <Asset Guid="26abac1a3a0cf364c95752a98911e3de" ResourceName="dll" />
       <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="datatables" />
-      <Asset Guid="288d0af1292d05c44b927549c1aed387" ResourceName="datatables" />
-      <Asset Guid="301ad54a6bbc30246a45761701568221" ResourceName="datatables" />
       <Asset Guid="467ef078cd2666e41af5b71898ee5435" ResourceName="dll" />
       <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="datatables" />
       <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="updateluncher" />
@@ -26,6 +24,7 @@
       <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="datatables" />
       <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="datatables" />
       <Asset Guid="65654b7c9ea1a3c4fa543467160d8eaa" ResourceName="dll" />
+      <Asset Guid="752d1fb86166d024a91bdbb1e6bce29a" ResourceName="datatables" />
       <Asset Guid="77f28af2dbce0ba49ab22abdbbe60deb" ResourceName="dll" />
       <Asset Guid="78cb16e24e4b03e4abb1fa23112b430c" ResourceName="dll" />
       <Asset Guid="943df3dd5dfb96d49b14efddd2f99ce3" ResourceName="dll" />

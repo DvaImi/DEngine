@@ -28,6 +28,15 @@
       "dependencies": {},
       "hash": "3156134075b89a162fe95350a2e92a4c85ccca59"
     },
+    "com.dvalmi.dengine": {
+      "version": "https://github.com/DvaImi/DEngineLibrarie.git?path=DEngine/",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "hash": "992ac885ed6baa4b71daa9ebe340cae28d71a83f"
+    },
     "com.fantasy.unity": {
       "version": "https://github.com/DvaImi/Fantasy.git?path=Fantasy.Unity/Fantasy.Unity",
       "depth": 0,
@@ -35,7 +44,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "5e88258f5acb67410822096aef3fcbda5bd6e787"
+      "hash": "b4401541327399200f62cc534be93ae66063c442"
     },
     "com.unity.ai.navigation": {
       "version": "1.1.5",
