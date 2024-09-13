@@ -29,7 +29,7 @@
       "hash": "3156134075b89a162fe95350a2e92a4c85ccca59"
     },
     "com.dvalmi.dengine": {
-      "version": "https://github.com/DvaImi/DEngineLibrarie.git?path=DEngine",
+      "version": "https://github.com/DvaImi/DEngineLibraries.git?path=DEngine",
       "depth": 0,
       "source": "git",
       "dependencies": {
