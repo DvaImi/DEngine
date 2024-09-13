@@ -5,8 +5,7 @@ namespace Game.Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {
-        private sealed class EnumProcessor<T> : GenericDataProcessor<int>
-            where T : struct, IConvertible
+        private sealed class EnumProcessor<T> : GenericDataProcessor<int> where T : struct, IConvertible
         {
             static EnumProcessor()
             {
@@ -17,7 +16,7 @@ namespace Game.Editor.DataTableTools
             }
 
             public override Type Type => typeof(T);
-            //public Type EnumType => typeof(T);
+
             public override bool IsSystem => false;
             public override bool IsEnum => true;
             public override string LanguageKeyword => Type.FullName;
@@ -26,13 +25,12 @@ namespace Game.Editor.DataTableTools
             {
                 if (string.IsNullOrEmpty(Type.FullName) || Type.FullName == Type.Name)
                 {
-                    return new[] {Type.Name.ToLower()};
+                    return new[] { Type.Name.ToLower() };
                 }
                 else
                 {
                     return new[]
                     {
-                        //EnumType.Name.ToLower(),
                         Type.FullName.ToLower()
                     };
                 }
@@ -54,15 +52,14 @@ namespace Game.Editor.DataTableTools
 
                 throw new Exception($"Value:{value} is not {typeof(T)}!");
             }
-            
 
-            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value)
+
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
             {
                 binaryWriter.Write7BitEncodedInt32(Parse(value));
             }
-            
-            public static bool EnumParse<TE>(string value,out TE defaultValue) where TE : struct, IConvertible 
+
+            public static bool EnumParse<TE>(string value, out TE defaultValue) where TE : struct, IConvertible
             {
                 if (!typeof(TE).IsEnum) throw new ArgumentException("T must be an enumerated type");
                 if (string.IsNullOrEmpty(value))
@@ -70,6 +67,7 @@ namespace Game.Editor.DataTableTools
                     defaultValue = default;
                     return false;
                 }
+
                 foreach (TE item in Enum.GetValues(typeof(TE)))
                 {
                     if (!item.ToString().ToLowerInvariant().Equals(value.Trim().ToLowerInvariant())) continue;

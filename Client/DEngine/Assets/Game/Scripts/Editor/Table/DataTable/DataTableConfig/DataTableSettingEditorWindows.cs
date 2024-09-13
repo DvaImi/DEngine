@@ -77,15 +77,16 @@ namespace Game.Editor.DataTableTools
 
                             void Save(string[] assemblyNames)
                             {
-                                DataTableSetting.Instance.AssemblyNames = assemblyNames;
+                                DataTableSetting.Instance.AssemblyNames = assemblyNames.Select(item => item.Replace(".dll", null)).ToArray();
                                 DataTableSetting.Instance.SaveSetting();
                                 Repaint();
                             }
 
                             bool WherePredicate(Assembly assembly)
                             {
-                                return true;
+                                return !assembly.FullName.Contains("Editor");
                             }
+
                             HashSet<string> hasSelect = new(DataTableSetting.Instance.AssemblyNames.Select(item => item.Replace(".dll", null)));
 
                             odinEditor.Open(hasSelect, Save, WherePredicate);
@@ -150,6 +151,7 @@ namespace Game.Editor.DataTableTools
                         content = path;
                     }
                 }
+
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
