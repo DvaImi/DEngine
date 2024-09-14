@@ -6,8 +6,7 @@ namespace Game.Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {
-        private sealed class ListProcessor<T, K> : DataProcessor, ICollectionProcessor
-            where T : GenericDataProcessor<K>, new()
+        private sealed class ListProcessor<T, K> : DataProcessor, ICollectionProcessor where T : GenericDataProcessor<K>, new()
         {
             public override bool IsComment => false;
 
@@ -63,8 +62,7 @@ namespace Game.Editor.DataTableTools
                 };
             }
 
-            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value)
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
             {
                 if (string.IsNullOrEmpty(value) || value.ToLowerInvariant().Equals("null"))
                 {
@@ -73,11 +71,12 @@ namespace Game.Editor.DataTableTools
                 }
 
                 DataProcessor dataProcessor = new T();
-                string[] splitValues;
-                splitValues = value.Split(dataProcessor.IsSystem|| dataProcessor.IsEnum ? ',' : '|');
+                var splitValues = value.Split(dataProcessor.IsSystem || dataProcessor.IsEnum ? ',' : '|');
                 binaryWriter.Write7BitEncodedInt32(splitValues.Length);
                 foreach (var itemValue in splitValues)
+                {
                     dataProcessor.WriteToStream(dataTableProcessor, binaryWriter, itemValue);
+                }
             }
         }
     }

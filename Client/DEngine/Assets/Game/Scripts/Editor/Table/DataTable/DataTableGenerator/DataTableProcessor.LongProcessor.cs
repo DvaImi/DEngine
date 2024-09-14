@@ -25,8 +25,7 @@ namespace Game.Editor.DataTableTools
                 return long.Parse(value);
             }
 
-            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value)
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
             {
                 binaryWriter.Write7BitEncodedInt64(Parse(value));
             }

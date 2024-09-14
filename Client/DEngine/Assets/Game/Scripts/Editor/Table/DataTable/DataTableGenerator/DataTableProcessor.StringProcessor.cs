@@ -25,8 +25,7 @@ namespace Game.Editor.DataTableTools
                 return m_EscapeStrings.Aggregate(value, (current, escapeString) => current.Replace(escapeString.Key, escapeString.Value));
             }
 
-            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value)
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
             {
                 binaryWriter.Write(Parse(value));
             }

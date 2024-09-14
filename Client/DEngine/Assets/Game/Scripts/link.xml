@@ -57,9 +57,7 @@
     <type fullname="UnityExtension" preserve="all" />
   </assembly>
   <assembly fullname="Fantasy.Unity">
-    <type fullname="Fantasy.Async.FTask`1" preserve="all" />
     <type fullname="Fantasy.Entitas.MessagePoolComponent" preserve="all" />
-    <type fullname="Fantasy.Log" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteMessage" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteRequest" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteResponse" preserve="all" />
@@ -73,7 +71,6 @@
     <type fullname="Fantasy.Network.Interface.IRouteMessage" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteRequest" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteResponse" preserve="all" />
-    <type fullname="Fantasy.Network.NetworkProtocolType" preserve="all" />
     <type fullname="Fantasy.Scene" preserve="all" />
     <type fullname="Fantasy.Serialize.AMessage" preserve="all" />
     <type fullname="Fantasy.Serialize.IProto" preserve="all" />
@@ -96,11 +93,9 @@
   </assembly>
   <assembly fullname="UniTask">
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.UniTaskVoid" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.YieldAwaitable" preserve="all" />

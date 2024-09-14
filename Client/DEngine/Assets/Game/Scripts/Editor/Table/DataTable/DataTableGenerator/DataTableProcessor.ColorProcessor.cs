@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEngine;
 
 namespace Game.Editor.DataTableTools
@@ -22,13 +23,11 @@ namespace Game.Editor.DataTableTools
 
             public override Color Parse(string value)
             {
-                var splitedValue = value.Split(',');
-                return new Color(float.Parse(splitedValue[0]), float.Parse(splitedValue[1]),
-                    float.Parse(splitedValue[2]), float.Parse(splitedValue[3]));
+                var splitedValue = value.Split(',') ?? throw new ArgumentNullException(nameof(value));
+                return new Color(float.Parse(splitedValue[0]), float.Parse(splitedValue[1]), float.Parse(splitedValue[2]), float.Parse(splitedValue[3]));
             }
 
-            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value)
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
             {
                 var color = Parse(value);
                 binaryWriter.Write(color.r);

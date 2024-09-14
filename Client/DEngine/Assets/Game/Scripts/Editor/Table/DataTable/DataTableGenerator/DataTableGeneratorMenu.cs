@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using DEngine;
@@ -12,11 +13,12 @@ namespace Game.Editor.DataTableTools
 {
     public sealed class DataTableGeneratorMenu
     {
-
         [MenuItem("DataTable/Generate/DataTables", priority = 1)]
         public static void GenerateDataTablesFormExcel()
         {
             DataTableSetting.Instance.RefreshDataTables("*.bytes");
+            DataTableProcessor.DataProcessorUtility.RefreshTypes();
+            DataTableProcessor.DataProcessorUtility.SetCodeTemplate(DataTableSetting.Instance.CSharpCodeTemplateFileName, Encoding.UTF8);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             List<string> dataTableNames = new List<string>();
             ExtensionsGenerate.GenerateExtensionByAnalysis(ExtensionsGenerate.DataTableType.Excel, DataTableSetting.Instance.ExcelFilePaths, 2);
@@ -32,6 +34,11 @@ namespace Game.Editor.DataTableTools
                         {
                             ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
                             string dataTableName = workCount > 1 ? sheet.Name : excelName;
+                            if (sheet.Dimension.Rows < DataTableSetting.Instance.TypeRow)
+                            {
+                                throw new Exception($"The format of the data table DataTableName='{dataTableName}' is incorrect. Please check.");
+                            }
+
                             var dataTableProcessor = DataTableGenerator.CreateExcelDataTableProcessor(sheet);
                             if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
                             {
@@ -50,6 +57,7 @@ namespace Game.Editor.DataTableTools
                     }
                 }
             }
+
             string version = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, Constant.AssetVersion.DataTableVersion + ".bytes"));
             GameAssetVersionUitlity.CreateAssetVersion(dataTableNames.ToArray(), version);
             AssetDatabase.Refresh();
@@ -74,16 +82,35 @@ namespace Game.Editor.DataTableTools
 
             for (int i = 4; i < dataTableProcessor.RawRowCount; i++)
             {
-                stringBuilder.AppendLine($"\t\t// {dataTableProcessor.GetValue(i, 2)}").AppendLine($"\t\t{dataTableProcessor.GetValue(i, 3)} = {dataTableProcessor.GetValue(i, 1)},");
+                var enumName = dataTableProcessor.GetValue(i, 3);
+                if (!System.CodeDom.Compiler.CodeGenerator.IsValidLanguageIndependentIdentifier(enumName))
+                {
+                    Debug.LogWarning($"Warning:  DataTableName='{dataTableName}' '{enumName}' is not a valid enum name at row {i + 1}.");
+                    return;
+                }
+
+                stringBuilder.AppendLine($"\t\t// {dataTableProcessor.GetValue(i, 2)}").AppendLine($"\t\t{enumName} = {dataTableProcessor.GetValue(i, 1)},");
             }
+
             stringBuilder.AppendLine("\t}").AppendLine("}");
 
             string outputFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, "TableEnum", fileName + ".cs"));
             FileInfo fileInfo = new FileInfo(outputFileName);
+            if (fileInfo.Exists)
+            {
+                fileInfo.Delete();
+                FileInfo meta = new FileInfo(outputFileName + ".meta");
+                if (meta.Exists)
+                {
+                    meta.Delete();
+                }
+            }
+
             if (!fileInfo.Directory.Exists)
             {
                 fileInfo.Directory.Create();
             }
+
             using (FileStream fileStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
             {
                 using (StreamWriter stream = new StreamWriter(fileStream, Encoding.UTF8))

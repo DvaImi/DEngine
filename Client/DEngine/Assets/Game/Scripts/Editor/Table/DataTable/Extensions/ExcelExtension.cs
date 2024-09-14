@@ -19,9 +19,11 @@ namespace Game.Editor.DataTableTools
             foreach (var excelFile in excelFiles)
             {
                 if (!excelFile.EndsWith(".xlsx") || excelFile.Contains("~$"))
+                {
                     continue;
-                using (FileStream fileStream =
-                       new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                }
+
+                using (FileStream fileStream = new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (ExcelPackage excelPackage = new ExcelPackage(fileStream))
                     {
@@ -29,7 +31,10 @@ namespace Game.Editor.DataTableTools
                         {
                             var sheet = excelPackage.Workbook.Worksheets[s];
                             if (sheet.Dimension.End.Row < 1)
+                            {
                                 continue;
+                            }
+
                             string fileName = sheet.Name;
                             if (string.IsNullOrWhiteSpace(fileName))
                             {

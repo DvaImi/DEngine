@@ -59,9 +59,13 @@ namespace Game.Editor.DataTableTools
                 binaryWriter.Write7BitEncodedInt32(Parse(value));
             }
 
-            public static bool EnumParse<TE>(string value, out TE defaultValue) where TE : struct, IConvertible
+            private static bool EnumParse<TE>(string value, out TE defaultValue) where TE : struct, IConvertible
             {
-                if (!typeof(TE).IsEnum) throw new ArgumentException("T must be an enumerated type");
+                if (!typeof(TE).IsEnum)
+                {
+                    throw new ArgumentException("T must be an enumerated type");
+                }
+
                 if (string.IsNullOrEmpty(value))
                 {
                     defaultValue = default;
@@ -70,7 +74,11 @@ namespace Game.Editor.DataTableTools
 
                 foreach (TE item in Enum.GetValues(typeof(TE)))
                 {
-                    if (!item.ToString().ToLowerInvariant().Equals(value.Trim().ToLowerInvariant())) continue;
+                    if (!item.ToString().ToLowerInvariant().Equals(value.Trim().ToLowerInvariant()))
+                    {
+                        continue;
+                    }
+
                     defaultValue = item;
                     return true;
                 }

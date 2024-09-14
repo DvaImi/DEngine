@@ -14,14 +14,14 @@ namespace Game.Editor.DataTableTools
             public abstract bool IsComment { get; }
 
             public abstract bool IsSystem { get; }
-            public abstract bool IsEnum { get; }
 
+            public abstract bool IsEnum { get; }
+            
             public abstract string LanguageKeyword { get; }
 
             public abstract string[] GetTypeStrings();
 
-            public abstract void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value);
+            public abstract void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value);
         }
     }
 }

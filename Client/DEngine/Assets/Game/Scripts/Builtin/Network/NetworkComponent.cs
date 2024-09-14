@@ -74,7 +74,8 @@ namespace Game.Network
 
         public async UniTask Initialize(params Assembly[] assemblies)
         {
-            Scene = await Entry.Initialize(assemblies);
+            Entry.Initialize(assemblies);
+            Scene = await Entry.CreateScene();
         }
 
         /// <summary>

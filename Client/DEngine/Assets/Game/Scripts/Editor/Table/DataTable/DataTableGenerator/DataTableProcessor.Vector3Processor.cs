@@ -23,12 +23,10 @@ namespace Game.Editor.DataTableTools
             public override Vector3 Parse(string value)
             {
                 var splitedValue = value.Split(',');
-                return new Vector3(float.Parse(splitedValue[0]), float.Parse(splitedValue[1]),
-                    float.Parse(splitedValue[2]));
+                return new Vector3(float.Parse(splitedValue[0]), float.Parse(splitedValue[1]), float.Parse(splitedValue[2]));
             }
 
-            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value)
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
             {
                 var vector3 = Parse(value);
                 binaryWriter.Write(vector3.x);

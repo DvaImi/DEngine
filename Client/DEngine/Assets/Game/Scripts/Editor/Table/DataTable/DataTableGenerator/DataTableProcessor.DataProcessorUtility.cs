@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using DEngine;
+using UnityEngine;
 
 namespace Game.Editor.DataTableTools
 {
@@ -17,6 +19,8 @@ namespace Game.Editor.DataTableTools
             {
                 RefreshTypes();
             }
+
+            public static string CodeTemplate { get; private set; }
 
             public static void RefreshTypes()
             {
@@ -53,6 +57,21 @@ namespace Game.Editor.DataTableTools
                 AddDictionary(addList);
             }
 
+            public static bool SetCodeTemplate(string codeTemplateFileName, Encoding encoding)
+            {
+                try
+                {
+                    CodeTemplate = File.ReadAllText(codeTemplateFileName, encoding);
+                    Debug.Log(Utility.Text.Format("Set code template '{0}' success.", codeTemplateFileName));
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogError(Utility.Text.Format("Set code template '{0}' failure, exception is '{1}'.", codeTemplateFileName, exception.ToString()));
+                    return false;
+                }
+            }
+
             private static void AddEnumType(List<DataProcessor> addList)
             {
                 foreach (var assemblyName in DataTableSetting.Instance.AssemblyNames)
@@ -62,43 +81,45 @@ namespace Game.Editor.DataTableTools
                     {
                         assembly = Assembly.Load(assemblyName);
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        UnityEngine.Debug.LogWarning(e.Message);
+                        UnityEngine.Debug.LogWarning($"Error loading assembly: {assemblyName}. Exception: {ex.Message}");
                         continue;
                     }
 
-                    if (assembly == null)
-                    {
-                        continue;
-                    }
+                    var types = assembly?.GetTypes();
+                    if (types == null) continue;
 
-                    var types = assembly.GetTypes();
                     foreach (var type in types)
                     {
-                        if (type.IsEnum)
+                        // 跳过开放的泛型类型
+                        if (!type.IsEnum || type.ContainsGenericParameters)
                         {
-                            Type enumProcessorType = typeof(EnumProcessor<>).MakeGenericType(type);
-                            DataProcessor dataProcessor = (DataProcessor)Activator.CreateInstance(enumProcessorType);
-                            foreach (var typeString in dataProcessor.GetTypeStrings())
-                            {
-                                if (s_DataProcessors.TryGetValue(typeString, out var processor))
-                                {
-                                    StringBuilder stringBuilder = new StringBuilder(256);
-                                    stringBuilder.AppendLine($"程序集:{type.Assembly.GetName().Name} 存在同名枚举:{type.FullName}");
-                                    if (processor.GetType().GetProperty("EnumType")?.GetValue(processor) is Type repeatType)
-                                    {
-                                        stringBuilder.AppendLine($"程序集:{repeatType.Assembly.GetName().Name} 存在同名枚举:{type.FullName}");
-                                    }
+                            continue;
+                        }
 
-                                    throw new Exception("不同程序集中存在同名枚举,请修改后重试.\n" + stringBuilder);
+                        Type enumProcessorType = typeof(EnumProcessor<>).MakeGenericType(type);
+                        DataProcessor dataProcessor = (DataProcessor)Activator.CreateInstance(enumProcessorType);
+
+                        foreach (var typeString in dataProcessor.GetTypeStrings())
+                        {
+                            if (s_DataProcessors.TryGetValue(typeString.ToLower(), out var existingProcessor))
+                            {
+                                var stringBuilder = new StringBuilder(256)
+                                    .AppendLine($"程序集:{type.Assembly.GetName().Name} 存在同名枚举:{type.FullName}");
+
+                                if (existingProcessor.GetType().GetProperty("EnumType")?.GetValue(existingProcessor) is Type repeatType)
+                                {
+                                    stringBuilder.AppendLine($"程序集:{repeatType.Assembly.GetName().Name} 存在同名枚举:{type.FullName}");
                                 }
 
-                                s_DataProcessors.Add(typeString.ToLower(), dataProcessor);
+                                throw new Exception("不同程序集中存在同名枚举,请修改后重试.\n" + stringBuilder);
                             }
 
-                            addList.Add(dataProcessor);
+                            s_DataProcessors.Add(typeString.ToLower(), dataProcessor);
                         }
+
+                        addList.Add(dataProcessor);
                     }
                 }
             }

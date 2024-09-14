@@ -61,7 +61,7 @@ namespace Game.Editor.BuildPipeline
 
         private void OnDisable()
         {
-           SaveAll();
+            SaveAll();
         }
 
         private void OnGUI()
@@ -101,6 +101,11 @@ namespace Game.Editor.BuildPipeline
                 }
             }
             GUILayout.EndHorizontal();
+            
+            if (GUI.changed)
+            {
+                Repaint();
+            }
         }
 
         private void Update()
@@ -146,7 +151,7 @@ namespace Game.Editor.BuildPipeline
                     EditorGUILayout.LabelField("Platform", EditorStyles.boldLabel);
                     int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, GameBuildPipeline.PlatformNames, GUILayout.Width(100));
 
-                    if (hotfixPlatformIndex != GameSetting.Instance.BuildPlatform)
+                    if (!hotfixPlatformIndex.Equals(GameSetting.Instance.BuildPlatform))
                     {
                         GameSetting.Instance.BuildPlatform = hotfixPlatformIndex;
                     }
@@ -228,6 +233,7 @@ namespace Game.Editor.BuildPipeline
                             {
                                 return !assembly.FullName.Contains("Editor");
                             }
+
                             HashSet<string> hasSelect = new(GameSetting.Instance.HotUpdateAssemblies.Select(item => item.Replace(".dll", null)));
                             assemblyEditor.Open(hasSelect, Save, WherePredicate);
                         }
@@ -284,6 +290,7 @@ namespace Game.Editor.BuildPipeline
                             {
                                 return !assembly.FullName.Contains("Editor");
                             }
+
                             HashSet<string> hasSelect = new(GameSetting.Instance.PreserveAssemblies.Select(item => item.Replace(".dll", null)));
                             assemblyEditor.Open(hasSelect, Save, WherePredicate);
                         }
@@ -340,6 +347,7 @@ namespace Game.Editor.BuildPipeline
                             {
                                 return !assembly.FullName.Contains("Editor");
                             }
+
                             HashSet<string> hasSelect = new(GameSetting.Instance.AOTAssemblies.Select(item => item.Replace(".dll", null)));
                             assemblyEditor.Open(hasSelect, Save, WherePredicate);
                         }
@@ -362,6 +370,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     GameBuildPipeline.CompileHotfixDll();
                 }
+
                 GUI.backgroundColor = bc;
             }
             EditorGUILayout.EndHorizontal();
@@ -379,6 +388,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     GameSetting.Instance.Difference = diff;
                 }
+
                 GUI.enabled = true;
 
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
@@ -432,6 +442,7 @@ namespace Game.Editor.BuildPipeline
                     DropPathUtility.DropAssetPath("ResourceEditorConfig", ref GameSetting.Instance.ResourceEditorConfig);
                     DropPathUtility.DropAssetPath("ResourceBuilderConfig", ref GameSetting.Instance.ResourceBuilderConfig);
                 }
+
                 EditorGUILayout.EndFoldoutHeaderGroup();
                 GUILayout.Space(5f);
                 m_FoldoutBuiltInfoGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutBuiltInfoGroup, "BuildInfo");
@@ -461,6 +472,7 @@ namespace Game.Editor.BuildPipeline
                     GameSetting.Instance.BuildInfo.IOSAppUrl = EditorGUILayout.TextField("IOS下载应用地址", GameSetting.Instance.BuildInfo.IOSAppUrl);
                     GameSetting.Instance.BuildInfo.LatestGameVersion = GameSetting.Instance.LatestGameVersion;
                 }
+
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }
             EditorGUILayout.EndVertical();
@@ -472,6 +484,7 @@ namespace Game.Editor.BuildPipeline
             {
                 m_BeginBuildResources = true;
             }
+
             GUI.backgroundColor = bc;
         }
 
@@ -537,6 +550,7 @@ namespace Game.Editor.BuildPipeline
                     m_BeginBuildPlayer = true;
                 }
             }
+
             GUI.backgroundColor = bc;
         }
     }

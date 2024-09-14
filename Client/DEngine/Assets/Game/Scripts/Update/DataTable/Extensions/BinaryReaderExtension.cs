@@ -9,14 +9,12 @@ namespace Game.Update
     {
         public static Color32 ReadColor32(this BinaryReader binaryReader)
         {
-            return new Color32(binaryReader.ReadByte(), binaryReader.ReadByte(), binaryReader.ReadByte(),
-                binaryReader.ReadByte());
+            return new Color32(binaryReader.ReadByte(), binaryReader.ReadByte(), binaryReader.ReadByte(), binaryReader.ReadByte());
         }
 
         public static Color ReadColor(this BinaryReader binaryReader)
         {
-            return new Color(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(),
-                binaryReader.ReadSingle());
+            return new Color(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle());
         }
 
         public static DateTime ReadDateTime(this BinaryReader binaryReader)
@@ -26,14 +24,12 @@ namespace Game.Update
 
         public static Quaternion ReadQuaternion(this BinaryReader binaryReader)
         {
-            return new Quaternion(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(),
-                binaryReader.ReadSingle());
+            return new Quaternion(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle());
         }
 
         public static Rect ReadRect(this BinaryReader binaryReader)
         {
-            return new Rect(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(),
-                binaryReader.ReadSingle());
+            return new Rect(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle());
         }
 
         public static Vector2 ReadVector2(this BinaryReader binaryReader)
@@ -48,16 +44,16 @@ namespace Game.Update
 
         public static Vector4 ReadVector4(this BinaryReader binaryReader)
         {
-            return new Vector4(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(),
-                binaryReader.ReadSingle());
+            return new Vector4(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle());
         }
+
         /// <summary>
         /// 从二进制流读取编码后的 32 位有符号整数。
         /// </summary>
         /// <param name="binaryReader">要读取的二进制流。</param>
         /// <param name="length">读取的位数</param>
         /// <returns>读取的 32 位有符号整数。</returns>
-        public static int Read7BitEncodedInt32(this BinaryReader binaryReader,out int length)
+        public static int Read7BitEncodedInt32(this BinaryReader binaryReader, out int length)
         {
             length = 0;
             int value = 0;

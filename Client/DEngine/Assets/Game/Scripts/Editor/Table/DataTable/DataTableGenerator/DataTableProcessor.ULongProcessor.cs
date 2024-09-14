@@ -26,8 +26,7 @@ namespace Game.Editor.DataTableTools
                 return ulong.Parse(value);
             }
 
-            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value)
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
             {
                 binaryWriter.Write7BitEncodedUInt64(Parse(value));
             }

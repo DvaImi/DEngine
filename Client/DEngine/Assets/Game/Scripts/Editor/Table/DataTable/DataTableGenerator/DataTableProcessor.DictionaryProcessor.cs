@@ -6,9 +6,7 @@ namespace Game.Editor.DataTableTools
 {
     public sealed partial class DataTableProcessor
     {
-        private sealed class DictionaryProcessor<T1, T2, T3, T4> : DataProcessor, IDictionaryProcessor
-            where T1 : GenericDataProcessor<T3>, new()
-            where T2 : GenericDataProcessor<T4>, new()
+        private sealed class DictionaryProcessor<T1, T2, T3, T4> : DataProcessor, IDictionaryProcessor where T1 : GenericDataProcessor<T3>, new() where T2 : GenericDataProcessor<T4>, new()
         {
             public override Type Type
             {
@@ -21,6 +19,7 @@ namespace Game.Editor.DataTableTools
                     return type;
                 }
             }
+
             public override bool IsEnum => false;
 
             public override bool IsId => false;
@@ -84,8 +83,7 @@ namespace Game.Editor.DataTableTools
                 };
             }
 
-            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter,
-                string value)
+            public override void WriteToStream(DataTableProcessor dataTableProcessor, BinaryWriter binaryWriter, string value)
             {
                 if (string.IsNullOrEmpty(value) || value.ToLowerInvariant().Equals("null"))
                 {
@@ -101,8 +99,7 @@ namespace Game.Editor.DataTableTools
                 {
                     var keyValue = itemValue.Split('#');
                     dataProcessor1.WriteToStream(dataTableProcessor, binaryWriter, keyValue[0].Substring(1));
-                    dataProcessor2.WriteToStream(dataTableProcessor, binaryWriter,
-                        keyValue[1].Substring(0, keyValue[1].Length - 1));
+                    dataProcessor2.WriteToStream(dataTableProcessor, binaryWriter, keyValue[1].Substring(0, keyValue[1].Length - 1));
                 }
             }
         }

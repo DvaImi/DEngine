@@ -14,6 +14,27 @@ namespace Game.Editor.DataTableTools
             var rawColumnCount = 0;
             var rawValues = new List<string[]>();
             rawColumnCount = sheet.Dimension.End.Column;
+
+            var validColumns = new List<int>();
+            for (int col = 1; col <= rawColumnCount; col++)
+            {
+                bool hasData = false;
+                for (int row = 1; row <= sheet.Dimension.End.Row; row++)
+                {
+                    if (sheet.Cells[row, col].Value != null && !string.IsNullOrWhiteSpace(sheet.Cells[row, col].Value.ToString()))
+                    {
+                        hasData = true;
+                        break;
+                    }
+                }
+
+                if (hasData)
+                {
+                    validColumns.Add(col);
+                }
+            }
+
+            rawColumnCount = validColumns.Count;
             for (int i = 1; i <= sheet.Dimension.End.Row; i++)
             {
                 if (i > DataTableSetting.Instance.ContentStartRow)
@@ -24,8 +45,9 @@ namespace Game.Editor.DataTableTools
                         continue;
                     }
                 }
+
                 var rawValue = new string[rawColumnCount];
-                for (int j = 1; j <= rawColumnCount; j++)
+                for (int j = 1; j <= validColumns.Count; j++)
                 {
                     if (sheet.Cells[i, j].Value == null)
                     {
@@ -46,46 +68,54 @@ namespace Game.Editor.DataTableTools
 
 
             if (nameRow < 0)
+            {
                 throw new DEngineException(DEngine.Utility.Text.Format("Name row '{0}' is invalid.", nameRow.ToString()));
+            }
 
             if (typeRow < 0)
+            {
                 throw new DEngineException(DEngine.Utility.Text.Format("Type row '{0}' is invalid.", typeRow.ToString()));
+            }
 
             if (contentStartRow < 0)
-                throw new DEngineException(DEngine.Utility.Text.Format("Content start row '{0}' is invalid.",
-                    contentStartRow.ToString()));
+            {
+                throw new DEngineException(DEngine.Utility.Text.Format("Content start row '{0}' is invalid.", contentStartRow.ToString()));
+            }
 
             if (idColumn < 0)
-                throw new DEngineException(
-                    DEngine.Utility.Text.Format("Id column '{0}' is invalid.", idColumn.ToString()));
+            {
+                throw new DEngineException(DEngine.Utility.Text.Format("Id column '{0}' is invalid.", idColumn.ToString()));
+            }
 
             if (nameRow >= rawRowCount)
-                throw new DEngineException(DEngine.Utility.Text.Format(
-                    "Name row '{0}' >= raw row count '{1}' is not allow.", nameRow.ToString(), rawRowCount.ToString()));
+            {
+                throw new DEngineException(DEngine.Utility.Text.Format("Name row '{0}' >= raw row count '{1}' is not allow.", nameRow.ToString(), rawRowCount.ToString()));
+            }
 
             if (typeRow >= rawRowCount)
-                throw new DEngineException(DEngine.Utility.Text.Format(
-                    "Type row '{0}' >= raw row count '{1}' is not allow.", typeRow.ToString(), rawRowCount.ToString()));
+            {
+                throw new DEngineException(DEngine.Utility.Text.Format("Type row '{0}' >= raw row count '{1}' is not allow.", typeRow.ToString(), rawRowCount.ToString()));
+            }
 
             if (defaultValueRow.HasValue && defaultValueRow.Value >= rawRowCount)
-                throw new DEngineException(DEngine.Utility.Text.Format(
-                    "Default value row '{0}' >= raw row count '{1}' is not allow.", defaultValueRow.Value.ToString(),
-                    rawRowCount.ToString()));
+            {
+                throw new DEngineException(DEngine.Utility.Text.Format("Default value row '{0}' >= raw row count '{1}' is not allow.", defaultValueRow.Value.ToString(), rawRowCount.ToString()));
+            }
 
             if (commentRow.HasValue && commentRow.Value >= rawRowCount)
-                throw new DEngineException(DEngine.Utility.Text.Format(
-                    "Comment row '{0}' >= raw row count '{1}' is not allow.", commentRow.Value.ToString(),
-                    rawRowCount.ToString()));
+            {
+                throw new DEngineException(DEngine.Utility.Text.Format("Comment row '{0}' >= raw row count '{1}' is not allow.", commentRow.Value.ToString(), rawRowCount.ToString()));
+            }
 
             if (contentStartRow > rawRowCount)
-                throw new DEngineException(DEngine.Utility.Text.Format(
-                    "Content start row '{0}' > raw row count '{1}' is not allow.", contentStartRow.ToString(),
-                    rawRowCount.ToString()));
+            {
+                throw new DEngineException(DEngine.Utility.Text.Format("Content start row '{0}' > raw row count '{1}' is not allow.", contentStartRow.ToString(), rawRowCount.ToString()));
+            }
 
             if (idColumn >= rawColumnCount)
-                throw new DEngineException(DEngine.Utility.Text.Format(
-                    "Id column '{0}' >= raw column count '{1}' is not allow.", idColumn.ToString(),
-                    rawColumnCount.ToString()));
+            {
+                throw new DEngineException(DEngine.Utility.Text.Format("Id column '{0}' >= raw column count '{1}' is not allow.", idColumn.ToString(), rawColumnCount.ToString()));
+            }
 
             m_NameRow = m_RawValues[nameRow];
             m_TypeRow = m_RawValues[typeRow];
@@ -96,15 +126,24 @@ namespace Game.Editor.DataTableTools
 
             m_DataProcessor = new DataProcessor[rawColumnCount];
             for (var i = 0; i < rawColumnCount; i++)
+            {
                 if (i == IdColumn)
+                {
                     m_DataProcessor[i] = DataProcessorUtility.GetDataProcessor("id");
+                }
                 else
+                {
                     m_DataProcessor[i] = DataProcessorUtility.GetDataProcessor(m_TypeRow[i]);
+                }
+            }
 
             var strings = new Dictionary<string, int>(StringComparer.Ordinal);
             for (var i = contentStartRow; i < rawRowCount; i++)
             {
-                if (IsCommentRow(i)) continue;
+                if (IsCommentRow(i))
+                {
+                    continue;
+                }
 
                 for (var j = 0; j < rawColumnCount; j++)
                 {
@@ -120,17 +159,20 @@ namespace Game.Editor.DataTableTools
                     var str = m_RawValues[i][j];
                     var values = str.Split(',');
                     foreach (var value in values)
+                    {
                         if (strings.ContainsKey(value))
+                        {
                             strings[value]++;
+                        }
                         else
+                        {
                             strings[value] = 1;
+                        }
+                    }
                 }
             }
 
-            m_Strings = strings.OrderBy(value => value.Key).ThenByDescending(value => value.Value)
-                .Select(value => value.Key).ToArray();
-
-            m_CodeTemplate = null;
+            m_Strings = strings.OrderBy(value => value.Key).ThenByDescending(value => value.Value).Select(value => value.Key).ToArray();
             m_CodeGenerator = null;
         }
     }
