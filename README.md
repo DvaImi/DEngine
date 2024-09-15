@@ -15,7 +15,6 @@ UNITY_2020_1_OR_NEWER
 - 扩充数据表
   - [x] 数据表支持多sheet导出  
   - [x] 本地化修改为数据表方式导出
-  - [ ] 后续考虑接入Luban 
 - 接入hybridclr
   - [x] 拆分热更程序集和AOT程序集，流程已跑通 
 - 接入Unitask
@@ -24,7 +23,7 @@ UNITY_2020_1_OR_NEWER
 - 接入Fantasy
   - [x] 接入 Fantasy，测试流程已跑通
 - 接入Luban
-  - [ ] TODO 整合客户端和服务端配表统一为Luban
+  - [x] TODO 客户端已接入Luban
 
 
 <strong>致谢
