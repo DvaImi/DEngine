@@ -7,6 +7,7 @@ using DEngine.Editor;
 using Game.Editor.ResourceTools;
 using OfficeOpenXml;
 using UnityEditor;
+using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 namespace Game.Editor.DataTableTools
@@ -69,7 +70,7 @@ namespace Game.Editor.DataTableTools
             OpenFolder.Execute(DataTableSetting.Instance.DataTableExcelsFolder);
         }
 
-        public static void GenerateDataTableEnumFile(DataTableProcessor dataTableProcessor, string dataTableName)
+        private static void GenerateDataTableEnumFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
             string fileName = $"{dataTableName}Id";
             StringBuilder stringBuilder = new StringBuilder();
@@ -106,7 +107,7 @@ namespace Game.Editor.DataTableTools
                 }
             }
 
-            if (!fileInfo.Directory.Exists)
+            if (fileInfo.Directory is { Exists: false })
             {
                 fileInfo.Directory.Create();
             }

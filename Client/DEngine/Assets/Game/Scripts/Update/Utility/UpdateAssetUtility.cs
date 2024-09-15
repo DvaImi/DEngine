@@ -6,6 +6,17 @@
     public static class UpdateAssetUtility
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assetName"></param>
+        /// <param name="fromBytes"></param>
+        /// <returns></returns>
+        public static string GetConfigAsset(string assetName, bool fromBytes)
+        {
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Configs/{0}/{1}.{2}", fromBytes ? "Bin" : "Json", assetName, fromBytes ? "bytes" : "json");
+        }
+
+        /// <summary>
         /// 获取数据表路径
         /// </summary>
         /// <param name="assetName"></param>

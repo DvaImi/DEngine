@@ -13,6 +13,7 @@ namespace Game.Editor.DataTableTools
     public class DataTableSetting : ScriptableSingleton<DataTableSetting>
     {
         #region DataTable
+
         /// <summary>
         /// 数据表存放文件夹路径
         /// </summary>
@@ -26,17 +27,17 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表C#实体类生成文件夹路径
         /// </summary>
-        public string CSharpCodePath= "Assets/Game/Scripts/Update/DataTable/DRCode";
+        public string CSharpCodePath = "Assets/Game/Scripts/Update/DataTable/DRCode";
 
         /// <summary>
         /// 数据表C#实体类模板存放路径
         /// </summary>
-        public string CSharpCodeTemplateFileName= "Assets/Game/Scripts/Editor/Table/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt";
+        public string CSharpCodeTemplateFileName = "Assets/Game/Scripts/Editor/Table/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt";
 
         /// <summary>
         /// 数据表扩展类文件夹路径
         /// </summary>
-        public string ExtensionDirectoryPath= "Assets/Game/Scripts/Update/DataTable/Extensions";
+        public string ExtensionDirectoryPath = "Assets/Game/Scripts/Update/DataTable/Extensions";
 
         /// <summary>
         /// 是否生成枚举
@@ -46,7 +47,7 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表命名空间
         /// </summary>
-        public string NameSpace="Game.Update";
+        public string NameSpace = "Game.Update";
 
         /// <summary>
         /// 数据表中使用类型 所在的所有程序集
@@ -72,20 +73,17 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表文件路径
         /// </summary>
-        [NonSerialized]
-        public string[] TxtFilePaths;
+        [NonSerialized] public string[] TxtFilePaths;
 
         /// <summary>
         /// 数据表文件名
         /// </summary>
-        [NonSerialized]
-        public string[] DataTableNames;
+        [NonSerialized] public string[] DataTableNames;
 
         /// <summary>
         /// Excel表文件路径
         /// </summary>
-        [NonSerialized]
-        public string[] ExcelFilePaths;
+        [NonSerialized] public string[] ExcelFilePaths;
 
 
         //所有行列 是逻辑行列从0 开始 但是eppplus 需要从1开始遍历 使用时需要+1
@@ -93,18 +91,22 @@ namespace Game.Editor.DataTableTools
         /// 字段名所在行
         /// </summary>
         public int NameRow = 1;
+
         /// <summary>
         /// 类型名所在行
         /// </summary>
         public int TypeRow = 2;
+
         /// <summary>
         /// 注释所在行
         /// </summary>
         public int CommentRow = 3;
+
         /// <summary>
         /// 内容开始行
         /// </summary>
         public int ContentStartRow = 4;
+
         /// <summary>
         /// id所在列
         /// </summary>
@@ -122,10 +124,10 @@ namespace Game.Editor.DataTableTools
             if (Directory.Exists(DataTableExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableExcelsFolder);
-                ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(_ => !_.Name.StartsWith("~$")).Select(_ => Utility.Path.GetRegularPath(_.FullName)).ToArray();
+                ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(_ => !_.Name.StartsWith("~$") && _.Name.EndsWith("~$")).Select(_ => Utility.Path.GetRegularPath(_.FullName)).ToArray();
             }
         }
-      
+
         #endregion
 
         #region Localization
@@ -133,11 +135,13 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表存放文件夹路径
         /// </summary>
-        public string LocalizationPath= "Assets/Game/Localization";
+        public string LocalizationPath = "Assets/Game/Localization";
+
         /// <summary>
         /// Excel存放的文件夹路径
         /// </summary>
         public string LocalizationExcelsFolder = "Assets/../Excels/Localization";
+
         #endregion
 
         internal void SaveSetting()

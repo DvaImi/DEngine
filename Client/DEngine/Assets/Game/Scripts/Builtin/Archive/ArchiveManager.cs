@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Archive
 {
-    internal sealed class ArchiveManager : GameModule, IArchiveManager
+    internal sealed class ArchiveManager : IArchiveManager, IGameModule
     {
         private const int Version = 1;
         private const string DefaultExtension = ".sav";
@@ -35,14 +35,6 @@ namespace Game.Archive
         public bool UserEncryptor => m_EncryptorHelper != null;
 
         public ArchiveSlot CurrentSlot => m_CurrentSlot;
-
-        internal override void Update(float elapseSeconds, float realElapseSeconds)
-        {
-        }
-
-        internal override void Shutdown()
-        {
-        }
 
         public void SetArchiveHelper(IArchiveHelper archiveHelper)
         {
@@ -342,6 +334,16 @@ namespace Game.Archive
         private string GetMetaPath(string slotIdentifier)
         {
             return Utility.Path.GetRegularCombinePath(m_ArchiveUri, slotIdentifier, DefaultMetaExtension);
+        }
+
+        public int Priority => 0;
+
+        public void Update(float elapseSeconds, float realElapseSeconds)
+        {
+        }
+
+        public void Shutdown()
+        {
         }
     }
 }

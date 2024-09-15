@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -583,7 +582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11451924, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_DataTableHelperTypeName
-      value: DEngine.Runtime.DefaultDataTableHelper
+      value: Game.DataTableHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_InstanceRoot
