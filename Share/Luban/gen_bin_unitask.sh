@@ -20,3 +20,4 @@ dotnet "$GEN_CLIENT" \
 
 # 暂停（可选）
 read -p "Press any key to continue..."
+
