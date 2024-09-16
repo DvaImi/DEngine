@@ -52,7 +52,7 @@ namespace Game.Update
             await UniTask.NextFrame();
 
             //在此进入热更新启动流程
-            procedureManager.StartProcedure<ProcedureHotfixLaunch>();
+            procedureManager.StartProcedure<ProcedureLanuchUpdate>();
 
             UnLoadLauncher();
         }

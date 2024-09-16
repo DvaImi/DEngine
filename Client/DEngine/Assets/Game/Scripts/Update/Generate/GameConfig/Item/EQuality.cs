@@ -9,7 +9,7 @@
 
 
 
-namespace Game.Config.Item
+namespace Game.LubanTable.Item
 { 
     public enum EQuality
     {

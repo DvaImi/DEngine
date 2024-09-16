@@ -1,8 +1,8 @@
 using Cysharp.Threading.Tasks;
 
-namespace Game.Config
+namespace Game.LubanTable
 {
-    public interface IConfig
+    public interface ILubanTable
     {
         UniTask LoadAsync();
     }

@@ -8,8 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using Game.LubanTable;
 
-namespace Game.Config.Test
+namespace Game.LubanTable.Test
 {
 /// <summary>
 /// 这是一个圆

@@ -8,8 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using Game.LubanTable;
 
-namespace Game.Config
+namespace Game.LubanTable
 {
 public partial struct vector4
 {

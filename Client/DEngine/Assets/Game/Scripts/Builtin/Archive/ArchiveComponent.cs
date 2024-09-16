@@ -109,6 +109,7 @@ namespace Game.Archive
         public async UniTask Initialize()
         {
             await m_ArchiveManager.Initialize(m_ArchiveUri, m_MaxSlotCount, m_UserIdentifier);
+            Log.Info("Init Archive complete.");
         }
 
         public void SetArchiveHelper(IArchiveHelper archiveHelper)

@@ -59,6 +59,7 @@ namespace Game.Update
             m_LoadedFlag.Add(UpdateAssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), false);
             GameEntry.Resource.LoadAsset(UpdateAssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableVersionLoadSuccess)));
             LoadLocalization(GameEntry.Localization.Language.ToString());
+            LoadLubanDataTable();
         }
 
         private void PreloadCompleteHandle()
@@ -110,6 +111,21 @@ namespace Game.Update
             string dictionaryAssetName = UpdateAssetUtility.GetDictionaryAsset(dictionaryName, true);
             m_LoadedFlag.Add(dictionaryAssetName, false);
             GameEntry.Localization.ReadData(dictionaryAssetName, this);
+        }
+
+        private async void LoadLubanDataTable()
+        {
+            foreach (var table in UpdateEntry.Luban.Tables.TableNames)
+            {
+                m_LoadedFlag[table] = false;
+            }
+
+            await UpdateEntry.Luban.LoadAsync();
+
+            foreach (var table in UpdateEntry.Luban.Tables.TableNames)
+            {
+                m_LoadedFlag[table] = true;
+            }
         }
 
         private void OnLoadDataTableSuccess(object sender, GameEventArgs e)

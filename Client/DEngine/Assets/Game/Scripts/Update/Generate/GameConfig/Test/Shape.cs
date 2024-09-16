@@ -8,8 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using Game.LubanTable;
 
-namespace Game.Config.Test
+namespace Game.LubanTable.Test
 {
 public abstract partial class Shape : Luban.BeanBase
 {

@@ -8,44 +8,54 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.Config;
+using Game.LubanTable;
 
-namespace Game.Config
+namespace Game.LubanTable
 {
-public partial class Tables
-{
-    public Item.TbItem TbItem { private set; get; }
-    private System.Collections.Generic.Dictionary<string, IConfig> _tables;
-    public System.Collections.Generic.IEnumerable<IConfig> DataTables => _tables.Values;
-    public IConfig GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
-
-    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
+    public partial class Tables
     {
-        _tables = new System.Collections.Generic.Dictionary<string, IConfig>();
-        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
+        public Item.TbItem TbItem { get; private set; }
 
-        TbItem = new Item.TbItem(() => loader("item_tbitem"));
-        loadTasks.Add(TbItem.LoadAsync());
-        _tables.Add("Item.TbItem", TbItem);
 
-        await Cysharp.Threading.Tasks.UniTask.WhenAll(loadTasks);
+        /// <summary>
+        /// 所有数据表名
+        /// </summary>
+        public readonly string[] TableNames = new[]
+        {
+           "item_tbitem",
+        };
 
-        Refresh();
+        private System.Collections.Generic.Dictionary<string, ILubanTable> m_Tables;
+        public System.Collections.Generic.IEnumerable<ILubanTable> DataTables => m_Tables.Values;
+        public ILubanTable GetDataTable(string tableName) => m_Tables.TryGetValue(tableName, out var v) ? v : null;
+    
+        public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
+        {
+            m_Tables = new System.Collections.Generic.Dictionary<string, ILubanTable>();
+            var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
+    
+            TbItem = new Item.TbItem(() => loader("item_tbitem"));
+            loadTasks.Add(TbItem.LoadAsync());
+            m_Tables.Add("Item.TbItem", TbItem);
+    
+            await Cysharp.Threading.Tasks.UniTask.WhenAll(loadTasks);
+    
+            Refresh();
+        }
+    
+        private void ResolveRef()
+        {
+            TbItem.ResolveRef(this);
+            PostResolveRef();
+        }
+    
+        public void Refresh()
+        {
+            PostInit();
+            ResolveRef();
+        }
+    
+        partial void PostInit();
+        partial void PostResolveRef();
     }
-
-    private void ResolveRef()
-    {
-        TbItem.ResolveRef(this);
-        PostResolveRef();
-    }
-
-    public void Refresh()
-    {
-        PostInit();
-        ResolveRef();
-    }
-
-    partial void PostInit();
-    partial void PostResolveRef();
-}
 }

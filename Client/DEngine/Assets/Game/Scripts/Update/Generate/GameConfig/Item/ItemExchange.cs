@@ -8,8 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using Game.LubanTable;
 
-namespace Game.Config.Item
+namespace Game.LubanTable.Item
 {
 public sealed partial class ItemExchange : Luban.BeanBase
 {

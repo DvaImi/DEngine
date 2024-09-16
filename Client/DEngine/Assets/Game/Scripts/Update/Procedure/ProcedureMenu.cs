@@ -5,6 +5,9 @@ namespace Game.Update
 {
     public class ProcedureMenu : ProcedureBase
     {
-       
+        protected override void OnEnter(ProcedureOwner procedureOwner)
+        {
+            base.OnEnter(procedureOwner);
+        }
     }
 }

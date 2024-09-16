@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Game.Config;
 
-namespace Game.Config
+namespace Game.LubanTable
 {
     public interface ILubanModule : IGameModule
     {
         public Tables Tables { get; }
+
+        ILubanModule Initialize();
 
         UniTask LoadAsync();
     }

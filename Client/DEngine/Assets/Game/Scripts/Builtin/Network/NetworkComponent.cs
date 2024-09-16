@@ -76,6 +76,7 @@ namespace Game.Network
         {
             Entry.Initialize(assemblies);
             Scene = await Entry.CreateScene();
+            Log.Info("Init Network complete.");
         }
 
         /// <summary>

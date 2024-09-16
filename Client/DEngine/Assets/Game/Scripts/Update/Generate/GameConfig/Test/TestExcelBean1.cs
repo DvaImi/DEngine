@@ -8,8 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using Game.LubanTable;
 
-namespace Game.Config.Test
+namespace Game.LubanTable.Test
 {
 /// <summary>
 /// 这是个测试excel结构
