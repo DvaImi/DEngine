@@ -21,7 +21,7 @@ namespace Game.Editor.DataTableTools
             if (Directory.Exists(DataTableSetting.Instance.LocalizationExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableSetting.Instance.LocalizationExcelsFolder);
-                string[] ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(_ => !_.Name.StartsWith("~$")).Select(_ => Utility.Path.GetRegularPath(_.FullName)).ToArray();
+                string[] ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.Contains("~")).Select(_ => Utility.Path.GetRegularPath(_.FullName)).ToArray();
                 foreach (var excelFile in ExcelFilePaths)
                 {
                     string excelName = Path.GetFileNameWithoutExtension(excelFile);

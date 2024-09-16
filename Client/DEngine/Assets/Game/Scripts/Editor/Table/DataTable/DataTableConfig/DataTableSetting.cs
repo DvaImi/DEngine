@@ -124,7 +124,7 @@ namespace Game.Editor.DataTableTools
             if (Directory.Exists(DataTableExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableExcelsFolder);
-                ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(_ => !_.Name.StartsWith("~$") && _.Name.EndsWith("~$")).Select(_ => Utility.Path.GetRegularPath(_.FullName)).ToArray();
+                ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.Contains("~") ).Select(info => Utility.Path.GetRegularPath(info.FullName)).ToArray();
             }
         }
 
