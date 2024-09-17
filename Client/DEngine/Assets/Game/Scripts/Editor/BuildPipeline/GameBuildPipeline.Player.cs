@@ -1,6 +1,6 @@
-﻿using System.IO;
-using System.IO.Compression;
-using DEngine.Editor.ResourceTools;
+﻿using System;
+using System.IO;
+using System.Xml;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -17,7 +17,7 @@ namespace Game.Editor.BuildPipeline
             AssetDatabase.SaveAssets();
         }
 
-        public static void BuildPlayer(bool aotGeneric)
+        public static void BuildPlayer()
         {
             SaveBuildInfo();
             BuildTarget target = GetBuildTarget(GameSetting.Instance.BuildPlatform);
@@ -25,7 +25,8 @@ namespace Game.Editor.BuildPipeline
             {
                 EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target);
             }
-            BuildReport report = BuildApplication(target, aotGeneric);
+
+            BuildReport report = BuildApplication(target);
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
@@ -38,7 +39,7 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static BuildReport BuildApplication(BuildTarget platform, bool aotGeneric)
+        public static BuildReport BuildApplication(BuildTarget platform)
         {
             string outputExtension = GetFileExtensionForPlatform(platform);
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
@@ -51,16 +52,12 @@ namespace Game.Editor.BuildPipeline
             GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
             BuildPlayerOptions buildPlayerOptions = new()
             {
-                scenes = new string[] { EditorBuildSettings.scenes[0].path },
+                scenes = GameSetting.Instance.DefaultSceneNames,
                 locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
                 target = platform,
                 options = BuildOptions.CompressWithLz4 | BuildOptions.ShowBuiltPlayer
             };
 
-            if (aotGeneric)
-            {
-                buildPlayerOptions.options = BuildOptions.CompressWithLz4;
-            }
             return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
@@ -80,6 +77,50 @@ namespace Game.Editor.BuildPipeline
         public static string GetBuildAppFullName()
         {
             return Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform], Application.productName + GetFileExtensionForPlatform(GetBuildTarget((int)m_OriginalPlatform)));
+        }
+
+        public static void SaveBuildSetting()
+        {
+            try
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+
+                XmlElement xmlRoot = xmlDocument.CreateElement("DEngine");
+                xmlDocument.AppendChild(xmlRoot);
+
+                XmlElement xmlBuildSettings = xmlDocument.CreateElement("BuildSettings");
+                xmlRoot.AppendChild(xmlBuildSettings);
+
+                XmlElement xmlDefaultScenes = xmlDocument.CreateElement("DefaultScenes");
+                xmlBuildSettings.AppendChild(xmlDefaultScenes);
+
+                foreach (string sceneName in GameSetting.Instance.DefaultSceneNames)
+                {
+                    XmlElement xmlScene = xmlDocument.CreateElement("DefaultScene");
+                    xmlScene.SetAttribute("Name", sceneName);
+                    xmlDefaultScenes.AppendChild(xmlScene);
+                }
+
+                XmlElement xmlSearchScenePaths = xmlDocument.CreateElement("SearchScenePaths");
+                xmlBuildSettings.AppendChild(xmlSearchScenePaths);
+
+                // 添加 SearchScenePath 节点
+                foreach (string path in GameSetting.Instance.SearchScenePaths)
+                {
+                    XmlElement xmlPath = xmlDocument.CreateElement("SearchScenePath");
+                    xmlPath.SetAttribute("Path", path);
+                    xmlSearchScenePaths.AppendChild(xmlPath);
+                }
+
+                // 保存 XML 文件到指定路径
+                xmlDocument.Save(GameSetting.Instance.BuildSettingsConfig);
+                AssetDatabase.Refresh();
+                Debug.Log("XML file generated and saved successfully at: " + GameSetting.Instance.BuildSettingsConfig);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error generating XML file: " + e.Message);
+            }
         }
     }
 }

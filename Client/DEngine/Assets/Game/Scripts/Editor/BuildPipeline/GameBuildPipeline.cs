@@ -3,16 +3,17 @@ using System.Linq;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
-using Game.Editor.ResourceTools;
+using HybridCLR.Editor.Commands;
 using UnityEditor;
+using UnityEngine;
 
 namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
         private static Platform m_OriginalPlatform;
-        public static string[] ResourceMode { get; }
-        public static string[] PlatformNames { get; }
+        public static string[] ResourceMode { get; private set; }
+        public static string[] PlatformNames { get; private set; }
         public static string[] PackagesNames { get; private set; }
 
         static GameBuildPipeline()
@@ -22,10 +23,32 @@ namespace Game.Editor.BuildPipeline
             RefreshPackages();
         }
 
-        public static void RefreshPackages()
+        [MenuItem("Game/Build Pipeline/ Build Current", false, 100)]
+        private static void RunCurrentBuild()
         {
-            PackagesNames = ResourcePackagesCollector.GetPackageCollector().PackagesCollector.Select(x => x.PackageName).ToArray();
+            Debug.Log("开始一键打包任务");
+            Debug.Log("====================保存配置文件========================");
+            SaveHybridCLR();
+            SaveResource();
+            SaveBuildInfo();
+            SaveBuildSetting();
+            GameSetting.Save();
+            Debug.Log("====================保存配置文件结束========================");
+
+            Debug.Log("====================编译代码========================");
+            PrebuildCommand.GenerateAll();
+            CompileHotfixDll();
+            Debug.Log("====================编译代码结束========================");
+
+            Debug.Log("====================打包资源========================");
+            BuildResource(GameSetting.Instance.BundlesOutput, false);
+            Debug.Log("====================打包资源结束========================");
+
+            Debug.Log("====================打包工程========================");
+            BuildPlayer();
+            Debug.Log("====================打包工程结束========================");
         }
+
 
         public static BuildTarget GetBuildTarget(int platformIndex)
         {

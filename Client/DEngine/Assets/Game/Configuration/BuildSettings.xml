@@ -1,8 +1,7 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <DEngine>
   <BuildSettings>
     <DefaultScenes>
-      <DefaultScene Name="Assets/DEngine.unity" />
+      <DefaultScene Name="Assets/GameEntry.unity" />
     </DefaultScenes>
     <SearchScenePaths>
       <SearchScenePath Path="Assets" />

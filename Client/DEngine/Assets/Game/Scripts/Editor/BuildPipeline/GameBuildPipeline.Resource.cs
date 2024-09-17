@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Runtime;
@@ -108,6 +109,11 @@ namespace Game.Editor.BuildPipeline
             builderController.Save();
         }
 
+        public static void RefreshPackages()
+        {
+            PackagesNames = ResourcePackagesCollector.GetPackageCollector().PackagesCollector.Select(x => x.PackageName).ToArray();
+        }
+        
         public static void SaveOutputDirectory(string outputDirectory)
         {
             if (!Directory.Exists(outputDirectory))
@@ -135,7 +141,7 @@ namespace Game.Editor.BuildPipeline
 
         private static void OnPreprocess()
         {
-            ResourceCollectorEditorUtility.RefreshResourceCollection(null);
+            ResourceCollectorEditorUtility.RefreshResourceCollection();
             RemoveUnknownAssets();
             GameSetting.Instance.SaveSetting();
             AssetDatabase.SaveAssets();

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ee0b9678739e54fb24dfff12f65674, type: 3}
   m_Name: GameSetting
   m_EditorClassIdentifier: 
-  BuildSettingsConfig: Assets/Game/Configuration/BuildSetting.xml
+  BuildSettingsConfig: Assets/Game/Configuration/BuildSettings.xml
   ResourceCollectionConfig: Assets/Game/Configuration/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Configuration/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Configuration/ResourceBuilder.xml
@@ -20,10 +20,14 @@ MonoBehaviour:
   ResourceModeIndex: 1
   Difference: 0
   ForceRebuild: 0
+  DefaultSceneNames:
+  - Assets/GameEntry.unity
+  SearchScenePaths:
+  - Assets
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 8
-  LatestGameVersion: 0.1.0
+  InternalResourceVersion: 44
+  LatestGameVersion: 2022.3.41f1
   UpdatePrefixUri: 
   BuildInfo:
     LatestGameVersion: 0.1.0

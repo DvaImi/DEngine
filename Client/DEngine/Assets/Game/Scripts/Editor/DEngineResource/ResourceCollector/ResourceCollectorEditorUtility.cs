@@ -57,6 +57,18 @@ namespace Game.Editor.ResourceTools
             }
         }
 
+        /// <summary>
+        /// 更新当前资源收集器
+        /// </summary>
+        public static void RefreshResourceCollection()
+        {
+            RefreshResourceCollection(null);
+        } 
+        
+        /// <summary>
+        /// 更新资源收集器
+        /// </summary>
+        /// <param name="collectorData"></param>
         public static void RefreshResourceCollection(ResourceGroupsCollector collectorData)
         {
             ResourceEditorController resourceEditorController = new();

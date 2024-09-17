@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -65,6 +66,7 @@ namespace Game.Editor
                 UnityEngine.Object[] obj = new T[1] { m_Instance };
                 InternalEditorUtility.SaveToSerializedFileAndForget(obj, filePath, saveAsText);
             }
+            AssetDatabase.Refresh();
         }
 
         protected static string GetFilePath()
