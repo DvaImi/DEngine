@@ -22,7 +22,7 @@ MonoBehaviour:
   ForceRebuild: 0
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 0
+  InternalResourceVersion: 8
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: 
   BuildInfo:
@@ -37,12 +37,15 @@ MonoBehaviour:
   - Game.Update
   AOTAssembliesPath: Assets/Game/Bundles/DLL/AOT
   AOTAssemblies:
+  - DEngine
+  - DEngine.Runtime
   - mscorlib
   - System
   - System.Core
-  - DEngine
-  - DEngine.Runtime
   - UniTask
   - UnityEngine.CoreModule
+  - Fantasy.Unity
+  - Luban.Runtime
+  - ZString
   PreserveAssembliesPath: Assets/Game/Bundles/DLL/Preserve
   PreserveAssemblies: []

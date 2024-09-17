@@ -11,7 +11,7 @@ namespace Game.Editor.ResourceTools
 
         public static ResourcePackagesCollector GetPackageCollector()
         {
-            return GameEditorUtility.LoadScriptableObject<ResourcePackagesCollector>();
+            return EditorTools.LoadScriptableObject<ResourcePackagesCollector>();
         }
 
         public static ResourceGroupsCollector GetBundleCollectorByIndex(int index)

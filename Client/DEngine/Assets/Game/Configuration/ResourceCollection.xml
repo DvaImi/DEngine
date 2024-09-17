@@ -2,13 +2,14 @@
 <DEngine>
   <ResourceCollection>
     <Resources>
-      <Resource Name="chinesesimplified" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="chinesetraditional" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="configs" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="datatables" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="dll" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="english" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="updateluncher" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="chinesesimplified" FileSystem="data" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="chinesetraditional" FileSystem="data" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="configs" FileSystem="data" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="datatables" FileSystem="data" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="dll" FileSystem="meta" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="english" FileSystem="data" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="shadervariants" FileSystem="shader" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="updateluncher" FileSystem="data" LoadType="0" Packed="True" ResourceGroups="Base" />
     </Resources>
     <Assets>
       <Asset Guid="02189523211fadd49b026f48182527ca" ResourceName="datatables" />
@@ -16,6 +17,7 @@
       <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="chinesesimplified" />
       <Asset Guid="26abac1a3a0cf364c95752a98911e3de" ResourceName="dll" />
       <Asset Guid="279e8aed7409aa84cab31200b2072262" ResourceName="datatables" />
+      <Asset Guid="30d43b1acdbbb9d4aa7839f003d6ff31" ResourceName="shadervariants" />
       <Asset Guid="467ef078cd2666e41af5b71898ee5435" ResourceName="dll" />
       <Asset Guid="473f100480e8f084d9f6e0cc6d06d27f" ResourceName="datatables" />
       <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="updateluncher" />
@@ -25,9 +27,12 @@
       <Asset Guid="60a7b00119834b040924326875a49240" ResourceName="datatables" />
       <Asset Guid="60cd25147428a2c49a0321dfd13c3568" ResourceName="datatables" />
       <Asset Guid="65654b7c9ea1a3c4fa543467160d8eaa" ResourceName="dll" />
+      <Asset Guid="7192078389dd97544978a4851f2ed546" ResourceName="dll" />
       <Asset Guid="752d1fb86166d024a91bdbb1e6bce29a" ResourceName="datatables" />
       <Asset Guid="77f28af2dbce0ba49ab22abdbbe60deb" ResourceName="dll" />
       <Asset Guid="78cb16e24e4b03e4abb1fa23112b430c" ResourceName="dll" />
+      <Asset Guid="838904cb85a5e404190d9db1e9e58a0e" ResourceName="dll" />
+      <Asset Guid="9074483949b85c849a0d883641f85fec" ResourceName="shadervariants" />
       <Asset Guid="943df3dd5dfb96d49b14efddd2f99ce3" ResourceName="dll" />
       <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="chinesetraditional" />
       <Asset Guid="a85dc8a121d7acc42839ebda6555b1f4" ResourceName="dll" />
@@ -35,6 +40,7 @@
       <Asset Guid="b26566fd60e4bd54fb80a8f5a4c9be81" ResourceName="dll" />
       <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="english" />
       <Asset Guid="b88bd6aa29cfd92488da0c8875a2dcde" ResourceName="datatables" />
+      <Asset Guid="e6aead9d2a9cfde46bd8c437cdf13195" ResourceName="dll" />
     </Assets>
   </ResourceCollection>
 </DEngine>

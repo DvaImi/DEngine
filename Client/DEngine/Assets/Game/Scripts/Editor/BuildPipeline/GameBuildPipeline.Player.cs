@@ -11,7 +11,7 @@ namespace Game.Editor.BuildPipeline
     {
         public static void SaveBuildInfo()
         {
-            BuiltinData builtinData = GameEditorUtility.LoadScriptableObject<BuiltinData>();
+            BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
             builtinData.BuildInfo = GameSetting.Instance.BuildInfo;
             EditorUtility.SetDirty(builtinData);
             AssetDatabase.SaveAssets();

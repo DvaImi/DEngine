@@ -43,7 +43,7 @@ namespace Game.Editor.ResourceTools
         {
             m_CacheFilterRuleTypes.Clear();
             m_CacheFilterRuleInstence.Clear();
-            List<Type> types = GameEditorUtility.GetAssignableTypes(typeof(IFilterRule));
+            List<Type> types = EditorTools.GetAssignableTypes(typeof(IFilterRule));
             FilterRules = new string[types.Count];
             for (int i = 0; i < types.Count; i++)
             {
@@ -220,5 +220,6 @@ namespace Game.Editor.ResourceTools
         {
             return m_ResourceCollection.Save();
         }
+
     }
 }

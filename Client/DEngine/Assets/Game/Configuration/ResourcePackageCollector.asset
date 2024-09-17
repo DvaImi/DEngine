@@ -22,7 +22,7 @@ MonoBehaviour:
       AssetCollectors:
       - Enable: 1
         Name: 
-        FileSystem: 
+        FileSystem: data
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: be6134754f035424aadfe7828332fed0, type: 3}
@@ -31,7 +31,7 @@ MonoBehaviour:
         FilterRule: CollectAll
       - Enable: 1
         Name: 
-        FileSystem: 
+        FileSystem: data
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: 11f2c913956269540987ff4d8220690f, type: 3}
@@ -40,7 +40,7 @@ MonoBehaviour:
         FilterRule: CollectAll
       - Enable: 1
         Name: 
-        FileSystem: 
+        FileSystem: data
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: 99b4813375565a8409dedd11e2797474, type: 3}
@@ -49,7 +49,7 @@ MonoBehaviour:
         FilterRule: CollectAll
       - Enable: 1
         Name: 
-        FileSystem: 
+        FileSystem: data
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: 4fc38d301ae29c34faccf58b7ab86874, type: 3}
@@ -58,7 +58,7 @@ MonoBehaviour:
         FilterRule: CollectAll
       - Enable: 1
         Name: 
-        FileSystem: 
+        FileSystem: data
         Groups: Base
         Variant: 
         Asset: {fileID: 3523361330751221004, guid: 47c57db2cbae5594a9872a084eb9be62, type: 3}
@@ -67,7 +67,7 @@ MonoBehaviour:
         FilterRule: CollectAll
       - Enable: 1
         Name: 
-        FileSystem: 
+        FileSystem: meta
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: b46604e8075d028449920e76b0765d60, type: 3}
@@ -76,10 +76,19 @@ MonoBehaviour:
         FilterRule: CollectAll
       - Enable: 1
         Name: 
-        FileSystem: 
+        FileSystem: data
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: 344d26ddca1e32e49a3b57d54ac1eeb6, type: 3}
+        LoadType: 0
+        Packed: 1
+        FilterRule: CollectAll
+      - Enable: 1
+        Name: 
+        FileSystem: shader
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 102900000, guid: a452f043ae001794fabdf7905a047bdd, type: 3}
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll

@@ -32,7 +32,7 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表C#实体类模板存放路径
         /// </summary>
-        public string CSharpCodeTemplateFileName = "Assets/Game/Scripts/Editor/Table/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt";
+        public string CSharpCodeTemplateFileName = "Assets/Game/Scripts/Editor/GameTable/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt";
 
         /// <summary>
         /// 数据表扩展类文件夹路径

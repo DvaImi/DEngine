@@ -30,10 +30,11 @@ namespace Game
                     Mode = 1,
                     Message = "The device is not connected to the network",
                     ConfirmText = "Quit",
-                    OnClickConfirm = delegate (object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                    OnClickConfirm = delegate(object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                 });
                 return;
             }
+
             CheckVersionList();
         }
 
@@ -67,7 +68,6 @@ namespace Game
             WebRequestResult result = await GameEntry.WebRequest.Get(checkVersionUrl);
             if (result.Success)
             {
-
                 // 解析版本信息
                 byte[] versionInfoBytes = result.Bytes;
                 string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
@@ -77,8 +77,10 @@ namespace Game
                     Log.Error("Parse VersionInfo failure.");
                     return;
                 }
-                Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
 
+                Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
+                GameEntry.Setting.SetInt("InternalResourceVersion", m_VersionInfo.InternalResourceVersion);
+                GameEntry.Setting.Save();
                 m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(m_VersionInfo.InternalResourceVersion) == CheckVersionListResult.NeedUpdate;
                 if (m_VersionInfo.ForceUpdateGame)
                 {
@@ -91,10 +93,11 @@ namespace Game
                         ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
                         OnClickConfirm = GotoUpdateApp,
                         CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
-                        OnClickCancel = delegate (object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                        OnClickCancel = delegate(object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                     });
                     return;
                 }
+
                 // 设置资源更新下载地址
                 GameEntry.Resource.UpdatePrefixUri = Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
                 m_CheckVersionComplete = true;

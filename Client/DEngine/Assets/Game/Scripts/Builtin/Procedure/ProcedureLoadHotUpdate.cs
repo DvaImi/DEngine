@@ -45,7 +45,7 @@ namespace Game
         private void LoadUpdateMainfest()
         {
             m_LoadedFlag.Add(BuiltinAssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), false);
-            GameEntry.Resource.LoadAsset(BuiltinAssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnUpdateAssembliesVersionLoadSuccess)));
+            GameEntry.Resource.LoadAsset(BuiltinAssetUtility.GetCLRUpdateAsset(Constant.AssetVersion.HotUpdateAssembliesVersion), new LoadAssetCallbacks(OnUpdateAssembliesVersionLoadSuccess));
         }
 
         private void OnUpdateAssembliesVersionLoadSuccess(string assetName, object asset, float duration, object userData)
@@ -71,7 +71,7 @@ namespace Game
 
         private void LoadHotfixDll(string hotUpdateAssemblies)
         {
-            GameEntry.Resource.LoadAsset(hotUpdateAssemblies, new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnHotUpdateDllLoadSuccess)));
+            GameEntry.Resource.LoadAsset(hotUpdateAssemblies, new LoadAssetCallbacks(OnHotUpdateDllLoadSuccess));
         }
 
         private void OnHotUpdateDllLoadSuccess(string assetName, object asset, float duration, object userData)

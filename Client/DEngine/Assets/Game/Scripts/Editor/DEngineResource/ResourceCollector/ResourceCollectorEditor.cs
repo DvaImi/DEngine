@@ -130,7 +130,7 @@ namespace Game.Editor
 
         private void Load()
         {
-            m_AssetBundlePackageCollector = GameEditorUtility.LoadScriptableObject<ResourcePackagesCollector>();
+            m_AssetBundlePackageCollector = EditorTools.LoadScriptableObject<ResourcePackagesCollector>();
         }
 
         private void Save()
@@ -148,13 +148,13 @@ namespace Game.Editor
                 GUILayout.FlexibleSpace();
                 Color originalColor = GUI.backgroundColor;
                 GUI.backgroundColor = Color.green;
-
+                
                 if (GUILayout.Button("导出"))
                 {
                     ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
 
-                if (GUILayout.Button("Save"))
+                if (GUILayout.Button("保存"))
                 {
                     Save();
                 }
@@ -237,7 +237,7 @@ namespace Game.Editor
                             SetFocusAndEnsureSelectedItem();
                         }
 
-                        GameEditorUtility.EditorDisplay("提示", $"确定要删除{m_PackageSelectedItem?.Data?.PackageName}?", "确认", "取消", ConfirmDeletion);
+                        EditorTools.EditorDisplay("提示", $"确定要删除{m_PackageSelectedItem?.Data?.PackageName}?", "确认", "取消", ConfirmDeletion);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -279,7 +279,7 @@ namespace Game.Editor
                             SetFocusAndEnsureSelectedItem();
                         }
 
-                        GameEditorUtility.EditorDisplay("提示", $"确定要删除{m_GroupSelectedItem?.Data?.GroupName}?", "确认", "取消", ConfirmDeletion);
+                        EditorTools.EditorDisplay("提示", $"确定要删除{m_GroupSelectedItem?.Data?.GroupName}?", "确认", "取消", ConfirmDeletion);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
