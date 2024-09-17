@@ -28,7 +28,7 @@ namespace Game.Update
             GameEntry.Fsm.DestroyFsm<IProcedureManager>();
 
             //使用当前程序集获取流程Type
-            Type[] types = GetType().Assembly.GetTypes();
+            Type[] types = AssemblyUtility.GetTypes();
 
             List<ProcedureBase> procedures = new List<ProcedureBase>();
             foreach (var item in types)
@@ -40,7 +40,7 @@ namespace Game.Update
                     Log.Info("自动注册流程: " + procedure.GetType().Name);
                 }
             }
-            if (procedures == null || procedures.Count <= 0)
+            if (procedures.Count <= 0)
             {
                 Log.Warning("procedures is invalid");
                 return;
