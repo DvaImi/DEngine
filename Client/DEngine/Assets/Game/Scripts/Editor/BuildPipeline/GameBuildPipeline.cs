@@ -27,6 +27,7 @@ namespace Game.Editor.BuildPipeline
         private static void RunCurrentBuild()
         {
             Debug.Log("开始一键打包任务");
+            CheckPlatform();
             Debug.Log("====================保存配置文件========================");
             SaveHybridCLR();
             SaveResource();
@@ -49,6 +50,18 @@ namespace Game.Editor.BuildPipeline
             Debug.Log("====================打包工程结束========================");
         }
 
+        public static void CheckPlatform()
+        {
+            BuildTarget buildTarget = GetBuildTarget(GameSetting.Instance.BuildPlatform);
+            if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
+            {
+                if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(buildTarget), buildTarget))
+                {
+                    Debug.Log("当前平台与目标平台不符已经进行切换");
+                    UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+                }
+            }
+        }
 
         public static BuildTarget GetBuildTarget(int platformIndex)
         {
