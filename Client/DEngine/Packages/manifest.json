@@ -4,7 +4,7 @@
     "com.code-philosophy.luban": "https://gitee.com/focus-creative-games/luban_unity.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.cysharp.zstring": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString#2.6.0",
-    "com.dvalmi.dengine": "https://github.com/DvaImi/DEngineLibraries.git?path=DEngine",
+    "com.dvalmi.dengine": "https://github.com/DvaImi/DEngineLibraries.git?path=Assets/Core",
     "com.fantasy.unity": "https://github.com/DvaImi/Fantasy.git?path=Fantasy.Unity/Fantasy.Unity",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.ide.rider": "3.0.31",
