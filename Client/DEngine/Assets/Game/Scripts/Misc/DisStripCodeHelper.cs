@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Fantasy.InnerMessage;
 using UnityEngine;
 
@@ -34,6 +35,7 @@ public class DisStripCodeHelper : MonoBehaviour
         RegisterType<Animator>();
         RegisterType<Animation>();
         RegisterType<PingRequest>();
+        RegisterType<UniTask>();
 
 #if UNITY_IOS || PLATFORM_IOS
         /* 

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using Cysharp.Threading.Tasks;
 using DEngine.Fsm;
 using DEngine.Procedure;
-using DEngine.Resource;
 using DEngine.Runtime;
 using HybridCLR;
 using UnityEngine;
@@ -15,26 +14,36 @@ namespace Game
     /// </summary>
     public class ProcedureLoadAotMetadData : ProcedureBase
     {
-        private Dictionary<string, bool> m_LoadedFlag = new Dictionary<string, bool>();
-        protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
+        protected override async void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            LoadMetadataForAOTAssemblies();
+            string[] aotFullNames = await LoadAOTMetadataVersion();
+            int loadCount = await LoadMetadataForAOTAssemblies(aotFullNames);
+            Log.Info("AOTMetadata Load Complete. need load count {0}，load success {1}", aotFullNames.Length, loadCount);
+            ChangeState<ProcedureLoadHotUpdate>(procedureOwner);
         }
 
-        protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+        /// <summary>
+        /// 加载补充元数据列表
+        /// </summary>
+        /// <returns></returns>
+        private async UniTask<string[]> LoadAOTMetadataVersion()
         {
-            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-
-            foreach (KeyValuePair<string, bool> loadedFlag in m_LoadedFlag)
+            string[] aotFullNames = null;
+            TextAsset result = await GameEntry.Resource.LoadAssetAsync<TextAsset>(BuiltinAssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion));
+            if (result != null && result.bytes != null)
             {
-                if (!loadedFlag.Value)
+                using Stream stream = new MemoryStream(result.bytes);
+                using BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8);
+                int count = binaryReader.ReadInt32();
+                aotFullNames = new string[count];
+                for (int i = 0; i < count; i++)
                 {
-                    return;
+                    aotFullNames[i] = BuiltinAssetUtility.GetCLRAOTAsset(binaryReader.ReadString());
                 }
             }
-            Log.Info($"AOTMetadata Load Complete.");
-            ChangeState<ProcedureLoadHotUpdate>(procedureOwner);
+
+            return aotFullNames;
         }
 
         /// <summary>
@@ -45,47 +54,38 @@ namespace Game
         /// 注意，补充元数据是给AOT dll补充元数据，而不是给热更新dll补充元数据。
         /// 热更新dll不缺元数据，不需要补充，如果调用LoadMetadataForAOTAssembly会返回错误。
         /// </summary>
-        private void LoadMetadataForAOTAssemblies()
+        /// <param name="aotFullNames"></param>
+        private async UniTask<int> LoadMetadataForAOTAssemblies(string[] aotFullNames)
         {
             Log.Info("补充元数据...");
-            m_LoadedFlag.Add(BuiltinAssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion), false);
-            GameEntry.Resource.LoadAsset(BuiltinAssetUtility.GetCLRAOTAsset(Constant.AssetVersion.AOTMetadataVersion), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnAOTMetadataVersionLoadSuccessAsync)));
-        }
-
-        private void OnAOTMetadataVersionLoadSuccessAsync(string assetName, object asset, float duration, object userData)
-        {
-            TextAsset result = (TextAsset)asset;
-            if (result != null && result.bytes != null)
+            var textAssets = await GameEntry.Resource.LoadAssetsAsync<TextAsset>(aotFullNames);
+            int metaCount = 0;
+            if (textAssets == null)
             {
-                m_LoadedFlag[assetName] = true;
-                using (Stream stream = new MemoryStream(result.bytes))
+                return metaCount;
+            }
+
+            foreach (TextAsset textAsset in textAssets)
+            {
+                if (textAsset == null || textAsset.bytes == null)
                 {
-                    using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
-                    {
-                        int count = binaryReader.ReadInt32();
-                        for (int i = 0; i < count; i++)
-                        {
-                            string aotFullName = BuiltinAssetUtility.GetCLRAOTAsset(binaryReader.ReadString());
-                            Log.Info($"补充的元数据：[{aotFullName}]");
-                            m_LoadedFlag.Add(aotFullName, false);
-                            GameEntry.Resource.LoadAsset(aotFullName, new LoadAssetCallbacks(OndAotMetadDataLoadSuccess));
-                        }
-                    }
+                    continue;
+                }
+
+                // 加载assembly对应的dll，会自动为它hook。一旦aot泛型函数的native函数不存在，用解释器版本代码
+                LoadImageErrorCode code = RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.SuperSet);
+                if (code == LoadImageErrorCode.OK)
+                {
+                    metaCount++;
+                    Log.Info($"AOTMetadata :{textAsset.name} Load Success");
+                }
+                else
+                {
+                    Log.Warning($"Load AOT metadata {code}");
                 }
             }
-        }
 
-        private void OndAotMetadDataLoadSuccess(string assetName, object asset, float duration, object userData)
-        {
-            TextAsset textAsset = asset as TextAsset;
-            if (textAsset == null || textAsset.bytes == null)
-            {
-                return;
-            }
-            // 加载assembly对应的dll，会自动为它hook。一旦aot泛型函数的native函数不存在，用解释器版本代码
-            RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.SuperSet);
-            m_LoadedFlag[assetName] = true;
-            Log.Info($"AOTMetadata :{textAsset.name} Load Success");
+            return metaCount;
         }
     }
 }

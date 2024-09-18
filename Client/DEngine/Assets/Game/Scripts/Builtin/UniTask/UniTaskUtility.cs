@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DEngine;
@@ -270,31 +271,71 @@ namespace Game
         /// <summary>
         /// 加载资源（可等待）
         /// </summary>
-        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent self, string assetName) where T : Object
+        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent self, string assetName, CancellationToken cancellationToken = default) where T : Object
         {
             UniTaskCompletionSource<T> loadAssetTcs = new UniTaskCompletionSource<T>();
-            self.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks((tempAssetName, asset, duration, userdata) =>
+
+            void LoadAssetSuccessCallback(string localaAssetName, object asset, float duration, object userData)
             {
-                var source = loadAssetTcs;
-                loadAssetTcs = null;
-                T tAsset = asset as T;
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    loadAssetTcs.TrySetCanceled();
+                }
+
+                var tAsset = asset as T;
                 if (tAsset != null)
                 {
-                    source.TrySetResult(tAsset);
+                    loadAssetTcs.TrySetResult(tAsset);
                 }
                 else
                 {
-                    Debug.LogError($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}.");
-                    source.TrySetException(new DEngineException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
+                    loadAssetTcs.TrySetException(new DEngineException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
                 }
-            },
-             (tempAssetName, status, errorMessage, userdata) =>
-             {
-                 Debug.LogError(errorMessage);
-                 loadAssetTcs.TrySetException(new DEngineException(errorMessage));
-             }
-            ));
+            }
 
+            void LoadAssetFailureCallback(string localaAssetName, LoadResourceStatus status, string errorMessage, object userData)
+            {
+                loadAssetTcs.TrySetException(new DEngineException(errorMessage));
+            }
+
+            self.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks(LoadAssetSuccessCallback, LoadAssetFailureCallback));
+            return loadAssetTcs.Task;
+        }
+
+        /// <summary>
+        /// 异步加载二进制资源(可等待)
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="binaryAssetName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static UniTask<byte[]> LoadBinaryAsync(this ResourceComponent self, string binaryAssetName, CancellationToken cancellationToken = default)
+        {
+            UniTaskCompletionSource<byte[]> loadAssetTcs = new UniTaskCompletionSource<byte[]>();
+
+            void LoadAssetSuccessCallback(string localbinaryAssetName, byte[] binaryBytes, float duration, object userData)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    loadAssetTcs.TrySetCanceled();
+                }
+
+                if (binaryBytes != null)
+                {
+                    loadAssetTcs.TrySetResult(binaryBytes);
+                }
+                else
+                {
+                    loadAssetTcs.TrySetException(new DEngineException("Load Binary failure."));
+                }
+            }
+
+            void LoadAssetFailureCallback(string localbinaryAssetName, LoadResourceStatus status, string errorMessage, object userData)
+            {
+                loadAssetTcs.TrySetException(new DEngineException(errorMessage));
+            }
+
+            self.LoadBinary(binaryAssetName, new LoadBinaryCallbacks(LoadAssetSuccessCallback, LoadAssetFailureCallback));
             return loadAssetTcs.Task;
         }
 
@@ -313,6 +354,7 @@ namespace Game
             {
                 tasks[i] = self.LoadAssetAsync<T>(assetName[i]);
             }
+
             return await UniTask.WhenAll(tasks);
         }
 
@@ -328,6 +370,14 @@ namespace Game
             return result.Task;
         }
 
+        public static UniTask<WebRequestResult> Get(this WebRequestComponent self, string webRequestUri, UnityWebRequestHeader requestParams)
+        {
+            int serialId = self.AddWebRequest(webRequestUri, userData: requestParams);
+            UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
+            m_WebRequestResult.Add(serialId, result);
+            return result.Task;
+        }
+
         public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, WWWForm wwwForm = null)
         {
             int serialId = self.AddWebRequest(webRequestUri, wwwForm);
@@ -336,9 +386,9 @@ namespace Game
             return result.Task;
         }
 
-        public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, WWWForm wwwForm = null, UnityWebRequestHeader requestParams = null)
+        public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, WWWForm wwwForm, UnityWebRequestHeader requestParams)
         {
-            int serialId = self.AddWebRequest(webRequestUri, wwwForm, requestParams);
+            int serialId = self.AddWebRequest(webRequestUri, wwwForm, userData: requestParams);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;
@@ -352,9 +402,9 @@ namespace Game
             return result.Task;
         }
 
-        public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, byte[] postData, UnityWebRequestHeader requestParams = null)
+        public static UniTask<WebRequestResult> Post(this WebRequestComponent self, string webRequestUri, byte[] postData, UnityWebRequestHeader requestParams)
         {
-            int serialId = self.AddWebRequest(webRequestUri, postData, requestParams);
+            int serialId = self.AddWebRequest(webRequestUri, postData, userData: requestParams);
             UniTaskCompletionSource<WebRequestResult> result = new UniTaskCompletionSource<WebRequestResult>();
             m_WebRequestResult.Add(serialId, result);
             return result.Task;

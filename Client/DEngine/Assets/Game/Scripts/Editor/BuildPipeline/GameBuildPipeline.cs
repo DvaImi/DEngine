@@ -23,7 +23,7 @@ namespace Game.Editor.BuildPipeline
             RefreshPackages();
         }
 
-        [MenuItem("Game/Build Pipeline/ Build Current", false, 100)]
+        [MenuItem("Game/Build Pipeline/ Build Current APP", false, 100)]
         private static void RunCurrentBuild()
         {
             Debug.Log("开始一键打包任务");
