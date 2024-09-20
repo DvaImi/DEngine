@@ -1,7 +1,13 @@
 #!/bin/bash
 
-# 设置工作空间
-WORKSPACE=$(pwd)
+# 获取脚本所在的目录并赋值给 WORKSPACE
+WORKSPACE=$(cd "$(dirname "$0")" && pwd)
+
+# 切换到 WORKSPACE 目录
+cd "$WORKSPACE"
+
+# 打印 WORKSPACE 目录以确认
+echo "Current WORKSPACE directory: $WORKSPACE"
 
 # 设置路径
 GEN_CLIENT="$WORKSPACE/Tools/Luban.dll"
@@ -20,3 +26,5 @@ dotnet "$GEN_CLIENT" \
 
 # 暂停
 read -p "Press any key to continue... "
+
+exit
