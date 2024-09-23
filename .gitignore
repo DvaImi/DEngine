@@ -81,3 +81,8 @@ AppOutput
 .DS_Store
 Server/DEngineServer/Bin
 Server/DEngineServer/Server/.idea
+Server/DEngineServer/Server/Entity/bin
+Server/DEngineServer/Server/Hotfix/bin
+Server/DEngineServer/Server/Main/obj
+Server/DEngineServer/Server/Hotfix/obj
+Server/DEngineServer/Server/Entity/obj
