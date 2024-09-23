@@ -742,7 +742,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EditorResourceMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_JsonHelperTypeName
@@ -814,11 +814,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef9e48be96154924fb5a48df7ba5699e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MaxSlotCount: 1
+  m_MaxSlotCount: 16
   m_ArchiveHelperTypeName: Game.Archive.FileArchiveHelper
   m_ArchiveSerializerTypeName: Game.Archive.DefaultArchiveSerializerHelper
   m_EncryptorTypeName: Game.Archive.DefaultEncryptorHelper
-  m_UserIdentifier: 
+  m_UserIdentifier: dvalmi
   m_UserEncryptor: 0
 --- !u!1 &1351024806
 GameObject:
@@ -864,6 +864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f48ab3cd3affc947a33d3005baf1679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ServiceType: 1
 --- !u!1 &2108069988
 GameObject:
   m_ObjectHideFlags: 0

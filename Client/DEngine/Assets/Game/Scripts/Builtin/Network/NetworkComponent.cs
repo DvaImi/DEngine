@@ -8,6 +8,7 @@ using Fantasy.Async;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
 using Fantasy.Platform.Unity;
+using UnityEngine;
 using Log = DEngine.Runtime.Log;
 
 namespace Game.Network
@@ -22,7 +23,7 @@ namespace Game.Network
         /// <summary>
         /// 获取网络协议类型
         /// </summary>
-        public NetworkProtocolType ServiceType { get; private set; }
+        [SerializeField] private NetworkProtocolType m_ServiceType = NetworkProtocolType.TCP;
 
         /// <summary>
         /// 是否已连接。
@@ -72,10 +73,15 @@ namespace Game.Network
         /// </summary>
         public SessionHeartbeatComponent Heartbeat { get; private set; }
 
-        public async UniTask Initialize(params Assembly[] assemblies)
+        /// <summary>
+        /// 获取网络协议类型
+        /// </summary>
+        public NetworkProtocolType ServiceType => m_ServiceType;
+
+        public void Initialize(params Assembly[] assemblies)
         {
             Entry.Initialize(assemblies);
-            Scene = await Entry.CreateScene();
+            Scene = Entry.Scene;
             Log.Info("Init Network complete.");
         }
 
@@ -83,17 +89,15 @@ namespace Game.Network
         /// 连接到远程主机
         /// </summary>
         /// <param name="address"></param>
-        /// <param name="protocolType"></param>
         /// <param name="isHttps"></param>
         /// <param name="connectTimeout"></param>
         /// <param name="interval"></param>
         /// <param name="timeOut"></param>
         /// <param name="timeOutInterval"></param>
-        public async UniTask<bool> Connect(string address, NetworkProtocolType protocolType, bool isHttps = false, int connectTimeout = 5000, int interval = 2000, int timeOut = 2000, int timeOutInterval = 3000)
+        public async UniTask<bool> Connect(string address, bool isHttps = false, int connectTimeout = 5000, int interval = 2000, int timeOut = 2000, int timeOutInterval = 3000)
         {
             Connected = false;
-            Session = Scene.Connect(address, protocolType, OnNetworkConnectedHandle, OnNetworkConnectFailureHandle, OnNetworkDisconnectHandle, isHttps, connectTimeout);
-            ServiceType = protocolType;
+            Session = Scene.Connect(address, m_ServiceType, OnNetworkConnectedHandle, OnNetworkConnectFailureHandle, OnNetworkDisconnectHandle, isHttps, connectTimeout);
             m_ConnectTask = new UniTaskCompletionSource();
             await m_ConnectTask.Task;
             Heartbeat = Session.AddComponent<SessionHeartbeatComponent>();

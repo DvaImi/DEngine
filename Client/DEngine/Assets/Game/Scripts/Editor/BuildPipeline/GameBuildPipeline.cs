@@ -27,40 +27,48 @@ namespace Game.Editor.BuildPipeline
         private static void RunCurrentBuild()
         {
             Debug.Log("开始一键打包任务");
-            CheckPlatform();
-            Debug.Log("====================保存配置文件========================");
-            SaveHybridCLR();
-            SaveResource();
-            SaveBuildInfo();
-            SaveBuildSetting();
-            GameSetting.Save();
-            Debug.Log("====================保存配置文件结束========================");
+            if (CheckPlatform())
+            {
+                Debug.Log("====================目标平台切换成功========================");
+                Debug.Log("====================保存配置文件========================");
+                SaveHybridCLR();
+                SaveResource();
+                SaveBuildInfo();
+                SaveBuildSetting();
+                GameSetting.Save();
+                Debug.Log("====================保存配置文件结束========================");
 
-            Debug.Log("====================编译代码========================");
-            PrebuildCommand.GenerateAll();
-            CompileHotfixDll();
-            Debug.Log("====================编译代码结束========================");
+                Debug.Log("====================编译代码========================");
+                PrebuildCommand.GenerateAll();
+                CompileHotfixDll();
+                Debug.Log("====================编译代码结束========================");
 
-            Debug.Log("====================打包资源========================");
-            BuildResource(GameSetting.Instance.BundlesOutput, false);
-            Debug.Log("====================打包资源结束========================");
+                Debug.Log("====================打包资源========================");
+                BuildResource(GameSetting.Instance.BundlesOutput, false);
+                Debug.Log("====================打包资源结束========================");
 
-            Debug.Log("====================打包工程========================");
-            BuildPlayer();
-            Debug.Log("====================打包工程结束========================");
+                Debug.Log("====================打包工程========================");
+                BuildPlayer();
+                Debug.Log("====================打包工程结束========================");
+            }
         }
 
-        public static void CheckPlatform()
+        public static bool CheckPlatform()
         {
             BuildTarget buildTarget = GetBuildTarget(GameSetting.Instance.BuildPlatform);
             if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
             {
-                if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(buildTarget), buildTarget))
+                if (EditorUtility.DisplayDialog("", "当前平台与目标平台不符是否切换 ? ", "确定", "取消"))
                 {
-                    Debug.Log("当前平台与目标平台不符已经进行切换");
-                    UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+                    if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(buildTarget), buildTarget))
+                    {
+                        UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+                        return true;
+                    }
                 }
             }
+
+            return false;
         }
 
         public static BuildTarget GetBuildTarget(int platformIndex)
