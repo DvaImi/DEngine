@@ -79,3 +79,5 @@ AOT
 BundlesOutput
 AppOutput
 .DS_Store
+Server/DEngineServer/Bin
+Server/DEngineServer/Server/.idea
