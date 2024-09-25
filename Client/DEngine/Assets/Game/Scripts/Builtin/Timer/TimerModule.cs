@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DEngine;
-using DEngine.Runtime;
 using UnityEngine;
 
 namespace Game.Timer
 {
-    public partial class TimerComponent : DEngineComponent
+    public partial class TimerModule : IGameModule, ITimerModule
     {
+        public int Priority => 0;
+
         /// <summary>
         /// 存储所有的timer
         /// </summary>
@@ -44,7 +45,7 @@ namespace Game.Timer
         /// </summary>
         private long m_MinTime;
 
-        private void Update()
+        public void Update(float elapseSeconds, float realElapseSeconds)
         {
             RunUpdateCallBack();
             if (m_TimeId.Count == 0)
@@ -122,43 +123,43 @@ namespace Game.Timer
             switch (timer.TimerType)
             {
                 case TimerType.OnceWait:
-                    {
-                        UniTaskCompletionSource<bool> tcs = timer.Callback as UniTaskCompletionSource<bool>;
-                        RemoveTimer(timer.ID);
-                        tcs?.TrySetResult(true);
-                        break;
-                    }
+                {
+                    UniTaskCompletionSource<bool> tcs = timer.Callback as UniTaskCompletionSource<bool>;
+                    RemoveTimer(timer.ID);
+                    tcs?.TrySetResult(true);
+                    break;
+                }
                 case TimerType.Once:
-                    {
-                        Action action = timer.Callback as Action;
-                        RemoveTimer(timer.ID);
-                        action?.Invoke();
-                        break;
-                    }
+                {
+                    Action action = timer.Callback as Action;
+                    RemoveTimer(timer.ID);
+                    action?.Invoke();
+                    break;
+                }
                 case TimerType.Repeated:
+                {
+                    Action action = timer.Callback as Action;
+                    long nowTime = TimerTimeUtility.Now();
+                    long tillTime = nowTime + timer.Time;
+                    if (timer.RepeatCount == 1)
                     {
-                        Action action = timer.Callback as Action;
-                        long nowTime = TimerTimeUtility.Now();
-                        long tillTime = nowTime + timer.Time;
-                        if (timer.RepeatCount == 1)
-                        {
-                            RemoveTimer(timer.ID);
-                        }
-                        else
-                        {
-                            if (timer.RepeatCount > 1)
-                            {
-                                timer.RepeatCount--;
-                            }
-
-                            timer.StartTime = nowTime;
-                            AddTimer(tillTime, timer.ID);
-                        }
-
-                        action?.Invoke();
-
-                        break;
+                        RemoveTimer(timer.ID);
                     }
+                    else
+                    {
+                        if (timer.RepeatCount > 1)
+                        {
+                            timer.RepeatCount--;
+                        }
+
+                        timer.StartTime = nowTime;
+                        AddTimer(tillTime, timer.ID);
+                    }
+
+                    action?.Invoke();
+
+                    break;
+                }
             }
         }
 
@@ -440,6 +441,16 @@ namespace Game.Timer
             m_Timers.Add(timer.ID, timer);
             AddTimer(nowTime + 1, timer.ID);
             return timer.ID;
+        }
+
+        public void Shutdown()
+        {
+            m_Timers.Clear();
+            m_TimeId.Clear();
+            m_TimeOutTime.Clear();
+            m_TimeOutTimerIds.Clear();
+            m_PausedTimer.Clear();
+            m_UpdateTimer.Clear();
         }
     }
 }

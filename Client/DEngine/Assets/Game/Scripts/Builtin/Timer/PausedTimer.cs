@@ -2,7 +2,7 @@
 
 namespace Game.Timer
 {
-    public partial class TimerComponent
+    public partial class TimerModule
     {
         /// <summary>
         /// 暂停的定时器

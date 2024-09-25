@@ -3,7 +3,7 @@ using DEngine;
 
 namespace Game.Timer
 {
-    public partial class TimerComponent
+    public partial class TimerModule
     {
         /// <summary>
         /// 定时器

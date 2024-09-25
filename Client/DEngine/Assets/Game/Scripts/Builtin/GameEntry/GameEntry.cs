@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game
 {
@@ -11,7 +10,7 @@ namespace Game
         private void Start()
         {
             InitBuiltinComponents();
-            InitCustomsComponents();
+            InitCustomsModules();
         }
 
         private void Update()

@@ -1,6 +1,6 @@
 ﻿namespace Game.Timer
 {
-    public partial class TimerComponent
+    public partial class TimerModule
     {
         /// <summary>
         /// timer 类型

@@ -2,28 +2,25 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
-using DEngine.Runtime;
 using Fantasy;
 using Fantasy.Async;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
 using Fantasy.Platform.Unity;
-using UnityEngine;
+using Game.Debugger;
 using Log = DEngine.Runtime.Log;
 
 namespace Game.Network
 {
-    public class NetworkComponent : DEngineComponent
+    public class NetworkModule : IGameModule, INetworkModule
     {
-        /// <summary>
-        /// 
-        /// </summary>
         private UniTaskCompletionSource m_ConnectTask;
+        private NetworkProtocolType m_ServiceType = NetworkProtocolType.TCP;
 
         /// <summary>
-        /// 获取网络协议类型
+        /// Debug 模块
         /// </summary>
-        [SerializeField] private NetworkProtocolType m_ServiceType = NetworkProtocolType.TCP;
+        private NetworkDebuggerWindow m_NetworkDebuggerWindow;
 
         /// <summary>
         /// 是否已连接。
@@ -59,11 +56,6 @@ namespace Game.Network
         public int CallRouteRequestCount { get; private set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public Scene Scene { get; private set; }
-
-        /// <summary>
         /// 网络会话对象
         /// </summary>
         public Session Session { get; private set; }
@@ -78,10 +70,15 @@ namespace Game.Network
         /// </summary>
         public NetworkProtocolType ServiceType => m_ServiceType;
 
+        /// <summary>
+        /// 初始化网络模块
+        /// </summary>
+        /// <param name="assemblies"></param>
         public void Initialize(params Assembly[] assemblies)
         {
+            m_NetworkDebuggerWindow = new NetworkDebuggerWindow();
+            GameEntry.Debugger.RegisterDebuggerWindow("Profiler/Network", m_NetworkDebuggerWindow);
             Entry.Initialize(assemblies);
-            Scene = Entry.Scene;
             Log.Info("Init Network complete.");
         }
 
@@ -89,15 +86,17 @@ namespace Game.Network
         /// 连接到远程主机
         /// </summary>
         /// <param name="address"></param>
+        /// <param name="serviceType"></param>
         /// <param name="isHttps"></param>
         /// <param name="connectTimeout"></param>
         /// <param name="interval"></param>
         /// <param name="timeOut"></param>
         /// <param name="timeOutInterval"></param>
-        public async UniTask<bool> Connect(string address, bool isHttps = false, int connectTimeout = 5000, int interval = 2000, int timeOut = 2000, int timeOutInterval = 3000)
+        public async UniTask<bool> Connect(string address, NetworkProtocolType serviceType = NetworkProtocolType.TCP, bool isHttps = false, int connectTimeout = 5000, int interval = 2000, int timeOut = 2000, int timeOutInterval = 3000)
         {
             Connected = false;
-            Session = Scene.Connect(address, m_ServiceType, OnNetworkConnectedHandle, OnNetworkConnectFailureHandle, OnNetworkDisconnectHandle, isHttps, connectTimeout);
+            m_ServiceType = serviceType;
+            Session = Entry.Scene.Connect(address, serviceType, OnNetworkConnectedHandle, OnNetworkConnectFailureHandle, OnNetworkDisconnectHandle, isHttps, connectTimeout);
             m_ConnectTask = new UniTaskCompletionSource();
             await m_ConnectTask.Task;
             Heartbeat = Session.AddComponent<SessionHeartbeatComponent>();
@@ -269,6 +268,17 @@ namespace Game.Network
             CallRouteRequestCount = 0;
             m_ConnectTask?.TrySetCanceled();
             Session?.Dispose();
+        }
+
+        public int Priority => 0;
+
+        public void Update(float elapseSeconds, float realElapseSeconds)
+        {
+        }
+
+        public void Shutdown()
+        {
+            Disconnect();
         }
     }
 }
