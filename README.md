@@ -19,11 +19,18 @@ UNITY_2020_1_OR_NEWER
   - [x] 拆分热更程序集和AOT程序集，流程已跑通 
 - 接入Unitask
   - [x] 扩充资源加载为await模式
-  - [ ] 考虑扩充异步事件系统
+  - [x] 考虑扩充异步事件系统    使用Fantasy 框架的异步事件系统 
 - 接入Fantasy
   - [x] 接入 Fantasy，测试流程已跑通
 - 接入Luban
   - [x] TODO 客户端已接入Luban
+  - [ ] 服务端接入Luban
+- 接入FairyGUI
+  - [ ] 完美融合进框架的UI系统中，采用扩展包形式接入
+-  技能、Buff 系统
+-    - [ ] 技能编辑器 
+-    状态帧同步扩展包
+-     
 
 
 <strong>致谢
