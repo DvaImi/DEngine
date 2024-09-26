@@ -161,7 +161,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.DarkMoonStudio.DEngine
+    Android: com.DvalmiStudio.DEngine
     Standalone: com.DvalmiStudio.DEngine
   buildNumber:
     Bratwurst: 0
@@ -743,7 +743,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: ENABLE_LOG;ENABLE_HYBRIDCLR
+    Android: ENABLE_LOG;ENABLE_HYBRIDCLR;FANTASY_UNITY
     PS4: 
     Standalone: FANTASY_UNITY;ENABLE_LOG;ENABLE_HYBRIDCLR
     WebGL: ENABLE_LOG;ENABLE_HYBRIDCLR
