@@ -7,7 +7,7 @@ namespace Game.Editor.DataTableTools
 {
     public static class GenerateLuban
     {
-        [MenuItem("Game/Luban/Generate", priority = 100)]
+        [MenuItem("DataTable/Generate/Luban", priority = 100)]
         public static void Generate()
         {
 #if UNITY_EDITOR_WIN

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
-using Fantasy;
 using Fantasy.Async;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
