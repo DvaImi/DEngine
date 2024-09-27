@@ -68,7 +68,7 @@ namespace Game.Editor.BuildPipeline
                 }
             }
 
-            return false;
+            return true;
         }
 
         public static BuildTarget GetBuildTarget(int platformIndex)
