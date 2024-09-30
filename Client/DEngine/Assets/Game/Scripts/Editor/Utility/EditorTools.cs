@@ -22,6 +22,20 @@ namespace Game.Editor
             InitAssembly();
         }
 
+
+        [MenuItem("Assets/Get Asset Path", priority = 3)]
+        static void GetAssetPath()
+        {
+            UnityEngine.Object selObj = Selection.activeObject;
+
+            if (selObj != null)
+            {
+                string assetPath = AssetDatabase.GetAssetPath(selObj);
+                EditorGUIUtility.systemCopyBuffer = assetPath;
+                Debug.Log(assetPath);
+            }
+        }
+
         #region Assembly
 
 #if UNITY_2019_4_OR_NEWER
@@ -282,6 +296,44 @@ namespace Game.Editor
             }
         }
 
+        /// <summary>
+        /// 从指定路径加载ScriptableObject
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <typeparam name="TScriptableObject"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static TScriptableObject LoadScriptableObject<TScriptableObject>(string filePath) where TScriptableObject : ScriptableObject
+        {
+            var settingType = typeof(TScriptableObject);
+            var guids = AssetDatabase.FindAssets($"t:{settingType.Name}");
+            if (guids.Length == 0)
+            {
+                Debug.LogWarning($"Create new {settingType.Name}.asset");
+                var setting = ScriptableObject.CreateInstance<TScriptableObject>();
+                AssetDatabase.CreateAsset(setting, filePath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                return setting;
+            }
+            else
+            {
+                if (guids.Length != 1)
+                {
+                    foreach (var guid in guids)
+                    {
+                        string path = AssetDatabase.GUIDToAssetPath(guid);
+                        Debug.LogWarning($"Found multiple file : {path}");
+                    }
+
+                    throw new System.Exception($"Found multiple {settingType.Name} files !");
+                }
+
+                var setting = AssetDatabase.LoadAssetAtPath<TScriptableObject>(filePath);
+                return setting;
+            }
+        }
+
         #endregion
 
         #region EditorWindow
@@ -326,7 +378,7 @@ namespace Game.Editor
             System.Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.ConsoleWindow");
             EditorWindow.GetWindow(T, false, "Console", true);
         }
-        
+
         public static void EditorDisplay(string title, string message, string ok, string cancel, System.Action action)
         {
             if (EditorUtility.DisplayDialog(title, message, ok, cancel))

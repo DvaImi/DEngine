@@ -40,8 +40,8 @@ namespace Game.Update
             // 还原游戏速度
             GameEntry.Base.ResetNormalGameSpeed();
 
-            int sceneId = procedureOwner.GetData<VarInt32>(ProceureConstant.NextSceneId);
-            m_NextProcedureType = procedureOwner.GetData<VarProcedure>(ProceureConstant.NextProcedure);
+            int sceneId = procedureOwner.GetData<VarInt32>(UpdateConstant.ProceureConstant.NextSceneId);
+            m_NextProcedureType = procedureOwner.GetData<VarProcedure>(UpdateConstant.ProceureConstant.NextProcedure);
             GameEntry.Scene.LoadScene((SceneId)sceneId, this);
         }
 

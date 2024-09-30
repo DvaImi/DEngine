@@ -115,14 +115,14 @@ namespace Game.Update
 
         private async void LoadLubanDataTable()
         {
-            foreach (var table in UpdateEntry.Luban.Tables.TableNames)
+            foreach (var table in Entry.Luban.Tables.TableNames)
             {
                 m_LoadedFlag[table] = false;
             }
 
-            await UpdateEntry.Luban.LoadAsync();
+            await Entry.Luban.LoadAsync();
 
-            foreach (var table in UpdateEntry.Luban.Tables.TableNames)
+            foreach (var table in Entry.Luban.Tables.TableNames)
             {
                 m_LoadedFlag[table] = true;
             }

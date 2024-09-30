@@ -4,6 +4,7 @@
 // 创建时间：2023-04-15 11:40:26
 // 版 本：1.0
 // ========================================================
+
 using System;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Game.Editor
     public class ScriptableSingleton<T> : ScriptableObject where T : ScriptableObject
     {
         private static T m_Instance;
+
         public static T Instance
         {
             get
@@ -24,9 +26,11 @@ namespace Game.Editor
                 {
                     LoadOrCreate();
                 }
+
                 return m_Instance;
             }
         }
+
         public static T LoadOrCreate()
         {
             string filePath = GetFilePath();
@@ -34,12 +38,17 @@ namespace Game.Editor
             {
                 var arr = InternalEditorUtility.LoadSerializedFileAndForget(filePath);
                 m_Instance = arr.Length > 0 ? arr[0] as T : m_Instance ?? CreateInstance<T>();
-                m_Instance.name = typeof(T).Name;
+                if (m_Instance != null)
+                {
+                    m_Instance.name = typeof(T).Name;
+                }
+                AssetDatabase.Refresh();
             }
             else
             {
                 Debug.LogError($"{nameof(ScriptableSingleton<T>)}: 请指定单例存档路径！ ");
             }
+
             return m_Instance;
         }
 
@@ -63,25 +72,28 @@ namespace Game.Editor
                 {
                     Directory.CreateDirectory(directoryName);
                 }
+
                 UnityEngine.Object[] obj = new T[1] { m_Instance };
                 InternalEditorUtility.SaveToSerializedFileAndForget(obj, filePath, saveAsText);
             }
+
             AssetDatabase.Refresh();
         }
 
         protected static string GetFilePath()
         {
             return typeof(T).GetCustomAttributes(inherit: true)
-                  .Cast<GameFilePathAttribute>()
-                  .FirstOrDefault(v => v != null)
-                  ?.filepath;
+                .Cast<GameFilePathAttribute>()
+                .FirstOrDefault(v => v != null)
+                ?.filepath;
         }
     }
-    
+
     [AttributeUsage(AttributeTargets.Class)]
     public class GameFilePathAttribute : Attribute
     {
         internal string filepath;
+
         /// <summary>
         /// 单例存放路径
         /// </summary>
@@ -92,10 +104,12 @@ namespace Game.Editor
             {
                 throw new ArgumentException("Invalid relative path (it is empty)");
             }
+
             if (path[0] == '/')
             {
                 path = path[1..];
             }
+
             filepath = path;
         }
     }

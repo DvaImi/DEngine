@@ -9,7 +9,7 @@ namespace Game.Update
         protected override async void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            await UpdateEntry.Initialize();
+            await Entry.Initialize();
             Log.Info("ProcedureHotfix  Launch  ");
             ChangeState<ProcedurePreload>(procedureOwner);
         }

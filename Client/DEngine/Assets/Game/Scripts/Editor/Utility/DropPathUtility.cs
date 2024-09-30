@@ -38,11 +38,12 @@ namespace Game.Editor
                     }
                 }
             }
+
             isFile = false;
             return isFile;
         }
 
-        public static bool DropPath(Rect dropArea, out string assetPath, bool files = false)
+        public static bool DropPath(Rect dropArea, out string assetPath, bool isFolder = false)
         {
             Event currentEvent = Event.current;
             assetPath = string.Empty;
@@ -66,27 +67,29 @@ namespace Game.Editor
                         if (!string.IsNullOrEmpty(assetPath))
                         {
                             currentEvent.Use();
-                            return files ? File.Exists(assetPath) : Directory.Exists(assetPath);
+                            return isFolder ? Directory.Exists(assetPath) : File.Exists(assetPath);
                         }
                     }
                 }
             }
+
             return false;
         }
 
-        public static void DropAssetPath(string label, ref string value)
+        public static void DropAssetPath(string label, ref string value, bool isFolder = false)
         {
             EditorGUILayout.BeginHorizontal();
             {
                 value = EditorGUILayout.TextField(label, value);
                 Rect textFieldRect = GUILayoutUtility.GetLastRect();
-                if (DropPath(textFieldRect, out string assetPath, true))
+                if (DropPath(textFieldRect, out string assetPath, isFolder))
                 {
                     if (assetPath != value)
                     {
                         value = assetPath;
                     }
                 }
+
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(value));
@@ -106,6 +109,7 @@ namespace Game.Editor
             {
                 return null;
             }
+
             string absoluteFolderPath = Application.dataPath + "/" + inputPath[(inputPath.IndexOf("Assets/") + "Assets/".Length)..];
             return Utility.Path.GetRegularPath($"Assets{absoluteFolderPath[Application.dataPath.Length..]}");
         }
