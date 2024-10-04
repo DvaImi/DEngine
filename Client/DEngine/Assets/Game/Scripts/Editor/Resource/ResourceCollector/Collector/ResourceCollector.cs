@@ -8,13 +8,13 @@ namespace Game.Editor.ResourceTools
     public class ResourceCollector
     {
         /// <summary>
-        /// 是否启用资源
-        /// </summary>
-        public bool Enable = true;
-        /// <summary>
         /// 资源名称
         /// </summary>
         public string Name = null;
+        /// <summary>
+        /// 是否启用资源
+        /// </summary>
+        public bool Enable = true;
         /// <summary>
         /// 资源文件系统
         /// </summary>

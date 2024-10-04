@@ -104,10 +104,10 @@ namespace Game.Editor.DataTableTools
             {
                 if (m_FoldoutDataTableGroup)
                 {
-                    GUIAssetPath("数据表文件导出路径", ref DataTableSetting.Instance.DataTableFolderPath);
-                    GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath);
-                    GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName, true);
-                    GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath);
+                    GUIAssetPath("数据表文件导出路径", ref DataTableSetting.Instance.DataTableFolderPath,true);
+                    GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath,true);
+                    GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName);
+                    GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath,true);
                     GUIOutPath("数据表格路径", ref DataTableSetting.Instance.DataTableExcelsFolder);
                     DataTableSetting.Instance.NameSpace = EditorGUILayout.TextField("数据表命名空间", DataTableSetting.Instance.NameSpace);
                     DataTableSetting.Instance.NameRow = EditorGUILayout.IntField("字段名所在行", DataTableSetting.Instance.NameRow);
@@ -115,7 +115,7 @@ namespace Game.Editor.DataTableTools
                     DataTableSetting.Instance.CommentRow = EditorGUILayout.IntField("注释所在行", DataTableSetting.Instance.CommentRow);
                     DataTableSetting.Instance.ContentStartRow = EditorGUILayout.IntField("内容所在行", DataTableSetting.Instance.ContentStartRow);
                     DataTableSetting.Instance.GenerateDataTableEnum = EditorGUILayout.Toggle("是否生成数据表枚举", DataTableSetting.Instance.GenerateDataTableEnum);
-                    
+
                     if (DataTableSetting.Instance.GenerateDataTableEnum)
                     {
                         EditorGUILayout.HelpBox("注意:数据表第三列将会作为枚举名称,Id 作为枚举值.", MessageType.Warning);
@@ -143,13 +143,14 @@ namespace Game.Editor.DataTableTools
         /// </summary>
         /// <param name="header"></param>
         /// <param name="content"></param>
-        private void GUIAssetPath(string header, ref string content, bool files = false)
+        /// <param name="isFolder"></param>
+        private void GUIAssetPath(string header, ref string content, bool isFolder = false)
         {
             EditorGUILayout.BeginHorizontal();
             {
                 content = EditorGUILayout.TextField(header, content);
                 Rect rect = GUILayoutUtility.GetLastRect();
-                if (DropPathUtility.DropPath(rect, out string path, files))
+                if (DropPathUtility.DropPath(rect, out string path, isFolder))
                 {
                     if (path != content)
                     {
