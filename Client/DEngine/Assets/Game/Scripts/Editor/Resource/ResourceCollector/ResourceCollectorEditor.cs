@@ -42,7 +42,7 @@ namespace Game.Editor
         private bool m_IsDirty = false;
         private float PackageSpace => 200;
 
-        [MenuItem("DEngine/Resource Tools/Resource Collector", false, 42)]
+        [MenuItem("Game/Resource Tools/Resource Collector", false, 42)]
         public static void OpenWindow()
         {
             var window = GetWindow<ResourceCollectorEditor>("资源收集器");

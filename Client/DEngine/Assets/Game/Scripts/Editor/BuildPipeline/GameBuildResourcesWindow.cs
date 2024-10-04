@@ -183,14 +183,23 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.EndVertical();
 
             Color bc = GUI.backgroundColor;
-            GUI.backgroundColor = Color.green;
             GUILayout.Space(5f);
-            if (GUILayout.Button("Build", GUILayout.Height(30)))
+            EditorGUILayout.BeginHorizontal("box");
             {
-                m_BeginBuildResources = true;
-            }
+                GUI.backgroundColor = Color.green;
+                if (GUILayout.Button("Editor", GUILayout.Height(30)))
+                {
+                    ResourceCollectorEditor.OpenWindow();
+                } 
+                
+                if (GUILayout.Button("Build", GUILayout.Height(30)))
+                {
+                    m_BeginBuildResources = true;
+                }
 
-            GUI.backgroundColor = bc;
+                GUI.backgroundColor = bc;
+            }
+            EditorGUILayout.EndHorizontal();
         }
     }
 }
