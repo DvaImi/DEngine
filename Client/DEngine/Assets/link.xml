@@ -147,6 +147,8 @@
     <type fullname="NativeCollections.NativeArrayPool`1" preserve="all"/>
     <type fullname="NativeCollections.NativeArrayReference`1" preserve="all"/>
     <type fullname="NativeCollections.NativeArraySegment`1" preserve="all"/>
+    <type fullname="NativeCollections.NativeBitArray" preserve="all"/>
+    <type fullname="NativeCollections.NativeBuddyMemoryPool" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionaryTypeProps`1" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentHashSet`1" preserve="all"/>
@@ -158,16 +160,19 @@
     <type fullname="NativeCollections.NativeConcurrentQueueArm64`1" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentQueueSegmentArm64`1" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentQueuePaddedHeadAndTailArm64" preserve="all"/>
-    <type fullname="NativeCollections.NativeConcurrentQueueArrayPool`1" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentSpinLock" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentStack`1" preserve="all"/>
     <type fullname="NativeCollections.NativeDictionary`2" preserve="all"/>
     <type fullname="NativeCollections.NativeHashSet`1" preserve="all"/>
     <type fullname="NativeCollections.NativeList`1" preserve="all"/>
     <type fullname="NativeCollections.NativeMemoryAllocator" preserve="all"/>
+    <type fullname="NativeCollections.NativeMemoryArray`1" preserve="all"/>
     <type fullname="NativeCollections.NativeMemoryBucket" preserve="all"/>
     <type fullname="NativeCollections.NativeMemoryPool" preserve="all"/>
+    <type fullname="NativeCollections.NativeMemoryReader" preserve="all"/>
+    <type fullname="NativeCollections.NativeMemoryReaderExtensions" preserve="all"/>
     <type fullname="NativeCollections.NativeMemoryStream" preserve="all"/>
+    <type fullname="NativeCollections.NativeMemoryWriter" preserve="all"/>
     <type fullname="NativeCollections.NativeMonitorLock" preserve="all"/>
     <type fullname="NativeCollections.NativePriorityQueue`2" preserve="all"/>
     <type fullname="NativeCollections.NativeQueue`1" preserve="all"/>
@@ -416,9 +421,6 @@
     <type fullname="Fantasy.DataStructure.Collection.SortedOneToManyHashSet`2" preserve="all"/>
     <type fullname="Fantasy.DataStructure.Collection.SortedOneToManyListPool`2" preserve="all"/>
     <type fullname="Fantasy.DataStructure.Collection.SortedOneToManyList`2" preserve="all"/>
-    <type fullname="Fantasy.ConfigTable.IntDictionaryConfig" preserve="all"/>
-    <type fullname="Fantasy.ConfigTable.StringDictionaryConfig" preserve="all"/>
-    <type fullname="Fantasy.ConfigTable.IConfigTable" preserve="all"/>
     <type fullname="Fantasy.Assembly.AssemblyInfo" preserve="all"/>
     <type fullname="Fantasy.Assembly.AssemblySystem" preserve="all"/>
     <type fullname="Fantasy.Assembly.IAssembly" preserve="all"/>
@@ -459,6 +461,7 @@
     <type fullname="NativeCollections.NativeArrayPool`1+NativeArrayPoolBucket" preserve="all"/>
     <type fullname="NativeCollections.NativeArrayReference`1+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeArraySegment`1+Enumerator" preserve="all"/>
+    <type fullname="NativeCollections.NativeBitArray+NativeBitArrayHandle" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+NativeConcurrentDictionaryHandle" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+VolatileNode" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+Node" preserve="all"/>
@@ -473,7 +476,6 @@
     <type fullname="NativeCollections.NativeConcurrentHashSet`1+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentQueueSegmentNotArm64`1+Slot" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentQueueSegmentArm64`1+Slot" preserve="all"/>
-    <type fullname="NativeCollections.NativeConcurrentQueueArrayPool`1+NativeConcurrentQueueArrayPoolBucket" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentSpinLock+NativeConcurrentSpinLockHandle" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentStack`1+NativeConcurrentStackHandle" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentStack`1+Node" preserve="all"/>
@@ -487,6 +489,7 @@
     <type fullname="NativeCollections.NativeHashSet`1+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeList`1+NativeListHandle" preserve="all"/>
     <type fullname="NativeCollections.NativeList`1+Enumerator" preserve="all"/>
+    <type fullname="NativeCollections.NativeMemoryArray`1+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeMemoryBucket+NativeMemoryBucketHandle" preserve="all"/>
     <type fullname="NativeCollections.NativeMemoryPool+NativeMemoryPoolHandle" preserve="all"/>
     <type fullname="NativeCollections.NativeMemoryPool+NativeMemorySlab" preserve="all"/>
@@ -524,7 +527,7 @@
     <type fullname="Fantasy.Pool.MultiThreadPool+++c__1`1" preserve="all"/>
     <type fullname="Fantasy.Pool.MultiThreadPool+++c__3`1" preserve="all"/>
     <type fullname="Fantasy.Pool.MultiThreadPool+++c__DisplayClass2_0" preserve="all"/>
-    <type fullname="Fantasy.Platform.Unity.Entry++Initialize+d__5" preserve="all"/>
+    <type fullname="Fantasy.Platform.Unity.Entry++CreateScene+d__6" preserve="all"/>
     <type fullname="Fantasy.Network.SessionHeartbeatComponent++RepeatedSend+d__17" preserve="all"/>
     <type fullname="Fantasy.Network.TCP.TCPClientNetwork++ReadPipeDataAsync+d__19" preserve="all"/>
     <type fullname="Fantasy.Network.TCP.TCPClientNetwork++ReceiveSocketAsync+d__18" preserve="all"/>
@@ -562,7 +565,9 @@
     <type fullname="Fantasy.Unity.Download.DownloadSprite+++c__DisplayClass1_0" preserve="all"/>
     <type fullname="Fantasy.Unity.Download.DownloadText+++c__DisplayClass1_0" preserve="all"/>
     <type fullname="Fantasy.Unity.Download.DownloadTexture+++c__DisplayClass1_0" preserve="all"/>
-    <type fullname="Fantasy.Helper.FileHelper++GetDirectoriesByFilePath+d__3" preserve="all"/>
+    <type fullname="Fantasy.Helper.FileHelper++GetDirectoriesByFilePath+d__5" preserve="all"/>
+    <type fullname="Fantasy.Helper.FileHelper++GetText+d__2" preserve="all"/>
+    <type fullname="Fantasy.Helper.FileHelper++GetTextByRelativePath+d__1" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNet+++c__DisplayClass13_0" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNet+++c__DisplayClass14_0" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNet+++c__DisplayClass18_0`1" preserve="all"/>
@@ -596,13 +601,13 @@
     <type fullname="Fantasy.Async.CoroutineLock++Wait+d__10" preserve="all"/>
     <type fullname="Fantasy.Async.FCancellationTokenExtension++AddToCancellationToken+d__0" preserve="all"/>
     <type fullname="Fantasy.Async.FCancellationTokenExtension++AddToCancellationToken+d__1`1" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask+++c__DisplayClass8_0" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask+++c__DisplayClass9_0" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask+++c__DisplayClass30_0" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask+++c__DisplayClass31_0" preserve="all"/>
     <type fullname="Fantasy.Async.FTask++GetUserTokenAsync+d__7`1" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++InnerCoroutine+d__24" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++SetUserToKen+d__27" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++WaitAll+d__8" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++WaitAny+d__9" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask++InnerCoroutine+d__46" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask++SetUserToKen+d__49" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask++WaitAll+d__30" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask++WaitAny+d__31" preserve="all"/>
     <type fullname="Fantasy.Async.FTask`1++InnerCoroutine+d__20" preserve="all"/>
     <type fullname="Fantasy.Async.FTask`1++SetUserToKen+d__23" preserve="all"/>
     <type fullname="Fantasy.DataStructure.SkipTable.SkipTableBase`1++GetEnumerator+d__21" preserve="all"/>
@@ -614,8 +619,8 @@
     <type fullname="Fantasy.Assembly.AssemblySystem++get_ForEachAssembly+d__13" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=32" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=288" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=19035" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=30937" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=19126" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=31452" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+KeyCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+ValueCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeDictionary`2+KeyCollection+Enumerator" preserve="all"/>
@@ -625,8 +630,8 @@
     <type fullname="NativeCollections.NativeSortedDictionary`2+ValueCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeSortedList`2+KeyCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeSortedList`2+ValueCollection+Enumerator" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask+++c__DisplayClass8_0+++WaitAll+g__RunSTask|0+d" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask+++c__DisplayClass9_0+++WaitAny+g__RunSTask|0+d" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask+++c__DisplayClass30_0+++WaitAll+g__RunSTask|0+d" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask+++c__DisplayClass31_0+++WaitAny+g__RunSTask|0+d" preserve="all"/>
   </assembly>
   <assembly fullname="DEngine">
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
@@ -955,7 +960,7 @@
     <type fullname="DEngine.DataNode.DataNodeManager+DataNode" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=15005" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=18345" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=27957" preserve="all"/>
     <type fullname="DEngine.Utility+Compression+ICompressionHelper" preserve="all"/>
     <type fullname="DEngine.Utility+Json+IJsonHelper" preserve="all"/>
     <type fullname="DEngine.Utility+Text+ITextHelper" preserve="all"/>
@@ -1187,7 +1192,7 @@
     <type fullname="DEngine.Runtime.UIComponent+UIGroup" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=10251" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=13543" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=20707" preserve="all"/>
     <type fullname="DEngine.Runtime.DebuggerComponent+RuntimeMemoryInformationWindow`1+Sample" preserve="all"/>
     <type fullname="DEngine.Runtime.DebuggerComponent+RuntimeMemorySummaryWindow+Record" preserve="all"/>
   </assembly>
@@ -1197,8 +1202,8 @@
     <type fullname="GameUtility" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
     <type fullname="Game.BuiltinDataComponent" preserve="all"/>
+    <type fullname="Game.IGameModule" preserve="all"/>
     <type fullname="Game.DataTableHelper" preserve="all"/>
-    <type fullname="Game.LubanDataTableModule" preserve="all"/>
     <type fullname="Game.Constant" preserve="all"/>
     <type fullname="Game.BuildInfo" preserve="all"/>
     <type fullname="Game.BuiltinData" preserve="all"/>
@@ -1208,7 +1213,6 @@
     <type fullname="Game.VersionInfo" preserve="all"/>
     <type fullname="Game.EventSubscriber" preserve="all"/>
     <type fullname="Game.GameEntry" preserve="all"/>
-    <type fullname="Game.GameModule" preserve="all"/>
     <type fullname="Game.ZStringHelper" preserve="all"/>
     <type fullname="Game.ProcedureCheckResources" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion" preserve="all"/>
@@ -1234,15 +1238,23 @@
     <type fullname="Game.WebRequestExtension" preserve="all"/>
     <type fullname="Game.WebRequestResult" preserve="all"/>
     <type fullname="Game.Timer.CancellationToken" preserve="all"/>
-    <type fullname="Game.Timer.TimerComponent" preserve="all"/>
+    <type fullname="Game.Timer.ITimerModule" preserve="all"/>
+    <type fullname="Game.Timer.TimerModule" preserve="all"/>
     <type fullname="Game.Timer.TimerTimeUtility" preserve="all"/>
-    <type fullname="Game.Network.NetworkComponent" preserve="all"/>
+    <type fullname="Game.Network.INetworkModule" preserve="all"/>
+    <type fullname="Game.Network.NetworkExtension" preserve="all"/>
+    <type fullname="Game.Network.NetworkModule" preserve="all"/>
+    <type fullname="Game.Network.OnNetworkConnectedEventArg" preserve="all"/>
+    <type fullname="Game.Network.OnNetworkConnectFailureEventArg" preserve="all"/>
+    <type fullname="Game.Network.OnNetworkDisconnectEventArg" preserve="all"/>
     <type fullname="Game.Helper.LocalizationHelper" preserve="all"/>
     <type fullname="Game.Helper.SoundAgentHelper" preserve="all"/>
     <type fullname="Game.Localization.BuildinLanguage" preserve="all"/>
     <type fullname="Game.Localization.OriginalPhrases" preserve="all"/>
     <type fullname="Game.Localization.Phrase" preserve="all"/>
     <type fullname="Game.Localization.TranslatedText" preserve="all"/>
+    <type fullname="Game.EventSystem.FantasyEventSystemExtension" preserve="all"/>
+    <type fullname="Game.Test.TestEnum" preserve="all"/>
     <type fullname="Game.CommandLine.Command" preserve="all"/>
     <type fullname="Game.CommandLine.CommandAttribute" preserve="all"/>
     <type fullname="Game.CommandLine.CommandCreator" preserve="all"/>
@@ -1258,6 +1270,8 @@
     <type fullname="Game.CommandLine.CLIUtils" preserve="all"/>
     <type fullname="Game.Debugger.ChangeLanguageDebuggerWindow" preserve="all"/>
     <type fullname="Game.Debugger.CommonLineDebuggerWindow" preserve="all"/>
+    <type fullname="Game.Debugger.NetworkDebuggerWindow" preserve="all"/>
+    <type fullname="Game.LubanTable.ILubanTable" preserve="all"/>
     <type fullname="Game.Archive.ArchiveComponent" preserve="all"/>
     <type fullname="Game.Archive.ArchiveManager" preserve="all"/>
     <type fullname="Game.Archive.ArchiveSlot" preserve="all"/>
@@ -1282,9 +1296,17 @@
     <type fullname="Game.ProcedureCheckResources+++c__DisplayClass6_0" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion++CheckVersionList+d__5" preserve="all"/>
+    <type fullname="Game.ProcedureLoadAotMetadData++LoadAOTMetadataVersion+d__1" preserve="all"/>
+    <type fullname="Game.ProcedureLoadAotMetadData++LoadMetadataForAOTAssemblies+d__2" preserve="all"/>
+    <type fullname="Game.ProcedureLoadAotMetadData++OnEnter+d__0" preserve="all"/>
+    <type fullname="Game.ProcedureLoadHotUpdate++LoadHotUpdateAssemblies+d__2" preserve="all"/>
+    <type fullname="Game.ProcedureLoadHotUpdate++LoadHotUpdateAssembliesVersion+d__1" preserve="all"/>
+    <type fullname="Game.ProcedureLoadHotUpdate++OnEnter+d__0" preserve="all"/>
+    <type fullname="Game.ProcedureLoadHotUpdateEntry++HotfixLauncher+d__1" preserve="all"/>
     <type fullname="Game.ProcedureUpdateResources+UpdateLengthData" preserve="all"/>
     <type fullname="Game.UniTaskUtility+++c__DisplayClass20_0`1" preserve="all"/>
-    <type fullname="Game.UniTaskUtility++LoadAssetsAsync+d__21`1" preserve="all"/>
+    <type fullname="Game.UniTaskUtility+++c__DisplayClass21_0" preserve="all"/>
+    <type fullname="Game.UniTaskUtility++LoadAssetsAsync+d__22`1" preserve="all"/>
     <type fullname="Game.UniTaskUtility++LoadSceneAsync+d__14" preserve="all"/>
     <type fullname="Game.UniTaskUtility++UnLoadSceneAsync+d__17" preserve="all"/>
     <type fullname="Game.GameUtility+Array" preserve="all"/>
@@ -1294,34 +1316,729 @@
     <type fullname="Game.GameUtility+Web" preserve="all"/>
     <type fullname="Game.WebRequestExtension++AddHeadWebRequest+d__0" preserve="all"/>
     <type fullname="Game.Timer.CancellationToken++CancelAfter+d__5" preserve="all"/>
-    <type fullname="Game.Timer.TimerComponent+PausedTimer" preserve="all"/>
-    <type fullname="Game.Timer.TimerComponent+Timer" preserve="all"/>
-    <type fullname="Game.Timer.TimerComponent+TimerType" preserve="all"/>
-    <type fullname="Game.Timer.TimerComponent+++c__DisplayClass20_0" preserve="all"/>
-    <type fullname="Game.Timer.TimerComponent++FrameAsync+d__21" preserve="all"/>
-    <type fullname="Game.Timer.TimerComponent++OnceTimerAsync+d__20" preserve="all"/>
-    <type fullname="Game.Network.NetworkComponent+++c__DisplayClass7_0" preserve="all"/>
-    <type fullname="Game.Network.NetworkComponent++ConnectMainSession+d__6" preserve="all"/>
-    <type fullname="Game.Network.NetworkComponent++Initialize+d__5" preserve="all"/>
+    <type fullname="Game.Timer.TimerModule+PausedTimer" preserve="all"/>
+    <type fullname="Game.Timer.TimerModule+Timer" preserve="all"/>
+    <type fullname="Game.Timer.TimerModule+TimerType" preserve="all"/>
+    <type fullname="Game.Timer.TimerModule+++c__DisplayClass22_0" preserve="all"/>
+    <type fullname="Game.Timer.TimerModule++FrameAsync+d__23" preserve="all"/>
+    <type fullname="Game.Timer.TimerModule++OnceTimerAsync+d__22" preserve="all"/>
+    <type fullname="Game.Network.NetworkModule++Connect+d__36" preserve="all"/>
     <type fullname="Game.Helper.SoundAgentHelper++FadeToVolume+d__61" preserve="all"/>
     <type fullname="Game.Helper.SoundAgentHelper++PauseCo+d__60" preserve="all"/>
     <type fullname="Game.Helper.SoundAgentHelper++StopCo+d__59" preserve="all"/>
+    <type fullname="Game.EventSystem.FantasyEventSystemExtension++PublishAsync+d__2`1" preserve="all"/>
+    <type fullname="Game.EventSystem.FantasyEventSystemExtension++PublishAsync+d__3`1" preserve="all"/>
     <type fullname="Game.CommandLine.CommandCreator++CollectCommands+d__0`1" preserve="all"/>
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
     <type fullname="Game.Archive.ArchiveComponent++Initialize+d__18" preserve="all"/>
-    <type fullname="Game.Archive.ArchiveManager+++c__DisplayClass26_0" preserve="all"/>
-    <type fullname="Game.Archive.ArchiveManager++AddArchiveSlot+d__26" preserve="all"/>
-    <type fullname="Game.Archive.ArchiveManager++Initialize+d__24" preserve="all"/>
-    <type fullname="Game.Archive.ArchiveManager++Load+d__35" preserve="all"/>
-    <type fullname="Game.Archive.ArchiveManager++Save+d__34" preserve="all"/>
-    <type fullname="Game.Archive.ArchiveManager++SaveSlotMeta+d__36" preserve="all"/>
-    <type fullname="Game.Archive.ArchiveManager++SaveSlotMeta+d__37" preserve="all"/>
+    <type fullname="Game.Archive.ArchiveManager+++c__DisplayClass24_0" preserve="all"/>
+    <type fullname="Game.Archive.ArchiveManager++AddArchiveSlot+d__24" preserve="all"/>
+    <type fullname="Game.Archive.ArchiveManager++Initialize+d__22" preserve="all"/>
+    <type fullname="Game.Archive.ArchiveManager++Load+d__33" preserve="all"/>
+    <type fullname="Game.Archive.ArchiveManager++Save+d__32" preserve="all"/>
+    <type fullname="Game.Archive.ArchiveManager++SaveSlotMeta+d__34" preserve="all"/>
+    <type fullname="Game.Archive.ArchiveManager++SaveSlotMeta+d__35" preserve="all"/>
     <type fullname="Game.Archive.FileArchiveHelper++LoadAsync+d__3" preserve="all"/>
     <type fullname="Game.Archive.FileArchiveHelper++SaveAsync+d__2" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=16" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=2990" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=6003" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3293" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=6547" preserve="all"/>
+  </assembly>
+  <assembly fullname="UniTask">
+    <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
+    <type fullname="System.Runtime.CompilerServices.AsyncMethodBuilderAttribute" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncLazy" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncLazy`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IReadOnlyAsyncReactiveProperty`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncReactiveProperty`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncReactiveProperty`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReadOnlyAsyncReactiveProperty`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.StateExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncUnit" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CancellationTokenEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CancellationTokenExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CancellationTokenAwaitable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CancellationTokenSourceExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Channel" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Channel`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Channel`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ChannelReader`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ChannelWriter`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ChannelClosedException" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SingleConsumerUnboundedChannel`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.EnumerableAsyncExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.EnumeratorAsyncExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ExceptionExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.TaskTracker" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IUniTaskAsyncEnumerable`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IUniTaskAsyncEnumerator`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IUniTaskAsyncDisposable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IUniTaskOrderedAsyncEnumerable`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IConnectableUniTaskAsyncEnumerable`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskAsyncEnumerableExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskCancelableAsyncEnumerable`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskStatus" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IUniTaskSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IUniTaskSource`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskStatusExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.MoveNextSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.PlayerLoopTiming" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.InjectPlayerLoopTimings" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IPlayerLoopItem" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.PlayerLoopHelper" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.PlayerLoopTimer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.DeltaTimePlayerLoopTimer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IgnoreTimeScalePlayerLoopTimer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.RealtimePlayerLoopTimer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Progress" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.TaskPool" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ITaskPoolNode`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.TaskPool`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.TimeoutController" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ITriggerHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.TriggerEvent`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskCancellationExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskValueTaskExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AwaiterActions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.DelayType" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.YieldAwaitable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompletedTasks" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SwitchToMainThreadAwaitable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReturnToMainThread" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SwitchToThreadPoolAwaitable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SwitchToTaskPoolAwaitable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SwitchToSynchronizationContextAwaitable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReturnToSynchronizationContext" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IResolvePromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IResolvePromise`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IRejectPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ICancelPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IPromise`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ExceptionHolder" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskCompletionSourceCoreShared" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AutoResetUniTaskCompletionSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AutoResetUniTaskCompletionSource`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskCompletionSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskCompletionSource`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskObservableExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskScheduler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskSynchronizationContext" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskVoid" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncClickEventHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncValueChangedEventHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncEndEditEventHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncEndTextSelectionEventHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncTextSelectionEventHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncDeselectEventHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncSelectEventHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.IAsyncSubmitEventHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.TextSelectionEventConverter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncUnityEventHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncUnityEventHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityEventHandlerAsyncEnumerable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityEventHandlerAsyncEnumerable`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityBindingExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityWebRequestException" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncAwakeTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDestroyTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncStartTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerBase`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOneShotTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerHandler`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncFixedUpdateHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncFixedUpdateTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncLateUpdateHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncLateUpdateTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnAnimatorIKHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncAnimatorIKTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnAnimatorMoveHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncAnimatorMoveTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnApplicationFocusHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncApplicationFocusTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnApplicationPauseHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncApplicationPauseTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnApplicationQuitHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncApplicationQuitTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnAudioFilterReadHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncAudioFilterReadTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnBecameInvisibleHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncBecameInvisibleTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnBecameVisibleHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncBecameVisibleTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnBeforeTransformParentChangedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncBeforeTransformParentChangedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnCanvasGroupChangedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncOnCanvasGroupChangedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnCollisionEnterHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncCollisionEnterTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnCollisionEnter2DHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncCollisionEnter2DTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnCollisionExitHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncCollisionExitTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnCollisionExit2DHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncCollisionExit2DTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnCollisionStayHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncCollisionStayTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnCollisionStay2DHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncCollisionStay2DTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnControllerColliderHitHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncControllerColliderHitTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnDisableHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDisableTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnDrawGizmosHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDrawGizmosTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnDrawGizmosSelectedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDrawGizmosSelectedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnEnableHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncEnableTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnGUIHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncGUITrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnJointBreakHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncJointBreakTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnJointBreak2DHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncJointBreak2DTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnMouseDownHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncMouseDownTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnMouseDragHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncMouseDragTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnMouseEnterHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncMouseEnterTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnMouseExitHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncMouseExitTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnMouseOverHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncMouseOverTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnMouseUpHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncMouseUpTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnMouseUpAsButtonHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncMouseUpAsButtonTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnParticleCollisionHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncParticleCollisionTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnParticleSystemStoppedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncParticleSystemStoppedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnParticleTriggerHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncParticleTriggerTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnParticleUpdateJobScheduledHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncParticleUpdateJobScheduledTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnPostRenderHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncPostRenderTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnPreCullHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncPreCullTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnPreRenderHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncPreRenderTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnRectTransformDimensionsChangeHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncRectTransformDimensionsChangeTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnRectTransformRemovedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncRectTransformRemovedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnRenderImageHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncRenderImageTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnRenderObjectHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncRenderObjectTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnServerInitializedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncServerInitializedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnTransformChildrenChangedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTransformChildrenChangedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnTransformParentChangedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTransformParentChangedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnTriggerEnterHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerEnterTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnTriggerEnter2DHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerEnter2DTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnTriggerExitHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerExitTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnTriggerExit2DHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerExit2DTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnTriggerStayHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerStayTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnTriggerStay2DHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerStay2DTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnValidateHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncValidateTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnWillRenderObjectHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncWillRenderObjectTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncResetHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncResetTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncUpdateHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncUpdateTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnBeginDragHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncBeginDragTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnCancelHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncCancelTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnDeselectHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDeselectTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnDragHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDragTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnDropHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDropTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnEndDragHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncEndDragTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnInitializePotentialDragHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncInitializePotentialDragTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnMoveHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncMoveTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnPointerClickHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncPointerClickTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnPointerDownHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncPointerDownTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnPointerEnterHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncPointerEnterTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnPointerExitHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncPointerExitTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnPointerUpHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncPointerUpTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnScrollHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncScrollTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnSelectHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncSelectTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnSubmitHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncSubmitTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.IAsyncOnUpdateSelectedHandler" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncUpdateSelectedTrigger" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ArrayPool`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ArrayPoolUtil" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ArrayUtil" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ContinuationQueue" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.DiagnosticsExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.Error" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.MinimumQueue`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.PlayerLoopRunner" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.PooledDelegate`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.RuntimeHelpersAbstraction" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.StateTuple" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.StateTuple`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.StatePool`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.StateTuple`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.StatePool`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.StateTuple`3" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.StatePool`3" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityWebRequestResultExtensions" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ValueStopwatch" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.WeakDictionary`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.EmptyDisposable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.SingleAssignmentDisposable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.AsyncSubject`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ListObserver`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.EmptyObserver`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ThrowObserver`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.DisposedObserver`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ImmutableList`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.IStateMachineRunner" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.IStateMachineRunnerPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.IStateMachineRunnerPromise`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.StateMachineUtility" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails+" preserve="all"/>
+    <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1+MonoScriptData" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncReactiveProperty`1+WaitAsyncSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncReactiveProperty`1+WithoutCurrentEnumerable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncReactiveProperty`1+Enumerator" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReadOnlyAsyncReactiveProperty`1+WaitAsyncSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReadOnlyAsyncReactiveProperty`1+WithoutCurrentEnumerable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReadOnlyAsyncReactiveProperty`1+Enumerator" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReadOnlyAsyncReactiveProperty`1++ConsumeEnumerator+d__7" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CancellationTokenExtensions++ToCancellationTokenCore+d__6" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CancellationTokenAwaitable+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ChannelReader`1++ReadAsyncCore+d__5" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SingleConsumerUnboundedChannel`1+SingleConsumerUnboundedChannelWriter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SingleConsumerUnboundedChannel`1+SingleConsumerUnboundedChannelReader" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.EnumeratorAsyncExtensions+EnumeratorPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.EnumeratorAsyncExtensions++Core+d__4" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.TaskTracker+EditorEnableState" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskCancelableAsyncEnumerable`1+Enumerator" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerInitialization" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerEarlyUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerFixedUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerPreUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerPreLateUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerPostLateUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastInitialization" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastEarlyUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastFixedUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastPreUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastPreLateUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastPostLateUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerYieldInitialization" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerYieldEarlyUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerYieldFixedUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerYieldPreUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerYieldUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerYieldPreLateUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerYieldPostLateUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastYieldInitialization" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastYieldEarlyUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastYieldFixedUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastYieldPreUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastYieldUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastYieldPreLateUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastYieldPostLateUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerTimeUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastTimeUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerYieldTimeUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskLoopRunners+UniTaskLoopRunnerLastYieldTimeUpdate" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.PlayerLoopHelper+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.PlayerLoopHelper+++c__DisplayClass19_0" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.PlayerLoopHelper+++c__DisplayClass20_0" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Progress+NullProgress`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Progress+AnonymousProgress`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Progress+OnlyValueChangedProgress`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.TaskPool++GetCacheSizeInfo+d__4" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskValueTaskExtensions++AsUniTask+d__2`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskValueTaskExtensions++AsUniTask+d__3" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+AsyncUnitSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+IsCanceledSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+MemoizeSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+YieldPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+NextFramePromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitForEndOfFramePromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DelayFramePromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DelayPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DelayIgnoreTimeScalePromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DelayRealtimePromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+CanceledUniTaskCache`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+ExceptionResultSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+ExceptionResultSource`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+CanceledResultSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+CanceledResultSource`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DeferPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DeferPromise`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+NeverPromise`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitUntilPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitWhilePromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitUntilCanceledPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitUntilValueChangedUnityObjectPromise`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitUntilValueChangedStandardObjectPromise`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`3" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`4" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`5" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`6" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`7" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`8" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`9" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`10" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`11" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`12" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`13" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`14" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`15" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyLRPromise`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`3" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`4" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`5" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`6" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`7" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`8" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`9" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`10" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`11" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`12" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`13" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`14" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`15" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+++c__DisplayClass61_0" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+++c__DisplayClass62_0" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+++c__DisplayClass63_0`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+++c__DisplayClass64_0" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+++c__DisplayClass65_0" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+++c__DisplayClass66_0`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask++RunOnThreadPool+d__86" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask++RunOnThreadPool+d__87" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask++RunOnThreadPool+d__88" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask++RunOnThreadPool+d__89" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask++RunOnThreadPool+d__90`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask++RunOnThreadPool+d__91`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask++RunOnThreadPool+d__92`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask++RunOnThreadPool+d__93`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask`1+IsCanceledSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask`1+MemoizeSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask`1+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.YieldAwaitable+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SwitchToMainThreadAwaitable+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReturnToMainThread+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SwitchToThreadPoolAwaitable+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SwitchToTaskPoolAwaitable+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SwitchToSynchronizationContextAwaitable+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReturnToSynchronizationContext+Awaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AutoResetUniTaskCompletionSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AutoResetUniTaskCompletionSource`1+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+AttachExternalCancellationSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+AttachExternalCancellationSource`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+ToCoroutineEnumerator" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+ToCoroutineEnumerator`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+++c__0`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+++c__19`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+++c__2`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ContinueWith+d__22`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ContinueWith+d__23`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ContinueWith+d__24`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ContinueWith+d__25`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ContinueWith+d__26" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ContinueWith+d__27" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ContinueWith+d__28`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ContinueWith+d__29`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ForgetCoreWithCatch+d__18" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++ForgetCoreWithCatch+d__21`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Timeout+d__12" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Timeout+d__13`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++TimeoutWithoutException+d__14" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++TimeoutWithoutException+d__15`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__30`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__31" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__32`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__33`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__34" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__35" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__36`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__37`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__38" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions++Unwrap+d__39" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskObservableExtensions+ToUniTaskObserver`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskObservableExtensions+FirstValueToUniTaskObserver`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskObservableExtensions+ReturnObservable`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskObservableExtensions+ThrowObservable`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskObservableExtensions++Fire+d__3`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskObservableExtensions++Fire+d__4" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskSynchronizationContext+Callback" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleRequestAllAssetsAwaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleRequestAllAssetsConfiguredSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AsyncGPUReadbackRequestAwaiterConfiguredSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AsyncOperationAwaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AsyncOperationConfiguredSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+ResourceRequestAwaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+ResourceRequestConfiguredSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleRequestAwaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleRequestConfiguredSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleCreateRequestAwaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleCreateRequestConfiguredSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+UnityWebRequestAsyncOperationAwaiter" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+UnityWebRequestAsyncOperationConfiguredSource" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+JobHandlePromise" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions++WaitAsync+d__41" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityEventHandlerAsyncEnumerable+UnityEventHandlerAsyncEnumerator" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityEventHandlerAsyncEnumerable`1+UnityEventHandlerAsyncEnumerator" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityBindingExtensions++BindToCore+d__12`2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityBindingExtensions++BindToCore+d__2" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityBindingExtensions++BindToCore+d__6`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityBindingExtensions++BindToCore+d__9" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDestroyTrigger+AwakeMonitor" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncDestroyTrigger+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerBase`1+AsyncTriggerEnumerator" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Triggers.AsyncTriggerBase`1+AwakeMonitor" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.ArrayPoolUtil+RentArray`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.DiagnosticsExtensions+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.PlayerLoopRunner+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.PooledDelegate`1+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.RuntimeHelpersAbstraction+WellKnownNoReferenceContainsType`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+Cache`1" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+Vector2EqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+Vector3EqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+Vector4EqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+ColorEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+RectEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+BoundsEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+QuaternionEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+Color32EqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+Vector2IntEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+Vector3IntEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+RangeIntEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+RectIntEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.UnityEqualityComparer+BoundsIntEqualityComparer" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.WeakDictionary`2+Entry" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.Internal.AsyncSubject`1+Subscription" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.StateMachineUtility+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoid`1+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2+++c" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=6817" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=36728" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.AsyncReactiveProperty`1+WaitAsyncSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.ReadOnlyAsyncReactiveProperty`1+WaitAsyncSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.SingleConsumerUnboundedChannel`1+SingleConsumerUnboundedChannelReader+ReadAllAsyncEnumerable" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.EnumeratorAsyncExtensions+EnumeratorPromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.EnumeratorAsyncExtensions+EnumeratorPromise++ConsumeEnumerator+d__19" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.EnumeratorAsyncExtensions+EnumeratorPromise++UnwrapWaitAsyncOperation+d__22" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.EnumeratorAsyncExtensions+EnumeratorPromise++UnwrapWaitForSeconds+d__21" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+YieldPromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+NextFramePromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitForEndOfFramePromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DelayFramePromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DelayPromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DelayIgnoreTimeScalePromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+DelayRealtimePromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitUntilPromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitWhilePromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitUntilCanceledPromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitUntilValueChangedUnityObjectPromise`2+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WaitUntilValueChangedStandardObjectPromise`2+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`1+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`2+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`3+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`4+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`5+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`6+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`7+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`8+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`9+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`10+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`11+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`12+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`13+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`14+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAllPromise`15+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyLRPromise`1+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`1+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`2+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`3+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`4+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`5+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`6+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`7+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`8+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`9+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`10+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`11+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`12+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`13+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`14+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTask+WhenAnyPromise`15+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+AttachExternalCancellationSource++RunTask+d__5" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+AttachExternalCancellationSource`1++RunTask+d__5" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+ToCoroutineEnumerator++RunTask+d__6" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions+ToCoroutineEnumerator`1++RunTask+d__8" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleRequestAllAssetsConfiguredSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AsyncGPUReadbackRequestAwaiterConfiguredSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AsyncOperationConfiguredSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+ResourceRequestConfiguredSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleRequestConfiguredSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+AssetBundleCreateRequestConfiguredSource+++c" preserve="all"/>
+    <type fullname="Cysharp.Threading.Tasks.UnityAsyncExtensions+UnityWebRequestAsyncOperationConfiguredSource+++c" preserve="all"/>
+  </assembly>
+  <assembly fullname="ZString">
+    <type fullname="Microsoft.CodeAnalysis.EmbeddedAttribute" preserve="all"/>
+    <type fullname="System.Runtime.CompilerServices.NullableAttribute" preserve="all"/>
+    <type fullname="System.Runtime.CompilerServices.NullableContextAttribute" preserve="all"/>
+    <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
+    <type fullname="System.BufferEx" preserve="all"/>
+    <type fullname="System.DecimalEx" preserve="all"/>
+    <type fullname="System.FloatEx" preserve="all"/>
+    <type fullname="System.GuidEx" preserve="all"/>
+    <type fullname="System.HexConverter" preserve="all"/>
+    <type fullname="System.InternalSpanEx" preserve="all"/>
+    <type fullname="System.MathEx" preserve="all"/>
+    <type fullname="System.Number" preserve="all"/>
+    <type fullname="System.NumberFormatInfoEx" preserve="all"/>
+    <type fullname="System.Text.ValueStringBuilder" preserve="all"/>
+    <type fullname="System.Buffers.Text.FormattingHelpers" preserve="all"/>
+    <type fullname="System.Numerics.BitOperations" preserve="all"/>
+    <type fullname="Cysharp.Text.EnumUtil`1" preserve="all"/>
+    <type fullname="Cysharp.Text.ExceptionUtil" preserve="all"/>
+    <type fullname="Cysharp.Text.FastNumberWriter" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16FormatHelper" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8FormatHelper" preserve="all"/>
+    <type fullname="Cysharp.Text.FormatParser" preserve="all"/>
+    <type fullname="Cysharp.Text.ParserScanResult" preserve="all"/>
+    <type fullname="Cysharp.Text.IResettableBufferWriter`1" preserve="all"/>
+    <type fullname="Cysharp.Text.NestedStringBuilderCreationException" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`1" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`2" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`3" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`4" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`5" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`6" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`7" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`8" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`9" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`10" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`11" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`12" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`13" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`14" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`15" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16PreparedFormat`16" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`1" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`2" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`3" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`4" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`5" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`6" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`7" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`8" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`9" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`10" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`11" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`12" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`13" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`14" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`15" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8PreparedFormat`16" preserve="all"/>
+    <type fullname="Cysharp.Text.PreparedFormatHelper" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8FormatSegment" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16FormatSegment" preserve="all"/>
+    <type fullname="Cysharp.Text.ReadOnlyListAdaptor`1" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16ValueStringBuilder" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8ValueStringBuilder" preserve="all"/>
+    <type fullname="Cysharp.Text.TextMeshProExtensions" preserve="all"/>
+    <type fullname="Cysharp.Text.ZString" preserve="all"/>
+    <type fullname="Cysharp.Text.ZStringWriter" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails+" preserve="all"/>
+    <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1+MonoScriptData" preserve="all"/>
+    <type fullname="System.DecimalEx+DecimalBits" preserve="all"/>
+    <type fullname="System.DecimalEx+DecCalc" preserve="all"/>
+    <type fullname="System.HexConverter+Casing" preserve="all"/>
+    <type fullname="System.Number+BigInteger" preserve="all"/>
+    <type fullname="System.Number+DiyFp" preserve="all"/>
+    <type fullname="System.Number+Grisu3" preserve="all"/>
+    <type fullname="System.Number+NumberBuffer" preserve="all"/>
+    <type fullname="System.Number+NumberBufferKind" preserve="all"/>
+    <type fullname="System.Number+FloatingPointInfo" preserve="all"/>
+    <type fullname="System.Number+ParsingStatus" preserve="all"/>
+    <type fullname="Cysharp.Text.FormatParser+ParseResult" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16ValueStringBuilder+TryFormat`1" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16ValueStringBuilder+ExceptionUtil" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16ValueStringBuilder+FormatterCache`1" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16ValueStringBuilder+++c" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf16ValueStringBuilder+++c__170`1" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8ValueStringBuilder+TryFormat`1" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8ValueStringBuilder+FormatterCache`1" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8ValueStringBuilder+++c" preserve="all"/>
+    <type fullname="Cysharp.Text.Utf8ValueStringBuilder+++c__150`1" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=32" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=40" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=44" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=103" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=174" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=184" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=696" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=932" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3016" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4007" preserve="all"/>
+    <type fullname="System.Number+BigInteger++_blocks+e__FixedBuffer" preserve="all"/>
   </assembly>
 </linker>

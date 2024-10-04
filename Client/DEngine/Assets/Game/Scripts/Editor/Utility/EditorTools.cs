@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -39,6 +39,7 @@ namespace Game.Editor
         #region Assembly
 
 #if UNITY_2019_4_OR_NEWER
+        [DidReloadScripts]
         private static void InitAssembly()
         {
         }

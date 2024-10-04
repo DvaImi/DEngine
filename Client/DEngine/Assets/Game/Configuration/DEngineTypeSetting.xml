@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEngine>
+    <DEngineTypeSetting>
+        <RuntimeAssemblyNames>
+            <Assembly Name="Game.Runtime"/>
+        </RuntimeAssemblyNames>
+        <RuntimeOrEditorAssemblyNames>
+            <Assembly Name="Game.Editor"/>
+            <Assembly Name="Game.Runtime"/>
+        </RuntimeOrEditorAssemblyNames>
+    </DEngineTypeSetting>
+</DEngine>

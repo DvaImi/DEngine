@@ -5,13 +5,16 @@
 // 版 本：1.0
 // ========================================================
 
-using UnityEngine;
-
 namespace Game.Editor
 {
     [GameFilePath("Assets/Game/Configuration/GameSetting.asset")]
     public class GameSetting : ScriptableSingleton<GameSetting>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string DEngineTypeConfig = "Assets/Game/Configuration/DEngineTypeSetting.xml";
+        
         /// <summary>
         /// 
         /// </summary>

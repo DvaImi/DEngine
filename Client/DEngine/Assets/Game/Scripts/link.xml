@@ -86,7 +86,7 @@
     <type fullname="Game.GameEntry" preserve="all" />
     <type fullname="Game.IGameModule" preserve="all" />
     <type fullname="Game.LubanTable.ILubanTable" preserve="all" />
-    <type fullname="Game.Network.NetworkComponent" preserve="all" />
+    <type fullname="Game.Network.INetworkModule" preserve="all" />
     <type fullname="Game.Test.TestEnum" preserve="all" />
     <type fullname="Game.UniTaskUtility" preserve="all" />
   </assembly>

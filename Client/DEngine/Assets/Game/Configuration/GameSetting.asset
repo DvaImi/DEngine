@@ -26,8 +26,8 @@ MonoBehaviour:
   - Assets
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 44
-  LatestGameVersion: 2022.3.41f1
+  InternalResourceVersion: 21
+  LatestGameVersion: 0.1.0
   UpdatePrefixUri: 
   BuildInfo:
     LatestGameVersion: 0.1.0

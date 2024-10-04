@@ -245,6 +245,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!1 &282840810
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,7 +564,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_UIGroupHelperTypeName
-      value: DEngine.Runtime.DefaultUIGroupHelper
+      value: Game.UGUIGroupHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_UIGroups.Array.data[0].m_Name
