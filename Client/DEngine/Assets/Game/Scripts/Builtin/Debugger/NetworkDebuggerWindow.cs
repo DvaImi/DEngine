@@ -13,6 +13,9 @@ namespace Game.Debugger
 
         private INetworkModule m_Network;
 
+        private string m_RemoteAddress;
+        private string m_Port;
+
         public void Initialize(params object[] args)
         {
             m_Network = GameEntry.Network;
@@ -53,6 +56,19 @@ namespace Game.Debugger
                 DrawItem("Call Request", m_Network.CallRequestCount.ToString());
                 DrawItem("Call Route Request", m_Network.CallRouteRequestCount.ToString());
                 DrawItem("Heart Beat LastTime", m_Network.Heartbeat == null ? "0" : DateTimeOffset.FromUnixTimeMilliseconds(m_Network.Heartbeat.LastTime).DateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+
+                GUILayout.Space(5);
+                GUILayout.Label("IP", GUILayout.Width(TitleWidth));
+                m_RemoteAddress = GUILayout.TextField(m_RemoteAddress);
+                GUILayout.Label("Port", GUILayout.Width(TitleWidth));
+                m_Port = GUILayout.TextField(m_Port);
+                GUILayout.Space(5);
+                if (GUILayout.Button("Connect"))
+                {
+                    m_Network.Connect(Utility.Text.Format("{0}/{1}", m_RemoteAddress, m_Port));
+                }
+
+                GUILayout.Space(5);
                 if (GUILayout.Button("Disconnect"))
                 {
                     m_Network.Disconnect();

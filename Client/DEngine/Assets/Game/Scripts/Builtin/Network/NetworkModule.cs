@@ -29,10 +29,7 @@ namespace Game.Network
         /// <summary>
         /// 获取网络延迟
         /// </summary>
-        public int Ping
-        {
-            get { return Heartbeat?.Ping ?? 0; }
-        }
+        public int Ping => Heartbeat?.Ping ?? 0;
 
         /// <summary>
         /// 

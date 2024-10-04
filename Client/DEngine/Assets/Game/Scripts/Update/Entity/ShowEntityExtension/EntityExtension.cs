@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using DEngine.DataTable;
 using DEngine.Runtime;
 
@@ -12,7 +13,7 @@ namespace Game.Update
         // 负值用于本地生成的临时实体（如特效、FakeObject等）
         private static int s_SerialId = 0;
 
-        public static void ShowHotfixEntity(this EntityComponent entityComponent, Type logicType, string entityGroup, int priority, HotfixEntityData data)
+        public static void ShowEntity(this EntityComponent self, Type logicType, string entityGroup, int priority, HotfixEntityData data)
         {
             if (data == null)
             {
@@ -28,10 +29,36 @@ namespace Game.Update
                 return;
             }
 
-            entityComponent.ShowEntity(data.Id, logicType, UpdateAssetUtility.GetEntityAsset(drEntity.AssetName), entityGroup, priority, data);
+            self.ShowEntity(data.Id, logicType, UpdateAssetUtility.GetEntityAsset(drEntity.AssetName), entityGroup, priority, data);
         }
 
-        public static int GenerateSerialId(this EntityComponent entityComponent)
+        public static async UniTask<T> ShowEntityAsync<T>(this EntityComponent self, string entityGroup, int priority, HotfixEntityData data) where T : HotfixEntityLogic
+        {
+            if (data == null)
+            {
+                Log.Warning("Data is invalid.");
+                return null;
+            }
+
+            IDataTable<DREntity> dtEntity = GameEntry.DataTable.GetDataTable<DREntity>();
+            DREntity drEntity = dtEntity.GetDataRow(data.TypeId);
+            if (drEntity == null)
+            {
+                Log.Warning("Can not load entity id '{0}' from data table.", data.TypeId.ToString());
+                return null;
+            }
+
+            Entity entity = await self.ShowEntityAsync(data.Id, typeof(T), UpdateAssetUtility.GetEntityAsset(drEntity.AssetName), entityGroup, priority, data);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return entity.Logic as T;
+        }
+
+        private static int GenerateSerialId()
         {
             return --s_SerialId;
         }
