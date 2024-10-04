@@ -29,6 +29,7 @@ namespace Game.Update
         /// </summary>
         /// <param name="localization"></param>
         /// <param name="language">将要修改的语言</param>
+        /// <param name="readBuiltinLanguage"></param>
         /// <returns>是否修改成功</returns>
         public static void HotReloadLocalization(this LocalizationComponent localization, Language language, bool readBuiltinLanguage = true)
         {

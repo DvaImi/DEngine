@@ -9,28 +9,20 @@ namespace Game
     public class AwaitDataWrap<T> : IReference
     {
         /// <summary>
-        /// 自定义数据
-        /// </summary>
-        public object UserData
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// UniTaskCompletionSource
         /// </summary>
-        public UniTaskCompletionSource<T> Source
-        {
-            get;
-            private set;
-        }
+        public UniTaskCompletionSource<T> Source { get; private set; }
 
-        public static AwaitDataWrap<T> Create(object userData, UniTaskCompletionSource<T> source)
+        /// <summary>
+        /// 自定义数据
+        /// </summary>
+        public object UserData { get; private set; }
+
+        public static AwaitDataWrap<T> Create(UniTaskCompletionSource<T> source, object userData = null)
         {
             AwaitDataWrap<T> awaitDataWrap = ReferencePool.Acquire<AwaitDataWrap<T>>();
-            awaitDataWrap.UserData = userData;
             awaitDataWrap.Source = source;
+            awaitDataWrap.UserData = userData;
             return awaitDataWrap;
         }
 

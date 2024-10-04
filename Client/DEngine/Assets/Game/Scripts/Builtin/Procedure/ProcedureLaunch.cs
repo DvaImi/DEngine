@@ -11,6 +11,7 @@ namespace Game
         {
             base.OnEnter(procedureOwner);
             GameEntry.BuiltinData.InitLanguageSettings();
+            GameEntry.BuiltinData.InitCurrentVariant();
             GameEntry.BuiltinData.InitSoundSettings();
             GameEntry.BuiltinData.InitDebugger();
             GameEntry.BuiltinData.InitExtensionEventHandle();

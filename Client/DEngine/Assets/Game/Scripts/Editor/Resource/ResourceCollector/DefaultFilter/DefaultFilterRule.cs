@@ -25,7 +25,7 @@ namespace Game.Editor.ResourceTools
     {
         public bool IsCollectAsset(string assetPath)
         {
-            return true;
+            return !DefaultFilterRule.IsIgnoreFile(Path.GetExtension(assetPath));
         }
     }
 

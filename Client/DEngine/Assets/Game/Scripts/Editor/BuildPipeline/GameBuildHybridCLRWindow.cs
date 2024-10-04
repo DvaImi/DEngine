@@ -23,6 +23,7 @@ namespace Game.Editor.BuildPipeline
         private bool m_FoldoutPatchAOTAssembliesGroup = true;
         private bool m_FoldoutPreserveAssembliesGroup = true;
         private bool m_IsAotGeneric = false;
+        private bool m_Compile = false;
         private Vector2 m_ScrollPosition;
 
         [MenuItem("Game/Build Pipeline/HybridCLR", false, 1)]
@@ -42,6 +43,12 @@ namespace Game.Editor.BuildPipeline
                 StripAOTDllCommand.GenerateStripedAOTDlls();
                 MethodBridgeGeneratorCommand.GenerateMethodBridgeAndReversePInvokeWrapper();
                 AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
+            }
+
+            if (m_Compile)
+            {
+                m_Compile = false;
+                GameBuildPipeline.CompileHotfixDll();
             }
         }
 
@@ -301,7 +308,7 @@ namespace Game.Editor.BuildPipeline
 
                 if (GUILayout.Button("Compile", GUILayout.Height(30)))
                 {
-                    GameBuildPipeline.CompileHotfixDll();
+                    m_Compile = true;
                 }
 
                 GUI.backgroundColor = bc;

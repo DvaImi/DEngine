@@ -1,4 +1,5 @@
 ﻿using System;
+using DEngine;
 using DEngine.Localization;
 using DEngine.Runtime;
 using Game.Debugger;
@@ -78,14 +79,26 @@ namespace Game
             ChangeLanguageDebuggerWindow changeLanguage = new ChangeLanguageDebuggerWindow();
             GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", changeLanguage);
 
-
             CommonLineDebuggerWindow commonLine = new CommonLineDebuggerWindow();
             GameEntry.Debugger.RegisterDebuggerWindow("Other/CommonLine", commonLine);
         }
 
         public void InitExtensionEventHandle()
         {
-            UniTaskUtility.Subscribe();
+            UniTaskExtension.Unsubscribe();
+            UniTaskExtension.Subscribe();
+        }
+
+        public void InitCurrentVariant()
+        {
+            if (GameEntry.Base.EditorResourceMode)
+            {
+                // 编辑器资源模式不使用 AssetBundle，也就没有变体了
+                return;
+            }
+
+            GameEntry.Resource.SetCurrentVariant(Utility.Variant.GameVariant);
+            Log.Info("Init current variant complete.");
         }
 
         public void OpenDialog(DialogParams dialogParams)

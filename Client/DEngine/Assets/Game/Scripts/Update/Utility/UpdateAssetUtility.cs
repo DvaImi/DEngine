@@ -35,7 +35,7 @@
         /// <returns></returns>
         public static string GetDictionaryAsset(string assetName, bool fromBytes)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Localization/{0}/{1}.{2}", assetName, assetName, fromBytes ? "bytes" : "txt");
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Localization/{0}/{1}.{2}", assetName, GameEntry.Localization.Language, fromBytes ? "bytes" : "txt");
         }
 
         /// <summary>

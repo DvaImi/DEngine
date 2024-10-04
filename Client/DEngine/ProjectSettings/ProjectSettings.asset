@@ -743,13 +743,13 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: ENABLE_LOG;ENABLE_HYBRIDCLR;FANTASY_UNITY
+    Android: ENABLE_HYBRIDCLR;FANTASY_UNITY;ENABLE_LOG
     PS4: 
-    Standalone: FANTASY_UNITY;ENABLE_LOG;ENABLE_HYBRIDCLR
-    WebGL: ENABLE_LOG;ENABLE_HYBRIDCLR
-    Windows Store Apps: ENABLE_LOG;ENABLE_HYBRIDCLR
+    Standalone: FANTASY_UNITY;ENABLE_HYBRIDCLR;ENABLE_LOG
+    WebGL: ENABLE_HYBRIDCLR;ENABLE_LOG
+    Windows Store Apps: ENABLE_HYBRIDCLR;ENABLE_LOG
     XboxOne: 
-    iPhone: ENABLE_LOG;ENABLE_HYBRIDCLR
+    iPhone: ENABLE_HYBRIDCLR;ENABLE_LOG
     tvOS: 
   additionalCompilerArguments: {}
   platformArchitecture: {}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using DEngine;
 using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEngine;
@@ -14,18 +15,22 @@ namespace Game.Editor.ResourceTools
         /// 资源规则
         /// </summary>
         private static ResourceCollection m_ResourceCollection;
+
         /// <summary>
         /// 排除的类型
         /// </summary>
         private static string[] m_SourceAssetExceptTypeFilterGUIDArray;
+
         /// <summary>
         /// 排除的标签
         /// </summary>
         private static string[] m_SourceAssetExceptLabelFilterGUIDArray;
+
         /// <summary>
         /// 缓存收集规则类型
         /// </summary>
         private static Dictionary<string, Type> m_CacheFilterRuleTypes = new Dictionary<string, Type>();
+
         /// <summary>
         /// 缓存收集规则实例
         /// </summary>
@@ -34,10 +39,7 @@ namespace Game.Editor.ResourceTools
         /// <summary>
         /// 资源收集规则名称
         /// </summary>
-        public static string[] FilterRules
-        {
-            get;
-        }
+        public static string[] FilterRules { get; }
 
         static ResourceCollectorEditorUtility()
         {
@@ -52,6 +54,7 @@ namespace Game.Editor.ResourceTools
                 {
                     continue;
                 }
+
                 m_CacheFilterRuleTypes.Add(type.Name, type);
                 FilterRules[i] = type.Name;
             }
@@ -63,8 +66,8 @@ namespace Game.Editor.ResourceTools
         public static void RefreshResourceCollection()
         {
             RefreshResourceCollection(null);
-        } 
-        
+        }
+
         /// <summary>
         /// 更新资源收集器
         /// </summary>
@@ -109,7 +112,7 @@ namespace Game.Editor.ResourceTools
             throw new Exception($"{nameof(IFilterRule)}类型无效:{ruleName}");
         }
 
-        private static Resource[] GetResources()
+        private static DEngine.Editor.ResourceTools.Resource[] GetResources()
         {
             return m_ResourceCollection.GetResources();
         }
@@ -153,6 +156,7 @@ namespace Game.Editor.ResourceTools
                         {
                             continue;
                         }
+
                         if (string.IsNullOrEmpty(resourceCollector.Variant))
                         {
                             resourceCollector.Variant = null;
@@ -178,7 +182,11 @@ namespace Game.Editor.ResourceTools
             {
                 if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
                 {
-                    RenameResource(oldResource.Name, oldResource.Variant, resourceName, assetCollector.Variant);
+                    if (!RenameResource(oldResource.Name, oldResource.Variant, resourceName, assetCollector.Variant))
+                    {
+                        Debug.LogWarningFormat("Rename resource '{0}' to '{1}' failure.", oldResource.Name, resourceName);
+                    }
+
                     break;
                 }
             }
@@ -190,7 +198,10 @@ namespace Game.Editor.ResourceTools
                     assetCollector.FileSystem = null;
                 }
 
-                AddResource(resourceName, assetCollector.Variant, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split('|'));
+                if (!AddResource(resourceName, assetCollector.Variant, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split('|')))
+                {
+                    Debug.LogWarningFormat("Add resource '{0}' failure.", assetCollector.AssetPath);
+                }
             }
 
             if (AssetDatabase.IsValidFolder(assetCollector.AssetPath))
@@ -204,7 +215,10 @@ namespace Game.Editor.ResourceTools
                         string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
                         if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                         {
-                            AssignAsset(assetGUID, resourceName, assetCollector.Variant);
+                            if (!AssignAsset(assetGUID, resourceName, assetCollector.Variant))
+                            {
+                                Debug.LogWarningFormat("Assign asset '{0}' to resource '{1}' failure.", assetCollector.Name, assetCollector.AssetPath);
+                            }
                         }
                     }
                 }
@@ -218,7 +232,10 @@ namespace Game.Editor.ResourceTools
                     string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
                     if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                     {
-                        AssignAsset(assetGUID, resourceName, assetCollector.Variant);
+                        if (!AssignAsset(assetGUID, resourceName, assetCollector.Variant))
+                        {
+                            Debug.LogWarningFormat("Assign asset '{0}' to resource '{1}' failure.", assetCollector.Name, assetCollector.AssetPath);
+                        }
                     }
                 }
                 else
@@ -232,6 +249,5 @@ namespace Game.Editor.ResourceTools
         {
             return m_ResourceCollection.Save();
         }
-
     }
 }
