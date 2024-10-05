@@ -1,0 +1,17 @@
+{
+  "name": "com.dvalmi.fairygui",
+  "version": "1.0.0",
+  "displayName": "FairyGUI",
+  "description": "FairyGUI is a Cross Platform UI Editor & UI framework.",
+  "category": "Runtime",
+  "keywords": [
+    "FairyGUI",
+    "fairygui"
+  ],
+  "author": {
+    "name": "Dvalmi"
+  },
+  "dependencies": {
+    "com.dvalmi.dengine": "1.0.0"
+  }
+}

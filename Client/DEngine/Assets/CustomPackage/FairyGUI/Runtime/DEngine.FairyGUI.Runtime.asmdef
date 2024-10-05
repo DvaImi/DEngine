@@ -1,0 +1,20 @@
+{
+    "name": "DEngine.FairyGUI.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:844937d985828c648866dc5fe1dc749c",
+        "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
+        "GUID:8c8f9d96103e94a7da84b012fd7e9f13",
+        "GUID:7bc98016d4aac29439a48a73d0e6dcf3",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

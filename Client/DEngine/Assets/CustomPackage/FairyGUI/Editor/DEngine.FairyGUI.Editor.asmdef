@@ -1,0 +1,23 @@
+{
+    "name": "DEngine.FairyGUI.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:844937d985828c648866dc5fe1dc749c",
+        "GUID:b2d2b43a3197dac4babdb8afbc14d5a8",
+        "GUID:f11907887f480418c8c693a619e2dbf0",
+        "GUID:8c8f9d96103e94a7da84b012fd7e9f13",
+        "GUID:40dbc3cb2d4c42d4dbbb8346fe52272e",
+        "GUID:1b482ecb56af90e4188a38330b70f1e0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
