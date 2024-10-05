@@ -28,10 +28,11 @@ UNITY_2020_1_OR_NEWER
     - [x] TODO 客户端已接入Luban
     - [ ] 服务端接入Luban
 - 扩展UI
-    - [x] 接入FairyGUI,完美融合进框架的UI系统中，采用扩展包形式接入，后续添加文件系统的支持
+    - [x] 接入FairyGUI,完美融合进框架的UI系统中，采用扩展包形式接入，添加"com.dvalmi.fairygui": "https://github.com/DvaImi/DEngineFairyGUI.git",后续考虑添加文件系统的支持
     - [ ] 接入UITookit
+- 对话编辑器
+    - [ ] 使用 UITookit编写对话编辑器
 - 技能、Buff 系统
--
     - [ ] 技能编辑器
 - 状态帧同步扩展包
 -
