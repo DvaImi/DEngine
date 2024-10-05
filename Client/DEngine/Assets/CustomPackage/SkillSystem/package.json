@@ -1,0 +1,12 @@
+
+{
+    "name": "com.yourcompany.com.dvalmi.skillsystem",
+    "version": "1.0.0",
+    "displayName": "SkillSystem",
+    "description": "SkillSystem",
+    "unity": "2020.1",
+    "author": {
+        "name": "Dvalmi",
+        "url": "https://dvalmi.com"
+    }
+}

@@ -1,0 +1,11 @@
+
+{
+    "name": "com.yourcompany.com.dvalmi.uitookit",
+    "version": "1.0.0",
+    "displayName": "New Package",
+    "description": "A custom Unity package",
+    "unity": "2020.1",
+    "author": {
+        "name": "Dvalmi",
+    }
+}

@@ -1,0 +1,11 @@
+
+{
+    "name": "com.yourcompany.com.dvalmi.archive",
+    "version": "1.0.0",
+    "displayName": "Archive",
+    "description": "ArchiveSystem",
+    "unity": "2020.1",
+    "author": {
+        "name": "Dvalmi"
+    }
+}
