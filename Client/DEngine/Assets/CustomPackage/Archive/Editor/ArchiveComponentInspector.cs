@@ -7,7 +7,7 @@ using Game.Archive;
 using UnityEditor;
 using UnityEngine;
 
-namespace Game.Editor
+namespace Game.Editor.Archive
 {
     [CustomEditor(typeof(ArchiveComponent))]
     public class ArchiveComponentInspector : DEngineInspector

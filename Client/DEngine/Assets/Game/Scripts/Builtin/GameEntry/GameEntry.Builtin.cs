@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using DEngine.Runtime;
-using Game.Archive;
+﻿using DEngine.Runtime;
 
 namespace Game
 {
@@ -104,10 +102,6 @@ namespace Game
         /// </summary>
         public static BuiltinDataComponent BuiltinData { get; private set; }
 
-        /// <summary>
-        /// 获取存档组件
-        /// </summary>
-        public static ArchiveComponent Archive { get; private set; }
 
         private static void InitBuiltinComponents()
         {
@@ -130,7 +124,6 @@ namespace Game
             UI = DEngine.Runtime.GameEntry.GetComponent<UIComponent>();
             WebRequest = DEngine.Runtime.GameEntry.GetComponent<WebRequestComponent>();
             BuiltinData = DEngine.Runtime.GameEntry.GetComponent<BuiltinDataComponent>();
-            Archive = DEngine.Runtime.GameEntry.GetComponent<ArchiveComponent>();
         }
     }
 }
