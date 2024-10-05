@@ -93,7 +93,7 @@ namespace Game.Editor.Package
         {
             return $@"
 {{
-    ""name"": ""com.yourcompany.{packageInfo.name.ToLower()}"",
+    ""name"": ""{packageInfo.name.ToLower()}"",
     ""version"": ""{packageInfo.version}"",
     ""displayName"": ""{packageInfo.displayName}"",
     ""description"": ""{packageInfo.description}"",

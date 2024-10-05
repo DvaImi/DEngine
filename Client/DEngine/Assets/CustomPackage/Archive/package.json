@@ -1,9 +1,9 @@
 
 {
-    "name": "com.yourcompany.com.dvalmi.archive",
+    "name": "com.dvalmi.archive",
     "version": "1.0.0",
-    "displayName": "Archive",
-    "description": "ArchiveSystem",
+    "displayName": "ArchiveSystem",
+    "description": "Unity Archive Sysytem",
     "unity": "2020.1",
     "author": {
         "name": "Dvalmi"

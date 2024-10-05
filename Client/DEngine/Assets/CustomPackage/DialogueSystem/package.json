@@ -1,12 +1,11 @@
 
 {
-    "name": "com.yourcompany.com.dvalmi.dialoguesystem",
+    "name": "com.dvalmi.dialoguesystem",
     "version": "1.0.0",
     "displayName": "DialogueSystem",
     "description": "DialogueSystem",
     "unity": "2020.1",
     "author": {
-        "name": "Dvalmi",
-        "url": "https://dvalmi.com"
+        "name": "Dvalmi"
     }
 }
