@@ -99,6 +99,7 @@ namespace Game
 
             GameEntry.Resource.SetCurrentVariant(Utility.Variant.GameVariant);
             Log.Info("Init current variant complete.");
+            Log.Info($"Current variant is {GameEntry.Resource.CurrentVariant}.");
         }
 
         public void OpenDialog(DialogParams dialogParams)

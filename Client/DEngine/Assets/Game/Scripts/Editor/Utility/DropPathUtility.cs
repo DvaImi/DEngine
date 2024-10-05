@@ -80,11 +80,14 @@ namespace Game.Editor
         {
             EditorGUILayout.BeginHorizontal();
             {
-                value = EditorGUILayout.TextField(label, value);
+                bool valid = !AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.BuildSettingsConfig);
+                GUIStyle style = new GUIStyle(EditorStyles.label);
+                style.normal.textColor = Color.yellow;
+                value = EditorGUILayout.TextField(label, value, valid ? style : EditorStyles.label);
                 Rect textFieldRect = GUILayoutUtility.GetLastRect();
                 if (DropPath(textFieldRect, out string assetPath, isFolder))
                 {
-                    if (assetPath != value)
+                    if (assetPath != null && assetPath != value)
                     {
                         value = assetPath;
                     }

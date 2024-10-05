@@ -45,6 +45,11 @@ namespace Game.Editor.DataTableTools
         public bool GenerateDataTableEnum;
 
         /// <summary>
+        /// 生成枚举的路径
+        /// </summary>
+        public string DataTableEnumPath = "Assets/Game/Scripts/Update/DataTable/DataTableEnum";
+
+        /// <summary>
         /// 数据表命名空间
         /// </summary>
         public string NameSpace = "Game.Update";
@@ -124,7 +129,7 @@ namespace Game.Editor.DataTableTools
             if (Directory.Exists(DataTableExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableExcelsFolder);
-                ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.Contains("~") ).Select(info => Utility.Path.GetRegularPath(info.FullName)).ToArray();
+                ExcelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.Contains("~")).Select(info => Utility.Path.GetRegularPath(info.FullName)).ToArray();
             }
         }
 

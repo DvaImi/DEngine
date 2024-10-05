@@ -41,6 +41,12 @@ namespace Game.Editor.DataTableTools
                             for (int i = 0; i < excelPackage.Workbook.Worksheets.Count; i++)
                             {
                                 var sheet = excelPackage.Workbook.Worksheets[i];
+                                
+                                if (sheet.Name.StartsWith("#"))
+                                {
+                                    continue;
+                                }
+
                                 int typeRow = DataTableSetting.Instance.TypeRow;
 
                                 if (sheet.Dimension.Rows < typeRow)

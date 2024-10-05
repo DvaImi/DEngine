@@ -65,7 +65,7 @@ namespace Game.Debugger
                 GUILayout.Space(5);
                 if (GUILayout.Button("Connect"))
                 {
-                    m_Network.Connect(Utility.Text.Format("{0}/{1}", m_RemoteAddress, m_Port));
+                    m_Network.Connect(Utility.Text.Format("{0}:{1}", m_RemoteAddress, m_Port));
                 }
 
                 GUILayout.Space(5);

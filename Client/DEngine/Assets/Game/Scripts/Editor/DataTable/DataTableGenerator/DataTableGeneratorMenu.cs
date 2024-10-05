@@ -34,6 +34,11 @@ namespace Game.Editor.DataTableTools
                         for (int i = 0; i < workCount; i++)
                         {
                             ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[i];
+                            if (sheet.Name.StartsWith("#"))
+                            {
+                                continue;
+                            }
+
                             string dataTableName = workCount > 1 ? sheet.Name : excelName;
                             if (sheet.Dimension.Rows < DataTableSetting.Instance.TypeRow)
                             {
@@ -95,7 +100,7 @@ namespace Game.Editor.DataTableTools
 
             stringBuilder.AppendLine("\t}").AppendLine("}");
 
-            string outputFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, "TableEnum", fileName + ".cs"));
+            string outputFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableEnumPath, fileName + ".cs"));
             FileInfo fileInfo = new FileInfo(outputFileName);
             if (fileInfo.Exists)
             {

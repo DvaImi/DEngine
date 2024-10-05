@@ -107,7 +107,7 @@ namespace Game.Editor.DataTableTools
                     GUIAssetPath("数据表文件导出路径", ref DataTableSetting.Instance.DataTableFolderPath,true);
                     GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath,true);
                     GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName);
-                    GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath,true);
+                    GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath, true);
                     GUIOutPath("数据表格路径", ref DataTableSetting.Instance.DataTableExcelsFolder);
                     DataTableSetting.Instance.NameSpace = EditorGUILayout.TextField("数据表命名空间", DataTableSetting.Instance.NameSpace);
                     DataTableSetting.Instance.NameRow = EditorGUILayout.IntField("字段名所在行", DataTableSetting.Instance.NameRow);
@@ -118,6 +118,7 @@ namespace Game.Editor.DataTableTools
 
                     if (DataTableSetting.Instance.GenerateDataTableEnum)
                     {
+                        GUIAssetPath("数据表扩展枚举导出路径", ref DataTableSetting.Instance.DataTableEnumPath, true);
                         EditorGUILayout.HelpBox("注意:数据表第三列将会作为枚举名称,Id 作为枚举值.", MessageType.Warning);
                     }
                 }
@@ -148,7 +149,10 @@ namespace Game.Editor.DataTableTools
         {
             EditorGUILayout.BeginHorizontal();
             {
-                content = EditorGUILayout.TextField(header, content);
+                bool valid = !AssetDatabase.LoadAssetAtPath<Object>(content);
+                GUIStyle style = new GUIStyle(EditorStyles.label);
+                style.normal.textColor = Color.yellow;
+                content = EditorGUILayout.TextField(header, content,valid ? style : EditorStyles.label);
                 Rect rect = GUILayoutUtility.GetLastRect();
                 if (DropPathUtility.DropPath(rect, out string path, isFolder))
                 {

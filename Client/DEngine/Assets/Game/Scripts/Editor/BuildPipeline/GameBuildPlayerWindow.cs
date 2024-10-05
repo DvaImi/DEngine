@@ -67,7 +67,7 @@ namespace Game.Editor.BuildPipeline
 
             GUILayout.BeginHorizontal();
             {
-                if (GUILayout.Button("Save",GUILayout.Height(30)))
+                if (GUILayout.Button("Save", GUILayout.Height(30)))
                 {
                     GameBuildPipeline.SaveBuildInfo();
                     GameBuildPipeline.SaveBuildSetting();
@@ -113,7 +113,7 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.BeginVertical("box");
             {
                 DropPathUtility.DropAssetPath("BuildSetting", ref GameSetting.Instance.BuildSettingsConfig);
-                
+
                 bool changed = false;
                 GUILayout.Space(5f);
                 m_FoldoutBuildSceneGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutBuildSceneGroup, "Build Scenes");
@@ -165,7 +165,7 @@ namespace Game.Editor.BuildPipeline
                     GameSetting.Save();
                     GameBuildPipeline.SaveBuildSetting();
                 }
-                
+
                 EditorGUILayout.EndFoldoutHeaderGroup();
                 GUILayout.Space(5f);
             }
