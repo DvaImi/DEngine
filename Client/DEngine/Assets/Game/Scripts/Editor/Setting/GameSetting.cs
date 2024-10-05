@@ -14,7 +14,7 @@ namespace Game.Editor
         /// 
         /// </summary>
         public string DEngineTypeConfig = "Assets/Game/Configuration/DEngineTypeSetting.xml";
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -53,7 +53,7 @@ namespace Game.Editor
         /// <summary>
         /// 强制重建资源包
         /// </summary>
-        public bool ForceRebuild;
+        public bool ForceRebuildAssetBundle;
 
         /// <summary>
         /// 应用发布路径

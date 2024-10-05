@@ -288,6 +288,10 @@ namespace Game.Editor.BuildPipeline
         /// <returns></returns>
         public static bool CanDifference()
         {
+            if (GameSetting.Instance.ForceRebuildAssetBundle)
+            {
+                return false;
+            }
             Platform platform = GetPlatform(GameSetting.Instance.BuildPlatform);
             GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutputFullPath, out string lastPackedVersionOutputFullPath, out _);
             return !string.IsNullOrEmpty(lastFullVersionOutputFullPath) && Directory.Exists(lastFullVersionOutputFullPath) && !string.IsNullOrEmpty(lastPackageVersionOutputFullPath) && Directory.Exists(lastPackageVersionOutputFullPath) && !string.IsNullOrEmpty(lastPackedVersionOutputFullPath) && Directory.Exists(lastPackedVersionOutputFullPath);

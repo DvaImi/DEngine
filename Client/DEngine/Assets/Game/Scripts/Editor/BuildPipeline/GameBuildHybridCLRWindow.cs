@@ -25,12 +25,15 @@ namespace Game.Editor.BuildPipeline
         private bool m_IsAotGeneric = false;
         private bool m_Compile = false;
         private Vector2 m_ScrollPosition;
+        private GUIContent m_BuildContent;
+        private GUIContent m_CompileContent;
+        private GUIContent m_SaveContent;
 
         [MenuItem("Game/Build Pipeline/HybridCLR", false, 1)]
         private static void Open()
         {
             GameBuildHybridCLRWindow window = GetWindow<GameBuildHybridCLRWindow>("Build HybridCLR", true);
-            window.minSize = new Vector2(800f, 600f);
+            window.minSize = new Vector2(900f, 600f);
         }
 
         private void Update()
@@ -38,10 +41,7 @@ namespace Game.Editor.BuildPipeline
             if (m_IsAotGeneric)
             {
                 m_IsAotGeneric = false;
-                Il2CppDefGeneratorCommand.GenerateIl2CppDef();
-                LinkGeneratorCommand.GenerateLinkXml();
                 StripAOTDllCommand.GenerateStripedAOTDlls();
-                MethodBridgeGeneratorCommand.GenerateMethodBridgeAndReversePInvokeWrapper();
                 AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
             }
 
@@ -57,6 +57,9 @@ namespace Game.Editor.BuildPipeline
             m_IsAotGeneric = false;
             m_EnableHybridCLR = SettingsUtil.Enable;
             m_ScrollPosition = Vector2.zero;
+            m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("AOT Generic", "生成AOT");
+            m_CompileContent = EditorGUIUtility.TrTextContentWithIcon("Compile", "编译热更代码", "Assembly Icon");
+            m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "保存配置");
 
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
             {
@@ -86,9 +89,20 @@ namespace Game.Editor.BuildPipeline
             }
             EditorGUILayout.EndScrollView();
 
+            GUILayout.FlexibleSpace();
             GUILayout.BeginHorizontal();
             {
-                if (GUILayout.Button("Save", GUILayout.Height(30)))
+                if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))
+                {
+                    m_IsAotGeneric = true;
+                }
+
+                if (GUILayout.Button(m_CompileContent, GUILayout.Height(30)))
+                {
+                    m_Compile = true;
+                }
+
+                if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
                     GameBuildPipeline.SaveHybridCLR();
                     GameSetting.Save();
@@ -296,24 +310,6 @@ namespace Game.Editor.BuildPipeline
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
-
-            Color bc = GUI.backgroundColor;
-            GUI.backgroundColor = Color.green;
-            EditorGUILayout.BeginHorizontal();
-            {
-                if (GUILayout.Button("AOT Generic", GUILayout.Height(30)))
-                {
-                    m_IsAotGeneric = true;
-                }
-
-                if (GUILayout.Button("Compile", GUILayout.Height(30)))
-                {
-                    m_Compile = true;
-                }
-
-                GUI.backgroundColor = bc;
-            }
-            EditorGUILayout.EndHorizontal();
         }
     }
 }

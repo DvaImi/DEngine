@@ -20,14 +20,14 @@ MonoBehaviour:
   BuildPlatform: 1
   ResourceModeIndex: 1
   Difference: 0
-  ForceRebuild: 0
+  ForceRebuildAssetBundle: 0
   DefaultSceneNames:
   - Assets/GameEntry.unity
   SearchScenePaths:
   - Assets
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 8
+  InternalResourceVersion: 12
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: 
   BuildInfo:

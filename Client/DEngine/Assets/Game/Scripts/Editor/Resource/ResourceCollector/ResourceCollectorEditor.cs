@@ -38,6 +38,8 @@ namespace Game.Editor
         private GUIContent m_AssetContent;
         private GUIContent m_FilterTypeContent;
         private GUIContent m_AssetPathContent;
+        private GUIContent m_ExportContent;
+        private GUIContent m_SaveContent;
         private readonly float m_AddRectHeight = 50f;
         private bool m_IsDirty = false;
         private float PackageSpace => 200;
@@ -62,6 +64,8 @@ namespace Game.Editor
             m_AssetContent = new GUIContent("AssetObject", "资源目录");
             m_FilterTypeContent = new GUIContent("FilterType", "资源筛选类型");
             m_AssetPathContent = new GUIContent("AssetPath", "资源路径");
+            m_ExportContent = EditorGUIUtility.TrTextContentWithIcon("Export", "导出配置", "Project");
+            m_SaveContent = EditorGUIUtility.TrTextContentWithIcon("Save", "保存配置", "SaveAs");
 
             Load();
 
@@ -148,13 +152,13 @@ namespace Game.Editor
                 GUILayout.FlexibleSpace();
                 Color originalColor = GUI.backgroundColor;
                 GUI.backgroundColor = Color.green;
-                
-                if (GUILayout.Button("导出"))
+
+                if (GUILayout.Button(m_ExportContent))
                 {
                     ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
 
-                if (GUILayout.Button("保存"))
+                if (GUILayout.Button(m_SaveContent))
                 {
                     Save();
                 }
@@ -245,17 +249,14 @@ namespace Game.Editor
             GUILayout.EndArea();
 
 
-
             m_MenuGroupRect = new Rect(PackageSpace, m_ToolbarRect.height, m_MenuTreeWidth, position.height - m_AddRectHeight - m_ToolbarRect.height);
             m_MenuTreeGroupsView.OnGUI(m_MenuGroupRect);
-
 
 
             GUILayout.BeginArea(new Rect(PackageSpace + m_MenuGroupRect.width * 0.2F, m_MenuGroupRect.height + m_AddRectHeight, m_MenuGroupRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
             {
                 EditorGUILayout.BeginHorizontal();
                 {
-
                     if (GUILayout.Button("+", GUILayout.Width(30)))
                     {
                         ResourceGroupCollector resourceGroup = new();

@@ -20,6 +20,8 @@ namespace Game.Editor.BuildPipeline
         private bool m_FoldoutBuildSceneGroup = true;
         private Vector2 m_ScrollPosition;
         private List<string> m_DefaultSceneNames;
+        private GUIContent m_BuildContent;
+        private GUIContent m_SaveContent;
 
         [MenuItem("Game/Build Pipeline/Player", false, 0)]
         private static void Open()
@@ -43,6 +45,8 @@ namespace Game.Editor.BuildPipeline
             m_ScrollPosition = Vector2.zero;
             m_DefaultSceneNames = GameSetting.Instance.DefaultSceneNames.ToList();
             m_DefaultSceneNames ??= new List<string>();
+            m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("Build", "构建当前平台应用");
+            m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "");
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
             {
                 Directory.CreateDirectory(GameSetting.Instance.AppOutput);
@@ -65,9 +69,28 @@ namespace Game.Editor.BuildPipeline
             }
             EditorGUILayout.EndScrollView();
 
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal("box");
             {
-                if (GUILayout.Button("Save", GUILayout.Height(30)))
+                if (GUILayout.Button(m_BuildContent, GUILayout.Height(40)))
+                {
+                    BuildTarget buildTarget = GameBuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform);
+                    if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
+                    {
+                        if (EditorUtility.DisplayDialog("提示", "当前平台与目标平台不符，是否进行切换?", "确认", "取消"))
+                        {
+                            if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(buildTarget), buildTarget))
+                            {
+                                m_BeginBuildPlayer = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        m_BeginBuildPlayer = true;
+                    }
+                }
+
+                if (GUILayout.Button(m_SaveContent, GUILayout.Height(40)))
                 {
                     GameBuildPipeline.SaveBuildInfo();
                     GameBuildPipeline.SaveBuildSetting();
@@ -172,11 +195,12 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.EndVertical();
             EditorGUILayout.BeginHorizontal();
             {
+                EditorGUILayout.LabelField("AppOutput", EditorStyles.boldLabel);
                 GUI.enabled = false;
                 EditorGUILayout.LabelField(GameSetting.Instance.AppOutput);
                 GUI.enabled = true;
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Open", GUILayout.Width(50)))
                 {
                     OpenFolder.Execute(GameSetting.Instance.AppOutput);
                 }
@@ -188,29 +212,6 @@ namespace Game.Editor.BuildPipeline
                 }
             }
             EditorGUILayout.EndHorizontal();
-
-            Color bc = GUI.backgroundColor;
-            GUI.backgroundColor = Color.green;
-            if (GUILayout.Button("Build", GUILayout.Height(30)))
-            {
-                BuildTarget buildTarget = GameBuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform);
-                if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
-                {
-                    if (EditorUtility.DisplayDialog("提示", "当前平台与目标平台不符，是否进行切换?", "确认", "取消"))
-                    {
-                        if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(buildTarget), buildTarget))
-                        {
-                            m_BeginBuildPlayer = true;
-                        }
-                    }
-                }
-                else
-                {
-                    m_BeginBuildPlayer = true;
-                }
-            }
-
-            GUI.backgroundColor = bc;
         }
     }
 }

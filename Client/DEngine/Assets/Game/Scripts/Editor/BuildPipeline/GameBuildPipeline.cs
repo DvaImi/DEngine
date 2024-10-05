@@ -26,6 +26,7 @@ namespace Game.Editor.BuildPipeline
         [MenuItem("Game/Build Pipeline/ Build Current APP", false, 100)]
         private static void RunCurrentBuild()
         {
+            EditorTools.CloseAllCustomEditorWindows();
             Debug.Log("开始一键打包任务");
             CheckPlatform();
             {

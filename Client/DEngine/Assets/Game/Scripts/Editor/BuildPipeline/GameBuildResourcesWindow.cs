@@ -18,6 +18,9 @@ namespace Game.Editor.BuildPipeline
         private bool m_FoldoutBuildConfigGroup = true;
         private bool m_FoldoutBuiltInfoGroup = true;
         private Vector2 m_ScrollPosition;
+        private GUIContent m_EditorContent;
+        private GUIContent m_BuildContent;
+        private GUIContent m_SaveContent;
 
         [MenuItem("Game/Build Pipeline/Resource", false, 2)]
         private static void Open()
@@ -38,6 +41,9 @@ namespace Game.Editor.BuildPipeline
         private void OnEnable()
         {
             m_ScrollPosition = Vector2.zero;
+            m_EditorContent = EditorGUIUtility.TrTextContentWithIcon("Editor", "", "Settings");
+            m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("Build", "构建当前平台资源");
+            m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "");
 
             if (!Directory.Exists(GameSetting.Instance.AppOutput))
             {
@@ -68,7 +74,17 @@ namespace Game.Editor.BuildPipeline
 
             GUILayout.BeginHorizontal();
             {
-                if (GUILayout.Button("Save", GUILayout.Height(30)))
+                if (GUILayout.Button(m_EditorContent, GUILayout.Height(30)))
+                {
+                    ResourceCollectorEditor.OpenWindow();
+                }
+
+                if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))
+                {
+                    m_BeginBuildResources = true;
+                }
+
+                if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
                     GameBuildPipeline.SaveResource();
                     GameSetting.Save();
@@ -87,16 +103,6 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
-                bool canDifference = GameBuildPipeline.CanDifference();
-                GUI.enabled = canDifference;
-                bool diff = EditorGUILayout.ToggleLeft("Difference", canDifference && GameSetting.Instance.Difference, GUILayout.Width(120));
-                if (diff != GameSetting.Instance.Difference)
-                {
-                    GameSetting.Instance.Difference = diff;
-                }
-
-                GUI.enabled = true;
-
                 int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
                 int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameBuildPipeline.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)
@@ -116,7 +122,27 @@ namespace Game.Editor.BuildPipeline
             }
 
             EditorGUILayout.EndHorizontal();
-            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUILayout.FlexibleSpace();
+                bool forceRebuildAssetBundle = EditorGUILayout.ToggleLeft("ForceRebuildAssetBundle", GameSetting.Instance.ForceRebuildAssetBundle, GUILayout.Width(200));
+                if (!forceRebuildAssetBundle.Equals(GameSetting.Instance.ForceRebuildAssetBundle))
+                {
+                    GameSetting.Instance.ForceRebuildAssetBundle = forceRebuildAssetBundle;
+                }
+
+                bool canDifference = GameBuildPipeline.CanDifference();
+                GUI.enabled = canDifference;
+                bool diff = EditorGUILayout.ToggleLeft("Difference", canDifference && GameSetting.Instance.Difference, GUILayout.Width(120));
+                if (!diff.Equals(GameSetting.Instance.Difference))
+                {
+                    GameSetting.Instance.Difference = diff;
+                }
+
+                GUI.enabled = true;
+            }
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
             {
                 GUI.enabled = false;
@@ -181,25 +207,6 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }
             EditorGUILayout.EndVertical();
-
-            Color bc = GUI.backgroundColor;
-            GUILayout.Space(5f);
-            EditorGUILayout.BeginHorizontal("box");
-            {
-                GUI.backgroundColor = Color.green;
-                if (GUILayout.Button("Editor", GUILayout.Height(30)))
-                {
-                    ResourceCollectorEditor.OpenWindow();
-                } 
-                
-                if (GUILayout.Button("Build", GUILayout.Height(30)))
-                {
-                    m_BeginBuildResources = true;
-                }
-
-                GUI.backgroundColor = bc;
-            }
-            EditorGUILayout.EndHorizontal();
         }
     }
 }

@@ -104,7 +104,7 @@ namespace Game.Editor.BuildPipeline
                 builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
                 builderController.AdditionalCompressionSelected = true;
                 builderController.Difference = GameSetting.Instance.Difference;
-                builderController.ForceRebuildAssetBundleSelected = GameSetting.Instance.ForceRebuild;
+                builderController.ForceRebuildAssetBundleSelected = GameSetting.Instance.ForceRebuildAssetBundle;
             }
             builderController.Save();
         }

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using DEngine.Editor;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Game.Editor.DataTableTools
 {
@@ -13,6 +15,7 @@ namespace Game.Editor.DataTableTools
         private bool m_FoldoutDataTableGroup = true;
         private bool m_FoldoutLocalizationGroup = true;
         private bool m_FoldoutAssemblyNamesGroup = true;
+        private GUIContent m_SaveContent;
 
         [MenuItem("DataTable/Setting", priority = 10)]
         private static void OpenWindow()
@@ -20,6 +23,11 @@ namespace Game.Editor.DataTableTools
             var window = GetWindow<DataTableSettingEditorWindows>("DataTable Setting");
             window.minSize = new Vector2(800, 600);
             DataTableSetting.Instance.SaveSetting();
+        }
+
+        private void OnEnable()
+        {
+            m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "");
         }
 
         private void OnGUI()
@@ -49,7 +57,7 @@ namespace Game.Editor.DataTableTools
 
             EditorGUILayout.BeginHorizontal();
             {
-                if (GUILayout.Button("Save"))
+                if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
                     DataTableSetting.Instance.SaveSetting();
                 }
@@ -104,8 +112,8 @@ namespace Game.Editor.DataTableTools
             {
                 if (m_FoldoutDataTableGroup)
                 {
-                    GUIAssetPath("数据表文件导出路径", ref DataTableSetting.Instance.DataTableFolderPath,true);
-                    GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath,true);
+                    GUIAssetPath("数据表文件导出路径", ref DataTableSetting.Instance.DataTableFolderPath, true);
+                    GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath, true);
                     GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName);
                     GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath, true);
                     GUIOutPath("数据表格路径", ref DataTableSetting.Instance.DataTableExcelsFolder);
@@ -152,7 +160,7 @@ namespace Game.Editor.DataTableTools
                 bool valid = !AssetDatabase.LoadAssetAtPath<Object>(content);
                 GUIStyle style = new GUIStyle(EditorStyles.label);
                 style.normal.textColor = Color.yellow;
-                content = EditorGUILayout.TextField(header, content,valid ? style : EditorStyles.label);
+                content = EditorGUILayout.TextField(header, content, valid ? style : EditorStyles.label);
                 Rect rect = GUILayoutUtility.GetLastRect();
                 if (DropPathUtility.DropPath(rect, out string path, isFolder))
                 {

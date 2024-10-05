@@ -388,6 +388,25 @@ namespace Game.Editor
             }
         }
 
+        public static void CloseAllCustomEditorWindows()
+        {
+            EditorWindow[] allWindows = Resources.FindObjectsOfTypeAll<EditorWindow>();
+
+            foreach (EditorWindow window in allWindows)
+            {
+                var ns = window.GetType().Namespace;
+                if (ns is not null && !ns.StartsWith("UnityEditor"))
+                {
+                    window.Close();
+                }
+            }
+        }
+
+        public static Texture GetIcon(string name)
+        {
+            return EditorGUIUtility.IconContent(name).image as Texture2D;
+        }
+
         #endregion
 
         #region EditorConsole

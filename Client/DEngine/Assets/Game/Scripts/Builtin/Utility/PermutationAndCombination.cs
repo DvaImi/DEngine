@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Game.Editor
+namespace Game
 {
     public static class PermutationAndCombination<T>
     {

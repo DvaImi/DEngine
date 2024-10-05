@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using DEngine.DataTable;
 using DEngine.Event;
 using DEngine.Procedure;
 using DEngine.Resource;
