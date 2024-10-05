@@ -10,14 +10,14 @@ namespace Game.Editor.ResourceTools
         /// <summary>
         /// 忽略的文件类型
         /// </summary>
-        private readonly static HashSet<string> _ignoreFileExtensions = new HashSet<string>() { ".so", ".dll", ".cs", ".js", ".boo", ".meta", ".cginc", ".hlsl" };
+        private static readonly HashSet<string> IgnoreFileExtensions = new() { ".so", ".dll", ".cs", ".js", ".boo", ".meta", ".cginc", ".hlsl" };
 
         /// <summary>
         /// 查询是否为忽略文件
         /// </summary>
         public static bool IsIgnoreFile(string fileExtension)
         {
-            return _ignoreFileExtensions.Contains(fileExtension);
+            return IgnoreFileExtensions.Contains(fileExtension);
         }
     }
 
