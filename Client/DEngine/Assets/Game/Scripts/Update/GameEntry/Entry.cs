@@ -13,8 +13,8 @@ namespace Game.Update
         public static async UniTask Initialize()
         {
             Luban = GameEntry.GetModule<ILubanModule>().Initialize();
-            await GameEntry.Archive.Initialize();
             GameEntry.Network.Initialize(AssemblyUtility.GetAssemblies());
+            await UniTask.CompletedTask;
         }
     }
 }
