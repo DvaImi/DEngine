@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Text;
+using Newtonsoft.Json;
+using UnityEditor;
 
 namespace Game.Editor.ResourceTools
 {
@@ -14,7 +16,26 @@ namespace Game.Editor.ResourceTools
             {
                 binaryWriter.Write(version[i]);
             }
+
             binaryWriter.Flush();
+        }
+
+        public static void CreateAssetVersion<T>(T version, string writePath)
+        {
+            if (File.Exists(writePath))
+            {
+                File.Delete(writePath);
+            }
+
+            var metaPath = writePath + ".meta";
+            if (File.Exists(metaPath))
+            {
+                File.Delete(metaPath);
+            }
+
+            var jsonContent = JsonConvert.SerializeObject(version);
+            File.WriteAllText(writePath, jsonContent);
+            AssetDatabase.Refresh();
         }
     }
 }

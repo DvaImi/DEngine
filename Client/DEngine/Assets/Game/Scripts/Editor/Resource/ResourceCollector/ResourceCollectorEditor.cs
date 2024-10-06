@@ -110,6 +110,7 @@ namespace Game.Editor
             SetFocusAndEnsureSelectedItem();
         }
 
+        
         protected override void OnGUI()
         {
             GUIToolbar();
@@ -506,6 +507,7 @@ namespace Game.Editor
         {
             Rect enableRect = new Rect(cellRect.x + (cellRect.width / 2), cellRect.y, cellRect.width, cellRect.height);
             data.Enable = EditorGUI.Toggle(enableRect, data.Enable);
+            data.Enable = data.Enable && data.IsValid;
         }
 
         private void DrawNameItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)

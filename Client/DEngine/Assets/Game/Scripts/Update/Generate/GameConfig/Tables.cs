@@ -22,7 +22,7 @@ namespace Game.LubanTable
         /// </summary>
         public readonly string[] TableNames = new[]
         {
-           "item_tbitem",
+           "TBItem_luban",
         };
 
         private System.Collections.Generic.Dictionary<string, ILubanTable> m_Tables;
@@ -34,7 +34,7 @@ namespace Game.LubanTable
             m_Tables = new System.Collections.Generic.Dictionary<string, ILubanTable>();
             var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
     
-            TbItem = new Item.TbItem(() => loader("item_tbitem"));
+            TbItem = new Item.TbItem(() => loader("TBItem_luban"));
             loadTasks.Add(TbItem.LoadAsync());
             m_Tables.Add("Item.TbItem", TbItem);
     

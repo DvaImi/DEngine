@@ -48,7 +48,7 @@ namespace Game.Editor.DataTableTools
 
         public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
-            var binaryDataFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + ".bytes"));
+            var binaryDataFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + "_table.bytes"));
 
             FileInfo fileInfo = new FileInfo(binaryDataFileName);
             if (fileInfo.Directory is { Exists: false })

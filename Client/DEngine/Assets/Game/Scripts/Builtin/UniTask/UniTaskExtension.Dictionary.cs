@@ -18,7 +18,7 @@ namespace Game
         /// <param name="dictionaryAssetName"></param>
         /// <param name="userData"></param>
         /// <returns></returns>
-        public static async UniTask<Language> GetDictionaryAsync(this LocalizationComponent self, string dictionaryAssetName, object userData = null)
+        public static async UniTask<Language> LoadDictionaryAsync(this LocalizationComponent self, string dictionaryAssetName, object userData = null)
         {
             if (string.IsNullOrEmpty(dictionaryAssetName))
             {
@@ -61,7 +61,7 @@ namespace Game
                 {
                     return;
                 }
-
+                Log.Info("Can not load dictionary '{0}' from '{1}' with error message '{2}'.", ne.DictionaryAssetName, ne.DictionaryAssetName, ne.ErrorMessage);
                 result.Source.TrySetException(new DEngineException(Utility.Text.Format("Can not load dictionary '{0}' from '{1}' with error message '{2}'.", ne.DictionaryAssetName, ne.DictionaryAssetName, ne.ErrorMessage)));
                 ReferencePool.Release(result);
             }

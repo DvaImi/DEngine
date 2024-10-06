@@ -17,7 +17,7 @@ namespace Game.Update.Localization
         public static async UniTask<Language> GetDictionaryAsync(this LocalizationComponent self, Language language, object userData = null)
         {
             self.RemoveAllRawStrings();
-            var result = await self.GetDictionaryAsync(UpdateAssetUtility.GetDictionaryAsset(language.ToString(), true), userData);
+            var result = await self.LoadDictionaryAsync(UpdateAssetUtility.GetDictionaryAsset(language.ToString(), true), userData);
             if (result != Language.Unspecified)
             {
                 Log.Info("Change language success");

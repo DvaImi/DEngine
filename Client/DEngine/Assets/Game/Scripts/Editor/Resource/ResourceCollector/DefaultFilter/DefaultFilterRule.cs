@@ -10,7 +10,7 @@ namespace Game.Editor.ResourceTools
         /// <summary>
         /// 忽略的文件类型
         /// </summary>
-        private static readonly HashSet<string> IgnoreFileExtensions = new() { ".so", ".dll", ".cs", ".js", ".boo", ".meta", ".cginc", ".hlsl" };
+        private static readonly HashSet<string> IgnoreFileExtensions = new() { ".so", ".dll", ".cs", ".js", ".boo", ".meta", ".cginc", ".hlsl", ".gitkeep" };
 
         /// <summary>
         /// 查询是否为忽略文件

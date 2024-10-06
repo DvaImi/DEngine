@@ -9,7 +9,7 @@ namespace Game
 {
     public static partial class UniTaskExtension
     {
-         /// <summary>
+        /// <summary>
         /// 加载资源（可等待）
         /// </summary>
         public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent self, string assetName, CancellationToken cancellationToken = default) where T : Object
@@ -19,18 +19,19 @@ namespace Game
             self.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks(LoadAssetSuccessCallback, LoadAssetFailureCallback));
             return loadAssetTcs.Task;
 
-            void LoadAssetFailureCallback(string localaAssetName, LoadResourceStatus status, string errorMessage, object userData)
+            void LoadAssetFailureCallback(string localAssetName, LoadResourceStatus status, string errorMessage, object userData)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
                     loadAssetTcs.TrySetCanceled();
                     return;
                 }
-                
+
+                Log.Warning("Load asset failure status is '{0}' errorMessage is '{1}'.", status, errorMessage);
                 loadAssetTcs.TrySetException(new DEngineException(errorMessage));
             }
 
-            void LoadAssetSuccessCallback(string localaAssetName, object asset, float duration, object userData)
+            void LoadAssetSuccessCallback(string localAssetName, object asset, float duration, object userData)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
@@ -39,12 +40,14 @@ namespace Game
                 }
 
                 var tAsset = asset as T;
-                if (tAsset != null)
+                if (tAsset)
                 {
+                    Log.Info("Load asset '{0}' OK.", assetName);
                     loadAssetTcs.TrySetResult(tAsset);
                 }
                 else
                 {
+                    Log.Warning($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}.");
                     loadAssetTcs.TrySetException(new DEngineException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
                 }
             }
@@ -80,7 +83,7 @@ namespace Game
         {
             UniTaskCompletionSource<byte[]> loadAssetTcs = new UniTaskCompletionSource<byte[]>();
 
-            void LoadAssetSuccessCallback(string localbinaryAssetName, byte[] binaryBytes, float duration, object userData)
+            void LoadAssetSuccessCallback(string localBinaryAssetName, byte[] binaryBytes, float duration, object userData)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
@@ -97,7 +100,7 @@ namespace Game
                 }
             }
 
-            void LoadAssetFailureCallback(string localbinaryAssetName, LoadResourceStatus status, string errorMessage, object userData)
+            void LoadAssetFailureCallback(string localBinaryAssetName, LoadResourceStatus status, string errorMessage, object userData)
             {
                 loadAssetTcs.TrySetException(new DEngineException(errorMessage));
             }

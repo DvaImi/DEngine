@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using DEngine.Editor;
+using Game.DataTable;
+using Game.Editor.ResourceTools;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -12,10 +15,16 @@ namespace Game.Editor.DataTableTools
 {
     public class DataTableSettingEditorWindows : EditorWindow
     {
+        private Vector2 m_ScrollPosition;
         private bool m_FoldoutDataTableGroup = true;
         private bool m_FoldoutLocalizationGroup = true;
-        private bool m_FoldoutAssemblyNamesGroup = true;
+        private bool m_FoldoutAssemblyNamesGroup = false;
+        private bool m_FoldoutProloadGroup = false;
         private GUIContent m_SaveContent;
+        private List<string> m_DataTableName;
+        private Dictionary<string, bool> m_DataTableMap;
+        private List<KeyValuePair<string, bool>> m_Updates;
+        private GameDataTableVersion m_DataTableVersion;
 
         [MenuItem("DataTable/Setting", priority = 10)]
         private static void OpenWindow()
@@ -27,31 +36,64 @@ namespace Game.Editor.DataTableTools
 
         private void OnEnable()
         {
+            m_ScrollPosition = Vector2.zero;
             m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "");
+            m_DataTableName = new List<string>();
+            m_DataTableMap = new Dictionary<string, bool>();
+            m_Updates = new List<KeyValuePair<string, bool>>();
+            string[] ids = AssetDatabase.FindAssets("_table t:textAsset");
+            int cnt = ids.Length;
+            for (int i = 0; i < cnt; i++)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(ids[i]);
+                var textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(assetPath);
+                if (textAsset)
+                {
+                    string dataTableName = textAsset.name[..textAsset.name.LastIndexOf("_table", StringComparison.Ordinal)];
+                    m_DataTableName.Add(dataTableName);
+                }
+            }
+
+            var value = AssetDatabase.LoadAssetAtPath<TextAsset>(DataTableSetting.DataTableVersion)?.text;
+            if (value != null)
+            {
+                m_DataTableVersion = JsonConvert.DeserializeObject<GameDataTableVersion>(value);
+            }
+
+            m_DataTableVersion ??= new GameDataTableVersion();
+
+            foreach (var data in m_DataTableName)
+            {
+                m_DataTableMap[data] = m_DataTableVersion.StaticDataTable.Contains(data);
+            }
         }
 
         private void OnGUI()
         {
-            GUILayout.Space(5f);
-            EditorGUILayout.BeginVertical("box");
+            m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, false, false);
             {
-                GUIAssemblyNames();
-            }
-            EditorGUILayout.EndHorizontal();
+                GUILayout.Space(5f);
+                EditorGUILayout.BeginVertical("box");
+                {
+                    GUIAssemblyNames();
+                }
+                EditorGUILayout.EndHorizontal();
 
-            GUILayout.Space(5f);
-            EditorGUILayout.BeginVertical("box");
-            {
-                GUIDataTable();
-            }
-            EditorGUILayout.EndHorizontal();
+                GUILayout.Space(5f);
+                EditorGUILayout.BeginVertical("box");
+                {
+                    GUIDataTable();
+                }
+                EditorGUILayout.EndHorizontal();
 
-            GUILayout.Space(5f);
-            EditorGUILayout.BeginVertical("box");
-            {
-                GUILocalization();
+                GUILayout.Space(5f);
+                EditorGUILayout.BeginVertical("box");
+                {
+                    GUILocalization();
+                }
+                EditorGUILayout.EndHorizontal();
             }
-            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndScrollView();
 
             GUILayout.FlexibleSpace();
 
@@ -63,6 +105,8 @@ namespace Game.Editor.DataTableTools
                 }
             }
             EditorGUILayout.EndHorizontal();
+
+            Repaint();
         }
 
         private void GUIAssemblyNames()
@@ -132,6 +176,52 @@ namespace Game.Editor.DataTableTools
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
+
+            EditorGUILayout.Space(10);
+
+
+            m_FoldoutProloadGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutProloadGroup, "数据表分类配置");
+            {
+                if (m_FoldoutProloadGroup)
+                {
+                    EditorGUILayout.LabelField("数据表", "\t\t\t\t\t是否静态表", EditorStyles.label);
+
+                    m_Updates.Clear();
+
+                    foreach (var data in m_DataTableMap)
+                    {
+                        bool isStatic = data.Value;
+                        GUIPreload(data.Key, ref isStatic);
+                        m_Updates.Add(new KeyValuePair<string, bool>(data.Key, isStatic));
+                    }
+
+                    foreach (var update in m_Updates)
+                    {
+                        m_DataTableMap[update.Key] = update.Value;
+                    }
+
+
+                    if (GUILayout.Button(m_SaveContent, GUILayout.Height(20)))
+                    {
+                        m_DataTableVersion.StaticDataTable.Clear();
+                        m_DataTableVersion.DynamicDataTable.Clear();
+                        foreach (var data in m_DataTableMap)
+                        {
+                            if (data.Value)
+                            {
+                                m_DataTableVersion.StaticDataTable.Add(data.Key);
+                            }
+                            else
+                            {
+                                m_DataTableVersion.DynamicDataTable.Add(data.Key);
+                            }
+                        }
+                        
+                        GameAssetVersionUitlity.CreateAssetVersion(m_DataTableVersion, DataTableSetting.DataTableVersion);
+                    }
+                }
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
         }
 
         private void GUILocalization()
@@ -164,7 +254,7 @@ namespace Game.Editor.DataTableTools
                 Rect rect = GUILayoutUtility.GetLastRect();
                 if (DropPathUtility.DropPath(rect, out string path, isFolder))
                 {
-                    if (path != content)
+                    if (!string.Equals(path, content, StringComparison.Ordinal))
                     {
                         content = path;
                     }
@@ -205,6 +295,16 @@ namespace Game.Editor.DataTableTools
                 {
                     OpenFolder.Execute(content);
                 }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void GUIPreload(string dataTableName, ref bool isStatic)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.LabelField(dataTableName);
+                isStatic = EditorGUILayout.Toggle(isStatic);
             }
             EditorGUILayout.EndHorizontal();
         }

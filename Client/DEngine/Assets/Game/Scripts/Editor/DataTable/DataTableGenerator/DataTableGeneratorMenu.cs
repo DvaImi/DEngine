@@ -64,8 +64,6 @@ namespace Game.Editor.DataTableTools
                 }
             }
 
-            string version = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, Constant.AssetVersion.DataTableVersion + ".bytes"));
-            GameAssetVersionUitlity.CreateAssetVersion(dataTableNames.ToArray(), version);
             AssetDatabase.Refresh();
         }
 

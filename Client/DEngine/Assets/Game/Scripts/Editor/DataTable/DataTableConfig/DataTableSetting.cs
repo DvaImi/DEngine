@@ -133,6 +133,9 @@ namespace Game.Editor.DataTableTools
             }
         }
 
+
+        public static string DataTableVersion => Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, Constant.AssetVersion.DataTableVersion + ".bytes"));
+
         #endregion
 
         #region Localization
