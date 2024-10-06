@@ -7,6 +7,7 @@
 
 using System.IO;
 using DEngine.Editor;
+using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
 
@@ -34,7 +35,7 @@ namespace Game.Editor.BuildPipeline
             if (m_BeginBuildResources)
             {
                 m_BeginBuildResources = false;
-                GameBuildPipeline.BuildResource(GameSetting.Instance.BundlesOutput, GameSetting.Instance.Difference);
+                GameBuildPipeline.BuildResource();
             }
         }
 

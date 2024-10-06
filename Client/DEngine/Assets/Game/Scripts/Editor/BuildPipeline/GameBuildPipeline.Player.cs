@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Game.Editor.BuildPipeline
             AssetDatabase.SaveAssets();
         }
 
+        [EditorToolMenu("BuildPlayer", 1, 10)]
         public static void BuildPlayer()
         {
             SaveBuildInfo();

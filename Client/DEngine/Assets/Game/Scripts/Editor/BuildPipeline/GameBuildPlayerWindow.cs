@@ -71,7 +71,7 @@ namespace Game.Editor.BuildPipeline
 
             GUILayout.BeginHorizontal("box");
             {
-                if (GUILayout.Button(m_BuildContent, GUILayout.Height(40)))
+                if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))
                 {
                     BuildTarget buildTarget = GameBuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform);
                     if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
@@ -90,7 +90,7 @@ namespace Game.Editor.BuildPipeline
                     }
                 }
 
-                if (GUILayout.Button(m_SaveContent, GUILayout.Height(40)))
+                if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
                     GameBuildPipeline.SaveBuildInfo();
                     GameBuildPipeline.SaveBuildSetting();

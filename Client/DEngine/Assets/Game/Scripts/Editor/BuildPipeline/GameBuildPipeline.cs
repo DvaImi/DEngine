@@ -3,6 +3,7 @@ using System.Linq;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
+using Game.Editor.Toolbar;
 using HybridCLR.Editor.Commands;
 using UnityEditor;
 using UnityEngine;
@@ -23,8 +24,9 @@ namespace Game.Editor.BuildPipeline
             RefreshPackages();
         }
 
-        [MenuItem("Game/Build Pipeline/ Build Current APP", false, 100)]
-        private static void RunCurrentBuild()
+        [MenuItem("Game/Build Pipeline/Automated Build", false, 100)]
+        [EditorToolMenu("AutomatedBuild", 1, 100)]
+        private static void AutomatedBuild()
         {
             EditorTools.CloseAllCustomEditorWindows();
             Debug.Log("开始一键打包任务");

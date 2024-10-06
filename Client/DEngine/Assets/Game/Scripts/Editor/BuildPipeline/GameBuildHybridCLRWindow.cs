@@ -41,8 +41,7 @@ namespace Game.Editor.BuildPipeline
             if (m_IsAotGeneric)
             {
                 m_IsAotGeneric = false;
-                StripAOTDllCommand.GenerateStripedAOTDlls();
-                AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
+                GameBuildPipeline.GenerateStripedAOT();
             }
 
             if (m_Compile)
