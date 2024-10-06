@@ -44,12 +44,11 @@ namespace Game.Editor.ResourceTools
         /// </summary>
         public string FilterRule = nameof(CollectAll);
 
-        public string AssetPath
-        {
-            get
-            {
-                return Asset == null ? null : AssetDatabase.GetAssetPath(Asset);
-            }
-        }
+        public string AssetPath => Asset == null ? null : AssetDatabase.GetAssetPath(Asset);
+
+        /// <summary>
+        /// 是否是有效资源
+        /// </summary>
+        public bool IsValid => !string.IsNullOrEmpty(AssetPath);
     }
 }

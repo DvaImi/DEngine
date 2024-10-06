@@ -5,6 +5,7 @@ using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Runtime;
 using Game.Editor.ResourceTools;
+using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -16,35 +17,17 @@ namespace Game.Editor.BuildPipeline
     /// </summary>
     public static partial class GameBuildPipeline
     {
-        public static string GetUpdatePrefixUri(Platform platform)
+        [EditorToolMenu("Build Resource", 1, 3)]
+        public static void BuildResource()
         {
-            return Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, GameSetting.Instance.LatestGameVersion, GameSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
+            BuildResource(GameSetting.Instance.BundlesOutput);
         }
 
-        public static void BuildResource(string output, bool difference)
+        public static void BuildResource(string output, bool difference = false)
         {
             OnPreprocess();
             BuildResource(GetPlatform(GameSetting.Instance.BuildPlatform), output, difference);
             OnPostprocess();
-        }
-
-        public static void ClearResource()
-        {
-            GameUtility.IO.Delete(GameSetting.Instance.BundlesOutput);
-            ResourceBuilderController controller = new ResourceBuilderController();
-            if (controller.Load())
-            {
-                controller.InternalResourceVersion = GameSetting.Instance.InternalResourceVersion = 0;
-                controller.Save();
-                GameSetting.Instance.SaveSetting();
-            }
-
-            if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))
-            {
-                GameUtility.IO.Delete(Application.streamingAssetsPath);
-            }
-            AssetDatabase.Refresh();
-            Debug.Log("Clear success");
         }
 
         public static void BuildResource(Platform platform, string outputDirectory, bool forceRebuild = false, bool difference = false)
@@ -71,9 +54,7 @@ namespace Game.Editor.BuildPipeline
                 builderController.ProcessResourceComplete += OnProcessResourceComplete;
                 builderController.BuildResourceError += OnBuildResourceError;
                 builderController.ProcessDifferenceComplete += OnPostprocessDifference;
-                string buildMessage = string.Empty;
-                MessageType buildMessageType = MessageType.None;
-                GetBuildMessage(builderController, out buildMessage, out buildMessageType);
+                GetBuildMessage(builderController, out var buildMessage, out var buildMessageType);
                 switch (buildMessageType)
                 {
                     case MessageType.None:
@@ -90,7 +71,28 @@ namespace Game.Editor.BuildPipeline
                         break;
                 }
             }
+
             builderController.Save();
+        }
+
+        public static void ClearResource()
+        {
+            GameUtility.IO.Delete(GameSetting.Instance.BundlesOutput);
+            ResourceBuilderController controller = new ResourceBuilderController();
+            if (controller.Load())
+            {
+                controller.InternalResourceVersion = GameSetting.Instance.InternalResourceVersion = 0;
+                controller.Save();
+                GameSetting.Instance.SaveSetting();
+            }
+
+            if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))
+            {
+                GameUtility.IO.Delete(Application.streamingAssetsPath);
+            }
+
+            AssetDatabase.Refresh();
+            Debug.Log("Clear success");
         }
 
         public static void SaveResource()
@@ -106,6 +108,7 @@ namespace Game.Editor.BuildPipeline
                 builderController.Difference = GameSetting.Instance.Difference;
                 builderController.ForceRebuildAssetBundleSelected = GameSetting.Instance.ForceRebuildAssetBundle;
             }
+
             builderController.Save();
         }
 
@@ -113,13 +116,14 @@ namespace Game.Editor.BuildPipeline
         {
             PackagesNames = ResourcePackagesCollector.GetPackageCollector().PackagesCollector.Select(x => x.PackageName).ToArray();
         }
-        
+
         public static void SaveOutputDirectory(string outputDirectory)
         {
             if (!Directory.Exists(outputDirectory))
             {
                 throw new DEngineException($"OutputDirectory: {outputDirectory}  is invalid.");
             }
+
             ResourceBuilderController controller = new();
             if (controller.Load())
             {
@@ -245,6 +249,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     Debug.LogWarning("Save configuration failure.");
                 }
+
                 if (GameSetting.Instance.ForceUpdateGame)
                 {
                     Debug.Log($"<color=#1E90FF>[DEngine] ►</color> " + "强制更新资源版本构建完成,打包新版本app时，务必更新版本号，避免冲突!!!");
@@ -268,6 +273,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     destFileInfo.Directory.Create();
                 }
+
                 File.Copy(fileName, destFileName, true);
             }
         }
@@ -336,4 +342,3 @@ namespace Game.Editor.BuildPipeline
         }
     }
 }
-

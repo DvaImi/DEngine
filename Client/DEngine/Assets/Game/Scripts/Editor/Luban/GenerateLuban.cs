@@ -1,5 +1,6 @@
 using System.IO;
 using DEngine.Editor;
+using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Game.Editor.DataTableTools
     public static class GenerateLuban
     {
         [MenuItem("DataTable/Generate/Luban", priority = 100)]
+        [EditorToolMenu("Generate Luban", 0, 4)]
         public static void Generate()
         {
 #if UNITY_EDITOR_WIN

@@ -5,6 +5,8 @@
 // 版 本：1.0
 // ========================================================
 
+using System;
+
 namespace Game.Editor
 {
     [GameFilePath("Assets/Game/Configuration/GameSetting.asset")]
@@ -134,6 +136,21 @@ namespace Game.Editor
         /// 其他预留按需加载程序集
         /// </summary>
         public string[] PreserveAssemblies = new string[] { };
+
+        /// <summary>
+        /// 多渠道配表路径
+        /// </summary>
+        public string MultiChannelExcelPath = string.Empty;
+
+        /// <summary>
+        /// 多渠道数据类生成路径
+        /// </summary>
+        public string MultiChannelCodePath = string.Empty;
+
+        /// <summary>
+        /// 多渠道数据生成路径
+        /// </summary>
+        public string MultiChannelDataPath = string.Empty;
 
         public void SaveSetting()
         {

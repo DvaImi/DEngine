@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using DEngine.DataTable;
 using DEngine.Runtime;
 
-namespace Game.Update
+namespace Game.Update.Entity
 {
     public static class EntityExtension
     {
@@ -48,7 +48,7 @@ namespace Game.Update
                 return null;
             }
 
-            Entity entity = await self.ShowEntityAsync(data.Id, typeof(T), UpdateAssetUtility.GetEntityAsset(drEntity.AssetName), entityGroup, priority, data);
+            DEngine.Runtime.Entity entity = await self.ShowEntityAsync(data.Id, typeof(T), UpdateAssetUtility.GetEntityAsset(drEntity.AssetName), entityGroup, priority, data);
 
             if (entity == null)
             {

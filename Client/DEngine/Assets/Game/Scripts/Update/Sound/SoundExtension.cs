@@ -8,7 +8,7 @@ using DEngine.DataTable;
 using DEngine.Runtime;
 using DEngine.Sound;
 
-namespace Game.Update
+namespace Game.Update.Sound
 {
     public static class SoundExtension
     {
@@ -48,7 +48,7 @@ namespace Game.Update
             s_MusicSerialId = null;
         }
 
-        public static int? PlaySound(this SoundComponent soundComponent, int soundId, Entity bindingEntity = null, object userData = null)
+        public static int? PlaySound(this SoundComponent soundComponent, int soundId, DEngine.Runtime.Entity bindingEntity = null, object userData = null)
         {
             IDataTable<DRSound> dtSound = GameEntry.DataTable.GetDataTable<DRSound>();
             DRSound drSound = dtSound.GetDataRow(soundId);

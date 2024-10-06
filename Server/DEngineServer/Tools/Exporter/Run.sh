@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# 获取脚本所在的目录并赋值给 WORKSPACE
+WORKSPACE=$(cd "$(dirname "$0")" && pwd)
+
+# 切换到 WORKSPACE 目录
+cd "$WORKSPACE"
+
+# 打印 WORKSPACE 目录以确认
+echo "Current WORKSPACE directory: $WORKSPACE"
+
 echo "1. Client"
 echo "2. Server"
 echo "3. All"

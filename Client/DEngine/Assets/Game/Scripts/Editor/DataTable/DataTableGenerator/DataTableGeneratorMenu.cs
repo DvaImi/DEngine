@@ -1,13 +1,13 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using DEngine;
 using DEngine.Editor;
-using Game.Editor.ResourceTools;
+using Game.Editor.Toolbar;
 using OfficeOpenXml;
 using UnityEditor;
-using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 namespace Game.Editor.DataTableTools
@@ -15,6 +15,7 @@ namespace Game.Editor.DataTableTools
     public sealed class DataTableGeneratorMenu
     {
         [MenuItem("DataTable/Generate/DataTables", priority = 1)]
+        [EditorToolMenu("Generate DataTable", 0, 3)]
         public static void GenerateDataTablesFormExcel()
         {
             DataTableSetting.Instance.RefreshDataTables("*.bytes");
@@ -64,8 +65,6 @@ namespace Game.Editor.DataTableTools
                 }
             }
 
-            string version = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, Constant.AssetVersion.DataTableVersion + ".bytes"));
-            GameAssetVersionUitlity.CreateAssetVersion(dataTableNames.ToArray(), version);
             AssetDatabase.Refresh();
         }
 
@@ -89,7 +88,7 @@ namespace Game.Editor.DataTableTools
             for (int i = 4; i < dataTableProcessor.RawRowCount; i++)
             {
                 var enumName = dataTableProcessor.GetValue(i, 3);
-                if (!System.CodeDom.Compiler.CodeGenerator.IsValidLanguageIndependentIdentifier(enumName))
+                if (!CodeGenerator.IsValidLanguageIndependentIdentifier(enumName))
                 {
                     Debug.LogWarning($"Warning:  DataTableName='{dataTableName}' '{enumName}' is not a valid enum name at row {i + 1}.");
                     return;

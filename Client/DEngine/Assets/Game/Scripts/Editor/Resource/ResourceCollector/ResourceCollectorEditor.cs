@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DEngine.Editor.ResourceTools;
 using Game.Editor.ResourceTools;
+using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -45,11 +46,13 @@ namespace Game.Editor
         private float PackageSpace => 200;
 
         [MenuItem("Game/Resource Tools/Resource Collector", false, 42)]
+        [EditorToolMenu("Resource Collector", 0, 100)]
         public static void OpenWindow()
         {
             var window = GetWindow<ResourceCollectorEditor>("资源收集器");
             window.minSize = new Vector2(1300f, 420f);
         }
+
 
         protected override void OnEnable()
         {
@@ -110,6 +113,7 @@ namespace Game.Editor
             SetFocusAndEnsureSelectedItem();
         }
 
+
         protected override void OnGUI()
         {
             GUIToolbar();
@@ -121,7 +125,6 @@ namespace Game.Editor
 
             Repaint();
         }
-
 
         private void Update()
         {
@@ -506,6 +509,7 @@ namespace Game.Editor
         {
             Rect enableRect = new Rect(cellRect.x + (cellRect.width / 2), cellRect.y, cellRect.width, cellRect.height);
             data.Enable = EditorGUI.Toggle(enableRect, data.Enable);
+            data.Enable = data.Enable && data.IsValid;
         }
 
         private void DrawNameItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)

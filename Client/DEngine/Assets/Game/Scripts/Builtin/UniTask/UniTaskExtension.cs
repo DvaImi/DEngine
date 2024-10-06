@@ -31,13 +31,16 @@ namespace Game
             eventComponent.Subscribe(WebRequestFailureEventArgs.EventId, OnWebRequestFailure);
 
             eventComponent.Subscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
-            eventComponent.Subscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);  
-            
+            eventComponent.Subscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
+
             eventComponent.Subscribe(PlaySoundSuccessEventArgs.EventId, OnPlaySoundSuccess);
-            eventComponent.Subscribe(PlaySoundFailureEventArgs.EventId, OnPlaySoundFailure); 
-            
+            eventComponent.Subscribe(PlaySoundFailureEventArgs.EventId, OnPlaySoundFailure);
+
             eventComponent.Subscribe(LoadDataTableSuccessEventArgs.EventId, OnLoadDataTableSuccess);
             eventComponent.Subscribe(LoadDataTableFailureEventArgs.EventId, OnLoadDataTableFailure);
+
+            eventComponent.Subscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
+            eventComponent.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
         }
 
         public static void Unsubscribe()
@@ -67,9 +70,12 @@ namespace Game
 
             eventComponent.SafeUnSubscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
             eventComponent.SafeUnSubscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
-            
+
             eventComponent.SafeUnSubscribe(LoadDataTableSuccessEventArgs.EventId, OnLoadDataTableSuccess);
             eventComponent.SafeUnSubscribe(LoadDataTableFailureEventArgs.EventId, OnLoadDataTableFailure);
+
+            eventComponent.SafeUnSubscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
+            eventComponent.SafeUnSubscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
         }
     }
 }

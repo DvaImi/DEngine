@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using DEngine;
 using UnityEditor;
 using UnityEngine;
+using Event = UnityEngine.Event;
+using Object = UnityEngine.Object;
 
 namespace Game.Editor
 {
@@ -113,7 +116,7 @@ namespace Game.Editor
                 return null;
             }
 
-            string absoluteFolderPath = Application.dataPath + "/" + inputPath[(inputPath.IndexOf("Assets/") + "Assets/".Length)..];
+            var absoluteFolderPath = Application.dataPath + "/" + inputPath[(inputPath.IndexOf("Assets/", StringComparison.Ordinal) + "Assets/".Length)..];
             return Utility.Path.GetRegularPath($"Assets{absoluteFolderPath[Application.dataPath.Length..]}");
         }
     }

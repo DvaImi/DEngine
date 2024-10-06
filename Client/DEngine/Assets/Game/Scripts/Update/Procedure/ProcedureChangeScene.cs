@@ -1,10 +1,11 @@
 ﻿using System;
-using DEngine.DataTable;
 using DEngine.Event;
 using DEngine.Procedure;
 using DEngine.Runtime;
+using Game.Update.Scene;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
-namespace Game.Update
+
+namespace Game.Update.Procedure
 {
     public class ProcedureChangeScene : ProcedureBase
     {

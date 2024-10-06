@@ -2,6 +2,7 @@
 using System.IO;
 using DEngine.Editor;
 using Game.Editor.ResourceTools;
+using Game.Editor.Toolbar;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
 using HybridCLR.Editor.Settings;
@@ -14,13 +15,14 @@ namespace Game.Editor.BuildPipeline
     {
         private const string EnableHybridCLRDefineSymbol = "ENABLE_HYBRIDCLR";
 
-        public static void SaveHybridCLR()
+        [EditorToolMenu("AOT Generic", 1, 0)]
+        public static void GenerateStripedAOT()
         {
-            HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
-            HybridCLRSettings.Instance.preserveHotUpdateAssemblies = GameSetting.Instance.PreserveAssemblies;
-            HybridCLRSettings.Save();
+            StripAOTDllCommand.GenerateStripedAOTDlls();
+            AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
         }
 
+        [EditorToolMenu("Compile", 1, 1)]
         public static void CompileHotfixDll()
         {
             BuildTarget buildTarget = GetBuildTarget(GameSetting.Instance.BuildPlatform);
@@ -28,6 +30,13 @@ namespace Game.Editor.BuildPipeline
             CopyDllAssets(buildTarget);
         }
 
+        public static void SaveHybridCLR()
+        {
+            HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
+            HybridCLRSettings.Instance.preserveHotUpdateAssemblies = GameSetting.Instance.PreserveAssemblies;
+            HybridCLRSettings.Save();
+        }
+        
         private static void CopyDllAssets(BuildTarget buildTarget)
         {
             if (string.IsNullOrEmpty(GameSetting.Instance.HotupdateAssembliesPath))
@@ -84,6 +93,7 @@ namespace Game.Editor.BuildPipeline
                 GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), hotUpdateAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} HotUpdateAssemblies success.");
             }
+
             assembliesVersion.Clear();
 
             //Copy PreserveAssemblies
@@ -95,12 +105,14 @@ namespace Game.Editor.BuildPipeline
                 File.Copy(oriFileName, desFileName, true);
                 assembliesVersion.Add(preserveAssemblyFullName);
             }
+
             if (assembliesVersion.Count > 0)
             {
                 string preserveAssembliesVersion = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, Constant.AssetVersion.PreserveAssembliesVersion + ".bytes");
                 GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), preserveAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} PreserveAssemblies success.");
             }
+
             assembliesVersion.Clear();
 
             // Copy AOTAssemblies
@@ -113,6 +125,7 @@ namespace Game.Editor.BuildPipeline
                     Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOTAssemblies.");
                     continue;
                 }
+
                 desFileName = Path.Combine(GameSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
                 assembliesVersion.Add(aotAssemblyFullName);
@@ -124,6 +137,7 @@ namespace Game.Editor.BuildPipeline
                 GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), aotAssembliesVersion);
                 Debug.Log($"Copy {buildTarget} AOTAssemblies success.");
             }
+
             AssetDatabase.Refresh();
         }
 
@@ -135,6 +149,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     return;
                 }
+
                 EnableHybridCLR();
             }
         }
