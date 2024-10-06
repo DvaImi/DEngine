@@ -15,13 +15,6 @@ namespace Game.Editor.BuildPipeline
     {
         private const string EnableHybridCLRDefineSymbol = "ENABLE_HYBRIDCLR";
 
-        public static void SaveHybridCLR()
-        {
-            HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
-            HybridCLRSettings.Instance.preserveHotUpdateAssemblies = GameSetting.Instance.PreserveAssemblies;
-            HybridCLRSettings.Save();
-        }
-
         [EditorToolMenu("AOT Generic", 1, 0)]
         public static void GenerateStripedAOT()
         {
@@ -37,6 +30,13 @@ namespace Game.Editor.BuildPipeline
             CopyDllAssets(buildTarget);
         }
 
+        public static void SaveHybridCLR()
+        {
+            HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
+            HybridCLRSettings.Instance.preserveHotUpdateAssemblies = GameSetting.Instance.PreserveAssemblies;
+            HybridCLRSettings.Save();
+        }
+        
         private static void CopyDllAssets(BuildTarget buildTarget)
         {
             if (string.IsNullOrEmpty(GameSetting.Instance.HotupdateAssembliesPath))

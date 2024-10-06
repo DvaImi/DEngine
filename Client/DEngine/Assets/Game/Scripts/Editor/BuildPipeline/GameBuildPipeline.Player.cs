@@ -10,14 +10,6 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        public static void SaveBuildInfo()
-        {
-            BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
-            builtinData.BuildInfo = GameSetting.Instance.BuildInfo;
-            EditorUtility.SetDirty(builtinData);
-            AssetDatabase.SaveAssets();
-        }
-
         [EditorToolMenu("BuildPlayer", 1, 10)]
         public static void BuildPlayer()
         {
@@ -39,6 +31,14 @@ namespace Game.Editor.BuildPipeline
             {
                 Debug.Log("Build failed ");
             }
+        }
+        
+        public static void SaveBuildInfo()
+        {
+            BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
+            builtinData.BuildInfo = GameSetting.Instance.BuildInfo;
+            EditorUtility.SetDirty(builtinData);
+            AssetDatabase.SaveAssets();
         }
 
         public static BuildReport BuildApplication(BuildTarget platform)
@@ -78,7 +78,7 @@ namespace Game.Editor.BuildPipeline
 
         public static string GetBuildAppFullName()
         {
-            return Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform], Application.productName + GetFileExtensionForPlatform(GetBuildTarget((int)m_OriginalPlatform)));
+            return Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform], Application.productName + GetFileExtensionForPlatform(GetBuildTarget((int)s_OriginalPlatform)));
         }
 
         public static void SaveBuildSetting()

@@ -17,6 +17,8 @@ namespace Game.Editor.Toolbar
         private static readonly List<EditorToolMenuAttribute> RightMenu = new();
         private static readonly Dictionary<string, MethodInfo> LeftCachedMethods = new();
         private static readonly Dictionary<string, MethodInfo> RightCachedMethods = new();
+        private static readonly Dictionary<string, MethodInfo> LeftToolbarCustomGUI = new();
+        private static readonly Dictionary<string, MethodInfo> RightToolbarCustomGUI = new();
 
         static EditorToolbarExtension()
         {
@@ -44,13 +46,29 @@ namespace Game.Editor.Toolbar
                         {
                             if (attribute.Align == 0)
                             {
+                                if (attribute.UseCustomGUI)
+                                {
+                                    LeftToolbarCustomGUI[attribute.MenuName!] = method;
+                                }
+                                else
+                                {
+                                    LeftCachedMethods[attribute.MenuName!] = method;
+                                }
+
                                 LeftMenu.Add(attribute);
-                                LeftCachedMethods[attribute.MenuName] = method;
                             }
                             else
                             {
+                                if (attribute.UseCustomGUI)
+                                {
+                                    RightToolbarCustomGUI[attribute.MenuName!] = method;
+                                }
+                                else
+                                {
+                                    RightCachedMethods[attribute.MenuName!] = method;
+                                }
+
                                 RightMenu.Add(attribute);
-                                RightCachedMethods[attribute.MenuName] = method;
                             }
                         }
                     }
@@ -159,9 +177,16 @@ namespace Game.Editor.Toolbar
                 for (var i = 0; i < LeftMenu.Count; i++)
                 {
                     var menu = LeftMenu[i];
-                    if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
+                    if (menu.UseCustomGUI)
                     {
-                        CallMethod(0, menu.MenuName);
+                        CallCustomGUIMethod(0, menu.MenuName);
+                    }
+                    else
+                    {
+                        if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
+                        {
+                            CallMethod(0, menu.MenuName);
+                        }
                     }
 
                     GUILayout.Space(5F);
@@ -179,13 +204,22 @@ namespace Game.Editor.Toolbar
                 for (var i = 0; i < RightMenu.Count; i++)
                 {
                     var menu = RightMenu[i];
-                    if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
+                    if (menu.UseCustomGUI)
                     {
-                        CallMethod(1, menu.MenuName);
+                        CallCustomGUIMethod(1, menu.MenuName);
+                    }
+                    else
+                    {
+                        if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
+                        {
+                            CallMethod(1, menu.MenuName);
+                        }
                     }
 
                     GUILayout.Space(5F);
                 }
+
+                GUILayout.Space(10F);
             }
             GUILayout.EndHorizontal();
         }
@@ -233,6 +267,38 @@ namespace Game.Editor.Toolbar
 
 
             Debug.LogWarning($"Method not found for menu name: {menuName}");
+        }
+
+        private static void CallCustomGUIMethod(int align, string menuName)
+        {
+            if (align == 0)
+            {
+                if (LeftToolbarCustomGUI.TryGetValue(menuName, out var methodInfo))
+                {
+                    try
+                    {
+                        methodInfo.Invoke(null, null);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
+            }
+            else
+            {
+                if (RightToolbarCustomGUI.TryGetValue(menuName, out var methodInfo))
+                {
+                    try
+                    {
+                        methodInfo.Invoke(null, null);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
+            }
         }
     }
 }

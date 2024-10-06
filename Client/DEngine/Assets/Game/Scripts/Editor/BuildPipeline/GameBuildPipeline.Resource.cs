@@ -17,12 +17,6 @@ namespace Game.Editor.BuildPipeline
     /// </summary>
     public static partial class GameBuildPipeline
     {
-        public static string GetUpdatePrefixUri(Platform platform)
-        {
-            return Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, GameSetting.Instance.LatestGameVersion, GameSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
-        }
-
-
         [EditorToolMenu("Build Resource", 1, 3)]
         public static void BuildResource()
         {
@@ -34,26 +28,6 @@ namespace Game.Editor.BuildPipeline
             OnPreprocess();
             BuildResource(GetPlatform(GameSetting.Instance.BuildPlatform), output, difference);
             OnPostprocess();
-        }
-
-        public static void ClearResource()
-        {
-            GameUtility.IO.Delete(GameSetting.Instance.BundlesOutput);
-            ResourceBuilderController controller = new ResourceBuilderController();
-            if (controller.Load())
-            {
-                controller.InternalResourceVersion = GameSetting.Instance.InternalResourceVersion = 0;
-                controller.Save();
-                GameSetting.Instance.SaveSetting();
-            }
-
-            if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))
-            {
-                GameUtility.IO.Delete(Application.streamingAssetsPath);
-            }
-
-            AssetDatabase.Refresh();
-            Debug.Log("Clear success");
         }
 
         public static void BuildResource(Platform platform, string outputDirectory, bool forceRebuild = false, bool difference = false)
@@ -80,9 +54,7 @@ namespace Game.Editor.BuildPipeline
                 builderController.ProcessResourceComplete += OnProcessResourceComplete;
                 builderController.BuildResourceError += OnBuildResourceError;
                 builderController.ProcessDifferenceComplete += OnPostprocessDifference;
-                string buildMessage = string.Empty;
-                MessageType buildMessageType = MessageType.None;
-                GetBuildMessage(builderController, out buildMessage, out buildMessageType);
+                GetBuildMessage(builderController, out var buildMessage, out var buildMessageType);
                 switch (buildMessageType)
                 {
                     case MessageType.None:
@@ -101,6 +73,26 @@ namespace Game.Editor.BuildPipeline
             }
 
             builderController.Save();
+        }
+
+        public static void ClearResource()
+        {
+            GameUtility.IO.Delete(GameSetting.Instance.BundlesOutput);
+            ResourceBuilderController controller = new ResourceBuilderController();
+            if (controller.Load())
+            {
+                controller.InternalResourceVersion = GameSetting.Instance.InternalResourceVersion = 0;
+                controller.Save();
+                GameSetting.Instance.SaveSetting();
+            }
+
+            if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))
+            {
+                GameUtility.IO.Delete(Application.streamingAssetsPath);
+            }
+
+            AssetDatabase.Refresh();
+            Debug.Log("Clear success");
         }
 
         public static void SaveResource()

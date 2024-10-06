@@ -20,11 +20,24 @@ namespace Game.Editor.Toolbar
         /// </summary>
         public int Order { get; private set; }
 
+        /// <summary>
+        /// 使用自定义绘制
+        /// </summary>
+        public bool UseCustomGUI { get; private set; }
+
         public EditorToolMenuAttribute(string menu, int align, int order)
         {
             MenuName = menu;
             Align = align;
             Order = order;
+        }
+
+        public EditorToolMenuAttribute(string menu, int align, int order, bool useCustomGUI)
+        {
+            MenuName = menu;
+            Align = align;
+            Order = order;
+            UseCustomGUI = useCustomGUI;
         }
     }
 }
