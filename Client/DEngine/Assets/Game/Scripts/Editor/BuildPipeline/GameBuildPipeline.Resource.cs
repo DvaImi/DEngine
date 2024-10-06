@@ -20,10 +20,10 @@ namespace Game.Editor.BuildPipeline
         [EditorToolMenu("Build Resource", 1, 3)]
         public static void BuildResource()
         {
-            BuildResource(GameSetting.Instance.BundlesOutput, GameSetting.Instance.Difference);
+            BuildResource(GameSetting.Instance.BundlesOutput);
         }
 
-        public static void BuildResource(string output, bool difference)
+        public static void BuildResource(string output, bool difference = false)
         {
             OnPreprocess();
             BuildResource(GetPlatform(GameSetting.Instance.BuildPlatform), output, difference);

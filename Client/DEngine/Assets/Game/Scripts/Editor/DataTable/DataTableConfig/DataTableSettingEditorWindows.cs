@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using DEngine.Editor;
 using Game.DataTable;
 using Game.Editor.ResourceTools;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Game.Editor.DataTableTools
 {
@@ -102,6 +99,7 @@ namespace Game.Editor.DataTableTools
                 if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
                     DataTableSetting.Instance.SaveSetting();
+                    Debug.Log("Save success.");
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -156,11 +154,11 @@ namespace Game.Editor.DataTableTools
             {
                 if (m_FoldoutDataTableGroup)
                 {
-                    GUIAssetPath("数据表文件导出路径", ref DataTableSetting.Instance.DataTableFolderPath, true);
-                    GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath, true);
-                    GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName);
-                    GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath, true);
-                    GUIOutPath("数据表格路径", ref DataTableSetting.Instance.DataTableExcelsFolder);
+                    EditorTools.GUIAssetPath("数据表文件导出路径", ref DataTableSetting.Instance.DataTableFolderPath, true);
+                    EditorTools.GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath, true);
+                    EditorTools.GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName);
+                    EditorTools.GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath, true);
+                    EditorTools.GUIOutFolderPath("数据表格路径", ref DataTableSetting.Instance.DataTableExcelsFolder);
                     DataTableSetting.Instance.NameSpace = EditorGUILayout.TextField("数据表命名空间", DataTableSetting.Instance.NameSpace);
                     DataTableSetting.Instance.NameRow = EditorGUILayout.IntField("字段名所在行", DataTableSetting.Instance.NameRow);
                     DataTableSetting.Instance.TypeRow = EditorGUILayout.IntField("类型名所在行", DataTableSetting.Instance.TypeRow);
@@ -170,7 +168,7 @@ namespace Game.Editor.DataTableTools
 
                     if (DataTableSetting.Instance.GenerateDataTableEnum)
                     {
-                        GUIAssetPath("数据表扩展枚举导出路径", ref DataTableSetting.Instance.DataTableEnumPath, true);
+                        EditorTools.GUIAssetPath("数据表扩展枚举导出路径", ref DataTableSetting.Instance.DataTableEnumPath, true);
                         EditorGUILayout.HelpBox("注意:数据表第三列将会作为枚举名称,Id 作为枚举值.", MessageType.Warning);
                     }
                 }
@@ -216,7 +214,7 @@ namespace Game.Editor.DataTableTools
                                 m_DataTableVersion.DynamicDataTable.Add(data.Key);
                             }
                         }
-                        
+
                         GameAssetVersionUitlity.CreateAssetVersion(m_DataTableVersion, DataTableSetting.DataTableVersion);
                     }
                 }
@@ -230,73 +228,11 @@ namespace Game.Editor.DataTableTools
             {
                 if (m_FoldoutLocalizationGroup)
                 {
-                    GUIAssetPath("字典导出路径", ref DataTableSetting.Instance.LocalizationPath);
-                    GUIOutPath("字典表格路径", ref DataTableSetting.Instance.LocalizationExcelsFolder);
+                    EditorTools.GUIAssetPath("字典导出路径", ref DataTableSetting.Instance.LocalizationPath);
+                    EditorTools.GUIOutFolderPath("字典表格路径", ref DataTableSetting.Instance.LocalizationExcelsFolder);
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
-        }
-
-        /// <summary>
-        /// 绘制unity 工程内部
-        /// </summary>
-        /// <param name="header"></param>
-        /// <param name="content"></param>
-        /// <param name="isFolder"></param>
-        private void GUIAssetPath(string header, ref string content, bool isFolder = false)
-        {
-            EditorGUILayout.BeginHorizontal();
-            {
-                bool valid = !AssetDatabase.LoadAssetAtPath<Object>(content);
-                GUIStyle style = new GUIStyle(EditorStyles.label);
-                style.normal.textColor = Color.yellow;
-                content = EditorGUILayout.TextField(header, content, valid ? style : EditorStyles.label);
-                Rect rect = GUILayoutUtility.GetLastRect();
-                if (DropPathUtility.DropPath(rect, out string path, isFolder))
-                {
-                    if (!string.Equals(path, content, StringComparison.Ordinal))
-                    {
-                        content = path;
-                    }
-                }
-
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
-                {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
-                }
-            }
-            EditorGUILayout.EndHorizontal();
-        }
-
-        /// <summary>
-        /// 绘制外部路径
-        /// </summary>
-        /// <param name="header"></param>
-        /// <param name="content"></param>
-        private void GUIOutPath(string header, ref string content)
-        {
-            EditorGUILayout.BeginHorizontal();
-            {
-                EditorGUILayout.LabelField(header, content);
-
-                if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
-                {
-                    string directory = EditorUtility.OpenFolderPanel("Select Output Directory", content, string.Empty);
-                    if (!string.IsNullOrEmpty(directory))
-                    {
-                        if (Directory.Exists(directory) && directory != content)
-                        {
-                            content = directory;
-                        }
-                    }
-                }
-
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
-                {
-                    OpenFolder.Execute(content);
-                }
-            }
-            EditorGUILayout.EndHorizontal();
         }
 
         private void GUIPreload(string dataTableName, ref bool isStatic)

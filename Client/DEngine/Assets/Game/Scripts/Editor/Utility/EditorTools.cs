@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Linq;
 using System.IO;
 using System.Text;
+using DEngine.Editor;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -405,6 +406,122 @@ namespace Game.Editor
         public static Texture GetIcon(string name)
         {
             return EditorGUIUtility.IconContent(name).image as Texture2D;
+        }
+
+        /// <summary>
+        /// 绘制unity 工程内部
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="content"></param>
+        /// <param name="isFolder"></param>
+        public static void GUIAssetPath(string header, ref string content, bool isFolder = false)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
+                {
+                    normal = new GUIStyleState
+                    {
+                        textColor = Color.yellow
+                    }
+                };
+                bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
+                content = EditorGUILayout.TextField(header, content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                Rect rect = GUILayoutUtility.GetLastRect();
+                if (DropPathUtility.DropPath(rect, out string path, isFolder))
+                {
+                    if (!string.Equals(path, content, StringComparison.Ordinal))
+                    {
+                        content = path;
+                    }
+                }
+
+                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                {
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        /// <summary>
+        /// 绘制外部文件夹路径
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="path"></param>
+        public static void GUIOutFolderPath(string header, ref string path)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
+                {
+                    normal = new GUIStyleState
+                    {
+                        textColor = Color.yellow
+                    }
+                };
+
+                bool invalid = !Directory.Exists(path);
+                EditorGUILayout.LabelField(header, path, invalid ? warningLableGUIStyle : EditorStyles.label);
+
+                if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
+                {
+                    string directory = EditorUtility.OpenFolderPanel("Select Output Directory", path, string.Empty);
+                    if (!string.IsNullOrEmpty(directory))
+                    {
+                        if (Directory.Exists(directory) && directory != path)
+                        {
+                            path = directory;
+                        }
+                    }
+                }
+
+                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                {
+                    OpenFolder.Execute(path);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        /// <summary>
+        /// 绘制外部文件路径
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="path"></param>
+        /// <param name="extension"></param>
+        public static void GUIOutFilePath(string header, ref string path, string extension)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
+                {
+                    normal = new GUIStyleState
+                    {
+                        textColor = Color.yellow
+                    }
+                };
+                bool invalid = !File.Exists(path);
+                EditorGUILayout.LabelField(header, path, invalid ? warningLableGUIStyle : EditorStyles.label);
+
+                if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
+                {
+                    string file = EditorUtility.OpenFilePanel("Select Output File", path, extension);
+                    if (!string.IsNullOrEmpty(file))
+                    {
+                        if (File.Exists(file) && file != path)
+                        {
+                            path = file;
+                        }
+                    }
+                }
+
+                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                {
+                    EditorUtility.OpenWithDefaultApp(path);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
         #endregion

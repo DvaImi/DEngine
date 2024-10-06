@@ -89,6 +89,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     GameBuildPipeline.SaveResource();
                     GameSetting.Save();
+                    Debug.Log("Save success.");
                 }
             }
             GUILayout.EndHorizontal();

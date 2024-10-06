@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using DEngine.Editor.ResourceTools;
 using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
@@ -32,7 +33,28 @@ namespace Game.Editor.BuildPipeline
                 Debug.Log("Build failed ");
             }
         }
-        
+
+        public static void BuildPlayerV2(string channel, Platform platform)
+        {
+            BuildTarget target = GetBuildTarget(platform);
+            if (target != EditorUserBuildSettings.activeBuildTarget)
+            {
+                EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target);
+            }
+
+            BuildReport report = BuildApplicationV2(target, channel);
+            BuildSummary summary = report.summary;
+
+            if (summary.result == BuildResult.Succeeded)
+            {
+                Debug.Log("Build succeeded: " + GameUtility.String.GetByteLengthString((long)summary.totalSize));
+            }
+            else
+            {
+                Debug.Log("Build failed ");
+            }
+        }
+
         public static void SaveBuildInfo()
         {
             BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
@@ -58,6 +80,28 @@ namespace Game.Editor.BuildPipeline
                 locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
                 target = platform,
                 options = BuildOptions.CompressWithLz4 | BuildOptions.ShowBuiltPlayer
+            };
+
+            return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);
+        }
+
+        public static BuildReport BuildApplicationV2(BuildTarget platform, string channel)
+        {
+            string outputExtension = GetFileExtensionForPlatform(platform);
+            if (!Directory.Exists(GameSetting.Instance.AppOutput))
+            {
+                GameUtility.IO.CreateDirectoryIfNotExists(GameSetting.Instance.AppOutput);
+                GameSetting.Instance.SaveSetting();
+            }
+
+            string locationPath = Path.Combine(GameSetting.Instance.AppOutput, GetPlatformPath(platform), channel);
+            GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
+            BuildPlayerOptions buildPlayerOptions = new()
+            {
+                scenes = GameSetting.Instance.DefaultSceneNames,
+                locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
+                target = platform,
+                options = BuildOptions.CompressWithLz4
             };
 
             return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);

@@ -105,6 +105,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     GameBuildPipeline.SaveHybridCLR();
                     GameSetting.Save();
+                    Debug.Log("Save success.");
                 }
             }
             GUILayout.EndHorizontal();

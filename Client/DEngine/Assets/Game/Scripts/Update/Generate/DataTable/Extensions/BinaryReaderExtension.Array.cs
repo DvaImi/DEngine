@@ -6,13 +6,13 @@ namespace Game.Update
 {
 	public static partial class BinaryReaderExtension
 	{
-		public static Game.Test.TestEnum[] ReadGameTestTestEnumArray(this BinaryReader binaryReader)
+		public static string[] ReadStringArray(this BinaryReader binaryReader)
 		{
 			int count = binaryReader.Read7BitEncodedInt32();
-			Game.Test.TestEnum[] array = new Game.Test.TestEnum[count];
+			string[] array = new string[count];
 			for (int i = 0; i < count; i++)
 			{
-				array[i] = (Game.Test.TestEnum)binaryReader.Read7BitEncodedInt32();
+				array[i] = binaryReader.ReadString();
 			}
 			return array;
 		}

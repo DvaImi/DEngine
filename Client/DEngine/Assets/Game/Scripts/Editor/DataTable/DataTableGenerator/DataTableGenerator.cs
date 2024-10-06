@@ -62,6 +62,20 @@ namespace Game.Editor.DataTableTools
             }
         }
 
+        public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string folderPath, string binaryDataFileName)
+        {
+            FileInfo fileInfo = new FileInfo(Utility.Path.GetRegularPath(Path.Combine(folderPath, binaryDataFileName)));
+            if (fileInfo.Directory is { Exists: false })
+            {
+                fileInfo.Directory.Create();
+            }
+
+            if (!dataTableProcessor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
+            {
+                File.Delete(binaryDataFileName);
+            }
+        }
+
         public static void GenerateCodeFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
             dataTableProcessor.SetCodeGenerator(DataTableCodeGenerator);
@@ -80,6 +94,28 @@ namespace Game.Editor.DataTableTools
             }
 
             if (!dataTableProcessor.GenerateCodeFile(csharpCodeFileName, Encoding.UTF8, dataTableName) && File.Exists(csharpCodeFileName))
+            {
+                File.Delete(csharpCodeFileName);
+            }
+        }
+
+        public static void GenerateCodeFile(DataTableProcessor dataTableProcessor, string dataTableName, string csharpCodeFileName, string nameSpace)
+        {
+            dataTableProcessor.SetCodeGenerator(DataTableCodeGeneratorV2);
+            bool isChanged = CheckIsChanged(dataTableProcessor, dataTableName);
+            if (!isChanged)
+            {
+                Debug.Log($"DR{dataTableName} is not Changed,don't have to regenerate it");
+                return;
+            }
+
+            FileInfo fileInfo = new FileInfo(csharpCodeFileName);
+            if (fileInfo.Directory is { Exists: false })
+            {
+                fileInfo.Directory.Create();
+            }
+
+            if (!dataTableProcessor.GenerateCodeFile(csharpCodeFileName, Encoding.UTF8, (dataTableName, nameSpace)) && File.Exists(csharpCodeFileName))
             {
                 File.Delete(csharpCodeFileName);
             }
@@ -126,6 +162,35 @@ namespace Game.Editor.DataTableTools
                 nameSpaceBuilder.AppendLine($"using {nameSpace};");
             }
 
+            codeContent.Replace("__DATA_TABLE_PROPERTIES_NAMESPACE__", nameSpaceBuilder.ToString());
+        }
+
+        /// <summary>
+        ///  数据类型生成版本2
+        /// </summary>
+        /// <param name="dataTableProcessor"></param>
+        /// <param name="codeContent"></param>
+        /// <param name="userData"> (dataTableName, customNameSpace)</param>
+        private static void DataTableCodeGeneratorV2(DataTableProcessor dataTableProcessor, StringBuilder codeContent, object userData)
+        {
+            var (dataTableName, customNameSpace) = ((string, string))userData;
+            codeContent.Replace("__DATA_TABLE_CREATE_TIME__", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            codeContent.Replace("__DATA_TABLE_NAME_SPACE__", customNameSpace);
+            codeContent.Replace("__DATA_TABLE_CLASS_NAME__", "DR" + dataTableName);
+            codeContent.Replace("__DATA_TABLE_COMMENT__", dataTableProcessor.GetValue(0, 1) + "。");
+            codeContent.Replace("__DATA_TABLE_ID_COMMENT__", "获取" + dataTableProcessor.GetComment(dataTableProcessor.IdColumn) + "。");
+            codeContent.Replace("__DATA_TABLE_PROPERTIES__", GenerateDataTableProperties(dataTableProcessor));
+            codeContent.Replace("__DATA_TABLE_PARSER__", GenerateDataTableParser(dataTableProcessor));
+            codeContent.Replace("__DATA_TABLE_PROPERTY_ARRAY__", GenerateDataTablePropertyArray(dataTableProcessor));
+            _nameSpace = _nameSpace.Distinct().ToList();
+            StringBuilder nameSpaceBuilder = new StringBuilder();
+            foreach (string nameSpace in _nameSpace)
+            {
+                nameSpaceBuilder.AppendLine($"using {nameSpace};");
+            }
+
+            // 添加配置路径
+            nameSpaceBuilder.AppendLine($"using Game.Update;");
             codeContent.Replace("__DATA_TABLE_PROPERTIES_NAMESPACE__", nameSpaceBuilder.ToString());
         }
 

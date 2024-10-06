@@ -95,6 +95,7 @@ namespace Game.Editor.BuildPipeline
                     GameBuildPipeline.SaveBuildInfo();
                     GameBuildPipeline.SaveBuildSetting();
                     GameSetting.Save();
+                    Debug.Log("Save success.");
                 }
             }
             GUILayout.EndHorizontal();

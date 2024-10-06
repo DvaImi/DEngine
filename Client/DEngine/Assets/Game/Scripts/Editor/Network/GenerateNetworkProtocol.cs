@@ -10,7 +10,7 @@ namespace Game.Editor.NetworkProtocol
     {
         [MenuItem("Fantasy/Generate", priority = 100)]
         [EditorToolMenu("Generate Protocol", 0, 20)]
-        public static void Generate()
+        public static void GenerateAll()
         {
 #if UNITY_EDITOR_WIN
             EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Tools/Exporter/Run.bat"));
