@@ -21,31 +21,36 @@ namespace Game
         /// <param name="dataTableAssetName"></param>
         /// <param name="userData"></param>
         /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <returns>要获取的数据表。</returns>
         public static async UniTask<IDataTable<T>> GetDataTableAsync<T>(this DataTableComponent self, string dataTableName, string dataTableAssetName, object userData = null) where T : IDataRow
         {
-            if (self.HasDataTable<T>(dataTableName))
-            {
-                return await UniTask.FromResult(self.GetDataTable<T>());
-            }
-
             if (string.IsNullOrEmpty(dataTableName))
             {
                 Log.Warning("Data table name is invalid.");
                 return null;
             }
 
-            string[] splitNames = dataTableName.Split('_');
+            var splitNames = dataTableName.Split('_');
             if (splitNames.Length > 2)
             {
                 Log.Warning("Data table name is invalid.");
                 return null;
             }
-
-            string name = splitNames.Length > 1 ? splitNames[1] : null;
-            DataTableBase dataTable = self.CreateDataTable(typeof(T), name);
+            if (DataTableResult.ContainsKey(dataTableAssetName))
+            {
+                Log.Warning("The dataTable '{0}' has already been loaded in the task.", dataTableName);
+                return null;
+            }
+          
+            if (self.HasDataTable<T>(dataTableName))
+            {
+                return await UniTask.FromResult(self.GetDataTable<T>());
+            }
+            
+            var name = splitNames.Length > 1 ? splitNames[1] : null;
+            var dataTable = self.CreateDataTable(typeof(T), name);
             dataTable.ReadData(dataTableAssetName, Constant.AssetPriority.DataTableAsset, userData);
-            AwaitDataWrap<DataTableBase> result = AwaitDataWrap<DataTableBase>.Create(new UniTaskCompletionSource<DataTableBase>(), userData);
+            var result = AwaitDataWrap<DataTableBase>.Create(new UniTaskCompletionSource<DataTableBase>(), userData);
             DataTableResult.Add(dataTableAssetName, result);
             DataTableTypeCache[dataTableAssetName] = typeof(T);
             return await result.Source.Task as IDataTable<T>;

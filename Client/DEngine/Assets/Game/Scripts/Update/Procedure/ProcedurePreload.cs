@@ -9,7 +9,7 @@ using DEngine.Runtime;
 using UnityEngine;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
-namespace Game.Update
+namespace Game.Update.Procedure
 {
     public class ProcedurePreload : ProcedureBase
     {
@@ -58,7 +58,7 @@ namespace Game.Update
         private void PreloadResources()
         {
             m_LoadedFlag.Add(UpdateAssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), false);
-            GameEntry.Resource.LoadAsset(UpdateAssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), new LoadAssetCallbacks(new LoadAssetSuccessCallback(OnDataTableVersionLoadSuccess)));
+            GameEntry.Resource.LoadAsset(UpdateAssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true), new LoadAssetCallbacks(OnDataTableVersionLoadSuccess));
             LoadLocalization(GameEntry.Localization.Language.ToString());
             LoadLubanDataTable();
         }

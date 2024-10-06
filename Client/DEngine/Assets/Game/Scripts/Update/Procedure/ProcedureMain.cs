@@ -3,7 +3,7 @@
 using DEngine.Procedure;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
-namespace Game.Update
+namespace Game.Update.Procedure
 {
     public class ProcedureMain : ProcedureBase
     {

@@ -2,7 +2,7 @@
 using DEngine.DataTable;
 using DEngine.Runtime;
 
-namespace Game.Update
+namespace Game.Update.Scene
 {
     public static class SceneExtension
     {

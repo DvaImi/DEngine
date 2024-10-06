@@ -7,7 +7,7 @@
 using DEngine;
 using UnityEngine;
 
-namespace Game
+namespace Game.Update.Entity
 {
     /// <summary>
     /// 热更新层实体数据

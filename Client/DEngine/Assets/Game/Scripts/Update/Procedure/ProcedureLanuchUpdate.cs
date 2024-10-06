@@ -2,7 +2,7 @@
 using DEngine.Runtime;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
-namespace Game.Update
+namespace Game.Update.Procedure
 {
     public class ProcedureLanuchUpdate : ProcedureBase
     {
