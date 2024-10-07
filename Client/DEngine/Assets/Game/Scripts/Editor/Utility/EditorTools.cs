@@ -524,6 +524,21 @@ namespace Game.Editor
             EditorGUILayout.EndHorizontal();
         }
 
+        /// <summary>
+        /// 绘制 Toggle
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="isOn"></param>
+        public static void GUIToggle(string header, ref bool isOn)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.LabelField(header);
+                isOn = EditorGUILayout.Toggle(isOn);
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
         #endregion
 
         #region EditorConsole

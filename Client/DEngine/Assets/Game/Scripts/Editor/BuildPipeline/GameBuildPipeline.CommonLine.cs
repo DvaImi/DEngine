@@ -19,9 +19,7 @@ namespace Game.Editor.BuildPipeline
             {
                 Debug.Log("====================目标平台切换成功========================");
                 Debug.Log("====================生成游戏数据表========================");
-                GenerateLuban.Generate();
-                DataTableGeneratorMenu.GenerateDataTablesFormExcel();
-                DictionaryGenerator.GenerateLocalizationsFormExcel();
+                GeneratorDataTableCommonLine.GenerateAll();
                 Debug.Log("====================数据表生成结束========================");
                 Debug.Log("====================保存配置文件========================");
                 Debug.Log("====================保存配置文件========================");
