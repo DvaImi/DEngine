@@ -56,7 +56,7 @@ namespace Game.Editor.DataTableTools
 
             foreach (var data in m_DataTableName)
             {
-                m_DataTableMap[data] = m_DataTableVersion.StaticDataTable.Contains(data);
+                m_DataTableMap[data] = m_DataTableVersion.PreloadDataTable.Contains(data);
             }
         }
 
@@ -79,13 +79,13 @@ namespace Game.Editor.DataTableTools
             {
                 if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
-                    m_DataTableVersion.StaticDataTable.Clear();
+                    m_DataTableVersion.PreloadDataTable.Clear();
                     m_DataTableVersion.DynamicDataTable.Clear();
                     foreach (var data in m_DataTableMap)
                     {
                         if (data.Value)
                         {
-                            m_DataTableVersion.StaticDataTable.Add(data.Key);
+                            m_DataTableVersion.PreloadDataTable.Add(data.Key);
                         }
                         else
                         {
@@ -109,15 +109,15 @@ namespace Game.Editor.DataTableTools
             {
                 if (m_FoldoutPreloadGroup)
                 {
-                    EditorGUILayout.LabelField("数据表", "\t\t\t\t\t是否静态表", EditorStyles.label);
+                    EditorGUILayout.LabelField("数据表", "\t\t\t\t\t是否预加载", EditorStyles.label);
 
                     m_Updates.Clear();
 
                     foreach (var data in m_DataTableMap)
                     {
-                        bool isStatic = data.Value;
-                        EditorTools.GUIToggle(data.Key, ref isStatic);
-                        m_Updates.Add(new KeyValuePair<string, bool>(data.Key, isStatic));
+                        bool isPreload = data.Value;
+                        EditorTools.GUIToggle(data.Key, ref isPreload);
+                        m_Updates.Add(new KeyValuePair<string, bool>(data.Key, isPreload));
                     }
 
                     foreach (var update in m_Updates)

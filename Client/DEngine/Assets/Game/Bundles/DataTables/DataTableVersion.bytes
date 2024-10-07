@@ -1,1 +1,1 @@
-{"StaticDataTable":["UIForm","UIGroup","UISound"],"DynamicDataTable":["Entity","Music","Scene","Sound"]}
+{"PreloadDataTable":["UIForm","UIGroup","UISound"],"DynamicDataTable":["Entity","Music","Scene","Sound"]}

@@ -7,9 +7,9 @@ namespace Game.DataTable
     public class GameDataTableVersion
     {
         /// <summary>
-        /// 常驻数据表
+        /// 预加载数据表
         /// </summary>
-        public HashSet<string> StaticDataTable { get; set; } = new();
+        public HashSet<string> PreloadDataTable { get; set; } = new();
 
         /// <summary>
         /// 动态数据表

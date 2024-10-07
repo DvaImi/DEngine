@@ -46,7 +46,7 @@ namespace Game.Update.Procedure
             if (dataTableVersion != null)
             {
                 List<UniTask> loadTask = new List<UniTask>();
-                foreach (var dataTableName in dataTableVersion.StaticDataTable)
+                foreach (var dataTableName in dataTableVersion.PreloadDataTable)
                 {
                     loadTask.Add(GameEntry.DataTable.LoadDataTableAsync(dataTableName));
                 }
