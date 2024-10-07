@@ -12,8 +12,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Benchmark\" />
       <Folder Include="Outer\NormalMessage\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Benchmark\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Benchmark\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Benchmark\**" />
     </ItemGroup>
 
 </Project>
