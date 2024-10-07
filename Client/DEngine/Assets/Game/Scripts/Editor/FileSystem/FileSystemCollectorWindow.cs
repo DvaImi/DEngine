@@ -67,13 +67,13 @@ namespace Game.Editor.ResourceTools
         {
             m_SerializedCollector.Update();
 
-            GUILayout.Label("Raw File Collector", EditorStyles.boldLabel);
+            GUILayout.Label("File System Collector", EditorStyles.boldLabel);
 
             GUILayout.Space(5);
             EditorGUILayout.ObjectField("Export Path", m_ExportPath, typeof(DefaultAsset), false);
             EditorGUILayout.BeginHorizontal();
             {
-                EditorGUILayout.LabelField("Raw File Handler", GUILayout.Width(160f));
+                EditorGUILayout.LabelField("File System Handler", GUILayout.Width(160f));
                 int selectedIndex = EditorGUILayout.Popup(m_FileSystemCollector.FileSystemHandlerTypeNameIndex, m_FileSystemHandlerTypeNames);
                 if (selectedIndex != m_FileSystemCollector.FileSystemHandlerTypeNameIndex)
                 {
@@ -81,11 +81,11 @@ namespace Game.Editor.ResourceTools
                     m_FileSystemCollector.FileSystemHelperTypeName = selectedIndex <= 0 ? string.Empty : m_FileSystemHandlerTypeNames[selectedIndex];
                     if (RefreshRawFileHandler())
                     {
-                        Debug.Log("Set raw file handler success.");
+                        Debug.Log("Set file system handler success.");
                     }
                     else
                     {
-                        Debug.LogWarning("Set raw file handler failure.");
+                        Debug.LogWarning("Set  file system handler failure.");
                     }
                 }
             }
@@ -93,7 +93,7 @@ namespace Game.Editor.ResourceTools
             GUILayout.Space(10);
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, false, false);
             {
-                EditorGUILayout.PropertyField(m_FileSystemDatasProperty, new GUIContent("Raw File Defines"), true);
+                EditorGUILayout.PropertyField(m_FileSystemDatasProperty, new GUIContent("File System Defines"), true);
             }
             EditorGUILayout.EndScrollView();
 
