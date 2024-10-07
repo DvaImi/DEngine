@@ -77,7 +77,7 @@ namespace Game.Editor.ResourceTools
             ResourceEditorController resourceEditorController = new();
             resourceEditorController.Load();
 
-            collectorData ??= ResourcePackagesCollector.GetBundleCollectorByIndex(GameSetting.Instance.AssetBundleCollectorIndex);
+            collectorData ??= ResourcePackagesCollector.GetResourceGroupsCollector(GameSetting.Instance.AssetBundleCollectorIndex);
             Debug.Log($"Export {collectorData.PackageName} ...");
 
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);

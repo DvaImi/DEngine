@@ -358,7 +358,7 @@ namespace Game.Editor
                             string path = DragAndDrop.paths[i];
                             if (!CanAddAssetCollectorRow(path))
                             {
-                                Debug.LogWarning("Asset path is duplicated");
+                                Debug.LogWarning($"Asset path '{path}' is duplicated");
                                 continue;
                             }
 

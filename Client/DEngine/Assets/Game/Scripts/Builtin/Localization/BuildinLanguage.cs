@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace Game.Localization
 {
-
-    [CreateAssetMenu(fileName = "BuildinLanguage")]
+    [CreateAssetMenu(menuName = "Game/BuildinLanguage", order = 1)]
     public class BuildinLanguage : ScriptableObject
     {
         public List<OriginalPhrases> OriginalPhrases = new List<OriginalPhrases>();

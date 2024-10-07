@@ -120,5 +120,15 @@
         {
             return DEngine.Utility.Text.Format("Assets/Game/Bundles/ScriptableAssets/{0}.asset", assetName);
         }
+
+        /// <summary>
+        /// 获取原生文件系统 资源路径
+        /// </summary>
+        /// <param name="assetName"></param>
+        /// <returns></returns>
+        public static string GetFileSystemAsset(string assetName)
+        {
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/FileSystem/{0}.bytes", assetName);
+        }
     }
 }

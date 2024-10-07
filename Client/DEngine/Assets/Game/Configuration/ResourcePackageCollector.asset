@@ -20,15 +20,6 @@ MonoBehaviour:
       EnableGroup: 1
       Description: "\u57FA\u7840\u8D44\u6E90"
       AssetCollectors:
-      - Name: cfg
-        Enable: 1
-        FileSystem: 
-        Groups: Base
-        Variant: 
-        Asset: {fileID: 102900000, guid: be6134754f035424aadfe7828332fed0, type: 3}
-        LoadType: 0
-        Packed: 1
-        FilterRule: CollectAll
       - Name: 
         Enable: 1
         FileSystem: 
@@ -65,7 +56,7 @@ MonoBehaviour:
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll
-      - Name: cfg
+      - Name: xxoo
         Enable: 1
         FileSystem: 
         Groups: Base
@@ -74,13 +65,13 @@ MonoBehaviour:
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll
-      - Name: cfg
+      - Name: 
         Enable: 1
-        FileSystem: 
+        FileSystem: cfg
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: 344d26ddca1e32e49a3b57d54ac1eeb6, type: 3}
-        LoadType: 0
+        LoadType: 4
         Packed: 1
         FilterRule: CollectAll
       - Name: 
@@ -93,11 +84,11 @@ MonoBehaviour:
         Packed: 1
         FilterRule: CollectAll
       - Name: 
-        Enable: 0
+        Enable: 1
         FileSystem: 
         Groups: Base
         Variant: 
-        Asset: {fileID: 102900000, guid: de939860c13b0d4418f5959cacb79d92, type: 3}
+        Asset: {fileID: 102900000, guid: be6134754f035424aadfe7828332fed0, type: 3}
         LoadType: 0
         Packed: 1
         FilterRule: CollectAll

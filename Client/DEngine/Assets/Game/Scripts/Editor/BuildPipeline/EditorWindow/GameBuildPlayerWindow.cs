@@ -69,6 +69,8 @@ namespace Game.Editor.BuildPipeline
             }
             EditorGUILayout.EndScrollView();
 
+            GUILayout.FlexibleSpace();
+            
             GUILayout.BeginHorizontal("box");
             {
                 if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))

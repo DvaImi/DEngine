@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 public class ShaderVariantCollectorWindow : EditorWindow
 {
-    [MenuItem("Game/Resource Tools/ShaderVariantCollector", false, 100)]
+    [MenuItem("Game/Resource Tools/ShaderVariantCollector", false, 1)]
     public static void OpenWindow()
     {
         ShaderVariantCollectorWindow window = GetWindow<ShaderVariantCollectorWindow>("着色器变种收集工具", true);

@@ -1,7 +1,6 @@
 ﻿using System;
 using DEngine.DataTable;
 using DEngine.Runtime;
-using Game.Update;
 using UnityEngine;
 
 namespace Game.Update
@@ -10,6 +9,39 @@ namespace Game.Update
     {
         public static readonly char[] DataSplitSeparators = { '\t' };
         public static readonly char[] DataTrimSeparators = { '\"' };
+
+        public static DataTableBase LoadDataTableFormFileSystem(this DataTableComponent self, string dataTableName, object userData = null)
+        {
+            if (string.IsNullOrEmpty(dataTableName))
+            {
+                Log.Warning("Data table name is invalid.");
+                return null;
+            }
+
+            var splitNames = dataTableName.Split('_');
+            if (splitNames.Length > 2)
+            {
+                Log.Warning("Data table name is invalid.");
+                return null;
+            }
+
+
+            var dataRowClassName = "Game.Update.DR" + splitNames[0];
+            var dataRowType = AssemblyUtility.GetType(dataRowClassName);
+            if (dataRowType == null)
+            {
+                Log.Warning("Can not get data row type with class name '{0}'.", dataRowClassName);
+                return null;
+            }
+
+            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName + "_table", true);
+
+            var name = splitNames.Length > 1 ? splitNames[1] : null;
+            var dataTable = self.CreateDataTable(dataRowType, name);
+            var bytes = GameEntry.Resource.LoadBinaryFromFileSystem(dataTableAssetName);
+            dataTable.ParseData(bytes, userData);
+            return dataTable;
+        }
 
         public static void LoadDataTable(this DataTableComponent dataTableComponent, string dataTableName, string dataTableAssetName, object userData)
         {
@@ -33,6 +65,7 @@ namespace Game.Update
                 Log.Warning("Can not get data row type with class name '{0}'.", dataRowClassName);
                 return;
             }
+
             string name = splitedNames.Length > 1 ? splitedNames[1] : null;
             DataTableBase dataTable = dataTableComponent.CreateDataTable(dataRowType, name);
             dataTable.ReadData(dataTableAssetName, Constant.AssetPriority.DataTableAsset, userData);

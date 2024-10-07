@@ -24,12 +24,11 @@ namespace Game.Editor
         }
 
 
-        [MenuItem("Assets/Get Asset Path", priority = 3)]
-        static void GetAssetPath()
+        [MenuItem("Assets/Copy Asset Path", priority = 3)]
+        static void CopyAssetPath()
         {
-            UnityEngine.Object selObj = Selection.activeObject;
-
-            if (selObj != null)
+            var selObj = Selection.activeObject;
+            if (selObj)
             {
                 string assetPath = AssetDatabase.GetAssetPath(selObj);
                 EditorGUIUtility.systemCopyBuffer = assetPath;

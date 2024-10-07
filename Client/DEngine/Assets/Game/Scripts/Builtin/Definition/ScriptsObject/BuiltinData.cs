@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game
 {
-    [CreateAssetMenu]
+    [CreateAssetMenu(menuName = "Game/BuiltinData", order = 0)]
     public class BuiltinData : ScriptableObject
     {
         /// <summary>
