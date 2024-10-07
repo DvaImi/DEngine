@@ -45,7 +45,7 @@ namespace Game.Editor
         private bool m_IsDirty = false;
         private float PackageSpace => 200;
 
-        [MenuItem("Game/Resource Tools/Resource Collector", false, 42)]
+        [MenuItem("Game/Resource Tools/Resource Collector", false, 0)]
         [EditorToolbarMenu("Resource Collector", 0, 100)]
         public static void OpenWindow()
         {
@@ -356,6 +356,12 @@ namespace Game.Editor
                         for (int i = 0; i < DragAndDrop.paths.Length; i++)
                         {
                             string path = DragAndDrop.paths[i];
+                            if (!CanAddAssetCollectorRow(path))
+                            {
+                                Debug.LogWarning("Asset path is duplicated");
+                                continue;
+                            }
+
                             AddAssetCollectorRow(path);
                         }
                     }
@@ -598,6 +604,16 @@ namespace Game.Editor
                 column.DrawCell = drawCellMethod;
             }
             return column;
+        }
+
+        /// <summary>
+        /// 处理拖拽添加时候的冗余
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private bool CanAddAssetCollectorRow(string path)
+        {
+            return string.IsNullOrEmpty(path) || m_SelectAssetBundleCollector.Groups.All(group => group.AssetCollectors.All(assetCollector => assetCollector.AssetPath != path));
         }
 
         /// <summary>
