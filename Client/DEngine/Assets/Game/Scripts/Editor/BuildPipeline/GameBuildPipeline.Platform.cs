@@ -10,7 +10,7 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        [EditorToolMenu("SwitchPlatform", 0, 300, true)]
+        [EditorToolbarMenu("SwitchPlatform", 0, 300, true)]
         public static void SwitchPlatform()
         {
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);

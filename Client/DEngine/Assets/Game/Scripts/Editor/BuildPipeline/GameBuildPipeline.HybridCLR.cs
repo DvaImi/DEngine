@@ -15,14 +15,14 @@ namespace Game.Editor.BuildPipeline
     {
         private const string EnableHybridCLRDefineSymbol = "ENABLE_HYBRIDCLR";
 
-        [EditorToolMenu("AOT Generic", 1, 0)]
+        [EditorToolbarMenu("AOT Generic", 1, 0)]
         public static void GenerateStripedAOT()
         {
             StripAOTDllCommand.GenerateStripedAOTDlls();
             AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
         }
 
-        [EditorToolMenu("Compile", 1, 1)]
+        [EditorToolbarMenu("Compile", 1, 1)]
         public static void CompileHotfixDll()
         {
             BuildTarget buildTarget = GetBuildTarget(GameSetting.Instance.BuildPlatform);

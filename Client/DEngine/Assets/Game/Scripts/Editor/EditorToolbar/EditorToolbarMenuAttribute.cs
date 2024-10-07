@@ -3,7 +3,7 @@ using System;
 namespace Game.Editor.Toolbar
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class EditorToolMenuAttribute : Attribute
+    public class EditorToolbarMenuAttribute : Attribute
     {
         /// <summary>
         /// 按钮路径
@@ -25,14 +25,14 @@ namespace Game.Editor.Toolbar
         /// </summary>
         public bool UseCustomGUI { get; private set; }
 
-        public EditorToolMenuAttribute(string menu, int align, int order)
+        public EditorToolbarMenuAttribute(string menu, int align, int order)
         {
             MenuName = menu;
             Align = align;
             Order = order;
         }
 
-        public EditorToolMenuAttribute(string menu, int align, int order, bool useCustomGUI)
+        public EditorToolbarMenuAttribute(string menu, int align, int order, bool useCustomGUI)
         {
             MenuName = menu;
             Align = align;

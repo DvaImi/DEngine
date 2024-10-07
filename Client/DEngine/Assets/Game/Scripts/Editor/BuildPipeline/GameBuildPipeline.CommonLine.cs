@@ -10,7 +10,7 @@ namespace Game.Editor.BuildPipeline
     public static partial class GameBuildPipeline
     {
         [MenuItem("Game/Build Pipeline/Automated Build", false, 100)]
-        [EditorToolMenu("AutomatedBuild", 1, 100)]
+        [EditorToolbarMenu("AutomatedBuild", 1, 100)]
         private static void AutomatedBuild()
         {
             EditorTools.CloseAllCustomEditorWindows();

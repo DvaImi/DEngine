@@ -9,7 +9,7 @@ namespace Game.Editor.NetworkProtocol
     public static class GenerateNetworkProtocol
     {
         [MenuItem("Fantasy/Generate", priority = 100)]
-        [EditorToolMenu("Generate Protocol", 0, 20)]
+        [EditorToolbarMenu("Generate Protocol", 0, 20)]
         public static void GenerateAll()
         {
 #if UNITY_EDITOR_WIN

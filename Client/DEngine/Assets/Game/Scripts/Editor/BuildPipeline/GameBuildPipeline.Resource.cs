@@ -17,7 +17,7 @@ namespace Game.Editor.BuildPipeline
     /// </summary>
     public static partial class GameBuildPipeline
     {
-        [EditorToolMenu("Build Resource", 1, 3)]
+        [EditorToolbarMenu("Build Resource", 1, 3)]
         public static void BuildResource()
         {
             BuildResource(GameSetting.Instance.BundlesOutput);

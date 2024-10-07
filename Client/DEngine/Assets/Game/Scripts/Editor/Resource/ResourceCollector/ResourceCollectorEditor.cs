@@ -46,7 +46,7 @@ namespace Game.Editor
         private float PackageSpace => 200;
 
         [MenuItem("Game/Resource Tools/Resource Collector", false, 42)]
-        [EditorToolMenu("Resource Collector", 0, 100)]
+        [EditorToolbarMenu("Resource Collector", 0, 100)]
         public static void OpenWindow()
         {
             var window = GetWindow<ResourceCollectorEditor>("资源收集器");

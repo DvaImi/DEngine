@@ -22,7 +22,7 @@ namespace Game.Editor.DataTableTools
         }
 
         [MenuItem("DataTable/Generate/DataTables", priority = 1)]
-        [EditorToolMenu("Generate DataTable", 0, 3)]
+        [EditorToolbarMenu("Generate DataTable", 0, 3)]
         public static void GenerateDataTablesFormExcel()
         {
             DataTableSetting.Instance.RefreshDataTables("*.bytes");
@@ -135,7 +135,7 @@ namespace Game.Editor.DataTableTools
         }
 
         [MenuItem("DataTable/Generate/Luban", priority = 3)]
-        [EditorToolMenu("Generate Luban", 0, 4)]
+        [EditorToolbarMenu("Generate Luban", 0, 4)]
         public static void GenerateLuban()
         {
 #if UNITY_EDITOR_WIN

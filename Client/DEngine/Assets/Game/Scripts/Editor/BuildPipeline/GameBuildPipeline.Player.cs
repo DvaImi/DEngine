@@ -11,7 +11,7 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        [EditorToolMenu("BuildPlayer", 1, 10)]
+        [EditorToolbarMenu("BuildPlayer", 1, 10)]
         public static void BuildPlayer()
         {
             SaveBuildInfo();
