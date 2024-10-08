@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using DEngine;
 using Game.Editor.BuildPipeline;
-using Game.Update;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -17,7 +15,6 @@ namespace Game.Editor.ResourceTools
         private FileSystemCollector m_FileSystemCollector;
         private Vector2 m_ScrollPosition;
         private GUIContent m_BuildContent;
-        private Object m_ExportPath;
         private bool m_ExportFlag;
         private IFileSystemDataHandlerHelper m_FileSystemDataHandlerHelper;
         private string[] m_FileSystemHandlerTypeNames;
@@ -42,14 +39,6 @@ namespace Game.Editor.ResourceTools
             {
                 m_FoldoutMap[fileSystemData.FileSystem] = true;
             }
-
-            string folder = EditorTools.GetRegularPath(Path.GetDirectoryName(UpdateAssetUtility.GetFileSystemAsset("")));
-            if (EditorTools.CreateDirectory(folder))
-            {
-                AssetDatabase.Refresh();
-            }
-
-            m_ExportPath = AssetDatabase.LoadAssetAtPath<Object>(folder);
             List<string> temp = new List<string> { NoneOptionName };
             temp.AddRange(GameEditorAssembly.GetRuntimeOrEditorTypeNames(typeof(IFileSystemDataHandlerHelper)));
             m_FileSystemHandlerTypeNames = temp.ToArray();
@@ -71,7 +60,6 @@ namespace Game.Editor.ResourceTools
             GUILayout.Label("File System Collector", EditorStyles.boldLabel);
 
             GUILayout.Space(5);
-            EditorGUILayout.ObjectField("Export Path", m_ExportPath, typeof(DefaultAsset), false);
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("File System Handler", GUILayout.Width(160f));
@@ -189,7 +177,7 @@ namespace Game.Editor.ResourceTools
                 }
 
                 string outputPath = fileSystemData.OutPutPath;
-                EditorTools.GUIAssetPath("导出路径", ref fileSystemData.OutPutPath, true);
+                EditorTools.GUIAssetPath("Export Path", ref fileSystemData.OutPutPath, true);
 
                 if (outputPath != fileSystemData.OutPutPath)
                 {

@@ -33,22 +33,22 @@ namespace Game.Editor.BuildPipeline
 
             try
             {
-                foreach (FileSystemData rawFileDefine in fileSystemCollector.FileSystemDatas)
+                foreach (FileSystemData fileSystemData in fileSystemCollector.FileSystemDatas)
                 {
-                    if (!fileSystemMap.TryGetValue(rawFileDefine.FileSystem, out var fileSystem))
+                    if (!fileSystemMap.TryGetValue(fileSystemData.FileSystem, out var fileSystem))
                     {
-                        fileSystem = fileSystemManager.CreateFileSystem(UpdateAssetUtility.GetFileSystemAsset(rawFileDefine.FileSystem), FileSystemAccess.Write, rawFileDefine.AssetPaths.Count, rawFileDefine.AssetPaths.Count);
-                        fileSystemMap[rawFileDefine.FileSystem] = fileSystem;
+                        fileSystem = fileSystemManager.CreateFileSystem(Utility.Path.GetRegularCombinePath(fileSystemData.OutPutPath, fileSystemData.FileSystem + ".bytes"), FileSystemAccess.Write, fileSystemData.AssetPaths.Count, fileSystemData.AssetPaths.Count);
+                        fileSystemMap[fileSystemData.FileSystem] = fileSystem;
                     }
 
-                    if (!fileSystemVersions.TryGetValue(rawFileDefine.FileSystem, out var fileSystemDataVersion))
+                    if (!fileSystemVersions.TryGetValue(fileSystemData.FileSystem, out var fileSystemDataVersion))
                     {
-                        fileSystemDataVersion = new FileSystemDataVersion(rawFileDefine.FileSystem, UpdateAssetUtility.GetFileSystemAsset(rawFileDefine.FileSystem));
-                        fileSystemVersions[rawFileDefine.FileSystem] = fileSystemDataVersion;
-                        fileSystemDataVersion.FileCount = rawFileDefine.AssetPaths.Count;
+                        fileSystemDataVersion = new FileSystemDataVersion(fileSystemData.FileSystem, UpdateAssetUtility.GetFileSystemAsset(fileSystemData.FileSystem));
+                        fileSystemVersions[fileSystemData.FileSystem] = fileSystemDataVersion;
+                        fileSystemDataVersion.FileCount = fileSystemData.AssetPaths.Count;
                     }
 
-                    foreach (string assetPath in rawFileDefine.AssetPaths)
+                    foreach (string assetPath in fileSystemData.AssetPaths)
                     {
                         if (AssetDatabase.IsValidFolder(assetPath))
                         {
@@ -56,7 +56,7 @@ namespace Game.Editor.BuildPipeline
                             foreach (string fullPath in allFiles)
                             {
                                 byte[] data = fileSystemDataHandlerHelper.GetBytes(fullPath);
-                                fileSystem.WriteFile(UpdateAssetUtility.GetFileSystemAsset(rawFileDefine.FileSystem), data);
+                                fileSystem.WriteFile(UpdateAssetUtility.GetFileSystemAsset(fileSystemData.FileSystem), data);
                                 fileSystemDataVersion.Length += data.LongLength;
                                 fileSystemDataVersion.AssetNames.Add(Path.GetFileNameWithoutExtension(fullPath));
                                 fileSystemDataVersion.AssetFullNames.Add(Utility.Path.GetRegularPath(fullPath));
@@ -70,7 +70,7 @@ namespace Game.Editor.BuildPipeline
                             if (!assetPath.EndsWith(".meta"))
                             {
                                 byte[] data = fileSystemDataHandlerHelper.GetBytes(assetPath);
-                                fileSystem.WriteFile(UpdateAssetUtility.GetFileSystemAsset(rawFileDefine.FileSystem), data);
+                                fileSystem.WriteFile(UpdateAssetUtility.GetFileSystemAsset(fileSystemData.FileSystem), data);
                                 fileSystemDataVersion.Length += data.LongLength;
                                 fileSystemDataVersion.AssetNames.Add(Path.GetFileNameWithoutExtension(assetPath));
                                 fileSystemDataVersion.AssetFullNames.Add(Utility.Path.GetRegularPath(assetPath));
