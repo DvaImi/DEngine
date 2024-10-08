@@ -4,7 +4,7 @@ namespace Game.Editor.ResourceTools
 {
     public class DefaultFileSystemDataHandlerHelper : IFileSystemDataHandlerHelper
     {
-        private readonly byte[] Empty = { };
+        private static readonly byte[] Empty = { };
 
         public byte[] GetBytes(string fullPath)
         {

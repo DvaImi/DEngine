@@ -34,7 +34,6 @@ namespace Game.Editor
                         if (!string.IsNullOrEmpty(assetPath))
                         {
                             currentEvent.Use();
-                            Debug.Log(assetPath);
                             isFile = File.Exists(assetPath);
                             return true;
                         }
@@ -73,6 +72,38 @@ namespace Game.Editor
                             return isFolder ? Directory.Exists(assetPath) : File.Exists(assetPath);
                         }
                     }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool DropPath(Rect dropArea, out string[] assetPaths)
+        {
+            Event currentEvent = Event.current;
+            assetPaths = null;
+            if (currentEvent.type == EventType.DragUpdated)
+            {
+                if (dropArea.Contains(currentEvent.mousePosition))
+                {
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    currentEvent.Use();
+                }
+            }
+            else if (currentEvent.type == EventType.DragPerform)
+            {
+                if (dropArea.Contains(currentEvent.mousePosition))
+                {
+                    DragAndDrop.AcceptDrag();
+                    assetPaths = new string[DragAndDrop.objectReferences.Length];
+                    int index = 0;
+                    foreach (Object draggedObject in DragAndDrop.objectReferences)
+                    {
+                        assetPaths[index++] = AssetDatabase.GetAssetPath(draggedObject);
+                        currentEvent.Use();
+                    }
+
+                    return true;
                 }
             }
 

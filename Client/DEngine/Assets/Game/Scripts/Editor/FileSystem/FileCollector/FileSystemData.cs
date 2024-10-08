@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace Game.Editor.ResourceTools
@@ -13,8 +14,13 @@ namespace Game.Editor.ResourceTools
         public string FileSystem = null;
 
         /// <summary>
+        /// 导出路径
+        /// </summary>
+        public string OutPutPath = null;
+
+        /// <summary>
         /// 资源对象
         /// </summary>
-        public List<Object> AssetObjects = null;
+        public List<string> AssetPaths = null;
     }
 }

@@ -7,7 +7,7 @@ using Game.Editor.ResourceTools;
 using Game.FileSystem;
 using Game.Update;
 using UnityEditor;
-using Object = UnityEngine.Object;
+using UnityEngine;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -28,7 +28,7 @@ namespace Game.Editor.BuildPipeline
             fileSystemManager.SetFileSystemHelper(fileSystemHelper);
             Dictionary<string, IFileSystem> fileSystemMap = new();
             Dictionary<string, FileSystemDataVersion> fileSystemVersions = new();
-            int totalFiles = fileSystemCollector.FileSystemDatas.Sum(rfd => rfd.AssetObjects.Count);
+            int totalFiles = fileSystemCollector.FileSystemDatas.Sum(rfd => rfd.AssetPaths.Count);
             int processedFiles = 0;
 
             try
@@ -37,7 +37,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     if (!fileSystemMap.TryGetValue(rawFileDefine.FileSystem, out var fileSystem))
                     {
-                        fileSystem = fileSystemManager.CreateFileSystem(UpdateAssetUtility.GetFileSystemAsset(rawFileDefine.FileSystem), FileSystemAccess.Write, rawFileDefine.AssetObjects.Count, rawFileDefine.AssetObjects.Count);
+                        fileSystem = fileSystemManager.CreateFileSystem(UpdateAssetUtility.GetFileSystemAsset(rawFileDefine.FileSystem), FileSystemAccess.Write, rawFileDefine.AssetPaths.Count, rawFileDefine.AssetPaths.Count);
                         fileSystemMap[rawFileDefine.FileSystem] = fileSystem;
                     }
 
@@ -45,13 +45,11 @@ namespace Game.Editor.BuildPipeline
                     {
                         fileSystemDataVersion = new FileSystemDataVersion(rawFileDefine.FileSystem, UpdateAssetUtility.GetFileSystemAsset(rawFileDefine.FileSystem));
                         fileSystemVersions[rawFileDefine.FileSystem] = fileSystemDataVersion;
-                        fileSystemDataVersion.FileCount = rawFileDefine.AssetObjects.Count;
+                        fileSystemDataVersion.FileCount = rawFileDefine.AssetPaths.Count;
                     }
 
-                    foreach (Object asset in rawFileDefine.AssetObjects)
+                    foreach (string assetPath in rawFileDefine.AssetPaths)
                     {
-                        string assetPath = AssetDatabase.GetAssetPath(asset);
-
                         if (AssetDatabase.IsValidFolder(assetPath))
                         {
                             string[] allFiles = Directory.GetFiles(assetPath, "*.*", SearchOption.AllDirectories).Where(file => !file.EndsWith(".meta")).ToArray();
@@ -96,6 +94,7 @@ namespace Game.Editor.BuildPipeline
                 EditorUtility.ClearProgressBar();
                 DEngineEntry.Shutdown();
                 AssetDatabase.Refresh();
+                Debug.Log("Export complete.");
             }
         }
     }

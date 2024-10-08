@@ -407,6 +407,84 @@ namespace Game.Editor
             return EditorGUIUtility.IconContent(name).image as Texture2D;
         }
 
+        public static void GUIAssetPath(ref string content, out bool isChanged)
+        {
+            isChanged = false;
+            EditorGUILayout.BeginHorizontal("box");
+            {
+                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
+                {
+                    normal = new GUIStyleState
+                    {
+                        textColor = Color.yellow
+                    },
+                };
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    EditorGUILayout.LabelField("AssetPath is invalid", warningLableGUIStyle);
+                }
+                else
+                {
+                    bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
+                    content = EditorGUILayout.TextField(content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                }
+
+                Rect rect = GUILayoutUtility.GetLastRect();
+                if (DropPathUtility.DropPathOutType(rect, out string path, out _))
+                {
+                    if (!string.Equals(path, content, StringComparison.Ordinal))
+                    {
+                        content = path;
+                        isChanged = true;
+                    }
+                }
+
+                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                {
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        public static void GUIAssetPath(string header, ref string content, out bool isFile)
+        {
+            EditorGUILayout.BeginHorizontal("box");
+            {
+                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
+                {
+                    normal = new GUIStyleState
+                    {
+                        textColor = Color.yellow
+                    },
+                };
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    EditorGUILayout.LabelField(header, "AssetPath is invalid", warningLableGUIStyle);
+                }
+                else
+                {
+                    bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
+                    content = EditorGUILayout.TextField(header, content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                }
+
+                Rect rect = GUILayoutUtility.GetLastRect();
+                if (DropPathUtility.DropPathOutType(rect, out string path, out isFile))
+                {
+                    if (!string.Equals(path, content, StringComparison.Ordinal))
+                    {
+                        content = path;
+                    }
+                }
+
+                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                {
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
         /// <summary>
         /// 绘制unity 工程内部
         /// </summary>
@@ -415,17 +493,25 @@ namespace Game.Editor
         /// <param name="isFolder"></param>
         public static void GUIAssetPath(string header, ref string content, bool isFolder = false)
         {
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal("box");
             {
                 GUIStyle warningLableGUIStyle = new(EditorStyles.label)
                 {
                     normal = new GUIStyleState
                     {
                         textColor = Color.yellow
-                    }
+                    },
                 };
-                bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
-                content = EditorGUILayout.TextField(header, content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    EditorGUILayout.LabelField(header, "AssetPath is invalid", warningLableGUIStyle);
+                }
+                else
+                {
+                    bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
+                    content = EditorGUILayout.TextField(header, content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                }
+
                 Rect rect = GUILayoutUtility.GetLastRect();
                 if (DropPathUtility.DropPath(rect, out string path, isFolder))
                 {
@@ -435,7 +521,7 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button(GetIcon(isFolder ? "Folder Icon" : "TextAsset Icon"), GUILayout.Width(30), GUILayout.Height(20)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
                 }
