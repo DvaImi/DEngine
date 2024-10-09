@@ -84,41 +84,29 @@ namespace Game.Editor.ResourceTools
         /// <param name="collectorData"></param>
         public static void RefreshResourceCollection(ResourceGroupsCollector collectorData = null)
         {
-            while (true)
+            ResourceEditorController resourceEditorController = new();
+
+            if (resourceEditorController.Load())
             {
-                ResourceEditorController resourceEditorController = new();
-                if (resourceEditorController.Load())
-                {
-                    collectorData ??= ResourcePackagesCollector.GetResourceGroupsCollector(GameSetting.Instance.AssetBundleCollectorIndex);
-                    Debug.Log($"Export {collectorData.PackageName} ...");
+                collectorData ??= ResourcePackagesCollector.GetResourceGroupsCollector(GameSetting.Instance.AssetBundleCollectorIndex);
+                Debug.Log($"Export {collectorData.PackageName} ...");
 
-                    s_SourceAssetExceptTypeFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
-                    s_SourceAssetExceptLabelFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptLabelFilter);
+                s_SourceAssetExceptTypeFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
+                s_SourceAssetExceptLabelFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptLabelFilter);
 
-                    AnalysisResourceFilters(collectorData);
+                Collection.Clear();
+                AnalysisResourceFilters(collectorData);
 
-                    if (SaveCollection())
-                    {
-                        Debug.Log("Refresh ResourceCollection.xml success");
-                    }
-                    else
-                    {
-                        Debug.Log("Refresh ResourceCollection.xml fail");
-                    }
-                }
-                else
-                {
-                    if (resourceEditorController.Save())
-                    {
-                        return;
-                    }
+                Debug.Log(Collection.Save() ? "Refresh ResourceCollection.xml success" : "Refresh ResourceCollection.xml fail");
+                return;
+            }
 
-                    continue;
-                }
-
-                break;
+            if (!resourceEditorController.Save())
+            {
+                
             }
         }
+
 
         /// <summary>
         /// 获取指定规则的实例
@@ -311,15 +299,6 @@ namespace Game.Editor.ResourceTools
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// 保存资源集合
-        /// </summary>
-        /// <returns>保存是否成功</returns>
-        private static bool SaveCollection()
-        {
-            return Collection.Save();
         }
     }
 }

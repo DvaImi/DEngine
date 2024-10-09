@@ -41,5 +41,10 @@ namespace Game.FileSystem
         /// 文件完整路径
         /// </summary>
         public List<string> AssetFullNames { get; set; } = new();
+
+        /// <summary>
+        /// 资源文件偏移
+        /// </summary>
+        public Dictionary<string, long> AssetOffsetMap { get; set; } = new();
     }
 }

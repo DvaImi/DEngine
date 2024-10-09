@@ -25,12 +25,29 @@ namespace Game.Editor.DataTableTools
         [EditorToolbarMenu("Generate DataTable", 0, 3)]
         public static void GenerateDataTablesFormExcel()
         {
-            DataTableSetting.Instance.RefreshDataTables("*.bytes");
+            string[] excelFilePaths;
+
+            if (Directory.Exists(DataTableSetting.Instance.DataTableExcelsFolder))
+            {
+                DirectoryInfo excelFolder = new(DataTableSetting.Instance.DataTableExcelsFolder);
+                excelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.Contains("~")).Select(info => Utility.Path.GetRegularPath(info.FullName)).ToArray();
+            }
+            else
+            {
+                Debug.LogWarning("Excel is not exist");
+                return;
+            }
+
+            if (excelFilePaths.Length <= 0)
+            {
+                return;
+            }
+
             DataTableProcessor.DataProcessorUtility.RefreshTypes();
             DataTableProcessor.DataProcessorUtility.SetCodeTemplate(DataTableSetting.Instance.CSharpCodeTemplateFileName, Encoding.UTF8);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            ExtensionsGenerate.GenerateExtensionByAnalysis(ExtensionsGenerate.DataTableType.Excel, DataTableSetting.Instance.ExcelFilePaths, 2);
-            foreach (var excelFile in DataTableSetting.Instance.ExcelFilePaths)
+            ExtensionsGenerate.GenerateExtensionByAnalysis(excelFilePaths, 2);
+            foreach (var excelFile in excelFilePaths)
             {
                 string excelName = Path.GetFileNameWithoutExtension(excelFile);
                 using (FileStream fileStream = new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))

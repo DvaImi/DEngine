@@ -60,6 +60,7 @@ namespace Game.Editor.BuildPipeline
                                 fileSystemDataVersion.Length += data.LongLength;
                                 fileSystemDataVersion.AssetNames.Add(Path.GetFileNameWithoutExtension(fullPath));
                                 fileSystemDataVersion.AssetFullNames.Add(Utility.Path.GetRegularPath(fullPath));
+                                fileSystemDataVersion.AssetOffsetMap[Utility.Path.GetRegularPath(fullPath)] = data.LongLength;
                                 processedFiles++;
                                 float progress = (float)processedFiles / totalFiles;
                                 EditorUtility.DisplayProgressBar("Exporting Files", $"Processing {fullPath}", progress);
@@ -74,6 +75,7 @@ namespace Game.Editor.BuildPipeline
                                 fileSystemDataVersion.Length += data.LongLength;
                                 fileSystemDataVersion.AssetNames.Add(Path.GetFileNameWithoutExtension(assetPath));
                                 fileSystemDataVersion.AssetFullNames.Add(Utility.Path.GetRegularPath(assetPath));
+                                fileSystemDataVersion.AssetOffsetMap[Utility.Path.GetRegularPath(assetPath)] = data.LongLength;
                                 processedFiles++;
                                 float progress = (float)processedFiles / totalFiles;
                                 EditorUtility.DisplayProgressBar("Exporting Files", $"Processing {assetPath}", progress);

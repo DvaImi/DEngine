@@ -4,42 +4,13 @@
     <Resources>
       <Resource Name="chinesesimplified" Variant="zh-cn" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="chinesetraditional" Variant="zh-tw" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="configs" FileSystem="cfg" LoadType="4" Packed="True" ResourceGroups="Base" />
+      <Resource Name="configs" FileSystem="cfg" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="datatables" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="english" Variant="en" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="shadervariants" FileSystem="shader" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="updateluncher" LoadType="0" Packed="True" ResourceGroups="Base" />
       <Resource Name="xxoo" LoadType="0" Packed="True" ResourceGroups="Base" />
     </Resources>
-    <Assets>
-      <Asset Guid="045a0772d54c75745ba16df17951da01" ResourceName="xxoo" />
-      <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="chinesesimplified" ResourceVariant="zh-cn" />
-      <Asset Guid="1b104c76d3badfa47a9b3914486cf63e" ResourceName="datatables" />
-      <Asset Guid="26abac1a3a0cf364c95752a98911e3de" ResourceName="xxoo" />
-      <Asset Guid="333ff64354a4f434d9369aa014a823e3" ResourceName="shadervariants" />
-      <Asset Guid="467ef078cd2666e41af5b71898ee5435" ResourceName="xxoo" />
-      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="updateluncher" />
-      <Asset Guid="4da5235c15000f34f9eb69011f36b2ae" ResourceName="datatables" />
-      <Asset Guid="5ad2c6b56aaed754ebf51d07b2fc749e" ResourceName="xxoo" />
-      <Asset Guid="65654b7c9ea1a3c4fa543467160d8eaa" ResourceName="xxoo" />
-      <Asset Guid="6c5b46918ec265c4db7cc7b538f27e8e" ResourceName="configs" />
-      <Asset Guid="7192078389dd97544978a4851f2ed546" ResourceName="xxoo" />
-      <Asset Guid="77f28af2dbce0ba49ab22abdbbe60deb" ResourceName="xxoo" />
-      <Asset Guid="78cb16e24e4b03e4abb1fa23112b430c" ResourceName="xxoo" />
-      <Asset Guid="808f28d834b4c0d4a8df430fd3903606" ResourceName="datatables" />
-      <Asset Guid="838904cb85a5e404190d9db1e9e58a0e" ResourceName="xxoo" />
-      <Asset Guid="88918b3d7c1ed21459fd390a05f9bfa2" ResourceName="shadervariants" />
-      <Asset Guid="89eba853283fd264cb54c8d4dca87914" ResourceName="datatables" />
-      <Asset Guid="90a4a2e20e10b8a41802a7016282a67f" ResourceName="datatables" />
-      <Asset Guid="943df3dd5dfb96d49b14efddd2f99ce3" ResourceName="xxoo" />
-      <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="chinesetraditional" ResourceVariant="zh-tw" />
-      <Asset Guid="a85dc8a121d7acc42839ebda6555b1f4" ResourceName="xxoo" />
-      <Asset Guid="b26566fd60e4bd54fb80a8f5a4c9be81" ResourceName="xxoo" />
-      <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="english" ResourceVariant="en" />
-      <Asset Guid="bbeaac1314ea912458815ab8b67f475d" ResourceName="datatables" />
-      <Asset Guid="e6aead9d2a9cfde46bd8c437cdf13195" ResourceName="xxoo" />
-      <Asset Guid="e93befe271788e04e97a23a2de4853e0" ResourceName="datatables" />
-      <Asset Guid="ecd5bca1917f6d34487409e6d39a531e" ResourceName="datatables" />
-    </Assets>
+    <Assets />
   </ResourceCollection>
 </DEngine>

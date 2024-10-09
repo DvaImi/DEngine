@@ -14,4 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FileSystemHandlerTypeNameIndex: 1
   FileSystemHelperTypeName: Game.Editor.ResourceTools.DefaultFileSystemDataHandlerHelper
-  FileSystemDatas: []
+  FileSystemDatas:
+  - FileSystem: cfg
+    OutPutPath: Assets/Game/Bundles/FileSystem
+    AssetPaths:
+    - Assets/Game/Bundles/DataTables/Entity_table.bytes
+    - Assets/Game/Bundles/DataTables/Music_table.bytes
+    - Assets/Game/Bundles/DataTables/Scene_table.bytes
+    - Assets/Game/Bundles/DataTables/Sound_table.bytes
+    - Assets/Game/Bundles/DataTables/UIForm_table.bytes
+    - Assets/Game/Bundles/DataTables/UIGroup_table.bytes
+    - Assets/Game/Bundles/DataTables/UISound_table.bytes
+    - Assets/Game/Bundles/Configs/Bin/TBItem.bytes

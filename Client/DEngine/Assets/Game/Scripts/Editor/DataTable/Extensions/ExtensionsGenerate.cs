@@ -11,126 +11,50 @@ namespace Game.Editor.DataTableTools
 {
     public static class ExtensionsGenerate
     {
-        public enum DataTableType
-        {
-            Txt,
-            Excel
-        }
-
-        public static void GenerateExtensionByAnalysis(DataTableType dataTableType, string[] filePath, int typeLine)
+        public static void GenerateExtensionByAnalysis(string[] filePath, int typeLine)
         {
             List<string> types = new List<string>(32);
-            if (dataTableType == DataTableType.Txt)
+
+            foreach (var excelFile in filePath)
             {
-                foreach (var dataTableFileName in filePath)
+                using (FileStream fileStream = new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    var lines = File.ReadAllLines(dataTableFileName, Encoding.UTF8);
-                    var rawValue = lines[typeLine].Split('\t');
-                    types.AddRange(rawValue.Select(_ => _.Trim('\"')));
-                    types = types.Distinct().ToList();
-                }
-            }
-            else
-            {
-                foreach (var excelFile in filePath)
-                {
-                    using (FileStream fileStream = new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (ExcelPackage excelPackage = new ExcelPackage(fileStream))
                     {
-                        using (ExcelPackage excelPackage = new ExcelPackage(fileStream))
+                        for (int i = 0; i < excelPackage.Workbook.Worksheets.Count; i++)
                         {
-                            for (int i = 0; i < excelPackage.Workbook.Worksheets.Count; i++)
+                            var sheet = excelPackage.Workbook.Worksheets[i];
+
+                            if (sheet.Name.StartsWith("#"))
                             {
-                                var sheet = excelPackage.Workbook.Worksheets[i];
-                                
-                                if (sheet.Name.StartsWith("#"))
-                                {
-                                    continue;
-                                }
+                                continue;
+                            }
 
-                                int typeRow = DataTableSetting.Instance.TypeRow;
+                            int typeRow = DataTableSetting.Instance.TypeRow;
 
-                                if (sheet.Dimension.Rows < typeRow)
-                                {
-                                    throw new Exception($"数据表 {excelFile} 格式不正确。请检查");
-                                }
+                            if (sheet.Dimension.Rows < typeRow)
+                            {
+                                throw new Exception($"数据表 {excelFile} 格式不正确。请检查");
+                            }
 
-                                for (int j = 1; j <= sheet.Dimension.Columns; j++)
+                            for (int j = 1; j <= sheet.Dimension.Columns; j++)
+                            {
+                                string rawValue = sheet.Cells[typeRow + 1, j].Value?.ToString().Trim('\"');
+                                if (!string.IsNullOrEmpty(rawValue))
                                 {
-                                    string rawValue = sheet.Cells[typeRow + 1, j].Value?.ToString().Trim('\"');
-                                    if (!string.IsNullOrEmpty(rawValue))
-                                    {
-                                        types.Add(rawValue);
-                                    }
+                                    types.Add(rawValue);
                                 }
                             }
                         }
                     }
                 }
-
-                types = types.Distinct().ToList();
             }
 
-
-            types.Remove("Id");
-            types.Remove("#");
-            types.Remove("");
-            types.Remove("comment");
-
-            List<DataTableProcessor.DataProcessor> datableDataProcessors = types.Select(DataTableProcessor.DataProcessorUtility.GetDataProcessor).ToList();
-
-            NameSpaces.Add("System");
-            NameSpaces.Add("System.IO");
-            NameSpaces.Add("System.Collections.Generic");
-            NameSpaces.Add("UnityEngine");
-            NameSpaces = NameSpaces.Distinct().ToList();
-            var dataProcessorsArray = datableDataProcessors
-                .Where(_ => _.LanguageKeyword.ToLower().EndsWith("[]"))
-                .Select(_ =>
-                    DataTableProcessor.DataProcessorUtility.GetDataProcessor(_.LanguageKeyword.ToLower()
-                        .Replace("[]", "")))
-                .ToDictionary(_ => _.LanguageKeyword, _ => _);
-
-            var dataProcessorsList = datableDataProcessors
-                .Where(_ => _.LanguageKeyword.ToLower().StartsWith("list"))
-                .Select(_ => DataTableProcessor.DataProcessorUtility.GetDataProcessor(_.LanguageKeyword.ToLower()
-                    .Replace("list", "").Replace("<", "").Replace(">", "")))
-                .ToDictionary(_ => _.LanguageKeyword, _ => _);
-
-            var dataProcessorsDictionary = datableDataProcessors
-                .Where(_ => _.LanguageKeyword.ToLower().StartsWith("dictionary"))
-                .Select(_ =>
-                    {
-                        var keyValue = _.LanguageKeyword.ToLower()
-                            .Replace("dictionary", "").Replace("<", "").Replace(">", "").Split(',');
-                        return new[]
-                        {
-                            DataTableProcessor.DataProcessorUtility.GetDataProcessor(keyValue[0]),
-                            DataTableProcessor.DataProcessorUtility.GetDataProcessor(keyValue[1])
-                        };
-                    }
-                ).ToList();
-            if (dataProcessorsArray.Count > 0)
-            {
-                GenerateDataTableExtensionArray(dataProcessorsArray);
-                GenerateBinaryReaderExtensionArray(dataProcessorsArray);
-            }
-
-            if (dataProcessorsList.Count > 0)
-            {
-                GenerateDataTableExtensionList(dataProcessorsList);
-                GenerateBinaryReaderExtensionList(dataProcessorsList);
-            }
-
-            if (dataProcessorsDictionary.Count > 0)
-            {
-                GenerateDataTableExtensionDictionary(dataProcessorsDictionary);
-                GenerateBinaryReaderExtensionDictionary(dataProcessorsDictionary);
-            }
-
-            AssetDatabase.Refresh();
+            types = types.Distinct().ToList();
+            GenerateExtension(types);
         }
 
-        public static void GenerateExtension(List<string> types)
+        private static void GenerateExtension(List<string> types)
         {
             if (types == null)
             {
@@ -144,34 +68,14 @@ namespace Game.Editor.DataTableTools
 
             List<DataTableProcessor.DataProcessor> datableDataProcessors = types.Select(DataTableProcessor.DataProcessorUtility.GetDataProcessor).ToList();
 
-            NameSpaces.Add("System");
-            NameSpaces.Add("System.IO");
-            NameSpaces.Add("System.Collections.Generic");
-            NameSpaces.Add("UnityEngine");
-            NameSpaces = NameSpaces.Distinct().ToList();
-            var dataProcessorsArray = datableDataProcessors
-                .Where(_ => _.LanguageKeyword.ToLower().EndsWith("[]"))
-                .Select(_ => DataTableProcessor.DataProcessorUtility.GetDataProcessor(_.LanguageKeyword.ToLower().Replace("[]", "")))
-                .ToDictionary(_ => _.LanguageKeyword, _ => _);
-
-            var dataProcessorsList = datableDataProcessors
-                .Where(_ => _.LanguageKeyword.ToLower().StartsWith("list"))
-                .Select(_ => DataTableProcessor.DataProcessorUtility.GetDataProcessor(_.LanguageKeyword.ToLower().Replace("list", "").Replace("<", "").Replace(">", "")))
-                .ToDictionary(_ => _.LanguageKeyword, _ => _);
-
-            var dataProcessorsDictionary = datableDataProcessors
-                .Where(_ => _.LanguageKeyword.ToLower().StartsWith("dictionary"))
-                .Select(_ =>
-                    {
-                        var keyValue = _.LanguageKeyword.ToLower()
-                            .Replace("dictionary", "").Replace("<", "").Replace(">", "").Split(',');
-                        return new[]
-                        {
-                            DataTableProcessor.DataProcessorUtility.GetDataProcessor(keyValue[0]),
-                            DataTableProcessor.DataProcessorUtility.GetDataProcessor(keyValue[1])
-                        };
-                    }
-                ).ToList();
+            s_NameSpaces.Add("System");
+            s_NameSpaces.Add("System.IO");
+            s_NameSpaces.Add("System.Collections.Generic");
+            s_NameSpaces.Add("UnityEngine");
+            s_NameSpaces = s_NameSpaces.Distinct().ToList();
+            var dataProcessorsArray = datableDataProcessors.Where(dataProcessor => dataProcessor.LanguageKeyword.ToLower().EndsWith("[]")).Select(ArraySelector).ToDictionary(dataProcessor => dataProcessor.LanguageKeyword, dataProcessor => dataProcessor);
+            var dataProcessorsList = datableDataProcessors.Where(dataProcessor => dataProcessor.LanguageKeyword.ToLower().StartsWith("list")).Select(ListSelector).ToDictionary(dataProcessor => dataProcessor.LanguageKeyword, dataProcessor => dataProcessor);
+            var dataProcessorsDictionary = datableDataProcessors.Where(dataProcessor => dataProcessor.LanguageKeyword.ToLower().StartsWith("dictionary")).Select(DictionarySelector).ToList();
             if (dataProcessorsArray.Count > 0)
             {
                 GenerateDataTableExtensionArray(dataProcessorsArray);
@@ -191,6 +95,22 @@ namespace Game.Editor.DataTableTools
             }
 
             AssetDatabase.Refresh();
+        }
+
+        private static DataTableProcessor.DataProcessor ArraySelector(DataTableProcessor.DataProcessor dataProcessor)
+        {
+            return DataTableProcessor.DataProcessorUtility.GetDataProcessor(dataProcessor.LanguageKeyword.ToLower().Replace("[]", ""));
+        }
+
+        private static DataTableProcessor.DataProcessor ListSelector(DataTableProcessor.DataProcessor dataProcessor)
+        {
+            return DataTableProcessor.DataProcessorUtility.GetDataProcessor(dataProcessor.LanguageKeyword.ToLower().Replace("list", "").Replace("<", "").Replace(">", ""));
+        }
+
+        private static DataTableProcessor.DataProcessor[] DictionarySelector(DataTableProcessor.DataProcessor dataProcessor)
+        {
+            var keyValue = dataProcessor.LanguageKeyword.ToLower().Replace("dictionary", "").Replace("<", "").Replace(">", "").Split(',');
+            return new[] { DataTableProcessor.DataProcessorUtility.GetDataProcessor(keyValue[0]), DataTableProcessor.DataProcessorUtility.GetDataProcessor(keyValue[1]) };
         }
 
         private static void GenerateDataTableExtensionArray(IDictionary<string, DataTableProcessor.DataProcessor> dataProcessors)
@@ -480,7 +400,7 @@ namespace Game.Editor.DataTableTools
         {
             var filePath = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.ExtensionDirectoryPath, fileName + ".cs"));
             FileInfo fileInfo = new FileInfo(filePath);
-            if (!fileInfo.Directory.Exists)
+            if (fileInfo.Directory is { Exists: false })
             {
                 fileInfo.Directory.Create();
             }
@@ -490,13 +410,9 @@ namespace Game.Editor.DataTableTools
                 File.Delete(filePath);
             }
 
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                using (var stream = new StreamWriter(fileStream, Encoding.UTF8))
-                {
-                    stream.Write(value);
-                }
-            }
+            using var fileStream = new FileStream(filePath, FileMode.Create);
+            using var stream = new StreamWriter(fileStream, Encoding.UTF8);
+            stream.Write(value);
         }
 
         private static void GenerateDataTableExtensionDictionary(List<DataTableProcessor.DataProcessor[]> keyValueList)
@@ -748,11 +664,11 @@ namespace Game.Editor.DataTableTools
             return type != typeof(object) && Type.GetTypeCode(type) == TypeCode.Object;
         }
 
-        private static List<string> NameSpaces = new List<string>();
+        private static List<string> s_NameSpaces = new List<string>();
 
         private static void AddNameSpaces(StringBuilder stringBuilder)
         {
-            foreach (var nameSpace in NameSpaces)
+            foreach (var nameSpace in s_NameSpaces)
             {
                 stringBuilder.AppendLine($"using {nameSpace};");
             }

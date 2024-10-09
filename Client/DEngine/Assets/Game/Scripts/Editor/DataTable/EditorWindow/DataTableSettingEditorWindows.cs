@@ -97,7 +97,7 @@ namespace Game.Editor.DataTableTools
 
                             bool WherePredicate(Assembly assembly)
                             {
-                                return !assembly.FullName.Contains("Editor");
+                                return true;
                             }
 
                             HashSet<string> hasSelect = new(DataTableSetting.Instance.AssemblyNames.Select(item => item.Replace(".dll", null)));

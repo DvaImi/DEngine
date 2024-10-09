@@ -22,18 +22,10 @@ namespace Game.Editor.BuildPipeline
                 return;
             }
 
-            var orgine = DataTableSetting.Instance.AssemblyNames.ToList();
-            var assemblyNames = orgine.ToList();
-            if (!assemblyNames.Contains("DEngine.Editor"))
-            {
-                assemblyNames.Add("DEngine.Editor");
-            }
-
-            DataTableSetting.Instance.AssemblyNames = assemblyNames.ToArray();
             DataTableProcessor.DataProcessorUtility.RefreshTypes();
             DataTableProcessor.DataProcessorUtility.SetCodeTemplate(DataTableSetting.Instance.CSharpCodeTemplateFileName, Encoding.UTF8);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            ExtensionsGenerate.GenerateExtensionByAnalysis(ExtensionsGenerate.DataTableType.Excel, new[] { excelFile }, 2);
+            ExtensionsGenerate.GenerateExtensionByAnalysis(new[] { excelFile }, 2);
             string excelName = Path.GetFileNameWithoutExtension(excelFile);
             using (FileStream fileStream = new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
@@ -57,8 +49,6 @@ namespace Game.Editor.BuildPipeline
                 }
             }
 
-            //确保不会影响正常数据
-            DataTableSetting.Instance.AssemblyNames = orgine.ToArray();
             DataTableSetting.Save();
             AssetDatabase.Refresh();
         }
