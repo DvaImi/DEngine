@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using UnityEvent = UnityEngine.Event;
 
 namespace Game.Editor
 {
@@ -54,19 +55,19 @@ namespace Game.Editor
 
             EditorGUIUtility.AddCursorRect(m_SpaceRect, MouseCursor.ResizeHorizontal);
 
-            if (Event.current.type == EventType.MouseDown && m_SpaceRect.Contains(Event.current.mousePosition))
+            if (UnityEvent.current.type == EventType.MouseDown && m_SpaceRect.Contains(UnityEvent.current.mousePosition))
             {
                 m_ResizingHorizontalSplitter = true;
             }
 
             if (m_ResizingHorizontalSplitter)
             {
-                m_MenuTreeWidth = Event.current.mousePosition.x;
+                m_MenuTreeWidth = UnityEvent.current.mousePosition.x;
                 m_SpaceRect.x = m_MenuTreeWidth;
                 Repaint();
             }
 
-            if (Event.current.type == EventType.MouseUp)
+            if (UnityEvent.current.type == EventType.MouseUp)
             {
                 m_ResizingHorizontalSplitter = false;
             }

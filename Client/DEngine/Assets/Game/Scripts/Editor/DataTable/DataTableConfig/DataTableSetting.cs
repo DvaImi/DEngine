@@ -25,7 +25,7 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表C#实体类生成文件夹路径
         /// </summary>
-        public string CSharpCodePath = "Assets/Game/Scripts/Update/DataTable/DRCode";
+        public string CSharpCodePath = "Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DRCode";
 
         /// <summary>
         /// 数据表C#实体类模板存放路径
@@ -35,7 +35,7 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 数据表扩展类文件夹路径
         /// </summary>
-        public string ExtensionDirectoryPath = "Assets/Game/Scripts/Update/Generate/DataTable/Extensions";
+        public string ExtensionDirectoryPath = "Assets/Game/Scripts/Runtime/Update/Generate/DataTable/Extensions";
 
         /// <summary>
         /// 是否生成枚举
@@ -45,7 +45,7 @@ namespace Game.Editor.DataTableTools
         /// <summary>
         /// 生成枚举的路径
         /// </summary>
-        public string DataTableEnumPath = "Assets/Game/Scripts/Update/Generate/DataTable/DataTableEnum";
+        public string DataTableEnumPath = "Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DataTableEnum";
 
         /// <summary>
         /// 数据表命名空间

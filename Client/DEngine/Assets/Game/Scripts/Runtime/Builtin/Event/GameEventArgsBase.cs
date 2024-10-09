@@ -7,7 +7,7 @@
 
 using DEngine.Event;
 
-namespace Game.Update.Event
+namespace Game.Event
 {
     public abstract class GameEventArgsBase<T> : GameEventArgs
     {

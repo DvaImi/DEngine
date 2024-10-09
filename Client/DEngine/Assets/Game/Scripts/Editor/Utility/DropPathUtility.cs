@@ -3,8 +3,8 @@ using System.IO;
 using DEngine;
 using UnityEditor;
 using UnityEngine;
-using Event = UnityEngine.Event;
 using Object = UnityEngine.Object;
+using UnityEvent = UnityEngine.Event;
 
 namespace Game.Editor
 {
@@ -12,7 +12,7 @@ namespace Game.Editor
     {
         public static bool DropPathOutType(Rect dropArea, out string assetPath, out bool isFile)
         {
-            Event currentEvent = Event.current;
+            UnityEvent currentEvent = UnityEvent.current;
             assetPath = string.Empty;
             if (currentEvent.type == EventType.DragUpdated)
             {
@@ -47,7 +47,7 @@ namespace Game.Editor
 
         public static bool DropPath(Rect dropArea, out string assetPath, bool isFolder = false)
         {
-            Event currentEvent = Event.current;
+            UnityEvent currentEvent = UnityEvent.current;
             assetPath = string.Empty;
             if (currentEvent.type == EventType.DragUpdated)
             {
@@ -80,7 +80,7 @@ namespace Game.Editor
 
         public static bool DropPath(Rect dropArea, out string[] assetPaths)
         {
-            Event currentEvent = Event.current;
+            UnityEvent currentEvent = UnityEvent.current;
             assetPaths = null;
             if (currentEvent.type == EventType.DragUpdated)
             {

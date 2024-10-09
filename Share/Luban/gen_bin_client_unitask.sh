@@ -11,7 +11,7 @@ echo "Current WORKSPACE directory: $WORKSPACE"
 
 # 设置路径
 GEN_CLIENT="$WORKSPACE/Tools/Luban.dll"
-CONF_ROOT="$WORKSPACE/Configs"
+CONF_ROOT="$WORKSPACE/Client"
 CODE_UNITASK="$CONF_ROOT/CustomTemplate_Client_UniTask"
 
 # 运行 Luban 工具
@@ -21,7 +21,7 @@ dotnet "$GEN_CLIENT" \
     -d bin \
     --conf "$CONF_ROOT/luban.conf" \
     --customTemplateDir "$CODE_UNITASK" \
-    -x outputCodeDir="../../Client/DEngine/Assets/Game/Scripts/Update/Generate/GameConfig" \
+    -x outputCodeDir="../../Client/DEngine/Assets/Game/Scripts/Runtime/Update/Generate/GameConfig" \
     -x outputDataDir="../../Client/DEngine/Assets/Game/Bundles/Configs/Bin/"
 
 # 暂停

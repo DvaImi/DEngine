@@ -39,7 +39,7 @@ MonoBehaviour:
     AndroidAppUrl: 
   HotupdateAssembliesPath: Assets/Game/Bundles/DLL/HotUpdate
   HotUpdateAssemblies:
-  - Game.Update
+  - Game.Runtime.Update
   AOTAssembliesPath: Assets/Game/Bundles/DLL/AOT
   AOTAssemblies:
   - DEngine

@@ -81,7 +81,6 @@
     <type fullname="Game.IGameModule" preserve="all" />
     <type fullname="Game.LubanTable.ILubanTable" preserve="all" />
     <type fullname="Game.Network.INetworkModule" preserve="all" />
-    <type fullname="Game.Test.TestEnum" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
   </assembly>
   <assembly fullname="Luban.Runtime">
@@ -144,11 +143,13 @@
     <type fullname="System.Boolean" preserve="all" />
     <type fullname="System.Byte" preserve="all" />
     <type fullname="System.Char" preserve="all" />
+    <type fullname="System.Collections.Generic.CollectionExtensions" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2/ValueCollection" preserve="all" />
     <type fullname="System.Collections.Generic.IEnumerable`1" preserve="all" />
     <type fullname="System.Collections.Generic.IEnumerator`1" preserve="all" />
     <type fullname="System.Collections.Generic.IEqualityComparer`1" preserve="all" />
+    <type fullname="System.Collections.Generic.IReadOnlyDictionary`2" preserve="all" />
     <type fullname="System.Collections.Generic.List`1" preserve="all" />
     <type fullname="System.Collections.Generic.List`1/Enumerator" preserve="all" />
     <type fullname="System.Collections.IEnumerator" preserve="all" />

@@ -18,14 +18,14 @@ MonoBehaviour:
   il2cppPlusRepoURL: https://gitee.com/focus-creative-games/il2cpp_plus
   hotUpdateAssemblyDefinitions: []
   hotUpdateAssemblies:
-  - Game.Update
+  - Game.Runtime.Update
   preserveHotUpdateAssemblies: []
   hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
   externalHotUpdateAssembliyDirs: []
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
   patchAOTAssemblies: []
   outputLinkFile: Game/Scripts/link.xml
-  outputAOTGenericReferenceFile: Game/Scripts/Builtin/HybridCLRData/Generated/AOTGenericReferences.cs
+  outputAOTGenericReferenceFile: Game/Scripts/Runtime/Builtin/Misc/HybridCLRData/Generated/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
   maxMethodBridgeGenericIteration: 10
   enableProfilerInReleaseBuild: 0

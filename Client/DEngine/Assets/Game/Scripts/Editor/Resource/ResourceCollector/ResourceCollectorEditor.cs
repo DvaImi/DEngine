@@ -7,6 +7,7 @@ using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using UnityEvent = UnityEngine.Event;
 
 namespace Game.Editor
 {
@@ -22,9 +23,9 @@ namespace Game.Editor
 
         private ResourcePackagesCollector m_AssetBundlePackageCollector;
         private ResourceGroupsCollector m_SelectAssetBundleCollector;
-        private Rect m_ToolbarRect = new Rect();
-        private Rect m_PackageMenuRect = new Rect();
-        private Rect m_RuleRect = new Rect();
+        private Rect m_ToolbarRect;
+        private Rect m_PackageMenuRect;
+        private Rect m_RuleRect;
         private GUIStyle m_LineStyle;
         private GUIStyle m_FolderBtnStyle;
         private GUIContent m_FolderBtnContent;
@@ -42,7 +43,7 @@ namespace Game.Editor
         private GUIContent m_ExportContent;
         private GUIContent m_SaveContent;
         private readonly float m_AddRectHeight = 50f;
-        private bool m_IsDirty = false;
+        private bool m_IsDirty;
         private float PackageSpace => 200;
 
         [MenuItem("Game/Resource Tools/Resource Collector", false, 0)]
@@ -78,33 +79,29 @@ namespace Game.Editor
                 m_ResourceEditorController.Load();
             }
 
-            m_MenuTreePackagesView = new MenuTreeView<ResourceGroupsCollector>(false, true, true);
+            m_MenuTreePackagesView = new MenuTreeView<ResourceGroupsCollector>(false, true);
             {
                 m_MenuTreePackagesView.onDrawFoldout = DrawFoldoutCallback;
                 m_MenuTreePackagesView.onDrawRowContent = DrawPackagesMenuRowContentCallback;
                 m_MenuTreePackagesView.onSelectionChanged = OnPackageSelectionChanged;
             }
             // 绘制包裹资源分组列表
-            m_MenuTreeGroupsView = new MenuTreeView<ResourceGroupCollector>(false, true, true);
+            m_MenuTreeGroupsView = new MenuTreeView<ResourceGroupCollector>(false, true);
             {
                 m_MenuTreeGroupsView.onDrawFoldout = DrawFoldoutCallback;
                 m_MenuTreeGroupsView.onDrawRowContent = DrawGroupMenuRowContentCallback;
                 m_MenuTreeGroupsView.onSelectionChanged = OnGroupSelectionChanged;
             }
 
-            if (m_AssetCollectorColumns == null)
-            {
-                m_AssetCollectorColumns = GetAssetCollectorColumns();
-            }
+            m_AssetCollectorColumns ??= GetAssetCollectorColumns();
 
             m_AssetCollectorTableView = new ResourceCollectorTableView<ResourceCollector>(null, m_AssetCollectorColumns);
             {
                 m_AssetCollectorTableView.OnRightAddRow = OnTreeViewRightAddRowCallback;
             }
 
-            for (int i = 0; i < m_AssetBundlePackageCollector.PackagesCollector.Count; i++)
+            foreach (var package in m_AssetBundlePackageCollector.PackagesCollector)
             {
-                ResourceGroupsCollector package = m_AssetBundlePackageCollector.PackagesCollector[i];
                 m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
             }
 
@@ -263,7 +260,7 @@ namespace Game.Editor
                     if (GUILayout.Button("+", GUILayout.Width(30)))
                     {
                         ResourceGroupCollector resourceGroup = new();
-                        m_SelectAssetBundleCollector.Groups.Add(resourceGroup);
+                        m_SelectAssetBundleCollector?.Groups.Add(resourceGroup);
                         m_MenuTreeGroupsView.AddItem(GetGroupDisplayName(resourceGroup), resourceGroup);
                         SetFocusAndEnsureSelectedItem();
                     }
@@ -297,19 +294,19 @@ namespace Game.Editor
 
             EditorGUIUtility.AddCursorRect(m_SpaceRect, MouseCursor.ResizeHorizontal);
 
-            if (Event.current.type == EventType.MouseDown && m_SpaceRect.Contains(Event.current.mousePosition))
+            if (UnityEvent.current.type == EventType.MouseDown && m_SpaceRect.Contains(UnityEvent.current.mousePosition))
             {
                 m_ResizingHorizontalSplitter = true;
             }
 
             if (m_ResizingHorizontalSplitter)
             {
-                m_MenuTreeWidth = Event.current.mousePosition.x;
+                m_MenuTreeWidth = UnityEvent.current.mousePosition.x;
                 m_SpaceRect.x = m_MenuTreeWidth;
                 Repaint();
             }
 
-            if (Event.current.type == EventType.MouseUp)
+            if (UnityEvent.current.type == EventType.MouseUp)
             {
                 m_ResizingHorizontalSplitter = false;
             }
@@ -349,13 +346,12 @@ namespace Game.Editor
                 GUILayout.EndArea();
 
                 //如果鼠标拖拽结束时，并且鼠标所在位置在文本输入框内 
-                if (Event.current.type == EventType.DragExited && m_RuleRect.Contains(Event.current.mousePosition))
+                if (UnityEvent.current.type == EventType.DragExited && m_RuleRect.Contains(UnityEvent.current.mousePosition))
                 {
                     if (DragAndDrop.paths != null && DragAndDrop.paths.Length > 0)
                     {
-                        for (int i = 0; i < DragAndDrop.paths.Length; i++)
+                        foreach (var path in DragAndDrop.paths)
                         {
-                            string path = DragAndDrop.paths[i];
                             if (!CanAddAssetCollectorRow(path))
                             {
                                 Debug.LogWarning($"Asset path '{path}' is duplicated");

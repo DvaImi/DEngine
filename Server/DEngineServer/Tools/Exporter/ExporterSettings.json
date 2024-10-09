@@ -9,7 +9,7 @@
             "Comment": "ProtoBuf生成到服务端的文件夹位置"
         },
         "NetworkProtocolClientDirectory": {
-            "Value": "../../../../Client/DEngine/Assets/Game/Scripts/Update/Generate/NetworkProtocol/",
+            "Value": "../../../../Client/DEngine/Assets/Game/Scripts/Runtime/Update/Generate/NetworkProtocol/",
             "Comment": "ProtoBuf生成到客户端的文件夹位置"
         },
         "ExcelProgramPath": {
@@ -25,7 +25,7 @@
             "Comment": "Excel生成的代码文件、在服务端文件夹位置"
         },
         "ExcelClientFileDirectory": {
-            "Value": "../../../../Client/DEngine/Assets/Game/Scripts/Update/Generate/ConfigTable/Entity/",
+            "Value": "../../../../Client/DEngine/Assets/Game/Scripts/Runtime/Update/Generate/ConfigTable/Entity/",
             "Comment": "Excel生成的代码文件、在客户端文件夹位置"
         },
         "ExcelServerBinaryDirectory": {
@@ -53,7 +53,7 @@
             "Comment": "Excel在服务端生成自定义代码的文件夹位置"
         },
         "ClientCustomExportDirectory": {
-            "Value": "../../../../Client/DEngine/Assets/Game/Scripts/Update/Generate/CustomExport",
+            "Value": "../../../../Client/DEngine/Assets/Game/Scripts/Runtime/Update/Generate/CustomExport",
             "Comment": "Excel在客户端端生成自定义代码的文件夹位置"
         }
     }

@@ -1,6 +1,3 @@
-[submodule "Server/Fantasy"]
-	path = Server/Fantasy
-	url = https://github.com/DvaImi/Fantasy.git
 [submodule "Share/Luban/src"]
 	path = Share/Luban/src
 	url = https://github.com/DvaImi/luban.git

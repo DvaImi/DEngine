@@ -156,16 +156,16 @@ namespace Game.Editor.DataTableTools
         public static void GenerateLuban()
         {
 #if UNITY_EDITOR_WIN
-            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Share/Luban/gen_bin_unitask.bat"));
+            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Share/Luban/gen_bin_client_unitask.bat"));
 #elif UNITY_EDITOR_OSX
-            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Share/Luban/gen_bin_unitask.sh"));
+            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Share/Luban/gen_bin_client_unitask.sh"));
 #endif
         }
 
         [MenuItem("DataTable/Editor/Luban", priority = 3)]
         public static void EditorLuban()
         {
-            OpenFolder.Execute(Path.Combine(Application.dataPath, "../../../Share/Luban/Configs/Datas"));
+            OpenFolder.Execute(Path.Combine(Application.dataPath, "../../../Share/Luban/Client/Datas"));
         }
 
         private static void GenerateDataTableEnumFile(DataTableProcessor dataTableProcessor, string dataTableName)

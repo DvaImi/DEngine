@@ -27,4 +27,8 @@
       <None Remove="Benchmark\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Fantasy-Net" Version="2024.1.9" />
+    </ItemGroup>
+
 </Project>
