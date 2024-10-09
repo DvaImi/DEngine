@@ -13,9 +13,9 @@ namespace Game.Editor.NetworkProtocol
         public static void GenerateAll()
         {
 #if UNITY_EDITOR_WIN
-            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Tools/Exporter/Run.bat"));
+            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Tools/NetworkProtocol/Run.bat"));
 #elif UNITY_EDITOR_OSX
-            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Tools/Exporter/Run.sh"));
+            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Tools/NetworkProtocol/Run.sh"));
 #endif
         }
 
