@@ -27,7 +27,7 @@ MonoBehaviour:
   - Assets
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 28
+  InternalResourceVersion: 5
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: 
   BuildInfo:
@@ -54,6 +54,6 @@ MonoBehaviour:
   - ZString
   PreserveAssembliesPath: Assets/Game/Bundles/DLL/Preserve
   PreserveAssemblies: []
-  MultiChannelExcelPath: 
-  MultiChannelCodePath: 
-  MultiChannelDataPath: 
+  MultiChannelExcelPath: F:/Project/Unity/Work/DEngine/Client/DEngine/Excels/PackingParameter/PackingParameter.xlsx
+  MultiChannelCodePath: Assets/Game/Scripts/Editor/BuildPipeline/Conifg
+  MultiChannelDataPath: Assets/Game/Scripts/Editor/BuildPipeline/Conifg
