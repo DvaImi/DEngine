@@ -4,7 +4,7 @@ using DEngine.Runtime;
 
 namespace Game.Editor.ResourceTools
 {
-    public sealed class RawFileSystemHelper : IFileSystemHelper
+    public sealed class FileSystemHelper : IFileSystemHelper
     {
         /// <summary>
         /// 创建文件系统流。

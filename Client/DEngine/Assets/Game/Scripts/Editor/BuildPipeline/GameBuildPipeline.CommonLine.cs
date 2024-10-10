@@ -48,7 +48,7 @@ namespace Game.Editor.BuildPipeline
         /// <summary>
         /// 多渠道自动打包
         /// </summary>
-        private static void MultiChannelAutomatedBuild()
+        public static void MultiChannelAutomatedBuild()
         {
             EditorTools.CloseAllCustomEditorWindows();
             Debug.Log("开始一键打包任务");

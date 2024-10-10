@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
-using Object = UnityEngine.Object;
 
 namespace Game.Editor.ResourceTools
 {

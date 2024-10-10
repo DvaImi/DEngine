@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using DEngine;
 using DEngine.Editor.ResourceTools;
 using Game.Editor.ResourceTools;
 using Game.Editor.Toolbar;
@@ -40,6 +42,7 @@ namespace Game.Editor
         private GUIContent m_AssetContent;
         private GUIContent m_FilterTypeContent;
         private GUIContent m_AssetPathContent;
+        private GUIContent m_CleanContent;
         private GUIContent m_ExportContent;
         private GUIContent m_SaveContent;
         private readonly float m_AddRectHeight = 50f;
@@ -68,6 +71,7 @@ namespace Game.Editor
             m_AssetContent = new GUIContent("AssetObject", "资源目录");
             m_FilterTypeContent = new GUIContent("FilterType", "资源筛选类型");
             m_AssetPathContent = new GUIContent("AssetPath", "资源路径");
+            m_CleanContent = EditorGUIUtility.TrTextContentWithIcon("Clean", "清理无效资源", "CloudConnect");
             m_ExportContent = EditorGUIUtility.TrTextContentWithIcon("Export", "导出配置", "Project");
             m_SaveContent = EditorGUIUtility.TrTextContentWithIcon("Save", "保存配置", "SaveAs");
 
@@ -146,24 +150,31 @@ namespace Game.Editor
 
         private void GUIToolbar()
         {
-            m_ToolbarRect = new Rect(position.width - 100, 0, 100, 42);
-            GUILayout.BeginHorizontal("Toolbar", GUILayout.ExpandWidth(true), GUILayout.Height(40));
+            m_ToolbarRect = new Rect(position.width - 100, 0, 100, 60);
+            GUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true), GUILayout.Height(50));
             {
                 GUILayout.FlexibleSpace();
-                Color originalColor = GUI.backgroundColor;
-                GUI.backgroundColor = Color.green;
 
-                if (GUILayout.Button(m_ExportContent))
+                if (GUILayout.Button(m_CleanContent, GUILayout.Height(30)))
+                {
+                    var unknownAssetCount = CleanUnknownAssets();
+                    if (unknownAssetCount > 0)
+                    {
+                        Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets  has been removed.", unknownAssetCount));
+                    }
+                }
+
+                GUILayout.Space(10);
+                if (GUILayout.Button(m_ExportContent, GUILayout.Height(30)))
                 {
                     ResourceCollectorEditorUtility.RefreshResourceCollection(m_SelectAssetBundleCollector);
                 }
 
-                if (GUILayout.Button(m_SaveContent))
+                GUILayout.Space(10);
+                if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
                     Save();
                 }
-
-                GUI.backgroundColor = originalColor;
             }
             GUILayout.EndHorizontal();
         }
@@ -509,44 +520,59 @@ namespace Game.Editor
 
         private void DrawEnableItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            EditorGUI.BeginChangeCheck();
             Rect enableRect = new Rect(cellRect.x + (cellRect.width / 2), cellRect.y, cellRect.width, cellRect.height);
             data.Enable = EditorGUI.Toggle(enableRect, data.Enable);
             data.Enable = data.Enable && data.IsValid;
+            m_IsDirty = EditorGUI.EndChangeCheck();
         }
 
         private void DrawNameItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            EditorGUI.BeginChangeCheck();
             data.Name = EditorGUI.TextField(cellRect, data.Name);
+            m_IsDirty = EditorGUI.EndChangeCheck();
         }
 
         private void DrawLoadTypeItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            EditorGUI.BeginChangeCheck();
             data.LoadType = (LoadType)EditorGUI.EnumPopup(cellRect, data.LoadType);
+            m_IsDirty = EditorGUI.EndChangeCheck();
         }
 
         private void DrawPackedItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            EditorGUI.BeginChangeCheck();
             Rect packedRect = new Rect(cellRect.x + (cellRect.width / 2), cellRect.y, cellRect.width, cellRect.height);
             data.Packed = EditorGUI.Toggle(packedRect, data.Packed);
+            m_IsDirty = EditorGUI.EndChangeCheck();
         }
 
         private void DrawFileSystemItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            EditorGUI.BeginChangeCheck();
             data.FileSystem = EditorGUI.TextField(cellRect, data.FileSystem);
+            m_IsDirty = EditorGUI.EndChangeCheck();
         }
 
         private void DrawVariantItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            EditorGUI.BeginChangeCheck();
             data.Variant = EditorGUI.TextField(cellRect, data.Variant);
+            m_IsDirty = EditorGUI.EndChangeCheck();
         }
 
         private void DrawAssetObjectItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            EditorGUI.BeginChangeCheck();
             data.Asset = EditorGUI.ObjectField(cellRect, m_EmptyContent, data.Asset, typeof(Object), false);
+            m_IsDirty = EditorGUI.EndChangeCheck();
         }
 
         private void DrawFilterTypeItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
+            EditorGUI.BeginChangeCheck();
             bool isValidFolderAsset = AssetDatabase.IsValidFolder(data.AssetPath);
             GUI.enabled = isValidFolderAsset;
             if (!isValidFolderAsset)
@@ -567,6 +593,7 @@ namespace Game.Editor
             }
 
             GUI.enabled = true;
+            m_IsDirty = EditorGUI.EndChangeCheck();
         }
 
         private void DrawAssetPathItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
@@ -625,6 +652,16 @@ namespace Game.Editor
             };
             m_AssetCollectorTableView.AddData(assetCollector);
             m_IsDirty = true;
+        }
+
+        private int CleanUnknownAssets()
+        {
+            return m_SelectAssetBundleCollector.Groups.Sum(resourceGroup => resourceGroup.AssetCollectors.RemoveAll(o => !IsValidAssetPath(o.AssetPath)));
+        }
+
+        private static bool IsValidAssetPath(string assetPath)
+        {
+            return AssetDatabase.IsValidFolder(assetPath) ? Directory.Exists(assetPath) : File.Exists(assetPath);
         }
 
         private void OnDestroy()

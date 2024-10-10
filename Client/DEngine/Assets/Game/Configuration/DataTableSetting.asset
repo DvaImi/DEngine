@@ -21,10 +21,12 @@ MonoBehaviour:
   DataTableEnumPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DataTableEnum
   NameSpace: Game.Update
   AssemblyNames:
-  - Assembly-CSharp
   - DEngine
   - DEngine.Runtime
-  - Game.Update
+  - DEngine.Editor
+  - Game.Editor
+  - Game.Runtime.Builtin
+  - Game.Runtime.Update
   NameRow: 1
   TypeRow: 2
   CommentRow: 3

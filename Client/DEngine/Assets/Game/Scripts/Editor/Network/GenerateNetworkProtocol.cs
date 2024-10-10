@@ -8,7 +8,7 @@ namespace Game.Editor.NetworkProtocol
 {
     public static class GenerateNetworkProtocol
     {
-        [MenuItem("Fantasy/Generate", priority = 100)]
+        [MenuItem("Fantasy/Generate/Protocol", priority = 100)]
         [EditorToolbarMenu("Generate Protocol", 0, 20)]
         public static void GenerateAll()
         {
@@ -20,9 +20,15 @@ namespace Game.Editor.NetworkProtocol
         }
 
         [MenuItem("Fantasy/Editor", priority = 101)]
-        public static void EditorLuban()
+        public static void EditorProtocol()
         {
             OpenFolder.Execute(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Config"));
+        }
+
+        [MenuItem("Fantasy/Run", priority = 201)]
+        public static void Run()
+        {
+            ShellHelper.Run("DEngine.exe --m Develop", Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Bin/Publish/"));
         }
     }
 }

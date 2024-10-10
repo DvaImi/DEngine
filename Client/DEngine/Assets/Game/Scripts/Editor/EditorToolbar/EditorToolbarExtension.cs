@@ -232,9 +232,7 @@ namespace Game.Editor.Toolbar
                 {
                     try
                     {
-                        Debug.Log($"Calling method: {menuName}");
                         methodInfo.Invoke(null, null);
-                        Debug.Log($"Successfully called method: {menuName}");
                     }
                     catch (Exception e)
                     {
@@ -251,9 +249,7 @@ namespace Game.Editor.Toolbar
                 {
                     try
                     {
-                        Debug.Log($"Calling method: {menuName}");
                         methodInfo.Invoke(null, null);
-                        Debug.Log($"Successfully called method: {menuName}");
                     }
                     catch (Exception e)
                     {

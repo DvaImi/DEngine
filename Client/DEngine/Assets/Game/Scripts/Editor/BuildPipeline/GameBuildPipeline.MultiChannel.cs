@@ -49,7 +49,6 @@ namespace Game.Editor.BuildPipeline
                 }
             }
 
-            DataTableSetting.Save();
             AssetDatabase.Refresh();
         }
 

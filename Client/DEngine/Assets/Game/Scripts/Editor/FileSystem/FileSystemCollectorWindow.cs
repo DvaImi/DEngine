@@ -51,7 +51,7 @@ namespace Game.Editor.ResourceTools
             if (m_ExportFlag)
             {
                 m_ExportFlag = false;
-                GameBuildPipeline.ExportFileSystem(new RawFileSystemHelper(), m_FileSystemDataHandlerHelper, m_FileSystemCollector);
+                GameBuildPipeline.ExportFileSystem(new FileSystemHelper(), m_FileSystemDataHandlerHelper, m_FileSystemCollector);
             }
         }
 

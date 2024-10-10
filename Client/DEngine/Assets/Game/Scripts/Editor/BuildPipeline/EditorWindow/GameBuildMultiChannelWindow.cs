@@ -13,7 +13,9 @@ namespace Game.Editor.BuildPipeline
     public class GameBuildMultiChannelWindow : EditorWindow
     {
         private GUIContent m_ExportContent;
+        private GUIContent m_BuildContent;
         private bool m_Generate;
+        private bool m_Build;
 
         [MenuItem("Game/Build Pipeline/MultiChannel", false, 10)]
         private static void Open()
@@ -25,7 +27,8 @@ namespace Game.Editor.BuildPipeline
         private void OnEnable()
         {
             m_ExportContent = EditorGUIUtility.TrTextContentWithIcon("Export", "导出配置", "Project");
-            m_Generate = false;
+            m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("Build", "构建当前配置应用");
+            m_Generate = m_Build = false;
         }
 
         private void Update()
@@ -34,6 +37,12 @@ namespace Game.Editor.BuildPipeline
             {
                 m_Generate = false;
                 GameBuildPipeline.GeneratePackingParameterFormExcel();
+            } 
+            
+            if (m_Build)
+            {
+                m_Build = false;
+                GameBuildPipeline.MultiChannelAutomatedBuild();
             }
         }
 
@@ -51,6 +60,11 @@ namespace Game.Editor.BuildPipeline
                 if (GUILayout.Button(m_ExportContent, GUILayout.Height(30)))
                 {
                     m_Generate = true;
+                }
+
+                if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))
+                {
+                    m_Build = true;
                 }
             }
             EditorGUILayout.EndHorizontal();
