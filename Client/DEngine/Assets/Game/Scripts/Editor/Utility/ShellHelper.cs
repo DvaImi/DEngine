@@ -13,7 +13,6 @@ namespace Game.Editor
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
                 string app = "bash";
-                string splitChar = ":";
                 string arguments = "-c";
 #elif UNITY_EDITOR_WIN
                 string app = "cmd.exe";
