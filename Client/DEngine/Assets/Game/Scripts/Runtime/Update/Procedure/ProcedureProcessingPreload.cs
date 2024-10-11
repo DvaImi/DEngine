@@ -17,7 +17,7 @@ namespace Game.Update.Procedure
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            ChangeState<ProcedureMenu>(procedureOwner);
+            ChangeState<ProcedureGame>(procedureOwner);
         }
 
         private void ProcessUIGroup()

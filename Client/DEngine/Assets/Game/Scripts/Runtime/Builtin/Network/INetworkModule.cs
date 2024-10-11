@@ -1,19 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
-using Fantasy;
 using Fantasy.Async;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
 
 namespace Game.Network
 {
-    public interface INetworkModule
+    public interface INetworkModule : IGameModule
     {
         /// <summary>
         /// 是否已连接。
         /// </summary>
         bool Connected { get; }
+
+        /// <summary>
+        /// 远程主机地址
+        /// </summary>
+        string RemoteAddress { get; }
 
         /// <summary>
         /// 获取网络延迟
@@ -58,20 +62,22 @@ namespace Game.Network
         /// <summary>
         /// 初始化网络模块
         /// </summary>
-        /// <param name="assemblies"></param>
-        void Initialize(params Assembly[] assemblies);
+        /// <param name="autoReconnect"></param>
+        /// <param name="maxReconnects"><see cref="autoReconnect"/> 设置为true的时候，重连的次数，默认为 5</param>
+        /// <param name="assemblies">装载的程序集</param>
+        void Initialize(bool autoReconnect, int maxReconnects = 5, params Assembly[] assemblies);
 
         /// <summary>
         /// 连接到远程主机
         /// </summary>
-        /// <param name="address"></param>
+        /// <param name="remoteAddress"></param>
         /// <param name="serviceType"></param>
         /// <param name="isHttps"></param>
         /// <param name="connectTimeout"></param>
         /// <param name="interval"></param>
         /// <param name="timeOut"></param>
         /// <param name="timeOutInterval"></param>
-        UniTask<bool> Connect(string address, NetworkProtocolType serviceType = NetworkProtocolType.TCP, bool isHttps = false, int connectTimeout = 5000, int interval = 2000, int timeOut = 2000, int timeOutInterval = 3000);
+        UniTask Connect(string remoteAddress, NetworkProtocolType serviceType = NetworkProtocolType.KCP, bool isHttps = false, int connectTimeout = 5000, int interval = 2000, int timeOut = 2000, int timeOutInterval = 3000);
 
         /// <summary>
         /// 发送消息到会话。

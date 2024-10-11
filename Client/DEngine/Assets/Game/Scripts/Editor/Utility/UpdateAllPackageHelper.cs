@@ -1,10 +1,10 @@
-using UnityEditor;
-using UnityEngine;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json.Linq;
+using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
-using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace Game.Editor
 {
@@ -55,7 +55,7 @@ namespace Game.Editor
             }
             else
             {
-                UnityEngine.Debug.Log("No packages to update.");
+                Debug.Log("No packages to update.");
             }
         }
 
@@ -65,7 +65,7 @@ namespace Game.Editor
             {
                 _updatingPackagesIndex++;
                 var (packageName, packageUrl) = PackagesToUpdate.Dequeue();
-                UnityEngine.Debug.Log($"Updating package: {packageName} from {packageUrl}");
+                Debug.Log($"Updating package: {packageName} from {packageUrl}");
                 _addRequest = Client.Add(packageUrl);
                 var isCancelableProgressBar = EditorUtility.DisplayCancelableProgressBar("正在更新包", $"{_updatingPackagesIndex}/{_allPackagesCount} ({packageName})", (float)_updatingPackagesIndex / _allPackagesCount);
                 EditorApplication.update += UpdatingProgressHandler;
@@ -81,7 +81,7 @@ namespace Game.Editor
             else
             {
                 EditorUtility.ClearProgressBar();
-                UnityEngine.Debug.Log("All packages updated.");
+                Debug.Log("All packages updated.");
                 AssetDatabase.Refresh();
             }
         }
@@ -92,11 +92,11 @@ namespace Game.Editor
             {
                 if (_addRequest.Status == StatusCode.Success)
                 {
-                    UnityEngine.Debug.Log($"Updated package: {_addRequest.Result.packageId}");
+                    Debug.Log($"Updated package: {_addRequest.Result.packageId}");
                 }
                 else if (_addRequest.Status >= StatusCode.Failure)
                 {
-                    UnityEngine.Debug.LogError($"Failed to update package: {_addRequest.Error.message}");
+                    Debug.LogError($"Failed to update package: {_addRequest.Error.message}");
                 }
 
                 EditorApplication.update -= UpdatingProgressHandler;

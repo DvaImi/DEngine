@@ -19,7 +19,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9057452c86079e4265228480b1439442894d5078"
+      "hash": "f9fd769be7c634610f2a61aa914a1a55f34740e1"
     },
     "com.cysharp.zstring": {
       "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString#2.6.0",
@@ -35,16 +35,16 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "67792908544b0aa520c29c255f37b13ee65f4b4f"
+      "hash": "7dca996a9bb6663f38a699af54736e0cb92b6a09"
     },
     "com.fantasy.unity": {
-      "version": "https://github.com/DvaImi/Fantasy.git?path=Fantasy.Unity/Fantasy.Unity",
+      "version": "https://github.com/qq362946/Fantasy.Unity.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "725c0272e637de1e39a139440bd7c71a80d86604"
+      "hash": "6b4d68df2c3546284997891f981df1c868776f76"
     },
     "com.unity.ai.navigation": {
       "version": "1.1.5",

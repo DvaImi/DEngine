@@ -5,10 +5,10 @@
 // 版 本：1.0
 // ========================================================
 
+using System;
 using System.Security.Cryptography;
 using System.Text;
 using DEngine;
-using DEngine.Localization;
 
 namespace Game
 {
@@ -16,35 +16,6 @@ namespace Game
     {
         public static class String
         {
-            public static string GetVariant()
-            {
-                string currentVariant;
-                switch (GameEntry.Localization.Language)
-                {
-                    case Language.English:
-                        currentVariant = "en-us";
-                        break;
-
-                    case Language.ChineseSimplified:
-                        currentVariant = "zh-cn";
-                        break;
-
-                    case Language.ChineseTraditional:
-                        currentVariant = "zh-tw";
-                        break;
-
-                    case Language.Korean:
-                        currentVariant = "ko-kr";
-                        break;
-
-                    default:
-                        currentVariant = "zh-cn";
-                        break;
-                }
-
-                return currentVariant;
-            }
-
             public static string GetByteLengthString(long byteLength)
             {
                 if (byteLength < 1024L) // 2 ^ 10
@@ -87,33 +58,36 @@ namespace Game
                     return content;
                 }
 
-                int startIndex;
-                if (firstMatch)
-                {
-                    startIndex = content.IndexOf(key); //返回子字符串第一次出现位置		
-                }
-                else
-                {
-                    startIndex = content.LastIndexOf(key); //返回子字符串最后出现的位置
-                }
-
-                // 如果没有找到匹配的关键字
+                var startIndex = firstMatch ? content.IndexOf(key, StringComparison.Ordinal) : content.LastIndexOf(key, StringComparison.Ordinal);
                 return startIndex == -1 ? content : includeKey ? content[startIndex..] : content[(startIndex + key.Length)..];
             }
-            
+
             public static string GetHashString(string input)
             {
                 using (SHA256 sha256 = SHA256.Create())
                 {
                     byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
-        
+
                     StringBuilder builder = new StringBuilder();
                     foreach (byte b in bytes)
                     {
                         builder.Append(b.ToString("x2"));
                     }
+
                     return builder.ToString();
                 }
+            }
+
+            public static string GetColor(ColorType colorType)
+            {
+                int color = (int)colorType;
+                string colorString = Convert.ToString(color, 16);
+                while (colorString.Length < 6)
+                {
+                    colorString = "0" + colorString;
+                }
+
+                return colorString;
             }
         }
     }
