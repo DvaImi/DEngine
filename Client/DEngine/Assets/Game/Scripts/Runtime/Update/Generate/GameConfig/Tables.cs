@@ -8,54 +8,49 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable
+namespace Game.Update.DataTable
 {
-    public partial class Tables
+public partial class Tables
+{
+    #region The Tables
+
+    private Item.TbItem m_TbItem;
+    public Item.TbItem TbItem 
     {
-        public Item.TbItem TbItem { get; private set; }
-
-
-        /// <summary>
-        /// 所有数据表名
-        /// </summary>
-        public readonly string[] TableNames = new[]
+        get
         {
-           "TBItem",
-        };
-
-        private System.Collections.Generic.Dictionary<string, ILubanTable> m_Tables;
-        public System.Collections.Generic.IEnumerable<ILubanTable> DataTables => m_Tables.Values;
-        public ILubanTable GetDataTable(string tableName) => m_Tables.TryGetValue(tableName, out var v) ? v : null;
-    
-        public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
-        {
-            m_Tables = new System.Collections.Generic.Dictionary<string, ILubanTable>();
-            var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
-    
-            TbItem = new Item.TbItem(() => loader("TBItem"));
-            loadTasks.Add(TbItem.LoadAsync());
-            m_Tables.Add("Item.TbItem", TbItem);
-    
-            await Cysharp.Threading.Tasks.UniTask.WhenAll(loadTasks);
-    
-            Refresh();
+            if (m_TbItem == null)
+            {
+                m_TbItem = new Item.TbItem(defaultLoader("TBItem"));
+                m_TbItem.ResolveRef(this);
+            }
+            return m_TbItem;
         }
-    
-        private void ResolveRef()
+        set
         {
-            TbItem.ResolveRef(this);
-            PostResolveRef();
+            m_TbItem = value;
+            m_TbItem.ResolveRef(this);
         }
-    
-        public void Refresh()
-        {
-            PostInit();
-            ResolveRef();
-        }
-    
-        partial void PostInit();
-        partial void PostResolveRef();
     }
+
+    #endregion
+
+    System.Func<string, ByteBuf> defaultLoader;
+
+    public Tables(System.Func<string, ByteBuf> loader)
+    {
+        SetDefaultLoader(loader);
+        Init();
+    }
+    
+    public void SetDefaultLoader(System.Func<string, ByteBuf> loader)
+    {
+        defaultLoader = null;
+        defaultLoader = loader;
+    }
+
+    partial void Init();
+}
+
 }

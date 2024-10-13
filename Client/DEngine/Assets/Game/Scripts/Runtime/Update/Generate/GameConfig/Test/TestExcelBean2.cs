@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable.Test
+
+namespace Game.Update.DataTable.Test
 {
 /// <summary>
 /// 这是个测试excel结构
@@ -22,7 +22,6 @@ public sealed partial class TestExcelBean2 : Luban.BeanBase
         Y1 = _buf.ReadInt();
         Y2 = _buf.ReadString();
         Y3 = _buf.ReadFloat();
-        PostInit();
     }
 
     public static TestExcelBean2 DeserializeTestExcelBean2(ByteBuf _buf)
@@ -42,12 +41,12 @@ public sealed partial class TestExcelBean2 : Luban.BeanBase
     /// 蓝色的
     /// </summary>
     public readonly float Y3;
+   
     public const int __ID__ = -485049063;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -58,8 +57,7 @@ public sealed partial class TestExcelBean2 : Luban.BeanBase
         + "y3:" + Y3 + ","
         + "}";
     }
+}
 
-    partial void PostInit();
-    partial void PostResolveRef();
 }
-}
+

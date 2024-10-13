@@ -609,6 +609,63 @@ namespace Game.Editor
             EditorGUILayout.EndHorizontal();
         }
 
+        public static void GUIOutMultipleFilePaths(string header, ref string[] paths, string extension)
+        {
+            EditorGUILayout.BeginVertical();
+            {
+                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
+                {
+                    normal = new GUIStyleState
+                    {
+                        textColor = Color.yellow
+                    }
+                };
+
+                for (int i = 0; i < paths.Length; i++)
+                {
+                    bool invalid = !File.Exists(paths[i]);
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField($"{header} {i + 1}:", paths[i], invalid ? warningLableGUIStyle : EditorStyles.label);
+
+                    if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
+                    {
+                        string file = EditorUtility.OpenFilePanel("Select Output File", paths[i], extension);
+                        if (!string.IsNullOrEmpty(file) && File.Exists(file) && file != paths[i])
+                        {
+                            paths[i] = file;
+                        }
+                    }
+
+                    if (GUILayout.Button("Go", GUILayout.Width(30)))
+                    {
+                        EditorUtility.OpenWithDefaultApp(paths[i]);
+                    }
+
+                    if (GUILayout.Button("Remove", GUILayout.Width(60)))
+                    {
+                        List<string> pathList = paths.ToList();
+                        pathList.RemoveAt(i);
+                        paths = pathList.ToArray();
+                        break;
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
+
+                if (GUILayout.Button("Add File", GUILayout.Width(80)))
+                {
+                    string file = EditorUtility.OpenFilePanel("Select Output File", "", extension);
+                    if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                    {
+                        Array.Resize(ref paths, paths.Length + 1);
+                        paths[^1] = file;
+                    }
+                }
+            }
+            EditorGUILayout.EndVertical();
+        }
+
+
         /// <summary>
         /// 绘制 Toggle
         /// </summary>
@@ -1036,6 +1093,32 @@ namespace Game.Editor
         }
 
         /// <summary>
+        /// 转换文件的绝对路径为Unity 项目的相对路径
+        /// </summary>
+        /// <param name="absolutePath"></param>
+        /// <returns></returns>
+        public static string AbsolutePathToProject(string absolutePath)
+        {
+            string projectPath = Application.dataPath.Replace("/Assets", "");
+
+            absolutePath = absolutePath.Replace("\\", "/");
+            projectPath = projectPath.Replace("\\", "/");
+
+            try
+            {
+                var projectUri = new Uri(projectPath + "/");
+                var absoluteUri = new Uri(absolutePath);
+                var relativeUri = projectUri.MakeRelativeUri(absoluteUri);
+                return Uri.UnescapeDataString(relativeUri.ToString().Replace("/", "/"));
+            }
+            catch (UriFormatException)
+            {
+                Debug.LogWarning("Invalid path format.");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 转换Unity资源路径为文件的绝对路径
         /// 例如：Assets/Works/file.txt 替换为 D:\\YourPorject/Assets/Works/file.txt
         /// </summary>
@@ -1076,26 +1159,27 @@ namespace Game.Editor
         /// <param name="content">内容</param>
         /// <param name="key">关键字</param>
         /// <param name="includeKey">分割的结果里是否包含关键字</param>
-        /// <param name="searchBegin">是否使用初始匹配的位置，否则使用末尾匹配的位置</param>
+        /// <param name="firstMatch"></param>
         public static string Substring(string content, string key, bool includeKey, bool firstMatch = true)
         {
             if (string.IsNullOrEmpty(key))
+            {
                 return content;
+            }
 
             int startIndex = -1;
-            if (firstMatch)
-                startIndex = content.IndexOf(key); //返回子字符串第一次出现位置		
-            else
-                startIndex = content.LastIndexOf(key); //返回子字符串最后出现的位置
+            startIndex = firstMatch
+                ? content.IndexOf(key, StringComparison.Ordinal)
+                : //返回子字符串第一次出现位置		
+                content.LastIndexOf(key, StringComparison.Ordinal); //返回子字符串最后出现的位置
 
             // 如果没有找到匹配的关键字
             if (startIndex == -1)
+            {
                 return content;
+            }
 
-            if (includeKey)
-                return content.Substring(startIndex);
-            else
-                return content.Substring(startIndex + key.Length);
+            return includeKey ? content[startIndex..] : content[(startIndex + key.Length)..];
         }
 
         #endregion

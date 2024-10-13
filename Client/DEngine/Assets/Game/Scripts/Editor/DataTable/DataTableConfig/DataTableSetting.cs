@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using DEngine;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 namespace Game.Editor.DataTableTools
 {
@@ -13,9 +14,9 @@ namespace Game.Editor.DataTableTools
         #region DataTable
 
         /// <summary>
-        /// 数据表存放文件夹路径
+        /// 数据表导出文件夹路径
         /// </summary>
-        public string DataTableFolderPath = "Assets/Game/Bundles/DataTables";
+        public string OutputDataTableFolder = "Assets/../Excels/Output/DataTable";
 
         /// <summary>
         /// Excel存放的文件夹路径
@@ -89,7 +90,7 @@ namespace Game.Editor.DataTableTools
         /// </summary>
         public int IdColumn = 1;
 
-        public static string DataTableVersion => Utility.Path.GetRegularPath(Path.Combine(Instance.DataTableFolderPath, Constant.AssetVersion.DataTableVersion + ".bytes"));
+        public static string DataTableVersion => Utility.Path.GetRegularPath(Path.Combine(Instance.OutputDataTableFolder, Constant.AssetVersion.DataTableVersion + ".bytes"));
 
         #endregion
 
@@ -106,11 +107,5 @@ namespace Game.Editor.DataTableTools
         public string LocalizationExcelsFolder = "Assets/../Excels/Localization";
 
         #endregion
-
-        internal void SaveSetting()
-        {
-            Save();
-            AssetDatabase.Refresh();
-        }
     }
 }

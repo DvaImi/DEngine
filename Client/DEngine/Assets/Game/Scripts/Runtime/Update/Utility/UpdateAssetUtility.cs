@@ -11,9 +11,9 @@
         /// <param name="assetName"></param>
         /// <param name="fromBytes"></param>
         /// <returns></returns>
-        public static string GetConfigAsset(string assetName, bool fromBytes)
+        public static string GetConfigAsset(string assetName, bool fromBytes = true)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Configs/{0}/{1}.{2}", fromBytes ? "Bin" : "Json", assetName, fromBytes ? "bytes" : "json");
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Configs/{0}.{1}", assetName, fromBytes ? "bytes" : "json");
         }
 
         /// <summary>
@@ -22,9 +22,9 @@
         /// <param name="assetName"></param>
         /// <param name="fromBytes"></param>
         /// <returns></returns>
-        public static string GetDataTableAsset(string assetName, bool fromBytes)
+        public static string GetDataTableAsset(string assetName, bool fromBytes = true)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/DataTables/{0}.{1}", assetName, fromBytes ? "bytes" : "txt");
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/DataTables/{0}.{1}", assetName, fromBytes ? "bytes" : "json");
         }
 
         /// <summary>
@@ -33,7 +33,7 @@
         /// <param name="assetName"></param>
         /// <param name="fromBytes"></param>
         /// <returns></returns>
-        public static string GetDictionaryAsset(string assetName, bool fromBytes)
+        public static string GetDictionaryAsset(string assetName, bool fromBytes = true)
         {
             return DEngine.Utility.Text.Format("Assets/Game/Bundles/Localization/{0}/{1}.{2}", assetName, GameEntry.Localization.Language, fromBytes ? "bytes" : "txt");
         }

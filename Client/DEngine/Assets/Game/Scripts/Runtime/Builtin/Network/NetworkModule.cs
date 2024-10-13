@@ -103,7 +103,7 @@ namespace Game.Network
             GameEntry.Debugger.RegisterDebuggerWindow("Profiler/Network", m_NetworkDebuggerWindow);
             m_AutoReconnect = autoReconnect;
             m_MaxReconnects = maxReconnects <= 0 ? 5 : maxReconnects;
-
+            Fantasy.Log.Register(new NetworkLog());
             if (Entry.Scene == null)
             {
                 Entry.Initialize(assemblies);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -22,7 +23,7 @@ namespace Game.Editor.BuildPipeline
         /// <param name="packed">为可更新模式生成的本地资源列表</param>
         public static void GetBuildVersions(Platform platform, bool lastFull, out string fullPath, out string package, out string packed, out string patch)
         {
-            string OutputDirectory = GameSetting.Instance.BundlesOutput;
+            string OutputDirectory = DEngineSetting.BundlesOutput;
             fullPath = package = packed = patch = null;
             string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
             if (!Directory.Exists(buildReportDirectory))
@@ -36,6 +37,7 @@ namespace Game.Editor.BuildPipeline
             {
                 return;
             }
+
             int[] lastBuildVersions = new int[allBuildReport.Length];
             for (int i = 0; i < allBuildReport.Length; i++)
             {
@@ -77,9 +79,25 @@ namespace Game.Editor.BuildPipeline
             MergeFullVersionList(currentVersionFullPath, lastFullVersionOutputFullPath, patchVersionPath.Replace("*patch", "Full"), lastFullVersionFiles);
             MergePackageVersionList(currentVersionPackagePath, lastPackageVersionOutpuPath, patchVersionPath.Replace("*patch", "Package"), lastPackageVersionFiles);
             MergePackedVersionList(currentVersionPackedPath, lastPackedVersionOutputPath, patchVersionPath.Replace("*patch", "Packed"), lastPackedVersionFiles);
-          
-            int resourceMode = GameSetting.Instance.ResourceModeIndex;
-            string sourcePath = resourceMode <= 1 ? currentVersionPackagePath : currentVersionPackedPath;
+
+            var resourceMode = DEngineSetting.Instance.ResourceMode;
+
+            string sourcePath = currentVersionPackagePath;
+
+            switch (resourceMode)
+            {
+                case DEngine.Resource.ResourceMode.Unspecified:
+                case DEngine.Resource.ResourceMode.Package:
+                    break;
+                case DEngine.Resource.ResourceMode.Updatable:
+                case DEngine.Resource.ResourceMode.UpdatableWhilePlaying:
+                    sourcePath = currentVersionPackedPath;
+                    break;
+                default:
+                    sourcePath = currentVersionPackagePath;
+                    break;
+            }
+
             CopyFileToStreamingAssets(sourcePath);
             Debug.Log("Difference postprocess complete.");
             EditorUtility.ClearProgressBar();
@@ -288,11 +306,12 @@ namespace Game.Editor.BuildPipeline
         /// <returns></returns>
         public static bool CanDifference()
         {
-            if (GameSetting.Instance.ForceRebuildAssetBundle)
+            if (DEngineSetting.Instance.ForceRebuildAssetBundle)
             {
                 return false;
             }
-            Platform platform = GetPlatform(GameSetting.Instance.BuildPlatform);
+
+            Platform platform =DEngineSetting.Instance.BuildPlatform;
             GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutputFullPath, out string lastPackedVersionOutputFullPath, out _);
             return !string.IsNullOrEmpty(lastFullVersionOutputFullPath) && Directory.Exists(lastFullVersionOutputFullPath) && !string.IsNullOrEmpty(lastPackageVersionOutputFullPath) && Directory.Exists(lastPackageVersionOutputFullPath) && !string.IsNullOrEmpty(lastPackedVersionOutputFullPath) && Directory.Exists(lastPackedVersionOutputFullPath);
         }

@@ -19,7 +19,6 @@ namespace Game.Editor.DataTableTools
         {
             var window = GetWindow<DataTableSettingEditorWindows>("DataTable Setting");
             window.minSize = new Vector2(800, 600);
-            DataTableSetting.Instance.SaveSetting();
         }
 
         private void OnEnable()
@@ -61,7 +60,7 @@ namespace Game.Editor.DataTableTools
             {
                 if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
-                    DataTableSetting.Instance.SaveSetting();
+                    DataTableSetting.Save();
                     Debug.Log("Save success.");
                 }
             }
@@ -91,7 +90,7 @@ namespace Game.Editor.DataTableTools
                             void Save(string[] assemblyNames)
                             {
                                 DataTableSetting.Instance.AssemblyNames = assemblyNames.Select(item => item.Replace(".dll", null)).ToArray();
-                                DataTableSetting.Instance.SaveSetting();
+                                DataTableSetting.Save();
                                 Repaint();
                             }
 
@@ -117,7 +116,7 @@ namespace Game.Editor.DataTableTools
             {
                 if (m_FoldoutDataTableGroup)
                 {
-                    EditorTools.GUIAssetPath("数据表文件导出路径", ref DataTableSetting.Instance.DataTableFolderPath, true);
+                    EditorTools.GUIOutFolderPath("数据表文件导出路径", ref DataTableSetting.Instance.OutputDataTableFolder);
                     EditorTools.GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath, true);
                     EditorTools.GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName);
                     EditorTools.GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath, true);
@@ -137,8 +136,6 @@ namespace Game.Editor.DataTableTools
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
-
-            EditorGUILayout.Space(10);
         }
 
         private void GUILocalization()

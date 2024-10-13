@@ -1,15 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Editor.ResourceTools
+namespace Game.Editor.FileSystem
 {
-    [CreateAssetMenu(menuName = "Game/FileSystem Collector", order = 3)]
-    public class FileSystemCollector : ScriptableObject
+    [GameFilePath("Assets/Game/Configuration/FileSystemCollector.asset"), CreateAssetMenu(menuName = "Game/FileSystem Collector", order = 3)]
+    public class FileSystemCollector : ScriptableSingleton<FileSystemCollector>
     {
-        public int FileSystemHandlerTypeNameIndex;
-
-        public string FileSystemHelperTypeName;
-
         public List<FileSystemData> FileSystemDatas = new();
     }
 }

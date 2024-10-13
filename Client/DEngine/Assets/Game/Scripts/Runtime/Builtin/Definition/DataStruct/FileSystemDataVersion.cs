@@ -1,50 +1,88 @@
 using System;
 using System.Collections.Generic;
+using DEngine.Runtime;
+using Newtonsoft.Json;
 
 namespace Game.FileSystem
 {
     [Serializable]
     public class FileSystemDataVersion
     {
-        public FileSystemDataVersion(string fileSystem, string fullPath)
-        {
-            FileSystem = fileSystem;
-            FullPath = fullPath;
-        }
-
         /// <summary>
         /// 资源文件系统
         /// </summary>
         public string FileSystem { get; set; }
 
         /// <summary>
-        /// 获取文件系统完整路径。
+        /// 资源文件偏移和长度
         /// </summary>
-        public string FullPath { get; set; }
+        public Dictionary<string, FileInfo> FileInfos { get; set; } = new();
+
+        public static FileSystemDataVersion Deserialize(byte[] data)
+        {
+            if (data == null)
+            {
+                Log.Error("data is invalid");
+                return null;
+            }
+
+            return GameUtility.Bson.FormBson<FileSystemDataVersion>(data);
+        }
+
+        public static byte[] ToBson(FileSystemDataVersion data)
+        {
+            if (data == null)
+            {
+                Log.Error("data is invalid");
+                return null;
+            }
+
+            return GameUtility.Bson.ToBson(data);
+        }
+
+        public static FileSystemDataVersion Deserialize(string json)
+        {
+            if (json == null)
+            {
+                Log.Error("json is invalid");
+                return null;
+            }
+
+            return JsonConvert.DeserializeObject<FileSystemDataVersion>(json);
+        }
+
+        public static string ToJson(FileSystemDataVersion data)
+        {
+            if (data == null)
+            {
+                Log.Error("data is invalid");
+                return null;
+            }
+
+            return JsonConvert.SerializeObject(data);
+        }
+    }
+
+    /// <summary>
+    /// 文件信息
+    /// </summary>
+    [Serializable]
+    public class FileInfo
+    {
+        public FileInfo(long offset, int length)
+        {
+            Offset = offset;
+            Length = length;
+        }
 
         /// <summary>
-        /// 获取文件数量。
+        /// 文件偏移
         /// </summary>
-        public int FileCount { get; set; }
+        public long Offset { get; set; }
 
         /// <summary>
-        /// 文件大小
+        /// 文件长度
         /// </summary>
-        public long Length { get; set; }
-
-        /// <summary>
-        /// 文件名称
-        /// </summary>
-        public List<string> AssetNames { get; set; } = new();
-
-        /// <summary>
-        /// 文件完整路径
-        /// </summary>
-        public List<string> AssetFullNames { get; set; } = new();
-
-        /// <summary>
-        /// 资源文件偏移
-        /// </summary>
-        public Dictionary<string, long> AssetOffsetMap { get; set; } = new();
+        public int Length { get; set; }
     }
 }

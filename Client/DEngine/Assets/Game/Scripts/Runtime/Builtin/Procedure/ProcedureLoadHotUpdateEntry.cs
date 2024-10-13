@@ -14,16 +14,17 @@ namespace Game
             HotfixLauncher().Forget();
         }
 
-        private async UniTaskVoid HotfixLauncher()
+        private static async UniTask HotfixLauncher()
         {
-            GameObject luncher = await GameEntry.Resource.LoadAssetAsync<GameObject>(BuiltinAssetUtility.GetCLRLanuchAsset("UpdateLuncher"));
-            if (luncher == null)
+            var launcher = await GameEntry.Resource.LoadAssetAsync<GameObject>(BuiltinAssetUtility.GetUpdateLauncherAsset());
+            if (!launcher)
             {
-                Log.Error("Load asset luncher failure.");
+                Log.Error("Load asset launcher failure.");
                 return;
             }
 
-            Object.Instantiate(luncher);
+            GameEntry.Resource.UnloadAsset(launcher);
+            Object.Instantiate(launcher);
         }
     }
 }

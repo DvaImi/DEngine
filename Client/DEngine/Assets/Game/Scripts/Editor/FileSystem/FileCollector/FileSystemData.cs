@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using DEngine;
+using UnityEditor;
 
-namespace Game.Editor.ResourceTools
+namespace Game.Editor.FileSystem
 {
     [Serializable]
     public class FileSystemData
@@ -14,11 +17,21 @@ namespace Game.Editor.ResourceTools
         /// <summary>
         /// 导出路径
         /// </summary>
-        public string OutPutPath = null;
+        public string OutPutFolderPath = null;
 
         /// <summary>
         /// 资源对象
         /// </summary>
-        public List<string> AssetPaths = null;
+        public List<string> FileFullPaths = null;
+
+        /// <summary>
+        /// 文件系统的完整路径
+        /// </summary>
+        public string FullPath => Utility.Path.GetRegularCombinePath(OutPutFolderPath, FileSystem + ".bytes");
+
+        /// <summary>
+        /// 是否是有效资源
+        /// </summary>
+        public bool IsValid => !string.IsNullOrWhiteSpace(FileSystem) && AssetDatabase.IsValidFolder(OutPutFolderPath) && File.Exists(FullPath);
     }
 }

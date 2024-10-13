@@ -36,7 +36,7 @@ namespace Game.Update.DataTable
                 return null;
             }
 
-            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName + "_table", true);
+            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName + "_table");
             return await self.LoadDataTableAsync(dataRowType, dataTableName, dataTableAssetName, userData);
         }
 

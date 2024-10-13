@@ -1,0 +1,4 @@
+{
+	"name": "Game.Runtime.Preserve",
+	"references":[ "GUID:7bc98016d4aac29439a48a73d0e6dcf3", "GUID:1b482ecb56af90e4188a38330b70f1e0" ]
+}

@@ -20,10 +20,10 @@ namespace Game.Update.Procedure
             ChangeState<ProcedureGame>(procedureOwner);
         }
 
-        private void ProcessUIGroup()
+        private static void ProcessUIGroup()
         {
             Log.Info("Process ui group");
-            var uiGroups = GameEntry.DataTable.GetDataTable<DRUIGroup>().GetAllDataRows();
+            var uiGroups = Entry.DataTable.GetDataTable<DRUIGroup>().GetAllDataRows();
 
             foreach (var group in uiGroups)
             {
@@ -38,7 +38,7 @@ namespace Game.Update.Procedure
             }
         }
 
-        private void ProcessEntityGroup()
+        private static void ProcessEntityGroup()
         {
             Log.Info("Process entity group");
         }

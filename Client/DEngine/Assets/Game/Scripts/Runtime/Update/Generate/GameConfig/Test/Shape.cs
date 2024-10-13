@@ -8,15 +8,14 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable.Test
+
+namespace Game.Update.DataTable.Test
 {
 public abstract partial class Shape : Luban.BeanBase
 {
     public Shape(ByteBuf _buf) 
     {
-        PostInit();
     }
 
     public static Shape DeserializeShape(ByteBuf _buf)
@@ -29,10 +28,10 @@ public abstract partial class Shape : Luban.BeanBase
         }
     }
 
+   
 
     public virtual void ResolveRef(Tables tables)
     {
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -40,8 +39,7 @@ public abstract partial class Shape : Luban.BeanBase
         return "{ "
         + "}";
     }
+}
 
-    partial void PostInit();
-    partial void PostResolveRef();
 }
-}
+

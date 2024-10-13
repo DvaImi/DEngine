@@ -6,8 +6,10 @@
 // ========================================================
 
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using Cysharp.Text;
 using DEngine;
 
 namespace Game
@@ -89,6 +91,37 @@ namespace Game
 
                 return colorString;
             }
+
+            public static string Concat(params string[] values)
+            {
+                return ZString.Concat(values);
+            }
+
+            public static string Concat<T>(params T[] values)
+            {
+                return ZString.Concat(values);
+            }
+
+            public static string CollectionToString<T>(IEnumerable<T> collection)
+            {
+                return Utility.Text.Format("[{0}]", ZString.Join(",", collection));
+            }
+
+            public static string CollectionToString<TK, TV>(IDictionary<TK, TV> collection)
+            {
+                using var sb = ZString.CreateStringBuilder();
+                sb.Append('{');
+                foreach (var e in collection)
+                {
+                    sb.Append(e.Key);
+                    sb.Append(':');
+                    sb.Append(e.Value);
+                    sb.Append(',');
+                }
+                sb.Append('}');
+                return sb.ToString();
+            }
+          
         }
     }
 }

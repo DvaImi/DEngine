@@ -100,6 +100,19 @@ namespace Game
                 return result;
             }
 
+            public static string[] GetFileNamesWithExtension(string directoryPath, string fileExtension)
+            {
+                var directoryInfo = new DirectoryInfo(directoryPath);
+                var fileInfos = directoryInfo.GetFiles("*" + fileExtension, SearchOption.AllDirectories);
+                var result = new string[fileInfos.Length];
+                for (var i = 0; i < fileInfos.Length; i++)
+                {
+                    result[i] = fileInfos[i].FullName;
+                }
+
+                return result;
+            }
+
             public static void Delete(string directoryPath)
             {
                 if (!Directory.Exists(directoryPath))

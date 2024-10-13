@@ -28,8 +28,8 @@ namespace Game
                 return;
             }
 
-#if ENABLE_HYBRIDCLR
-            ChangeState<ProcedureLoadAotMetadData>(procedureOwner);
+#if ENABLE_HYBRIDCLR&& !UNITY_EDITOR
+            ChangeState<ProcedureLoadAssemblies>(procedureOwner);
 #else
             ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
 #endif

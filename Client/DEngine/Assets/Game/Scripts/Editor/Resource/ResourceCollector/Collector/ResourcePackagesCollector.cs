@@ -4,19 +4,14 @@ using UnityEngine;
 
 namespace Game.Editor.ResourceTools
 {
-    [CreateAssetMenu(menuName = "Game/ResourcePackagesCollector", order = 2)]
-    public class ResourcePackagesCollector : ScriptableObject
+    [GameFilePath("Assets/Game/Configuration/ResourcePackagesCollector.asset"), CreateAssetMenu(menuName = "Game/ResourcePackagesCollector", order = 2)]
+    public class ResourcePackagesCollector : ScriptableSingleton<ResourcePackagesCollector>
     {
-        public List<ResourceGroupsCollector> PackagesCollector = new List<ResourceGroupsCollector>();
-
-        public static ResourcePackagesCollector GetPackageCollector()
-        {
-            return EditorTools.LoadScriptableObject<ResourcePackagesCollector>();
-        }
+        public List<ResourceGroupsCollector> PackagesCollector = new();
 
         public static ResourceGroupsCollector GetResourceGroupsCollector()
         {
-            return GetResourceGroupsCollector(GameSetting.Instance.AssetBundleCollectorIndex);
+            return GetResourceGroupsCollector(DEngineSetting.Instance.AssetBundleCollectorIndex);
         }
 
         public static ResourceGroupsCollector GetResourceGroupsCollector(int index)
@@ -28,7 +23,7 @@ namespace Game.Editor.ResourceTools
 
             try
             {
-                return GetPackageCollector().PackagesCollector[index];
+                return Instance.PackagesCollector[index];
             }
             catch (Exception e)
             {

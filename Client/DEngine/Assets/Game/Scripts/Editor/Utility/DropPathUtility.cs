@@ -114,7 +114,7 @@ namespace Game.Editor
         {
             EditorGUILayout.BeginHorizontal();
             {
-                bool valid = !AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.BuildSettingsConfig);
+                bool valid = !AssetDatabase.LoadAssetAtPath<Object>(DEngineSetting.Instance.BuildSettingsConfig);
                 GUIStyle style = new GUIStyle(EditorStyles.label);
                 style.normal.textColor = Color.yellow;
                 value = EditorGUILayout.TextField(label, value, valid ? style : EditorStyles.label);

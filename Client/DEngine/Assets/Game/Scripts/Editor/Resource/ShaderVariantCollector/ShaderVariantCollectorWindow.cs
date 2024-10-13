@@ -133,7 +133,7 @@ public class ShaderVariantCollectorWindow : EditorWindow
     private List<string> GetBuildPackageNames()
     {
         List<string> result = new List<string>();
-        foreach (var package in ResourcePackagesCollector.GetPackageCollector().PackagesCollector)
+        foreach (var package in ResourcePackagesCollector.Instance.PackagesCollector)
         {
             result.Add(package.PackageName);
         }

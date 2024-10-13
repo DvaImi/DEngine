@@ -9,7 +9,7 @@
 
 
 
-namespace Game.LubanTable.Test
+namespace Game.Update.DataTable.Test
 { 
     [System.Flags]
     public enum AccessFlag

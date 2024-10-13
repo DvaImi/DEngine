@@ -1,11 +1,14 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using DEngine;
 using DEngine.Editor;
+using Game.Editor.FileSystem;
 using Game.Editor.Toolbar;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using UnityEditor;
 using UnityEngine;
@@ -49,6 +52,8 @@ namespace Game.Editor.DataTableTools
             ExtensionsGenerate.GenerateExtensionByAnalysis(excelFilePaths, 2);
             foreach (var excelFile in excelFilePaths)
             {
+                string md5 = GameUtility.IO.GetFileMD5(excelFile);
+
                 string excelName = Path.GetFileNameWithoutExtension(excelFile);
                 using (FileStream fileStream = new FileStream(excelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {

@@ -1,5 +1,6 @@
 ﻿using DEngine.Fsm;
 using DEngine.Procedure;
+using DEngine.Runtime;
 
 namespace Game.Update.Procedure
 {
@@ -8,9 +9,6 @@ namespace Game.Update.Procedure
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-#if FANTASY_UNITY
-            GameEntry.Network.Connect("127.0.0.1:20000");
-#endif
         }
     }
 }

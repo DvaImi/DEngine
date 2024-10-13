@@ -8,55 +8,45 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable.Item
+
+namespace Game.Update.DataTable.Item
 {
-    public partial class TbItem : ILubanTable
+public partial class TbItem
+{
+    private readonly System.Collections.Generic.Dictionary<int, Item.DCItem> _dataMap;
+    private readonly System.Collections.Generic.List<Item.DCItem> _dataList;
+    
+    public TbItem(ByteBuf _buf)
     {
-        private readonly System.Collections.Generic.Dictionary<int, Item.DCItem> m_DataMap;
-        private readonly System.Collections.Generic.List<Item.DCItem> m_DataList;
-        private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> m_LoadFunc;
-    
-        public TbItem(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
+        _dataMap = new System.Collections.Generic.Dictionary<int, Item.DCItem>();
+        _dataList = new System.Collections.Generic.List<Item.DCItem>();
+        
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
-            m_DataMap = new System.Collections.Generic.Dictionary<int, Item.DCItem>();
-            m_DataList = new System.Collections.Generic.List<Item.DCItem>();
-            m_LoadFunc = loadFunc;
+            Item.DCItem _v;
+            _v = Item.DCItem.DeserializeDCItem(_buf);
+            _dataList.Add(_v);
+            _dataMap.Add(_v.Id, _v);
         }
-    
-        public async Cysharp.Threading.Tasks.UniTask LoadAsync()
-        {
-            ByteBuf _buf = await m_LoadFunc();
-            m_DataMap.Clear();
-            m_DataList.Clear();
-            for(int n = _buf.ReadSize() ; n > 0 ; --n)
-            {
-                Item.DCItem _v;
-                _v = Item.DCItem.DeserializeDCItem(_buf);
-                m_DataList.Add(_v);
-                m_DataMap.Add(_v.Id, _v);
-            }
-            PostInit();
-        }
-    
-        public System.Collections.Generic.Dictionary<int, Item.DCItem> DataMap => m_DataMap;
-        public System.Collections.Generic.List<Item.DCItem> DataList => m_DataList;
-        public Item.DCItem GetOrDefault(int key) => m_DataMap.TryGetValue(key, out var v) ? v : null;
-        public Item.DCItem Get(int key) => m_DataMap[key];
-        public Item.DCItem this[int key] => m_DataMap[key];
-    
-        public void ResolveRef(Tables tables)
-        {
-            foreach(var _v in m_DataList)
-            {
-                _v.ResolveRef(tables);
-            }
-            PostResolveRef();
-        }
-    
-    
-        partial void PostInit();
-        partial void PostResolveRef();
     }
+
+    public System.Collections.Generic.Dictionary<int, Item.DCItem> DataMap => _dataMap;
+    public System.Collections.Generic.List<Item.DCItem> DataList => _dataList;
+
+    public Item.DCItem GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public Item.DCItem Get(int key) => _dataMap[key];
+    public Item.DCItem this[int key] => _dataMap[key];
+
+    public void ResolveRef(Tables tables)
+    {
+        foreach(var _v in _dataList)
+        {
+            _v.ResolveRef(tables);
+        }
+    }
+
 }
+
+}
+

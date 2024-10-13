@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable.Item
+
+namespace Game.Update.DataTable.Item
 {
 public sealed partial class DCItem : Luban.BeanBase
 {
@@ -27,7 +27,6 @@ public sealed partial class DCItem : Luban.BeanBase
         ExchangeStream = Item.ItemExchange.DeserializeItemExchange(_buf);
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);ExchangeList = new System.Collections.Generic.List<Item.ItemExchange>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { Item.ItemExchange _e0;  _e0 = Item.ItemExchange.DeserializeItemExchange(_buf); ExchangeList.Add(_e0);}}
         ExchangeColumn = Item.ItemExchange.DeserializeItemExchange(_buf);
-        PostInit();
     }
 
     public static DCItem DeserializeDCItem(ByteBuf _buf)
@@ -55,7 +54,7 @@ public sealed partial class DCItem : Luban.BeanBase
     /// 引用当前表
     /// </summary>
     public readonly int UpgradeToItemId;
-    public Item.DCItem UpgradeToItemId_Ref { private set; get; }
+    public Item.DCItem UpgradeToItemId_Ref;
     /// <summary>
     /// 过期时间
     /// </summary>
@@ -73,6 +72,7 @@ public sealed partial class DCItem : Luban.BeanBase
     /// 道具兑换配置
     /// </summary>
     public readonly Item.ItemExchange ExchangeColumn;
+   
     public const int __ID__ = -644257971;
     public override int GetTypeId() => __ID__;
 
@@ -82,7 +82,6 @@ public sealed partial class DCItem : Luban.BeanBase
         ExchangeStream?.ResolveRef(tables);
         foreach (var _e in ExchangeList) { _e?.ResolveRef(tables); }
         ExchangeColumn?.ResolveRef(tables);
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -100,8 +99,7 @@ public sealed partial class DCItem : Luban.BeanBase
         + "exchangeColumn:" + ExchangeColumn + ","
         + "}";
     }
+}
 
-    partial void PostInit();
-    partial void PostResolveRef();
 }
-}
+

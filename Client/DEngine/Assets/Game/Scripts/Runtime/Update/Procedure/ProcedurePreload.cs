@@ -13,10 +13,24 @@ namespace Game.Update.Procedure
 {
     public class ProcedurePreload : ProcedureBase
     {
-        protected override async void OnEnter(ProcedureOwner procedureOwner)
+        private bool complete = false;
+
+        protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            await PreloadResourcesTask();
+            // await PreloadResourcesTask();
+            complete = true;
+        }
+
+
+        protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
+        {
+            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+            if (!complete)
+            {
+                return;
+            }
+
             ChangeState<ProcedureProcessingPreload>(procedureOwner);
         }
 
@@ -24,7 +38,9 @@ namespace Game.Update.Procedure
         {
             try
             {
-                await UniTask.WhenAll(PreloadDataTable(), PreloadLocalization(), PreloadLubanDataTable());
+                complete = false;
+                await UniTask.WhenAll(PreloadDataTable(), PreloadLocalization());
+                complete = true;
             }
             catch (Exception e)
             {
@@ -58,11 +74,6 @@ namespace Game.Update.Procedure
         private async UniTask PreloadLocalization()
         {
             await GameEntry.Localization.LoadDictionaryAsync(UpdateAssetUtility.GetDictionaryAsset(GameEntry.Localization.Language.ToString(), true));
-        }
-
-        private async UniTask PreloadLubanDataTable()
-        {
-            await Entry.Luban.LoadAsync();
         }
     }
 }

@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using DEngine.Editor;
-using Game.Editor.ResourceTools;
 using Game.Editor.Toolbar;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
@@ -25,99 +23,86 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("Compile", 1, 1)]
         public static void CompileHotfixDll()
         {
-            BuildTarget buildTarget = GetBuildTarget(GameSetting.Instance.BuildPlatform);
+            BuildTarget buildTarget = GetBuildTarget(DEngineSetting.Instance.BuildPlatform);
             CompileDllCommand.CompileDll(buildTarget);
             CopyDllAssets(buildTarget);
         }
 
         public static void SaveHybridCLR()
         {
-            HybridCLRSettings.Instance.hotUpdateAssemblies = GameSetting.Instance.HotUpdateAssemblies;
-            HybridCLRSettings.Instance.preserveHotUpdateAssemblies = GameSetting.Instance.PreserveAssemblies;
+            HybridCLRSettings.Instance.hotUpdateAssemblies = DEngineSetting.Instance.UpdateAssemblies;
+            HybridCLRSettings.Instance.preserveHotUpdateAssemblies = DEngineSetting.Instance.PreserveAssemblies;
             HybridCLRSettings.Save();
         }
-        
+
+        private static void CopyDllAssets()
+        {
+            BuildTarget buildTarget = GetBuildTarget(DEngineSetting.Instance.BuildPlatform);
+            CopyDllAssets(buildTarget);
+        }
+
         private static void CopyDllAssets(BuildTarget buildTarget)
         {
-            if (string.IsNullOrEmpty(GameSetting.Instance.HotupdateAssembliesPath))
+            if (string.IsNullOrEmpty(DEngineSetting.Instance.UpdateAssembliesPath))
             {
                 Debug.LogError("Directory path is null.");
                 return;
             }
 
-            if (Directory.Exists(GameSetting.Instance.HotupdateAssembliesPath))
+            if (Directory.Exists(DEngineSetting.Instance.UpdateAssembliesPath))
             {
-                GameUtility.IO.Delete(GameSetting.Instance.HotupdateAssembliesPath);
+                GameUtility.IO.Delete(DEngineSetting.Instance.UpdateAssembliesPath);
             }
             else
             {
-                Directory.CreateDirectory(GameSetting.Instance.HotupdateAssembliesPath);
+                Directory.CreateDirectory(DEngineSetting.Instance.UpdateAssembliesPath);
             }
 
-            if (Directory.Exists(GameSetting.Instance.PreserveAssembliesPath))
+            if (Directory.Exists(DEngineSetting.Instance.PreserveAssembliesPath))
             {
-                GameUtility.IO.Delete(GameSetting.Instance.PreserveAssembliesPath);
+                GameUtility.IO.Delete(DEngineSetting.Instance.PreserveAssembliesPath);
             }
             else
             {
-                Directory.CreateDirectory(GameSetting.Instance.PreserveAssembliesPath);
+                Directory.CreateDirectory(DEngineSetting.Instance.PreserveAssembliesPath);
             }
 
-            if (Directory.Exists(GameSetting.Instance.AOTAssembliesPath))
+            if (Directory.Exists(DEngineSetting.Instance.AOTAssembliesPath))
             {
-                GameUtility.IO.Delete(GameSetting.Instance.AOTAssembliesPath);
+                GameUtility.IO.Delete(DEngineSetting.Instance.AOTAssembliesPath);
             }
             else
             {
-                Directory.CreateDirectory(GameSetting.Instance.AOTAssembliesPath);
+                Directory.CreateDirectory(DEngineSetting.Instance.AOTAssembliesPath);
             }
 
 
             string desFileName;
             string oriFileName;
 
-            List<string> assembliesVersion = new List<string>();
             //Copy HotUpdateAssemblies
-            foreach (string hotUpdateAssemblyFullName in GameSetting.Instance.HotUpdateAssemblies)
+            foreach (var hotUpdateAssemblyFullName in DEngineSetting.Instance.UpdateAssemblies)
             {
                 oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), hotUpdateAssemblyFullName + ".dll");
                 //加bytes 后缀让Unity识别为TextAsset 文件
-                desFileName = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, hotUpdateAssemblyFullName + ".bytes");
+                desFileName = Path.Combine(DEngineSetting.Instance.UpdateAssembliesPath, hotUpdateAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
-                assembliesVersion.Add(hotUpdateAssemblyFullName);
             }
 
-            if (assembliesVersion.Count > 0)
-            {
-                string hotUpdateAssembliesVersion = Path.Combine(GameSetting.Instance.HotupdateAssembliesPath, Constant.AssetVersion.HotUpdateAssembliesVersion + ".bytes");
-                GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), hotUpdateAssembliesVersion);
-                Debug.Log($"Copy {buildTarget} HotUpdateAssemblies success.");
-            }
-
-            assembliesVersion.Clear();
 
             //Copy PreserveAssemblies
-            foreach (string preserveAssemblyFullName in GameSetting.Instance.PreserveAssemblies)
+            foreach (string preserveAssemblyFullName in DEngineSetting.Instance.PreserveAssemblies)
             {
                 oriFileName = Path.Combine(SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget), preserveAssemblyFullName + ".dll");
                 //加bytes 后缀让Unity识别为TextAsset 文件
-                desFileName = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, preserveAssemblyFullName + ".bytes");
+                desFileName = Path.Combine(DEngineSetting.Instance.PreserveAssembliesPath, preserveAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
-                assembliesVersion.Add(preserveAssemblyFullName);
             }
 
-            if (assembliesVersion.Count > 0)
-            {
-                string preserveAssembliesVersion = Path.Combine(GameSetting.Instance.PreserveAssembliesPath, Constant.AssetVersion.PreserveAssembliesVersion + ".bytes");
-                GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), preserveAssembliesVersion);
-                Debug.Log($"Copy {buildTarget} PreserveAssemblies success.");
-            }
-
-            assembliesVersion.Clear();
 
             // Copy AOTAssemblies
             string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
-            foreach (var aotAssemblyFullName in GameSetting.Instance.AOTAssemblies)
+            foreach (var aotAssemblyFullName in DEngineSetting.Instance.AOTAssemblies)
             {
                 oriFileName = Path.Combine(aotDllPath, aotAssemblyFullName + ".dll");
                 if (!File.Exists(oriFileName))
@@ -126,16 +111,8 @@ namespace Game.Editor.BuildPipeline
                     continue;
                 }
 
-                desFileName = Path.Combine(GameSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
+                desFileName = Path.Combine(DEngineSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
-                assembliesVersion.Add(aotAssemblyFullName);
-            }
-
-            if (assembliesVersion.Count > 0)
-            {
-                string aotAssembliesVersion = Path.Combine(GameSetting.Instance.AOTAssembliesPath, Constant.AssetVersion.AOTMetadataVersion + ".bytes");
-                GameAssetVersionUitlity.CreateAssetVersion(assembliesVersion.ToArray(), aotAssembliesVersion);
-                Debug.Log($"Copy {buildTarget} AOTAssemblies success.");
             }
 
             AssetDatabase.Refresh();

@@ -41,7 +41,11 @@ namespace Game
             }
             else
             {
-                ChangeState<ProcedureLoadAotMetadData>(procedureOwner);
+#if ENABLE_HYBRIDCLR&& !UNITY_EDITOR
+                ChangeState<ProcedureLoadAssemblies>(procedureOwner);
+#else
+                ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
+#endif
             }
         }
 
@@ -59,11 +63,12 @@ namespace Game
                     ConfirmText = "Update",
                     OnClickConfirm = ConfirmUpdate,
                     CancelText = " Cancel",
-                    OnClickCancel = delegate (object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                    OnClickCancel = delegate(object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                 });
 
                 return;
             }
+
             void ConfirmUpdate(object parm)
             {
                 GameEntry.BuiltinData.DestroyDialog();

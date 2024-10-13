@@ -5,7 +5,9 @@ using DEngine.Editor.ResourceTools;
 using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -15,7 +17,7 @@ namespace Game.Editor.BuildPipeline
         public static void BuildPlayer()
         {
             SaveBuildInfo();
-            BuildTarget target = GetBuildTarget(GameSetting.Instance.BuildPlatform);
+            BuildTarget target = GetBuildTarget(DEngineSetting.Instance.BuildPlatform);
             if (target != EditorUserBuildSettings.activeBuildTarget)
             {
                 EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target);
@@ -58,25 +60,26 @@ namespace Game.Editor.BuildPipeline
         public static void SaveBuildInfo()
         {
             BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
-            builtinData.BuildInfo = GameSetting.Instance.BuildInfo;
+            builtinData.BuildInfo = DEngineSetting.Instance.BuildInfo;
             EditorUtility.SetDirty(builtinData);
             AssetDatabase.SaveAssets();
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         }
 
         public static BuildReport BuildApplication(BuildTarget platform)
         {
             string outputExtension = GetFileExtensionForPlatform(platform);
-            if (!Directory.Exists(GameSetting.Instance.AppOutput))
+            if (!Directory.Exists(DEngineSetting.AppOutput))
             {
-                GameUtility.IO.CreateDirectoryIfNotExists(GameSetting.Instance.AppOutput);
-                GameSetting.Instance.SaveSetting();
+                GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.AppOutput);
+                DEngineSetting.Save();
             }
 
-            string locationPath = Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform]);
+            string locationPath = Path.Combine(DEngineSetting.AppOutput, DEngineSetting.Instance.BuildPlatform.ToString());
             GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
             BuildPlayerOptions buildPlayerOptions = new()
             {
-                scenes = GameSetting.Instance.DefaultSceneNames,
+                scenes = DEngineSetting.Instance.DefaultSceneNames,
                 locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
                 target = platform,
                 options = BuildOptions.CompressWithLz4 | BuildOptions.ShowBuiltPlayer
@@ -88,17 +91,17 @@ namespace Game.Editor.BuildPipeline
         public static BuildReport BuildApplicationV2(BuildTarget platform, string channel)
         {
             string outputExtension = GetFileExtensionForPlatform(platform);
-            if (!Directory.Exists(GameSetting.Instance.AppOutput))
+            if (!Directory.Exists(DEngineSetting.AppOutput))
             {
-                GameUtility.IO.CreateDirectoryIfNotExists(GameSetting.Instance.AppOutput);
-                GameSetting.Instance.SaveSetting();
+                GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.AppOutput);
+                DEngineSetting.Save();
             }
 
-            string locationPath = Path.Combine(GameSetting.Instance.AppOutput, GetPlatformPath(platform), channel);
+            string locationPath = Path.Combine(DEngineSetting.AppOutput, GetPlatformPath(platform), channel);
             GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
             BuildPlayerOptions buildPlayerOptions = new()
             {
-                scenes = GameSetting.Instance.DefaultSceneNames,
+                scenes = DEngineSetting.Instance.DefaultSceneNames,
                 locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
                 target = platform,
                 options = BuildOptions.CompressWithLz4
@@ -120,11 +123,6 @@ namespace Game.Editor.BuildPipeline
             };
         }
 
-        public static string GetBuildAppFullName()
-        {
-            return Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform], Application.productName + GetFileExtensionForPlatform(GetBuildTarget((int)s_OriginalPlatform)));
-        }
-
         public static void SaveBuildSetting()
         {
             try
@@ -140,7 +138,7 @@ namespace Game.Editor.BuildPipeline
                 XmlElement xmlDefaultScenes = xmlDocument.CreateElement("DefaultScenes");
                 xmlBuildSettings.AppendChild(xmlDefaultScenes);
 
-                foreach (string sceneName in GameSetting.Instance.DefaultSceneNames)
+                foreach (string sceneName in DEngineSetting.Instance.DefaultSceneNames)
                 {
                     XmlElement xmlScene = xmlDocument.CreateElement("DefaultScene");
                     xmlScene.SetAttribute("Name", sceneName);
@@ -151,7 +149,7 @@ namespace Game.Editor.BuildPipeline
                 xmlBuildSettings.AppendChild(xmlSearchScenePaths);
 
                 // 添加 SearchScenePath 节点
-                foreach (string path in GameSetting.Instance.SearchScenePaths)
+                foreach (string path in DEngineSetting.Instance.SearchScenePaths)
                 {
                     XmlElement xmlPath = xmlDocument.CreateElement("SearchScenePath");
                     xmlPath.SetAttribute("Path", path);
@@ -159,9 +157,9 @@ namespace Game.Editor.BuildPipeline
                 }
 
                 // 保存 XML 文件到指定路径
-                xmlDocument.Save(GameSetting.Instance.BuildSettingsConfig);
+                xmlDocument.Save(DEngineSetting.Instance.BuildSettingsConfig);
                 AssetDatabase.Refresh();
-                Debug.Log("XML file generated and saved successfully at: " + GameSetting.Instance.BuildSettingsConfig);
+                Debug.Log("XML file generated and saved successfully at: " + DEngineSetting.Instance.BuildSettingsConfig);
             }
             catch (Exception e)
             {

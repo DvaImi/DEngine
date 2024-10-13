@@ -5,34 +5,24 @@
     /// </summary>
     public static class BuiltinAssetUtility
     {
-        /// <summary>
-        ///获取热更新资源路径 
-        /// </summary>
-        /// <param name="assetName"></param>
-        /// <returns></returns>
-        public static string GetCLRUpdateAsset(string assetName)
+        ///  <summary>
+        /// 获取程序集资源路径 
+        ///  </summary>
+        ///  <param name="assetName"></param>
+        ///  <param name="suffix"></param>
+        ///  <returns></returns>
+        public static string GetAssembliesAsset(string assetName, string suffix = "bytes")
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/DLL/HotUpdate/{0}.{1}", assetName, "bytes");
-        }
-
-        /// <summary>
-        /// 获取热更新AOT资源路径
-        /// </summary>
-        /// <param name="assetName"></param>
-        /// <returns></returns>
-        public static string GetCLRAOTAsset(string assetName)
-        {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/DLL/AOT/{0}.{1}", assetName, "bytes");
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Assemblies/{0}.{1}", assetName, suffix);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="assetName"></param>
         /// <returns></returns>
-        public static string GetCLRLanuchAsset(string assetName)
+        public static string GetUpdateLauncherAsset()
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Luncher/{0}.{1}", assetName, "prefab");
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Launcher/{0}.{1}", "UpdateLauncher", "prefab");
         }
     }
 }

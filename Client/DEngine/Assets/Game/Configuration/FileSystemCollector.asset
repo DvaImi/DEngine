@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
+--- !u!114 &1
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,17 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 545da1e2971a55742bd771ab9de64a02, type: 3}
   m_Name: FileSystemCollector
   m_EditorClassIdentifier: 
-  FileSystemHandlerTypeNameIndex: 1
-  FileSystemHelperTypeName: Game.Editor.ResourceTools.DefaultFileSystemDataHandlerHelper
   FileSystemDatas:
   - FileSystem: cfg
-    OutPutPath: Assets/Game/Bundles/FileSystem
-    AssetPaths:
-    - Assets/Game/Bundles/DataTables/Entity_table.bytes
-    - Assets/Game/Bundles/DataTables/Music_table.bytes
-    - Assets/Game/Bundles/DataTables/Scene_table.bytes
-    - Assets/Game/Bundles/DataTables/Sound_table.bytes
-    - Assets/Game/Bundles/DataTables/UIForm_table.bytes
-    - Assets/Game/Bundles/DataTables/UIGroup_table.bytes
-    - Assets/Game/Bundles/DataTables/UISound_table.bytes
-    - Assets/Game/Bundles/Configs/Bin/TBItem.bytes
+    OutPutFolderPath: Assets/Game/Bundles/Configs
+    FileFullPaths:
+    - Excels/Output/DataTable/Entity.bytes
+    - Excels/Output/DataTable/Music.bytes
+    - Excels/Output/DataTable/Scene.bytes
+    - Excels/Output/DataTable/Sound.bytes
+    - Excels/Output/DataTable/UIForm.bytes
+    - Excels/Output/DataTable/UIGroup.bytes
+    - Excels/Output/DataTable/UISound.bytes
+    - ../../Share/Luban/Client/output/Bin/TBItem.bytes
+  - FileSystem: aot
+    OutPutFolderPath: Assets/Game/Bundles/Assemblies
+    FileFullPaths:
+    - HybridCLRData/Output/AOT/DEngine.bytes
+    - HybridCLRData/Output/AOT/DEngine.Runtime.bytes
+    - HybridCLRData/Output/AOT/Fantasy.Unity.bytes
+    - HybridCLRData/Output/AOT/Game.Runtime.Builtin.bytes
+    - HybridCLRData/Output/AOT/Luban.Runtime.bytes
+    - HybridCLRData/Output/AOT/mscorlib.bytes
+    - HybridCLRData/Output/AOT/System.bytes
+    - HybridCLRData/Output/AOT/System.Core.bytes
+    - HybridCLRData/Output/AOT/UniTask.bytes
+    - HybridCLRData/Output/AOT/UnityEngine.CoreModule.bytes
+    - HybridCLRData/Output/AOT/ZString.bytes
+  - FileSystem: patch
+    OutPutFolderPath: Assets/Game/Bundles/Assemblies
+    FileFullPaths:
+    - HybridCLRData/Output/HotUpdate/Game.Runtime.Update.bytes

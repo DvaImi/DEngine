@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Game.Editor.DataTableTools;
+﻿using Game.Editor.DataTableTools;
 using Game.Editor.Toolbar;
 using HybridCLR.Editor.Commands;
 using UnityEditor;
@@ -10,7 +9,7 @@ namespace Game.Editor.BuildPipeline
     public static partial class GameBuildPipeline
     {
         [MenuItem("Game/Build Pipeline/Automated Build", false, 100)]
-        [EditorToolbarMenu("AutomatedBuild", 1, 100)]
+        [EditorToolbarMenu("一键打包", 1, 100)]
         private static void AutomatedBuild()
         {
             EditorTools.CloseAllCustomEditorWindows();
@@ -27,13 +26,19 @@ namespace Game.Editor.BuildPipeline
                 SaveResource();
                 SaveBuildInfo();
                 SaveBuildSetting();
-                GameSetting.Save();
+                DEngineSetting.Save();
                 Debug.Log("====================保存配置文件结束========================");
 
+#if ENABLE_HYBRIDCLR
                 Debug.Log("====================编译代码========================");
                 PrebuildCommand.GenerateAll();
-                CompileHotfixDll();
+                CopyDllAssets();
                 Debug.Log("====================编译代码结束========================");
+#endif
+
+                Debug.Log("====================处理文件系统========================");
+                ProcessFileSystem();
+                Debug.Log("====================处理文件系统结束========================");
 
                 Debug.Log("====================打包资源========================");
                 BuildResource();
@@ -42,47 +47,6 @@ namespace Game.Editor.BuildPipeline
                 Debug.Log("====================打包工程========================");
                 BuildPlayer();
                 Debug.Log("====================打包工程结束========================");
-            }
-        }
-
-        /// <summary>
-        /// 多渠道自动打包
-        /// </summary>
-        public static void MultiChannelAutomatedBuild()
-        {
-            EditorTools.CloseAllCustomEditorWindows();
-            Debug.Log("开始一键打包任务");
-
-            Debug.Log("====================保存配置文件========================");
-            SaveHybridCLR();
-            SaveResource();
-            SaveBuildInfo();
-            SaveBuildSetting();
-            GameSetting.Save();
-            Debug.Log("====================保存配置文件结束========================");
-
-            Debug.Log("====================编译代码========================");
-            PrebuildCommand.GenerateAll();
-            CompileHotfixDll();
-            Debug.Log("====================编译代码结束========================");
-
-            Debug.Log("====================打包资源========================");
-            BuildResource();
-            Debug.Log("====================打包资源结束========================");
-
-            Debug.Log("====================读取渠道配置========================");
-            List<DRPackingParameter> packingParametersa = GetPackingParameterset();
-
-            if (packingParametersa != null)
-            {
-                foreach (DRPackingParameter parameter in packingParametersa)
-                {
-                    Debug.Log("====================应用渠道配置========================");
-                    ApplyPackingParameter(parameter);
-                    Debug.Log($"====================打包{parameter.AppName}工程========================");
-                    BuildPlayerV2(parameter.ChannelName, parameter.ChannelPlatform);
-                    Debug.Log($"====================打包{parameter.AppName}工程结束========================");
-                }
             }
         }
     }

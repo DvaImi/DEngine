@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable.Test
+
+namespace Game.Update.DataTable.Test
 {
 /// <summary>
 /// 这是个测试excel结构
@@ -23,7 +23,6 @@ public sealed partial class TestExcelBean1 : Luban.BeanBase
         X2 = _buf.ReadString();
         X3 = _buf.ReadInt();
         X4 = _buf.ReadFloat();
-        PostInit();
     }
 
     public static TestExcelBean1 DeserializeTestExcelBean1(ByteBuf _buf)
@@ -47,12 +46,12 @@ public sealed partial class TestExcelBean1 : Luban.BeanBase
     /// 最差品质
     /// </summary>
     public readonly float X4;
+   
     public const int __ID__ = -485049064;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -64,8 +63,7 @@ public sealed partial class TestExcelBean1 : Luban.BeanBase
         + "x4:" + X4 + ","
         + "}";
     }
+}
 
-    partial void PostInit();
-    partial void PostResolveRef();
 }
-}
+

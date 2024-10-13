@@ -23,7 +23,6 @@ namespace Game.Editor.DataTableTools
         {
             var window = GetWindow<DataTableVersionEditorWindows>("DataTable Version Setting");
             window.minSize = new Vector2(800, 600);
-            DataTableSetting.Instance.SaveSetting();
         }
 
         private void OnEnable()

@@ -9,7 +9,6 @@ namespace Game.Editor
 {
     public sealed class GameBuildEventHandler : IBuildEventHandler
     {
-
         public bool ContinueOnFailure
         {
             get { return false; }
@@ -18,9 +17,9 @@ namespace Game.Editor
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, int internalResourceVersion, Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
             GameUtility.IO.Delete(Application.streamingAssetsPath);
-            GameSetting.Instance.LatestGameVersion = applicableGameVersion;
-            GameSetting.Instance.InternalResourceVersion = internalResourceVersion;
-            GameSetting.Save();
+            DEngineSetting.Instance.LatestGameVersion = applicableGameVersion;
+            DEngineSetting.Instance.InternalResourceVersion = internalResourceVersion;
+            DEngineSetting.Save();
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, int internalResourceVersion, Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
@@ -40,30 +39,45 @@ namespace Game.Editor
             string platformPath = BuildPipeline.GameBuildPipeline.GetPlatformPath(platform);
             VersionInfo versionInfo = new()
             {
-                ForceUpdateGame = GameSetting.Instance.ForceUpdateGame,
+                ForceUpdateGame = DEngineSetting.Instance.ForceUpdateGame,
                 UpdatePrefixUri = BuildPipeline.GameBuildPipeline.GetUpdatePrefixUri(platform),
-                LatestGameVersion = GameSetting.Instance.LatestGameVersion,
+                LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
                 InternalGameVersion = 1,
-                InternalResourceVersion = GameSetting.Instance.InternalResourceVersion,
+                InternalResourceVersion = DEngineSetting.Instance.InternalResourceVersion,
                 VersionListLength = versionListLength,
                 VersionListHashCode = versionListHashCode,
                 VersionListCompressedLength = versionListCompressedLength,
                 VersionListCompressedHashCode = versionListCompressedHashCode
             };
             string versionJson = JsonConvert.SerializeObject(versionInfo);
-            string versionFilePath = Path.Combine(GameSetting.Instance.BundlesOutput, platformPath + "Version.json");
+            string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "Version.json");
             File.WriteAllText(versionFilePath, versionJson);
         }
 
         public void OnPostprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, bool isSuccess)
         {
             //差异化打包特殊处理
-            if (!outputPackageSelected || GameSetting.Instance.Difference)
+            if (!outputPackageSelected || DEngineSetting.Instance.Difference)
             {
                 return;
             }
-            int resourceMode = GameSetting.Instance.ResourceModeIndex;
-            string sourcePath = resourceMode <= 1 ? outputPackagePath : outputPackedPath;
+
+            string sourcePath = outputPackagePath;
+
+            switch (DEngineSetting.Instance.ResourceMode)
+            {
+                case DEngine.Resource.ResourceMode.Unspecified:
+                case DEngine.Resource.ResourceMode.Package:
+                    break;
+                case DEngine.Resource.ResourceMode.Updatable:
+                case DEngine.Resource.ResourceMode.UpdatableWhilePlaying:
+                    sourcePath = outputPackedPath;
+                    break;
+                default:
+                    sourcePath = outputPackagePath;
+                    break;
+            }
+
             BuildPipeline.GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);
         }
     }

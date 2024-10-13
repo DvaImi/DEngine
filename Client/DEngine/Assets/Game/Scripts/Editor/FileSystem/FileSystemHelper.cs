@@ -2,7 +2,7 @@ using System;
 using DEngine.FileSystem;
 using DEngine.Runtime;
 
-namespace Game.Editor.ResourceTools
+namespace Game.Editor.FileSystem
 {
     public sealed class FileSystemHelper : IFileSystemHelper
     {

@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0ee0b9678739e54fb24dfff12f65674, type: 3}
+  m_Name: DEngineSetting
+  m_EditorClassIdentifier: 
+  DEngineTypeConfig: Assets/Game/Configuration/DEngineTypeSetting.xml
+  BuildSettingsConfig: Assets/Game/Configuration/BuildSettings.xml
+  ResourceCollectionConfig: Assets/Game/Configuration/ResourceCollection.xml
+  ResourceEditorConfig: Assets/Game/Configuration/ResourceEditor.xml
+  ResourceBuilderConfig: Assets/Game/Configuration/ResourceBuilder.xml
+  BuildPlatform: 32
+  ResourceMode: 1
+  Difference: 0
+  ForceRebuildAssetBundle: 0
+  DefaultSceneNames:
+  - Assets/GameEntry.unity
+  SearchScenePaths:
+  - Assets
+  AssetBundleCollectorIndex: 0
+  ForceUpdateGame: 0
+  InternalResourceVersion: 54
+  LatestGameVersion: 0.1.0
+  UpdatePrefixUri: 
+  BuildInfo:
+    LatestGameVersion: 
+    CheckVersionUrl: 
+    WindowsAppUrl: 
+    MacOSAppUrl: 
+    IOSAppUrl: 
+    AndroidAppUrl: 
+  UpdateAssembliesPath: Assets/../HybridCLRData/Output/HotUpdate
+  UpdateAssemblies:
+  - Game.Runtime.Update
+  AOTAssembliesPath: Assets/../HybridCLRData/Output/AOT
+  AOTAssemblies:
+  - DEngine
+  - DEngine.Runtime
+  - Fantasy.Unity
+  - Game.Runtime.Builtin
+  - Luban.Runtime
+  - mscorlib
+  - System
+  - System.Core
+  - UniTask
+  - UnityEngine.CoreModule
+  - ZString
+  PreserveAssembliesPath: Assets/../HybridCLRData/Output/Preserve
+  PreserveAssemblies: []

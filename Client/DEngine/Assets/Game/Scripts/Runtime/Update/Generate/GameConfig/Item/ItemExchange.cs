@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable.Item
+
+namespace Game.Update.DataTable.Item
 {
 public sealed partial class ItemExchange : Luban.BeanBase
 {
@@ -18,7 +18,6 @@ public sealed partial class ItemExchange : Luban.BeanBase
     {
         Id = _buf.ReadInt();
         Num = _buf.ReadInt();
-        PostInit();
     }
 
     public static ItemExchange DeserializeItemExchange(ByteBuf _buf)
@@ -34,12 +33,12 @@ public sealed partial class ItemExchange : Luban.BeanBase
     /// 道具数量
     /// </summary>
     public readonly int Num;
+   
     public const int __ID__ = 1458423121;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -49,8 +48,7 @@ public sealed partial class ItemExchange : Luban.BeanBase
         + "num:" + Num + ","
         + "}";
     }
+}
 
-    partial void PostInit();
-    partial void PostResolveRef();
 }
-}
+

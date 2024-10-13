@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable.Test
+
+namespace Game.Update.DataTable.Test
 {
 /// <summary>
 /// 这是一个矩形
@@ -21,7 +21,6 @@ public sealed partial class Rectangle : Shape
     {
         Width = _buf.ReadFloat();
         Height = _buf.ReadFloat();
-        PostInit();
     }
 
     public static Rectangle DeserializeRectangle(ByteBuf _buf)
@@ -37,13 +36,13 @@ public sealed partial class Rectangle : Shape
     /// 高度
     /// </summary>
     public readonly float Height;
+   
     public const int __ID__ = -1033886957;
     public override int GetTypeId() => __ID__;
 
     public override void ResolveRef(Tables tables)
     {
         base.ResolveRef(tables);
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -53,8 +52,7 @@ public sealed partial class Rectangle : Shape
         + "height:" + Height + ","
         + "}";
     }
+}
 
-    partial void PostInit();
-    partial void PostResolveRef();
 }
-}
+

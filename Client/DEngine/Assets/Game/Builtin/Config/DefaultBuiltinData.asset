@@ -15,7 +15,7 @@ MonoBehaviour:
   UpdateResourceFormTemplate: {fileID: 4863827266948120156, guid: 1a28f36a920aad544bac449fb4127126, type: 3}
   NativeDialogFormTemplate: {fileID: -7793811446997299701, guid: a91171fb30298464b95cd0e975dd83c7, type: 3}
   BuildInfo:
-    LatestGameVersion: 0.1.0
+    LatestGameVersion: 
     CheckVersionUrl: 
     WindowsAppUrl: 
     MacOSAppUrl: 

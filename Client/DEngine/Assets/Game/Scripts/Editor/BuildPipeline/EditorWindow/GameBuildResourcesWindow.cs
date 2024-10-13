@@ -7,7 +7,7 @@
 
 using System.IO;
 using DEngine.Editor;
-using Game.Editor.Toolbar;
+using DEngine.Resource;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,14 +46,14 @@ namespace Game.Editor.BuildPipeline
             m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("Build", "构建当前平台资源");
             m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "");
 
-            if (!Directory.Exists(GameSetting.Instance.AppOutput))
+            if (!Directory.Exists(DEngineSetting.AppOutput))
             {
-                Directory.CreateDirectory(GameSetting.Instance.AppOutput);
+                Directory.CreateDirectory(DEngineSetting.AppOutput);
             }
 
-            if (!Directory.Exists(GameSetting.Instance.BundlesOutput))
+            if (!Directory.Exists(DEngineSetting.BundlesOutput))
             {
-                Directory.CreateDirectory(GameSetting.Instance.BundlesOutput);
+                Directory.CreateDirectory(DEngineSetting.BundlesOutput);
             }
 
             GameBuildPipeline.RefreshPackages();
@@ -88,7 +88,7 @@ namespace Game.Editor.BuildPipeline
                 if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
                     GameBuildPipeline.SaveResource();
-                    GameSetting.Save();
+                    DEngineSetting.Save();
                     Debug.Log("Save success.");
                 }
             }
@@ -105,21 +105,20 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("Resources", EditorStyles.boldLabel);
-                int resourceModeIndexEnum = GameSetting.Instance.ResourceModeIndex - 1;
-                int resourceModeIndex = EditorGUILayout.Popup(resourceModeIndexEnum, GameBuildPipeline.ResourceMode, GUILayout.Width(160));
+                var resourceModeIndexEnum = DEngineSetting.Instance.ResourceMode;
+                var resourceModeIndex = (ResourceMode)EditorGUILayout.EnumPopup(DEngineSetting.Instance.ResourceMode, GUILayout.Width(160));
                 if (resourceModeIndex != resourceModeIndexEnum)
                 {
-                    //由于跳过了 ResourceMode.Unspecified 保存时索引+1
-                    GameSetting.Instance.ResourceModeIndex = resourceModeIndex + 1;
-                    GameSetting.Instance.SaveSetting();
+                    DEngineSetting.Instance.ResourceMode = resourceModeIndex;
+                    DEngineSetting.Save();
                 }
 
-                int assetBundleCollectorIndex = GameSetting.Instance.AssetBundleCollectorIndex;
+                int assetBundleCollectorIndex = DEngineSetting.Instance.AssetBundleCollectorIndex;
                 int tempBundleCollectorIndex = EditorGUILayout.Popup(assetBundleCollectorIndex, GameBuildPipeline.PackagesNames, GUILayout.Width(160));
                 if (tempBundleCollectorIndex != assetBundleCollectorIndex)
                 {
-                    GameSetting.Instance.AssetBundleCollectorIndex = tempBundleCollectorIndex;
-                    GameSetting.Instance.SaveSetting();
+                    DEngineSetting.Instance.AssetBundleCollectorIndex = tempBundleCollectorIndex;
+                    DEngineSetting.Save();
                 }
             }
 
@@ -127,18 +126,18 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.BeginHorizontal();
             {
                 GUILayout.FlexibleSpace();
-                bool forceRebuildAssetBundle = EditorGUILayout.ToggleLeft("ForceRebuildAssetBundle", GameSetting.Instance.ForceRebuildAssetBundle, GUILayout.Width(200));
-                if (!forceRebuildAssetBundle.Equals(GameSetting.Instance.ForceRebuildAssetBundle))
+                bool forceRebuildAssetBundle = EditorGUILayout.ToggleLeft("ForceRebuildAssetBundle", DEngineSetting.Instance.ForceRebuildAssetBundle, GUILayout.Width(200));
+                if (!forceRebuildAssetBundle.Equals(DEngineSetting.Instance.ForceRebuildAssetBundle))
                 {
-                    GameSetting.Instance.ForceRebuildAssetBundle = forceRebuildAssetBundle;
+                    DEngineSetting.Instance.ForceRebuildAssetBundle = forceRebuildAssetBundle;
                 }
 
                 bool canDifference = GameBuildPipeline.CanDifference();
                 GUI.enabled = canDifference;
-                bool diff = EditorGUILayout.ToggleLeft("Difference", canDifference && GameSetting.Instance.Difference, GUILayout.Width(120));
-                if (!diff.Equals(GameSetting.Instance.Difference))
+                bool diff = EditorGUILayout.ToggleLeft("Difference", canDifference && DEngineSetting.Instance.Difference, GUILayout.Width(120));
+                if (!diff.Equals(DEngineSetting.Instance.Difference))
                 {
-                    GameSetting.Instance.Difference = diff;
+                    DEngineSetting.Instance.Difference = diff;
                 }
 
                 GUI.enabled = true;
@@ -148,12 +147,12 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.BeginHorizontal();
             {
                 GUI.enabled = false;
-                EditorGUILayout.LabelField(GameSetting.Instance.BundlesOutput);
+                EditorGUILayout.LabelField(DEngineSetting.BundlesOutput);
                 GUI.enabled = true;
 
                 if (GUILayout.Button("Go", GUILayout.Width(30)))
                 {
-                    OpenFolder.Execute(GameSetting.Instance.BundlesOutput);
+                    OpenFolder.Execute(DEngineSetting.BundlesOutput);
                 }
 
                 if (GUILayout.Button("Clear", GUILayout.Width(80)))
@@ -171,9 +170,9 @@ namespace Game.Editor.BuildPipeline
 
                 if (m_FoldoutBuildConfigGroup)
                 {
-                    DropPathUtility.DropAssetPath("ResourceCollectionConfig", ref GameSetting.Instance.ResourceCollectionConfig);
-                    DropPathUtility.DropAssetPath("ResourceEditorConfig", ref GameSetting.Instance.ResourceEditorConfig);
-                    DropPathUtility.DropAssetPath("ResourceBuilderConfig", ref GameSetting.Instance.ResourceBuilderConfig);
+                    DropPathUtility.DropAssetPath("ResourceCollectionConfig", ref DEngineSetting.Instance.ResourceCollectionConfig);
+                    DropPathUtility.DropAssetPath("ResourceEditorConfig", ref DEngineSetting.Instance.ResourceEditorConfig);
+                    DropPathUtility.DropAssetPath("ResourceBuilderConfig", ref DEngineSetting.Instance.ResourceBuilderConfig);
                 }
 
                 EditorGUILayout.EndFoldoutHeaderGroup();
@@ -181,29 +180,29 @@ namespace Game.Editor.BuildPipeline
                 m_FoldoutBuiltInfoGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutBuiltInfoGroup, "BuildInfo");
                 if (m_FoldoutBuiltInfoGroup)
                 {
-                    GameSetting.Instance.ForceUpdateGame = EditorGUILayout.Toggle("强制更新应用", GameSetting.Instance.ForceUpdateGame);
+                    DEngineSetting.Instance.ForceUpdateGame = EditorGUILayout.Toggle("强制更新应用", DEngineSetting.Instance.ForceUpdateGame);
                     EditorGUILayout.BeginHorizontal();
                     {
-                        if (GameSetting.Instance.ForceUpdateGame)
+                        if (DEngineSetting.Instance.ForceUpdateGame)
                         {
                             GUI.enabled = false;
-                            EditorGUILayout.LabelField($"强制更新应用将以{GameSetting.Instance.LatestGameVersion} 为最后一个版本号");
+                            EditorGUILayout.LabelField($"强制更新应用将以{DEngineSetting.Instance.LatestGameVersion} 为最后一个版本号");
                             GUI.enabled = true;
                         }
                     }
                     EditorGUILayout.EndHorizontal();
 
-                    GameSetting.Instance.UpdatePrefixUri = EditorGUILayout.TextField("资源更新地址", GameSetting.Instance.UpdatePrefixUri);
+                    DEngineSetting.Instance.UpdatePrefixUri = EditorGUILayout.TextField("资源更新地址", DEngineSetting.Instance.UpdatePrefixUri);
                     GUI.enabled = false;
-                    EditorGUILayout.IntField("内置资源版本", GameSetting.Instance.InternalResourceVersion);
+                    EditorGUILayout.IntField("内置资源版本", DEngineSetting.Instance.InternalResourceVersion);
                     EditorGUILayout.TextField("最新的游戏版本号", Application.version);
                     GUI.enabled = true;
-                    GameSetting.Instance.BuildInfo.CheckVersionUrl = EditorGUILayout.TextField("版本检查文件地址", GameSetting.Instance.BuildInfo.CheckVersionUrl);
-                    GameSetting.Instance.BuildInfo.WindowsAppUrl = EditorGUILayout.TextField("Windows下载应用地址", GameSetting.Instance.BuildInfo.WindowsAppUrl);
-                    GameSetting.Instance.BuildInfo.AndroidAppUrl = EditorGUILayout.TextField("Android应用下载地址", GameSetting.Instance.BuildInfo.AndroidAppUrl);
-                    GameSetting.Instance.BuildInfo.MacOSAppUrl = EditorGUILayout.TextField("MacOS下载应用地址", GameSetting.Instance.BuildInfo.MacOSAppUrl);
-                    GameSetting.Instance.BuildInfo.IOSAppUrl = EditorGUILayout.TextField("IOS下载应用地址", GameSetting.Instance.BuildInfo.IOSAppUrl);
-                    GameSetting.Instance.BuildInfo.LatestGameVersion = GameSetting.Instance.LatestGameVersion;
+                    DEngineSetting.Instance.BuildInfo.CheckVersionUrl = EditorGUILayout.TextField("版本检查文件地址", DEngineSetting.Instance.BuildInfo.CheckVersionUrl);
+                    DEngineSetting.Instance.BuildInfo.WindowsAppUrl = EditorGUILayout.TextField("Windows下载应用地址", DEngineSetting.Instance.BuildInfo.WindowsAppUrl);
+                    DEngineSetting.Instance.BuildInfo.AndroidAppUrl = EditorGUILayout.TextField("Android应用下载地址", DEngineSetting.Instance.BuildInfo.AndroidAppUrl);
+                    DEngineSetting.Instance.BuildInfo.MacOSAppUrl = EditorGUILayout.TextField("MacOS下载应用地址", DEngineSetting.Instance.BuildInfo.MacOSAppUrl);
+                    DEngineSetting.Instance.BuildInfo.IOSAppUrl = EditorGUILayout.TextField("IOS下载应用地址", DEngineSetting.Instance.BuildInfo.IOSAppUrl);
+                    DEngineSetting.Instance.BuildInfo.LatestGameVersion = DEngineSetting.Instance.LatestGameVersion;
                 }
 
                 EditorGUILayout.EndFoldoutHeaderGroup();

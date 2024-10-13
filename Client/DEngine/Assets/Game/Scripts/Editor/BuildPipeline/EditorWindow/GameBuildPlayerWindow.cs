@@ -6,9 +6,9 @@
 // ========================================================
 
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using DEngine.Editor;
+using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -43,14 +43,10 @@ namespace Game.Editor.BuildPipeline
         {
             m_BeginBuildPlayer = false;
             m_ScrollPosition = Vector2.zero;
-            m_DefaultSceneNames = GameSetting.Instance.DefaultSceneNames.ToList();
+            m_DefaultSceneNames = DEngineSetting.Instance.DefaultSceneNames.ToList();
             m_DefaultSceneNames ??= new List<string>();
             m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("Build", "构建当前平台应用");
             m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "");
-            if (!Directory.Exists(GameSetting.Instance.AppOutput))
-            {
-                Directory.CreateDirectory(GameSetting.Instance.AppOutput);
-            }
         }
 
         private void OnGUI()
@@ -70,12 +66,12 @@ namespace Game.Editor.BuildPipeline
             EditorGUILayout.EndScrollView();
 
             GUILayout.FlexibleSpace();
-            
+
             GUILayout.BeginHorizontal("box");
             {
                 if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))
                 {
-                    BuildTarget buildTarget = GameBuildPipeline.GetBuildTarget(GameSetting.Instance.BuildPlatform);
+                    BuildTarget buildTarget = GameBuildPipeline.GetBuildTarget(DEngineSetting.Instance.BuildPlatform);
                     if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
                     {
                         if (EditorUtility.DisplayDialog("提示", "当前平台与目标平台不符，是否进行切换?", "确认", "取消"))
@@ -96,7 +92,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     GameBuildPipeline.SaveBuildInfo();
                     GameBuildPipeline.SaveBuildSetting();
-                    GameSetting.Save();
+                    DEngineSetting.Save();
                     Debug.Log("Save success.");
                 }
             }
@@ -116,11 +112,11 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUILayout.LabelField("Platform", EditorStyles.boldLabel);
-                    int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, GameBuildPipeline.PlatformNames, GUILayout.Width(100));
+                    var hotfixPlatformIndex = (Platform)EditorGUILayout.EnumPopup(DEngineSetting.Instance.BuildPlatform, GUILayout.Width(100));
 
-                    if (!hotfixPlatformIndex.Equals(GameSetting.Instance.BuildPlatform))
+                    if (!hotfixPlatformIndex.Equals(DEngineSetting.Instance.BuildPlatform))
                     {
-                        GameSetting.Instance.BuildPlatform = hotfixPlatformIndex;
+                        DEngineSetting.Instance.BuildPlatform = hotfixPlatformIndex;
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -138,16 +134,16 @@ namespace Game.Editor.BuildPipeline
 
             EditorGUILayout.BeginVertical("box");
             {
-                DropPathUtility.DropAssetPath("BuildSetting", ref GameSetting.Instance.BuildSettingsConfig);
+                DropPathUtility.DropAssetPath("BuildSetting", ref DEngineSetting.Instance.BuildSettingsConfig);
 
                 bool changed = false;
                 GUILayout.Space(5f);
                 m_FoldoutBuildSceneGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutBuildSceneGroup, "Build Scenes");
                 Rect defaultSceneRect = GUILayoutUtility.GetLastRect();
-                if (DropPathUtility.DropPath(defaultSceneRect, out string sceneAssetPath, true))
+                if (DropPathUtility.DropPath(defaultSceneRect, out string sceneAssetPath))
                 {
                     SceneAsset sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(sceneAssetPath);
-                    if (sceneAsset != null)
+                    if (sceneAsset)
                     {
                         if (!m_DefaultSceneNames.Contains(sceneAssetPath))
                         {
@@ -187,8 +183,8 @@ namespace Game.Editor.BuildPipeline
 
                 if (changed)
                 {
-                    GameSetting.Instance.DefaultSceneNames = m_DefaultSceneNames.ToArray();
-                    GameSetting.Save();
+                    DEngineSetting.Instance.DefaultSceneNames = m_DefaultSceneNames.ToArray();
+                    DEngineSetting.Save();
                     GameBuildPipeline.SaveBuildSetting();
                 }
 
@@ -200,18 +196,18 @@ namespace Game.Editor.BuildPipeline
             {
                 EditorGUILayout.LabelField("AppOutput", EditorStyles.boldLabel);
                 GUI.enabled = false;
-                EditorGUILayout.LabelField(GameSetting.Instance.AppOutput);
+                EditorGUILayout.LabelField(DEngineSetting.AppOutput);
                 GUI.enabled = true;
 
                 if (GUILayout.Button("Open", GUILayout.Width(50)))
                 {
-                    OpenFolder.Execute(GameSetting.Instance.AppOutput);
+                    OpenFolder.Execute(DEngineSetting.AppOutput);
                 }
 
                 if (GUILayout.Button("Clear", GUILayout.Width(80f)))
                 {
-                    GameUtility.IO.ClearFolder(GameSetting.Instance.AppOutput);
-                    Debug.Log($"Clear{GameSetting.Instance.AppOutput} success !");
+                    GameUtility.IO.ClearFolder(DEngineSetting.AppOutput);
+                    Debug.Log($"Clear{DEngineSetting.AppOutput} success !");
                 }
             }
             EditorGUILayout.EndHorizontal();

@@ -1,5 +1,4 @@
-using Cysharp.Threading.Tasks;
-using Game.LubanTable;
+using Game.Update.DataTable;
 
 namespace Game.Update
 {
@@ -8,13 +7,13 @@ namespace Game.Update
     /// </summary>
     public static class Entry
     {
-        public static ILubanModule Luban { get; private set; }
+        public static IDataTableProvider DataTable { get; private set; }
+        public static ILubanDataProvider Luban { get; private set; }
 
-        public static async UniTask Initialize()
+        public static void Initialize()
         {
-            Luban = GameEntry.GetModule<ILubanModule>().Initialize();
-            GameEntry.Network.Initialize(true, 5, AssemblyUtility.GetAssemblies());
-            await UniTask.CompletedTask;
+            Luban = GameEntry.GetModule<ILubanDataProvider>();
+            DataTable = GameEntry.GetModule<IDataTableProvider>();
         }
     }
 }

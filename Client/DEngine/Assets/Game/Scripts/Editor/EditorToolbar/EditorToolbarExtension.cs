@@ -27,12 +27,17 @@ namespace Game.Editor.Toolbar
             CacheMethods();
         }
 
-        private static void CacheMethods()
+        public static void Shutdown()
         {
             LeftMenu.Clear();
             RightMenu.Clear();
             LeftCachedMethods.Clear();
             RightCachedMethods.Clear();
+        }
+
+        private static void CacheMethods()
+        {
+            Shutdown();
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 foreach (var type in assembly.GetTypes())
@@ -189,7 +194,7 @@ namespace Game.Editor.Toolbar
                         }
                     }
 
-                    GUILayout.Space(5F);
+                    GUILayout.Space(10F);
                 }
             }
 
@@ -216,7 +221,7 @@ namespace Game.Editor.Toolbar
                         }
                     }
 
-                    GUILayout.Space(5F);
+                    GUILayout.Space(10F);
                 }
 
                 GUILayout.Space(10F);

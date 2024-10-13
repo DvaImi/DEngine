@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable
+
+namespace Game.Update.DataTable
 {
 public partial struct vector3
 {
@@ -19,7 +19,6 @@ public partial struct vector3
         X = _buf.ReadFloat();
         Y = _buf.ReadFloat();
         Z = _buf.ReadFloat();
-        PostInit();
     }
 
     public static vector3 Deserializevector3(ByteBuf _buf)
@@ -30,10 +29,10 @@ public partial struct vector3
     public readonly float X;
     public readonly float Y;
     public readonly float Z;
+   
 
     public  void ResolveRef(Tables tables)
     {
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -44,8 +43,7 @@ public partial struct vector3
         + "z:" + Z + ","
         + "}";
     }
+}
 
-    partial void PostInit();
-    partial void PostResolveRef();
 }
-}
+

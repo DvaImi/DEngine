@@ -24,7 +24,8 @@ namespace Game.Editor
             {
                 if (!m_Instance)
                 {
-                    LoadOrCreate();
+                    m_Instance = LoadOrCreate();
+                    Save();
                 }
 
                 return m_Instance;
@@ -42,6 +43,7 @@ namespace Game.Editor
                 {
                     m_Instance.name = typeof(T).Name;
                 }
+
                 AssetDatabase.Refresh();
             }
             else

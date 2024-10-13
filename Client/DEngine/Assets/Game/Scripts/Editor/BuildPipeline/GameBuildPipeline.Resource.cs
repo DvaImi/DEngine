@@ -20,13 +20,13 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("Build Resource", 1, 3)]
         public static void BuildResource()
         {
-            BuildResource(GameSetting.Instance.BundlesOutput);
+            BuildResource(DEngineSetting.BundlesOutput);
         }
 
         public static void BuildResource(string output, bool difference = false)
         {
             OnPreprocess();
-            BuildResource(GetPlatform(GameSetting.Instance.BuildPlatform), output, difference);
+            BuildResource(DEngineSetting.Instance.BuildPlatform, output, difference);
             OnPostprocess();
         }
 
@@ -77,13 +77,13 @@ namespace Game.Editor.BuildPipeline
 
         public static void ClearResource()
         {
-            GameUtility.IO.Delete(GameSetting.Instance.BundlesOutput);
+            GameUtility.IO.Delete(DEngineSetting.BundlesOutput);
             ResourceBuilderController controller = new ResourceBuilderController();
             if (controller.Load())
             {
-                controller.InternalResourceVersion = GameSetting.Instance.InternalResourceVersion = 0;
+                controller.InternalResourceVersion = DEngineSetting.Instance.InternalResourceVersion = 0;
                 controller.Save();
-                GameSetting.Instance.SaveSetting();
+                DEngineSetting.Save();
             }
 
             if (EditorUtility.DisplayDialog("Clear", "Clear StreamingAssetsPath ?", "Clear", "Cancel"))
@@ -100,13 +100,13 @@ namespace Game.Editor.BuildPipeline
             ResourceBuilderController builderController = new();
             if (builderController.Load())
             {
-                builderController.Platforms = GetPlatform(GameSetting.Instance.BuildPlatform);
-                builderController.OutputDirectory = GameSetting.Instance.BundlesOutput;
+                builderController.Platforms = DEngineSetting.Instance.BuildPlatform;
+                builderController.OutputDirectory = DEngineSetting.BundlesOutput;
                 builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
                 builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
                 builderController.AdditionalCompressionSelected = true;
-                builderController.Difference = GameSetting.Instance.Difference;
-                builderController.ForceRebuildAssetBundleSelected = GameSetting.Instance.ForceRebuildAssetBundle;
+                builderController.Difference = DEngineSetting.Instance.Difference;
+                builderController.ForceRebuildAssetBundleSelected = DEngineSetting.Instance.ForceRebuildAssetBundle;
             }
 
             builderController.Save();
@@ -114,7 +114,7 @@ namespace Game.Editor.BuildPipeline
 
         public static void RefreshPackages()
         {
-            PackagesNames = ResourcePackagesCollector.GetPackageCollector().PackagesCollector.Select(x => x.PackageName).ToArray();
+            PackagesNames = ResourcePackagesCollector.Instance.PackagesCollector.Select(x => x.PackageName).ToArray();
         }
 
         public static void SaveOutputDirectory(string outputDirectory)
@@ -143,15 +143,37 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
+        public static int CleanUnknownAssets()
+        {
+            var unknownAssetCount = ResourcePackagesCollector.GetResourceGroupsCollector().Groups.Sum(resourceGroup => resourceGroup.AssetCollectors.RemoveAll(o => !IsValidAssetPath(o.AssetPath)));
+            if (unknownAssetCount > 0)
+            {
+                Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets  has been removed.", unknownAssetCount));
+            }
+
+            return unknownAssetCount;
+        }
+
+        private static bool IsValidAssetPath(string assetPath)
+        {
+            return AssetDatabase.IsValidFolder(assetPath) ? Directory.Exists(assetPath) : File.Exists(assetPath);
+        }
+
         private static void OnPreprocess()
         {
+            if (DEngineSetting.Instance.ResourceMode == DEngine.Resource.ResourceMode.Unspecified)
+            {
+                DEngineSetting.Instance.ResourceMode = DEngine.Resource.ResourceMode.Package;
+            }
+
+            CleanUnknownAssets();
             ResourceCollectorEditorUtility.RefreshResourceCollection();
             RemoveUnknownAssets();
-            GameSetting.Instance.SaveSetting();
+            DEngineSetting.Save();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            GameUtility.IO.CreateDirectoryIfNotExists(GameSetting.Instance.BundlesOutput);
+            GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.BundlesOutput);
             GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
         }
 
@@ -250,7 +272,7 @@ namespace Game.Editor.BuildPipeline
                     Debug.LogWarning("Save configuration failure.");
                 }
 
-                if (GameSetting.Instance.ForceUpdateGame)
+                if (DEngineSetting.Instance.ForceUpdateGame)
                 {
                     Debug.Log($"<color=#1E90FF>[DEngine] ►</color> " + "强制更新资源版本构建完成,打包新版本app时，务必更新版本号，避免冲突!!!");
                 }

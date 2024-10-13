@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using Game.LubanTable;
 
-namespace Game.LubanTable.Test
+
+namespace Game.Update.DataTable.Test
 {
 /// <summary>
 /// 这是一个圆
@@ -20,7 +20,6 @@ public sealed partial class Circle : Shape
     public Circle(ByteBuf _buf)  : base(_buf) 
     {
         Radius = _buf.ReadFloat();
-        PostInit();
     }
 
     public static Circle DeserializeCircle(ByteBuf _buf)
@@ -32,13 +31,13 @@ public sealed partial class Circle : Shape
     /// 半径
     /// </summary>
     public readonly float Radius;
+   
     public const int __ID__ = -495269460;
     public override int GetTypeId() => __ID__;
 
     public override void ResolveRef(Tables tables)
     {
         base.ResolveRef(tables);
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -47,8 +46,7 @@ public sealed partial class Circle : Shape
         + "radius:" + Radius + ","
         + "}";
     }
+}
 
-    partial void PostInit();
-    partial void PostResolveRef();
 }
-}
+

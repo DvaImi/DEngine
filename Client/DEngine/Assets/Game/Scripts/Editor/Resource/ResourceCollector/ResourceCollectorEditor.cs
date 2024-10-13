@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using DEngine;
 using DEngine.Editor.ResourceTools;
+using Game.Editor.BuildPipeline;
 using Game.Editor.ResourceTools;
 using Game.Editor.Toolbar;
 using UnityEditor;
@@ -75,7 +75,7 @@ namespace Game.Editor
             m_ExportContent = EditorGUIUtility.TrTextContentWithIcon("Export", "导出配置", "Project");
             m_SaveContent = EditorGUIUtility.TrTextContentWithIcon("Save", "保存配置", "SaveAs");
 
-            Load();
+            m_AssetBundlePackageCollector = ResourcePackagesCollector.LoadOrCreate();
 
             if (m_ResourceEditorController == null)
             {
@@ -132,32 +132,20 @@ namespace Game.Editor
             if (m_IsDirty)
             {
                 m_IsDirty = false;
-                Save();
+                ResourcePackagesCollector.Save();
             }
-        }
-
-        private void Load()
-        {
-            m_AssetBundlePackageCollector = EditorTools.LoadScriptableObject<ResourcePackagesCollector>();
-        }
-
-        private void Save()
-        {
-            EditorUtility.SetDirty(m_AssetBundlePackageCollector);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         private void GUIToolbar()
         {
-            m_ToolbarRect = new Rect(position.width - 100, 0, 100, 60);
-            GUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true), GUILayout.Height(50));
+            m_ToolbarRect = new Rect(position.width - 100, 0, 100, 55);
+            GUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true), GUILayout.Height(45));
             {
                 GUILayout.FlexibleSpace();
 
                 if (GUILayout.Button(m_CleanContent, GUILayout.Height(30)))
                 {
-                    var unknownAssetCount = CleanUnknownAssets();
+                    var unknownAssetCount = GameBuildPipeline.CleanUnknownAssets();
                     if (unknownAssetCount > 0)
                     {
                         Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets  has been removed.", unknownAssetCount));
@@ -173,7 +161,7 @@ namespace Game.Editor
                 GUILayout.Space(10);
                 if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
-                    Save();
+                    ResourcePackagesCollector.Save();
                 }
             }
             GUILayout.EndHorizontal();
@@ -227,11 +215,11 @@ namespace Game.Editor
                 SetFocusAndEnsureSelectedItem();
             }
 
-            GUILayout.BeginArea(new Rect(m_PackageMenuRect.width * 0.2F, m_PackageMenuRect.height + m_AddRectHeight + 90, m_PackageMenuRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
+            GUILayout.BeginArea(new Rect(m_PackageMenuRect.width * 0.2F, m_PackageMenuRect.height + m_AddRectHeight + 100, m_PackageMenuRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
             {
                 EditorGUILayout.BeginHorizontal();
                 {
-                    if (GUILayout.Button("+", GUILayout.Width(30)))
+                    if (GUILayout.Button("[+]", GUILayout.Width(30)))
                     {
                         ResourceGroupsCollector package = new ResourceGroupsCollector();
                         m_AssetBundlePackageCollector.PackagesCollector.Add(package);
@@ -239,7 +227,7 @@ namespace Game.Editor
                     }
 
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("-", GUILayout.Width(30)))
+                    if (GUILayout.Button("[-]", GUILayout.Width(30)))
                     {
                         void ConfirmDeletion()
                         {
@@ -264,11 +252,11 @@ namespace Game.Editor
             m_MenuTreeGroupsView.OnGUI(m_MenuGroupRect);
 
 
-            GUILayout.BeginArea(new Rect(PackageSpace + m_MenuGroupRect.width * 0.2F, m_MenuGroupRect.height + m_AddRectHeight, m_MenuGroupRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
+            GUILayout.BeginArea(new Rect(PackageSpace + m_MenuGroupRect.width * 0.2F, m_MenuGroupRect.height + m_AddRectHeight + 10, m_MenuGroupRect.width * 0.6F, position.height - m_AddRectHeight - m_ToolbarRect.height));
             {
                 EditorGUILayout.BeginHorizontal();
                 {
-                    if (GUILayout.Button("+", GUILayout.Width(30)))
+                    if (GUILayout.Button("[+]", GUILayout.Width(30)))
                     {
                         ResourceGroupCollector resourceGroup = new();
                         m_SelectAssetBundleCollector?.Groups.Add(resourceGroup);
@@ -277,7 +265,7 @@ namespace Game.Editor
                     }
 
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("-", GUILayout.Width(30)))
+                    if (GUILayout.Button("[-]", GUILayout.Width(30)))
                     {
                         void ConfirmDeletion()
                         {
@@ -654,19 +642,9 @@ namespace Game.Editor
             m_IsDirty = true;
         }
 
-        private int CleanUnknownAssets()
-        {
-            return m_SelectAssetBundleCollector.Groups.Sum(resourceGroup => resourceGroup.AssetCollectors.RemoveAll(o => !IsValidAssetPath(o.AssetPath)));
-        }
-
-        private static bool IsValidAssetPath(string assetPath)
-        {
-            return AssetDatabase.IsValidFolder(assetPath) ? Directory.Exists(assetPath) : File.Exists(assetPath);
-        }
-
         private void OnDestroy()
         {
-            Save();
+            ResourcePackagesCollector.Save();
         }
     }
 }

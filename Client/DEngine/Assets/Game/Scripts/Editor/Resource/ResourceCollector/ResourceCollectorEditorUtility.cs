@@ -88,7 +88,7 @@ namespace Game.Editor.ResourceTools
 
             if (resourceEditorController.Load())
             {
-                collectorData ??= ResourcePackagesCollector.GetResourceGroupsCollector(GameSetting.Instance.AssetBundleCollectorIndex);
+                collectorData ??= ResourcePackagesCollector.GetResourceGroupsCollector(DEngineSetting.Instance.AssetBundleCollectorIndex);
                 Debug.Log($"Export {collectorData.PackageName} ...");
 
                 s_SourceAssetExceptTypeFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
@@ -103,7 +103,6 @@ namespace Game.Editor.ResourceTools
 
             if (!resourceEditorController.Save())
             {
-                
             }
         }
 
@@ -203,6 +202,11 @@ namespace Game.Editor.ResourceTools
                     foreach (var resourceCollector in resourceGroup.AssetCollectors)
                     {
                         if (!resourceCollector.Enable)
+                        {
+                            continue;
+                        }
+
+                        if (string.IsNullOrWhiteSpace(resourceCollector.AssetPath))
                         {
                             continue;
                         }

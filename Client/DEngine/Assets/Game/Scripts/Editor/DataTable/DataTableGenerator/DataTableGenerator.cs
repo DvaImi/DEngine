@@ -18,7 +18,7 @@ namespace Game.Editor.DataTableTools
 
         public static DataTableProcessor CreateDataTableProcessor(string dataTableName)
         {
-            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + ".txt")), Encoding.UTF8, 1, 2, null, 3, 4, 1);
+            return new DataTableProcessor(Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.OutputDataTableFolder, dataTableName + ".txt")), Encoding.UTF8, 1, 2, null, 3, 4, 1);
         }
 
         public static DataTableProcessor CreateExcelDataTableProcessor(ExcelWorksheet sheet)
@@ -48,7 +48,7 @@ namespace Game.Editor.DataTableTools
 
         public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
-            var binaryDataFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableFolderPath, dataTableName + "_table.bytes"));
+            var binaryDataFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.OutputDataTableFolder, dataTableName + ".bytes"));
 
             FileInfo fileInfo = new FileInfo(binaryDataFileName);
             if (fileInfo.Directory is { Exists: false })
@@ -155,6 +155,7 @@ namespace Game.Editor.DataTableTools
             codeContent.Replace("__DATA_TABLE_PROPERTIES__", GenerateDataTableProperties(dataTableProcessor));
             codeContent.Replace("__DATA_TABLE_PARSER__", GenerateDataTableParser(dataTableProcessor));
             codeContent.Replace("__DATA_TABLE_PROPERTY_ARRAY__", GenerateDataTablePropertyArray(dataTableProcessor));
+            codeContent.Replace("__DATA_TABLE_TOSTRING__", GenerateDataTableToString(dataTableProcessor));
             _nameSpace = _nameSpace.Distinct().ToList();
             StringBuilder nameSpaceBuilder = new StringBuilder();
             foreach (string nameSpace in _nameSpace)
@@ -163,6 +164,41 @@ namespace Game.Editor.DataTableTools
             }
 
             codeContent.Replace("__DATA_TABLE_PROPERTIES_NAMESPACE__", nameSpaceBuilder.ToString());
+        }
+
+        private static string GenerateDataTableToString(DataTableProcessor dataTableProcessor)
+        {
+            StringBuilder codeContent = new StringBuilder();
+            codeContent.AppendLine();
+
+            codeContent.AppendLine("        public override string ToString()");
+            codeContent.AppendLine("        {");
+
+            codeContent.AppendFormat("                return string.Concat(");
+            const string fmf = "{0}";
+            for (var i = 0; i < dataTableProcessor.RawColumnCount; i++)
+            {
+                if (dataTableProcessor.IsCommentColumn(i))
+                {
+                    continue;
+                }
+
+                if (dataTableProcessor.IsListColumn(i) || dataTableProcessor.IsArrayColumn(i) || dataTableProcessor.IsDictionaryColumn(i))
+                {
+                    codeContent.Append($"string.Format(\"{dataTableProcessor.GetName(i)}: {fmf}\" ,GameUtility.String.CollectionToString({dataTableProcessor.GetName(i)}))");
+                    continue;
+                }
+
+                codeContent.Append($"string.Format(\"{dataTableProcessor.GetName(i)}: {fmf}\" ,{dataTableProcessor.GetName(i)})");
+                if (i < dataTableProcessor.RawColumnCount - 1)
+                {
+                    codeContent.Append(",");
+                }
+            }
+
+            codeContent.AppendLine(");");
+            codeContent.AppendLine("        }");
+            return codeContent.ToString();
         }
 
         /// <summary>
@@ -284,15 +320,18 @@ namespace Game.Editor.DataTableTools
                     if (dataTableProcessor.IsListColumn(i))
                     {
                         var t = dataTableProcessor.GetDataProcessor(i).GetType().GetGenericArguments();
-                        var dataProcessor = Activator.CreateInstance(t[0]) as DataTableProcessor.DataProcessor;
-                        string typeName = dataProcessor.Type.Name;
-
-                        if (dataProcessor.IsEnum)
+                        if (Activator.CreateInstance(t[0]) is DataTableProcessor.DataProcessor dataProcessor)
                         {
-                            typeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessor.LanguageKeyword);
+                            string typeName = dataProcessor.Type.Name;
+
+                            if (dataProcessor.IsEnum)
+                            {
+                                typeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessor.LanguageKeyword);
+                            }
+
+                            stringBuilder.AppendFormat("\t\t\t{0} = DataTableExtension.Parse{1}List(columnStrings[index++]);", dataTableProcessor.GetName(i), typeName).AppendLine();
                         }
 
-                        stringBuilder.AppendFormat("\t\t\t{0} = DataTableExtension.Parse{1}List(columnStrings[index++]);", dataTableProcessor.GetName(i), typeName).AppendLine();
                         continue;
                     }
 

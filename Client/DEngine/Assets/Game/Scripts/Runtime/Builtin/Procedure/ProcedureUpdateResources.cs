@@ -4,9 +4,13 @@ using DEngine;
 using DEngine.Event;
 using DEngine.Fsm;
 using DEngine.Procedure;
+using DEngine.Resource;
 using DEngine.Runtime;
-using UnityEngine;
 using Object = UnityEngine.Object;
+using ResourceUpdateChangedEventArgs = DEngine.Runtime.ResourceUpdateChangedEventArgs;
+using ResourceUpdateFailureEventArgs = DEngine.Runtime.ResourceUpdateFailureEventArgs;
+using ResourceUpdateStartEventArgs = DEngine.Runtime.ResourceUpdateStartEventArgs;
+using ResourceUpdateSuccessEventArgs = DEngine.Runtime.ResourceUpdateSuccessEventArgs;
 
 namespace Game
 {
@@ -67,12 +71,16 @@ namespace Game
                 return;
             }
 
-            ChangeState<ProcedureLoadAotMetadData>(procedureOwner);
+#if ENABLE_HYBRIDCLR&& !UNITY_EDITOR
+            ChangeState<ProcedureLoadAssemblies>(procedureOwner);
+#else
+            ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
+#endif
         }
 
         private void StartUpdateResources()
         {
-            if (m_UpdateResourceForm == null)
+            if (!m_UpdateResourceForm)
             {
                 m_UpdateResourceForm = Object.Instantiate(GameEntry.BuiltinData.Builtin.UpdateResourceFormTemplate);
             }
@@ -90,18 +98,16 @@ namespace Game
             }
 
             float progressTotal = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
-            string descriptionText = Utility.Text.Format("{0}/{1},{2}/{3}, {4:P0},{5}/s", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), GameUtility.String.GetByteLengthString(currentTotalUpdateLength), GameUtility.String.GetByteLengthString(m_UpdateTotalCompressedLength),
-                progressTotal.ToString("P2"), GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
+            string descriptionText = Utility.Text.Format("{0}/{1},{2}/{3}, {4:P0},{5}/s", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), GameUtility.String.GetByteLengthString(currentTotalUpdateLength), GameUtility.String.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("P2"), GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
             descriptionText += "\n";
             int needTime = (int)((m_UpdateTotalCompressedLength - currentTotalUpdateLength) / GameEntry.Download.CurrentSpeed);
             TimeSpan timespan = new(0, 0, needTime);
             string timeFormat = timespan.ToString(@"mm\:ss");
-            descriptionText += string.Format("剩余时间 {0}({1}/s)", timeFormat, GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
-            ;
+            descriptionText += $"剩余时间 {timeFormat}({GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed)}/s)";
             m_UpdateResourceForm.SetProgress(progressTotal, descriptionText);
         }
 
-        private void OnUpdateResourcesComplete(DEngine.Resource.IResourceGroup resourceGroup, bool result)
+        private void OnUpdateResourcesComplete(IResourceGroup resourceGroup, bool result)
         {
             if (result)
             {
@@ -203,10 +209,7 @@ namespace Game
                 m_Name = name;
             }
 
-            public string Name
-            {
-                get { return m_Name; }
-            }
+            public string Name => m_Name;
 
             public int Length { get; set; }
         }
