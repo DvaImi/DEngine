@@ -17,9 +17,18 @@ namespace Game
     {
         private readonly List<UniTask<Assembly>> m_PatchTask = new();
 
+        private static bool s_MetadataForAOTLoaded = false;
+        private static bool s_UpdateAssembliesLoaded = false;
+
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
+            if (s_MetadataForAOTLoaded && s_UpdateAssembliesLoaded)
+            {
+                ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
+                return;
+            }
+
             LoadMetadataForAOTAssembly();
             LoadUpdateAssemblies(procedureOwner).Forget();
         }
@@ -32,8 +41,13 @@ namespace Game
         /// 注意，补充元数据是给AOT dll补充元数据，而不是给热更新dll补充元数据。
         /// 热更新dll不缺元数据，不需要补充，如果调用LoadMetadataForAOTAssembly会返回错误。
         /// </summary>
-        private void LoadMetadataForAOTAssembly()
+        private static void LoadMetadataForAOTAssembly()
         {
+            if (s_MetadataForAOTLoaded)
+            {
+                return;
+            }
+
             FileSystemDataVersion aotVersion = FileSystemDataVersion.Deserialize(GameEntry.Resource.LoadBinaryFromFileSystem(BuiltinAssetUtility.GetAssembliesAsset("aotVersion")));
             if (aotVersion == null)
             {
@@ -54,6 +68,8 @@ namespace Game
                     Log.Warning($"Load AOT metadata {code}");
                 }
             }
+
+            s_MetadataForAOTLoaded = true;
         }
 
         /// <summary>
@@ -62,6 +78,11 @@ namespace Game
         /// <param name="procedureOwner"></param>
         private async UniTask LoadUpdateAssemblies(IFsm<IProcedureManager> procedureOwner)
         {
+            if (s_UpdateAssembliesLoaded)
+            {
+                return;
+            }
+
             var patchVersion = FileSystemDataVersion.Deserialize(GameEntry.Resource.LoadBinaryFromFileSystem(BuiltinAssetUtility.GetAssembliesAsset("patchVersion")));
             if (patchVersion == null)
             {
@@ -77,6 +98,7 @@ namespace Game
 
             await UniTask.WhenAll(m_PatchTask);
             await UniTask.NextFrame();
+            s_UpdateAssembliesLoaded = true;
             Log.Info("HotUpdateAssemblies Load Complete.");
             ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
         }
