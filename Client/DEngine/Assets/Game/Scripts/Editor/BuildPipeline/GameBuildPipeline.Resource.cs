@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using DEngine;
 using DEngine.Editor.ResourceTools;
+using DEngine.Resource;
 using DEngine.Runtime;
 using Game.Editor.ResourceTools;
 using Game.Editor.Toolbar;
@@ -44,6 +45,9 @@ namespace Game.Editor.BuildPipeline
                 builderController.AdditionalCompressionSelected = true;
                 builderController.Difference = difference;
                 builderController.ForceRebuildAssetBundleSelected = forceRebuild;
+                builderController.OutputPackageSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Package;
+                builderController.OutputFullSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Updatable || DEngineSetting.Instance.ResourceMode == ResourceMode.UpdatableWhilePlaying;
+                builderController.OutputPackedSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Updatable || DEngineSetting.Instance.ResourceMode == ResourceMode.UpdatableWhilePlaying;
                 builderController.OnLoadingResource += OnLoadingResource;
                 builderController.OnLoadingAsset += OnLoadingAsset;
                 builderController.OnLoadCompleted += OnLoadCompleted;
@@ -168,7 +172,6 @@ namespace Game.Editor.BuildPipeline
 
             CleanUnknownAssets();
             ResourceCollectorEditorUtility.RefreshResourceCollection();
-            RemoveUnknownAssets();
             DEngineSetting.Save();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DEngine;
+using DEngine.Runtime;
+using UnityEngine;
 
 namespace Game
 {
@@ -10,12 +12,21 @@ namespace Game
         private void Start()
         {
             InitBuiltinComponents();
-            InitCustomsModules();
         }
 
         private void Update()
         {
-            UpdateModule(Time.deltaTime, Time.unscaledDeltaTime);
+            Update(Time.deltaTime, Time.unscaledDeltaTime);
+        }
+
+        private void OnDestroy()
+        {
+            ShutdownModule();
+        }
+
+        public void Shutdown(ShutdownType shutdownType)
+        {
+            DEngine.Runtime.GameEntry.Shutdown(shutdownType);
         }
     }
 }

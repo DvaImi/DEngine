@@ -18,7 +18,7 @@ namespace Game.Debugger
 
         public void Initialize(params object[] args)
         {
-            m_Network = GameEntry.Network;
+            m_Network = GameEntry.GetModule<INetworkModule>();
         }
 
         public void Shutdown()

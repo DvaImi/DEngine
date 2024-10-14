@@ -62,21 +62,12 @@ namespace Game.Editor
                 return;
             }
 
-            string sourcePath = outputPackagePath;
-
-            switch (DEngineSetting.Instance.ResourceMode)
+            string sourcePath = DEngineSetting.Instance.ResourceMode switch
             {
-                case DEngine.Resource.ResourceMode.Unspecified:
-                case DEngine.Resource.ResourceMode.Package:
-                    break;
-                case DEngine.Resource.ResourceMode.Updatable:
-                case DEngine.Resource.ResourceMode.UpdatableWhilePlaying:
-                    sourcePath = outputPackedPath;
-                    break;
-                default:
-                    sourcePath = outputPackagePath;
-                    break;
-            }
+                DEngine.Resource.ResourceMode.Unspecified or DEngine.Resource.ResourceMode.Package => outputPackagePath,
+                DEngine.Resource.ResourceMode.Updatable or DEngine.Resource.ResourceMode.UpdatableWhilePlaying => outputPackedPath,
+                _ => outputPackagePath
+            };
 
             BuildPipeline.GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);
         }

@@ -25,12 +25,20 @@ namespace Game
             base.OnEnter(procedureOwner);
             if (s_MetadataForAOTLoaded && s_UpdateAssembliesLoaded)
             {
-                ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
                 return;
             }
-
             LoadMetadataForAOTAssembly();
             LoadUpdateAssemblies(procedureOwner).Forget();
+        }
+
+
+        protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+        {
+            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+            if (s_MetadataForAOTLoaded && s_UpdateAssembliesLoaded)
+            {
+                ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
+            }
         }
 
         /// <summary>

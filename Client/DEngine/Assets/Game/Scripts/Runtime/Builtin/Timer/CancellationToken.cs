@@ -8,6 +8,8 @@ namespace Game.Timer
     {
         private HashSet<Action> m_Actions = new HashSet<Action>();
 
+        public bool Invalid => m_Actions == null || m_Actions.Count == 0;
+
         public void Add(Action callback)
         {
             if (callback == null)
@@ -53,22 +55,6 @@ namespace Game.Timer
             {
                 Log.Error(e.ToString());
             }
-        }
-
-        public async void CancelAfter(long afterTimeCancel)
-        {
-            if (m_Actions == null)
-            {
-                return;
-            }
-
-            if (m_Actions.Count == 0)
-            {
-                return;
-            }
-
-            await GameEntry.Timer.OnceTimerAsync(afterTimeCancel);
-            Invoke();
         }
     }
 }

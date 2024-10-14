@@ -17,7 +17,7 @@ MonoBehaviour:
   ResourceCollectionConfig: Assets/Game/Configuration/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Configuration/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Configuration/ResourceBuilder.xml
-  BuildPlatform: 32
+  BuildPlatform: 2
   ResourceMode: 1
   Difference: 0
   ForceRebuildAssetBundle: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
   - Assets
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 54
+  InternalResourceVersion: 59
   LatestGameVersion: 0.1.0
   UpdatePrefixUri: 
   BuildInfo:

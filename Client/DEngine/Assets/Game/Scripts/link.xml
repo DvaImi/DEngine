@@ -83,6 +83,7 @@
     <type fullname="Game.GameEntry" preserve="all" />
     <type fullname="Game.IGameModule" preserve="all" />
     <type fullname="Game.Network.INetworkModule" preserve="all" />
+    <type fullname="Game.Timer.ITimerModule" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
   </assembly>
   <assembly fullname="Luban.Runtime">

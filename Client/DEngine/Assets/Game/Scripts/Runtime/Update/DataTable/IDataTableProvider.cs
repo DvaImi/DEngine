@@ -5,7 +5,7 @@ using DEngine.DataTable;
 
 namespace Game.Update.DataTable
 {
-    public interface IDataTableProvider : IDataProvider
+    public interface IDataTableProvider : IGameModule
     {
         /// <summary>
         /// 获取数据表。

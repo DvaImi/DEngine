@@ -1,6 +1,6 @@
 namespace Game.Update.DataTable
 {
-    public interface ILubanDataProvider : IDataProvider
+    public interface ILubanDataProvider : IGameModule
     {
         public Tables Tables { get; }
     }

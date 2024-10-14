@@ -34,8 +34,9 @@ namespace Game
                     string languageString = GameEntry.Setting.GetString(Constant.Setting.Language);
                     language = (Language)Enum.Parse(typeof(Language), languageString);
                 }
-                catch
+                catch (Exception e)
                 {
+                    Log.Error(e.Message);
                 }
             }
 
@@ -53,9 +54,9 @@ namespace Game
             ReadLanguage(language);
         }
 
-        public void ReadLanguage(Language language)
+        private void ReadLanguage(Language language)
         {
-            if (Builtin.BuildinLanguage == null)
+            if (!Builtin.BuildinLanguage)
             {
                 return;
             }
@@ -63,7 +64,7 @@ namespace Game
             GameEntry.Localization.ParseData(Builtin.BuildinLanguage[language]);
         }
 
-        public void InitSoundSettings()
+        public static void InitSoundSettings()
         {
             GameEntry.Sound.Mute("Music", GameEntry.Setting.GetBool(Constant.Setting.MusicMuted, false));
             GameEntry.Sound.SetVolume("Music", GameEntry.Setting.GetFloat(Constant.Setting.MusicVolume, 0.3f));
@@ -74,7 +75,7 @@ namespace Game
             Log.Info("Init sound settings complete.");
         }
 
-        public void InitDebugger()
+        public static void InitDebugger()
         {
             ChangeLanguageDebuggerWindow changeLanguage = new ChangeLanguageDebuggerWindow();
             GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", changeLanguage);
@@ -83,13 +84,13 @@ namespace Game
             GameEntry.Debugger.RegisterDebuggerWindow("Other/CommonLine", commonLine);
         }
 
-        public void InitExtensionEventHandle()
+        public static void InitExtensionEventHandle()
         {
             UniTaskExtension.Unsubscribe();
             UniTaskExtension.Subscribe();
         }
 
-        public void InitCurrentVariant()
+        public static void InitCurrentVariant()
         {
             if (GameEntry.Base.EditorResourceMode)
             {

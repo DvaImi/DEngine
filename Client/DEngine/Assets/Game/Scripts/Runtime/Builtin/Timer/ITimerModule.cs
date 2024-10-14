@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Timer
 {
-    public interface ITimerModule
+    public interface ITimerModule : IGameUpdateModule
     {
         /// <summary>
         /// 取消计时器

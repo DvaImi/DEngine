@@ -9,8 +9,8 @@ namespace Game.Update.Procedure
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            Update.Entry.Initialize();
-            GameEntry.Network.Initialize(true, 5, AssemblyUtility.GetAssemblies());
+            Entry.Initialize();
+            Entry.Network.Initialize(true, 5, AssemblyUtility.GetAssemblies());
             Log.Info("ProcedureHotfix  Launch  ");
         }
 

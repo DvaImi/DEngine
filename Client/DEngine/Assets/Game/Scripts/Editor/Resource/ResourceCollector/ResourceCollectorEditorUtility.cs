@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using DEngine;
 using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEngine;
@@ -98,6 +99,11 @@ namespace Game.Editor.ResourceTools
                 AnalysisResourceFilters(collectorData);
 
                 Debug.Log(Collection.Save() ? "Refresh ResourceCollection.xml success" : "Refresh ResourceCollection.xml fail");
+
+                int unknownAssetCount = resourceEditorController.RemoveUnknownAssets();
+                int unusedResourceCount = resourceEditorController.RemoveUnusedResources();
+                Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets and {1} unused resources has been removed.", unknownAssetCount, unusedResourceCount));
+                resourceEditorController.Save();
                 return;
             }
 

@@ -22,8 +22,10 @@ namespace Game.Editor.BuildPipeline
                     BuildTarget target = GetBuildTarget(DEngineSetting.Instance.BuildPlatform);
                     if (target != EditorUserBuildSettings.activeBuildTarget)
                     {
-                        EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target);
-                        DEngineSetting.Save();
+                        if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target))
+                        {
+                            DEngineSetting.Save();
+                        }
                     }
                 }
             }

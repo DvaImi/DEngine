@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Timer
 {
-    public partial class TimerModule : IGameModule, ITimerModule
+    public partial class TimerModule : ITimerModule
     {
         public int Priority => 0;
 

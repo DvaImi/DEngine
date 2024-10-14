@@ -11,10 +11,10 @@ namespace Game
         {
             base.OnEnter(procedureOwner);
             GameEntry.BuiltinData.InitLanguageSettings();
-            GameEntry.BuiltinData.InitCurrentVariant();
-            GameEntry.BuiltinData.InitSoundSettings();
-            GameEntry.BuiltinData.InitDebugger();
-            GameEntry.BuiltinData.InitExtensionEventHandle();
+            BuiltinDataComponent.InitCurrentVariant();
+            BuiltinDataComponent.InitSoundSettings();
+            BuiltinDataComponent.InitDebugger();
+            BuiltinDataComponent.InitExtensionEventHandle();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

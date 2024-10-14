@@ -5,7 +5,7 @@ using Luban;
 
 namespace Game.Update.DataTable
 {
-    public sealed class LubanDataProvider : ILubanDataProvider
+    public class LubanDataProvider : ILubanDataProvider
     {
         public int Priority => 1;
 
@@ -47,10 +47,6 @@ namespace Game.Update.DataTable
         }
 
         #endregion
-
-        public void Update(float elapseSeconds, float realElapseSeconds)
-        {
-        }
 
         public void Shutdown()
         {
