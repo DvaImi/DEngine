@@ -22,7 +22,6 @@
     <type fullname="DEngine.UI.IUIForm" preserve="all" />
     <type fullname="DEngine.UI.IUIGroup" preserve="all" />
     <type fullname="DEngine.Utility" preserve="all" />
-    <type fullname="DEngine.Utility/Json" preserve="all" />
     <type fullname="DEngine.Utility/Text" preserve="all" />
     <type fullname="DEngine.Variable`1" preserve="all" />
   </assembly>
@@ -76,7 +75,6 @@
   </assembly>
   <assembly fullname="Game.Runtime.Builtin">
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
-    <type fullname="Game.DataTable.GameDataTableVersion" preserve="all" />
     <type fullname="Game.EventSubscriber" preserve="all" />
     <type fullname="Game.FileSystem.FileInfo" preserve="all" />
     <type fullname="Game.FileSystem.FileSystemDataVersion" preserve="all" />
@@ -97,15 +95,12 @@
     <type fullname="System.ComponentModel.EditorBrowsableAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableState" preserve="all" />
   </assembly>
-  <assembly fullname="System.Core">
-    <type fullname="System.Collections.Generic.HashSet`1" preserve="all" />
-    <type fullname="System.Collections.Generic.HashSet`1/Enumerator" preserve="all" />
-  </assembly>
   <assembly fullname="UniTask">
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTaskStatus" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.YieldAwaitable" preserve="all" />
@@ -123,7 +118,7 @@
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.Rect" preserve="all" />
     <type fullname="UnityEngine.RectTransform" preserve="all" />
-    <type fullname="UnityEngine.TextAsset" preserve="all" />
+    <type fullname="UnityEngine.ShaderVariantCollection" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
     <type fullname="UnityEngine.Vector2" preserve="all" />
     <type fullname="UnityEngine.Vector3" preserve="all" />

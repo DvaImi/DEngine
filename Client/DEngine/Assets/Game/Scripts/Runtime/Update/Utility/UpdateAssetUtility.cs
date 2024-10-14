@@ -122,13 +122,13 @@
         }
 
         /// <summary>
-        /// 获取原生文件系统 资源路径
+        /// 获取着色器变体资源路径
         /// </summary>
         /// <param name="assetName"></param>
         /// <returns></returns>
-        public static string GetFileSystemAsset(string assetName)
+        public static string GetShaderVariantsAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/FileSystem/{0}.bytes", assetName);
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/ShaderVariants/{0}.shadervariants", assetName);
         }
     }
 }

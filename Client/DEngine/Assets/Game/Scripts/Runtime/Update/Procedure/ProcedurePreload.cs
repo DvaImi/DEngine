@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using DEngine;
 using DEngine.Procedure;
 using DEngine.Runtime;
-using Game.DataTable;
-using Game.Update.DataTable;
 using UnityEngine;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
@@ -13,34 +9,50 @@ namespace Game.Update.Procedure
 {
     public class ProcedurePreload : ProcedureBase
     {
-        private bool complete = false;
+        private UniTask m_PreloadTask;
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            // await PreloadResourcesTask();
-            complete = true;
+            m_PreloadTask = PreloadResourcesTask();
         }
-
 
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            if (!complete)
-            {
-                return;
-            }
 
-            ChangeState<ProcedureProcessingPreload>(procedureOwner);
+            switch (m_PreloadTask.Status)
+            {
+                case UniTaskStatus.Pending:
+                    return;
+                case UniTaskStatus.Succeeded:
+                    ChangeState<ProcedureProcessingPreload>(procedureOwner);
+                    break;
+                case UniTaskStatus.Faulted:
+                    try
+                    {
+                        //触发异常机制
+                        m_PreloadTask.GetAwaiter().GetResult();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Preload task failed with exception: {ex}");
+                    }
+
+                    break;
+                case UniTaskStatus.Canceled:
+                    break;
+                default:
+                    Log.Error("Unknown Status");
+                    break;
+            }
         }
 
-        private async UniTask PreloadResourcesTask()
+        private static async UniTask PreloadResourcesTask()
         {
             try
             {
-                complete = false;
-                await UniTask.WhenAll(PreloadDataTable(), PreloadLocalization());
-                complete = true;
+                await UniTask.WhenAll(PreloadLocalization(), PreloadShaderVariants());
             }
             catch (Exception e)
             {
@@ -50,30 +62,22 @@ namespace Game.Update.Procedure
             Log.Info("Preload resources complete.");
         }
 
-        private async UniTask PreloadDataTable()
+
+        private static async UniTask PreloadLocalization()
         {
-            TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(UpdateAssetUtility.GetDataTableAsset(Constant.AssetVersion.DataTableVersion, true));
-            if (!textAsset)
+            await GameEntry.Localization.LoadDictionaryAsync(UpdateAssetUtility.GetDictionaryAsset(GameEntry.Localization.Language.ToString(), true));
+        }
+
+        private static async UniTask PreloadShaderVariants()
+        {
+            ShaderVariantCollection shaderVariantCollection = await GameEntry.Resource.LoadAssetAsync<ShaderVariantCollection>(UpdateAssetUtility.GetShaderVariantsAsset("GameShaderVariants"));
+            if (!shaderVariantCollection || shaderVariantCollection.isWarmedUp)
             {
                 return;
             }
 
-            var dataTableVersion = Utility.Json.ToObject<GameDataTableVersion>(textAsset.text);
-            if (dataTableVersion != null)
-            {
-                List<UniTask> loadTask = new List<UniTask>();
-                foreach (var dataTableName in dataTableVersion.PreloadDataTable)
-                {
-                    loadTask.Add(GameEntry.DataTable.LoadDataTableAsync(dataTableName));
-                }
-
-                await UniTask.WhenAll(loadTask);
-            }
-        }
-
-        private async UniTask PreloadLocalization()
-        {
-            await GameEntry.Localization.LoadDictionaryAsync(UpdateAssetUtility.GetDictionaryAsset(GameEntry.Localization.Language.ToString(), true));
+            shaderVariantCollection.WarmUp();
+            Log.Info("Game ShaderVariants has WarmUp.");
         }
     }
 }
