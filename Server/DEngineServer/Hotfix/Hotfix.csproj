@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Fantasy-Net" Version="2024.1.10" />
+      <PackageReference Include="Fantasy-Net" Version="2024.1.11" />
     </ItemGroup>
 
 </Project>

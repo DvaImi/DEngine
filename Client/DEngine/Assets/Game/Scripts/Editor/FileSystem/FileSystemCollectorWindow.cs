@@ -11,7 +11,8 @@ namespace Game.Editor.FileSystem
     {
         private FileSystemCollector m_FileSystemCollector;
         private Vector2 m_ScrollPosition;
-        private GUIContent m_BuildContent;
+        private GUIContent m_ExportContent;
+        private GUIContent m_ExportAllContent;
         private bool m_ExportFlag;
         private readonly Dictionary<string, bool> m_FoldoutMap = new();
         private FileSystemData m_SelectedFileSystemData;
@@ -28,7 +29,8 @@ namespace Game.Editor.FileSystem
         private void OnEnable()
         {
             m_ExportFlag = false;
-            m_BuildContent = EditorGUIUtility.TrTextContentWithIcon("ExportAll", "导出全部配置", "Project");
+            m_ExportContent = EditorGUIUtility.TrTextContentWithIcon("Export", "导出当前配置", "Project");
+            m_ExportAllContent = EditorGUIUtility.TrTextContentWithIcon("ExportAll", "导出全部配置", "Project");
 
             m_FileSystemCollector = FileSystemCollector.Instance;
             foreach (var fileSystemData in m_FileSystemCollector.FileSystemDatas)
@@ -104,7 +106,7 @@ namespace Game.Editor.FileSystem
             GUILayout.FlexibleSpace();
             GUILayout.BeginHorizontal("box");
             {
-                if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))
+                if (GUILayout.Button(m_ExportAllContent, GUILayout.Height(30)))
                 {
                     m_ExportFlag = true;
                 }
@@ -173,6 +175,11 @@ namespace Game.Editor.FileSystem
 
                                 m_ContentChange = true;
                             }
+                        }
+
+                        if (GUILayout.Button(m_ExportContent, GUILayout.Width(80)))
+                        {
+                            GameBuildPipeline.ProcessFileSystem(fileSystemData);
                         }
                     }
                     EditorGUILayout.EndHorizontal();

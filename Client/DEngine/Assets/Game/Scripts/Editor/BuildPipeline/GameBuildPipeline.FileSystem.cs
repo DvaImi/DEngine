@@ -1,6 +1,10 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
+using DEngine;
 using Game.Editor.FileSystem;
+using Game.FileSystem;
 using UnityEditor;
+using UnityEngine;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -18,7 +22,39 @@ namespace Game.Editor.BuildPipeline
             }
 
             AssetDatabase.Refresh();
-            new FileSystemTaskRunner().Run();
+            new FileSystemTaskRunner().ExecuteAll();
+        }
+
+        public static void ProcessFileSystem(FileSystemData fileSystemData)
+        {
+            if (!fileSystemData.IsValid)
+            {
+                Debug.Log("fileSystem is invalid.");
+                return;
+            }
+
+            if (fileSystemData.FileFullPaths is not { Count: > 0 })
+            {
+                return;
+            }
+
+            GameUtility.IO.Delete(fileSystemData.OutPutFolderPath);
+            
+            string fullPath = Utility.Path.GetRegularCombinePath(fileSystemData.OutPutFolderPath, fileSystemData.FileSystem + ".bytes");
+            string versionPath = Utility.Path.GetRegularCombinePath(fileSystemData.OutPutFolderPath, fileSystemData.FileSystem + "Version.bytes");
+            try
+            {
+                var version = new FileSystemTaskRunner().Execute(fullPath, fileSystemData.FileFullPaths);
+                File.WriteAllBytes(versionPath, FileSystemDataVersion.ToBson(version));
+                File.WriteAllText(versionPath.Replace(".bytes", ".json"), FileSystemDataVersion.ToJson(version));
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
+                DEngineEntry.Shutdown();
+                AssetDatabase.Refresh();
+                Debug.Log("Export complete.");
+            }
         }
     }
 }

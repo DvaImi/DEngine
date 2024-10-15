@@ -146,10 +146,7 @@ namespace Game.Editor
                 if (GUILayout.Button(m_CleanContent, GUILayout.Height(30)))
                 {
                     var unknownAssetCount = GameBuildPipeline.CleanUnknownAssets();
-                    if (unknownAssetCount > 0)
-                    {
-                        Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets  has been removed.", unknownAssetCount));
-                    }
+                    Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets  has been removed.", unknownAssetCount));
                 }
 
                 GUILayout.Space(10);

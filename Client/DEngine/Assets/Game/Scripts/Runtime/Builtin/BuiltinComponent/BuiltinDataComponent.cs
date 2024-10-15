@@ -13,10 +13,7 @@ namespace Game
 
         private NativeDialogForm m_NativeDialogForm;
 
-        public BuiltinData Builtin
-        {
-            get => m_BuiltinData;
-        }
+        public BuiltinData Builtin => m_BuiltinData;
 
         public void InitLanguageSettings()
         {
@@ -105,7 +102,7 @@ namespace Game
 
         public void OpenDialog(DialogParams dialogParams)
         {
-            if (m_NativeDialogForm == null)
+            if (!m_NativeDialogForm)
             {
                 m_NativeDialogForm = Instantiate(Builtin.NativeDialogFormTemplate);
             }
@@ -115,12 +112,12 @@ namespace Game
 
         public void DestroyDialog()
         {
-            if (m_NativeDialogForm == null)
+            if (!m_NativeDialogForm)
             {
                 return;
             }
 
-            Destroy(m_NativeDialogForm);
+            Destroy(m_NativeDialogForm.gameObject);
         }
     }
 }

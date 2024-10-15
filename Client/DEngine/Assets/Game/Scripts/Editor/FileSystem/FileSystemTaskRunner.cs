@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using DEngine;
 using DEngine.FileSystem;
 using Game.FileSystem;
@@ -68,17 +66,39 @@ namespace Game.Editor.FileSystem
             return fileSystemDataVersion;
         }
 
-        public void Run()
+        public void ExecuteAll()
         {
-            var allTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes());
-            var taskTypes = allTypes.Where(type => typeof(IFileSystemTask).IsAssignableFrom(type) && !type.IsAbstract);
-            var buildFileSystemTasks = taskTypes.Select(taskType => (IFileSystemTask)Activator.CreateInstance(taskType)).Where(instance => instance != null).ToList();
-
             try
             {
-                foreach (var task in buildFileSystemTasks)
+                var fileSystemCollector = FileSystemCollector.Instance;
+                Dictionary<string, FileSystemDataVersion> fileSystemVersions = new();
+
+                foreach (var fileSystemData in fileSystemCollector.FileSystemDatas)
                 {
-                    task.Run(this);
+                    if (string.IsNullOrWhiteSpace(fileSystemData.FileSystem))
+                    {
+                        continue;
+                    }
+
+                    if (!AssetDatabase.IsValidFolder(fileSystemData.OutPutFolderPath))
+                    {
+                        continue;
+                    }
+
+                    if (fileSystemData.FileFullPaths is not { Count: > 0 })
+                    {
+                        continue;
+                    }
+
+                    string fullPath = Utility.Path.GetRegularCombinePath(fileSystemData.OutPutFolderPath, fileSystemData.FileSystem + ".bytes");
+                    string versionPath = Utility.Path.GetRegularCombinePath(fileSystemData.OutPutFolderPath, fileSystemData.FileSystem + "Version.bytes");
+                    fileSystemVersions[versionPath] = Execute(fullPath, fileSystemData.FileFullPaths);
+                }
+
+                foreach (var version in fileSystemVersions)
+                {
+                    File.WriteAllBytes(version.Key, FileSystemDataVersion.ToBson(version.Value));
+                    File.WriteAllText(version.Key.Replace(".bytes", ".json"), FileSystemDataVersion.ToJson(version.Value));
                 }
             }
             finally
