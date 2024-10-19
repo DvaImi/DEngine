@@ -36,7 +36,8 @@ namespace Game.Editor.BuildPipeline
 #if ENABLE_HYBRIDCLR
                 Debug.Log("====================编译代码========================");
                 PrebuildCommand.GenerateAll();
-                GameBuildPipeline.CopyDllAssets(target);
+                GameBuildPipeline.CopyAOTDllAssets(target);
+                GameBuildPipeline.CopyUpdateDllAssets(target);
                 Debug.Log("====================编译代码结束========================");
 #endif
 

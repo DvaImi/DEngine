@@ -8,23 +8,23 @@
       <Resource Name="Bundles/Assemblies/patchVersion.bytes" FileSystem="patch" LoadType="6" Packed="False" ResourceGroups="Base" />
       <Resource Name="Bundles/Configs/cfg.bytes" FileSystem="cfg" LoadType="4" Packed="False" ResourceGroups="Base" />
       <Resource Name="Bundles/Configs/cfgVersion.bytes" FileSystem="cfg" LoadType="4" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Launcher/UpdateLauncher.prefab" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Localization/ChineseSimplified" Variant="zh-cn" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Localization/ChineseTraditional" Variant="zh-tw" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Localization/English" Variant="en" LoadType="0" Packed="False" ResourceGroups="Base" />
       <Resource Name="Bundles/ShaderVariants" FileSystem="shader" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="data" Variant="en" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="data" Variant="zh-cn" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="data" Variant="zh-tw" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="data2" LoadType="0" Packed="False" ResourceGroups="Base" />
     </Resources>
     <Assets>
       <Asset Guid="0cf212ceb193ce247a4ee71a0e49197f" ResourceName="Bundles/Assemblies/aot.bytes" />
-      <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="Bundles/Localization/ChineseSimplified" ResourceVariant="zh-cn" />
+      <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="data" ResourceVariant="zh-cn" />
       <Asset Guid="333ff64354a4f434d9369aa014a823e3" ResourceName="Bundles/ShaderVariants" />
       <Asset Guid="405f5a4f5a14afd4c9d96a27906c4088" ResourceName="Bundles/Configs/cfg.bytes" />
-      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="Bundles/Launcher/UpdateLauncher.prefab" />
+      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="data2" />
       <Asset Guid="61ac612acf2c87f479eba867ee96c10c" ResourceName="Bundles/Assemblies/patchVersion.bytes" />
       <Asset Guid="88918b3d7c1ed21459fd390a05f9bfa2" ResourceName="Bundles/ShaderVariants" />
       <Asset Guid="95ce57afa274d6648a1077d9a4127240" ResourceName="Bundles/Assemblies/aotVersion.bytes" />
-      <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="Bundles/Localization/ChineseTraditional" ResourceVariant="zh-tw" />
-      <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="Bundles/Localization/English" ResourceVariant="en" />
+      <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="data" ResourceVariant="zh-tw" />
+      <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="data" ResourceVariant="en" />
       <Asset Guid="ef509fea589ad0e4ead2dac138f5a6fd" ResourceName="Bundles/Assemblies/patch.bytes" />
       <Asset Guid="f98416e525a5f1242a5390ccbda6a6f7" ResourceName="Bundles/Configs/cfgVersion.bytes" />
     </Assets>

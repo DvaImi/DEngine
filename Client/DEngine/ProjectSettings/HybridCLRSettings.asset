@@ -19,7 +19,8 @@ MonoBehaviour:
   hotUpdateAssemblyDefinitions: []
   hotUpdateAssemblies:
   - Game.Runtime.Update
-  preserveHotUpdateAssemblies: []
+  preserveHotUpdateAssemblies:
+  - Game.Runtime.Preserve
   hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
   externalHotUpdateAssembliyDirs: []
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip

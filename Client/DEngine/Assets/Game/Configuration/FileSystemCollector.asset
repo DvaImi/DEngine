@@ -37,7 +37,6 @@ MonoBehaviour:
     - HybridCLRData/Output/AOT/System.Core.bytes
     - HybridCLRData/Output/AOT/UniTask.bytes
     - HybridCLRData/Output/AOT/UnityEngine.CoreModule.bytes
-    - HybridCLRData/Output/AOT/ZString.bytes
   - FileSystem: patch
     OutPutFolderPath: Assets/Game/Bundles/Assemblies
     FileFullPaths:

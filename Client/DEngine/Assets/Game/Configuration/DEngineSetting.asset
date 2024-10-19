@@ -17,9 +17,9 @@ MonoBehaviour:
   ResourceCollectionConfig: Assets/Game/Configuration/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Configuration/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Configuration/ResourceBuilder.xml
-  BuildPlatforms: 0
-  ResourceMode: 0
-  BuildPlayerEventHandlerTypeName: 
+  BuildPlatforms: 3
+  ResourceMode: 1
+  BuildPlayerEventHandlerTypeName: Game.Editor.BuildPipeline.DefaultBuildPlayerEventHandler
   ForceRebuildAssetBundle: 0
   DefaultSceneNames: []
   SearchScenePaths:
@@ -28,8 +28,8 @@ MonoBehaviour:
   ForceUpdateGame: 0
   HostURL: http://localhost
   HostingServicePort: 8899
-  InternalResourceVersion: 0
-  LatestGameVersion: 
+  InternalResourceVersion: 6
+  LatestGameVersion: 0.1.0
   InternalGameVersion: 0
   WindowsAppUrl: 
   MacOSAppUrl: 
@@ -37,11 +37,21 @@ MonoBehaviour:
   AndroidAppUrl: 
   EnableHostingService: 0
   UpdateAssembliesPath: Assets/../HybridCLRData/Output/HotUpdate
-  UpdateAssemblies: []
+  UpdateAssemblies:
+  - Game.Runtime.Update
   AOTAssembliesPath: Assets/../HybridCLRData/Output/AOT
   AOTAssemblies:
-  - mscorlib.dll
-  - System.dll
-  - System.Core.dll
+  - mscorlib
+  - System
+  - System.Core
+  - DEngine
+  - DEngine.Runtime
+  - Fantasy.Unity
+  - Game.Runtime.Builtin
+  - Luban.Runtime
+  - UniTask
+  - UniTask.Linq
+  - UnityEngine.CoreModule
   PreserveAssembliesPath: Assets/../HybridCLRData/Output/Preserve
-  PreserveAssemblies: []
+  PreserveAssemblies:
+  - Game.Runtime.Preserve

@@ -20,7 +20,7 @@ MonoBehaviour:
       EnableGroup: 1
       Description: "\u57FA\u7840\u8D44\u6E90"
       AssetCollectors:
-      - Name: 
+      - Name: data
         Enable: 1
         FileSystem: 
         Groups: Base
@@ -29,7 +29,7 @@ MonoBehaviour:
         LoadType: 0
         Packed: 0
         FilterRule: CollectAll
-      - Name: 
+      - Name: data
         Enable: 1
         FileSystem: 
         Groups: Base
@@ -38,7 +38,7 @@ MonoBehaviour:
         LoadType: 0
         Packed: 0
         FilterRule: CollectAll
-      - Name: 
+      - Name: data
         Enable: 1
         FileSystem: 
         Groups: Base
@@ -47,7 +47,7 @@ MonoBehaviour:
         LoadType: 0
         Packed: 0
         FilterRule: CollectAll
-      - Name: 
+      - Name: data2
         Enable: 1
         FileSystem: 
         Groups: Base

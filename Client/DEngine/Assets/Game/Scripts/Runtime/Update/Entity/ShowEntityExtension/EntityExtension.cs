@@ -13,7 +13,7 @@ namespace Game.Update.Entity
         // 负值用于本地生成的临时实体（如特效、FakeObject等）
         private static int s_SerialId = 0;
 
-        public static void ShowEntity(this EntityComponent self, Type logicType, string entityGroup, int priority, HotfixEntityData data)
+        public static void ShowEntity(this EntityComponent self, Type logicType, string entityGroup, int priority, UpdateEntityData data)
         {
             if (data == null)
             {
@@ -32,7 +32,7 @@ namespace Game.Update.Entity
             self.ShowEntity(data.Id, logicType, UpdateAssetUtility.GetEntityAsset(drEntity.AssetName), entityGroup, priority, data);
         }
 
-        public static async UniTask<T> ShowEntityAsync<T>(this EntityComponent self, string entityGroup, int priority, HotfixEntityData data) where T : HotfixEntityLogic
+        public static async UniTask<T> ShowEntityAsync<T>(this EntityComponent self, string entityGroup, int priority, UpdateEntityData data) where T : UpdateEntityLogic
         {
             if (data == null)
             {
