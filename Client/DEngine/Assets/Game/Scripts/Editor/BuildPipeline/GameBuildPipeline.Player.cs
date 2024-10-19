@@ -75,21 +75,7 @@ namespace Game.Editor.BuildPipeline
 
             if (DEngineSetting.Instance.ResourceMode is ResourceMode.Updatable or ResourceMode.UpdatableWhilePlaying)
             {
-                BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
-                string platformPath = GetPlatformPath(platform);
-                string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
-                if (File.Exists(versionFilePath))
-                {
-                    JObject checkVersionInfo = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(versionFilePath));
-                    builtinData.BuildInfo = new BuildInfo()
-                    {
-                        LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
-                        CheckVersionUrl = checkVersionInfo["CheckVersionUrl"]!.Value<string>()
-                    };
-                    EditorUtility.SetDirty(builtinData);
-                    AssetDatabase.SaveAssets();
-                    AssetDatabase.Refresh();
-                }
+                SaveBuiltinData(platform);
             }
 
 
@@ -105,6 +91,25 @@ namespace Game.Editor.BuildPipeline
             {
                 Debug.Log("Build failed ");
                 return false;
+            }
+        }
+
+        public static void SaveBuiltinData(Platform platform)
+        {
+            BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
+            string platformPath = GetPlatformPath(platform);
+            string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
+            if (File.Exists(versionFilePath))
+            {
+                JObject checkVersionInfo = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(versionFilePath));
+                builtinData.BuildInfo = new BuildInfo
+                {
+                    LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
+                    CheckVersionUrl = checkVersionInfo["CheckVersionUrl"]!.Value<string>()
+                };
+                EditorUtility.SetDirty(builtinData);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
         }
 

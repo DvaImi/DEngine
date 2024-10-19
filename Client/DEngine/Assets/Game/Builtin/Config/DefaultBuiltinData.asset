@@ -17,7 +17,7 @@ MonoBehaviour:
   BuildinLanguage: {fileID: 11400000, guid: 27a75f22419519245a9d873683d2111f, type: 2}
   BuildInfo:
     LatestGameVersion: 0.1.0
-    CheckVersionUrl: http://192.168.86.2/0.1.0/WindowsVersion.json
+    CheckVersionUrl: http://localhost:8899/WindowsVersion.json
     WindowsAppUrl: 
     MacOSAppUrl: 
     IOSAppUrl: 

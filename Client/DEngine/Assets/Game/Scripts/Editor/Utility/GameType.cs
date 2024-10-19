@@ -24,6 +24,7 @@ namespace Game.Editor
         {
             "Assembly-CSharp",
             "DEngine.Runtime",
+            "Game.Runtime.Builtin",
         };
 
         private static readonly List<string> RuntimeOrEditorAssemblyNames = new()
@@ -32,6 +33,8 @@ namespace Game.Editor
             "Assembly-CSharp-Editor",
             "DEngine.Editor",
             "DEngine.Runtime",
+            "Game.Editor",
+            "Game.Runtime.Builtin",
         };
 
         static GameType()

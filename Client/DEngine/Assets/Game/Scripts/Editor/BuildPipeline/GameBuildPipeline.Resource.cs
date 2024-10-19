@@ -40,6 +40,7 @@ namespace Game.Editor.BuildPipeline
 
             if (DEngineSetting.Instance.ResourceMode == ResourceMode.Unspecified)
             {
+                Debug.LogWarning("ResourceMode is Unspecified");
                 return false;
             }
 
@@ -174,6 +175,11 @@ namespace Game.Editor.BuildPipeline
         {
             PackagesNames = ResourcePackagesCollector.Instance.PackagesCollector.Select(x => x.PackageName).ToArray();
             VariantNames = VariantHelper.GetVariantArray();
+        }
+
+        public static string GetCurrentPackageName()
+        {
+            return PackagesNames[DEngineSetting.Instance.AssetBundleCollectorIndex];
         }
 
         public static void RemoveUnknownAssets()

@@ -2,31 +2,31 @@
 <DEngine>
   <ResourceCollection>
     <Resources>
-      <Resource Name="aot" FileSystem="aot" LoadType="6" Packed="True" ResourceGroups="Base" />
-      <Resource Name="aotversion" FileSystem="aot" LoadType="6" Packed="True" ResourceGroups="Base" />
-      <Resource Name="cfg" FileSystem="cfg" LoadType="4" Packed="True" ResourceGroups="Base" />
-      <Resource Name="cfgversion" FileSystem="cfg" LoadType="4" Packed="True" ResourceGroups="Base" />
-      <Resource Name="chinesesimplified" Variant="zh-cn" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="chinesetraditional" Variant="zh-tw" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="english" Variant="en" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="patch" FileSystem="patch" LoadType="6" Packed="True" ResourceGroups="Base" />
-      <Resource Name="patchversion" FileSystem="patch" LoadType="6" Packed="True" ResourceGroups="Base" />
-      <Resource Name="shadervariants" FileSystem="shader" LoadType="0" Packed="True" ResourceGroups="Base" />
-      <Resource Name="updatelauncher" LoadType="0" Packed="True" ResourceGroups="Base" />
+      <Resource Name="Bundles/Assemblies/aot.bytes" FileSystem="aot" LoadType="6" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Assemblies/aotVersion.bytes" FileSystem="aot" LoadType="6" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Assemblies/patch.bytes" FileSystem="patch" LoadType="6" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Assemblies/patchVersion.bytes" FileSystem="patch" LoadType="6" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Configs/cfg.bytes" FileSystem="cfg" LoadType="4" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Configs/cfgVersion.bytes" FileSystem="cfg" LoadType="4" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Launcher/UpdateLauncher.prefab" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Localization/ChineseSimplified" Variant="zh-cn" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Localization/ChineseTraditional" Variant="zh-tw" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Localization/English" Variant="en" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/ShaderVariants" FileSystem="shader" LoadType="0" Packed="False" ResourceGroups="Base" />
     </Resources>
     <Assets>
-      <Asset Guid="0cf212ceb193ce247a4ee71a0e49197f" ResourceName="aot" />
-      <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="chinesesimplified" ResourceVariant="zh-cn" />
-      <Asset Guid="333ff64354a4f434d9369aa014a823e3" ResourceName="shadervariants" />
-      <Asset Guid="405f5a4f5a14afd4c9d96a27906c4088" ResourceName="cfg" />
-      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="updatelauncher" />
-      <Asset Guid="61ac612acf2c87f479eba867ee96c10c" ResourceName="patchversion" />
-      <Asset Guid="88918b3d7c1ed21459fd390a05f9bfa2" ResourceName="shadervariants" />
-      <Asset Guid="95ce57afa274d6648a1077d9a4127240" ResourceName="aotversion" />
-      <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="chinesetraditional" ResourceVariant="zh-tw" />
-      <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="english" ResourceVariant="en" />
-      <Asset Guid="ef509fea589ad0e4ead2dac138f5a6fd" ResourceName="patch" />
-      <Asset Guid="f98416e525a5f1242a5390ccbda6a6f7" ResourceName="cfgversion" />
+      <Asset Guid="0cf212ceb193ce247a4ee71a0e49197f" ResourceName="Bundles/Assemblies/aot.bytes" />
+      <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="Bundles/Localization/ChineseSimplified" ResourceVariant="zh-cn" />
+      <Asset Guid="333ff64354a4f434d9369aa014a823e3" ResourceName="Bundles/ShaderVariants" />
+      <Asset Guid="405f5a4f5a14afd4c9d96a27906c4088" ResourceName="Bundles/Configs/cfg.bytes" />
+      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="Bundles/Launcher/UpdateLauncher.prefab" />
+      <Asset Guid="61ac612acf2c87f479eba867ee96c10c" ResourceName="Bundles/Assemblies/patchVersion.bytes" />
+      <Asset Guid="88918b3d7c1ed21459fd390a05f9bfa2" ResourceName="Bundles/ShaderVariants" />
+      <Asset Guid="95ce57afa274d6648a1077d9a4127240" ResourceName="Bundles/Assemblies/aotVersion.bytes" />
+      <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="Bundles/Localization/ChineseTraditional" ResourceVariant="zh-tw" />
+      <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="Bundles/Localization/English" ResourceVariant="en" />
+      <Asset Guid="ef509fea589ad0e4ead2dac138f5a6fd" ResourceName="Bundles/Assemblies/patch.bytes" />
+      <Asset Guid="f98416e525a5f1242a5390ccbda6a6f7" ResourceName="Bundles/Configs/cfgVersion.bytes" />
     </Assets>
   </ResourceCollection>
 </DEngine>

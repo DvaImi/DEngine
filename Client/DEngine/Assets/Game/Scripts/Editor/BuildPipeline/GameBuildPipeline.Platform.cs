@@ -108,14 +108,24 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static string GetUpdatePrefixUri(Platform platform)
+        public static string GetCheckVersionUrl()
         {
-            return Utility.Text.Format(DEngineSetting.Instance.HostURL + "/{0}/{1}", DEngineSetting.Instance.LatestGameVersion, GetPlatformPath(platform));
+            return Utility.Text.Format("{0}:{1}/{{Platform}}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort);
         }
 
         public static string GetCheckVersionUrl(Platform platform)
         {
-            return Utility.Text.Format(DEngineSetting.Instance.HostURL + "/{0}/{1}Version.json", DEngineSetting.Instance.LatestGameVersion, GetPlatformPath(platform));
+            return Utility.Text.Format("{0}:{1}/{2}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, GetPlatformPath(platform));
+        }
+
+        public static string GetUpdatePrefixUri()
+        {
+            return Utility.Text.Format("{0}:{1}/{2}.{3}/{{Platform}}", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, DEngineSetting.Instance.LatestGameVersion, DEngineSetting.Instance.InternalResourceVersion);
+        }
+
+        public static string GetUpdatePrefixUri(Platform platform)
+        {
+            return Utility.Text.Format("{0}:{1}/{2}.{3}/{4}", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, DEngineSetting.Instance.LatestGameVersion, DEngineSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
         }
 
         public static string GetPlatformPath(Platform platform)

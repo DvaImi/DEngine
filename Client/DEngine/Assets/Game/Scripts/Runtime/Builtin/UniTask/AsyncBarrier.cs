@@ -25,16 +25,22 @@ public class AsyncBarrier : IReference
         await m_CoreCompletionSource.Task;
     }
 
-    public static AsyncBarrier Creat(int participantCount)
+    public void Initlize(int participantCount)
     {
-        AsyncBarrier barrier = ReferencePool.Acquire<AsyncBarrier>();
         if (participantCount <= 0)
         {
             throw new ArgumentOutOfRangeException(nameof(participantCount), "The number of participants must be greater than zero.");
         }
-        barrier.m_TotalCount = participantCount;
+
+        m_TotalCount = participantCount;
+    }
+
+    public static AsyncBarrier Creat(int participantCount)
+    {
+        AsyncBarrier barrier = ReferencePool.Acquire<AsyncBarrier>();
         barrier.m_CurrentCount = 0;
         barrier.m_CoreCompletionSource = new UniTaskCompletionSource();
+        barrier.Initlize(participantCount);
         return barrier;
     }
 

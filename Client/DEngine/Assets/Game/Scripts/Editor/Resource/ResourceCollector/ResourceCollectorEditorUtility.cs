@@ -96,7 +96,7 @@ namespace Game.Editor.ResourceTools
                 s_SourceAssetExceptLabelFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptLabelFilter);
 
                 Collection.Clear();
-                
+
                 AnalysisResourceFilters(collectorData);
 
                 int unknownAssetCount = resourceEditorController.RemoveUnknownAssets();
@@ -202,6 +202,14 @@ namespace Game.Editor.ResourceTools
         /// <param name="collectorData">资源组收集器</param>
         private static void AnalysisResourceFilters(ResourceGroupsCollector collectorData)
         {
+            ResourceEditorController resourceEditorController = new();
+
+            string sourceAssetRootPath = "Assets";
+            if (resourceEditorController.Load())
+            {
+                sourceAssetRootPath = resourceEditorController.SourceAssetRootPath;
+            }
+
             foreach (var resourceGroup in collectorData.Groups)
             {
                 if (resourceGroup.EnableGroup)
@@ -218,7 +226,6 @@ namespace Game.Editor.ResourceTools
                             continue;
                         }
 
-                        FileInfo fileInfo = new(resourceCollector.AssetPath);
                         if (string.IsNullOrEmpty(resourceCollector.Variant))
                         {
                             resourceCollector.Variant = null;
@@ -226,7 +233,7 @@ namespace Game.Editor.ResourceTools
 
                         if (AssetDatabase.IsValidFolder(resourceCollector.AssetPath) || File.Exists(resourceCollector.AssetPath))
                         {
-                            string resourceName = string.IsNullOrEmpty(resourceCollector.Name) ? Path.GetFileNameWithoutExtension(fileInfo.FullName).ToLowerInvariant() : resourceCollector.Name.ToLowerInvariant();
+                            string resourceName = string.IsNullOrEmpty(resourceCollector.Name) ? resourceCollector.AssetPath[(sourceAssetRootPath.Length + 1)..] : resourceCollector.Name;
                             ApplyResourceFilter(resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));
                         }
                         else

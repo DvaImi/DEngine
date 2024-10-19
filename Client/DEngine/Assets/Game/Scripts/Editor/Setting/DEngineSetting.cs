@@ -92,7 +92,12 @@ namespace Game.Editor
         /// <summary>
         /// 服务器地址
         /// </summary>
-        public string HostURL = "http://127.0.0.1";
+        public string HostURL = "http://localhost";
+
+        /// <summary>
+        /// 服务器端口
+        /// </summary>
+        public int HostingServicePort = 8899;
 
         /// <summary>
         /// 内置资源版本
@@ -108,11 +113,6 @@ namespace Game.Editor
         /// 游戏内部版本号
         /// </summary>
         public int InternalGameVersion = 0;
-
-        /// <summary>
-        /// 资源更新下载地址
-        /// </summary>
-        public string UpdatePrefixUri = string.Empty;
 
         /// <summary>
         /// 
@@ -133,6 +133,11 @@ namespace Game.Editor
         /// 
         /// </summary>
         public string AndroidAppUrl = string.Empty;
+
+        /// <summary>
+        /// 是否开启本地资源服务
+        /// </summary>
+        public bool EnableHostingService = false;
 
         /// <summary>
         /// 热更程序集生成路径
