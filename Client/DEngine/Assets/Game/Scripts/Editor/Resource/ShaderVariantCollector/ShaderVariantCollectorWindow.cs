@@ -33,7 +33,7 @@ public class ShaderVariantCollectorWindow : EditorWindow
             VisualElement root = this.rootVisualElement;
 
             // 加载布局文件
-            var visualAsset = UxmlLoader.LoadWindowUXML<ShaderVariantCollectorWindow>();
+            var visualAsset = UxmlLoader.LoadWindowUxml<ShaderVariantCollectorWindow>();
             if (visualAsset == null)
                 return;
 
