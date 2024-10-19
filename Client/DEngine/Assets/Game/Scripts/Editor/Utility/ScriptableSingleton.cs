@@ -6,10 +6,8 @@
 // ========================================================
 
 using System;
-using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace Game.Editor
@@ -37,14 +35,7 @@ namespace Game.Editor
             string filePath = GetFilePath();
             if (!string.IsNullOrEmpty(filePath))
             {
-                var arr = InternalEditorUtility.LoadSerializedFileAndForget(filePath);
-                m_Instance = arr.Length > 0 ? arr[0] as T : m_Instance ?? CreateInstance<T>();
-                if (m_Instance != null)
-                {
-                    m_Instance.name = typeof(T).Name;
-                }
-
-                AssetDatabase.Refresh();
+                return EditorTools.LoadScriptableObject<T>(filePath);
             }
             else
             {
@@ -57,8 +48,7 @@ namespace Game.Editor
         /// <summary>
         /// 保存配置信息
         /// </summary>
-        /// <param name="saveAsText"></param>
-        public static void Save(bool saveAsText = true)
+        public static void Save()
         {
             if (!m_Instance)
             {
@@ -66,19 +56,8 @@ namespace Game.Editor
                 return;
             }
 
-            string filePath = GetFilePath();
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                string directoryName = Path.GetDirectoryName(filePath);
-                if (!Directory.Exists(directoryName))
-                {
-                    Directory.CreateDirectory(directoryName);
-                }
-
-                UnityEngine.Object[] obj = new T[1] { m_Instance };
-                InternalEditorUtility.SaveToSerializedFileAndForget(obj, filePath, saveAsText);
-            }
-
+            EditorUtility.SetDirty(m_Instance);
+            AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
 

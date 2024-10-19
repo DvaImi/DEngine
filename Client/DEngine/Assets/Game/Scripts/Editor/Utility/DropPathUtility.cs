@@ -110,7 +110,7 @@ namespace Game.Editor
             return false;
         }
 
-        public static void DropAssetPath(string label, ref string value, bool isFolder = false)
+        public static void DropAndPingAssetPath(string label, ref string value, bool isFolder = false)
         {
             EditorGUILayout.BeginHorizontal();
             {
@@ -127,7 +127,7 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80),GUILayout.Height(20)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(value));
                 }

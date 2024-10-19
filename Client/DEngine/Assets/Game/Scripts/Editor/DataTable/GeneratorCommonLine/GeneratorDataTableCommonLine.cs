@@ -98,7 +98,7 @@ namespace Game.Editor.DataTableTools
         [MenuItem("DataTable/Editor/DataTables", priority = 1)]
         public static void EditorDataTable()
         {
-            OpenFolder.Execute(DataTableSetting.Instance.DataTableExcelsFolder);
+            EditorUtility.RevealInFinder(DataTableSetting.Instance.DataTableExcelsFolder);
         }
 
         [MenuItem("DataTable/Generate/Localizations", priority = 2)]
@@ -153,7 +153,7 @@ namespace Game.Editor.DataTableTools
         [MenuItem("DataTable/Editor/Localization", priority = 2)]
         public static void EditorLocalization()
         {
-            OpenFolder.Execute(DataTableSetting.Instance.LocalizationExcelsFolder);
+            EditorUtility.RevealInFinder(DataTableSetting.Instance.LocalizationExcelsFolder);
         }
 
         [MenuItem("DataTable/Generate/Luban", priority = 3)]
@@ -170,7 +170,7 @@ namespace Game.Editor.DataTableTools
         [MenuItem("DataTable/Editor/Luban", priority = 3)]
         public static void EditorLuban()
         {
-            OpenFolder.Execute(Path.Combine(Application.dataPath, "../../../Share/Luban/Client/Datas"));
+            EditorUtility.RevealInFinder(Path.Combine(Application.dataPath, "../../../Share/Luban/Client/Datas"));
         }
 
         private static void GenerateDataTableEnumFile(DataTableProcessor dataTableProcessor, string dataTableName)

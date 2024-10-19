@@ -8,7 +8,7 @@ using DEngine.Runtime;
 
 namespace Game.Update.Entity
 {
-    public abstract class HotfixEntityLogic : EntityLogic
+    public abstract class UpdateEntityLogic : EntityLogic
     {
 
     }

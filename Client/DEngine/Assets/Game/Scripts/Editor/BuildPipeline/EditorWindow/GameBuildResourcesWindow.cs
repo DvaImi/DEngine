@@ -186,12 +186,12 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.LabelField(DEngineSetting.BundlesOutput);
                 GUI.enabled = true;
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
                 {
-                    OpenFolder.Execute(DEngineSetting.BundlesOutput);
+                    EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
                 }
 
-                if (GUILayout.Button("Clear", GUILayout.Width(80)))
+                if (GUILayout.Button("Clear", GUILayout.Width(80), GUILayout.Height(20)))
                 {
                     GameBuildPipeline.ClearResource();
                 }
@@ -206,9 +206,9 @@ namespace Game.Editor.BuildPipeline
 
                 if (m_FoldoutBuildConfigGroup)
                 {
-                    DropPathUtility.DropAssetPath("ResourceCollectionConfig", ref DEngineSetting.Instance.ResourceCollectionConfig);
-                    DropPathUtility.DropAssetPath("ResourceEditorConfig", ref DEngineSetting.Instance.ResourceEditorConfig);
-                    DropPathUtility.DropAssetPath("ResourceBuilderConfig", ref DEngineSetting.Instance.ResourceBuilderConfig);
+                    DropPathUtility.DropAndPingAssetPath("ResourceCollectionConfig", ref DEngineSetting.Instance.ResourceCollectionConfig);
+                    DropPathUtility.DropAndPingAssetPath("ResourceEditorConfig", ref DEngineSetting.Instance.ResourceEditorConfig);
+                    DropPathUtility.DropAndPingAssetPath("ResourceBuilderConfig", ref DEngineSetting.Instance.ResourceBuilderConfig);
                 }
 
                 EditorGUILayout.EndFoldoutHeaderGroup();
@@ -260,9 +260,9 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUILayout.LabelField("本地路径", HostingServiceManager.HostingServicePath);
-                    if (GUILayout.Button("Open", GUILayout.Width(100)))
+                    if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
                     {
-                        OpenFolder.Execute(HostingServiceManager.HostingServicePath);
+                        EditorUtility.RevealInFinder(HostingServiceManager.HostingServicePath);
                     }
                 }
                 EditorGUILayout.EndHorizontal();

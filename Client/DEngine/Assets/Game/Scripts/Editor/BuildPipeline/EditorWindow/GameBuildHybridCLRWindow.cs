@@ -46,7 +46,7 @@ namespace Game.Editor.BuildPipeline
             if (m_Compile)
             {
                 m_Compile = false;
-                GameBuildPipeline.CompileHotfixDll();
+                GameBuildPipeline.CompileUpdateDll();
             }
         }
 
@@ -80,7 +80,7 @@ namespace Game.Editor.BuildPipeline
                 GUILayout.Space(10f);
                 EditorGUILayout.BeginVertical("box");
                 {
-                    GUIHyBridCLR();
+                    GUIHybridCLR();
                 }
                 GUILayout.Space(5f);
                 EditorGUILayout.EndHorizontal();
@@ -115,7 +115,7 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        private void GUIHyBridCLR()
+        private void GUIHybridCLR()
         {
             EditorGUILayout.BeginHorizontal();
             {
@@ -151,9 +151,9 @@ namespace Game.Editor.BuildPipeline
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Width(80)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(DEngineSetting.Instance.UpdateAssembliesPath));
+                    EditorUtility.RevealInFinder(DEngineSetting.Instance.UpdateAssembliesPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -209,9 +209,9 @@ namespace Game.Editor.BuildPipeline
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Width(80)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(DEngineSetting.Instance.PreserveAssembliesPath));
+                    EditorUtility.RevealInFinder(DEngineSetting.Instance.PreserveAssembliesPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -266,9 +266,9 @@ namespace Game.Editor.BuildPipeline
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Width(80)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(DEngineSetting.Instance.AOTAssembliesPath));
+                    EditorUtility.RevealInFinder(DEngineSetting.Instance.AOTAssembliesPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -289,9 +289,9 @@ namespace Game.Editor.BuildPipeline
                         {
                             SelectAssembly assemblyEditor = GetWindow<SelectAssembly>();
 
-                            void Save(string[] aotdll)
+                            void Save(string[] dlls)
                             {
-                                DEngineSetting.Instance.AOTAssemblies = aotdll.Select(item => item.Replace(".dll", null)).ToArray();
+                                DEngineSetting.Instance.AOTAssemblies = dlls.Select(item => item.Replace(".dll", null)).ToArray();
                                 DEngineSetting.Save();
                                 Repaint();
                             }

@@ -16,16 +16,18 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("AOT Generic", 1, 0)]
         public static void GenerateStripedAOT()
         {
+            BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             StripAOTDllCommand.GenerateStripedAOTDlls();
             AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
+            CopyAOTDllAssets(buildTarget);
         }
 
         [EditorToolbarMenu("Compile", 1, 1)]
-        public static void CompileHotfixDll()
+        public static void CompileUpdateDll()
         {
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             CompileDllCommand.CompileDll(buildTarget);
-            CopyDllAssets(buildTarget);
+            CopyUpdateDllAssets(buildTarget);
         }
 
         public static void SaveHybridCLR()
@@ -35,13 +37,34 @@ namespace Game.Editor.BuildPipeline
             HybridCLRSettings.Save();
         }
 
-        private static void CopyDllAssets()
+        public static void CopyAOTDllAssets(BuildTarget buildTarget)
         {
-            BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
-            CopyDllAssets(buildTarget);
+            if (Directory.Exists(DEngineSetting.Instance.AOTAssembliesPath))
+            {
+                GameUtility.IO.Delete(DEngineSetting.Instance.AOTAssembliesPath);
+            }
+            else
+            {
+                Directory.CreateDirectory(DEngineSetting.Instance.AOTAssembliesPath);
+            }
+
+            // Copy AOTAssemblies
+            string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
+            foreach (var aotAssemblyFullName in DEngineSetting.Instance.AOTAssemblies)
+            {
+                var oriFileName = Path.Combine(aotDllPath, aotAssemblyFullName + ".dll");
+                if (!File.Exists(oriFileName))
+                {
+                    Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOTAssemblies.");
+                    continue;
+                }
+
+                var desFileName = Path.Combine(DEngineSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
+                File.Copy(oriFileName, desFileName, true);
+            }
         }
 
-        public static void CopyDllAssets(BuildTarget buildTarget)
+        public static void CopyUpdateDllAssets(BuildTarget buildTarget)
         {
             if (string.IsNullOrEmpty(DEngineSetting.Instance.UpdateAssembliesPath))
             {
@@ -67,16 +90,6 @@ namespace Game.Editor.BuildPipeline
                 Directory.CreateDirectory(DEngineSetting.Instance.PreserveAssembliesPath);
             }
 
-            if (Directory.Exists(DEngineSetting.Instance.AOTAssembliesPath))
-            {
-                GameUtility.IO.Delete(DEngineSetting.Instance.AOTAssembliesPath);
-            }
-            else
-            {
-                Directory.CreateDirectory(DEngineSetting.Instance.AOTAssembliesPath);
-            }
-
-
             string desFileName;
             string oriFileName;
 
@@ -99,21 +112,6 @@ namespace Game.Editor.BuildPipeline
                 File.Copy(oriFileName, desFileName, true);
             }
 
-
-            // Copy AOTAssemblies
-            string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
-            foreach (var aotAssemblyFullName in DEngineSetting.Instance.AOTAssemblies)
-            {
-                oriFileName = Path.Combine(aotDllPath, aotAssemblyFullName + ".dll");
-                if (!File.Exists(oriFileName))
-                {
-                    Debug.LogError($"AOT 补充元数据 dll: {oriFileName} 文件不存在。需要构建一次主包后才能生成裁剪后的 AOTAssemblies.");
-                    continue;
-                }
-
-                desFileName = Path.Combine(DEngineSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
-                File.Copy(oriFileName, desFileName, true);
-            }
 
             AssetDatabase.Refresh();
         }

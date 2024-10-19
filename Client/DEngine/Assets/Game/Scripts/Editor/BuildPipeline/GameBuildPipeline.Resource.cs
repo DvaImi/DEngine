@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
@@ -11,7 +10,6 @@ using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
-using Object = UnityEngine.Object;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -23,7 +21,13 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("Build Resource", 1, 3)]
         public static bool BuildResource()
         {
-            return BuildResource(DEngineSetting.Instance.BuildPlatforms, DEngineSetting.Instance.ForceRebuildAssetBundle);
+            bool isSuccess = BuildResource(DEngineSetting.Instance.BuildPlatforms, DEngineSetting.Instance.ForceRebuildAssetBundle);
+            if (isSuccess)
+            {
+                EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
+            }
+
+            return isSuccess;
         }
 
         private static bool BuildResource(Platform platforms, bool forceRebuild = false)

@@ -439,7 +439,7 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
                 }
@@ -477,7 +477,7 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
                 }
@@ -521,7 +521,7 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button(GetIcon(isFolder ? "Folder Icon" : "TextAsset Icon"), GUILayout.Width(30), GUILayout.Height(20)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
                 }
@@ -561,9 +561,9 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
                 {
-                    OpenFolder.Execute(path);
+                    EditorUtility.RevealInFinder(path);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -601,70 +601,13 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
                 {
                     EditorUtility.OpenWithDefaultApp(path);
                 }
             }
             EditorGUILayout.EndHorizontal();
         }
-
-        public static void GUIOutMultipleFilePaths(string header, ref string[] paths, string extension)
-        {
-            EditorGUILayout.BeginVertical();
-            {
-                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
-                {
-                    normal = new GUIStyleState
-                    {
-                        textColor = Color.yellow
-                    }
-                };
-
-                for (int i = 0; i < paths.Length; i++)
-                {
-                    bool invalid = !File.Exists(paths[i]);
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{header} {i + 1}:", paths[i], invalid ? warningLableGUIStyle : EditorStyles.label);
-
-                    if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
-                    {
-                        string file = EditorUtility.OpenFilePanel("Select Output File", paths[i], extension);
-                        if (!string.IsNullOrEmpty(file) && File.Exists(file) && file != paths[i])
-                        {
-                            paths[i] = file;
-                        }
-                    }
-
-                    if (GUILayout.Button("Go", GUILayout.Width(30)))
-                    {
-                        EditorUtility.OpenWithDefaultApp(paths[i]);
-                    }
-
-                    if (GUILayout.Button("Remove", GUILayout.Width(60)))
-                    {
-                        List<string> pathList = paths.ToList();
-                        pathList.RemoveAt(i);
-                        paths = pathList.ToArray();
-                        break;
-                    }
-
-                    EditorGUILayout.EndHorizontal();
-                }
-
-                if (GUILayout.Button("Add File", GUILayout.Width(80)))
-                {
-                    string file = EditorUtility.OpenFilePanel("Select Output File", "", extension);
-                    if (!string.IsNullOrEmpty(file) && File.Exists(file))
-                    {
-                        Array.Resize(ref paths, paths.Length + 1);
-                        paths[^1] = file;
-                    }
-                }
-            }
-            EditorGUILayout.EndVertical();
-        }
-
 
         /// <summary>
         /// 绘制 Toggle

@@ -116,11 +116,11 @@ namespace Game.Editor.DataTableTools
             {
                 if (m_FoldoutDataTableGroup)
                 {
+                    EditorTools.GUIOutFolderPath("数据表格路径", ref DataTableSetting.Instance.DataTableExcelsFolder);
                     EditorTools.GUIOutFolderPath("数据表文件导出路径", ref DataTableSetting.Instance.OutputDataTableFolder);
                     EditorTools.GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath, true);
                     EditorTools.GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName);
                     EditorTools.GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath, true);
-                    EditorTools.GUIOutFolderPath("数据表格路径", ref DataTableSetting.Instance.DataTableExcelsFolder);
                     DataTableSetting.Instance.NameSpace = EditorGUILayout.TextField("数据表命名空间", DataTableSetting.Instance.NameSpace);
                     DataTableSetting.Instance.NameRow = EditorGUILayout.IntField("字段名所在行", DataTableSetting.Instance.NameRow);
                     DataTableSetting.Instance.TypeRow = EditorGUILayout.IntField("类型名所在行", DataTableSetting.Instance.TypeRow);

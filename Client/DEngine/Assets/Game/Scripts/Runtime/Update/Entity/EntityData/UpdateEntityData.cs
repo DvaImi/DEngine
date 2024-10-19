@@ -12,7 +12,7 @@ namespace Game.Update.Entity
     /// <summary>
     /// 热更新层实体数据
     /// </summary>
-    public class HotfixEntityData : IReference
+    public class UpdateEntityData : IReference
     {
         /// <summary>
         /// 实体编号。
@@ -34,7 +34,7 @@ namespace Game.Update.Entity
         /// </summary>
         public Quaternion Rotation { get; set; } = Quaternion.identity;
 
-        public HotfixEntityData()
+        public UpdateEntityData()
         {
 
         }

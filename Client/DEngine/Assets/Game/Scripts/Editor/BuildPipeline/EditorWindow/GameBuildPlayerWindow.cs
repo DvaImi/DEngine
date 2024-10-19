@@ -135,7 +135,7 @@ namespace Game.Editor.BuildPipeline
 
             EditorGUILayout.BeginVertical("box");
             {
-                DropPathUtility.DropAssetPath("BuildSetting", ref DEngineSetting.Instance.BuildSettingsConfig);
+                DropPathUtility.DropAndPingAssetPath("BuildSetting", ref DEngineSetting.Instance.BuildSettingsConfig);
 
                 bool changed = false;
                 GUILayout.Space(5f);
@@ -165,7 +165,7 @@ namespace Game.Editor.BuildPipeline
                         EditorGUILayout.BeginHorizontal();
                         {
                             SceneAsset sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(m_DefaultSceneNames[i]);
-                            if (sceneAsset == null)
+                            if (!sceneAsset)
                             {
                                 continue;
                             }
@@ -200,12 +200,12 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.LabelField(DEngineSetting.AppOutput);
                 GUI.enabled = true;
 
-                if (GUILayout.Button("Open", GUILayout.Width(50)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80)))
                 {
-                    OpenFolder.Execute(DEngineSetting.AppOutput);
+                    EditorUtility.RevealInFinder(DEngineSetting.AppOutput);
                 }
 
-                if (GUILayout.Button("Clear", GUILayout.Width(80f)))
+                if (GUILayout.Button("Clear", GUILayout.Width(80)))
                 {
                     GameUtility.IO.ClearFolder(DEngineSetting.AppOutput);
                     Debug.Log($"Clear{DEngineSetting.AppOutput} success !");

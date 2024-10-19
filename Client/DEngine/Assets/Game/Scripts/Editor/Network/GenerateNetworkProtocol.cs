@@ -22,7 +22,7 @@ namespace Game.Editor.NetworkProtocol
         [MenuItem("Fantasy/Editor", priority = 101)]
         public static void EditorProtocol()
         {
-            OpenFolder.Execute(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Config"));
+            EditorUtility.RevealInFinder(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Config"));
         }
 
         [MenuItem("Fantasy/Run", priority = 201)]
