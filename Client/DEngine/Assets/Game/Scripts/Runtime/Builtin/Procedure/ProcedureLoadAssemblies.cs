@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Game
 
         private static bool s_MetadataForAOTLoaded = false;
         private static bool s_UpdateAssembliesLoaded = false;
+        private UniTask m_LoadAssembliesTask;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
@@ -27,8 +29,9 @@ namespace Game
             {
                 return;
             }
+
             LoadMetadataForAOTAssembly();
-            LoadUpdateAssemblies(procedureOwner).Forget();
+            m_LoadAssembliesTask = LoadUpdateAssemblies(procedureOwner);
         }
 
 
@@ -38,6 +41,32 @@ namespace Game
             if (s_MetadataForAOTLoaded && s_UpdateAssembliesLoaded)
             {
                 ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
+                return;
+            }
+
+            switch (m_LoadAssembliesTask.Status)
+            {
+                case UniTaskStatus.Pending:
+                    return;
+                case UniTaskStatus.Succeeded:
+                    s_UpdateAssembliesLoaded = true;
+                    break;
+                case UniTaskStatus.Faulted:
+                    try
+                    {
+                        m_LoadAssembliesTask.GetAwaiter().GetResult();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Task failed with exception: {ex}");
+                    }
+
+                    break;
+                case UniTaskStatus.Canceled:
+                    break;
+                default:
+                    Log.Error("Unknown Status");
+                    break;
             }
         }
 
@@ -105,10 +134,7 @@ namespace Game
             }
 
             await UniTask.WhenAll(m_PatchTask);
-            await UniTask.NextFrame();
-            s_UpdateAssembliesLoaded = true;
             Log.Info("HotUpdateAssemblies Load Complete.");
-            ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
         }
     }
 }
