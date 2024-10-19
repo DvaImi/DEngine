@@ -52,7 +52,7 @@ namespace Game.Editor
         /// <summary>
         /// 记录打包平台
         /// </summary>
-        public Platform BuildPlatform;
+        public Platform BuildPlatforms;
 
         /// <summary>
         /// 资源打包模式
@@ -60,9 +60,9 @@ namespace Game.Editor
         public ResourceMode ResourceMode;
 
         /// <summary>
-        /// 差异化打包
+        /// 构建项目事件处理接口
         /// </summary>
-        public bool Difference;
+        public string BuildPlayerEventHandlerTypeName;
 
         /// <summary>
         /// 强制重建资源包
@@ -90,6 +90,11 @@ namespace Game.Editor
         public bool ForceUpdateGame = false;
 
         /// <summary>
+        /// 服务器地址
+        /// </summary>
+        public string HostURL = "http://127.0.0.1";
+
+        /// <summary>
         /// 内置资源版本
         /// </summary>
         public int InternalResourceVersion;
@@ -100,14 +105,34 @@ namespace Game.Editor
         public string LatestGameVersion = string.Empty;
 
         /// <summary>
+        /// 游戏内部版本号
+        /// </summary>
+        public int InternalGameVersion = 0;
+
+        /// <summary>
         /// 资源更新下载地址
         /// </summary>
         public string UpdatePrefixUri = string.Empty;
 
         /// <summary>
-        /// 内置信息
+        /// 
         /// </summary>
-        public BuildInfo BuildInfo = new();
+        public string WindowsAppUrl = string.Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string MacOSAppUrl = string.Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string IOSAppUrl = string.Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string AndroidAppUrl = string.Empty;
 
         /// <summary>
         /// 热更程序集生成路径

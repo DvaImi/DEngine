@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
@@ -10,6 +11,7 @@ using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -19,64 +21,116 @@ namespace Game.Editor.BuildPipeline
     public static partial class GameBuildPipeline
     {
         [EditorToolbarMenu("Build Resource", 1, 3)]
-        public static void BuildResource()
+        public static bool BuildResource()
         {
-            BuildResource(DEngineSetting.BundlesOutput);
+            return BuildResource(DEngineSetting.Instance.BuildPlatforms, DEngineSetting.Instance.ForceRebuildAssetBundle);
         }
 
-        public static void BuildResource(string output, bool difference = false)
+        private static bool BuildResource(Platform platforms, bool forceRebuild = false)
         {
-            OnPreprocess();
-            BuildResource(DEngineSetting.Instance.BuildPlatform, output, difference);
-            OnPostprocess();
+            return BuildResource(platforms, DEngineSetting.BundlesOutput, forceRebuild);
         }
 
-        public static void BuildResource(Platform platform, string outputDirectory, bool forceRebuild = false, bool difference = false)
+        private static bool BuildResource(Platform platforms, string outputDirectory, bool forceRebuild = false)
         {
-            ResourceBuilderController builderController = new();
-            if (builderController.Load())
+            if (!IsPlatformSelected(platforms))
             {
-                builderController.Platforms = platform;
-                builderController.OutputDirectory = outputDirectory;
-                builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
-                builderController.RefreshCompressionHelper();
-                builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
-                builderController.RefreshBuildEventHandler();
-                builderController.AdditionalCompressionSelected = true;
-                builderController.Difference = difference;
-                builderController.ForceRebuildAssetBundleSelected = forceRebuild;
-                builderController.OutputPackageSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Package;
-                builderController.OutputFullSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Updatable || DEngineSetting.Instance.ResourceMode == ResourceMode.UpdatableWhilePlaying;
-                builderController.OutputPackedSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Updatable || DEngineSetting.Instance.ResourceMode == ResourceMode.UpdatableWhilePlaying;
-                builderController.OnLoadingResource += OnLoadingResource;
-                builderController.OnLoadingAsset += OnLoadingAsset;
-                builderController.OnLoadCompleted += OnLoadCompleted;
-                builderController.OnAnalyzingAsset += OnAnalyzingAsset;
-                builderController.OnAnalyzeCompleted += OnAnalyzeCompleted;
-                builderController.ProcessingAssetBundle += OnProcessingAssetBundle;
-                builderController.ProcessingBinary += OnProcessingBinary;
-                builderController.ProcessResourceComplete += OnProcessResourceComplete;
-                builderController.BuildResourceError += OnBuildResourceError;
-                builderController.ProcessDifferenceComplete += OnPostprocessDifference;
-                GetBuildMessage(builderController, out var buildMessage, out var buildMessageType);
-                switch (buildMessageType)
-                {
-                    case MessageType.None:
-                    case MessageType.Info:
-                        Debug.Log(buildMessage);
-                        BuildResources(builderController);
-                        break;
-                    case MessageType.Warning:
-                        Debug.LogWarning(buildMessage);
-                        BuildResources(builderController);
-                        break;
-                    case MessageType.Error:
-                        Debug.LogError(buildMessage);
-                        break;
-                }
+                return true;
             }
 
-            builderController.Save();
+            if (DEngineSetting.Instance.ResourceMode == ResourceMode.Unspecified)
+            {
+                return false;
+            }
+
+            GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
+            GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.BundlesOutput);
+            GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
+
+            var builderController = new ResourceBuilderController();
+            if (builderController.Load() && BuildResource(builderController, platforms, outputDirectory, forceRebuild))
+            {
+                if (builderController.Save())
+                {
+                    Debug.Log("Save configuration success.");
+                }
+                else
+                {
+                    Debug.LogWarning("Save configuration failure.");
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool BuildResource(ResourceBuilderController builderController, Platform platforms, string outputDirectory, bool forceRebuild = false)
+        {
+            if (builderController == null)
+            {
+                return false;
+            }
+
+            if (!IsPlatformSelected(platforms))
+            {
+                return true;
+            }
+
+            GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
+            GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.BundlesOutput);
+            GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
+
+            bool isSuccess = false;
+            builderController.Platforms = platforms;
+            builderController.OutputDirectory = outputDirectory;
+            builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
+            builderController.RefreshCompressionHelper();
+            builderController.BuildEventHandlerTypeName = typeof(GameResourceBuildEventHandler).FullName;
+            builderController.RefreshBuildEventHandler();
+            builderController.AdditionalCompressionSelected = true;
+            builderController.ForceRebuildAssetBundleSelected = forceRebuild;
+            builderController.OutputPackageSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Package;
+            builderController.OutputFullSelected = true;
+            builderController.OutputPackedSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Updatable || DEngineSetting.Instance.ResourceMode == ResourceMode.UpdatableWhilePlaying;
+            builderController.OnLoadingResource += OnLoadingResource;
+            builderController.OnLoadingAsset += OnLoadingAsset;
+            builderController.OnLoadCompleted += OnLoadCompleted;
+            builderController.OnAnalyzingAsset += OnAnalyzingAsset;
+            builderController.OnAnalyzeCompleted += OnAnalyzeCompleted;
+            builderController.ProcessingAssetBundle += OnProcessingAssetBundle;
+            builderController.ProcessingBinary += OnProcessingBinary;
+            builderController.ProcessResourceComplete += OnProcessResourceComplete;
+            builderController.BuildResourceError += OnBuildResourceError;
+            GetBuildMessage(builderController, out var buildMessage, out var buildMessageType);
+
+            switch (buildMessageType)
+            {
+                case MessageType.None:
+                case MessageType.Info:
+                    Debug.Log(buildMessage);
+                    isSuccess = builderController.BuildResources();
+                    break;
+                case MessageType.Warning:
+                    Debug.LogWarning(buildMessage);
+                    isSuccess = builderController.BuildResources();
+                    break;
+                case MessageType.Error:
+                    Debug.LogError(buildMessage);
+                    break;
+            }
+
+            if (isSuccess)
+            {
+                Debug.Log("Build resources success.");
+            }
+
+            else
+            {
+                Debug.LogError($"Build resources failure. <a href=\"file:///{Utility.Path.GetRegularPath(Path.Combine(builderController.BuildReportPath, "BuildLog.txt"))}\" line=\"0\">[ Open BuildLog.txt ]</a>");
+            }
+
+            return isSuccess;
         }
 
         public static void ClearResource()
@@ -99,41 +153,27 @@ namespace Game.Editor.BuildPipeline
             Debug.Log("Clear success");
         }
 
-        public static void SaveResource()
+        public static bool IsPlatformSelected(Platform platform)
         {
-            ResourceBuilderController builderController = new();
-            if (builderController.Load())
-            {
-                builderController.Platforms = DEngineSetting.Instance.BuildPlatform;
-                builderController.OutputDirectory = DEngineSetting.BundlesOutput;
-                builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
-                builderController.BuildEventHandlerTypeName = typeof(GameBuildEventHandler).FullName;
-                builderController.AdditionalCompressionSelected = true;
-                builderController.Difference = DEngineSetting.Instance.Difference;
-                builderController.ForceRebuildAssetBundleSelected = DEngineSetting.Instance.ForceRebuildAssetBundle;
-            }
+            return (DEngineSetting.Instance.BuildPlatforms & platform) != 0;
+        }
 
-            builderController.Save();
+        public static void SelectPlatform(Platform platform, bool selected)
+        {
+            if (selected)
+            {
+                DEngineSetting.Instance.BuildPlatforms |= platform;
+            }
+            else
+            {
+                DEngineSetting.Instance.BuildPlatforms &= ~platform;
+            }
         }
 
         public static void RefreshPackages()
         {
             PackagesNames = ResourcePackagesCollector.Instance.PackagesCollector.Select(x => x.PackageName).ToArray();
-        }
-
-        public static void SaveOutputDirectory(string outputDirectory)
-        {
-            if (!Directory.Exists(outputDirectory))
-            {
-                throw new DEngineException($"OutputDirectory: {outputDirectory}  is invalid.");
-            }
-
-            ResourceBuilderController controller = new();
-            if (controller.Load())
-            {
-                controller.OutputDirectory = outputDirectory;
-                controller.Save();
-            }
+            VariantNames = VariantHelper.GetVariantArray();
         }
 
         public static void RemoveUnknownAssets()
@@ -161,28 +201,6 @@ namespace Game.Editor.BuildPipeline
         private static bool IsValidAssetPath(string assetPath)
         {
             return AssetDatabase.IsValidFolder(assetPath) ? Directory.Exists(assetPath) : File.Exists(assetPath);
-        }
-
-        private static void OnPreprocess()
-        {
-            if (DEngineSetting.Instance.ResourceMode == DEngine.Resource.ResourceMode.Unspecified)
-            {
-                DEngineSetting.Instance.ResourceMode = DEngine.Resource.ResourceMode.Package;
-            }
-
-            CleanUnknownAssets();
-            ResourceCollectorEditorUtility.RefreshResourceCollection();
-            DEngineSetting.Save();
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.BundlesOutput);
-            GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
-        }
-
-        private static void OnPostprocess()
-        {
-            EditorUtility.UnloadUnusedAssetsImmediate();
         }
 
         private static void GetBuildMessage(ResourceBuilderController builderController, out string message, out MessageType messageType)
@@ -261,33 +279,9 @@ namespace Game.Editor.BuildPipeline
             message = "Ready to build.";
         }
 
-        private static void BuildResources(ResourceBuilderController builderController)
-        {
-            if (builderController.BuildResources())
-            {
-                Debug.Log("Build resources success.");
-                if (builderController.Save())
-                {
-                    Debug.Log("Save configuration success.");
-                }
-                else
-                {
-                    Debug.LogWarning("Save configuration failure.");
-                }
-
-                if (DEngineSetting.Instance.ForceUpdateGame)
-                {
-                    Debug.Log($"<color=#1E90FF>[DEngine] ►</color> " + "强制更新资源版本构建完成,打包新版本app时，务必更新版本号，避免冲突!!!");
-                }
-            }
-            else
-            {
-                Debug.LogError($"Build resources failure. <a href=\"file:///{Utility.Path.GetRegularPath(Path.Combine(builderController.BuildReportPath, "BuildLog.txt"))}\" line=\"0\">[ Open BuildLog.txt ]</a>");
-            }
-        }
-
         public static void CopyFileToStreamingAssets(string sourcePath)
         {
+            GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
             string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
             string[] fileNames = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)

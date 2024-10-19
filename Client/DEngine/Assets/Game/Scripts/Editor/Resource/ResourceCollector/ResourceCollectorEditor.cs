@@ -15,6 +15,8 @@ namespace Game.Editor
 {
     public class ResourceCollectorEditor : MenuTreeEditorWindow
     {
+        private const string NoneOptionName = "<None>";
+
         private MenuTreeView<ResourceGroupsCollector> m_MenuTreePackagesView;
         private MenuTreeViewItem<ResourceGroupsCollector> m_PackageSelectedItem;
         private MenuTreeView<ResourceGroupCollector> m_MenuTreeGroupsView;
@@ -109,7 +111,7 @@ namespace Game.Editor
                 m_MenuTreePackagesView.AddItem(GetPackageDisplayName(package), package);
             }
 
-            m_SelectAssetBundleCollector = m_AssetBundlePackageCollector.PackagesCollector.FirstOrDefault();
+            m_SelectAssetBundleCollector = ResourcePackagesCollector.GetResourceGroupsCollector();
             RefreshAssetGroups();
             SetFocusAndEnsureSelectedItem();
         }
@@ -544,7 +546,9 @@ namespace Game.Editor
         private void DrawVariantItem(Rect cellRect, ResourceCollector data, int rowIndex, bool isSelected, bool isFocused)
         {
             EditorGUI.BeginChangeCheck();
-            data.Variant = EditorGUI.TextField(cellRect, data.Variant);
+            int variantIndex = Array.IndexOf(GameBuildPipeline.VariantNames, string.IsNullOrEmpty(data.Variant) ? NoneOptionName : data.Variant);
+            variantIndex = EditorGUI.Popup(cellRect, variantIndex, GameBuildPipeline.VariantNames);
+            data.Variant = variantIndex > 0 ? GameBuildPipeline.VariantNames[variantIndex] : null;
             m_IsDirty = EditorGUI.EndChangeCheck();
         }
 

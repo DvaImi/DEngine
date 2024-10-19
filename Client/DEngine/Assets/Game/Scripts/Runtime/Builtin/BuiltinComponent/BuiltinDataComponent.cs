@@ -3,6 +3,7 @@ using DEngine;
 using DEngine.Localization;
 using DEngine.Runtime;
 using Game.Debugger;
+using Game.Sound;
 using UnityEngine;
 
 namespace Game
@@ -95,7 +96,7 @@ namespace Game
                 return;
             }
 
-            GameEntry.Resource.SetCurrentVariant(Utility.Variant.GameVariant);
+            GameEntry.Resource.SetCurrentVariant(VariantHelper.GetVariant(GameEntry.Localization.Language));
             Log.Info("Init current variant complete.");
             Log.Info($"Current variant is {GameEntry.Resource.CurrentVariant}.");
         }

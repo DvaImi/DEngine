@@ -5,10 +5,11 @@
 // 版 本：1.0
 // ========================================================
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using DEngine;
 using DEngine.Editor;
-using DEngine.Editor.ResourceTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,6 +23,9 @@ namespace Game.Editor.BuildPipeline
         private List<string> m_DefaultSceneNames;
         private GUIContent m_BuildContent;
         private GUIContent m_SaveContent;
+        private const string NoneOptionName = "<None>";
+        private int m_BuildEventHandlerTypeNameIndex;
+        private List<string> m_BuildEventHandlerTypeNames;
 
         [MenuItem("Game/Build Pipeline/Player", false, 0)]
         private static void Open()
@@ -47,15 +51,32 @@ namespace Game.Editor.BuildPipeline
             m_DefaultSceneNames ??= new List<string>();
             m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("Build", "构建当前平台应用");
             m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "");
+
+
+            m_BuildEventHandlerTypeNameIndex = 0;
+            m_BuildEventHandlerTypeNames = new List<string>
+            {
+                NoneOptionName
+            };
+
+            m_BuildEventHandlerTypeNames.AddRange(GameType.GetRuntimeOrEditorTypeNames(typeof(IBuildPlayerEventHandler)));
+            for (int i = 0; i < m_BuildEventHandlerTypeNames.Count; i++)
+            {
+                if (DEngineSetting.Instance.BuildPlayerEventHandlerTypeName == m_BuildEventHandlerTypeNames[i])
+                {
+                    m_BuildEventHandlerTypeNameIndex = i;
+                    break;
+                }
+            }
         }
 
         private void OnGUI()
         {
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, false, false);
             {
-                GUILayout.Space(5f);
-                GUIPlatform();
-                GUILayout.Space(5f);
+                GUILayout.Space(10f);
+                GameBuildPipeline.GUIPlatform();
+                GUILayout.Space(10f);
                 EditorGUILayout.BeginVertical("box");
                 {
                     GUIBuildPlayer();
@@ -65,32 +86,32 @@ namespace Game.Editor.BuildPipeline
             }
             EditorGUILayout.EndScrollView();
 
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.LabelField("Build Event Handler", GUILayout.Width(160f));
+                string[] names = m_BuildEventHandlerTypeNames.ToArray();
+                int selectedIndex = EditorGUILayout.Popup(m_BuildEventHandlerTypeNameIndex, names);
+                if (selectedIndex != m_BuildEventHandlerTypeNameIndex)
+                {
+                    m_BuildEventHandlerTypeNameIndex = selectedIndex;
+                    DEngineSetting.Instance.BuildPlayerEventHandlerTypeName = selectedIndex <= 0 ? string.Empty : names[selectedIndex];
+                    DEngineSetting.Save();
+                    Debug.Log("Set build event handler success.");
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
             GUILayout.FlexibleSpace();
 
             GUILayout.BeginHorizontal("box");
             {
                 if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))
                 {
-                    BuildTarget buildTarget = GameBuildPipeline.GetBuildTarget(DEngineSetting.Instance.BuildPlatform);
-                    if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
-                    {
-                        if (EditorUtility.DisplayDialog("提示", "当前平台与目标平台不符，是否进行切换?", "确认", "取消"))
-                        {
-                            if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(buildTarget), buildTarget))
-                            {
-                                m_BeginBuildPlayer = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        m_BeginBuildPlayer = true;
-                    }
+                    m_BeginBuildPlayer = true;
                 }
 
                 if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
-                    GameBuildPipeline.SaveBuildInfo();
                     GameBuildPipeline.SaveBuildSetting();
                     DEngineSetting.Save();
                     Debug.Log("Save success.");
@@ -102,26 +123,6 @@ namespace Game.Editor.BuildPipeline
             {
                 Repaint();
             }
-        }
-
-        private void GUIPlatform()
-        {
-            GUILayout.Space(5f);
-            EditorGUILayout.BeginVertical("box");
-            {
-                EditorGUILayout.BeginHorizontal();
-                {
-                    EditorGUILayout.LabelField("Platform", EditorStyles.boldLabel);
-                    var hotfixPlatformIndex = (Platform)EditorGUILayout.EnumPopup(DEngineSetting.Instance.BuildPlatform, GUILayout.Width(100));
-
-                    if (!hotfixPlatformIndex.Equals(DEngineSetting.Instance.BuildPlatform))
-                    {
-                        DEngineSetting.Instance.BuildPlatform = hotfixPlatformIndex;
-                    }
-                }
-                EditorGUILayout.EndVertical();
-            }
-            EditorGUILayout.EndVertical();
         }
 
         private void GUIBuildPlayer()

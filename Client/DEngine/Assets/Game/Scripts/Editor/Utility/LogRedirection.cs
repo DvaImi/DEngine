@@ -18,13 +18,27 @@ namespace Game.Editor
         [OnOpenAsset(0)]
         private static bool OnOpenAsset(int instanceId, int line)
         {
+            if (line <= 0)
+            {
+                return false;
+            }
+
+            // 获取资源路径
+            string assetPath = AssetDatabase.GetAssetPath(instanceId);
+            
+            // 判断资源类型
+            if (!assetPath.EndsWith(".cs"))
+            {
+                return false;
+            }
+            
             string selectedStackTrace = GetSelectedStackTrace();
             if (string.IsNullOrEmpty(selectedStackTrace))
             {
                 return false;
             }
 
-            if (!selectedStackTrace.Contains("DEngine.Runtime.DefaultLogHelper:Log"))
+            if (!selectedStackTrace.Contains("DefaultLogHelper.cs"))
             {
                 return false;
             }

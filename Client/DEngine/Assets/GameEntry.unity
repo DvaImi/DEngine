@@ -455,68 +455,24 @@ PrefabInstance:
       value: Dvalmi.ProcedureVerifyResources
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AudioMixer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundHelperTypeName
       value: DEngine.Runtime.DefaultSoundHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundAgentHelperTypeName
-      value: Game.Helper.SoundAgentHelper
+      value: Game.Sound.Helper.SoundAgentHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroupHelperTypeName
       value: DEngine.Runtime.DefaultSoundGroupHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[0].m_Name
-      value: Music
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[1].m_Name
-      value: Sound
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[2].m_Name
-      value: UISound
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[3].m_Name
       value: UISound
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[0].m_Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[1].m_Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[2].m_Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[3].m_Volume
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[0].m_AgentHelperCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[1].m_AgentHelperCount
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[2].m_AgentHelperCount
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[3].m_AgentHelperCount

@@ -23,7 +23,7 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("Compile", 1, 1)]
         public static void CompileHotfixDll()
         {
-            BuildTarget buildTarget = GetBuildTarget(DEngineSetting.Instance.BuildPlatform);
+            BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             CompileDllCommand.CompileDll(buildTarget);
             CopyDllAssets(buildTarget);
         }
@@ -37,11 +37,11 @@ namespace Game.Editor.BuildPipeline
 
         private static void CopyDllAssets()
         {
-            BuildTarget buildTarget = GetBuildTarget(DEngineSetting.Instance.BuildPlatform);
+            BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             CopyDllAssets(buildTarget);
         }
 
-        private static void CopyDllAssets(BuildTarget buildTarget)
+        public static void CopyDllAssets(BuildTarget buildTarget)
         {
             if (string.IsNullOrEmpty(DEngineSetting.Instance.UpdateAssembliesPath))
             {

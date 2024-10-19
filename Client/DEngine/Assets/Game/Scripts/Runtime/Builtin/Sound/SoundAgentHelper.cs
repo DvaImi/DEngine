@@ -4,6 +4,7 @@
 // 创建时间：2023-04-07 20:47:46
 // 版 本：1.0
 // ========================================================
+
 using System;
 using System.Collections;
 using DEngine;
@@ -12,7 +13,7 @@ using DEngine.Sound;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Game.Helper
+namespace Game.Sound.Helper
 {
     public class SoundAgentHelper : SoundAgentHelperBase
     {
@@ -23,6 +24,7 @@ namespace Game.Helper
         private bool m_ApplicationPauseFlag = false;
         private EventHandler<ResetSoundAgentEventArgs> m_ResetSoundAgentEventHandler = null;
         private bool m_IsPaused;
+
         /// <summary>
         /// 获取当前是否正在播放。
         /// </summary>
@@ -30,6 +32,11 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return false;
+                }
+
                 return m_AudioSource.isPlaying || m_IsPaused;
             }
         }
@@ -41,7 +48,12 @@ namespace Game.Helper
         {
             get
             {
-                return m_AudioSource.clip != null ? m_AudioSource.clip.length : 0f;
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                return m_AudioSource.clip ? m_AudioSource.clip.length : 0f;
             }
         }
 
@@ -52,10 +64,30 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return 0;
+                }
+
                 return m_AudioSource.time;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.time = value;
             }
         }
@@ -67,10 +99,25 @@ namespace Game.Helper
         {
             get
             {
-                return m_AudioSource.mute;
+                if (!m_AudioSource)
+                {
+                    return false;
+                }
+
+                return m_AudioSource.clip && m_AudioSource.mute;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.mute = value;
             }
         }
@@ -82,10 +129,25 @@ namespace Game.Helper
         {
             get
             {
-                return m_AudioSource.loop;
+                if (!m_AudioSource)
+                {
+                    return false;
+                }
+
+                return m_AudioSource.clip && m_AudioSource.loop;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.loop = value;
             }
         }
@@ -97,10 +159,30 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return 0;
+                }
+
                 return 128 - m_AudioSource.priority;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.priority = 128 - value;
             }
         }
@@ -112,10 +194,30 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return 0;
+                }
+
                 return m_AudioSource.volume;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.volume = value;
             }
         }
@@ -127,10 +229,30 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return 0;
+                }
+
                 return m_AudioSource.pitch;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.pitch = value;
             }
         }
@@ -142,10 +264,30 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return 0;
+                }
+
                 return m_AudioSource.panStereo;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.panStereo = value;
             }
         }
@@ -157,10 +299,30 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return 0;
+                }
+
                 return m_AudioSource.spatialBlend;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.spatialBlend = value;
             }
         }
@@ -172,11 +334,31 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return 0;
+                }
+
                 return m_AudioSource.maxDistance;
             }
 
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.maxDistance = value;
             }
         }
@@ -188,10 +370,30 @@ namespace Game.Helper
         {
             get
             {
+                if (!m_AudioSource)
+                {
+                    return 0;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return 0;
+                }
+
                 return m_AudioSource.dopplerLevel;
             }
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
+                if (!m_AudioSource.clip)
+                {
+                    return;
+                }
+
                 m_AudioSource.dopplerLevel = value;
             }
         }
@@ -201,12 +403,14 @@ namespace Game.Helper
         /// </summary>
         public override AudioMixerGroup AudioMixerGroup
         {
-            get
-            {
-                return m_AudioSource.outputAudioMixerGroup;
-            }
+            get => !m_AudioSource ? null : m_AudioSource.outputAudioMixerGroup;
             set
             {
+                if (!m_AudioSource)
+                {
+                    return;
+                }
+
                 m_AudioSource.outputAudioMixerGroup = value;
             }
         }
@@ -216,14 +420,8 @@ namespace Game.Helper
         /// </summary>
         public override event EventHandler<ResetSoundAgentEventArgs> ResetSoundAgent
         {
-            add
-            {
-                m_ResetSoundAgentEventHandler += value;
-            }
-            remove
-            {
-                m_ResetSoundAgentEventHandler -= value;
-            }
+            add => m_ResetSoundAgentEventHandler += value;
+            remove => m_ResetSoundAgentEventHandler -= value;
         }
 
         /// <summary>
@@ -320,7 +518,7 @@ namespace Game.Helper
         public override bool SetSoundAsset(object soundAsset)
         {
             AudioClip audioClip = soundAsset as AudioClip;
-            if (audioClip == null)
+            if (!audioClip)
             {
                 return false;
             }
@@ -336,7 +534,7 @@ namespace Game.Helper
         public override void SetBindingEntity(DEngine.Runtime.Entity bindingEntity)
         {
             m_BindingEntityLogic = bindingEntity.Logic;
-            if (m_BindingEntityLogic != null)
+            if (m_BindingEntityLogic)
             {
                 UpdateAgentPosition();
                 return;
@@ -377,7 +575,7 @@ namespace Game.Helper
                 return;
             }
 
-            if (m_BindingEntityLogic != null)
+            if (m_BindingEntityLogic)
             {
                 UpdateAgentPosition();
             }

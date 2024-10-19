@@ -35,7 +35,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "13ec52b8ed7d2b9e93127021a46de9ac14b1d01b"
+      "hash": "169590c95368fba927316d18b1e016f7f0cbc790"
     },
     "com.fantasy.unity": {
       "version": "https://github.com/qq362946/Fantasy.Unity.git",
@@ -44,7 +44,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "6b4d68df2c3546284997891f981df1c868776f76"
+      "hash": "224a4d61df3a6fa22b2500f85074595c251c5193"
     },
     "com.unity.ai.navigation": {
       "version": "1.1.5",
@@ -79,7 +79,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.11.1",
+      "version": "1.11.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {

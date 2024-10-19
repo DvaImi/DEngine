@@ -7,7 +7,7 @@ using Fantasy.Network;
 using Fantasy.Network.Interface;
 using Fantasy.Platform.Unity;
 using Game.Debugger;
-using Log = DEngine.Runtime.Log;
+using Log = Fantasy.Log;
 
 namespace Game.Network
 {
@@ -364,10 +364,6 @@ namespace Game.Network
         }
 
         public int Priority => 0;
-
-        public void Update(float elapseSeconds, float realElapseSeconds)
-        {
-        }
 
         public void Shutdown()
         {

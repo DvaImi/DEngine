@@ -2,16 +2,16 @@
 <DEngine>
   <ResourceBuilder>
     <Settings>
-      <InternalResourceVersion>59</InternalResourceVersion>
-      <Platforms>2</Platforms>
+      <InternalResourceVersion>8</InternalResourceVersion>
+      <Platforms>1</Platforms>
       <AssetBundleCompression>1</AssetBundleCompression>
       <CompressionHelperTypeName>DEngine.Runtime.DefaultCompressionHelper</CompressionHelperTypeName>
       <AdditionalCompressionSelected>True</AdditionalCompressionSelected>
       <ForceRebuildAssetBundleSelected>False</ForceRebuildAssetBundleSelected>
-      <BuildEventHandlerTypeName>Game.Editor.GameBuildEventHandler</BuildEventHandlerTypeName>
+      <BuildEventHandlerTypeName>Game.Editor.GameResourceBuildEventHandler</BuildEventHandlerTypeName>
       <OutputDirectory>Assets/../BundlesOutput</OutputDirectory>
       <OutputPackageSelected>True</OutputPackageSelected>
-      <OutputFullSelected>False</OutputFullSelected>
+      <OutputFullSelected>True</OutputFullSelected>
       <OutputPackedSelected>False</OutputPackedSelected>
     </Settings>
   </ResourceBuilder>

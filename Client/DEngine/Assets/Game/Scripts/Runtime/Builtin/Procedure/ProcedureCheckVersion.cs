@@ -63,7 +63,9 @@ namespace Game
 
         private async void CheckVersionList()
         {
-            string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.Builtin.BuildInfo.LatestGameVersion, GetPlatformPath());
+            string checkVersionUrl = GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl;
+            // string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.Builtin.BuildInfo.LatestGameVersion, GetPlatformPath());
+            Log.Debug(checkVersionUrl);
             // 向服务器请求版本信息
             WebRequestResult result = await GameEntry.WebRequest.Get(checkVersionUrl);
             if (result.Success)
@@ -71,6 +73,7 @@ namespace Game
                 // 解析版本信息
                 byte[] versionInfoBytes = result.Bytes;
                 string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
+                Log.Debug(versionInfoString);
                 m_VersionInfo = Utility.Json.ToObject<VersionInfo>(versionInfoString);
                 if (m_VersionInfo == null)
                 {

@@ -17,9 +17,9 @@ MonoBehaviour:
   ResourceCollectionConfig: Assets/Game/Configuration/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Configuration/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Configuration/ResourceBuilder.xml
-  BuildPlatform: 2
+  BuildPlatforms: 1
   ResourceMode: 1
-  Difference: 0
+  BuildPlayerEventHandlerTypeName: Game.Editor.BuildPipeline.DefaultBuildPlayerEventHandler
   ForceRebuildAssetBundle: 0
   DefaultSceneNames:
   - Assets/GameEntry.unity
@@ -27,16 +27,15 @@ MonoBehaviour:
   - Assets
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  InternalResourceVersion: 59
+  HostURL: http://192.168.86.2
+  InternalResourceVersion: 8
   LatestGameVersion: 0.1.0
-  UpdatePrefixUri: 
-  BuildInfo:
-    LatestGameVersion: 
-    CheckVersionUrl: 
-    WindowsAppUrl: 
-    MacOSAppUrl: 
-    IOSAppUrl: 
-    AndroidAppUrl: 
+  InternalGameVersion: 0
+  UpdatePrefixUri: http://192.168.86.2/0.1.0/
+  WindowsAppUrl: 
+  MacOSAppUrl: 
+  IOSAppUrl: 
+  AndroidAppUrl: 
   UpdateAssembliesPath: Assets/../HybridCLRData/Output/HotUpdate
   UpdateAssemblies:
   - Game.Runtime.Update

@@ -44,7 +44,7 @@ namespace Game.Editor.ResourceTools
         /// <summary>
         /// 资源规则
         /// </summary>
-        private static ResourceCollection Collection
+        internal static ResourceCollection Collection
         {
             get
             {
@@ -96,14 +96,15 @@ namespace Game.Editor.ResourceTools
                 s_SourceAssetExceptLabelFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptLabelFilter);
 
                 Collection.Clear();
+                
                 AnalysisResourceFilters(collectorData);
-
-                Debug.Log(Collection.Save() ? "Refresh ResourceCollection.xml success" : "Refresh ResourceCollection.xml fail");
 
                 int unknownAssetCount = resourceEditorController.RemoveUnknownAssets();
                 int unusedResourceCount = resourceEditorController.RemoveUnusedResources();
                 Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets and {1} unused resources has been removed.", unknownAssetCount, unusedResourceCount));
                 resourceEditorController.Save();
+                Debug.Log(Collection.Save() ? "Refresh ResourceCollection.xml success" : "Refresh ResourceCollection.xml fail");
+                AssetDatabase.Refresh();
                 return;
             }
 
@@ -218,11 +219,6 @@ namespace Game.Editor.ResourceTools
                         }
 
                         FileInfo fileInfo = new(resourceCollector.AssetPath);
-                        if (DefaultFilterRule.IsIgnoreFile(fileInfo.Extension))
-                        {
-                            continue;
-                        }
-
                         if (string.IsNullOrEmpty(resourceCollector.Variant))
                         {
                             resourceCollector.Variant = null;

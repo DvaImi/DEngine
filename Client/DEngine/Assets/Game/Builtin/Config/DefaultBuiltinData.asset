@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UpdateResourceFormTemplate: {fileID: 4863827266948120156, guid: 1a28f36a920aad544bac449fb4127126, type: 3}
   NativeDialogFormTemplate: {fileID: -7793811446997299701, guid: a91171fb30298464b95cd0e975dd83c7, type: 3}
+  BuildinLanguage: {fileID: 11400000, guid: 27a75f22419519245a9d873683d2111f, type: 2}
   BuildInfo:
-    LatestGameVersion: 
-    CheckVersionUrl: 
+    LatestGameVersion: 0.1.0
+    CheckVersionUrl: http://192.168.86.2/0.1.0/WindowsVersion.json
     WindowsAppUrl: 
     MacOSAppUrl: 
     IOSAppUrl: 
     AndroidAppUrl: 
-  BuildinLanguage: {fileID: 11400000, guid: 27a75f22419519245a9d873683d2111f, type: 2}

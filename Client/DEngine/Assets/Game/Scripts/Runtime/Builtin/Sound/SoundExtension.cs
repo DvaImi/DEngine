@@ -2,7 +2,7 @@
 using DEngine.Runtime;
 using DEngine.Sound;
 
-namespace Game
+namespace Game.Sound
 {
     public static class SoundExtension
     {

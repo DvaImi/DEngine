@@ -17,13 +17,13 @@ namespace Game
         public NativeDialogForm NativeDialogFormTemplate = null;
 
         /// <summary>
-        /// 构建信息
-        /// </summary>
-        public BuildInfo BuildInfo;
-
-        /// <summary>
         /// 系统内置语言提示
         /// </summary>
         public BuildinLanguage BuildinLanguage;
+
+        /// <summary>
+        /// 构建信息
+        /// </summary>
+        public BuildInfo BuildInfo;
     }
 }
