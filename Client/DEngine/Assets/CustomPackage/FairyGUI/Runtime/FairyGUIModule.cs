@@ -10,11 +10,12 @@ using Object = UnityEngine.Object;
 
 namespace Game.FairyGUI.Runtime
 {
-    public class FairyGUIModule : IFairyGUIModule
+    public class FairyGUIModule : IFairyGUIModule, IGameModule
     {
         public int Priority => 1;
         private UIComponent m_UIComponent;
         private FairyGUIFormRuntimeData m_FormRuntimeData;
+        private IFairyGUIModule m_FairyGUIModuleImplementation;
         private readonly Dictionary<string, int> m_FairyGUIReference = new();
         private readonly Queue<string> m_PreUnLoad = new();
         private float m_InstanceAutoReleaseInterval;
@@ -49,7 +50,7 @@ namespace Game.FairyGUI.Runtime
             var groupName = GetGroupName(uiFormId);
             var assetName = GetFairyGUIFormAssetName(uiFormId);
             var form = m_UIComponent.GetUIForm(assetName);
-            if (!form)
+            if (form == null)
             {
                 return null;
             }
@@ -229,7 +230,7 @@ namespace Game.FairyGUI.Runtime
                 throw new DEngineException("packageName is null");
             }
 
-            var uiPackage = UIPackage.GetByName(packageName);
+            UIPackage uiPackage = UIPackage.GetByName(packageName);
             if (uiPackage == null)
             {
                 var fairyForm = m_FormRuntimeData.GetFairyForm(packageName);
@@ -239,14 +240,13 @@ namespace Game.FairyGUI.Runtime
                     return;
                 }
 
-                var parallelTask = UniTaskParallel.Creat();
+                //load dependencies package
                 foreach (var package in fairyForm.DependencyPackages)
                 {
-                    parallelTask.Push(AddPackage(package));
+                    await AddPackage(package);
                 }
 
-                parallelTask.Push(InternalLoadFairyGUIAsset(fairyForm));
-                await parallelTask.WhenAll();
+                await InternalLoadFairyGUIAsset(fairyForm);
             }
             else
             {
@@ -261,18 +261,16 @@ namespace Game.FairyGUI.Runtime
                 throw new DEngineException("fairyForm is null");
             }
 
-            var uiPackage = UIPackage.GetByName(fairyForm.PackageName);
+            UIPackage uiPackage = UIPackage.GetByName(fairyForm.PackageName);
             if (uiPackage == null)
             {
-                var parallelTask = UniTaskParallel.Creat();
+                //load dependencies package
                 foreach (var package in fairyForm.DependencyPackages)
                 {
-                    parallelTask.Push(AddPackage(package));
+                    await AddPackage(package);
                 }
 
-                parallelTask.Push(InternalLoadFairyGUIAsset(fairyForm));
-
-                await parallelTask.WhenAll();
+                await InternalLoadFairyGUIAsset(fairyForm);
             }
             else
             {
@@ -282,14 +280,15 @@ namespace Game.FairyGUI.Runtime
 
         private async UniTask InternalLoadFairyGUIAsset(FairyForm fairyForm)
         {
-            var dependenciesTask = GameEntry.Resource.LoadAssetsAsync<Object>(fairyForm.DependencyAssets.ToArray());
-            var descTask = GameEntry.Resource.LoadAssetAsync<TextAsset>(fairyForm.AssetName);
-            var (dependencies, desc) = await UniTask.WhenAll(dependenciesTask, descTask);
+            //load dependencies
+            Object[] dependencies = await GameEntry.Resource.LoadAssetsAsync<Object>(fairyForm.DependencyAssets.ToArray());
+
+            //load desc
+            TextAsset desc = await GameEntry.Resource.LoadAssetAsync<TextAsset>(fairyForm.AssetName);
 
             UIPackage.AddPackage(desc.bytes, "", LoadFunc);
 
             AddReference(fairyForm.PackageName);
-            return;
 
             object LoadFunc(string name, string extension, Type type, out DestroyMethod destroyMethod)
             {
