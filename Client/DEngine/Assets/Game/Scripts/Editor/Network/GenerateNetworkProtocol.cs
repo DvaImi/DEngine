@@ -1,5 +1,4 @@
 using System.IO;
-using DEngine.Editor;
 using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
@@ -22,7 +21,7 @@ namespace Game.Editor.NetworkProtocol
         [MenuItem("Fantasy/Editor", priority = 101)]
         public static void EditorProtocol()
         {
-            EditorUtility.RevealInFinder(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/Config"));
+            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/DEngineServer.sln"));
         }
 
         [MenuItem("Fantasy/Run", priority = 201)]

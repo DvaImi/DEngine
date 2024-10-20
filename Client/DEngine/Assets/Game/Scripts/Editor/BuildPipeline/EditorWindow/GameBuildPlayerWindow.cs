@@ -5,11 +5,8 @@
 // 版 本：1.0
 // ========================================================
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using DEngine;
-using DEngine.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -32,6 +29,7 @@ namespace Game.Editor.BuildPipeline
         {
             GameBuildPlayerWindow window = GetWindow<GameBuildPlayerWindow>("Build Player", true);
             window.minSize = new Vector2(800f, 400f);
+            window.Show();
         }
 
         private void Update()
