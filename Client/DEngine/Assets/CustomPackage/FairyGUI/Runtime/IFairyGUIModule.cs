@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.FairyGUI.Runtime
 {
-    public interface IFairyGUIModule
+    public interface IFairyGUIModule : IGameUpdateModule
     {
         /// <summary>
         /// 获取包体数量
