@@ -128,21 +128,21 @@ namespace Game.Editor.FairyGUI
                     EditorGUILayout.HelpBox("The fairygui data path cannot be empty.", MessageType.Warning);
                 }
 
-                DropPathUtility.DropAssetPath("FairyGUI Data Path", ref FairyGUIEditorSetting.Instance.FairyGUIDataPath, true);
+                DropPathUtility.DropAndPingAssetPath("FairyGUI Data Path", ref FairyGUIEditorSetting.Instance.FairyGUIDataPath, true);
 
                 if (!AssetDatabase.IsValidFolder(FairyGUIEditorSetting.Instance.GeneralCodePath))
                 {
                     EditorGUILayout.HelpBox("The general code path cannot be empty.", MessageType.Warning);
                 }
 
-                DropPathUtility.DropAssetPath("General Code Path", ref FairyGUIEditorSetting.Instance.GeneralCodePath, true);
+                DropPathUtility.DropAndPingAssetPath("General Code Path", ref FairyGUIEditorSetting.Instance.GeneralCodePath, true);
 
                 if (!AssetDatabase.IsValidFolder(FairyGUIEditorSetting.Instance.GeneralObjectAssetName))
                 {
                     EditorGUILayout.HelpBox("The general object asset path cannot be empty.", MessageType.Warning);
                 }
 
-                DropPathUtility.DropAssetPath("General Object Asset Path", ref FairyGUIEditorSetting.Instance.GeneralObjectAssetName, true);
+                DropPathUtility.DropAndPingAssetPath("General Object Asset Path", ref FairyGUIEditorSetting.Instance.GeneralObjectAssetName, true);
             }
             EditorGUILayout.EndVertical();
 
@@ -434,7 +434,7 @@ namespace Game.FairyGUI.Runtime
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             //获取到热更程序集
-            HashSet<string> assembliesNames = new(GameSetting.Instance.HotUpdateAssemblies.Select(item => item.Replace(".dll", null)));
+            HashSet<string> assembliesNames = new(DEngineSetting.Instance.UpdateAssemblies.Select(item => item.Replace(".dll", null)));
             var hotUpdateAssembly = assemblies.FirstOrDefault(assembly => assembliesNames.Contains(assembly.GetName().Name));
             if (hotUpdateAssembly == null)
             {

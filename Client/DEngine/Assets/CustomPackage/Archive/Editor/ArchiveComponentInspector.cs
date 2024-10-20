@@ -159,7 +159,7 @@ namespace Game.Editor.Archive
                 NoneOptionName
             };
 
-            archiveSerializerTypeNames.AddRange(GameUtility.Type.GetRuntimeTypeNames(typeof(IArchiveSerializerHelper)));
+            archiveSerializerTypeNames.AddRange(GameType.GetRuntimeTypeNames(typeof(IArchiveSerializerHelper)));
             m_ArchiveSerializerTypeNames = archiveSerializerTypeNames.ToArray();
             m_ArchiveSerializerTypeNameIndex = 0;
             if (!string.IsNullOrEmpty(m_ArchiveSerializerTypeName.stringValue))
@@ -177,7 +177,7 @@ namespace Game.Editor.Archive
                 NoneOptionName
             };
 
-            archiveHelperTypeNames.AddRange(GameUtility.Type.GetRuntimeTypeNames(typeof(IArchiveHelper)));
+            archiveHelperTypeNames.AddRange(GameType.GetRuntimeTypeNames(typeof(IArchiveHelper)));
             m_ArchiveHelperTypeNames = archiveHelperTypeNames.ToArray();
             m_ArchiveHelperTypeNameIndex = 0;
             if (!string.IsNullOrEmpty(m_ArchiveHelperTypeName.stringValue))
@@ -195,7 +195,7 @@ namespace Game.Editor.Archive
                 NoneOptionName
             };
 
-            encryptorTypeNames.AddRange(GameUtility.Type.GetRuntimeTypeNames(typeof(IEncryptorHelper)));
+            encryptorTypeNames.AddRange(GameType.GetRuntimeTypeNames(typeof(IEncryptorHelper)));
             m_EncryptorTypeNames = encryptorTypeNames.ToArray();
             m_EncryptorTypeNameIndex = 0;
             if (!string.IsNullOrEmpty(m_EncryptorTypeName.stringValue))

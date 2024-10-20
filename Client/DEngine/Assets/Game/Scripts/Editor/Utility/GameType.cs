@@ -138,7 +138,7 @@ namespace Game.Editor
         /// </summary>
         /// <param name="typeBase">基类类型。</param>
         /// <returns>指定基类的所有子类的名称。</returns>
-        internal static string[] GetRuntimeTypeNames(Type typeBase)
+        public static string[] GetRuntimeTypeNames(Type typeBase)
         {
             return GetTypeNames(typeBase, RuntimeAssemblyNames);
         }
@@ -148,7 +148,7 @@ namespace Game.Editor
         /// </summary>
         /// <param name="typeBase">基类类型。</param>
         /// <returns>指定基类的所有子类的名称。</returns>
-        internal static string[] GetRuntimeOrEditorTypeNames(Type typeBase)
+        public static string[] GetRuntimeOrEditorTypeNames(Type typeBase)
         {
             return GetTypeNames(typeBase, RuntimeOrEditorAssemblyNames);
         }
