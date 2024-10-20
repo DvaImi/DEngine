@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Game.Editor.ResourceTools
 {
-    [InitializeOnLoad]
     public static class HostingServiceManager
     {
         private static IHostingService s_HostingService;
@@ -14,12 +13,6 @@ namespace Game.Editor.ResourceTools
         public static string HostingServicePath { get; } = DEngine.Utility.Text.Format("{0}/{1}", DEngineSetting.BundlesOutput, "HostingService");
 
         static HostingServiceManager()
-        {
-            Init();
-        }
-
-        [InitializeOnLoadMethod]
-        private static void Init()
         {
             if (!DEngineSetting.Instance.EnableHostingService)
             {

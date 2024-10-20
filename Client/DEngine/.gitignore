@@ -79,3 +79,4 @@ AOT
 BundlesOutput
 AppOutput
 .DS_Store
+.utmp
