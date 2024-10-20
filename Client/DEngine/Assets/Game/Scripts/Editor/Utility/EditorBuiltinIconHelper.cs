@@ -41,5 +41,10 @@ namespace Game.Editor
         {
             return EditorGUIUtility.TrTextContentWithIcon(text, tooltip, "SaveAs@2x");
         }
+
+        public static GUIContent GetIcon(string iconName)
+        {
+            return EditorGUIUtility.IconContent(iconName);
+        }
     }
 }

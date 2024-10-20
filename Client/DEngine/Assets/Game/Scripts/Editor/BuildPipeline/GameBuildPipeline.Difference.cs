@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -14,28 +15,75 @@ namespace Game.Editor.BuildPipeline
     public static partial class GameBuildPipeline
     {
         /// <summary>
+        /// 差异打包后处理
+        /// 主要功能 提取差异包并合并成完整的资源包
+        /// </summary>
+        /// <param name="platform"></param>
+        public static void OnPostprocessDifference(Platform platform)
+        {
+            //获取上次整包的资源列表
+            GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutputPath, out string lastPackedVersionOutputPath, out _);
+
+            //获取当前版本的资源列表
+            GetBuildVersions(platform, false, out string currentVersionFullPath, out string currentVersionPackagePath, out string currentVersionPackedPath, out string patchVersionPath);
+
+            var resourceMode = DEngineSetting.Instance.ResourceMode;
+
+            string[] lastFullVersionFiles = Directory.GetFiles(lastFullVersionOutputFullPath, "*", SearchOption.AllDirectories);
+            MergeFullVersionList(currentVersionFullPath, lastFullVersionOutputFullPath, patchVersionPath.Replace("*patch", "Full"), lastFullVersionFiles);
+
+            bool outputPackageSelected = resourceMode == ResourceMode.Package;
+            bool outputPackedSelected = resourceMode is ResourceMode.Updatable or ResourceMode.UpdatableWhilePlaying;
+
+            if (outputPackageSelected)
+            {
+                string[] lastPackageVersionFiles = Directory.GetFiles(lastPackageVersionOutputPath, "*", SearchOption.AllDirectories);
+                MergePackageVersionList(currentVersionPackagePath, lastPackageVersionOutputPath, patchVersionPath.Replace("*patch", "Package"), lastPackageVersionFiles);
+                CopyFileToStreamingAssets(currentVersionPackagePath);
+            }
+
+            if (outputPackedSelected)
+            {
+                string[] lastPackedVersionFiles = Directory.GetFiles(lastPackedVersionOutputPath, "*", SearchOption.AllDirectories);
+                MergePackedVersionList(currentVersionPackedPath, lastPackedVersionOutputPath, patchVersionPath.Replace("*patch", "Packed"), lastPackedVersionFiles);
+                CopyFileToStreamingAssets(currentVersionPackedPath);
+            }
+
+            Debug.Log("Difference postprocess complete.");
+            EditorUtility.ClearProgressBar();
+        }
+
+        /// <summary>
         /// 获取最新的资源构建列表
         /// </summary>
-        /// <param name="lastFull">是否是最新的整包构建列表</param>
+        /// <param name="platform"></param>
+        /// <param name="lastFullVersion">是否是最新的整包构建列表</param>
         /// <param name="fullPath">整包列表</param>
         /// <param name="package">单机资源列表</param>
         /// <param name="packed">为可更新模式生成的本地资源列表</param>
-        public static void GetBuildVersions(Platform platform, bool lastFull, out string fullPath, out string package, out string packed, out string patch)
+        /// <param name="patch"></param>
+        private static bool GetBuildVersions(Platform platform, bool lastFullVersion, out string fullPath, out string package, out string packed, out string patch)
         {
-            string OutputDirectory = GameSetting.Instance.BundlesOutput;
             fullPath = package = packed = patch = null;
-            string buildReportDirectory = Path.Combine(OutputDirectory, "BuildReport");
+            if (!IsPlatformSelected(platform))
+            {
+                return true;
+            }
+
+            string outputDirectory = DEngineSetting.BundlesOutput;
+            string buildReportDirectory = Path.Combine(outputDirectory, "BuildReport");
             if (!Directory.Exists(buildReportDirectory))
             {
-                return;
+                return false;
             }
 
             string[] allBuildReport = Directory.GetFiles(buildReportDirectory, "*.xml", SearchOption.AllDirectories);
 
-            if (allBuildReport == null || allBuildReport.Length == 0)
+            if (allBuildReport.Length == 0)
             {
-                return;
+                return false;
             }
+
             int[] lastBuildVersions = new int[allBuildReport.Length];
             for (int i = 0; i < allBuildReport.Length; i++)
             {
@@ -43,54 +91,42 @@ namespace Game.Editor.BuildPipeline
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(item);
                 XmlNode xmlRoot = xmlDocument.SelectSingleNode("DEngine");
-                XmlNode xmlBuildReport = xmlRoot.SelectSingleNode("BuildReport");
-                XmlNode xmlSummary = xmlBuildReport.SelectSingleNode("Summary");
-                XmlNode xmlInternalResourceVersion = xmlSummary.SelectSingleNode("InternalResourceVersion");
-                XmlNode xmlLastFullBuildVersion = xmlSummary.SelectSingleNode("LastFullBuildVersion");
-                lastBuildVersions[i] = lastFull ? int.Parse(xmlLastFullBuildVersion.InnerText) : int.Parse(xmlInternalResourceVersion.InnerText);
+                if (xmlRoot != null)
+                {
+                    XmlNode xmlBuildReport = xmlRoot.SelectSingleNode("BuildReport");
+                    if (xmlBuildReport != null)
+                    {
+                        XmlNode xmlSummary = xmlBuildReport.SelectSingleNode("Summary");
+                        if (xmlSummary != null)
+                        {
+                            XmlNode xmlInternalResourceVersion = xmlSummary.SelectSingleNode("InternalResourceVersion");
+                            XmlNode xmlLastFullBuildVersion = xmlSummary.SelectSingleNode("LastFullBuildVersion");
+                            if (xmlLastFullBuildVersion != null)
+                            {
+                                if (xmlInternalResourceVersion != null)
+                                {
+                                    lastBuildVersions[i] = lastFullVersion ? int.Parse(xmlLastFullBuildVersion.InnerText) : int.Parse(xmlInternalResourceVersion.InnerText);
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             int maxVersion = lastBuildVersions.Max();
-            fullPath = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
-            package = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Package/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
-            packed = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Packed/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
-            patch = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Patch/{4}/{1}.{2}/{3}/", OutputDirectory, Application.version, maxVersion, GetPlatformPath(platform), "*patch")).FullName);
+            fullPath = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/{3}/", outputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
+            package = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Package/{1}.{2}/{3}/", outputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
+            packed = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Packed/{1}.{2}/{3}/", outputDirectory, Application.version, maxVersion, GetPlatformPath(platform))).FullName);
+            patch = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Patch/{4}/{1}.{2}/{3}/", outputDirectory, Application.version, maxVersion, GetPlatformPath(platform), "*patch")).FullName);
+            return true;
         }
 
         /// <summary>
-        /// 差异打包后处理
-        /// 合并资源包
+        /// 拷贝完整资源列表
         /// </summary>
-        /// <param name="platform"></param>
-        public static void OnPostprocessDifference(Platform platform)
-        {
-            //获取上次整包的资源列表
-            GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutpuPath, out string lastPackedVersionOutputPath, out _);
-
-            //获取当前版本的资源列表
-            GetBuildVersions(platform, false, out string currentVersionFullPath, out string currentVersionPackagePath, out string currentVersionPackedPath, out string patchVersionPath);
-
-            string[] lastFullVersionFiles = Directory.GetFiles(lastFullVersionOutputFullPath, "*", SearchOption.AllDirectories);
-            string[] lastPackageVersionFiles = Directory.GetFiles(lastPackageVersionOutpuPath, "*", SearchOption.AllDirectories);
-            string[] lastPackedVersionFiles = Directory.GetFiles(lastPackedVersionOutputPath, "*", SearchOption.AllDirectories);
-
-            MergeFullVersionList(currentVersionFullPath, lastFullVersionOutputFullPath, patchVersionPath.Replace("*patch", "Full"), lastFullVersionFiles);
-            MergePackageVersionList(currentVersionPackagePath, lastPackageVersionOutpuPath, patchVersionPath.Replace("*patch", "Package"), lastPackageVersionFiles);
-            MergePackedVersionList(currentVersionPackedPath, lastPackedVersionOutputPath, patchVersionPath.Replace("*patch", "Packed"), lastPackedVersionFiles);
-          
-            int resourceMode = GameSetting.Instance.ResourceModeIndex;
-            string sourcePath = resourceMode <= 1 ? currentVersionPackagePath : currentVersionPackedPath;
-            CopyFileToStreamingAssets(sourcePath);
-            Debug.Log("Difference postprocess complete.");
-            EditorUtility.ClearProgressBar();
-        }
-
-        /// <summary>
-        /// 拷贝可更新资源列表
-        /// </summary>
-        /// <param name="platform"></param>
         /// <param name="currentVersionFullPath"></param>
         /// <param name="lastFullVersionOutputFullPath"></param>
+        /// <param name="patchVersionPath"></param>
         /// <param name="filteredFullFiles"></param>
         private static void MergeFullVersionList(string currentVersionFullPath, string lastFullVersionOutputFullPath, string patchVersionPath, string[] filteredFullFiles)
         {
@@ -133,7 +169,7 @@ namespace Game.Editor.BuildPipeline
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(lastFileFullName);
                 if (File.Exists(lastFileFullName))
                 {
-                    string fileNameWithoutCrcHashCode = fileNameWithoutExtension[..fileNameWithoutExtension.IndexOf(".")];
+                    string fileNameWithoutCrcHashCode = fileNameWithoutExtension[..fileNameWithoutExtension.IndexOf(".", StringComparison.Ordinal)];
                     if (updatableVersionList.Contains(fileNameWithoutCrcHashCode))
                     {
                         string destFileName = Utility.Path.GetRegularPath(Path.Combine(patchVersionPath, lastFileFullName[lastFullVersionOutputFullPath.Length..]));
@@ -152,9 +188,9 @@ namespace Game.Editor.BuildPipeline
         /// <summary>
         /// 拷贝单机版本资源
         /// </summary>
-        /// <param name="platform"></param>
         /// <param name="currentVersionPackagePath"></param>
         /// <param name="lastFullVersionOutputPackagePath"></param>
+        /// <param name="patchVersionPath"></param>
         /// <param name="filteredPackageFiles"></param>
         private static void MergePackageVersionList(string currentVersionPackagePath, string lastFullVersionOutputPackagePath, string patchVersionPath, string[] filteredPackageFiles)
         {
@@ -218,9 +254,9 @@ namespace Game.Editor.BuildPipeline
         /// <summary>
         /// 拷贝可更新模式本地只读资源
         /// </summary>
-        /// <param name="platform"></param>
         /// <param name="currentVersionPackedPath"></param>
         /// <param name="lastFullVersionOutputPackedPath"></param>
+        /// <param name="patchVersionPath"></param>
         /// <param name="filteredPackedFiles"></param>
         private static void MergePackedVersionList(string currentVersionPackedPath, string lastFullVersionOutputPackedPath, string patchVersionPath, string[] filteredPackedFiles)
         {
@@ -284,17 +320,51 @@ namespace Game.Editor.BuildPipeline
         /// <summary>
         /// 判断是否可以进行差异化打包
         /// </summary>
-        /// <param name="platform"></param>
         /// <returns></returns>
         public static bool CanDifference()
         {
-            if (GameSetting.Instance.ForceRebuildAssetBundle)
+            if (DEngineSetting.Instance.ForceRebuildAssetBundle)
             {
                 return false;
             }
-            Platform platform = GetPlatform(GameSetting.Instance.BuildPlatform);
-            GetBuildVersions(platform, true, out string lastFullVersionOutputFullPath, out string lastPackageVersionOutputFullPath, out string lastPackedVersionOutputFullPath, out _);
-            return !string.IsNullOrEmpty(lastFullVersionOutputFullPath) && Directory.Exists(lastFullVersionOutputFullPath) && !string.IsNullOrEmpty(lastPackageVersionOutputFullPath) && Directory.Exists(lastPackageVersionOutputFullPath) && !string.IsNullOrEmpty(lastPackedVersionOutputFullPath) && Directory.Exists(lastPackedVersionOutputFullPath);
+
+            var isSuccess = GetBuildVersions(Platform.Windows, true, out _, out _, out _, out _);
+            if (isSuccess)
+            {
+                isSuccess = GetBuildVersions(Platform.Windows64, true, out _, out _, out _, out _);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = GetBuildVersions(Platform.MacOS, true, out _, out _, out _, out _);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = GetBuildVersions(Platform.Linux, true, out _, out _, out _, out _);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = GetBuildVersions(Platform.IOS, true, out _, out _, out _, out _);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = GetBuildVersions(Platform.Android, true, out _, out _, out _, out _);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = GetBuildVersions(Platform.WindowsStore, true, out _, out _, out _, out _);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = GetBuildVersions(Platform.WebGL, true, out _, out _, out _, out _);
+            }
+
+            return isSuccess;
         }
     }
 }

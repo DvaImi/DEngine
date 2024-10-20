@@ -14,132 +14,201 @@ namespace Game.Editor.ResourceTools
         /// <summary>
         /// 资源规则
         /// </summary>
-        private static ResourceCollection m_ResourceCollection;
+        private static ResourceCollection s_ResourceCollection;
 
         /// <summary>
         /// 排除的类型
         /// </summary>
-        private static string[] m_SourceAssetExceptTypeFilterGUIDArray;
+        private static string[] s_SourceAssetExceptTypeFilterGuidArray;
 
         /// <summary>
         /// 排除的标签
         /// </summary>
-        private static string[] m_SourceAssetExceptLabelFilterGUIDArray;
+        private static string[] s_SourceAssetExceptLabelFilterGuidArray;
 
         /// <summary>
         /// 缓存收集规则类型
         /// </summary>
-        private static Dictionary<string, Type> m_CacheFilterRuleTypes = new Dictionary<string, Type>();
+        private static readonly Dictionary<string, Type> CacheFilterRuleTypes = new();
 
         /// <summary>
         /// 缓存收集规则实例
         /// </summary>
-        private static Dictionary<string, IFilterRule> m_CacheFilterRuleInstence = new Dictionary<string, IFilterRule>();
+        private static readonly Dictionary<string, IFilterRule> CacheFilterRuleInstance = new();
 
         /// <summary>
         /// 资源收集规则名称
         /// </summary>
         public static string[] FilterRules { get; }
 
+        /// <summary>
+        /// 资源规则
+        /// </summary>
+        internal static ResourceCollection Collection
+        {
+            get
+            {
+                if (s_ResourceCollection == null)
+                {
+                    s_ResourceCollection = new ResourceCollection();
+                    if (!s_ResourceCollection.Load())
+                    {
+                        s_ResourceCollection.Save();
+                    }
+                }
+
+                return s_ResourceCollection;
+            }
+        }
+
         static ResourceCollectorEditorUtility()
         {
-            m_CacheFilterRuleTypes.Clear();
-            m_CacheFilterRuleInstence.Clear();
+            CacheFilterRuleTypes.Clear();
+            CacheFilterRuleInstance.Clear();
             List<Type> types = EditorTools.GetAssignableTypes(typeof(IFilterRule));
             FilterRules = new string[types.Count];
             for (int i = 0; i < types.Count; i++)
             {
                 Type type = types[i];
-                if (m_CacheFilterRuleTypes.ContainsKey(type.Name))
+                if (!CacheFilterRuleTypes.TryAdd(type.Name, type))
                 {
                     continue;
                 }
 
-                m_CacheFilterRuleTypes.Add(type.Name, type);
                 FilterRules[i] = type.Name;
             }
-        }
-
-        /// <summary>
-        /// 更新当前资源收集器
-        /// </summary>
-        public static void RefreshResourceCollection()
-        {
-            RefreshResourceCollection(null);
         }
 
         /// <summary>
         /// 更新资源收集器
         /// </summary>
         /// <param name="collectorData"></param>
-        public static void RefreshResourceCollection(ResourceGroupsCollector collectorData)
+        public static void RefreshResourceCollection(ResourceGroupsCollector collectorData = null)
         {
             ResourceEditorController resourceEditorController = new();
-            resourceEditorController.Load();
 
-            collectorData ??= ResourcePackagesCollector.GetBundleCollectorByIndex(GameSetting.Instance.AssetBundleCollectorIndex);
-            Debug.Log($"Export {collectorData.PackageName} ...");
-
-            m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
-            m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptLabelFilter);
-
-            AnalysisResourceFilters(collectorData);
-
-            if (SaveCollection())
+            if (resourceEditorController.Load())
             {
-                Debug.Log("Refresh ResourceCollection.xml success");
+                collectorData ??= ResourcePackagesCollector.GetResourceGroupsCollector(DEngineSetting.Instance.AssetBundleCollectorIndex);
+                Debug.Log($"Export {collectorData.PackageName} ...");
+
+                s_SourceAssetExceptTypeFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
+                s_SourceAssetExceptLabelFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptLabelFilter);
+
+                Collection.Clear();
+
+                AnalysisResourceFilters(collectorData);
+
+                int unknownAssetCount = resourceEditorController.RemoveUnknownAssets();
+                int unusedResourceCount = resourceEditorController.RemoveUnusedResources();
+                Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets and {1} unused resources has been removed.", unknownAssetCount, unusedResourceCount));
+                resourceEditorController.Save();
+                Debug.Log(Collection.Save() ? "Refresh ResourceCollection.xml success" : "Refresh ResourceCollection.xml fail");
+                AssetDatabase.Refresh();
+                return;
             }
-            else
+
+            if (!resourceEditorController.Save())
             {
-                Debug.Log("Refresh ResourceCollection.xml fail");
             }
         }
 
-        public static IFilterRule GetFilterRuleInstance(string ruleName)
+        /// <summary>
+        /// 获取指定规则的实例
+        /// </summary>
+        /// <param name="ruleName">规则名称</param>
+        /// <returns>过滤规则实例</returns>
+        private static IFilterRule GetFilterRuleInstance(string ruleName)
         {
-            if (m_CacheFilterRuleInstence.TryGetValue(ruleName, out IFilterRule instance))
+            if (CacheFilterRuleInstance.TryGetValue(ruleName, out IFilterRule instance))
             {
                 return instance;
             }
 
-            if (m_CacheFilterRuleTypes.TryGetValue(ruleName, out Type type))
+            if (CacheFilterRuleTypes.TryGetValue(ruleName, out Type type))
             {
                 instance = (IFilterRule)Activator.CreateInstance(type);
-                m_CacheFilterRuleInstence.Add(ruleName, instance);
+                CacheFilterRuleInstance.Add(ruleName, instance);
                 return instance;
             }
 
             throw new Exception($"{nameof(IFilterRule)}类型无效:{ruleName}");
         }
 
+        /// <summary>
+        /// 获取所有资源
+        /// </summary>
+        /// <returns>资源数组</returns>
         private static DEngine.Editor.ResourceTools.Resource[] GetResources()
         {
-            return m_ResourceCollection.GetResources();
+            return Collection.GetResources();
         }
 
-        private static bool HasResource(string name, string Variant)
+        /// <summary>
+        /// 检查是否存在指定的资源
+        /// </summary>
+        /// <param name="name">资源名称</param>
+        /// <param name="variant">资源变体</param>
+        /// <returns>是否存在</returns>
+        private static bool HasResource(string name, string variant)
         {
-            return m_ResourceCollection.HasResource(name, Variant);
+            return Collection.HasResource(name, variant);
         }
 
-        private static bool AddResource(string name, string Variant, string FileSystem, LoadType LoadType, bool Packed, string[] resourceGroups)
+        /// <summary>
+        /// 添加新资源
+        /// </summary>
+        /// <param name="name">资源名称</param>
+        /// <param name="variant">资源变体</param>
+        /// <param name="fileSystem">文件系统名称</param>
+        /// <param name="loadType">加载类型</param>
+        /// <param name="packed">是否打包</param>
+        /// <param name="resourceGroups">资源组数组</param>
+        /// <returns>添加是否成功</returns>
+        private static bool AddResource(string name, string variant, string fileSystem, LoadType loadType, bool packed, string[] resourceGroups)
         {
-            return m_ResourceCollection.AddResource(name, Variant, FileSystem, LoadType, Packed, resourceGroups);
+            return Collection.AddResource(name, variant, fileSystem, loadType, packed, resourceGroups);
         }
 
+        /// <summary>
+        /// 重命名资源
+        /// </summary>
+        /// <param name="oldName">旧资源名称</param>
+        /// <param name="oldVariant">旧资源变体</param>
+        /// <param name="newName">新资源名称</param>
+        /// <param name="newVariant">新资源变体</param>
+        /// <returns>重命名是否成功</returns>
         private static bool RenameResource(string oldName, string oldVariant, string newName, string newVariant)
         {
-            return m_ResourceCollection.RenameResource(oldName, oldVariant, newName, newVariant);
+            return Collection.RenameResource(oldName, oldVariant, newName, newVariant);
         }
 
+        /// <summary>
+        /// 分配资源给指定的Asset
+        /// </summary>
+        /// <param name="assetGuid">Asset的GUID</param>
+        /// <param name="resourceName">资源名称</param>
+        /// <param name="resourceVariant">资源变体</param>
+        /// <returns>分配是否成功</returns>
         private static bool AssignAsset(string assetGuid, string resourceName, string resourceVariant)
         {
-            return m_ResourceCollection.AssignAsset(assetGuid, resourceName, resourceVariant);
+            return Collection.AssignAsset(assetGuid, resourceName, resourceVariant);
         }
 
+        /// <summary>
+        /// 分析资源过滤器并应用规则
+        /// </summary>
+        /// <param name="collectorData">资源组收集器</param>
         private static void AnalysisResourceFilters(ResourceGroupsCollector collectorData)
         {
-            m_ResourceCollection = new ResourceCollection();
+            ResourceEditorController resourceEditorController = new();
+
+            string sourceAssetRootPath = "Assets";
+            if (resourceEditorController.Load())
+            {
+                sourceAssetRootPath = resourceEditorController.SourceAssetRootPath;
+            }
+
             foreach (var resourceGroup in collectorData.Groups)
             {
                 if (resourceGroup.EnableGroup)
@@ -151,8 +220,7 @@ namespace Game.Editor.ResourceTools
                             continue;
                         }
 
-                        FileInfo fileInfo = new(resourceCollector.AssetPath);
-                        if (DefaultFilterRule.IsIgnoreFile(fileInfo.Extension))
+                        if (string.IsNullOrWhiteSpace(resourceCollector.AssetPath))
                         {
                             continue;
                         }
@@ -164,7 +232,7 @@ namespace Game.Editor.ResourceTools
 
                         if (AssetDatabase.IsValidFolder(resourceCollector.AssetPath) || File.Exists(resourceCollector.AssetPath))
                         {
-                            string resourceName = string.IsNullOrEmpty(resourceCollector.Name) ? Path.GetFileNameWithoutExtension(fileInfo.FullName).ToLowerInvariant() : resourceCollector.Name.ToLowerInvariant();
+                            string resourceName = string.IsNullOrEmpty(resourceCollector.Name) ? resourceCollector.AssetPath[(sourceAssetRootPath.Length + 1)..] : resourceCollector.Name;
                             ApplyResourceFilter(resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));
                         }
                         else
@@ -176,6 +244,12 @@ namespace Game.Editor.ResourceTools
             }
         }
 
+        /// <summary>
+        /// 应用资源过滤规则
+        /// </summary>
+        /// <param name="assetCollector">资源收集器</param>
+        /// <param name="resourceName">资源名称</param>
+        /// <param name="filterRule">过滤规则</param>
         private static void ApplyResourceFilter(ResourceCollector assetCollector, string resourceName, IFilterRule filterRule)
         {
             foreach (var oldResource in GetResources())
@@ -212,10 +286,10 @@ namespace Game.Editor.ResourceTools
                     if (filterRule.IsCollectAsset(file.FullName))
                     {
                         string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
-                        string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-                        if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                        string assetGuid = AssetDatabase.AssetPathToGUID(assetName);
+                        if (!s_SourceAssetExceptTypeFilterGuidArray.Contains(assetGuid) && !s_SourceAssetExceptLabelFilterGuidArray.Contains(assetGuid))
                         {
-                            if (!AssignAsset(assetGUID, resourceName, assetCollector.Variant))
+                            if (!AssignAsset(assetGuid, resourceName, assetCollector.Variant))
                             {
                                 Debug.LogWarningFormat("Assign asset '{0}' to resource '{1}' failure.", assetCollector.Name, assetCollector.AssetPath);
                             }
@@ -225,29 +299,18 @@ namespace Game.Editor.ResourceTools
             }
             else
             {
-                FileInfo file = new(assetCollector.AssetPath);
-                if (filterRule.IsCollectAsset(file.FullName))
+                if (filterRule.IsCollectAsset(assetCollector.AssetPath))
                 {
-                    string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
-                    string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-                    if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                    string assetGuid = AssetDatabase.AssetPathToGUID(assetCollector.AssetPath);
+                    if (!s_SourceAssetExceptTypeFilterGuidArray.Contains(assetGuid) && !s_SourceAssetExceptLabelFilterGuidArray.Contains(assetGuid))
                     {
-                        if (!AssignAsset(assetGUID, resourceName, assetCollector.Variant))
+                        if (!AssignAsset(assetGuid, resourceName, assetCollector.Variant))
                         {
                             Debug.LogWarningFormat("Assign asset '{0}' to resource '{1}' failure.", assetCollector.Name, assetCollector.AssetPath);
                         }
                     }
                 }
-                else
-                {
-                    Debug.LogWarningFormat("The resource collection rule is incorrect  AssetPath is {0},FilterRule is {1}", assetCollector.AssetPath, filterRule);
-                }
             }
-        }
-
-        private static bool SaveCollection()
-        {
-            return m_ResourceCollection.Save();
         }
     }
 }

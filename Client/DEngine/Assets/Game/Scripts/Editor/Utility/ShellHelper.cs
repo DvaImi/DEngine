@@ -6,7 +6,35 @@ namespace Game.Editor
 {
     public static class ShellHelper
     {
-        public static void Run(string cmd, string workDirectory, List<string> environmentVars = null)
+        public static void Run(string cmd, string workDirectory)
+        {
+            System.Diagnostics.Process process = new();
+            try
+            {
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+                string app = "bash";
+                string arguments = "-c";
+#elif UNITY_EDITOR_WIN
+                string app = "cmd.exe";
+                string arguments = "/c";
+#endif
+                ProcessStartInfo start = new ProcessStartInfo(app);
+                process.StartInfo = start;
+                start.Arguments = arguments + " \"" + cmd + "\"";
+                start.CreateNoWindow = false;
+                start.ErrorDialog = true;
+                start.UseShellExecute = true;
+                start.WorkingDirectory = workDirectory;
+
+                process.Start();
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogException(e);
+            }
+        }
+
+        public static void RunV2(string cmd, string workDirectory, List<string> environmentVars = null)
         {
             System.Diagnostics.Process process = new();
             try

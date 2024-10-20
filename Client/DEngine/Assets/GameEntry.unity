@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -42,8 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 0
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -66,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -392,7 +389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ShowFullWindow
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ConsoleWindow.m_LockScroll
@@ -404,119 +401,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_AvailableProcedureTypeNames.Array.size
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[0]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[0]'
       value: Game.ProcedureCheckResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[1]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[1]'
       value: Game.ProcedureCheckVersion
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[2]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[2]'
       value: Game.ProcedureInitResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[3]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[3]'
       value: Game.ProcedureLaunch
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[4]
-      value: Game.ProcedureLoadAotMetadData
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[4]'
+      value: Game.ProcedureLoadAssemblies
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[5]
-      value: Game.ProcedureLoadHotUpdate
-      objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[6]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[5]'
       value: Game.ProcedureLoadHotUpdateEntry
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[7]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[6]'
       value: Game.ProcedureUpdateResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[8]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[7]'
       value: Game.ProcedureUpdateVersionList
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[9]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[8]'
       value: Game.ProcedureVerifyResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[10]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[9]'
+      value: Game.ProcedureUpdateVersionList
+      objectReference: {fileID: 0}
+    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[10]'
       value: Game.ProcedureVerifyResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[11]
+      propertyPath: 'm_AvailableProcedureTypeNames.Array.data[11]'
       value: Dvalmi.ProcedureVerifyResources
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AudioMixer
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundHelperTypeName
       value: DEngine.Runtime.DefaultSoundHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundAgentHelperTypeName
-      value: Game.Helper.SoundAgentHelper
+      value: Game.Sound.Helper.SoundAgentHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroupHelperTypeName
       value: DEngine.Runtime.DefaultSoundGroupHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[0].m_Name
-      value: Music
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[1].m_Name
-      value: Sound
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[2].m_Name
-      value: UISound
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[3].m_Name
       value: UISound
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[0].m_Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[1].m_Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[2].m_Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[3].m_Volume
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[0].m_AgentHelperCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[1].m_AgentHelperCount
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_SoundGroups.Array.data[2].m_AgentHelperCount
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[3].m_AgentHelperCount
@@ -664,7 +617,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ResourceMode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ReadWritePathType
@@ -676,7 +629,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_LoadResourceAgentHelperCount
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_LoadResourceAgentHelperTypeName
@@ -708,7 +661,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EditorResourceMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_JsonHelperTypeName

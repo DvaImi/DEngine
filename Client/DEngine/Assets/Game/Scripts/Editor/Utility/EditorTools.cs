@@ -24,12 +24,11 @@ namespace Game.Editor
         }
 
 
-        [MenuItem("Assets/Get Asset Path", priority = 3)]
-        static void GetAssetPath()
+        [MenuItem("Assets/Copy Asset Path", priority = 3)]
+        static void CopyAssetPath()
         {
-            UnityEngine.Object selObj = Selection.activeObject;
-
-            if (selObj != null)
+            var selObj = Selection.activeObject;
+            if (selObj)
             {
                 string assetPath = AssetDatabase.GetAssetPath(selObj);
                 EditorGUIUtility.systemCopyBuffer = assetPath;
@@ -408,6 +407,84 @@ namespace Game.Editor
             return EditorGUIUtility.IconContent(name).image as Texture2D;
         }
 
+        public static void GUIAssetPath(ref string content, out bool isChanged)
+        {
+            isChanged = false;
+            EditorGUILayout.BeginHorizontal("box");
+            {
+                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
+                {
+                    normal = new GUIStyleState
+                    {
+                        textColor = Color.yellow
+                    },
+                };
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    EditorGUILayout.LabelField("AssetPath is invalid", warningLableGUIStyle);
+                }
+                else
+                {
+                    bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
+                    content = EditorGUILayout.TextField(content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                }
+
+                Rect rect = GUILayoutUtility.GetLastRect();
+                if (DropPathUtility.DropPathOutType(rect, out string path, out _))
+                {
+                    if (!string.Equals(path, content, StringComparison.Ordinal))
+                    {
+                        content = path;
+                        isChanged = true;
+                    }
+                }
+
+                if (GUILayout.Button("Reveal", GUILayout.Width(80)))
+                {
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        public static void GUIAssetPath(string header, ref string content, out bool isFile)
+        {
+            EditorGUILayout.BeginHorizontal("box");
+            {
+                GUIStyle warningLableGUIStyle = new(EditorStyles.label)
+                {
+                    normal = new GUIStyleState
+                    {
+                        textColor = Color.yellow
+                    },
+                };
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    EditorGUILayout.LabelField(header, "AssetPath is invalid", warningLableGUIStyle);
+                }
+                else
+                {
+                    bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
+                    content = EditorGUILayout.TextField(header, content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                }
+
+                Rect rect = GUILayoutUtility.GetLastRect();
+                if (DropPathUtility.DropPathOutType(rect, out string path, out isFile))
+                {
+                    if (!string.Equals(path, content, StringComparison.Ordinal))
+                    {
+                        content = path;
+                    }
+                }
+
+                if (GUILayout.Button("Reveal", GUILayout.Width(80)))
+                {
+                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
         /// <summary>
         /// 绘制unity 工程内部
         /// </summary>
@@ -416,17 +493,25 @@ namespace Game.Editor
         /// <param name="isFolder"></param>
         public static void GUIAssetPath(string header, ref string content, bool isFolder = false)
         {
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal("box");
             {
                 GUIStyle warningLableGUIStyle = new(EditorStyles.label)
                 {
                     normal = new GUIStyleState
                     {
                         textColor = Color.yellow
-                    }
+                    },
                 };
-                bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
-                content = EditorGUILayout.TextField(header, content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    EditorGUILayout.LabelField(header, "AssetPath is invalid", warningLableGUIStyle);
+                }
+                else
+                {
+                    bool invalid = !AssetDatabase.LoadAssetAtPath<Object>(content);
+                    content = EditorGUILayout.TextField(header, content, invalid ? warningLableGUIStyle : EditorStyles.label);
+                }
+
                 Rect rect = GUILayoutUtility.GetLastRect();
                 if (DropPathUtility.DropPath(rect, out string path, isFolder))
                 {
@@ -436,7 +521,7 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(content));
                 }
@@ -476,9 +561,9 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
                 {
-                    OpenFolder.Execute(path);
+                    EditorUtility.RevealInFinder(path);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -516,10 +601,25 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
                 {
                     EditorUtility.OpenWithDefaultApp(path);
                 }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        /// <summary>
+        /// 绘制 Toggle
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="isOn"></param>
+        public static void GUIToggle(string header, ref bool isOn)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.LabelField(header);
+                isOn = EditorGUILayout.Toggle(isOn);
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -936,6 +1036,32 @@ namespace Game.Editor
         }
 
         /// <summary>
+        /// 转换文件的绝对路径为Unity 项目的相对路径
+        /// </summary>
+        /// <param name="absolutePath"></param>
+        /// <returns></returns>
+        public static string AbsolutePathToProject(string absolutePath)
+        {
+            string projectPath = Application.dataPath.Replace("/Assets", "");
+
+            absolutePath = absolutePath.Replace("\\", "/");
+            projectPath = projectPath.Replace("\\", "/");
+
+            try
+            {
+                var projectUri = new Uri(projectPath + "/");
+                var absoluteUri = new Uri(absolutePath);
+                var relativeUri = projectUri.MakeRelativeUri(absoluteUri);
+                return Uri.UnescapeDataString(relativeUri.ToString().Replace("/", "/"));
+            }
+            catch (UriFormatException)
+            {
+                Debug.LogWarning("Invalid path format.");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 转换Unity资源路径为文件的绝对路径
         /// 例如：Assets/Works/file.txt 替换为 D:\\YourPorject/Assets/Works/file.txt
         /// </summary>
@@ -976,26 +1102,27 @@ namespace Game.Editor
         /// <param name="content">内容</param>
         /// <param name="key">关键字</param>
         /// <param name="includeKey">分割的结果里是否包含关键字</param>
-        /// <param name="searchBegin">是否使用初始匹配的位置，否则使用末尾匹配的位置</param>
+        /// <param name="firstMatch"></param>
         public static string Substring(string content, string key, bool includeKey, bool firstMatch = true)
         {
             if (string.IsNullOrEmpty(key))
+            {
                 return content;
+            }
 
             int startIndex = -1;
-            if (firstMatch)
-                startIndex = content.IndexOf(key); //返回子字符串第一次出现位置		
-            else
-                startIndex = content.LastIndexOf(key); //返回子字符串最后出现的位置
+            startIndex = firstMatch
+                ? content.IndexOf(key, StringComparison.Ordinal)
+                : //返回子字符串第一次出现位置		
+                content.LastIndexOf(key, StringComparison.Ordinal); //返回子字符串最后出现的位置
 
             // 如果没有找到匹配的关键字
             if (startIndex == -1)
+            {
                 return content;
+            }
 
-            if (includeKey)
-                return content.Substring(startIndex);
-            else
-                return content.Substring(startIndex + key.Length);
+            return includeKey ? content[startIndex..] : content[(startIndex + key.Length)..];
         }
 
         #endregion

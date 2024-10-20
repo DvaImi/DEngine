@@ -3,8 +3,10 @@
   <assembly fullname="DEngine">
     <type fullname="DEngine.DEngineEntry" preserve="all" />
     <type fullname="DEngine.DEngineException" preserve="all" />
+    <type fullname="DEngine.DEngineFunc`2" preserve="all" />
     <type fullname="DEngine.DataTable.DataTableBase" preserve="all" />
     <type fullname="DEngine.DataTable.IDataRow" preserve="all" />
+    <type fullname="DEngine.DataTable.IDataTableManager" preserve="all" />
     <type fullname="DEngine.DataTable.IDataTable`1" preserve="all" />
     <type fullname="DEngine.Event.GameEventArgs" preserve="all" />
     <type fullname="DEngine.Fsm.FsmState`1" preserve="all" />
@@ -20,7 +22,6 @@
     <type fullname="DEngine.UI.IUIForm" preserve="all" />
     <type fullname="DEngine.UI.IUIGroup" preserve="all" />
     <type fullname="DEngine.Utility" preserve="all" />
-    <type fullname="DEngine.Utility/Json" preserve="all" />
     <type fullname="DEngine.Utility/Text" preserve="all" />
     <type fullname="DEngine.Variable`1" preserve="all" />
   </assembly>
@@ -65,7 +66,6 @@
     <type fullname="Fantasy.Network.Interface.IRouteMessage" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteRequest" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteResponse" preserve="all" />
-    <type fullname="Fantasy.Network.NetworkProtocolType" preserve="all" />
     <type fullname="Fantasy.Scene" preserve="all" />
     <type fullname="Fantasy.Serialize.AMessage" preserve="all" />
     <type fullname="Fantasy.Serialize.IProto" preserve="all" />
@@ -73,15 +73,15 @@
     <type fullname="ProtoBuf.ProtoIgnoreAttribute" preserve="all" />
     <type fullname="ProtoBuf.ProtoMemberAttribute" preserve="all" />
   </assembly>
-  <assembly fullname="Game.Runtime">
+  <assembly fullname="Game.Runtime.Builtin">
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
-    <type fullname="Game.DataTable.GameDataTableVersion" preserve="all" />
     <type fullname="Game.EventSubscriber" preserve="all" />
+    <type fullname="Game.FileSystem.FileInfo" preserve="all" />
+    <type fullname="Game.FileSystem.FileSystemDataVersion" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
     <type fullname="Game.IGameModule" preserve="all" />
-    <type fullname="Game.LubanTable.ILubanTable" preserve="all" />
     <type fullname="Game.Network.INetworkModule" preserve="all" />
-    <type fullname="Game.Test.TestEnum" preserve="all" />
+    <type fullname="Game.Timer.ITimerModule" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
   </assembly>
   <assembly fullname="Luban.Runtime">
@@ -95,15 +95,12 @@
     <type fullname="System.ComponentModel.EditorBrowsableAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableState" preserve="all" />
   </assembly>
-  <assembly fullname="System.Core">
-    <type fullname="System.Collections.Generic.HashSet`1" preserve="all" />
-    <type fullname="System.Collections.Generic.HashSet`1/Enumerator" preserve="all" />
-  </assembly>
   <assembly fullname="UniTask">
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTaskStatus" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.YieldAwaitable" preserve="all" />
@@ -121,7 +118,7 @@
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.Rect" preserve="all" />
     <type fullname="UnityEngine.RectTransform" preserve="all" />
-    <type fullname="UnityEngine.TextAsset" preserve="all" />
+    <type fullname="UnityEngine.ShaderVariantCollection" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
     <type fullname="UnityEngine.Vector2" preserve="all" />
     <type fullname="UnityEngine.Vector3" preserve="all" />
@@ -145,7 +142,6 @@
     <type fullname="System.Byte" preserve="all" />
     <type fullname="System.Char" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2" preserve="all" />
-    <type fullname="System.Collections.Generic.Dictionary`2/ValueCollection" preserve="all" />
     <type fullname="System.Collections.Generic.IEnumerable`1" preserve="all" />
     <type fullname="System.Collections.Generic.IEnumerator`1" preserve="all" />
     <type fullname="System.Collections.Generic.IEqualityComparer`1" preserve="all" />
@@ -160,12 +156,12 @@
     <type fullname="System.EventHandler`1" preserve="all" />
     <type fullname="System.Exception" preserve="all" />
     <type fullname="System.FlagsAttribute" preserve="all" />
-    <type fullname="System.Func`1" preserve="all" />
     <type fullname="System.Func`2" preserve="all" />
     <type fullname="System.IConvertible" preserve="all" />
     <type fullname="System.IDisposable" preserve="all" />
     <type fullname="System.IFormatProvider" preserve="all" />
     <type fullname="System.IO.BinaryReader" preserve="all" />
+    <type fullname="System.IO.File" preserve="all" />
     <type fullname="System.IO.MemoryStream" preserve="all" />
     <type fullname="System.IO.Stream" preserve="all" />
     <type fullname="System.Int32" preserve="all" />
@@ -186,6 +182,7 @@
     <type fullname="System.Runtime.CompilerServices.IteratorStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeHelpers" preserve="all" />
+    <type fullname="System.Runtime.CompilerServices.TaskAwaiter`1" preserve="all" />
     <type fullname="System.RuntimeFieldHandle" preserve="all" />
     <type fullname="System.RuntimeTypeHandle" preserve="all" />
     <type fullname="System.Security.Permissions.SecurityAction" preserve="all" />
@@ -197,6 +194,7 @@
     <type fullname="System.StringSplitOptions" preserve="all" />
     <type fullname="System.Text.Encoding" preserve="all" />
     <type fullname="System.Threading.CancellationToken" preserve="all" />
+    <type fullname="System.Threading.Tasks.Task`1" preserve="all" />
     <type fullname="System.Type" preserve="all" />
     <type fullname="System.ValueType" preserve="all" />
   </assembly>

@@ -3,8 +3,8 @@ using System.IO;
 using DEngine;
 using UnityEditor;
 using UnityEngine;
-using Event = UnityEngine.Event;
 using Object = UnityEngine.Object;
+using UnityEvent = UnityEngine.Event;
 
 namespace Game.Editor
 {
@@ -12,7 +12,7 @@ namespace Game.Editor
     {
         public static bool DropPathOutType(Rect dropArea, out string assetPath, out bool isFile)
         {
-            Event currentEvent = Event.current;
+            UnityEvent currentEvent = UnityEvent.current;
             assetPath = string.Empty;
             if (currentEvent.type == EventType.DragUpdated)
             {
@@ -34,7 +34,6 @@ namespace Game.Editor
                         if (!string.IsNullOrEmpty(assetPath))
                         {
                             currentEvent.Use();
-                            Debug.Log(assetPath);
                             isFile = File.Exists(assetPath);
                             return true;
                         }
@@ -48,7 +47,7 @@ namespace Game.Editor
 
         public static bool DropPath(Rect dropArea, out string assetPath, bool isFolder = false)
         {
-            Event currentEvent = Event.current;
+            UnityEvent currentEvent = UnityEvent.current;
             assetPath = string.Empty;
             if (currentEvent.type == EventType.DragUpdated)
             {
@@ -79,11 +78,43 @@ namespace Game.Editor
             return false;
         }
 
-        public static void DropAssetPath(string label, ref string value, bool isFolder = false)
+        public static bool DropPath(Rect dropArea, out string[] assetPaths)
+        {
+            UnityEvent currentEvent = UnityEvent.current;
+            assetPaths = null;
+            if (currentEvent.type == EventType.DragUpdated)
+            {
+                if (dropArea.Contains(currentEvent.mousePosition))
+                {
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    currentEvent.Use();
+                }
+            }
+            else if (currentEvent.type == EventType.DragPerform)
+            {
+                if (dropArea.Contains(currentEvent.mousePosition))
+                {
+                    DragAndDrop.AcceptDrag();
+                    assetPaths = new string[DragAndDrop.objectReferences.Length];
+                    int index = 0;
+                    foreach (Object draggedObject in DragAndDrop.objectReferences)
+                    {
+                        assetPaths[index++] = AssetDatabase.GetAssetPath(draggedObject);
+                        currentEvent.Use();
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static void DropAndPingAssetPath(string label, ref string value, bool isFolder = false)
         {
             EditorGUILayout.BeginHorizontal();
             {
-                bool valid = !AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.BuildSettingsConfig);
+                bool valid = !AssetDatabase.LoadAssetAtPath<Object>(DEngineSetting.Instance.BuildSettingsConfig);
                 GUIStyle style = new GUIStyle(EditorStyles.label);
                 style.normal.textColor = Color.yellow;
                 value = EditorGUILayout.TextField(label, value, valid ? style : EditorStyles.label);
@@ -96,7 +127,7 @@ namespace Game.Editor
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80),GUILayout.Height(20)))
                 {
                     EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(value));
                 }

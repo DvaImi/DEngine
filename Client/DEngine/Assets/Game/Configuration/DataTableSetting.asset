@@ -12,24 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0261ba9f4be469c81ea6adc28e08dc9, type: 3}
   m_Name: DataTableSetting
   m_EditorClassIdentifier: 
-  DataTableFolderPath: Assets/Game/Bundles/DataTables
+  OutputDataTableFolder: Assets/../Excels/Output/DataTable
   DataTableExcelsFolder: Assets/../Excels/DataTable
-  CSharpCodePath: Assets/Game/Scripts/Update/Generate/DataTable/DRCode
+  CSharpCodePath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DRCode
   CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
-  ExtensionDirectoryPath: Assets/Game/Scripts/Update/Generate/DataTable/Extensions
-  GenerateDataTableEnum: 1
-  DataTableEnumPath: Assets/Game/Scripts/Update/Generate/DataTable/DataTableEnum
+  ExtensionDirectoryPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/Extensions
+  GenerateDataTableEnum: 0
+  DataTableEnumPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DataTableEnum
   NameSpace: Game.Update
   AssemblyNames:
   - DEngine
   - DEngine.Runtime
-  - Fantasy.Unity
-  - Game.Runtime
-  - Game.Update
-  EditorAssemblyNames:
   - DEngine.Editor
   - Game.Editor
-  - Assembly-CSharp-Editor
+  - Game.Runtime.Builtin
+  - Game.Runtime.Update
   NameRow: 1
   TypeRow: 2
   CommentRow: 3

@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 public class ShaderVariantCollectorWindow : EditorWindow
 {
-    [MenuItem("Game/Resource Tools/ShaderVariantCollector", false, 100)]
+    [MenuItem("Game/Resource Tools/ShaderVariantCollector", false, 1)]
     public static void OpenWindow()
     {
         ShaderVariantCollectorWindow window = GetWindow<ShaderVariantCollectorWindow>("着色器变种收集工具", true);
@@ -33,7 +33,7 @@ public class ShaderVariantCollectorWindow : EditorWindow
             VisualElement root = this.rootVisualElement;
 
             // 加载布局文件
-            var visualAsset = UxmlLoader.LoadWindowUXML<ShaderVariantCollectorWindow>();
+            var visualAsset = UxmlLoader.LoadWindowUxml<ShaderVariantCollectorWindow>();
             if (visualAsset == null)
                 return;
 
@@ -133,7 +133,7 @@ public class ShaderVariantCollectorWindow : EditorWindow
     private List<string> GetBuildPackageNames()
     {
         List<string> result = new List<string>();
-        foreach (var package in ResourcePackagesCollector.GetPackageCollector().PackagesCollector)
+        foreach (var package in ResourcePackagesCollector.Instance.PackagesCollector)
         {
             result.Add(package.PackageName);
         }

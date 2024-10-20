@@ -1,7 +1,5 @@
-﻿using System;
-using DEngine;
+﻿using DEngine;
 using DEngine.Editor.ResourceTools;
-using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEngine;
@@ -10,42 +8,52 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        [EditorToolMenu("SwitchPlatform", 0, 300, true)]
-        public static void SwitchPlatform()
-        {
-            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
-            {
-                GUILayout.Space(400);
-                int hotfixPlatformIndex = EditorGUILayout.Popup(GameSetting.Instance.BuildPlatform, PlatformNames, EditorStyles.toolbarPopup, GUILayout.Width(120));
+        #region GUI
 
-                if (!hotfixPlatformIndex.Equals(GameSetting.Instance.BuildPlatform))
+        public static void GUIPlatform()
+        {
+            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.BeginVertical();
                 {
-                    GameSetting.Instance.BuildPlatform = hotfixPlatformIndex;
-                    BuildTarget target = GetBuildTarget(GameSetting.Instance.BuildPlatform);
-                    if (target != EditorUserBuildSettings.activeBuildTarget)
+                    EditorGUILayout.LabelField("Platforms", EditorStyles.boldLabel);
+                    EditorGUILayout.BeginHorizontal("box");
                     {
-                        EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target);
-                        GameSetting.Save();
+                        EditorGUILayout.BeginVertical();
+                        {
+                            DrawPlatform(Platform.Windows, "Windows");
+                            DrawPlatform(Platform.Windows64, "Windows x64");
+                            DrawPlatform(Platform.MacOS, "macOS");
+                        }
+                        EditorGUILayout.EndVertical();
+                        EditorGUILayout.BeginVertical();
+                        {
+                            DrawPlatform(Platform.Linux, "Linux");
+                            DrawPlatform(Platform.IOS, "iOS");
+                            DrawPlatform(Platform.Android, "Android");
+                        }
+                        EditorGUILayout.EndVertical();
+                        EditorGUILayout.BeginVertical();
+                        {
+                            DrawPlatform(Platform.WindowsStore, "Windows Store");
+                            DrawPlatform(Platform.WebGL, "WebGL");
+                        }
+                        EditorGUILayout.EndVertical();
                     }
+                    EditorGUILayout.EndHorizontal();
                 }
+                EditorGUILayout.EndVertical();
             }
-            EditorGUI.EndDisabledGroup();
+            EditorGUILayout.EndHorizontal();
         }
 
-        public static void CheckPlatform()
+        private static void DrawPlatform(Platform platform, string platformName)
         {
-            BuildTarget buildTarget = GetBuildTarget(GameSetting.Instance.BuildPlatform);
-            if (buildTarget != EditorUserBuildSettings.activeBuildTarget)
-            {
-                if (EditorUtility.DisplayDialog("", "当前平台与目标平台不符是否切换 ? ", "确定", "取消"))
-                {
-                    if (EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(buildTarget), buildTarget))
-                    {
-                        CompilationPipeline.RequestScriptCompilation();
-                    }
-                }
-            }
+            SelectPlatform(platform, EditorGUILayout.ToggleLeft(platformName, IsPlatformSelected(platform)));
         }
+
+        #endregion
 
         public static Platform GetPlatform(BuildTarget target)
         {
@@ -61,48 +69,6 @@ namespace Game.Editor.BuildPipeline
                 BuildTarget.StandaloneLinux64 => Platform.Linux,
                 _ => throw new DEngineException("Platform is invalid."),
             };
-        }
-
-        public static Platform GetPlatform(int platformIndex)
-        {
-            return (Platform)Enum.Parse(typeof(Platform), PlatformNames[platformIndex]);
-        }
-
-        public static BuildTarget GetBuildTarget(int platformIndex)
-        {
-            Platform platform = GetPlatform(platformIndex);
-            switch (platform)
-            {
-                case Platform.Windows:
-                    return BuildTarget.StandaloneWindows;
-
-                case Platform.Windows64:
-                    return BuildTarget.StandaloneWindows64;
-
-                case Platform.MacOS:
-#if UNITY_2017_3_OR_NEWER
-                    return BuildTarget.StandaloneOSX;
-#else
-                    return BuildTarget.StandaloneOSXUniversal;
-#endif
-                case Platform.Linux:
-                    return BuildTarget.StandaloneLinux64;
-
-                case Platform.IOS:
-                    return BuildTarget.iOS;
-
-                case Platform.Android:
-                    return BuildTarget.Android;
-
-                case Platform.WindowsStore:
-                    return BuildTarget.WSAPlayer;
-
-                case Platform.WebGL:
-                    return BuildTarget.WebGL;
-
-                default:
-                    throw new DEngineException("Platform is invalid.");
-            }
         }
 
         public static BuildTarget GetBuildTarget(Platform platform)
@@ -136,14 +102,30 @@ namespace Game.Editor.BuildPipeline
                 case Platform.WebGL:
                     return BuildTarget.WebGL;
 
+                case Platform.Undefined:
                 default:
                     throw new DEngineException("Platform is invalid.");
             }
         }
 
+        public static string GetCheckVersionUrl()
+        {
+            return Utility.Text.Format("{0}:{1}/{{Platform}}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort);
+        }
+
+        public static string GetCheckVersionUrl(Platform platform)
+        {
+            return Utility.Text.Format("{0}:{1}/{2}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, GetPlatformPath(platform));
+        }
+
+        public static string GetUpdatePrefixUri()
+        {
+            return Utility.Text.Format("{0}:{1}/{2}.{3}/{{Platform}}", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, DEngineSetting.Instance.LatestGameVersion, DEngineSetting.Instance.InternalResourceVersion);
+        }
+
         public static string GetUpdatePrefixUri(Platform platform)
         {
-            return Utility.Text.Format(GameSetting.Instance.UpdatePrefixUri, GameSetting.Instance.LatestGameVersion, GameSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
+            return Utility.Text.Format("{0}:{1}/{2}.{3}/{4}", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, DEngineSetting.Instance.LatestGameVersion, DEngineSetting.Instance.InternalResourceVersion, GetPlatformPath(platform));
         }
 
         public static string GetPlatformPath(Platform platform)
@@ -175,7 +157,7 @@ namespace Game.Editor.BuildPipeline
                     return "Linux";
 
                 default:
-                    throw new DEngineException("Platform is invalid.");
+                    return "";
             }
         }
 
@@ -209,7 +191,7 @@ namespace Game.Editor.BuildPipeline
                     return "Linux";
 
                 default:
-                    throw new DEngineException("Platform is invalid.");
+                    return "";
             }
         }
     }

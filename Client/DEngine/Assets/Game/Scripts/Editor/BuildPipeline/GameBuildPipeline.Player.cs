@@ -2,112 +2,140 @@
 using System.IO;
 using System.Xml;
 using DEngine.Editor.ResourceTools;
+using DEngine.Resource;
 using Game.Editor.Toolbar;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        [EditorToolMenu("BuildPlayer", 1, 10)]
-        public static void BuildPlayer()
+        [EditorToolbarMenu("BuildPlayer", 1, 10)]
+        public static bool BuildPlayer()
         {
-            SaveBuildInfo();
-            BuildTarget target = GetBuildTarget(GameSetting.Instance.BuildPlatform);
-            if (target != EditorUserBuildSettings.activeBuildTarget)
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+
+            var isSuccess = BuildPlayer(Platform.Windows);
+
+            if (isSuccess)
             {
-                EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target);
+                isSuccess = BuildPlayer(Platform.Windows64);
             }
 
-            BuildReport report = BuildApplication(target);
+            if (isSuccess)
+            {
+                isSuccess = BuildPlayer(Platform.MacOS);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = BuildPlayer(Platform.Linux);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = BuildPlayer(Platform.IOS);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = BuildPlayer(Platform.Android);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = BuildPlayer(Platform.WindowsStore);
+            }
+
+            if (isSuccess)
+            {
+                isSuccess = BuildPlayer(Platform.WebGL);
+            }
+
+            if (isSuccess)
+            {
+                Debug.Log($"Build {DEngineSetting.Instance.BuildPlatforms} complete. ");
+            }
+
+            return isSuccess;
+        }
+
+        private static bool BuildPlayer(Platform platform)
+        {
+            if (!IsPlatformSelected(platform))
+            {
+                return true;
+            }
+
+            if (DEngineSetting.Instance.ResourceMode is ResourceMode.Updatable or ResourceMode.UpdatableWhilePlaying)
+            {
+                SaveBuiltinData(platform);
+            }
+
+
+            BuildReport report = BuildApplication(platform);
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Build succeeded: " + GameUtility.String.GetByteLengthString((long)summary.totalSize));
+                return true;
             }
             else
             {
                 Debug.Log("Build failed ");
+                return false;
             }
         }
 
-        public static void BuildPlayerV2(string channel, Platform platform)
-        {
-            BuildTarget target = GetBuildTarget(platform);
-            if (target != EditorUserBuildSettings.activeBuildTarget)
-            {
-                EditorUserBuildSettings.SwitchActiveBuildTarget(UnityEditor.BuildPipeline.GetBuildTargetGroup(target), target);
-            }
-
-            BuildReport report = BuildApplicationV2(target, channel);
-            BuildSummary summary = report.summary;
-
-            if (summary.result == BuildResult.Succeeded)
-            {
-                Debug.Log("Build succeeded: " + GameUtility.String.GetByteLengthString((long)summary.totalSize));
-            }
-            else
-            {
-                Debug.Log("Build failed ");
-            }
-        }
-
-        public static void SaveBuildInfo()
+        public static void SaveBuiltinData(Platform platform)
         {
             BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
-            builtinData.BuildInfo = GameSetting.Instance.BuildInfo;
-            EditorUtility.SetDirty(builtinData);
-            AssetDatabase.SaveAssets();
+            string platformPath = GetPlatformPath(platform);
+            string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
+            if (File.Exists(versionFilePath))
+            {
+                JObject checkVersionInfo = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(versionFilePath));
+                builtinData.BuildInfo = new BuildInfo
+                {
+                    LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
+                    CheckVersionUrl = checkVersionInfo["CheckVersionUrl"]!.Value<string>()
+                };
+                EditorUtility.SetDirty(builtinData);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
         }
 
-        public static BuildReport BuildApplication(BuildTarget platform)
+        private static BuildReport BuildApplication(Platform platform)
         {
-            string outputExtension = GetFileExtensionForPlatform(platform);
-            if (!Directory.Exists(GameSetting.Instance.AppOutput))
+            BuildTarget target = GetBuildTarget(platform);
+            string outputExtension = GetFileExtensionForPlatform(target);
+            if (!Directory.Exists(DEngineSetting.AppOutput))
             {
-                GameUtility.IO.CreateDirectoryIfNotExists(GameSetting.Instance.AppOutput);
-                GameSetting.Instance.SaveSetting();
+                GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.AppOutput);
             }
 
-            string locationPath = Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform]);
+            string locationPath = Path.Combine(DEngineSetting.AppOutput, platform.ToString());
             GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
             BuildPlayerOptions buildPlayerOptions = new()
             {
-                scenes = GameSetting.Instance.DefaultSceneNames,
+                scenes = DEngineSetting.Instance.DefaultSceneNames,
                 locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
-                target = platform,
+                target = target,
                 options = BuildOptions.CompressWithLz4 | BuildOptions.ShowBuiltPlayer
             };
 
             return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
-        public static BuildReport BuildApplicationV2(BuildTarget platform, string channel)
-        {
-            string outputExtension = GetFileExtensionForPlatform(platform);
-            if (!Directory.Exists(GameSetting.Instance.AppOutput))
-            {
-                GameUtility.IO.CreateDirectoryIfNotExists(GameSetting.Instance.AppOutput);
-                GameSetting.Instance.SaveSetting();
-            }
-
-            string locationPath = Path.Combine(GameSetting.Instance.AppOutput, GetPlatformPath(platform), channel);
-            GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
-            BuildPlayerOptions buildPlayerOptions = new()
-            {
-                scenes = GameSetting.Instance.DefaultSceneNames,
-                locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
-                target = platform,
-                options = BuildOptions.CompressWithLz4
-            };
-
-            return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);
-        }
-
-        public static string GetFileExtensionForPlatform(BuildTarget platform)
+        private static string GetFileExtensionForPlatform(BuildTarget platform)
         {
             return platform switch
             {
@@ -118,11 +146,6 @@ namespace Game.Editor.BuildPipeline
                 BuildTarget.WebGL => "",
                 _ => ".exe",
             };
-        }
-
-        public static string GetBuildAppFullName()
-        {
-            return Path.Combine(GameSetting.Instance.AppOutput, PlatformNames[GameSetting.Instance.BuildPlatform], Application.productName + GetFileExtensionForPlatform(GetBuildTarget((int)s_OriginalPlatform)));
         }
 
         public static void SaveBuildSetting()
@@ -140,7 +163,7 @@ namespace Game.Editor.BuildPipeline
                 XmlElement xmlDefaultScenes = xmlDocument.CreateElement("DefaultScenes");
                 xmlBuildSettings.AppendChild(xmlDefaultScenes);
 
-                foreach (string sceneName in GameSetting.Instance.DefaultSceneNames)
+                foreach (string sceneName in DEngineSetting.Instance.DefaultSceneNames)
                 {
                     XmlElement xmlScene = xmlDocument.CreateElement("DefaultScene");
                     xmlScene.SetAttribute("Name", sceneName);
@@ -151,7 +174,7 @@ namespace Game.Editor.BuildPipeline
                 xmlBuildSettings.AppendChild(xmlSearchScenePaths);
 
                 // 添加 SearchScenePath 节点
-                foreach (string path in GameSetting.Instance.SearchScenePaths)
+                foreach (string path in DEngineSetting.Instance.SearchScenePaths)
                 {
                     XmlElement xmlPath = xmlDocument.CreateElement("SearchScenePath");
                     xmlPath.SetAttribute("Path", path);
@@ -159,9 +182,9 @@ namespace Game.Editor.BuildPipeline
                 }
 
                 // 保存 XML 文件到指定路径
-                xmlDocument.Save(GameSetting.Instance.BuildSettingsConfig);
+                xmlDocument.Save(DEngineSetting.Instance.BuildSettingsConfig);
                 AssetDatabase.Refresh();
-                Debug.Log("XML file generated and saved successfully at: " + GameSetting.Instance.BuildSettingsConfig);
+                Debug.Log("XML file generated and saved successfully at: " + DEngineSetting.Instance.BuildSettingsConfig);
             }
             catch (Exception e)
             {

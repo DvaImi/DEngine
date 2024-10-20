@@ -146,7 +146,7 @@ public static class ShaderVariantCollector
         List<string> allAssets = new List<string>(1000);
 
         // 获取所有打包的资源
-        var packageCollector = ResourcePackagesCollector.GetBundleCollectorByIndex(GameSetting.Instance.AssetBundleCollectorIndex);
+        var packageCollector = ResourcePackagesCollector.GetResourceGroupsCollector();
         foreach (var groups in packageCollector.Groups)
         {
             foreach (var assetInfo in groups.AssetCollectors)

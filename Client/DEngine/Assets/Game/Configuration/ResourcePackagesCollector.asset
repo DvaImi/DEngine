@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba3d823840013a4429ea895596b60a1b, type: 3}
+  m_Name: ResourcePackagesCollector
+  m_EditorClassIdentifier: 
+  PackagesCollector:
+  - PackageName: Game
+    Description: 
+    Groups:
+    - GroupName: Base
+      EnableGroup: 1
+      Description: "\u57FA\u7840\u8D44\u6E90"
+      AssetCollectors:
+      - Name: data
+        Enable: 1
+        FileSystem: 
+        Groups: Base
+        Variant: zh-cn
+        Asset: {fileID: 102900000, guid: 11f2c913956269540987ff4d8220690f, type: 3}
+        LoadType: 0
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: data
+        Enable: 1
+        FileSystem: 
+        Groups: Base
+        Variant: zh-tw
+        Asset: {fileID: 102900000, guid: 99b4813375565a8409dedd11e2797474, type: 3}
+        LoadType: 0
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: data
+        Enable: 1
+        FileSystem: 
+        Groups: Base
+        Variant: en
+        Asset: {fileID: 102900000, guid: 4fc38d301ae29c34faccf58b7ab86874, type: 3}
+        LoadType: 0
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: data2
+        Enable: 1
+        FileSystem: 
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 3523361330751221004, guid: 47c57db2cbae5594a9872a084eb9be62, type: 3}
+        LoadType: 0
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: 
+        Enable: 1
+        FileSystem: shader
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 102900000, guid: a452f043ae001794fabdf7905a047bdd, type: 3}
+        LoadType: 0
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: 
+        Enable: 1
+        FileSystem: cfg
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 4900000, guid: 405f5a4f5a14afd4c9d96a27906c4088, type: 3}
+        LoadType: 4
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: 
+        Enable: 1
+        FileSystem: cfg
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 4900000, guid: f98416e525a5f1242a5390ccbda6a6f7, type: 3}
+        LoadType: 4
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: 
+        Enable: 1
+        FileSystem: aot
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 4900000, guid: 0cf212ceb193ce247a4ee71a0e49197f, type: 3}
+        LoadType: 6
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: 
+        Enable: 1
+        FileSystem: patch
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 4900000, guid: ef509fea589ad0e4ead2dac138f5a6fd, type: 3}
+        LoadType: 6
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: 
+        Enable: 1
+        FileSystem: aot
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 4900000, guid: 95ce57afa274d6648a1077d9a4127240, type: 3}
+        LoadType: 6
+        Packed: 0
+        FilterRule: CollectAll
+      - Name: 
+        Enable: 1
+        FileSystem: patch
+        Groups: Base
+        Variant: 
+        Asset: {fileID: 4900000, guid: 61ac612acf2c87f479eba867ee96c10c, type: 3}
+        LoadType: 6
+        Packed: 0
+        FilterRule: CollectAll

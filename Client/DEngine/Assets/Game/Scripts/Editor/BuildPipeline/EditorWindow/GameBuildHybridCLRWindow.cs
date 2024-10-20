@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using HybridCLR.Editor;
-using HybridCLR.Editor.Commands;
 using UnityEditor;
 using UnityEngine;
 
@@ -47,7 +46,7 @@ namespace Game.Editor.BuildPipeline
             if (m_Compile)
             {
                 m_Compile = false;
-                GameBuildPipeline.CompileHotfixDll();
+                GameBuildPipeline.CompileUpdateDll();
             }
         }
 
@@ -60,14 +59,14 @@ namespace Game.Editor.BuildPipeline
             m_CompileContent = EditorGUIUtility.TrTextContentWithIcon("Compile", "编译热更代码", "Assembly Icon");
             m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "保存配置");
 
-            if (!Directory.Exists(GameSetting.Instance.AppOutput))
+            if (!Directory.Exists(DEngineSetting.AppOutput))
             {
-                Directory.CreateDirectory(GameSetting.Instance.AppOutput);
+                Directory.CreateDirectory(DEngineSetting.AppOutput);
             }
 
-            if (!Directory.Exists(GameSetting.Instance.BundlesOutput))
+            if (!Directory.Exists(DEngineSetting.BundlesOutput))
             {
-                Directory.CreateDirectory(GameSetting.Instance.BundlesOutput);
+                Directory.CreateDirectory(DEngineSetting.BundlesOutput);
             }
 
             GameBuildPipeline.RefreshPackages();
@@ -81,7 +80,7 @@ namespace Game.Editor.BuildPipeline
                 GUILayout.Space(10f);
                 EditorGUILayout.BeginVertical("box");
                 {
-                    GUIHyBridCLR();
+                    GUIHybridCLR();
                 }
                 GUILayout.Space(5f);
                 EditorGUILayout.EndHorizontal();
@@ -104,7 +103,7 @@ namespace Game.Editor.BuildPipeline
                 if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
                     GameBuildPipeline.SaveHybridCLR();
-                    GameSetting.Save();
+                    DEngineSetting.Save();
                     Debug.Log("Save success.");
                 }
             }
@@ -116,7 +115,7 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        private void GUIHyBridCLR()
+        private void GUIHybridCLR()
         {
             EditorGUILayout.BeginHorizontal();
             {
@@ -142,29 +141,29 @@ namespace Game.Editor.BuildPipeline
             GUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
             {
-                GameSetting.Instance.HotupdateAssembliesPath = EditorGUILayout.TextField("HotUpdate Dll Path", GameSetting.Instance.HotupdateAssembliesPath);
+                DEngineSetting.Instance.UpdateAssembliesPath = EditorGUILayout.TextField("Update Assemblies Path", DEngineSetting.Instance.UpdateAssembliesPath);
                 Rect hotUpdateRect = GUILayoutUtility.GetLastRect();
                 if (DropPathUtility.DropPath(hotUpdateRect, out string hotDatePath))
                 {
-                    if (hotDatePath != null && hotDatePath != GameSetting.Instance.HotupdateAssembliesPath)
+                    if (hotDatePath != null && hotDatePath != DEngineSetting.Instance.UpdateAssembliesPath)
                     {
-                        GameSetting.Instance.HotupdateAssembliesPath = hotDatePath;
+                        DEngineSetting.Instance.UpdateAssembliesPath = hotDatePath;
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Width(80)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.HotupdateAssembliesPath));
+                    EditorUtility.RevealInFinder(DEngineSetting.Instance.UpdateAssembliesPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);
 
-            m_FoldoutHotUpdateAssembliesGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutHotUpdateAssembliesGroup, "HotUpdateAssemblies");
+            m_FoldoutHotUpdateAssembliesGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutHotUpdateAssembliesGroup, "UpdateAssembliesPath");
             {
                 if (m_FoldoutHotUpdateAssembliesGroup)
                 {
-                    foreach (var item in GameSetting.Instance.HotUpdateAssemblies)
+                    foreach (var item in DEngineSetting.Instance.UpdateAssemblies)
                     {
                         EditorGUILayout.TextField(item);
                     }
@@ -178,8 +177,8 @@ namespace Game.Editor.BuildPipeline
 
                             void Save(string[] hotUpdateAssemblies)
                             {
-                                GameSetting.Instance.HotUpdateAssemblies = hotUpdateAssemblies.Select(item => item.Replace(".dll", null)).ToArray();
-                                GameSetting.Instance.SaveSetting();
+                                DEngineSetting.Instance.UpdateAssemblies = hotUpdateAssemblies.Select(item => item.Replace(".dll", null)).ToArray();
+                                DEngineSetting.Save();
                                 Repaint();
                             }
 
@@ -188,7 +187,7 @@ namespace Game.Editor.BuildPipeline
                                 return !assembly.FullName.Contains("Editor");
                             }
 
-                            HashSet<string> hasSelect = new(GameSetting.Instance.HotUpdateAssemblies.Select(item => item.Replace(".dll", null)));
+                            HashSet<string> hasSelect = new(DEngineSetting.Instance.UpdateAssemblies.Select(item => item.Replace(".dll", null)));
                             assemblyEditor.Open(hasSelect, Save, WherePredicate);
                         }
                     }
@@ -200,19 +199,19 @@ namespace Game.Editor.BuildPipeline
             GUILayout.Space(5f);
             EditorGUILayout.BeginHorizontal();
             {
-                GameSetting.Instance.PreserveAssembliesPath = EditorGUILayout.TextField("PreserveDll Path", GameSetting.Instance.PreserveAssembliesPath);
+                DEngineSetting.Instance.PreserveAssembliesPath = EditorGUILayout.TextField("PreserveDll Path", DEngineSetting.Instance.PreserveAssembliesPath);
                 Rect preservePathRect = GUILayoutUtility.GetLastRect();
                 if (DropPathUtility.DropPath(preservePathRect, out string preservePath))
                 {
-                    if (preservePath != null && preservePath != GameSetting.Instance.PreserveAssembliesPath)
+                    if (preservePath != null && preservePath != DEngineSetting.Instance.PreserveAssembliesPath)
                     {
-                        GameSetting.Instance.PreserveAssembliesPath = preservePath;
+                        DEngineSetting.Instance.PreserveAssembliesPath = preservePath;
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Width(80)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.PreserveAssembliesPath));
+                    EditorUtility.RevealInFinder(DEngineSetting.Instance.PreserveAssembliesPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -221,7 +220,7 @@ namespace Game.Editor.BuildPipeline
             {
                 if (m_FoldoutPreserveAssembliesGroup)
                 {
-                    foreach (var item in GameSetting.Instance.PreserveAssemblies)
+                    foreach (var item in DEngineSetting.Instance.PreserveAssemblies)
                     {
                         EditorGUILayout.TextField(item);
                     }
@@ -235,8 +234,8 @@ namespace Game.Editor.BuildPipeline
 
                             void Save(string[] preserveDll)
                             {
-                                GameSetting.Instance.PreserveAssemblies = preserveDll.Select(item => item.Replace(".dll", null)).ToArray();
-                                GameSetting.Instance.SaveSetting();
+                                DEngineSetting.Instance.PreserveAssemblies = preserveDll.Select(item => item.Replace(".dll", null)).ToArray();
+                                DEngineSetting.Save();
                                 Repaint();
                             }
 
@@ -245,7 +244,7 @@ namespace Game.Editor.BuildPipeline
                                 return !assembly.FullName.Contains("Editor");
                             }
 
-                            HashSet<string> hasSelect = new(GameSetting.Instance.PreserveAssemblies.Select(item => item.Replace(".dll", null)));
+                            HashSet<string> hasSelect = new(DEngineSetting.Instance.PreserveAssemblies.Select(item => item.Replace(".dll", null)));
                             assemblyEditor.Open(hasSelect, Save, WherePredicate);
                         }
                     }
@@ -257,19 +256,19 @@ namespace Game.Editor.BuildPipeline
             GUILayout.Space(5f);
             EditorGUILayout.BeginHorizontal();
             {
-                GameSetting.Instance.AOTAssembliesPath = EditorGUILayout.TextField("AOT Dll Path", GameSetting.Instance.AOTAssembliesPath);
+                DEngineSetting.Instance.AOTAssembliesPath = EditorGUILayout.TextField("AOT Dll Path", DEngineSetting.Instance.AOTAssembliesPath);
                 Rect aotPathRect = GUILayoutUtility.GetLastRect();
                 if (DropPathUtility.DropPath(aotPathRect, out string aotPath))
                 {
-                    if (aotPath != null && aotPath != GameSetting.Instance.AOTAssembliesPath)
+                    if (aotPath != null && aotPath != DEngineSetting.Instance.AOTAssembliesPath)
                     {
-                        GameSetting.Instance.AOTAssembliesPath = aotPath;
+                        DEngineSetting.Instance.AOTAssembliesPath = aotPath;
                     }
                 }
 
-                if (GUILayout.Button("Go", GUILayout.Width(30)))
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Width(80)))
                 {
-                    EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(GameSetting.Instance.AOTAssembliesPath));
+                    EditorUtility.RevealInFinder(DEngineSetting.Instance.AOTAssembliesPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -278,7 +277,7 @@ namespace Game.Editor.BuildPipeline
             {
                 if (m_FoldoutPatchAOTAssembliesGroup)
                 {
-                    foreach (var item in GameSetting.Instance.AOTAssemblies)
+                    foreach (var item in DEngineSetting.Instance.AOTAssemblies)
                     {
                         EditorGUILayout.TextField(item);
                     }
@@ -290,10 +289,10 @@ namespace Game.Editor.BuildPipeline
                         {
                             SelectAssembly assemblyEditor = GetWindow<SelectAssembly>();
 
-                            void Save(string[] aotdll)
+                            void Save(string[] dlls)
                             {
-                                GameSetting.Instance.AOTAssemblies = aotdll.Select(item => item.Replace(".dll", null)).ToArray();
-                                GameSetting.Instance.SaveSetting();
+                                DEngineSetting.Instance.AOTAssemblies = dlls.Select(item => item.Replace(".dll", null)).ToArray();
+                                DEngineSetting.Save();
                                 Repaint();
                             }
 
@@ -302,7 +301,7 @@ namespace Game.Editor.BuildPipeline
                                 return !assembly.FullName.Contains("Editor");
                             }
 
-                            HashSet<string> hasSelect = new(GameSetting.Instance.AOTAssemblies.Select(item => item.Replace(".dll", null)));
+                            HashSet<string> hasSelect = new(DEngineSetting.Instance.AOTAssemblies.Select(item => item.Replace(".dll", null)));
                             assemblyEditor.Open(hasSelect, Save, WherePredicate);
                         }
                     }

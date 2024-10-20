@@ -10,13 +10,16 @@ UNITY_2020_1_OR_NEWER
 
 ### Todo && Done
 
-- 扩充资源收集器
+- 资源
     - [x] 支持自定义资源收集器
     - [x] 收集器支持多个package
+    - [x] 添加虚拟文件收集器，可以将数据表等文本或二进制数据利用文件系统实现延迟加载；可以将unity不支持的原生文件利用文件系统导出为二进制数据，从而进行打包和加载
+    - [x] 添加一个简易本地资源服务器，实现上传和下载功能，方便测试热更新 
     - [ ] 支持导入配置
 - 扩充数据表
     - [x] 数据表支持多sheet导出
     - [x] 本地化修改为数据表方式导出
+    - [x] 利用文件系统实现LazyLoad  
 - 接入hybridclr
     - [x] 拆分热更程序集和AOT程序集，流程已跑通
 - 接入Unitask
@@ -25,7 +28,7 @@ UNITY_2020_1_OR_NEWER
 - 接入Fantasy
     - [x] 接入 Fantasy，测试流程已跑通
 - 接入Luban
-    - [x] TODO 客户端已接入Luban
+    - [x] 客户端已接入Luban,采用懒加载模式使用
     - [ ] 服务端接入Luban
 - 扩展UI
     - [x] 接入FairyGUI,完美融合进框架的UI系统中，采用扩展包形式接入，添加"com.dvalmi.fairygui": "https://github.com/DvaImi/DEngineFairyGUI.git",后续考虑添加文件系统的支持

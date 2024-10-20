@@ -13,8 +13,8 @@ namespace Game.Editor.Toolbar
     {
         private static ScriptableObject s_CurrentToolbar;
         private static readonly Type ToolbarType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.Toolbar");
-        private static readonly List<EditorToolMenuAttribute> LeftMenu = new();
-        private static readonly List<EditorToolMenuAttribute> RightMenu = new();
+        private static readonly List<EditorToolbarMenuAttribute> LeftMenu = new();
+        private static readonly List<EditorToolbarMenuAttribute> RightMenu = new();
         private static readonly Dictionary<string, MethodInfo> LeftCachedMethods = new();
         private static readonly Dictionary<string, MethodInfo> RightCachedMethods = new();
         private static readonly Dictionary<string, MethodInfo> LeftToolbarCustomGUI = new();
@@ -27,12 +27,17 @@ namespace Game.Editor.Toolbar
             CacheMethods();
         }
 
-        private static void CacheMethods()
+        public static void Shutdown()
         {
             LeftMenu.Clear();
             RightMenu.Clear();
             LeftCachedMethods.Clear();
             RightCachedMethods.Clear();
+        }
+
+        private static void CacheMethods()
+        {
+            Shutdown();
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 foreach (var type in assembly.GetTypes())
@@ -41,7 +46,7 @@ namespace Game.Editor.Toolbar
 
                     foreach (MethodInfo method in methods)
                     {
-                        var attribute = method.GetCustomAttribute<EditorToolMenuAttribute>();
+                        var attribute = method.GetCustomAttribute<EditorToolbarMenuAttribute>();
                         if (attribute != null)
                         {
                             if (attribute.Align == 0)
@@ -81,7 +86,7 @@ namespace Game.Editor.Toolbar
             RightMenu.Sort(Compare);
         }
 
-        private static void CheckDuplicateOrders(List<EditorToolMenuAttribute> menuAttributes, Dictionary<string, MethodInfo> methodInfos)
+        private static void CheckDuplicateOrders(List<EditorToolbarMenuAttribute> menuAttributes, Dictionary<string, MethodInfo> methodInfos)
         {
             Dictionary<int, List<string>> orderDictionary = new();
 
@@ -116,7 +121,7 @@ namespace Game.Editor.Toolbar
             }
         }
 
-        private static int Compare(EditorToolMenuAttribute x, EditorToolMenuAttribute y)
+        private static int Compare(EditorToolbarMenuAttribute x, EditorToolbarMenuAttribute y)
         {
             return x.Order.CompareTo(y.Order);
         }
@@ -189,7 +194,7 @@ namespace Game.Editor.Toolbar
                         }
                     }
 
-                    GUILayout.Space(5F);
+                    GUILayout.Space(10F);
                 }
             }
 
@@ -216,7 +221,7 @@ namespace Game.Editor.Toolbar
                         }
                     }
 
-                    GUILayout.Space(5F);
+                    GUILayout.Space(10F);
                 }
 
                 GUILayout.Space(10F);
@@ -232,9 +237,7 @@ namespace Game.Editor.Toolbar
                 {
                     try
                     {
-                        Debug.Log($"Calling method: {menuName}");
                         methodInfo.Invoke(null, null);
-                        Debug.Log($"Successfully called method: {menuName}");
                     }
                     catch (Exception e)
                     {
@@ -251,9 +254,7 @@ namespace Game.Editor.Toolbar
                 {
                     try
                     {
-                        Debug.Log($"Calling method: {menuName}");
                         methodInfo.Invoke(null, null);
-                        Debug.Log($"Successfully called method: {menuName}");
                     }
                     catch (Exception e)
                     {
