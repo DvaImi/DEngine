@@ -4,7 +4,7 @@ using DEngine;
 
 namespace Game
 {
-    public class UniTaskParallel<T> : IReference
+    public class UniTaskParallel<T> : IReference, IDisposable
     {
         private readonly DEngineLinkedList<UniTask<T>> m_Tasks = null;
 
@@ -25,14 +25,7 @@ namespace Game
                 return Array.Empty<T>();
             }
 
-            try
-            {
-                return await UniTask.WhenAll(m_Tasks);
-            }
-            finally
-            {
-                ReferencePool.Release(this);
-            }
+            return await UniTask.WhenAll(m_Tasks);
         }
 
         public static UniTaskParallel<T> Creat()
@@ -54,6 +47,11 @@ namespace Game
         public void Clear()
         {
             m_Tasks.Clear();
+        }
+
+        public void Dispose()
+        {
+            ReferencePool.Release(this);
         }
     }
 }
