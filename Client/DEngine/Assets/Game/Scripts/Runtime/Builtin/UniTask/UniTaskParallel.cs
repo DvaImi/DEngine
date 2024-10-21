@@ -32,7 +32,6 @@ namespace Game
             return ReferencePool.Acquire<UniTaskParallel>();
         }
 
-
         public static UniTaskParallel Creat(params UniTask[] uniTasks)
         {
             var parallel = ReferencePool.Acquire<UniTaskParallel>();
@@ -43,7 +42,6 @@ namespace Game
 
             return parallel;
         }
-
 
         public void Clear()
         {
