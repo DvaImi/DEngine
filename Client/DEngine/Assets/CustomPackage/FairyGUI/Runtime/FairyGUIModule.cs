@@ -18,15 +18,10 @@ namespace Game.FairyGUI.Runtime
         private IFairyGUIModule m_FairyGUIModuleImplementation;
         private readonly Dictionary<string, int> m_FairyGUIReference = new();
         private readonly Queue<string> m_PreUnLoad = new();
-        private float m_InstanceAutoReleaseInterval;
         private float m_Time;
         public int PackageCount => UIPackage.GetPackages().Count;
 
-        public float InstanceAutoReleaseInterval
-        {
-            get { return m_InstanceAutoReleaseInterval; }
-            set { m_InstanceAutoReleaseInterval = value; }
-        }
+        public float InstanceAutoReleaseInterval { get; set; }
 
         public async UniTask Initialize(string fairyDataAssetName)
         {
@@ -39,9 +34,9 @@ namespace Game.FairyGUI.Runtime
                 m_UIComponent.AddUIGroup(fairyGroup.Name, fairyGroup.Depth);
             }
 
-            if (m_InstanceAutoReleaseInterval < 60)
+            if (InstanceAutoReleaseInterval < 60)
             {
-                m_InstanceAutoReleaseInterval = 60;
+                InstanceAutoReleaseInterval = 60;
             }
         }
 
@@ -50,7 +45,7 @@ namespace Game.FairyGUI.Runtime
             var groupName = GetGroupName(uiFormId);
             var assetName = GetFairyGUIFormAssetName(uiFormId);
             var form = m_UIComponent.GetUIForm(assetName);
-            if (form == null)
+            if (!form)
             {
                 return null;
             }
@@ -195,7 +190,7 @@ namespace Game.FairyGUI.Runtime
         public void Update(float elapseSeconds, float realElapseSeconds)
         {
             m_Time += elapseSeconds;
-            if (m_Time > m_InstanceAutoReleaseInterval)
+            if (m_Time > InstanceAutoReleaseInterval)
             {
                 RemovePackage();
                 m_Time = 0;
@@ -264,13 +259,14 @@ namespace Game.FairyGUI.Runtime
             UIPackage uiPackage = UIPackage.GetByName(fairyForm.PackageName);
             if (uiPackage == null)
             {
-                //load dependencies package
+                using var parallel = UniTaskParallel.Creat();
                 foreach (var package in fairyForm.DependencyPackages)
                 {
-                    await AddPackage(package);
+                    parallel.Push(AddPackage(package));
                 }
 
-                await InternalLoadFairyGUIAsset(fairyForm);
+                parallel.Push(InternalLoadFairyGUIAsset(fairyForm));
+                await parallel.WhenAll();
             }
             else
             {
@@ -280,11 +276,11 @@ namespace Game.FairyGUI.Runtime
 
         private async UniTask InternalLoadFairyGUIAsset(FairyForm fairyForm)
         {
-            //load dependencies
-            Object[] dependencies = await GameEntry.Resource.LoadAssetsAsync<Object>(fairyForm.DependencyAssets.ToArray());
+            using var parallel = UniTaskParallel<Object[], TextAsset>.Creat();
+            parallel.Push(GameEntry.Resource.LoadAssetsAsync<Object>(fairyForm.DependencyAssets.ToArray()));
+            parallel.Push(GameEntry.Resource.LoadAssetAsync<TextAsset>(fairyForm.AssetName));
 
-            //load desc
-            TextAsset desc = await GameEntry.Resource.LoadAssetAsync<TextAsset>(fairyForm.AssetName);
+            var (dependencies, desc) = await parallel.FirstOfEach();
 
             UIPackage.AddPackage(desc.bytes, "", LoadFunc);
 
