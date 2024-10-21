@@ -1,9 +1,10 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DEngine;
 
 namespace Game
 {
-    public class UniTaskParallel : IReference
+    public class UniTaskParallel : IReference, IDisposable
     {
         private readonly DEngineLinkedList<UniTask> m_Tasks = null;
 
@@ -23,15 +24,7 @@ namespace Game
             {
                 return;
             }
-
-            try
-            {
-                await UniTask.WhenAll(m_Tasks);
-            }
-            finally
-            {
-                ReferencePool.Release(this);
-            }
+            await UniTask.WhenAll(m_Tasks);
         }
 
         public static UniTaskParallel Creat()
@@ -39,7 +32,7 @@ namespace Game
             return ReferencePool.Acquire<UniTaskParallel>();
         }
 
-        
+
         public static UniTaskParallel Creat(params UniTask[] uniTasks)
         {
             var parallel = ReferencePool.Acquire<UniTaskParallel>();
@@ -50,11 +43,16 @@ namespace Game
 
             return parallel;
         }
-        
+
 
         public void Clear()
         {
             m_Tasks.Clear();
+        }
+
+        public void Dispose()
+        {
+            ReferencePool.Release(this);
         }
     }
 }

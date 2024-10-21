@@ -33,6 +33,7 @@ namespace Game.Editor.BuildPipeline
         {
             GameBuildHybridCLRWindow window = GetWindow<GameBuildHybridCLRWindow>("Build HybridCLR", true);
             window.minSize = new Vector2(900f, 600f);
+            window.Show();
         }
 
         private void Update()

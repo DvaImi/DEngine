@@ -57,6 +57,7 @@ namespace Game.Editor
         {
             var window = GetWindow<ResourceCollectorEditor>("资源收集器");
             window.minSize = new Vector2(1300f, 420f);
+            window.Show();
         }
 
 

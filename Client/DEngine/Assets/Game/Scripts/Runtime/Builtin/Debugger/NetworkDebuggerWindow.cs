@@ -58,14 +58,13 @@ namespace Game.Debugger
                 DrawItem("Heart Beat LastTime", m_Network.Heartbeat == null ? "0" : DateTimeOffset.FromUnixTimeMilliseconds(m_Network.Heartbeat.LastTime).DateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
 
                 GUILayout.Space(5);
-                GUILayout.Label("IP", GUILayout.Width(TitleWidth));
-                m_RemoteAddress = GUILayout.TextField(m_RemoteAddress);
-                GUILayout.Label("Port", GUILayout.Width(TitleWidth));
-                m_Port = GUILayout.TextField(m_Port);
-                GUILayout.Space(5);
-                if (GUILayout.Button("Connect"))
+                if (m_Network.Connected)
                 {
-                    m_Network.Connect(Utility.Text.Format("{0}:{1}", m_RemoteAddress, m_Port));
+                    DrawSendMessage();
+                }
+                else
+                {
+                    DrawConnect();
                 }
 
                 GUILayout.Space(5);
@@ -75,6 +74,25 @@ namespace Game.Debugger
                 }
             }
             GUILayout.EndVertical();
+        }
+
+
+        private void DrawConnect()
+        {
+            GUILayout.Label("IP", GUILayout.Width(TitleWidth));
+            m_RemoteAddress = GUILayout.TextField(m_RemoteAddress);
+            GUILayout.Label("Port", GUILayout.Width(TitleWidth));
+            m_Port = GUILayout.TextField(m_Port);
+            GUILayout.Space(5);
+            if (GUILayout.Button("Connect"))
+            {
+                m_Network.Connect(Utility.Text.Format("{0}:{1}", m_RemoteAddress, m_Port));
+            }
+        }
+
+        private void DrawSendMessage()
+        {
+           
         }
 
         private static void DrawItem(string title, string content)
