@@ -12,7 +12,7 @@ namespace Game
         /// <summary>
         /// 加载资源（可等待）
         /// </summary>
-        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent self, string assetName, CancellationToken cancellationToken = default) where T : Object
+        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent self, string assetName, CancellationToken? cancellationToken = null) where T : Object
         {
             UniTaskCompletionSource<T> loadAssetTcs = new UniTaskCompletionSource<T>();
 
@@ -21,7 +21,7 @@ namespace Game
 
             void LoadAssetFailureCallback(string localAssetName, LoadResourceStatus status, string errorMessage, object userData)
             {
-                if (cancellationToken.IsCancellationRequested)
+                if (cancellationToken?.IsCancellationRequested is true)
                 {
                     loadAssetTcs.TrySetCanceled();
                     return;
@@ -33,7 +33,7 @@ namespace Game
 
             void LoadAssetSuccessCallback(string localAssetName, object asset, float duration, object userData)
             {
-                if (cancellationToken.IsCancellationRequested)
+                if (cancellationToken?.IsCancellationRequested is true)
                 {
                     loadAssetTcs.TrySetCanceled();
                     return;
@@ -79,13 +79,13 @@ namespace Game
         /// <param name="binaryAssetName"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static UniTask<byte[]> LoadBinaryAsync(this ResourceComponent self, string binaryAssetName, CancellationToken cancellationToken = default)
+        public static UniTask<byte[]> LoadBinaryAsync(this ResourceComponent self, string binaryAssetName, CancellationToken? cancellationToken = null)
         {
             UniTaskCompletionSource<byte[]> loadAssetTcs = new UniTaskCompletionSource<byte[]>();
 
             void LoadAssetSuccessCallback(string localBinaryAssetName, byte[] binaryBytes, float duration, object userData)
             {
-                if (cancellationToken.IsCancellationRequested)
+                if (cancellationToken?.IsCancellationRequested is true)
                 {
                     loadAssetTcs.TrySetCanceled();
                 }
