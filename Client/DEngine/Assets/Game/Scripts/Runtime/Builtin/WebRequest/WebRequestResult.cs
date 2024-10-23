@@ -1,4 +1,5 @@
-﻿using DEngine;
+﻿using System.IO;
+using DEngine;
 
 namespace Game
 {
@@ -11,14 +12,17 @@ namespace Game
         /// web请求 返回数据
         /// </summary>
         public byte[] Bytes { get; private set; }
+
         /// <summary>
         /// 是否请求成功
         /// </summary>
         public bool Success { get; private set; }
+
         /// <summary>
         /// 错误信息
         /// </summary>
         public string ErrorMessage { get; private set; }
+
         /// <summary>
         /// 自定义数据
         /// </summary>
@@ -38,6 +42,12 @@ namespace Game
         {
             return Success ? Utility.Converter.GetString(Bytes) : ErrorMessage;
         }
+
+        public T ToObject<T>()
+        {
+            return Success ? Utility.Json.ToObject<T>(Utility.Converter.GetString(Bytes)) : throw new InvalidDataException();
+        }
+
         public void Clear()
         {
             Bytes = null;
