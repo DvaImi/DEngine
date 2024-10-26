@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
+using DEngine;
 using DEngine.Fsm;
 using DEngine.Procedure;
 using DEngine.Runtime;
@@ -16,10 +17,8 @@ namespace Game
     /// </summary>
     public class ProcedureLoadAssemblies : ProcedureBase
     {
-        private readonly List<UniTask<Assembly>> m_PatchTask = new();
-
-        private static bool s_MetadataForAOTLoaded = false;
-        private static bool s_UpdateAssembliesLoaded = false;
+        private static bool s_MetadataForAOTLoaded;
+        private static bool s_UpdateAssembliesLoaded;
         private UniTask m_LoadAssembliesTask;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
@@ -31,7 +30,7 @@ namespace Game
             }
 
             LoadMetadataForAOTAssembly();
-            m_LoadAssembliesTask = LoadUpdateAssemblies(procedureOwner);
+            m_LoadAssembliesTask = LoadUpdateAssemblies();
         }
 
 
@@ -95,7 +94,9 @@ namespace Game
             foreach (var fileInfo in aotVersion.FileInfos)
             {
                 byte[] bytes = GameEntry.Resource.LoadBinarySegmentFromFileSystem(aotVersion.FileSystem, (int)fileInfo.Value.Offset, fileInfo.Value.Length);
-                LoadImageErrorCode code = RuntimeApi.LoadMetadataForAOTAssembly(bytes, HomologousImageMode.SuperSet);
+                byte[] hashBytes = Utility.Converter.GetBytes(fileInfo.Value.HashCode);
+                bytes = Utility.Encryption.GetXorBytes(bytes, hashBytes);
+                var code = RuntimeApi.LoadMetadataForAOTAssembly(bytes, HomologousImageMode.SuperSet);
                 if (code == LoadImageErrorCode.OK)
                 {
                     Log.Info($"AOTMetadata :{fileInfo.Key} Load Success");
@@ -112,8 +113,7 @@ namespace Game
         /// <summary>
         /// 加载热更程序集
         /// </summary>
-        /// <param name="procedureOwner"></param>
-        private async UniTask LoadUpdateAssemblies(IFsm<IProcedureManager> procedureOwner)
+        private static async UniTask LoadUpdateAssemblies()
         {
             if (s_UpdateAssembliesLoaded)
             {
@@ -127,13 +127,22 @@ namespace Game
                 return;
             }
 
-            m_PatchTask.Clear();
-            foreach (var bytes in patchVersion.FileInfos.Select(fileInfo => GameEntry.Resource.LoadBinarySegmentFromFileSystem(patchVersion.FileSystem, (int)fileInfo.Value.Offset, fileInfo.Value.Length)))
+            using var parallel = UniTaskParallel.Creat();
+            foreach (var fileInfo in patchVersion.FileInfos)
             {
-                m_PatchTask.Add(UniTask.RunOnThreadPool(() => Assembly.Load(bytes)));
+                byte[] data = GameEntry.Resource.LoadBinarySegmentFromFileSystem(patchVersion.FileSystem, (int)fileInfo.Value.Offset, fileInfo.Value.Length);
+                byte[] hashBytes = Utility.Converter.GetBytes(fileInfo.Value.HashCode);
+                data = Utility.Encryption.GetXorBytes(data, hashBytes);
+                parallel.Push(UniTask.RunOnThreadPool(LoadAssembly));
+                continue;
+
+                void LoadAssembly()
+                {
+                    Assembly.Load(data);
+                }
             }
 
-            await UniTask.WhenAll(m_PatchTask);
+            await parallel.WhenAll();
             Log.Info("HotUpdateAssemblies Load Complete.");
         }
     }

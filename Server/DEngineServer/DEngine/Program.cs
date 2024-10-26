@@ -2,7 +2,7 @@
 using Fantasy.Helper;
 using Fantasy.Platform.Net;
 
-Fantasy.Log.Register(new Fantasy.NLog("Server"));
+Log.Register(new Fantasy.NLog("Server"));
 
 var machineConfigText = await FileHelper.GetTextByRelativePath("../Config/Json/Server/MachineConfigData.Json");
 var processConfigText = await FileHelper.GetTextByRelativePath("../Config/Json/Server/ProcessConfigData.Json");
@@ -16,4 +16,4 @@ ProcessConfigData.Initialize(processConfigText);
 WorldConfigData.Initialize(worldConfigText);
 SceneConfigData.Initialize(sceneConfigText);
 
-await Entry.Start(Fantasy.AssemblyHelper.Assemblies);
+await Entry.Start(AssemblyHelper.Assemblies);

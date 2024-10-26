@@ -25,6 +25,11 @@ namespace Game.Editor.FileSystem
         public List<string> FileFullPaths = null;
 
         /// <summary>
+        /// 是否使用加密
+        /// </summary>
+        public bool UseEncryption = false;
+
+        /// <summary>
         /// 是否是有效资源
         /// </summary>
         public bool IsValid => !string.IsNullOrWhiteSpace(FileSystem) && AssetDatabase.IsValidFolder(OutPutFolderPath);

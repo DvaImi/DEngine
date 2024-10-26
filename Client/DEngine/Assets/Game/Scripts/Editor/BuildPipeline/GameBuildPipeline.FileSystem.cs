@@ -38,13 +38,11 @@ namespace Game.Editor.BuildPipeline
                 return;
             }
 
-            GameUtility.IO.Delete(fileSystemData.OutPutFolderPath);
-            
             string fullPath = Utility.Path.GetRegularCombinePath(fileSystemData.OutPutFolderPath, fileSystemData.FileSystem + ".bytes");
             string versionPath = Utility.Path.GetRegularCombinePath(fileSystemData.OutPutFolderPath, fileSystemData.FileSystem + "Version.bytes");
             try
             {
-                var version = new FileSystemTaskRunner().Execute(fullPath, fileSystemData.FileFullPaths);
+                var version = new FileSystemTaskRunner().Execute(fullPath, fileSystemData.FileFullPaths, fileSystemData.UseEncryption);
                 File.WriteAllBytes(versionPath, FileSystemDataVersion.ToBson(version));
                 File.WriteAllText(versionPath.Replace(".bytes", ".json"), FileSystemDataVersion.ToJson(version));
             }

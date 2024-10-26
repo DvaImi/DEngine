@@ -19,6 +19,7 @@ namespace Game.Editor.Toolbar
         private static readonly Dictionary<string, MethodInfo> RightCachedMethods = new();
         private static readonly Dictionary<string, MethodInfo> LeftToolbarCustomGUI = new();
         private static readonly Dictionary<string, MethodInfo> RightToolbarCustomGUI = new();
+        private static Stack<MethodInfo> RunMethodInfos = new();
 
         static EditorToolbarExtension()
         {
@@ -172,6 +173,18 @@ namespace Game.Editor.Toolbar
                     }
                 }
             }
+
+            while (RunMethodInfos.Count > 0)
+            {
+                try
+                {
+                    RunMethodInfos.Pop().Invoke(null, null);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
+            }
         }
 
         private static void OnGUILeftHandler()
@@ -190,7 +203,14 @@ namespace Game.Editor.Toolbar
                     {
                         if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
                         {
-                            CallMethod(0, menu.MenuName);
+                            if (LeftCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
+                            {
+                                RunMethodInfos.Push(methodInfo);
+                            }
+                            else
+                            {
+                                Debug.LogError($"Error calling method: {menu.MenuName}.");
+                            }
                         }
                     }
 
@@ -217,7 +237,14 @@ namespace Game.Editor.Toolbar
                     {
                         if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
                         {
-                            CallMethod(1, menu.MenuName);
+                            if (RightCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
+                            {
+                                RunMethodInfos.Push(methodInfo);
+                            }
+                            else
+                            {
+                                Debug.LogError($"Error calling method: {menu.MenuName}.");
+                            }
                         }
                     }
 
@@ -227,47 +254,6 @@ namespace Game.Editor.Toolbar
                 GUILayout.Space(10F);
             }
             GUILayout.EndHorizontal();
-        }
-
-        private static void CallMethod(int align, string menuName)
-        {
-            if (align == 0)
-            {
-                if (LeftCachedMethods.TryGetValue(menuName, out var methodInfo))
-                {
-                    try
-                    {
-                        methodInfo.Invoke(null, null);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogException(e);
-                        Debug.LogError($"Error calling method: {menuName}. Exception: {e.Message}");
-                    }
-
-                    return;
-                }
-            }
-            else
-            {
-                if (RightCachedMethods.TryGetValue(menuName, out var methodInfo))
-                {
-                    try
-                    {
-                        methodInfo.Invoke(null, null);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogException(e);
-                        Debug.LogError($"Error calling method: {menuName}. Exception: {e.Message}");
-                    }
-
-                    return;
-                }
-            }
-
-
-            Debug.LogWarning($"Method not found for menu name: {menuName}");
         }
 
         private static void CallCustomGUIMethod(int align, string menuName)

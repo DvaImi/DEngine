@@ -69,10 +69,11 @@ namespace Game.FileSystem
     [Serializable]
     public class FileInfo
     {
-        public FileInfo(long offset, int length)
+        public FileInfo(long offset, int length, int hashCode)
         {
             Offset = offset;
             Length = length;
+            HashCode = hashCode;
         }
 
         /// <summary>
@@ -84,5 +85,10 @@ namespace Game.FileSystem
         /// 文件长度
         /// </summary>
         public int Length { get; set; }
+
+        /// <summary>
+        /// 资源哈希值
+        /// </summary>
+        public int HashCode { get; set; }
     }
 }
