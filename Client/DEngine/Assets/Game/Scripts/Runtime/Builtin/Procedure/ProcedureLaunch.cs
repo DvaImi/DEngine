@@ -13,7 +13,6 @@ namespace Game
             GameEntry.BuiltinData.InitLanguageSettings();
             BuiltinDataComponent.InitCurrentVariant();
             BuiltinDataComponent.InitSoundSettings();
-            BuiltinDataComponent.InitDebugger();
             BuiltinDataComponent.InitExtensionEventHandle();
         }
 

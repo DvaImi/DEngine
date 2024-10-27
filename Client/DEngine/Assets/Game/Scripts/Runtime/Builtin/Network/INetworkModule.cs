@@ -1,137 +1,60 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Cysharp.Threading.Tasks;
-using Fantasy.Async;
 using Fantasy.Network;
-using Fantasy.Network.Interface;
 
 namespace Game.Network
 {
     public interface INetworkModule : IGameModule
     {
         /// <summary>
-        /// 是否已连接。
+        /// 获取网络频道数量。
         /// </summary>
-        bool Connected { get; }
+        int NetworkChannelCount { get; }
 
         /// <summary>
-        /// 远程主机地址
+        /// 检查是否存在网络频道。
         /// </summary>
-        string RemoteAddress { get; }
+        /// <param name="name">网络频道名称。</param>
+        /// <returns>是否存在网络频道。</returns>
+        bool HasNetworkChannel(string name);
 
         /// <summary>
-        /// 获取网络延迟
+        /// 获取网络频道。
         /// </summary>
-        int Ping { get; }
+        /// <param name="name">网络频道名称。</param>
+        /// <returns>要获取的网络频道。</returns>
+        INetworkChannel GetNetworkChannel(string name);
 
         /// <summary>
-        /// 
+        /// 获取所有网络频道。
         /// </summary>
-        int SendMessageCount { get; }
+        /// <returns>所有网络频道。</returns>
+        INetworkChannel[] GetAllNetworkChannels();
 
         /// <summary>
-        /// 
+        /// 获取所有网络频道。
         /// </summary>
-        int SentRouteMessageCount { get; }
+        /// <param name="results">所有网络频道。</param>
+        void GetAllNetworkChannels(List<INetworkChannel> results);
 
         /// <summary>
-        /// 
+        /// 创建网络频道。
         /// </summary>
-        int CallRequestCount { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        int CallRouteRequestCount { get; }
-
-        /// <summary>
-        /// 网络会话对象
-        /// </summary>
-        Session Session { get; }
-
-        /// <summary>
-        /// 网络会话心跳包组件
-        /// </summary>
-        SessionHeartbeatComponent Heartbeat { get; }
-
-        /// <summary>
-        /// 获取网络协议类型
-        /// </summary>
-        NetworkProtocolType ServiceType { get; }
-
-        /// <summary>
-        /// 初始化网络模块
-        /// </summary>
-        /// <param name="autoReconnect"></param>
-        /// <param name="maxReconnects"><see cref="autoReconnect"/> 设置为true的时候，重连的次数，默认为 5</param>
-        /// <param name="assemblies">装载的程序集</param>
-        void Initialize(bool autoReconnect, int maxReconnects = 5, params Assembly[] assemblies);
-
-        /// <summary>
-        /// 连接到远程主机
-        /// </summary>
-        /// <param name="remoteAddress"></param>
-        /// <param name="serviceType"></param>
-        /// <param name="isHttps"></param>
-        /// <param name="connectTimeout"></param>
-        /// <param name="interval"></param>
-        /// <param name="timeOut"></param>
-        /// <param name="timeOutInterval"></param>
-        UniTask Connect(string remoteAddress, NetworkProtocolType serviceType = NetworkProtocolType.KCP, bool isHttps = false, int connectTimeout = 5000, int interval = 2000, int timeOut = 2000, int timeOutInterval = 3000);
-
-        /// <summary>
-        /// 发送消息到会话。
-        /// </summary>
-        /// <param name="message">要发送的消息。</param>
-        void Send(IMessage message);
-
-        /// <summary>
-        /// 发送消息到会话。
-        /// </summary>
-        /// <param name="messages">要发送的消息列表。</param>
-        void Send(IList<IMessage> messages);
-
-        /// <summary>
-        /// 发送消息到会话。
-        /// </summary>
-        /// <param name="messages">要发送的消息列表。</param>
-        void Send(params IMessage[] messages);
-
-        /// <summary>
-        /// 发送路由消息到会话。
-        /// </summary>
-        /// <param name="routeMessage">要发送的路由消息。</param>
-        /// <param name="rpcId">RPC 标识符。</param>
-        /// <param name="routeId">路由标识符。</param>
-        void Send(IRouteMessage routeMessage, uint rpcId = 0, long routeId = 0);
-
-        /// <summary>
-        /// 发送路由消息到会话。
-        /// </summary>
-        /// <param name="routeMessages">要发送的路由消息。</param>
-        /// <param name="rpcId">RPC 标识符。</param>
-        /// <param name="routeId">路由标识符。</param>
-        void Send(IList<IRouteMessage> routeMessages, uint rpcId = 0, long routeId = 0);
-
-        /// <summary>
-        /// 调用请求并等待响应。
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="routeId"></param>
+        /// <param name="name">网络频道名称</param>
+        /// <param name="serviceType">网络协议类型</param>
+        /// <param name="isHttps">是否是https</param>
+        /// <param name="connectTimeout">连接超时时间</param>
+        /// <param name="heartbeatInterval">心跳间隔</param>
+        /// <param name="heartbeatTimeOut">心跳超时时间</param>
+        /// <param name="heartbeatTimeOutInterval">心跳超时间隔</param>
         /// <returns></returns>
-        FTask<IResponse> Call(IRequest request, long routeId = 0);
+        INetworkChannel CreateNetworkChannel(string name, NetworkProtocolType serviceType, bool isHttps = false, int connectTimeout = 5000, int heartbeatInterval = 2000, int heartbeatTimeOut = 2000, int heartbeatTimeOutInterval = 3000);
 
         /// <summary>
-        /// 调用请求并等待响应。
+        /// 销毁网络频道。
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="routeId"></param>
-        /// <returns></returns>
-        FTask<IResponse> Call(IRouteRequest request, long routeId = 0);
-
-        /// <summary>
-        /// 释放会话
-        /// </summary>
-        void Disconnect();
+        /// <param name="name">网络频道名称。</param>
+        /// <returns>是否销毁网络频道成功。</returns>
+        bool DestroyNetworkChannel(string name);
     }
 }

@@ -7,14 +7,23 @@ namespace Game.Editor.NetworkProtocol
 {
     public static class GenerateNetworkProtocol
     {
-        [MenuItem("Fantasy/Generate", priority = 100)]
-        [EditorToolbarMenu("Generate Protocol", 0, 20)]
-        public static void GenerateAll()
+        [MenuItem("Fantasy/Generate/Protocol", priority = 100)]
+        public static void GenerateProtocol()
         {
 #if UNITY_EDITOR_WIN
             EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/Tools/NetworkProtocol/Run.bat"));
 #elif UNITY_EDITOR_OSX
             EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/Tools/NetworkProtocol/Run.sh"));
+#endif
+        }
+
+        [MenuItem("Fantasy/Generate/DataTable", priority = 200)]
+        public static void GenerateDataTable()
+        {
+#if UNITY_EDITOR_WIN
+            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/Tools/ConfigTable/Run.bat"));
+#elif UNITY_EDITOR_OSX
+            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/Tools/ConfigTable/Run.sh"));
 #endif
         }
 

@@ -73,15 +73,6 @@ namespace Game
             Log.Info("Init sound settings complete.");
         }
 
-        public static void InitDebugger()
-        {
-            ChangeLanguageDebuggerWindow changeLanguage = new ChangeLanguageDebuggerWindow();
-            GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", changeLanguage);
-
-            CommonLineDebuggerWindow commonLine = new CommonLineDebuggerWindow();
-            GameEntry.Debugger.RegisterDebuggerWindow("Other/CommonLine", commonLine);
-        }
-
         public static void InitExtensionEventHandle()
         {
             UniTaskExtension.Unsubscribe();

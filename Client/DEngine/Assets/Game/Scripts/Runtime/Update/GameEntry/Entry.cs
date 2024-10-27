@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
+using Fantasy.Event;
+using Fantasy.Platform.Unity;
 using Game.Network;
-using Game.Timer;
 using Game.Update.DataTable;
 
 namespace Game.Update
@@ -7,12 +9,9 @@ namespace Game.Update
     /// <summary>
     /// 可更新入口
     /// </summary>
-    public static class Entry
+    public static partial class Entry
     {
-        /// <summary>
-        /// 获取计时器模块
-        /// </summary>
-        public static ITimerModule Timer { get; private set; }
+        public static Fantasy.Scene Scene { get; private set; }
 
         /// <summary>
         /// 获取网络模块。
@@ -31,7 +30,6 @@ namespace Game.Update
 
         public static void Initialize()
         {
-            Timer = GameEntry.GetModule<ITimerModule>();
             Network = GameEntry.GetModule<INetworkModule>();
             DataTable = GameEntry.GetModule<IDataTableProvider>();
             Luban = GameEntry.GetModule<ILubanDataProvider>();

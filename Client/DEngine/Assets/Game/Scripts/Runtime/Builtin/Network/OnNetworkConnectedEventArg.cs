@@ -1,18 +1,12 @@
-using DEngine.Event;
-
 namespace Game.Network
 {
-    public class OnNetworkConnectedEventArg : GameEventArgs
+    public struct OnNetworkConnectedEventArg
     {
-        public static int EventId = typeof(OnNetworkConnectedEventArg).GetHashCode();
+        public INetworkChannel NetworkChannel { get; private set; }
 
-        public override int Id
+        public OnNetworkConnectedEventArg(INetworkChannel networkChannel)
         {
-            get => EventId;
-        }
-
-        public override void Clear()
-        {
+            NetworkChannel = networkChannel;
         }
     }
 }

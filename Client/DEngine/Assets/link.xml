@@ -1,7 +1,12 @@
 <linker>
   <assembly fullname="Assembly-CSharp">
+    <type fullname="DisStripCodeHelper" preserve="all"/>
+    <type fullname="AOTGenericReferences" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails+" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1+MonoScriptData" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=50" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=152" preserve="all"/>
   </assembly>
   <assembly fullname="Fantasy.Unity">
     <type fullname="Microsoft.CodeAnalysis.EmbeddedAttribute" preserve="all"/>
@@ -1216,8 +1221,6 @@
   </assembly>
   <assembly fullname="Game.Runtime.Builtin">
     <type fullname="++f__AnonymousType0`2" preserve="all"/>
-    <type fullname="DisStripCodeHelper" preserve="all"/>
-    <type fullname="AOTGenericReferences" preserve="all"/>
     <type fullname="VariantHelper" preserve="all"/>
     <type fullname="AsyncBarrier" preserve="all"/>
     <type fullname="GameUtility" preserve="all"/>
@@ -1254,19 +1257,20 @@
     <type fullname="Game.AwaitDataWrap`1" preserve="all"/>
     <type fullname="Game.DownLoadResult" preserve="all"/>
     <type fullname="Game.UniTaskExtension" preserve="all"/>
+    <type fullname="Game.UniTaskParallel" preserve="all"/>
+    <type fullname="Game.UniTaskParallel`1" preserve="all"/>
+    <type fullname="Game.UniTaskParallel`2" preserve="all"/>
     <type fullname="Game.BuiltinAssetUtility" preserve="all"/>
     <type fullname="Game.ColorType" preserve="all"/>
+    <type fullname="Game.GameProfiler" preserve="all"/>
     <type fullname="Game.GameUtility" preserve="all"/>
     <type fullname="Game.PermutationAndCombination`1" preserve="all"/>
     <type fullname="Game.WebRequestExtension" preserve="all"/>
     <type fullname="Game.WebRequestResult" preserve="all"/>
-    <type fullname="Game.Timer.CancellationToken" preserve="all"/>
-    <type fullname="Game.Timer.ITimerModule" preserve="all"/>
-    <type fullname="Game.Timer.TimerModule" preserve="all"/>
-    <type fullname="Game.Timer.TimerTimeUtility" preserve="all"/>
     <type fullname="Game.Sound.SoundExtension" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper" preserve="all"/>
     <type fullname="Game.Resource.GameAssetVersionLoader" preserve="all"/>
+    <type fullname="Game.Network.INetworkChannel" preserve="all"/>
     <type fullname="Game.Network.INetworkModule" preserve="all"/>
     <type fullname="Game.Network.NetworkExtension" preserve="all"/>
     <type fullname="Game.Network.NetworkLog" preserve="all"/>
@@ -1281,9 +1285,12 @@
     <type fullname="Game.Localization.TranslatedText" preserve="all"/>
     <type fullname="Game.Event.GameEventArgsBase`1" preserve="all"/>
     <type fullname="Game.EventSystem.EventExtension" preserve="all"/>
-    <type fullname="Game.EventSystem.FantasyEventSystemExtension" preserve="all"/>
     <type fullname="Game.FileSystem.FileSystemDataVersion" preserve="all"/>
     <type fullname="Game.FileSystem.FileInfo" preserve="all"/>
+    <type fullname="Game.Debugger.ChangeLanguageDebuggerWindow" preserve="all"/>
+    <type fullname="Game.Debugger.CommonLineDebuggerWindow" preserve="all"/>
+    <type fullname="Game.Debugger.NetworkDebuggerWindow" preserve="all"/>
+    <type fullname="Game.Debugger.ScrollableDebuggerWindowBase" preserve="all"/>
     <type fullname="Game.CommandLine.Command" preserve="all"/>
     <type fullname="Game.CommandLine.CommandAttribute" preserve="all"/>
     <type fullname="Game.CommandLine.CommandCreator" preserve="all"/>
@@ -1297,9 +1304,6 @@
     <type fullname="Game.CommandLine.ParameterParser" preserve="all"/>
     <type fullname="Game.CommandLine.QueryBuffer" preserve="all"/>
     <type fullname="Game.CommandLine.CLIUtils" preserve="all"/>
-    <type fullname="Game.Debugger.ChangeLanguageDebuggerWindow" preserve="all"/>
-    <type fullname="Game.Debugger.CommonLineDebuggerWindow" preserve="all"/>
-    <type fullname="Game.Debugger.NetworkDebuggerWindow" preserve="all"/>
     <type fullname="+PrivateImplementationDetails+" preserve="all"/>
     <type fullname="AsyncBarrier++SignalAndWaitAsync+d__3" preserve="all"/>
     <type fullname="GameUtility+Time" preserve="all"/>
@@ -1315,44 +1319,48 @@
     <type fullname="Game.ProcedureCheckResources+++c__DisplayClass6_0" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion++CheckVersionList+d__5" preserve="all"/>
-    <type fullname="Game.ProcedureLoadAssemblies+++c__DisplayClass7_0" preserve="all"/>
-    <type fullname="Game.ProcedureLoadAssemblies+++c__DisplayClass7_1" preserve="all"/>
-    <type fullname="Game.ProcedureLoadAssemblies++LoadUpdateAssemblies+d__7" preserve="all"/>
+    <type fullname="Game.ProcedureLoadAssemblies+++c__DisplayClass6_0" preserve="all"/>
+    <type fullname="Game.ProcedureLoadAssemblies++LoadUpdateAssemblies+d__6" preserve="all"/>
     <type fullname="Game.ProcedureLoadHotUpdateEntry++HotfixLauncher+d__1" preserve="all"/>
     <type fullname="Game.ProcedureUpdateResources+UpdateLengthData" preserve="all"/>
     <type fullname="Game.UniTaskExtension+++c__DisplayClass20_0`1" preserve="all"/>
     <type fullname="Game.UniTaskExtension+++c__DisplayClass22_0" preserve="all"/>
+    <type fullname="Game.UniTaskExtension+++c__DisplayClass40_0" preserve="all"/>
+    <type fullname="Game.UniTaskExtension+++c__DisplayClass41_0" preserve="all"/>
+    <type fullname="Game.UniTaskExtension+++c__DisplayClass42_0" preserve="all"/>
+    <type fullname="Game.UniTaskExtension+++c__DisplayClass43_0" preserve="all"/>
+    <type fullname="Game.UniTaskExtension+++c__DisplayClass44_0" preserve="all"/>
+    <type fullname="Game.UniTaskExtension+++c__DisplayClass45_0" preserve="all"/>
     <type fullname="Game.UniTaskExtension++LoadAssetsAsync+d__21`1" preserve="all"/>
     <type fullname="Game.UniTaskExtension++LoadDataTableAsync+d__4" preserve="all"/>
     <type fullname="Game.UniTaskExtension++LoadDataTableAsync+d__5`1" preserve="all"/>
     <type fullname="Game.UniTaskExtension++LoadDictionaryAsync+d__9" preserve="all"/>
     <type fullname="Game.UniTaskExtension++LoadSceneAsync+d__25" preserve="all"/>
     <type fullname="Game.UniTaskExtension++UnLoadSceneAsync+d__28" preserve="all"/>
+    <type fullname="Game.UniTaskParallel++WhenAll+d__3" preserve="all"/>
+    <type fullname="Game.UniTaskParallel`1++WhenAll+d__3" preserve="all"/>
+    <type fullname="Game.UniTaskParallel`2++AllResultsFirstOfT2+d__7" preserve="all"/>
+    <type fullname="Game.UniTaskParallel`2++FirstOfEach+d__6" preserve="all"/>
+    <type fullname="Game.UniTaskParallel`2++FirstOfT1AllOfT2+d__8" preserve="all"/>
+    <type fullname="Game.UniTaskParallel`2++WhenAll+d__9" preserve="all"/>
     <type fullname="Game.GameUtility+Array" preserve="all"/>
     <type fullname="Game.GameUtility+Bson" preserve="all"/>
     <type fullname="Game.GameUtility+IO" preserve="all"/>
     <type fullname="Game.GameUtility+String" preserve="all"/>
     <type fullname="Game.GameUtility+Web" preserve="all"/>
     <type fullname="Game.WebRequestExtension++AddHeadWebRequest+d__0" preserve="all"/>
-    <type fullname="Game.Timer.TimerModule+PausedTimer" preserve="all"/>
-    <type fullname="Game.Timer.TimerModule+Timer" preserve="all"/>
-    <type fullname="Game.Timer.TimerModule+TimerType" preserve="all"/>
-    <type fullname="Game.Timer.TimerModule+++c__DisplayClass22_0" preserve="all"/>
-    <type fullname="Game.Timer.TimerModule++FrameAsync+d__23" preserve="all"/>
-    <type fullname="Game.Timer.TimerModule++OnceTimerAsync+d__22" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++FadeToVolume+d__61" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++PauseCo+d__60" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++StopCo+d__59" preserve="all"/>
     <type fullname="Game.Resource.GameAssetVersionLoader++LoadAsync+d__0" preserve="all"/>
-    <type fullname="Game.Network.NetworkModule++Connect+d__44" preserve="all"/>
-    <type fullname="Game.EventSystem.FantasyEventSystemExtension++PublishAsync+d__2`1" preserve="all"/>
-    <type fullname="Game.EventSystem.FantasyEventSystemExtension++PublishAsync+d__3`1" preserve="all"/>
+    <type fullname="Game.Network.NetworkModule+NetworkChannel" preserve="all"/>
     <type fullname="Game.CommandLine.CommandCreator++CollectCommands+d__0`1" preserve="all"/>
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3388" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=7732" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3270" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=7459" preserve="all"/>
+    <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__44" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>

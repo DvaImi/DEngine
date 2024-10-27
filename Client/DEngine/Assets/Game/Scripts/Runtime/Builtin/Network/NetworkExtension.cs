@@ -1,4 +1,3 @@
-using Fantasy.Event;
 using Fantasy.Platform.Unity;
 using Fantasy.Serialize;
 
