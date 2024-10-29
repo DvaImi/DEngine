@@ -30,7 +30,7 @@ namespace Game.Editor.NetworkProtocol
         [MenuItem("Fantasy/Editor", priority = 101)]
         public static void EditorProtocol()
         {
-            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/DEngineServer/DEngineServer.sln"));
+            EditorUtility.OpenWithDefaultApp(Path.Combine(Application.dataPath, "../../../Server/Server/DEngineServer.sln"));
         }
 
         [MenuItem("Fantasy/Run", priority = 201)]

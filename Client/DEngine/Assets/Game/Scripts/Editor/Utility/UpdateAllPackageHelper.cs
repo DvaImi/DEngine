@@ -25,7 +25,15 @@ namespace Game.Editor
         public static void UpdatePackages()
         {
             string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
-            UpdatePackagesFromManifest(manifestPath);
+            try
+            {
+                UpdatePackagesFromManifest(manifestPath);
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
+                AssetDatabase.Refresh();
+            }
         }
 
         private static void UpdatePackagesFromManifest(string manifestPath)
@@ -99,6 +107,7 @@ namespace Game.Editor
                     Debug.LogError($"Failed to update package: {_addRequest.Error.message}");
                 }
 
+                _addRequest = null;
                 EditorApplication.update -= UpdatingProgressHandler;
                 UpdateNextPackage();
             }

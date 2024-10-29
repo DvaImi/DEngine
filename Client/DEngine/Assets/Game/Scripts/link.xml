@@ -8,6 +8,7 @@
     <type fullname="DEngine.DataTable.IDataRow" preserve="all" />
     <type fullname="DEngine.DataTable.IDataTableManager" preserve="all" />
     <type fullname="DEngine.DataTable.IDataTable`1" preserve="all" />
+    <type fullname="DEngine.Debugger.IDebuggerWindow" preserve="all" />
     <type fullname="DEngine.Event.GameEventArgs" preserve="all" />
     <type fullname="DEngine.Fsm.FsmState`1" preserve="all" />
     <type fullname="DEngine.Fsm.IFsmManager" preserve="all" />
@@ -30,6 +31,7 @@
     <type fullname="DEngine.Runtime.BaseComponent" preserve="all" />
     <type fullname="DEngine.Runtime.DataRowBase" preserve="all" />
     <type fullname="DEngine.Runtime.DataTableComponent" preserve="all" />
+    <type fullname="DEngine.Runtime.DebuggerComponent" preserve="all" />
     <type fullname="DEngine.Runtime.Entity" preserve="all" />
     <type fullname="DEngine.Runtime.EntityComponent" preserve="all" />
     <type fullname="DEngine.Runtime.EntityLogic" preserve="all" />
@@ -52,7 +54,12 @@
     <type fullname="UnityExtension" preserve="all" />
   </assembly>
   <assembly fullname="Fantasy.Unity">
+    <type fullname="Fantasy.Async.AsyncFTaskMethodBuilder" preserve="all" />
+    <type fullname="Fantasy.Async.FTask" preserve="all" />
+    <type fullname="Fantasy.Entitas.Entity" preserve="all" />
     <type fullname="Fantasy.Entitas.MessagePoolComponent" preserve="all" />
+    <type fullname="Fantasy.Event.EventComponent" preserve="all" />
+    <type fullname="Fantasy.Event.EventSystem`1" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteMessage" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteRequest" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteResponse" preserve="all" />
@@ -66,6 +73,7 @@
     <type fullname="Fantasy.Network.Interface.IRouteMessage" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteRequest" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteResponse" preserve="all" />
+    <type fullname="Fantasy.Platform.Unity.OnSceneCreate" preserve="all" />
     <type fullname="Fantasy.Scene" preserve="all" />
     <type fullname="Fantasy.Serialize.AMessage" preserve="all" />
     <type fullname="Fantasy.Serialize.IProto" preserve="all" />
@@ -75,13 +83,15 @@
   </assembly>
   <assembly fullname="Game.Runtime.Builtin">
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
+    <type fullname="Game.Debugger.ChangeLanguageDebuggerWindow" preserve="all" />
+    <type fullname="Game.Debugger.CommonLineDebuggerWindow" preserve="all" />
+    <type fullname="Game.Debugger.NetworkDebuggerWindow" preserve="all" />
     <type fullname="Game.EventSubscriber" preserve="all" />
     <type fullname="Game.FileSystem.FileInfo" preserve="all" />
     <type fullname="Game.FileSystem.FileSystemDataVersion" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
     <type fullname="Game.IGameModule" preserve="all" />
     <type fullname="Game.Network.INetworkModule" preserve="all" />
-    <type fullname="Game.Timer.ITimerModule" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
   </assembly>
   <assembly fullname="Luban.Runtime">
