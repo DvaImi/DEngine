@@ -97,11 +97,13 @@ namespace Game.Editor.ResourceTools
 
                 Collection.Clear();
 
+                ResolveDuplicateAssetsHelper.ResolveDuplicateAssets(resourceEditorController);
                 AnalysisResourceFilters(collectorData);
-
                 int unknownAssetCount = resourceEditorController.RemoveUnknownAssets();
                 int unusedResourceCount = resourceEditorController.RemoveUnusedResources();
                 Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets and {1} unused resources has been removed.", unknownAssetCount, unusedResourceCount));
+                
+
                 resourceEditorController.Save();
                 Debug.Log(Collection.Save() ? "Refresh ResourceCollection.xml success" : "Refresh ResourceCollection.xml fail");
                 AssetDatabase.Refresh();

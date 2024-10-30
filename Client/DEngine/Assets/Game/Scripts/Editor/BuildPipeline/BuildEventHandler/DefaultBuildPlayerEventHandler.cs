@@ -17,6 +17,7 @@ namespace Game.Editor.BuildPipeline
             GameBuildPipeline.SaveHybridCLR();
             GameBuildPipeline.SaveBuildSetting();
             DEngineSetting.Save();
+            Fantasy.LinkXmlGenerator.GenerateLinkXml();
             AssetDatabase.Refresh();
         }
 
