@@ -73,6 +73,7 @@
     <type fullname="Fantasy.Network.Interface.IRouteMessage" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteRequest" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteResponse" preserve="all" />
+    <type fullname="Fantasy.Network.NetworkProtocolType" preserve="all" />
     <type fullname="Fantasy.Platform.Unity.OnSceneCreate" preserve="all" />
     <type fullname="Fantasy.Scene" preserve="all" />
     <type fullname="Fantasy.Serialize.AMessage" preserve="all" />
@@ -91,6 +92,7 @@
     <type fullname="Game.FileSystem.FileSystemDataVersion" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
     <type fullname="Game.IGameModule" preserve="all" />
+    <type fullname="Game.Network.INetworkChannel" preserve="all" />
     <type fullname="Game.Network.INetworkModule" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
   </assembly>

@@ -197,6 +197,7 @@
     <type fullname="Fantasy.MultiThreadScheduler" preserve="all"/>
     <type fullname="Fantasy.ThreadPoolScheduler" preserve="all"/>
     <type fullname="Fantasy.ThreadScheduler" preserve="all"/>
+    <type fullname="Fantasy.Serialize.BsonPackHelper" preserve="all"/>
     <type fullname="Fantasy.Serialize.ASerialize" preserve="all"/>
     <type fullname="Fantasy.Serialize.AMessage" preserve="all"/>
     <type fullname="Fantasy.Serialize.ISerialize" preserve="all"/>
@@ -540,10 +541,10 @@
     <type fullname="Fantasy.Pool.MultiThreadPool+++c__3`1" preserve="all"/>
     <type fullname="Fantasy.Pool.MultiThreadPool+++c__DisplayClass2_0" preserve="all"/>
     <type fullname="Fantasy.Platform.Unity.Entry++CreateScene+d__6" preserve="all"/>
-    <type fullname="Fantasy.Network.SessionHeartbeatComponent++RepeatedSend+d__17" preserve="all"/>
-    <type fullname="Fantasy.Network.TCP.TCPClientNetwork++ReadPipeDataAsync+d__19" preserve="all"/>
-    <type fullname="Fantasy.Network.TCP.TCPClientNetwork++ReceiveSocketAsync+d__18" preserve="all"/>
-    <type fullname="Fantasy.Network.TCP.TCPClientNetwork++Send+d__23" preserve="all"/>
+    <type fullname="Fantasy.Network.SessionHeartbeatComponent++RepeatedSend+d__16" preserve="all"/>
+    <type fullname="Fantasy.Network.TCP.TCPClientNetwork++ReadPipeDataAsync+d__20" preserve="all"/>
+    <type fullname="Fantasy.Network.TCP.TCPClientNetwork++ReceiveSocketAsync+d__19" preserve="all"/>
+    <type fullname="Fantasy.Network.TCP.TCPClientNetwork++Send+d__24" preserve="all"/>
     <type fullname="Fantasy.Network.KCP.KCPClientNetwork++ReadPipeDataAsync+d__42" preserve="all"/>
     <type fullname="Fantasy.Network.KCP.KCPClientNetwork++ReceiveSocketAsync+d__41" preserve="all"/>
     <type fullname="Fantasy.Network.Interface.Message`1++Handle+d__1" preserve="all"/>
@@ -645,8 +646,8 @@
     <type fullname="Fantasy.Assembly.AssemblySystem++get_ForEachAssembly+d__13" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=32" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=288" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=19602" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=28514" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=19639" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=28611" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+KeyCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+ValueCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeDictionary`2+KeyCollection+Enumerator" preserve="all"/>
@@ -1359,8 +1360,8 @@
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3270" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=7459" preserve="all"/>
-    <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__44" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=7463" preserve="all"/>
+    <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
