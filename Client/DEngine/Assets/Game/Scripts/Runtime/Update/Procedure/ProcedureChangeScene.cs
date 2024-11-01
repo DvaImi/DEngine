@@ -71,6 +71,7 @@ namespace Game.Update.Procedure
             }
 
             ChangeState(procedureOwner, m_NextProcedureType);
+            procedureOwner.RemoveData(UpdateConstant.ProceureConstant.NextProcedure);
         }
 
         private void OnLoadSceneSuccess(object sender, GameEventArgs e)

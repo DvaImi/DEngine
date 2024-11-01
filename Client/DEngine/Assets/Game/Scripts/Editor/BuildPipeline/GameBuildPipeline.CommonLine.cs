@@ -62,7 +62,7 @@ namespace Game.Editor.BuildPipeline
 
             if (eventHandler != null)
             {
-                Debug.Log("Execute build event handler 'OnPreprocessPlatform'...");
+                Debug.Log("Execute build event handler 'OnPostprocessAllPlatforms'...");
                 eventHandler.OnPostprocessAllPlatforms(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, DEngineSetting.Instance.BuildPlatforms, DEngineSetting.AppOutput);
             }
 
