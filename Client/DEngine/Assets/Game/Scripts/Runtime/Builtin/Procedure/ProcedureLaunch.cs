@@ -2,6 +2,7 @@
 using DEngine.Procedure;
 using DEngine.Resource;
 using DEngine.Runtime;
+using Game.Debugger;
 
 namespace Game
 {
@@ -14,6 +15,10 @@ namespace Game
             BuiltinDataComponent.InitCurrentVariant();
             BuiltinDataComponent.InitSoundSettings();
             BuiltinDataComponent.InitExtensionEventHandle();
+
+            GameEntry.Debugger.RegisterDebuggerWindow("Profiler/Network", new NetworkDebuggerWindow());
+            GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", new ChangeLanguageDebuggerWindow());
+            GameEntry.Debugger.RegisterDebuggerWindow("Other/CommonLine", new CommonLineDebuggerWindow());
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

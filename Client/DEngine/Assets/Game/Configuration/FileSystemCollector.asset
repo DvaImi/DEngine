@@ -17,13 +17,6 @@ MonoBehaviour:
     OutPutFolderPath: Assets/Game/Bundles/Configs
     FileFullPaths:
     - ../../Share/Luban/Client/output/Bin/TBItem.bytes
-    - Excels/Output/DataTable/Entity.bytes
-    - Excels/Output/DataTable/Music.bytes
-    - Excels/Output/DataTable/Scene.bytes
-    - Excels/Output/DataTable/Sound.bytes
-    - Excels/Output/DataTable/UIForm.bytes
-    - Excels/Output/DataTable/UIGroup.bytes
-    - Excels/Output/DataTable/UISound.bytes
     UseEncryption: 0
   - FileSystem: aot
     OutPutFolderPath: Assets/Game/Bundles/Assemblies

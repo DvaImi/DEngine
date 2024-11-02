@@ -18,14 +18,6 @@ namespace Game.Network
         public NetworkModule()
         {
             m_NetworkChannels = new Dictionary<string, INetworkChannel>();
-            Log.Register(new NetworkLog());
-            if (Entry.Scene == null)
-            {
-                Entry.Initialize(AppDomain.CurrentDomain.GetAssemblies());
-                Entry.CreateScene().Coroutine();
-            }
-
-            Log.Info("Init Network complete.");
         }
 
         public bool HasNetworkChannel(string name)

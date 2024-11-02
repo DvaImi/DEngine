@@ -68,7 +68,7 @@
         /// <returns></returns>
         public static string GetMusicAsset(string assetName, string suffix = "mp3")
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Musics/{0}.{1}", assetName, suffix);
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Sound/Musics/{0}.{1}", assetName, suffix);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@
         /// <returns></returns>
         public static string GetSoundAsset(string assetName, string suffix = "mp3")
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Sounds/{0}.{1}", assetName, suffix);
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Sound/Sounds/{0}.{1}", assetName, suffix);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@
         /// <returns></returns>
         public static string GetUISoundAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/UI/UISounds/{0}.mp3", assetName);
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Sound/UISounds/{0}.mp3", assetName);
         }
 
         /// <summary>

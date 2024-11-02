@@ -29,7 +29,7 @@ MonoBehaviour:
   ForceUpdateGame: 0
   HostURL: http://localhost
   HostingServicePort: 8899
-  InternalResourceVersion: 13
+  InternalResourceVersion: 42
   LatestGameVersion: 0.1.0
   InternalGameVersion: 0
   WindowsAppUrl: 

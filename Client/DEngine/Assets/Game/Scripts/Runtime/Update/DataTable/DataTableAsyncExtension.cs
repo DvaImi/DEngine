@@ -1,3 +1,4 @@
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using DEngine.DataTable;
 using DEngine.Runtime;
@@ -6,6 +7,26 @@ namespace Game.Update.DataTable
 {
     public static class DataTableAsyncExtension
     {
+        /// <summary>
+        /// 异步加载所有的数据表
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="userData"></param>
+        public static async UniTask LoadAllDataTableAsync(this DataTableComponent self, object userData = null)
+        {
+            using var parallel = UniTaskParallel<DataTableBase>.Creat();
+            var dataTableTypes = AssemblyUtility.GetTypes().Where(o => o.IsSubclassOf(typeof(DataRowBase)) && !o.IsAbstract);
+
+            foreach (var dataRowType in dataTableTypes)
+            {
+                string dataTableName = dataRowType.Name.Replace("DR", null);
+                var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName);
+                parallel.Push(self.LoadDataTableAsync(dataRowType, dataTableName, dataTableAssetName, userData));
+            }
+
+            await parallel.WhenAll();
+        }
+
         /// <summary>
         /// 异步加载数据表
         /// </summary>
@@ -36,7 +57,7 @@ namespace Game.Update.DataTable
                 return null;
             }
 
-            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName + "_table");
+            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName);
             return await self.LoadDataTableAsync(dataRowType, dataTableName, dataTableAssetName, userData);
         }
 
@@ -64,7 +85,7 @@ namespace Game.Update.DataTable
                 return null;
             }
 
-            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName, true);
+            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName);
             return await self.LoadDataTableAsync<T>(dataTableName, dataTableAssetName, userData);
         }
     }

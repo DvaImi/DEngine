@@ -13,6 +13,7 @@ namespace Game.Editor.BuildPipeline
 
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, Platform platforms, string outputDirectory)
         {
+            DEngine.Editor.BuildSettings.DefaultScenes();
             GeneratorDataTableCommonLine.GenerateAll();
             GameBuildPipeline.SaveHybridCLR();
             GameBuildPipeline.SaveBuildSetting();

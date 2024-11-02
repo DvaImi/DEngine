@@ -1,8 +1,13 @@
-﻿using DEngine;
+﻿using System.Reflection;
+using DEngine;
+using DEngine.Editor;
 using DEngine.Editor.ResourceTools;
+using DEngine.Resource;
+using Game.Editor.Toolbar;
 using UnityEditor;
-using UnityEditor.Compilation;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -51,6 +56,59 @@ namespace Game.Editor.BuildPipeline
         private static void DrawPlatform(Platform platform, string platformName)
         {
             SelectPlatform(platform, EditorGUILayout.ToggleLeft(platformName, IsPlatformSelected(platform)));
+        }
+
+        private static readonly string[] ResourceModeNames =
+        {
+            "EditorMode (编辑器模式)",
+            "Package (单机模式)",
+            "Updatable (预下载的可更新模式)",
+            "UpdatableWhilePlaying (使用时下载的可更新模式)"
+        };
+
+        [EditorToolbarMenu("SwitchResourceMode", 0, 1000, true)]
+        private static void SwitchResourceMode()
+        {
+            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            {
+                EditorGUILayout.Space(100);
+                var playModeIndex = (int)DEngineSetting.Instance.ResourceMode;
+                int selectedIndex = EditorGUILayout.Popup(playModeIndex, ResourceModeNames, GUILayout.Width(200));
+                if (selectedIndex != playModeIndex)
+                {
+                    Debug.Log($"更改编辑器资源运行模式 : {ResourceModeNames[selectedIndex]}");
+                    playModeIndex = selectedIndex;
+                    var baseComponent = Object.FindFirstObjectByType<DEngine.Runtime.BaseComponent>();
+                    var resourcesComponent = Object.FindFirstObjectByType<DEngine.Runtime.ResourceComponent>();
+                    if (baseComponent)
+                    {
+                        baseComponent.EditorResourceMode = selectedIndex <= 0;
+                        if (baseComponent.EditorResourceMode)
+                        {
+                            BuildSettings.AllScenes();
+                        }
+
+                        EditorTools.SaveAsset(baseComponent);
+                    }
+
+                    if (resourcesComponent)
+                    {
+                        if (selectedIndex > 0)
+                        {
+                            var fieldInfo = typeof(DEngine.Runtime.ResourceComponent).GetField("m_ResourceMode", BindingFlags.Instance | BindingFlags.NonPublic);
+                            if (fieldInfo != null)
+                            {
+                                fieldInfo.SetValue(resourcesComponent, (ResourceMode)playModeIndex);
+                                EditorTools.SaveAsset(resourcesComponent);
+                            }
+                        }
+                    }
+
+                    DEngineSetting.Instance.ResourceMode = (ResourceMode)playModeIndex;
+                    DEngineSetting.Save();
+                }
+            }
+            EditorGUI.EndDisabledGroup();
         }
 
         #endregion

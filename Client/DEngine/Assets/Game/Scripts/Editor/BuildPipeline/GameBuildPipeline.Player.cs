@@ -68,6 +68,11 @@ namespace Game.Editor.BuildPipeline
 
         private static bool BuildPlayer(Platform platform)
         {
+            return BuildPlayer(platform, DEngineSetting.AppOutput);
+        }
+
+        private static bool BuildPlayer(Platform platform, string outputDirectory)
+        {
             if (!IsPlatformSelected(platform))
             {
                 return true;
@@ -79,7 +84,7 @@ namespace Game.Editor.BuildPipeline
             }
 
 
-            BuildReport report = BuildApplication(platform);
+            BuildReport report = BuildApplication(platform, outputDirectory);
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
@@ -94,35 +99,16 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static void SaveBuiltinData(Platform platform)
-        {
-            BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
-            string platformPath = GetPlatformPath(platform);
-            string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
-            if (File.Exists(versionFilePath))
-            {
-                JObject checkVersionInfo = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(versionFilePath));
-                builtinData.BuildInfo = new BuildInfo
-                {
-                    LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
-                    CheckVersionUrl = checkVersionInfo["CheckVersionUrl"]!.Value<string>()
-                };
-                EditorUtility.SetDirty(builtinData);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
-        }
-
-        private static BuildReport BuildApplication(Platform platform)
+        private static BuildReport BuildApplication(Platform platform, string outputDirectory)
         {
             BuildTarget target = GetBuildTarget(platform);
             string outputExtension = GetFileExtensionForPlatform(target);
-            if (!Directory.Exists(DEngineSetting.AppOutput))
+            if (!Directory.Exists(outputDirectory))
             {
-                GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.AppOutput);
+                GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
             }
 
-            string locationPath = Path.Combine(DEngineSetting.AppOutput, platform.ToString());
+            string locationPath = Path.Combine(outputDirectory, Application.version, platform.ToString());
             GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
             BuildPlayerOptions buildPlayerOptions = new()
             {
@@ -189,6 +175,25 @@ namespace Game.Editor.BuildPipeline
             catch (Exception e)
             {
                 Debug.LogError("Error generating XML file: " + e.Message);
+            }
+        }
+
+        public static void SaveBuiltinData(Platform platform)
+        {
+            BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
+            string platformPath = GetPlatformPath(platform);
+            string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
+            if (File.Exists(versionFilePath))
+            {
+                JObject checkVersionInfo = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(versionFilePath));
+                builtinData.BuildInfo = new BuildInfo
+                {
+                    LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
+                    CheckVersionUrl = checkVersionInfo["CheckVersionUrl"]!.Value<string>()
+                };
+                EditorUtility.SetDirty(builtinData);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
         }
     }

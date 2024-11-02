@@ -1,6 +1,7 @@
 ﻿using System;
 using DEngine;
 using DEngine.Editor.ResourceTools;
+using DEngine.Resource;
 using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +14,12 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("一键打包", 1, 100)]
         private static void AutomatedBuild()
         {
+            if (DEngineSetting.Instance.ResourceMode == ResourceMode.Unspecified)
+            {
+                Debug.LogWarning("ResourceMode is Unspecified");
+                return;
+            }
+
             EditorTools.CloseAllCustomEditorWindows();
             IBuildPlayerEventHandler eventHandler = GetBuildPlayerEventHandler();
             bool watchResult = eventHandler is not { ContinueOnFailure: true };

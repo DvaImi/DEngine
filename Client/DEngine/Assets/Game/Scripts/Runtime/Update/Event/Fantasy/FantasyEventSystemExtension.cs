@@ -1,5 +1,4 @@
 using Fantasy.Async;
-using Fantasy.Event;
 
 namespace Game.Update.EventSystem
 {
@@ -11,9 +10,9 @@ namespace Game.Update.EventSystem
         /// <typeparam name="TEventData">事件数据类型（值类型）。</typeparam>
         /// <param name="self"></param>
         /// <param name="eventData">事件数据实例。</param>
-        public static void Publish<TEventData>(this EventComponent self, TEventData eventData) where TEventData : struct
+        public static void Publish<TEventData>(this Fantasy.Scene self, TEventData eventData) where TEventData : struct
         {
-            Entry.Scene.EventComponent.Publish(eventData);
+            self.EventComponent.Publish(eventData);
         }
 
         /// <summary>
@@ -23,9 +22,9 @@ namespace Game.Update.EventSystem
         /// <param name="self"></param>
         /// <param name="eventData">事件数据实例。</param>
         /// <param name="isDisposed">是否释放事件数据。</param>
-        public static void Publish<TEventData>(this EventComponent self, TEventData eventData, bool isDisposed) where TEventData : Fantasy.Entitas.Entity
+        public static void Publish<TEventData>(this Fantasy.Scene self, TEventData eventData, bool isDisposed) where TEventData : Fantasy.Entitas.Entity
         {
-            Entry.Scene.EventComponent.Publish(eventData, isDisposed);
+            self.EventComponent.Publish(eventData, isDisposed);
         }
 
         /// <summary>
@@ -35,9 +34,9 @@ namespace Game.Update.EventSystem
         /// <param name="self"></param>
         /// <param name="eventData">事件数据实例。</param>
         /// <returns>表示异步操作的任务。</returns>
-        public static async FTask PublishAsync<TEventData>(this EventComponent self, TEventData eventData) where TEventData : struct
+        public static async FTask PublishAsync<TEventData>(this Fantasy.Scene self, TEventData eventData) where TEventData : struct
         {
-            await Entry.Scene.EventComponent.PublishAsync(eventData);
+            await self.EventComponent.PublishAsync(eventData);
         }
 
         /// <summary>
@@ -48,9 +47,9 @@ namespace Game.Update.EventSystem
         /// <param name="eventData">事件数据实例。</param>
         /// <param name="isDisposed">是否释放事件数据。</param>
         /// <returns>表示异步操作的任务。</returns>
-        public static async FTask PublishAsync<TEventData>(this EventComponent self, TEventData eventData, bool isDisposed) where TEventData : Fantasy.Entitas.Entity
+        public static async FTask PublishAsync<TEventData>(this Fantasy.Scene self, TEventData eventData, bool isDisposed) where TEventData : Fantasy.Entitas.Entity
         {
-            await Entry.Scene.EventComponent.PublishAsync(eventData, isDisposed);
+            await self.EventComponent.PublishAsync(eventData, isDisposed);
         }
     }
 }

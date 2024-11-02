@@ -34,7 +34,7 @@ namespace Game.Update
                 return null;
             }
 
-            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName + "_table", true);
+            var dataTableAssetName = UpdateAssetUtility.GetDataTableAsset(dataTableName);
 
             var name = splitNames.Length > 1 ? splitNames[1] : null;
             var dataTable = self.CreateDataTable(dataRowType, name);
