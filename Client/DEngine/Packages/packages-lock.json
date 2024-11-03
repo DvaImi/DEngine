@@ -35,7 +35,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "a8fa5927c302f24dc9acad06910ac61880dd26a1"
+      "hash": "a81d506462d3bb137891b98ab950c0003fb16e85"
     },
     "com.fantasy.unity": {
       "version": "https://github.com/qq362946/Fantasy.Unity.git",
