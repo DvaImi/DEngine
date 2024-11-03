@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using Cysharp.Threading.Tasks;
+using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
+using DEngine.Runtime;
 using Game.Editor.BuildPipeline;
 using Game.Editor.ResourceTools;
 using Newtonsoft.Json;
@@ -15,12 +17,11 @@ namespace Game.Editor
 {
     public sealed class GameResourceBuildEventHandler : IBuildEventHandler
     {
-        public bool ContinueOnFailure
-        {
-            get { return true; }
-        }
+        public bool ContinueOnFailure => true;
 
-        private Dictionary<string, string> m_WaitUploadFileNames = new();
+        private readonly Dictionary<string, string> m_WaitUploadFileNames = new();
+        private const string FullPartToFind = "Full/";
+        private VersionInfo m_VersionInfo = null;
 
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, int internalResourceVersion, Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
@@ -40,8 +41,8 @@ namespace Game.Editor
             DEngineSetting.Instance.InternalResourceVersion = internalResourceVersion;
             DEngineSetting.Save();
             m_WaitUploadFileNames.Clear();
+            m_VersionInfo = null;
         }
-
 
         public void OnPreprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath)
         {
@@ -60,7 +61,7 @@ namespace Game.Editor
 
             string platformPath = GameBuildPipeline.GetPlatformPath(platform);
 
-            VersionInfo versionInfo = new()
+            m_VersionInfo = new VersionInfo
             {
                 ForceUpdateGame = DEngineSetting.Instance.ForceUpdateGame,
                 UpdatePrefixUri = GameBuildPipeline.GetUpdatePrefixUri(platform),
@@ -70,22 +71,18 @@ namespace Game.Editor
                 VersionListLength = versionListLength,
                 VersionListHashCode = versionListHashCode,
                 VersionListCompressedLength = versionListCompressedLength,
-                VersionListCompressedHashCode = versionListCompressedHashCode
+                VersionListCompressedHashCode = versionListCompressedHashCode,
+                UseResourcePatchPack = false,
+                PatchResourcePackName = null,
+                PatchTotalCompressedLength = 0
             };
-            string versionJson = JsonConvert.SerializeObject(versionInfo);
-            string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "Version.json");
-            File.WriteAllText(versionFilePath, versionJson);
-            if (DEngineSetting.Instance.EnableHostingService)
-            {
-                m_WaitUploadFileNames.Add(versionFilePath, platformPath + "Version.json");
-            }
 
-            JObject checkVersionInfo = new JObject()
+            var checkVersionInfo = new JObject()
             {
                 ["CheckVersionUrl"] = GameBuildPipeline.GetCheckVersionUrl(platform)
             };
-            versionJson = JsonConvert.SerializeObject(checkVersionInfo);
-            versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
+            var versionJson = JsonConvert.SerializeObject(checkVersionInfo);
+            var versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
             File.WriteAllText(versionFilePath, versionJson);
             GameBuildPipeline.SaveBuiltinData(platform);
         }
@@ -100,32 +97,23 @@ namespace Game.Editor
             };
 
             GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);
-
-            if (!DEngineSetting.Instance.EnableHostingService)
+            if (m_VersionInfo == null)
             {
+                Debug.LogError("Version info is null");
                 return;
             }
 
-            const string partToFind = "Full/";
-
-            string[] fileNames = Directory.GetFiles(outputFullPath, "*", SearchOption.AllDirectories);
-            foreach (string fileName in fileNames)
+            string platformPath = GameBuildPipeline.GetPlatformPath(platform);
+            if (DEngineSetting.Instance.BuildResourcePack && ProcessResourcePatchPack(platform))
             {
-                string bundlesOutput = DEngineSetting.BundlesOutput;
-                string relativePath = fileName[bundlesOutput.Length..];
-
-                int indexOfFull = relativePath.IndexOf(partToFind, StringComparison.Ordinal);
-
-                if (indexOfFull >= 0)
-                {
-                    string destFileName = relativePath[(indexOfFull + partToFind.Length)..];
-                    m_WaitUploadFileNames.Add(fileName, destFileName);
-                }
-                else
-                {
-                    Debug.LogError("'Full/' not found in the path.");
-                }
+                Debug.Log("Build resource patch pack success.");
             }
+            else
+            {
+                PrecessLocalHost(outputFullPath);
+            }
+
+            m_WaitUploadFileNames.Add(SaveVersionInfo(platformPath), platformPath + "Version.json");
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, int internalResourceVersion, Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
@@ -134,12 +122,103 @@ namespace Game.Editor
 
             if (!DEngineSetting.Instance.EnableHostingService)
             {
+                EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
                 return;
             }
 
             InternalUpload().Forget();
         }
 
+        private string SaveVersionInfo(string platformPath)
+        {
+            string versionJson = JsonConvert.SerializeObject(m_VersionInfo);
+            string versionFolder = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/", DEngineSetting.BundlesOutput, m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalResourceVersion)).FullName);
+            string versionFilePath = Utility.Path.GetRegularCombinePath(versionFolder, platformPath + "Version.json");
+            File.WriteAllText(versionFilePath, versionJson);
+            return versionFilePath;
+        }
+
+        private void PrecessLocalHost(string outputFullPath)
+        {
+            if (DEngineSetting.Instance.EnableHostingService)
+            {
+                string[] fileNames = Directory.GetFiles(outputFullPath, "*", SearchOption.AllDirectories);
+                foreach (string fileName in fileNames)
+                {
+                    string bundlesOutput = DEngineSetting.BundlesOutput;
+                    string relativePath = fileName[bundlesOutput.Length..];
+
+                    int indexOfFull = relativePath.IndexOf(FullPartToFind, StringComparison.Ordinal);
+
+                    if (indexOfFull >= 0)
+                    {
+                        string destFileName = relativePath[(indexOfFull + FullPartToFind.Length)..];
+                        m_WaitUploadFileNames.Add(fileName, destFileName);
+                    }
+                    else
+                    {
+                        Debug.LogError("'Full/' not found in the path.");
+                    }
+                }
+            }
+        }
+
+        private bool ProcessResourcePatchPack(Platform platform)
+        {
+            string platformPath = GameBuildPipeline.GetPlatformPath(platform);
+            if (DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.BuildResourcePack)
+            {
+                ResourcePackBuilderController controller = new();
+                if (controller.Load())
+                {
+                    controller.Platform = platform;
+                    var versionNames = controller.GetVersionNames();
+                    if (versionNames.Length < 2)
+                    {
+                        Debug.LogWarning("No version was found in the specified working directory and platform.");
+                        DEngineSetting.Instance.BuildResourcePack = false;
+                        DEngineSetting.Save();
+                        return false;
+                    }
+
+                    controller.BackupDiff = controller.BackupVersion = true;
+                    controller.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
+                    controller.RefreshCompressionHelper();
+                    string targetVersion = versionNames[^1];
+                    string sourceVersion = versionNames[^2];
+                    if (controller.BuildResourcePack(sourceVersion, targetVersion))
+                    {
+                        Debug.LogFormat("Build Resource Pack {0}==>{1} Success", sourceVersion, targetVersion);
+
+                        // Patch
+                        string searchPattern = Utility.Text.Format("{0}-{1}-{2}.*.block", "DEngineResourcePack", sourceVersion, targetVersion);
+                        string[] files = Directory.GetFiles(controller.OutputPath, searchPattern);
+                        if (files.Length > 0)
+                        {
+                            FileInfo fileInfo = new(files[0]);
+                            m_VersionInfo.UseResourcePatchPack = true;
+                            m_VersionInfo.PatchResourcePackName = fileInfo.Name;
+                            m_VersionInfo.PatchTotalCompressedLength = fileInfo.Length;
+                            string destFileName = Utility.Path.GetRegularCombinePath(targetVersion, platformPath, fileInfo.FullName[controller.OutputPath.Length..]);
+                            m_WaitUploadFileNames.Add(fileInfo.FullName, destFileName);
+                        }
+
+                        //Version
+                        var targetDirectoryInfo = new DirectoryInfo(Utility.Text.Format("{0}/{1}-{2}-{3}", controller.OutputPath, "DEngineResourcePack", sourceVersion, targetVersion));
+                        var targetVersionListFiles = targetDirectoryInfo.GetFiles("RemoteVersionList.*.block", SearchOption.TopDirectoryOnly);
+                        if (targetVersionListFiles.Length > 0)
+                        {
+                            var destFileName = Utility.Path.GetRegularCombinePath(targetVersion, platformPath, targetVersionListFiles[0].Name);
+                            m_WaitUploadFileNames.Add(targetVersionListFiles[0].FullName, destFileName);
+                        }
+                    }
+
+                    return false;
+                }
+            }
+
+            return false;
+        }
 
         private async UniTask InternalUpload()
         {
@@ -157,6 +236,7 @@ namespace Game.Editor
 
             Debug.Log($"Upload To {DEngineSetting.Instance.HostURL} complete...");
             HostingServiceManager.StopService();
+            EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
         }
     }
 }

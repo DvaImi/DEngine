@@ -7,7 +7,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using DEngine.Editor;
 using DEngine.Resource;
 using Game.Editor.ResourceTools;
 using UnityEditor;
@@ -71,6 +70,8 @@ namespace Game.Editor.BuildPipeline
                     m_HostingServiceTypeName = null;
                 }
             }
+
+            DEngineSetting.Instance.BuildResourcePack = DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.InternalResourceVersion > 1;
 
             if (!Directory.Exists(DEngineSetting.AppOutput))
             {
@@ -173,6 +174,20 @@ namespace Game.Editor.BuildPipeline
                     {
                         DEngineSetting.Instance.ForceUpdateGame = forceUpdateGame;
                     }
+
+                    GUI.enabled = DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.InternalResourceVersion > 1;
+                    if (!GUI.enabled && DEngineSetting.Instance.BuildResourcePack)
+                    {
+                        DEngineSetting.Instance.BuildResourcePack = false;
+                        DEngineSetting.Save();
+                    }
+                    bool buildResourcePack = EditorGUILayout.Toggle("构建补丁包", DEngineSetting.Instance.BuildResourcePack);
+                    if (!buildResourcePack.Equals(DEngineSetting.Instance.BuildResourcePack))
+                    {
+                        DEngineSetting.Instance.BuildResourcePack = buildResourcePack;
+                    }
+
+                    GUI.enabled = true;
                 }
 
                 EditorGUILayout.EndHorizontal();
@@ -221,8 +236,8 @@ namespace Game.Editor.BuildPipeline
                     DEngineSetting.Instance.HostURL = EditorGUILayout.TextField("网络CDN地址", DEngineSetting.Instance.HostURL);
                     DEngineSetting.Instance.HostingServicePort = EditorGUILayout.IntField("网络CDN地址端口号", DEngineSetting.Instance.HostingServicePort);
                     GUI.enabled = false;
-                    EditorGUILayout.TextField("资源版本地址", GameBuildPipeline.GetCheckVersionUrl());
-                    EditorGUILayout.TextField("资源下载地址", GameBuildPipeline.GetUpdatePrefixUri());
+                    EditorGUILayout.TextField("资源版本地址格式", GameBuildPipeline.GetCheckVersionUrlFormat());
+                    EditorGUILayout.TextField("资源下载地址格式", GameBuildPipeline.GetUpdatePrefixUriFormat());
                     GUI.enabled = true;
                     DEngineSetting.Instance.InternalGameVersion = EditorGUILayout.IntField("内部游戏版本号", DEngineSetting.Instance.InternalGameVersion);
                     DEngineSetting.Instance.WindowsAppUrl = EditorGUILayout.TextField("Windows下载应用地址", DEngineSetting.Instance.WindowsAppUrl);

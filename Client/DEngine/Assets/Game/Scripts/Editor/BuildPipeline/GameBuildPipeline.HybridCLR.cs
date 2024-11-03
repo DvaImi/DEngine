@@ -17,11 +17,17 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("AOT Generic", 1, 0)]
         public static void GenerateStripedAOT()
         {
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Cannot generate striped aot because editor is compiling.");
+                return;
+            }
+            AssetDatabase.Refresh();
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             StripAOTDllCommand.GenerateStripedAOTDlls();
             AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
             CopyAOTDllAssets(buildTarget);
-            
+
             var aot = FileSystemCollector.Instance.Get("aot");
             if (aot == null)
             {
@@ -34,6 +40,12 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("Compile", 1, 1)]
         public static void CompileUpdateDll()
         {
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Cannot compile updated assemblies because editor is compiling.");
+                return;
+            }
+            AssetDatabase.Refresh();
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             CompileDllCommand.CompileDll(buildTarget);
             CopyUpdateDllAssets(buildTarget);

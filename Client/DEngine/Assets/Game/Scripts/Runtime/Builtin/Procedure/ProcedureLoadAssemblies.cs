@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using DEngine;
@@ -15,7 +13,7 @@ namespace Game
     /// <summary>
     /// 加载程序集流程
     /// </summary>
-    public class ProcedureLoadAssemblies : ProcedureBase
+    public class ProcedureLoadAssemblies : GameProcedureBase
     {
         private static bool s_MetadataForAOTLoaded;
         private static bool s_UpdateAssembliesLoaded;

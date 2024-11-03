@@ -17,7 +17,7 @@ namespace Game
     /// <summary>
     /// 使用可更新模式更新所有资源流程
     /// </summary>
-    public class ProcedureUpdateResources : ProcedureBase
+    public class ProcedureUpdateResources : GameProcedureBase
     {
         private bool m_UpdateResourcesComplete = false;
         private int m_UpdateCount = 0;
@@ -48,7 +48,7 @@ namespace Game
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)
         {
-            if (m_UpdateResourceForm != null)
+            if (m_UpdateResourceForm)
             {
                 Object.Destroy(m_UpdateResourceForm.gameObject);
                 m_UpdateResourceForm = null;
@@ -71,11 +71,7 @@ namespace Game
                 return;
             }
 
-#if ENABLE_HYBRIDCLR&& !UNITY_EDITOR
-            ChangeState<ProcedureLoadAssemblies>(procedureOwner);
-#else
-            ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
-#endif
+            ProcessAssembliesProcedure(procedureOwner);
         }
 
         private void StartUpdateResources()

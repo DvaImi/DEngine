@@ -5,6 +5,7 @@ using DEngine.Runtime;
 using Game.Debugger;
 using Game.Sound;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game
 {
@@ -15,6 +16,12 @@ namespace Game
         private NativeDialogForm m_NativeDialogForm;
 
         public BuiltinData Builtin => m_BuiltinData;
+
+        [SerializeField, Header("是否强制检测版本"), Tooltip("对于偏单机但是也有资源热更需求的项目。当玩家在无网络的时候，我们又不希望玩家卡在资源更新步骤而不能正常游戏。所以当玩家本地网络有问题的时候，我们可以跳过资源更新的步骤")]
+        private bool forceCheckVersion = true;
+
+        public bool ForceCheckVersion => forceCheckVersion;
+
 
         public void InitLanguageSettings()
         {

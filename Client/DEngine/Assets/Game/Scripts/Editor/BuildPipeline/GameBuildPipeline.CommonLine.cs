@@ -14,12 +14,19 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("一键打包", 1, 100)]
         private static void AutomatedBuild()
         {
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Cannot build because editor is compiling.");
+                return;
+            }
+
             if (DEngineSetting.Instance.ResourceMode == ResourceMode.Unspecified)
             {
                 Debug.LogWarning("ResourceMode is Unspecified");
                 return;
             }
 
+            AssetDatabase.Refresh();
             EditorTools.CloseAllCustomEditorWindows();
             IBuildPlayerEventHandler eventHandler = GetBuildPlayerEventHandler();
             bool watchResult = eventHandler is not { ContinueOnFailure: true };

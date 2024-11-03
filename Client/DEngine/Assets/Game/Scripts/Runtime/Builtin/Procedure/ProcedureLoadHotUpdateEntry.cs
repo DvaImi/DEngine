@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class ProcedureLoadHotUpdateEntry : ProcedureBase
+    public class ProcedureLoadHotUpdateEntry : GameProcedureBase
     {
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {

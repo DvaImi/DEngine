@@ -6,7 +6,7 @@ using Game.Debugger;
 
 namespace Game
 {
-    public class ProcedureLaunch : ProcedureBase
+    public class ProcedureLaunch : GameProcedureBase
     {
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {

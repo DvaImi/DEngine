@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using DEngine.Resource;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,20 +13,22 @@ namespace Game.Editor.ResourceTools
 
         public static string HostingServicePath { get; } = DEngine.Utility.Text.Format("{0}/{1}", DEngineSetting.BundlesOutput, "HostingService");
 
+
         static HostingServiceManager()
         {
-            if (!DEngineSetting.Instance.EnableHostingService)
+            EditorApplication.quitting -= OnEditorQuit;
+            EditorApplication.quitting += OnEditorQuit;
+        }
+
+        [InitializeOnEnterPlayMode]
+        public static void StartService()
+        {
+            if (DEngineSetting.Instance.ResourceMode < ResourceMode.Updatable)
             {
                 return;
             }
 
-            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-            EditorApplication.quitting += OnEditorQuit;
-        }
-
-        public static void StartService()
-        {
-            if (!DEngineSetting.Instance.EnableHostingService || s_HostingService?.IsListening == true)
+            if (!DEngineSetting.Instance.EnableHostingService || IsListening)
             {
                 return;
             }
@@ -66,9 +69,6 @@ namespace Game.Editor.ResourceTools
             {
                 s_HostingService.StopService();
             }
-
-            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
-            EditorApplication.quitting -= OnEditorQuit;
         }
 
         public static async UniTask UploadFile(string filePath, string relativePath)
@@ -78,7 +78,7 @@ namespace Game.Editor.ResourceTools
                 return;
             }
 
-            if (s_HostingService == null || !s_HostingService.IsListening)
+            if (s_HostingService is not { IsListening: true })
             {
                 return;
             }
@@ -90,28 +90,6 @@ namespace Game.Editor.ResourceTools
             catch (Exception ex)
             {
                 Debug.LogError($"Failed to upload file: {ex.Message}");
-            }
-        }
-
-        private static void OnPlayModeStateChanged(PlayModeStateChange mode)
-        {
-            if (!DEngineSetting.Instance.EnableHostingService)
-            {
-                return;
-            }
-
-            switch (mode)
-            {
-                case PlayModeStateChange.EnteredEditMode:
-                case PlayModeStateChange.ExitingEditMode:
-                case PlayModeStateChange.ExitingPlayMode:
-                    StopService();
-                    break;
-                case PlayModeStateChange.EnteredPlayMode:
-                    StartService();
-                    break;
-                default:
-                    return;
             }
         }
 

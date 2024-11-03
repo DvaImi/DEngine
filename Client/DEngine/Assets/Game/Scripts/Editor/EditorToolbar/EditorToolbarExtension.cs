@@ -189,71 +189,78 @@ namespace Game.Editor.Toolbar
 
         private static void OnGUILeftHandler()
         {
-            GUILayout.BeginHorizontal();
+            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                GUILayout.Space(15F);
-                for (var i = 0; i < LeftMenu.Count; i++)
+                GUILayout.BeginHorizontal();
                 {
-                    var menu = LeftMenu[i];
-                    if (menu.UseCustomGUI)
+                    GUILayout.Space(15F);
+                    for (var i = 0; i < LeftMenu.Count; i++)
                     {
-                        CallCustomGUIMethod(0, menu.MenuName);
-                    }
-                    else
-                    {
-                        if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
+                        var menu = LeftMenu[i];
+                        if (menu.UseCustomGUI)
                         {
-                            if (LeftCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
+                            CallCustomGUIMethod(0, menu.MenuName);
+                        }
+                        else
+                        {
+                            if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
                             {
-                                RunMethodInfos.Push(methodInfo);
-                            }
-                            else
-                            {
-                                Debug.LogError($"Error calling method: {menu.MenuName}.");
+                                if (LeftCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
+                                {
+                                    RunMethodInfos.Push(methodInfo);
+                                }
+                                else
+                                {
+                                    Debug.LogError($"Error calling method: {menu.MenuName}.");
+                                }
                             }
                         }
+
+                        GUILayout.Space(10F);
                     }
-
-                    GUILayout.Space(10F);
                 }
+                GUILayout.EndHorizontal();
             }
-
-            GUILayout.EndHorizontal();
+            EditorGUI.EndDisabledGroup();
         }
 
         private static void OnGUIRightHandler()
         {
-            GUILayout.BeginHorizontal();
+            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                GUILayout.Space(15F);
-                for (var i = 0; i < RightMenu.Count; i++)
+                GUILayout.BeginHorizontal();
                 {
-                    var menu = RightMenu[i];
-                    if (menu.UseCustomGUI)
+                    GUILayout.Space(15F);
+                    for (var i = 0; i < RightMenu.Count; i++)
                     {
-                        CallCustomGUIMethod(1, menu.MenuName);
-                    }
-                    else
-                    {
-                        if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
+                        var menu = RightMenu[i];
+                        if (menu.UseCustomGUI)
                         {
-                            if (RightCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
+                            CallCustomGUIMethod(1, menu.MenuName);
+                        }
+                        else
+                        {
+                            if (GUILayout.Button(menu.MenuName, EditorStyles.toolbarButton))
                             {
-                                RunMethodInfos.Push(methodInfo);
-                            }
-                            else
-                            {
-                                Debug.LogError($"Error calling method: {menu.MenuName}.");
+                                if (RightCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
+                                {
+                                    RunMethodInfos.Push(methodInfo);
+                                }
+                                else
+                                {
+                                    Debug.LogError($"Error calling method: {menu.MenuName}.");
+                                }
                             }
                         }
+
+                        GUILayout.Space(10F);
                     }
 
                     GUILayout.Space(10F);
                 }
-
-                GUILayout.Space(10F);
+                GUILayout.EndHorizontal();
             }
-            GUILayout.EndHorizontal();
+            EditorGUI.EndDisabledGroup();
         }
 
         private static void CallCustomGUIMethod(int align, string menuName)

@@ -32,8 +32,15 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("Build Resource", 1, 3)]
         public static bool BuildResource()
         {
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Can't build resource because editor is compiling.");
+                return false;
+            }
+
+            AssetDatabase.Refresh();
             bool isSuccess = BuildResource(DEngineSetting.Instance.BuildPlatforms, DEngineSetting.Instance.ForceRebuildAssetBundle);
-            if (isSuccess)
+            if (isSuccess && DEngineSetting.Instance.EnableHostingService == false)
             {
                 EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
             }

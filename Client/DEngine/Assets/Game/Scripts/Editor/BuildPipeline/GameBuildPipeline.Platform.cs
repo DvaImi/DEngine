@@ -51,6 +51,7 @@ namespace Game.Editor.BuildPipeline
         {
             SelectPlatform(platform, EditorGUILayout.ToggleLeft(platformName, IsPlatformSelected(platform)));
         }
+
         #endregion
 
         public static Platform GetPlatform(BuildTarget target)
@@ -106,7 +107,8 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static string GetCheckVersionUrl()
+        
+        public static string GetCheckVersionUrlFormat()
         {
             return Utility.Text.Format("{0}:{1}/{{Platform}}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort);
         }
@@ -116,7 +118,7 @@ namespace Game.Editor.BuildPipeline
             return Utility.Text.Format("{0}:{1}/{2}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, GetPlatformPath(platform));
         }
 
-        public static string GetUpdatePrefixUri()
+        public static string GetUpdatePrefixUriFormat()
         {
             return Utility.Text.Format("{0}:{1}/{2}.{3}/{{Platform}}", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, DEngineSetting.Instance.LatestGameVersion, DEngineSetting.Instance.InternalResourceVersion);
         }

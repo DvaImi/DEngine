@@ -8,7 +8,7 @@ namespace Game
     /// <summary>
     /// 使用可更新模式更新版本资源列表流程
     /// </summary>
-    public class ProcedureUpdateVersionList : ProcedureBase
+    public class ProcedureUpdateVersionList : GameProcedureBase
     {
         private bool m_UpdateVersionComplete = false;
         private UpdateVersionListCallbacks m_UpdateVersionListCallbacks = null;

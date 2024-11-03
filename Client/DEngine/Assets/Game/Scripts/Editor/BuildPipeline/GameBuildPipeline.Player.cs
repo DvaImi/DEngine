@@ -19,8 +19,14 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("BuildPlayer", 1, 10)]
         public static bool BuildPlayer()
         {
-            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Cannot build player because editor is compiling.");
+                return false;
+            }
 
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            AssetDatabase.Refresh();
             var isSuccess = BuildPlayer(Platform.Windows);
 
             if (isSuccess)

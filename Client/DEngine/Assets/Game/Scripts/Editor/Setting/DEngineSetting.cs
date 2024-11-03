@@ -90,6 +90,11 @@ namespace Game.Editor
         public bool ForceUpdateGame = false;
 
         /// <summary>
+        /// 构建补丁包
+        /// </summary>
+        public bool BuildResourcePack = false;
+
+        /// <summary>
         /// 服务器地址
         /// </summary>
         public string HostURL = "http://localhost";
