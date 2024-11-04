@@ -44,6 +44,7 @@ namespace Game
             {
                 // 可更新模式
                 Log.Info("Updatable resource mode detected.");
+                Log.Info(GameEntry.BuiltinData.ForceCheckVersion ? "Current updatable resource mode enforces version check." : "Current updatable resource mode does not enforce version check.");
                 ChangeState<ProcedureCheckVersion>(procedureOwner);
             }
         }

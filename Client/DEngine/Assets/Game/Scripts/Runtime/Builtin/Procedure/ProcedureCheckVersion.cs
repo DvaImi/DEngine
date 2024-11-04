@@ -37,15 +37,13 @@ namespace Game
                         ConfirmText = "Quit",
                         OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                     });
+                    return;
                 }
-                else
+                
+                if (TryUseLastLocalVersionResource())
                 {
-                    if (TryUseLastLocalVersionResource())
-                    {
-                        return;
-                    }
+                    return;
                 }
-
                 return;
             }
 
@@ -55,8 +53,10 @@ namespace Game
         private bool TryUseLastLocalVersionResource()
         {
             Log.Info("Try to use the latest local resource version.");
-            if (GameEntry.Setting.HasSetting(InternalResourceVersionKey) && GameEntry.Setting.GetInt(InternalResourceVersionKey) > 0)
+            int internalResourceVersion = GameEntry.Setting.GetInt(InternalResourceVersionKey);
+            if (GameEntry.Setting.HasSetting(InternalResourceVersionKey) && internalResourceVersion > 0)
             {
+                m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
                 m_CheckVersionComplete = true;
                 return true;
             }
