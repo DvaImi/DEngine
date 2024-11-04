@@ -157,12 +157,11 @@ namespace Game.Editor.BuildPipeline
         }
 
 
-        [EditorToolbarMenu(nameof(SwitchResourceMode), 0, 1000, true)]
-        private static void SwitchResourceMode()
+        [EditorToolbarMenu(nameof(SwitchResourceMode), 1, -1, true)]
+        public static void SwitchResourceMode()
         {
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                EditorGUILayout.Space(100);
                 var playModeIndex = (int)DEngineSetting.Instance.ResourceMode;
                 int selectedIndex = EditorGUILayout.Popup(playModeIndex, ResourceModeNames, GUILayout.Width(200));
                 if (selectedIndex != playModeIndex)
