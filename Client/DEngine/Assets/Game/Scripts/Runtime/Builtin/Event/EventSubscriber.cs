@@ -6,19 +6,9 @@ namespace Game
 {
     public class EventSubscriber : IReference
     {
-        private DEngineMultiDictionary<int, EventHandler<GameEventArgs>> dicEventHandler = new DEngineMultiDictionary<int, EventHandler<GameEventArgs>>();
+        private readonly DEngineMultiDictionary<int, EventHandler<GameEventArgs>> m_DicEventHandler = new();
 
-        public object Owner
-        {
-            get;
-            private set;
-        }
-
-        public EventSubscriber()
-        {
-            dicEventHandler = new DEngineMultiDictionary<int, EventHandler<GameEventArgs>>();
-            Owner = null;
-        }
+        public object Owner { get; private set; }
 
         public void Subscribe(int id, EventHandler<GameEventArgs> handler)
         {
@@ -27,13 +17,13 @@ namespace Game
                 throw new Exception("Event handler is invalid.");
             }
 
-            dicEventHandler.Add(id, handler);
+            m_DicEventHandler.Add(id, handler);
             GameEntry.Event.Subscribe(id, handler);
         }
 
         public void UnSubscribe(int id, EventHandler<GameEventArgs> handler)
         {
-            if (!dicEventHandler.Remove(id, handler))
+            if (!m_DicEventHandler.Remove(id, handler))
             {
                 throw new Exception(Utility.Text.Format("Event '{0}' not exists specified handler.", id.ToString()));
             }
@@ -43,12 +33,12 @@ namespace Game
 
         public void UnSubscribeAll()
         {
-            if (dicEventHandler == null)
+            if (m_DicEventHandler == null)
             {
                 return;
             }
 
-            foreach (var item in dicEventHandler)
+            foreach (var item in m_DicEventHandler)
             {
                 foreach (var eventHandler in item.Value)
                 {
@@ -56,7 +46,7 @@ namespace Game
                 }
             }
 
-            dicEventHandler.Clear();
+            m_DicEventHandler.Clear();
         }
 
         public static EventSubscriber Create(object owner)
@@ -68,7 +58,7 @@ namespace Game
 
         public void Clear()
         {
-            dicEventHandler.Clear();
+            m_DicEventHandler.Clear();
             Owner = null;
         }
     }
