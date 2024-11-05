@@ -97,6 +97,12 @@ namespace Game.Editor
             };
 
             GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);
+
+            if (DEngineSetting.Instance.ResourceMode <= ResourceMode.Package)
+            {
+                return;
+            }
+
             if (m_VersionInfo == null)
             {
                 Debug.LogError("Version info is null");
