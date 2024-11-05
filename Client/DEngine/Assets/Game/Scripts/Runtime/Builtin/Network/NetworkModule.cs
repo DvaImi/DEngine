@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DEngine;
 using Fantasy.Network;
-using Fantasy.Platform.Unity;
-using Log = Fantasy.Log;
 
 namespace Game.Network
 {
