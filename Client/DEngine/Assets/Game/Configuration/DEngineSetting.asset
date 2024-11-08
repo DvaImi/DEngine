@@ -27,12 +27,13 @@ MonoBehaviour:
   - Assets
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  BuildResourcePack: 0
+  BuildResourcePack: 1
+  SourceVersion: 1
   HostURL: http://localhost
   HostingServicePort: 8899
-  InternalResourceVersion: 0
+  InternalResourceVersion: 6
   LatestGameVersion: 0.1.0
-  InternalGameVersion: 0
+  InternalGameVersion: 4
   WindowsAppUrl: 
   MacOSAppUrl: 
   IOSAppUrl: 

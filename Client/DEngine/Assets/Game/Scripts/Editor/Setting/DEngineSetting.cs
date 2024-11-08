@@ -8,6 +8,7 @@
 using System;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
+using UnityEngine.Serialization;
 
 namespace Game.Editor
 {
@@ -93,6 +94,11 @@ namespace Game.Editor
         /// 构建补丁包
         /// </summary>
         public bool BuildResourcePack = false;
+
+        /// <summary>
+        /// 补丁包基础版本
+        /// </summary>
+        public int SourceVersion = 0;
 
         /// <summary>
         /// 服务器地址

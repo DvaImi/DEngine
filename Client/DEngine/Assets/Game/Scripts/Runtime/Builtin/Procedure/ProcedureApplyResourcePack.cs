@@ -37,7 +37,7 @@ namespace Game
                 return;
             }
 
-            ProcessAssembliesProcedure(procedureOwner);
+            ChangeState<ProcedureClearCachePack>(procedureOwner);
         }
 
         private void OnApplyResourcesComplete(string resourcePackPath, bool result)

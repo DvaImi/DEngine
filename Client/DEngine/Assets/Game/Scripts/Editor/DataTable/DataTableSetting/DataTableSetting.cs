@@ -90,8 +90,6 @@ namespace Game.Editor.DataTableTools
         /// </summary>
         public int IdColumn = 1;
 
-        public static string DataTableVersion => Utility.Path.GetRegularPath(Path.Combine(Instance.OutputDataTableFolder, Constant.AssetVersion.DataTableVersion + ".bytes"));
-
         #endregion
 
         #region Localization

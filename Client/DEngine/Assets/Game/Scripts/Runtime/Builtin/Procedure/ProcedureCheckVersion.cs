@@ -13,7 +13,6 @@ namespace Game
         private bool m_NeedUpdateVersion;
         private bool m_UseResourcePatchPack;
         private VersionInfo m_VersionInfo;
-        private const string InternalResourceVersionKey = "InternalResourceVersion";
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
@@ -39,11 +38,12 @@ namespace Game
                     });
                     return;
                 }
-                
+
                 if (TryUseLastLocalVersionResource())
                 {
                     return;
                 }
+
                 return;
             }
 
@@ -53,8 +53,8 @@ namespace Game
         private bool TryUseLastLocalVersionResource()
         {
             Log.Info("Try to use the latest local resource version.");
-            int internalResourceVersion = GameEntry.Setting.GetInt(InternalResourceVersionKey);
-            if (GameEntry.Setting.HasSetting(InternalResourceVersionKey) && internalResourceVersion > 0)
+            int internalResourceVersion = GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion);
+            if (GameEntry.Setting.HasSetting(Constant.ResourceVersion.InternalResourceVersion) && internalResourceVersion > 0)
             {
                 m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
                 m_CheckVersionComplete = true;
@@ -80,12 +80,6 @@ namespace Game
                 return;
             }
 
-            if (m_UseResourcePatchPack && !string.IsNullOrEmpty(m_VersionInfo.PatchResourcePackName))
-            {
-                procedureOwner.SetData<VarBoolean>("UseResourcePatchPack", m_VersionInfo.UseResourcePatchPack);
-                procedureOwner.SetData<VarString>("PatchResourcePackName", m_VersionInfo.PatchResourcePackName);
-                procedureOwner.SetData<VarInt64>("PatchTotalCompressedLength", m_VersionInfo.PatchTotalCompressedLength);
-            }
 
             if (m_NeedUpdateVersion)
             {
@@ -93,6 +87,14 @@ namespace Game
                 procedureOwner.SetData<VarInt32>("VersionListHashCode", m_VersionInfo.VersionListHashCode);
                 procedureOwner.SetData<VarInt32>("VersionListCompressedLength", m_VersionInfo.VersionListCompressedLength);
                 procedureOwner.SetData<VarInt32>("VersionListCompressedHashCode", m_VersionInfo.VersionListCompressedHashCode);
+
+                if (m_UseResourcePatchPack && !string.IsNullOrEmpty(m_VersionInfo.PatchResourcePackName))
+                {
+                    procedureOwner.SetData<VarBoolean>("UseResourcePatchPack", m_VersionInfo.UseResourcePatchPack);
+                    procedureOwner.SetData<VarString>("PatchResourcePackName", m_VersionInfo.PatchResourcePackName);
+                    procedureOwner.SetData<VarInt64>("PatchTotalCompressedLength", m_VersionInfo.PatchTotalCompressedLength);
+                }
+
                 ChangeState<ProcedureUpdateVersionList>(procedureOwner);
             }
             else
@@ -121,7 +123,7 @@ namespace Game
                 }
 
                 Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
-                GameEntry.Setting.SetInt(InternalResourceVersionKey, m_VersionInfo.InternalResourceVersion);
+                GameEntry.Setting.SetInt(Constant.ResourceVersion.InternalResourceVersion, m_VersionInfo.InternalResourceVersion);
                 GameEntry.Setting.Save();
                 m_UseResourcePatchPack = m_VersionInfo.UseResourcePatchPack;
                 m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(m_VersionInfo.InternalResourceVersion) == CheckVersionListResult.NeedUpdate;

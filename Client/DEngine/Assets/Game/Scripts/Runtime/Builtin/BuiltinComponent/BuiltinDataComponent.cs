@@ -1,11 +1,8 @@
 ﻿using System;
-using DEngine;
 using DEngine.Localization;
 using DEngine.Runtime;
-using Game.Debugger;
 using Game.Sound;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Game
 {
@@ -72,7 +69,7 @@ namespace Game
         public static void InitSoundSettings()
         {
             GameEntry.Sound.Mute("Music", GameEntry.Setting.GetBool(Constant.Setting.MusicMuted, false));
-            GameEntry.Sound.SetVolume("Music", GameEntry.Setting.GetFloat(Constant.Setting.MusicVolume, 0.3f));
+            GameEntry.Sound.SetVolume("Music", GameEntry.Setting.GetFloat(Constant.Setting.MusicVolume, 0.6f));
             GameEntry.Sound.Mute("Sound", GameEntry.Setting.GetBool(Constant.Setting.SoundMuted, false));
             GameEntry.Sound.SetVolume("Sound", GameEntry.Setting.GetFloat(Constant.Setting.SoundVolume, 1f));
             GameEntry.Sound.Mute("UISound", GameEntry.Setting.GetBool(Constant.Setting.UISoundMuted, false));

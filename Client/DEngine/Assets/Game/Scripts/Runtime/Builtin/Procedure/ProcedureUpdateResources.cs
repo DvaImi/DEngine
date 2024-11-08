@@ -23,7 +23,7 @@ namespace Game
         private int m_UpdateCount = 0;
         private long m_UpdateTotalCompressedLength = 0L;
         private int m_UpdateSuccessCount = 0;
-        private List<UpdateLengthData> m_UpdateLengthData = new List<UpdateLengthData>();
+        private List<UpdateLengthData> m_UpdateLengthData = new();
         private UpdateResourceForm m_UpdateResourceForm = null;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)

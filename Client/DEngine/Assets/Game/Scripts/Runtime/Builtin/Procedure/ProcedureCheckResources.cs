@@ -6,11 +6,11 @@ namespace Game
 {
     public class ProcedureCheckResources : GameProcedureBase
     {
-        private bool m_CheckResourcesComplete = false;
-        private bool m_NeedUpdateResources = false;
-        private int m_UpdateResourceCount = 0;
-        private long m_UpdateResourceTotalCompressedLength = 0L;
-        private bool m_UseResourcePatchPack = false;
+        private bool m_CheckResourcesComplete;
+        private bool m_NeedUpdateResources;
+        private int m_UpdateResourceCount;
+        private long m_UpdateResourceTotalCompressedLength;
+        private bool m_UseResourcePatchPack;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
@@ -42,14 +42,16 @@ namespace Game
 
             if (m_NeedUpdateResources)
             {
-                procedureOwner.SetData<VarInt32>("UpdateResourceCount", m_UpdateResourceCount);
-                procedureOwner.SetData<VarInt64>("UpdateResourceTotalCompressedLength", m_UpdateResourceTotalCompressedLength);
                 if (m_UseResourcePatchPack)
                 {
                     ChangeState<ProcedureUpdateResourcePack>(procedureOwner);
-                    return;
                 }
-                ChangeState<ProcedureUpdateResources>(procedureOwner);
+                else
+                {
+                    procedureOwner.SetData<VarInt32>("UpdateResourceCount", m_UpdateResourceCount);
+                    procedureOwner.SetData<VarInt64>("UpdateResourceTotalCompressedLength", m_UpdateResourceTotalCompressedLength);
+                    ChangeState<ProcedureUpdateResources>(procedureOwner);
+                }
             }
             else
             {

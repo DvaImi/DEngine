@@ -44,7 +44,16 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "2316347ec602e2743978dc19bdc83e887c299d90"
+      "hash": "2f305656980f6974ed19850e758a33330068ad87"
+    },
+    "com.unity.adaptiveperformance": {
+      "version": "5.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.profiling.core": "1.0.2"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.4",

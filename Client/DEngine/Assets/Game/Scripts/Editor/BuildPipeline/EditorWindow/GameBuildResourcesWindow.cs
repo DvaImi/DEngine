@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
 using Game.Editor.ResourceTools;
 using UnityEditor;
@@ -21,7 +22,7 @@ namespace Game.Editor.BuildPipeline
         private GUIContent m_BuildContent;
         private GUIContent m_EditorContent;
         private bool m_FoldoutBuildConfigGroup = true;
-        private bool m_FoldoutBuiltInfoGroup = true;
+        private bool m_FoldoutVersionInfoGroup = true;
         private string m_HostingServiceTypeName;
         private int m_HostingServiceTypeNameIndex;
         private string[] m_HostingServiceTypeNames;
@@ -66,9 +67,15 @@ namespace Game.Editor.BuildPipeline
 
             DEngineSetting.Instance.BuildResourcePack = DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.InternalResourceVersion > 1;
 
-            if (!Directory.Exists(DEngineSetting.AppOutput)) Directory.CreateDirectory(DEngineSetting.AppOutput);
+            if (!Directory.Exists(DEngineSetting.AppOutput))
+            {
+                Directory.CreateDirectory(DEngineSetting.AppOutput);
+            }
 
-            if (!Directory.Exists(DEngineSetting.BundlesOutput)) Directory.CreateDirectory(DEngineSetting.BundlesOutput);
+            if (!Directory.Exists(DEngineSetting.BundlesOutput))
+            {
+                Directory.CreateDirectory(DEngineSetting.BundlesOutput);
+            }
 
             GameBuildPipeline.RefreshPackages();
             GameBuildPipeline.CheckEnableHybridCLR();
@@ -96,9 +103,15 @@ namespace Game.Editor.BuildPipeline
 
             GUILayout.BeginHorizontal();
             {
-                if (GUILayout.Button(m_EditorContent, GUILayout.Height(30))) ResourceCollectorEditor.OpenWindow();
+                if (GUILayout.Button(m_EditorContent, GUILayout.Height(30)))
+                {
+                    ResourceCollectorEditor.OpenWindow();
+                }
 
-                if (GUILayout.Button(m_BuildContent, GUILayout.Height(30))) m_BeginBuildResources = true;
+                if (GUILayout.Button(m_BuildContent, GUILayout.Height(30)))
+                {
+                    m_BeginBuildResources = true;
+                }
 
                 if (GUILayout.Button(m_SaveContent, GUILayout.Height(30)))
                 {
@@ -143,11 +156,17 @@ namespace Game.Editor.BuildPipeline
 
                 EditorGUILayout.BeginHorizontal();
                 {
-                    var forceRebuildAssetBundle = EditorGUILayout.Toggle("ForceRebuildAssetBundle", DEngineSetting.Instance.ForceRebuildAssetBundle);
-                    if (!forceRebuildAssetBundle.Equals(DEngineSetting.Instance.ForceRebuildAssetBundle)) DEngineSetting.Instance.ForceRebuildAssetBundle = forceRebuildAssetBundle;
+                    var forceRebuildAssetBundle = EditorGUILayout.ToggleLeft("ForceRebuildAssetBundle", DEngineSetting.Instance.ForceRebuildAssetBundle);
+                    if (!forceRebuildAssetBundle.Equals(DEngineSetting.Instance.ForceRebuildAssetBundle))
+                    {
+                        DEngineSetting.Instance.ForceRebuildAssetBundle = forceRebuildAssetBundle;
+                    }
 
-                    var forceUpdateGame = EditorGUILayout.Toggle("需要更新主包", DEngineSetting.Instance.ForceUpdateGame);
-                    if (!forceUpdateGame.Equals(DEngineSetting.Instance.ForceUpdateGame)) DEngineSetting.Instance.ForceUpdateGame = forceUpdateGame;
+                    var forceUpdateGame = EditorGUILayout.ToggleLeft("需要更新主包", DEngineSetting.Instance.ForceUpdateGame);
+                    if (!forceUpdateGame.Equals(DEngineSetting.Instance.ForceUpdateGame))
+                    {
+                        DEngineSetting.Instance.ForceUpdateGame = forceUpdateGame;
+                    }
 
                     GUI.enabled = DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.InternalResourceVersion > 1;
                     if (!GUI.enabled && DEngineSetting.Instance.BuildResourcePack)
@@ -156,8 +175,23 @@ namespace Game.Editor.BuildPipeline
                         DEngineSetting.Save();
                     }
 
-                    var buildResourcePack = EditorGUILayout.Toggle("构建补丁包", DEngineSetting.Instance.BuildResourcePack);
-                    if (!buildResourcePack.Equals(DEngineSetting.Instance.BuildResourcePack)) DEngineSetting.Instance.BuildResourcePack = buildResourcePack;
+                    var buildResourcePack = EditorGUILayout.ToggleLeft("构建补丁包", DEngineSetting.Instance.BuildResourcePack);
+                    if (!buildResourcePack.Equals(DEngineSetting.Instance.BuildResourcePack))
+                    {
+                        DEngineSetting.Instance.BuildResourcePack = buildResourcePack;
+                    }
+
+                    if (buildResourcePack)
+                    {
+                        GUILayout.Space(10);
+                        EditorGUILayout.LabelField("Pack Source Version", GUILayout.Width(160f));
+                        int value = EditorGUILayout.DelayedIntField(DEngineSetting.Instance.SourceVersion);
+                        if (DEngineSetting.Instance.SourceVersion != value)
+                        {
+                            DEngineSetting.Instance.SourceVersion = value;
+                            DEngineSetting.Save();
+                        }
+                    }
 
                     GUI.enabled = true;
                 }
@@ -173,9 +207,15 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.LabelField(DEngineSetting.BundlesOutput);
                 GUI.enabled = true;
 
-                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20))) EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
+                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20)))
+                {
+                    EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
+                }
 
-                if (GUILayout.Button("Clear", GUILayout.Width(80), GUILayout.Height(20))) GameBuildPipeline.ClearResource();
+                if (GUILayout.Button("Clear", GUILayout.Width(80), GUILayout.Height(20)))
+                {
+                    GameBuildPipeline.ClearResource();
+                }
             }
             EditorGUILayout.EndHorizontal();
 
@@ -194,8 +234,8 @@ namespace Game.Editor.BuildPipeline
 
                 EditorGUILayout.EndFoldoutHeaderGroup();
                 GUILayout.Space(5f);
-                m_FoldoutBuiltInfoGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutBuiltInfoGroup, "BuildInfo");
-                if (m_FoldoutBuiltInfoGroup)
+                m_FoldoutVersionInfoGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutVersionInfoGroup, "VersionInfo");
+                if (m_FoldoutVersionInfoGroup)
                 {
                     EditorGUILayout.LabelField("内置资源版本", DEngineSetting.Instance.InternalResourceVersion.ToString());
                     EditorGUILayout.LabelField("最新的游戏版本号", DEngineSetting.Instance.LatestGameVersion);
@@ -220,27 +260,30 @@ namespace Game.Editor.BuildPipeline
         private void GUIHostingService()
         {
             GUILayout.Label("Hosting Service", EditorStyles.boldLabel);
-
             EditorGUILayout.BeginVertical();
             {
-                var enableHostingService = EditorGUILayout.Toggle("Enable", DEngineSetting.Instance.EnableHostingService);
-
-                if (!enableHostingService.Equals(DEngineSetting.Instance.EnableHostingService)) DEngineSetting.Instance.EnableHostingService = enableHostingService;
-
-                var hostingServiceTypeNameIndex = EditorGUILayout.Popup("HostingService", m_HostingServiceTypeNameIndex, m_HostingServiceTypeNames);
-                if (hostingServiceTypeNameIndex != m_HostingServiceTypeNameIndex)
+                EditorGUI.BeginDisabledGroup(DEngineSetting.Instance.ResourceMode <= ResourceMode.Package);
                 {
-                    m_HostingServiceTypeNameIndex = hostingServiceTypeNameIndex;
-                    m_HostingServiceTypeName = hostingServiceTypeNameIndex <= 0 ? null : m_HostingServiceTypeNames[hostingServiceTypeNameIndex];
-                    EditorPrefs.SetString("File Hosting Service Type Name", m_HostingServiceTypeName);
-                }
+                    var enableHostingService = EditorGUILayout.Toggle("Enable", DEngineSetting.Instance.EnableHostingService);
 
-                EditorGUILayout.BeginHorizontal();
-                {
-                    EditorGUILayout.LabelField("本地路径", HostingServiceManager.HostingServicePath);
-                    if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20))) EditorUtility.RevealInFinder(HostingServiceManager.HostingServicePath);
+                    if (!enableHostingService.Equals(DEngineSetting.Instance.EnableHostingService)) DEngineSetting.Instance.EnableHostingService = enableHostingService;
+
+                    var hostingServiceTypeNameIndex = EditorGUILayout.Popup("HostingService", m_HostingServiceTypeNameIndex, m_HostingServiceTypeNames);
+                    if (hostingServiceTypeNameIndex != m_HostingServiceTypeNameIndex)
+                    {
+                        m_HostingServiceTypeNameIndex = hostingServiceTypeNameIndex;
+                        m_HostingServiceTypeName = hostingServiceTypeNameIndex <= 0 ? null : m_HostingServiceTypeNames[hostingServiceTypeNameIndex];
+                        EditorPrefs.SetString("File Hosting Service Type Name", m_HostingServiceTypeName);
+                    }
+
+                    EditorGUILayout.BeginHorizontal();
+                    {
+                        EditorGUILayout.LabelField("本地路径", HostingServiceManager.HostingServicePath);
+                        if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Height(20))) EditorUtility.RevealInFinder(HostingServiceManager.HostingServicePath);
+                    }
+                    EditorGUILayout.EndHorizontal();
                 }
-                EditorGUILayout.EndHorizontal();
+                EditorGUI.EndDisabledGroup();
             }
             EditorGUILayout.EndVertical();
         }

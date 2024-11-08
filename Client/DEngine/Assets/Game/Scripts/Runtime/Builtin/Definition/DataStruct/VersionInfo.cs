@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DEngine.Runtime;
-
-namespace Game
+﻿namespace Game
 {
     public class VersionInfo
     {
@@ -50,6 +46,11 @@ namespace Game
         /// 资源版本列表压缩后哈希值
         /// </summary>
         public int VersionListCompressedHashCode { get; set; }
+
+        /// <summary>
+        /// 更新描述
+        /// </summary>
+        public string UpdateDescription { get; set; }
 
         /// <summary>
         /// 是否应用补丁包

@@ -64,11 +64,10 @@
         /// 获取音乐路径
         /// </summary>
         /// <param name="assetName"></param>
-        /// <param name="suffix"></param>
         /// <returns></returns>
-        public static string GetMusicAsset(string assetName, string suffix = "mp3")
+        public static string GetMusicAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Sound/Musics/{0}.{1}", assetName, suffix);
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Audios/Musics/{0}", assetName);
         }
 
         /// <summary>
@@ -76,9 +75,9 @@
         /// </summary>
         /// <param name="assetName"></param>
         /// <returns></returns>
-        public static string GetSoundAsset(string assetName, string suffix = "mp3")
+        public static string GetSoundAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Sound/Sounds/{0}.{1}", assetName, suffix);
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Audios/Sounds/{0}", assetName);
         }
 
         /// <summary>
@@ -108,7 +107,7 @@
         /// <returns></returns>
         public static string GetUISoundAsset(string assetName)
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Sound/UISounds/{0}.mp3", assetName);
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/Audios/UISounds/{0}", assetName);
         }
 
         /// <summary>

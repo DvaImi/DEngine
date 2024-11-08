@@ -7,7 +7,6 @@ using DEngine.Procedure;
 using Fantasy;
 using Fantasy.Platform.Unity;
 using Game.Network;
-using Game.Update.EventSystem;
 using Game.Update.Procedure;
 using UnityEngine;
 
@@ -61,6 +60,7 @@ namespace Game.Update
                 Log.Warning("procedures is invalid");
                 return;
             }
+
             var procedureManager = DEngineEntry.GetModule<IProcedureManager>();
             procedureManager.Initialize(DEngineEntry.GetModule<IFsmManager>(), procedures.ToArray());
             procedureManager.StartProcedure<ProcedureEnterUpdateDomain>();

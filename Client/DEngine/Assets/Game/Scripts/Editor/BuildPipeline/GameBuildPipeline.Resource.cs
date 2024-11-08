@@ -432,5 +432,95 @@ namespace Game.Editor.BuildPipeline
             EditorUtility.ClearProgressBar();
             Debug.LogWarning(Utility.Text.Format("Build resources error with error message '{0}'.", errorMessage));
         }
+
+        public static bool BuildResourcePack(Platform platform, string sourceVersion, out string outputPath, out string targetVersion)
+        {
+            outputPath = targetVersion = string.Empty;
+            if (DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.BuildResourcePack)
+            {
+                ResourcePackBuilderController controller = new();
+                controller.OnBuildResourcePacksStarted += OnBuildResourcePacksStarted;
+                controller.OnBuildResourcePacksCompleted += OnBuildResourcePacksCompleted;
+                controller.OnBuildResourcePackSuccess += OnBuildResourcePackSuccess;
+                controller.OnBuildResourcePackFailure += OnBuildResourcePackFailure;
+                if (controller.Load())
+                {
+                    controller.Platform = platform;
+                    var versionNames = controller.GetVersionNames();
+                    if (versionNames.Length < 2)
+                    {
+                        Debug.LogWarning("No version was found in the specified working directory and platform.");
+                        DEngineSetting.Instance.BuildResourcePack = false;
+                        DEngineSetting.Save();
+                        return false;
+                    }
+
+                    controller.BackupDiff = controller.BackupVersion = true;
+                    controller.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
+                    controller.RefreshCompressionHelper();
+                    outputPath = controller.OutputPath;
+                    targetVersion = versionNames[^1];
+                    return controller.BuildResourcePack(sourceVersion, targetVersion);
+                }
+            }
+
+            return false;
+        }
+
+        private static void OnBuildResourcePacksStarted(int count)
+        {
+            Debug.Log(Utility.Text.Format("Build resource packs started, '{0}' items to be built.", count));
+            EditorUtility.DisplayProgressBar("Build Resource Packs", Utility.Text.Format("Build resource packs, {0} items to be built.", count), 0f);
+        }
+
+        private static void OnBuildResourcePacksCompleted(int successCount, int count)
+        {
+            int failureCount = count - successCount;
+            string str = Utility.Text.Format("Build resource packs completed, '{0}' items, '{1}' success, '{2}' failure.", count, successCount, failureCount);
+            if (failureCount > 0)
+            {
+                Debug.LogWarning(str);
+            }
+            else
+            {
+                Debug.Log(str);
+            }
+
+            EditorUtility.ClearProgressBar();
+        }
+
+        private static void OnBuildResourcePackSuccess(int index, int count, string sourceVersion, string targetVersion)
+        {
+            Debug.Log(Utility.Text.Format("Build resource packs success, source version '{0}', target version '{1}'.", GetVersionNameForDisplay(sourceVersion), GetVersionNameForDisplay(targetVersion)));
+            EditorUtility.DisplayProgressBar("Build Resource Packs", Utility.Text.Format("Build resource packs, {0}/{1} completed.", index + 1, count), (float)index / count);
+        }
+
+        private static void OnBuildResourcePackFailure(int index, int count, string sourceVersion, string targetVersion)
+        {
+            Debug.LogWarning(Utility.Text.Format("Build resource packs failure, source version '{0}', target version '{1}'.", GetVersionNameForDisplay(sourceVersion), GetVersionNameForDisplay(targetVersion)));
+            EditorUtility.DisplayProgressBar("Build Resource Packs", Utility.Text.Format("Build resource packs, {0}/{1} completed.", index + 1, count), (float)index / count);
+        }
+
+        private static string GetVersionNameForDisplay(string versionName)
+        {
+            if (string.IsNullOrEmpty(versionName))
+            {
+                return "<None>";
+            }
+
+            string[] splitVersionNames = versionName.Split('.');
+            if (splitVersionNames.Length < 2)
+            {
+                return null;
+            }
+
+            string text = splitVersionNames[0];
+            for (int i = 1; i < splitVersionNames.Length - 1; i++)
+            {
+                text += "." + splitVersionNames[i];
+            }
+
+            return DEngine.Utility.Text.Format("{0} ({1})", text, splitVersionNames[^1]);
+        }
     }
 }

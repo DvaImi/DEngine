@@ -11,6 +11,7 @@ namespace Game
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
+
             GameEntry.BuiltinData.InitLanguageSettings();
             BuiltinDataComponent.InitCurrentVariant();
             BuiltinDataComponent.InitSoundSettings();

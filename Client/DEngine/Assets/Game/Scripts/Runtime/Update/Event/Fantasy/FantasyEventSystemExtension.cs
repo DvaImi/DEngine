@@ -1,6 +1,6 @@
 using Fantasy.Async;
 
-namespace Game.Update.EventSystem
+namespace Game.Update
 {
     public static class FantasyEventSystemExtension
     {

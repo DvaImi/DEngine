@@ -96,6 +96,8 @@ namespace Game.Editor.BuildPipeline
             if (summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Build succeeded: " + GameUtility.String.GetByteLengthString((long)summary.totalSize));
+                DEngineSetting.Instance.InternalGameVersion += 1;
+                DEngineSetting.Save();
                 return true;
             }
             else
@@ -173,10 +175,9 @@ namespace Game.Editor.BuildPipeline
                     xmlSearchScenePaths.AppendChild(xmlPath);
                 }
 
-                // 保存 XML 文件到指定路径
                 xmlDocument.Save(DEngineSetting.Instance.BuildSettingsConfig);
                 AssetDatabase.Refresh();
-                Debug.Log("XML file generated and saved successfully at: " + DEngineSetting.Instance.BuildSettingsConfig);
+                Debug.Log("Saved successfully.");
             }
             catch (Exception e)
             {
@@ -184,23 +185,13 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static void SaveBuiltinData(Platform platform)
+        private static void SaveBuiltinData(Platform platform)
         {
-            BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
-            string platformPath = GetPlatformPath(platform);
-            string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
-            if (File.Exists(versionFilePath))
-            {
-                JObject checkVersionInfo = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(versionFilePath));
-                builtinData.BuildInfo = new BuildInfo
-                {
-                    LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
-                    CheckVersionUrl = checkVersionInfo["CheckVersionUrl"]!.Value<string>()
-                };
-                EditorUtility.SetDirty(builtinData);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
+            var builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
+            builtinData.BuildInfo ??= new BuildInfo();
+            builtinData.BuildInfo.LatestGameVersion = DEngineSetting.Instance.LatestGameVersion;
+            builtinData.BuildInfo.CheckVersionUrl = GetCheckVersionUrl(platform);
+            EditorTools.SaveAsset(builtinData);
         }
     }
 }
