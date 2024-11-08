@@ -51,11 +51,6 @@ namespace Game.Editor
         public string ResourceBuilderConfig = "Assets/Game/Configuration/ResourceBuilder.xml";
 
         /// <summary>
-        /// 记录打包平台
-        /// </summary>
-        public Platform BuildPlatforms;
-
-        /// <summary>
         /// 资源打包模式
         /// </summary>
         public ResourceMode ResourceMode;
@@ -98,7 +93,7 @@ namespace Game.Editor
         /// <summary>
         /// 补丁包基础版本
         /// </summary>
-        public int SourceVersion = 0;
+        public string SourceVersion;
 
         /// <summary>
         /// 服务器地址

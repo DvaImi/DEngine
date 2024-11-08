@@ -1,58 +1,15 @@
 ﻿using DEngine;
 using DEngine.Editor.ResourceTools;
 using UnityEditor;
-using UnityEngine;
 
 namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        #region GUI
-
-        public static void GUIPlatform()
+        public static Platform GetCurrentPlatform()
         {
-            GUILayout.Space(5f);
-            EditorGUILayout.BeginHorizontal();
-            {
-                EditorGUILayout.BeginVertical();
-                {
-                    EditorGUILayout.LabelField("Platforms", EditorStyles.boldLabel);
-                    EditorGUILayout.BeginHorizontal("box");
-                    {
-                        EditorGUILayout.BeginVertical();
-                        {
-                            DrawPlatform(Platform.Windows, "Windows");
-                            DrawPlatform(Platform.Windows64, "Windows x64");
-                            DrawPlatform(Platform.MacOS, "macOS");
-                        }
-                        EditorGUILayout.EndVertical();
-                        EditorGUILayout.BeginVertical();
-                        {
-                            DrawPlatform(Platform.Linux, "Linux");
-                            DrawPlatform(Platform.IOS, "iOS");
-                            DrawPlatform(Platform.Android, "Android");
-                        }
-                        EditorGUILayout.EndVertical();
-                        EditorGUILayout.BeginVertical();
-                        {
-                            DrawPlatform(Platform.WindowsStore, "Windows Store");
-                            DrawPlatform(Platform.WebGL, "WebGL");
-                        }
-                        EditorGUILayout.EndVertical();
-                    }
-                    EditorGUILayout.EndHorizontal();
-                }
-                EditorGUILayout.EndVertical();
-            }
-            EditorGUILayout.EndHorizontal();
+            return GetPlatform(EditorUserBuildSettings.activeBuildTarget);
         }
-
-        private static void DrawPlatform(Platform platform, string platformName)
-        {
-            SelectPlatform(platform, EditorGUILayout.ToggleLeft(platformName, IsPlatformSelected(platform)));
-        }
-
-        #endregion
 
         public static Platform GetPlatform(BuildTarget target)
         {
@@ -107,7 +64,6 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        
         public static string GetCheckVersionUrlFormat()
         {
             return Utility.Text.Format("{0}:{1}/{{Platform}}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort);

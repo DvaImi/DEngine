@@ -29,70 +29,29 @@ namespace Game.Editor.BuildPipeline
             AssetDatabase.Refresh();
             EditorTools.CloseAllCustomEditorWindows();
             IBuildPlayerEventHandler eventHandler = GetBuildPlayerEventHandler();
-            bool watchResult = eventHandler is not { ContinueOnFailure: true };
             Debug.Log("开始一键打包任务");
             if (eventHandler != null)
             {
                 Debug.Log("Execute build event handler 'OnPreprocessAllPlatforms'...");
-                eventHandler.OnPreprocessAllPlatforms(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, DEngineSetting.Instance.BuildPlatforms, DEngineSetting.AppOutput);
+                eventHandler.OnPreprocessAllPlatforms(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, GetCurrentPlatform(), DEngineSetting.AppOutput);
             }
 
-            var isSuccess = InternalAutomatedBuild(Platform.Windows, eventHandler);
-
-            if (!watchResult && isSuccess)
-            {
-                isSuccess = InternalAutomatedBuild(Platform.Windows64, eventHandler);
-            }
-
-            if (!watchResult && isSuccess)
-            {
-                isSuccess = InternalAutomatedBuild(Platform.MacOS, eventHandler);
-            }
-
-            if (!watchResult && isSuccess)
-            {
-                isSuccess = InternalAutomatedBuild(Platform.Linux, eventHandler);
-            }
-
-            if (!watchResult && isSuccess)
-            {
-                isSuccess = InternalAutomatedBuild(Platform.IOS, eventHandler);
-            }
-
-            if (!watchResult && isSuccess)
-            {
-                isSuccess = InternalAutomatedBuild(Platform.Android, eventHandler);
-            }
-
-            if (!watchResult && isSuccess)
-            {
-                isSuccess = InternalAutomatedBuild(Platform.WindowsStore, eventHandler);
-            }
-
-            if (!watchResult && isSuccess)
-            {
-                isSuccess = InternalAutomatedBuild(Platform.WebGL, eventHandler);
-            }
+            var isSuccess = InternalAutomatedBuild(GetCurrentPlatform(), eventHandler);
 
             if (eventHandler != null)
             {
                 Debug.Log("Execute build event handler 'OnPostprocessAllPlatforms'...");
-                eventHandler.OnPostprocessAllPlatforms(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, DEngineSetting.Instance.BuildPlatforms, DEngineSetting.AppOutput);
+                eventHandler.OnPostprocessAllPlatforms(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, GetCurrentPlatform(), DEngineSetting.AppOutput);
             }
 
             if (isSuccess)
             {
-                Debug.Log($"Build {DEngineSetting.Instance.BuildPlatforms} complete. ");
+                Debug.Log($"Build {GetCurrentPlatform()} complete. ");
             }
         }
 
         private static bool InternalAutomatedBuild(Platform platform, IBuildPlayerEventHandler eventHandler)
         {
-            if (!IsPlatformSelected(platform))
-            {
-                return true;
-            }
-
             Debug.LogFormat("Execute build event handler 'OnPreprocessPlatform for '{0}''...", platform.ToString());
             eventHandler?.OnPreprocessPlatform(platform);
             Debug.LogFormat("====================打包{0}资源========================", platform.ToString());

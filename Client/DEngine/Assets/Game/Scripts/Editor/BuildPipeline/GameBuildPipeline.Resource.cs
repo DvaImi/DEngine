@@ -39,7 +39,7 @@ namespace Game.Editor.BuildPipeline
             }
 
             AssetDatabase.Refresh();
-            bool isSuccess = BuildResource(DEngineSetting.Instance.BuildPlatforms, DEngineSetting.Instance.ForceRebuildAssetBundle);
+            bool isSuccess = BuildResource(GetCurrentPlatform(), DEngineSetting.Instance.ForceRebuildAssetBundle);
             if (isSuccess && DEngineSetting.Instance.EnableHostingService == false)
             {
                 EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
@@ -48,18 +48,13 @@ namespace Game.Editor.BuildPipeline
             return isSuccess;
         }
 
-        private static bool BuildResource(Platform platforms, bool forceRebuild = false)
+        private static bool BuildResource(Platform platform, bool forceRebuild = false)
         {
-            return BuildResource(platforms, DEngineSetting.BundlesOutput, forceRebuild);
+            return BuildResource(platform, DEngineSetting.BundlesOutput, forceRebuild);
         }
 
-        private static bool BuildResource(Platform platforms, string outputDirectory, bool forceRebuild = false)
+        private static bool BuildResource(Platform platform, string outputDirectory, bool forceRebuild = false)
         {
-            if (!IsPlatformSelected(platforms))
-            {
-                return true;
-            }
-
             if (DEngineSetting.Instance.ResourceMode == ResourceMode.Unspecified)
             {
                 Debug.LogWarning("ResourceMode is Unspecified");
@@ -71,7 +66,7 @@ namespace Game.Editor.BuildPipeline
             GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
 
             var builderController = new ResourceBuilderController();
-            if (builderController.Load() && BuildResource(builderController, platforms, outputDirectory, forceRebuild))
+            if (builderController.Load() && BuildResource(builderController, platform, outputDirectory, forceRebuild))
             {
                 if (builderController.Save())
                 {
@@ -93,11 +88,6 @@ namespace Game.Editor.BuildPipeline
             if (builderController == null)
             {
                 return false;
-            }
-
-            if (!IsPlatformSelected(platforms))
-            {
-                return true;
             }
 
             GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
@@ -219,23 +209,6 @@ namespace Game.Editor.BuildPipeline
 
             AssetDatabase.Refresh();
             Debug.Log("Clear success");
-        }
-
-        public static bool IsPlatformSelected(Platform platform)
-        {
-            return (DEngineSetting.Instance.BuildPlatforms & platform) != 0;
-        }
-
-        public static void SelectPlatform(Platform platform, bool selected)
-        {
-            if (selected)
-            {
-                DEngineSetting.Instance.BuildPlatforms |= platform;
-            }
-            else
-            {
-                DEngineSetting.Instance.BuildPlatforms &= ~platform;
-            }
         }
 
         public static void RefreshPackages()
@@ -501,7 +474,7 @@ namespace Game.Editor.BuildPipeline
             EditorUtility.DisplayProgressBar("Build Resource Packs", Utility.Text.Format("Build resource packs, {0}/{1} completed.", index + 1, count), (float)index / count);
         }
 
-        private static string GetVersionNameForDisplay(string versionName)
+        public static string GetVersionNameForDisplay(string versionName)
         {
             if (string.IsNullOrEmpty(versionName))
             {

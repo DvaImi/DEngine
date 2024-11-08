@@ -4,8 +4,6 @@ using System.Xml;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
 using Game.Editor.Toolbar;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
@@ -27,46 +25,10 @@ namespace Game.Editor.BuildPipeline
 
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
             AssetDatabase.Refresh();
-            var isSuccess = BuildPlayer(Platform.Windows);
-
+            var isSuccess = BuildPlayer(GetCurrentPlatform());
             if (isSuccess)
             {
-                isSuccess = BuildPlayer(Platform.Windows64);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.MacOS);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.Linux);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.IOS);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.Android);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.WindowsStore);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.WebGL);
-            }
-
-            if (isSuccess)
-            {
-                Debug.Log($"Build {DEngineSetting.Instance.BuildPlatforms} complete. ");
+                Debug.Log($"Build {GetCurrentPlatform()} complete. ");
             }
 
             return isSuccess;
@@ -79,11 +41,6 @@ namespace Game.Editor.BuildPipeline
 
         private static bool BuildPlayer(Platform platform, string outputDirectory)
         {
-            if (!IsPlatformSelected(platform))
-            {
-                return true;
-            }
-
             if (DEngineSetting.Instance.ResourceMode is ResourceMode.Updatable or ResourceMode.UpdatableWhilePlaying)
             {
                 SaveBuiltinData(platform);

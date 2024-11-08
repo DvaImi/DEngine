@@ -5,6 +5,7 @@
 // 版 本：1.0
 // ========================================================
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using DEngine.Editor.ResourceTools;
@@ -28,6 +29,8 @@ namespace Game.Editor.BuildPipeline
         private string[] m_HostingServiceTypeNames;
         private GUIContent m_SaveContent;
         private Vector2 m_ScrollPosition;
+        private string[] m_VersionNamesForSourceDisplay;
+        private int m_VersionNamesForSourceDisplayIndex;
 
         private void Update()
         {
@@ -65,6 +68,22 @@ namespace Game.Editor.BuildPipeline
                 }
             }
 
+            var controller = new ResourcePackBuilderController();
+            if (controller.Load())
+            {
+                controller.Platform = GameBuildPipeline.GetCurrentPlatform();
+                var versionNames = controller.GetVersionNames();
+                m_VersionNamesForSourceDisplay = new string[versionNames.Length + 1];
+                m_VersionNamesForSourceDisplay[0] = "<None>";
+                for (int i = 0; i < versionNames.Length; i++)
+                {
+                    string versionNameForDisplay = versionNames[i];
+                    m_VersionNamesForSourceDisplay[i + 1] = versionNameForDisplay;
+                }
+
+                m_VersionNamesForSourceDisplayIndex = Array.IndexOf(m_VersionNamesForSourceDisplay, DEngineSetting.Instance.SourceVersion);
+            }
+
             DEngineSetting.Instance.BuildResourcePack = DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.InternalResourceVersion > 1;
 
             if (!Directory.Exists(DEngineSetting.AppOutput))
@@ -91,8 +110,8 @@ namespace Game.Editor.BuildPipeline
                     GUIResources();
                 }
                 EditorGUILayout.EndVertical();
-
                 GUILayout.Space(5f);
+
                 EditorGUILayout.BeginVertical("box");
                 {
                     GUIHostingService();
@@ -130,7 +149,6 @@ namespace Game.Editor.BuildPipeline
             var window = GetWindow<GameBuildResourcesWindow>("Build Resource", true);
             window.minSize = new Vector2(800f, 800f);
         }
-
 
         private void GUIResources()
         {
@@ -181,25 +199,22 @@ namespace Game.Editor.BuildPipeline
                         DEngineSetting.Instance.BuildResourcePack = buildResourcePack;
                     }
 
-                    if (buildResourcePack)
-                    {
-                        GUILayout.Space(10);
-                        EditorGUILayout.LabelField("Pack Source Version", GUILayout.Width(160f));
-                        int value = EditorGUILayout.DelayedIntField(DEngineSetting.Instance.SourceVersion);
-                        if (DEngineSetting.Instance.SourceVersion != value)
-                        {
-                            DEngineSetting.Instance.SourceVersion = value;
-                            DEngineSetting.Save();
-                        }
-                    }
-
                     GUI.enabled = true;
                 }
 
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
-            GameBuildPipeline.GUIPlatform();
+            GUILayout.Space(10f);
+            if (DEngineSetting.Instance.BuildResourcePack)
+            {
+                EditorGUILayout.BeginVertical("box");
+                {
+                    GUIPatchPack();
+                }
+                EditorGUILayout.EndVertical();
+            }
+
             GUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
             {
@@ -218,7 +233,6 @@ namespace Game.Editor.BuildPipeline
                 }
             }
             EditorGUILayout.EndHorizontal();
-
 
             GUILayout.Space(5f);
             EditorGUILayout.BeginVertical("box");
@@ -286,6 +300,22 @@ namespace Game.Editor.BuildPipeline
                 EditorGUI.EndDisabledGroup();
             }
             EditorGUILayout.EndVertical();
+        }
+
+        private void GUIPatchPack()
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.LabelField("Source Version", GUILayout.Width(160f));
+                int value = EditorGUILayout.Popup(m_VersionNamesForSourceDisplayIndex, m_VersionNamesForSourceDisplay);
+                if (m_VersionNamesForSourceDisplayIndex != value)
+                {
+                    m_VersionNamesForSourceDisplayIndex = value;
+                    DEngineSetting.Instance.SourceVersion = m_VersionNamesForSourceDisplay[m_VersionNamesForSourceDisplayIndex];
+                    DEngineSetting.Save();
+                }
+            }
+            EditorGUILayout.EndHorizontal();
         }
     }
 }
