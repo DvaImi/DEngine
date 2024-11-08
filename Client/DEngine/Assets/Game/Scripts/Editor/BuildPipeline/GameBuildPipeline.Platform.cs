@@ -29,39 +29,19 @@ namespace Game.Editor.BuildPipeline
 
         public static BuildTarget GetBuildTarget(Platform platform)
         {
-            switch (platform)
+            return platform switch
             {
-                case Platform.Windows:
-                    return BuildTarget.StandaloneWindows;
-
-                case Platform.Windows64:
-                    return BuildTarget.StandaloneWindows64;
-
-                case Platform.MacOS:
-#if UNITY_2017_3_OR_NEWER
-                    return BuildTarget.StandaloneOSX;
-#else
-                    return BuildTarget.StandaloneOSXUniversal;
-#endif
-                case Platform.Linux:
-                    return BuildTarget.StandaloneLinux64;
-
-                case Platform.IOS:
-                    return BuildTarget.iOS;
-
-                case Platform.Android:
-                    return BuildTarget.Android;
-
-                case Platform.WindowsStore:
-                    return BuildTarget.WSAPlayer;
-
-                case Platform.WebGL:
-                    return BuildTarget.WebGL;
-
-                case Platform.Undefined:
-                default:
-                    throw new DEngineException("Platform is invalid.");
-            }
+                Platform.Windows => BuildTarget.StandaloneWindows,
+                Platform.Windows64 => BuildTarget.StandaloneWindows64,
+                Platform.MacOS => BuildTarget.StandaloneOSX,
+                Platform.Linux => BuildTarget.StandaloneLinux64,
+                Platform.IOS => BuildTarget.iOS,
+                Platform.Android => BuildTarget.Android,
+                Platform.WindowsStore => BuildTarget.WSAPlayer,
+                Platform.WebGL => BuildTarget.WebGL,
+                Platform.Undefined => throw new DEngineException("Platform is invalid."),
+                _ => throw new DEngineException("Platform is invalid.")
+            };
         }
 
         public static string GetCheckVersionUrlFormat()
@@ -86,69 +66,23 @@ namespace Game.Editor.BuildPipeline
 
         public static string GetPlatformPath(Platform platform)
         {
-            switch (platform)
+            return platform switch
             {
-                case Platform.Windows:
-                    return "Windows";
-
-                case Platform.Windows64:
-                    return "Windows64";
-
-                case Platform.MacOS:
-                    return "MacOS";
-
-                case Platform.IOS:
-                    return "IOS";
-
-                case Platform.Android:
-                    return "Android";
-
-                case Platform.WindowsStore:
-                    return "WSA";
-
-                case Platform.WebGL:
-                    return "WebGL";
-
-                case Platform.Linux:
-                    return "Linux";
-
-                default:
-                    return "";
-            }
+                Platform.Windows => "Windows",
+                Platform.Windows64 => "Windows64",
+                Platform.MacOS => "MacOS",
+                Platform.IOS => "IOS",
+                Platform.Android => "Android",
+                Platform.WindowsStore => "WSA",
+                Platform.WebGL => "WebGL",
+                Platform.Linux => "Linux",
+                _ => ""
+            };
         }
 
         public static string GetPlatformPath(BuildTarget target)
         {
-            Platform platform = GetPlatform(target);
-            switch (platform)
-            {
-                case Platform.Windows:
-                    return "Windows";
-
-                case Platform.Windows64:
-                    return "Windows64";
-
-                case Platform.MacOS:
-                    return "MacOS";
-
-                case Platform.IOS:
-                    return "IOS";
-
-                case Platform.Android:
-                    return "Android";
-
-                case Platform.WindowsStore:
-                    return "WSA";
-
-                case Platform.WebGL:
-                    return "WebGL";
-
-                case Platform.Linux:
-                    return "Linux";
-
-                default:
-                    return "";
-            }
+            return GetPlatformPath(GetPlatform(target));
         }
     }
 }

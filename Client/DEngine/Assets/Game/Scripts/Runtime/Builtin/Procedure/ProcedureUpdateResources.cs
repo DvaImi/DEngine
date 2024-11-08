@@ -23,7 +23,7 @@ namespace Game
         private int m_UpdateCount = 0;
         private long m_UpdateTotalCompressedLength = 0L;
         private int m_UpdateSuccessCount = 0;
-        private List<UpdateLengthData> m_UpdateLengthData = new();
+        private readonly List<UpdateLengthData> m_UpdateLengthData = new();
         private UpdateResourceForm m_UpdateResourceForm = null;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
@@ -43,7 +43,8 @@ namespace Game
             GameEntry.Event.Subscribe(ResourceUpdateChangedEventArgs.EventId, OnResourceUpdateChanged);
             GameEntry.Event.Subscribe(ResourceUpdateSuccessEventArgs.EventId, OnResourceUpdateSuccess);
             GameEntry.Event.Subscribe(ResourceUpdateFailureEventArgs.EventId, OnResourceUpdateFailure);
-            StartUpdateResources();
+            string groupName = GameEntry.Resource.ResourceMode >= ResourceMode.UpdatableWhilePlaying ? "Base" : null;
+            StartUpdateResources(groupName);
         }
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)
@@ -74,7 +75,7 @@ namespace Game
             ProcessAssembliesProcedure(procedureOwner);
         }
 
-        private void StartUpdateResources()
+        private void StartUpdateResources(string resourceGroupName)
         {
             if (!m_UpdateResourceForm)
             {
@@ -82,7 +83,7 @@ namespace Game
             }
 
             Log.Info("Start update resources...");
-            GameEntry.Resource.UpdateResources(OnUpdateResourcesComplete);
+            GameEntry.Resource.UpdateResources(resourceGroupName, OnUpdateResourcesComplete);
         }
 
         private void RefreshProgress()
@@ -198,14 +199,12 @@ namespace Game
 
         private class UpdateLengthData
         {
-            private readonly string m_Name;
-
             public UpdateLengthData(string name)
             {
-                m_Name = name;
+                Name = name;
             }
 
-            public string Name => m_Name;
+            public string Name { get; }
 
             public int Length { get; set; }
         }
