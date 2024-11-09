@@ -1,9 +1,4 @@
-﻿using System.IO;
-using DEngine;
-using UnityEditor;
-using UnityEngine.Serialization;
-
-namespace Game.Editor.DataTableTools
+﻿namespace Game.Editor.DataTableTools
 {
     /// <summary>
     /// 数据表编辑器配置相关数据
@@ -61,7 +56,6 @@ namespace Game.Editor.DataTableTools
             "Assembly-CSharp",
             "DEngine",
             "DEngine.Runtime",
-            "Game.Update"
         };
 
         //所有行列 是逻辑行列从0 开始 但是eppplus 需要从1开始遍历 使用时需要+1
