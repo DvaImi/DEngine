@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 
 namespace Game.FairyGUI.Runtime
 {
-    public class FairyGUIModule : IFairyGUIModule, IGameModule
+    public class FairyGUIModule : IFairyGUIModule
     {
         public int Priority => 1;
         private UIComponent m_UIComponent;
@@ -80,7 +80,6 @@ namespace Game.FairyGUI.Runtime
             return (await m_UIComponent.OpenUIFormAsync(fairyForm.ObjectAssetName, fairyForm.UIGroupName, 0, fairyForm.PauseCoveredUIForm, userData)).Logic as T;
         }
 
-
         public async UniTask<T> OpenUIForm<T>(int uiFormId, object userData = null) where T : FairyGUIFormBase
         {
             var fairyForm = m_FormRuntimeData.GetFairyForm(uiFormId);
@@ -119,7 +118,6 @@ namespace Game.FairyGUI.Runtime
             CloseUIForm(fairyForm.Id);
         }
 
-
         public void CloseUIForm<T>(object userData) where T : FairyGUIFormBase
         {
             var fairyForm = m_FormRuntimeData.GetFairyForm(typeof(T).Name);
@@ -130,7 +128,6 @@ namespace Game.FairyGUI.Runtime
 
             CloseUIForm(fairyForm.Id, userData);
         }
-
 
         public void CloseUIForm(FairyGUIFormBase fairyForm)
         {
@@ -156,7 +153,6 @@ namespace Game.FairyGUI.Runtime
             RemoveReference(fairyForm.PackageName);
         }
 
-
         public void RefocusUIForm(int uiFormId, object userData = null)
         {
             var fairyForm = GetUIForm(uiFormId);
@@ -169,7 +165,6 @@ namespace Game.FairyGUI.Runtime
             m_UIComponent.RefocusUIForm(fairyForm.UIForm, userData);
         }
 
-
         public void RefocusUIForm(FairyGUIFormBase fairyForm)
         {
             if (!fairyForm)
@@ -179,7 +174,6 @@ namespace Game.FairyGUI.Runtime
 
             m_UIComponent.RefocusUIForm(fairyForm.UIForm);
         }
-
 
         public int GetPackageReferenceCount(string packageName)
         {
