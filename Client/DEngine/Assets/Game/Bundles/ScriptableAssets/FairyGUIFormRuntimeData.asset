@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a026bbf641ed70143acf83a0ef1a3254, type: 3}
   m_Name: FairyGUIFormRuntimeData
   m_EditorClassIdentifier: 
-  FairyGroups:
-  - Name: Default
-    Depth: 0
-  FairyForms: []
+  fairyGroups: []
+  fairyForms: []

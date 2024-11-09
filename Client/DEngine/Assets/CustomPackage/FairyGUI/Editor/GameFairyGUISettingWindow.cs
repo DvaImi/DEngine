@@ -63,7 +63,7 @@ namespace Game.Editor.FairyGUI
                 onRemoveCallback = list => { m_FairyGUIFormRuntimeData.FairyGroups.RemoveAt(list.index); },
                 elementHeightCallback = (index) =>
                 {
-                    if (string.IsNullOrEmpty(m_FairyGUIFormRuntimeData.FairyGroups[index].Name))
+                    if (string.IsNullOrEmpty(m_FairyGUIFormRuntimeData.FairyGroups[index].groupName))
                     {
                         return EditorGUIUtility.singleLineHeight * 3F + 2;
                     }
@@ -78,7 +78,7 @@ namespace Game.Editor.FairyGUI
                 drawElementCallback = DrawFairyFormElement,
                 onSelectCallback = list =>
                 {
-                    var selectedAsset = AssetDatabase.LoadAssetAtPath<Object>(m_FairyGUIFormRuntimeData.FairyForms[list.index].AssetName);
+                    var selectedAsset = AssetDatabase.LoadAssetAtPath<Object>(m_FairyGUIFormRuntimeData.FairyForms[list.index].assetName);
                     Selection.activeObject = selectedAsset;
                 }
             };
@@ -207,13 +207,13 @@ namespace Game.Editor.FairyGUI
                 rect.width = totalWidth;
 
                 // 绘制名称字段
-                fairyGroup.Name = EditorGUI.DelayedTextField(new Rect(rect.x, rect.y, nameFieldWidth, EditorGUIUtility.singleLineHeight), fairyGroup.Name);
+                fairyGroup.groupName = EditorGUI.DelayedTextField(new Rect(rect.x, rect.y, nameFieldWidth, EditorGUIUtility.singleLineHeight), fairyGroup.groupName);
 
                 // 绘制深度字段
-                fairyGroup.Depth = EditorGUI.DelayedIntField(new Rect(rect.x + nameFieldWidth + spacing, rect.y, depthFieldWidth, EditorGUIUtility.singleLineHeight), fairyGroup.Depth);
+                fairyGroup.depth = EditorGUI.DelayedIntField(new Rect(rect.x + nameFieldWidth + spacing, rect.y, depthFieldWidth, EditorGUIUtility.singleLineHeight), fairyGroup.depth);
 
                 // 显示错误提示信息
-                if (string.IsNullOrEmpty(fairyGroup.Name))
+                if (string.IsNullOrEmpty(fairyGroup.groupName))
                 {
                     EditorGUI.HelpBox(new Rect(rect.x, rect.y + EditorGUIUtility.singleLineHeight + spacing, totalWidth, 25), "The group name cannot be empty.", MessageType.Error);
                 }
@@ -228,33 +228,33 @@ namespace Game.Editor.FairyGUI
 
                 // 元素布局
                 Rect idRect = new Rect(rect.x, rect.y, 50, EditorGUIUtility.singleLineHeight);
-                EditorGUI.LabelField(idRect, fairyForm.Id.ToString());
+                EditorGUI.LabelField(idRect, fairyForm.id.ToString());
 
                 Rect packageNameRect = new Rect(rect.x + 55, rect.y, 150, EditorGUIUtility.singleLineHeight);
-                EditorGUI.LabelField(packageNameRect, fairyForm.PackageName);
+                EditorGUI.LabelField(packageNameRect, fairyForm.packageName);
 
                 Rect popupRect = new Rect(rect.x + 180, rect.y, 100, EditorGUIUtility.singleLineHeight);
                 int selectedIndex = EditorGUI.Popup(popupRect, fairyForm.GroupIndex, m_GroupNames);
-                if (selectedIndex != fairyForm.GroupIndex || fairyForm.UIGroupName != m_GroupNames[selectedIndex])
+                if (selectedIndex != fairyForm.GroupIndex || fairyForm.uiGroupName != m_GroupNames[selectedIndex])
                 {
                     fairyForm.GroupIndex = selectedIndex;
-                    fairyForm.UIGroupName = m_GroupNames[selectedIndex];
+                    fairyForm.uiGroupName = m_GroupNames[selectedIndex];
                 }
 
                 Rect allowMultiInstanceRect = new Rect(rect.x + 315, rect.y, 25, EditorGUIUtility.singleLineHeight);
-                fairyForm.AllowMultiInstance = EditorGUI.Toggle(allowMultiInstanceRect, fairyForm.AllowMultiInstance);
+                fairyForm.allowMultiInstance = EditorGUI.Toggle(allowMultiInstanceRect, fairyForm.allowMultiInstance);
 
                 Rect pauseCoveredUIFormRect = new Rect(rect.x + 470, rect.y, 25, EditorGUIUtility.singleLineHeight);
-                fairyForm.PauseCoveredUIForm = EditorGUI.Toggle(pauseCoveredUIFormRect, fairyForm.PauseCoveredUIForm);
+                fairyForm.pauseCoveredUIForm = EditorGUI.Toggle(pauseCoveredUIFormRect, fairyForm.pauseCoveredUIForm);
 
                 Rect assetNameRect = new Rect(rect.x + 565, rect.y, rect.width - 625, EditorGUIUtility.singleLineHeight);
-                EditorGUI.LabelField(assetNameRect, fairyForm.AssetName);
+                EditorGUI.LabelField(assetNameRect, fairyForm.assetName);
 
                 Rect objectAssetRect = new Rect(rect.x + 565 + 450, rect.y, rect.width - 625, EditorGUIUtility.singleLineHeight);
-                bool valid = !AssetDatabase.LoadAssetAtPath<GameObject>(fairyForm.ObjectAssetName);
+                bool valid = !AssetDatabase.LoadAssetAtPath<GameObject>(fairyForm.objectAssetName);
                 GUIStyle style = new GUIStyle(EditorStyles.label);
                 style.normal.textColor = Color.yellow;
-                EditorGUI.LabelField(objectAssetRect, fairyForm.ObjectAssetName, valid ? style : EditorStyles.label);
+                EditorGUI.LabelField(objectAssetRect, fairyForm.objectAssetName, valid ? style : EditorStyles.label);
             }
         }
 
@@ -276,14 +276,14 @@ namespace Game.Editor.FairyGUI
             for (int i = 0; i < runtimeData.FairyForms.Count; i++)
             {
                 var fairyForm = runtimeData.FairyForms[i];
-                var enumName = fairyForm.PackageName;
+                var enumName = fairyForm.packageName;
                 if (!CodeGenerator.IsValidLanguageIndependentIdentifier(enumName))
                 {
-                    Debug.LogWarning($"Warning:  PackageName='{fairyForm.PackageName}' '{enumName}' is not a valid enum name.");
+                    Debug.LogWarning($"Warning:  PackageName='{fairyForm.packageName}' '{enumName}' is not a valid enum name.");
                     return;
                 }
 
-                stringBuilder.AppendLine($"\t\t// {fairyForm.PackageName}").AppendLine($"\t\t{enumName} = {fairyForm.Id},");
+                stringBuilder.AppendLine($"\t\t// {fairyForm.packageName}").AppendLine($"\t\t{enumName} = {fairyForm.id},");
             }
 
             stringBuilder.AppendLine("\t}").AppendLine("}");
@@ -327,7 +327,7 @@ namespace Game.Editor.FairyGUI
             string scriptFolder = FairyGUIEditorSetting.Instance.GeneralCodePath + "/{0}";
             for (int i = 0; i < runtimeData.FairyForms.Count; i++)
             {
-                string packageName = runtimeData.FairyForms[i].PackageName;
+                string packageName = runtimeData.FairyForms[i].packageName;
                 string outputFileName = Path.Combine(string.Format(scriptFolder, packageName), $"{packageName}.cs");
 
                 if (File.Exists(outputFileName))
@@ -394,14 +394,14 @@ namespace Game.FairyGUI.Runtime
             {
                 foreach (FairyForm fairyForm in runtimeData.FairyForms)
                 {
-                    string prefabPath = Path.Combine(prefabFolder, $"{fairyForm.PackageName}.prefab");
+                    string prefabPath = Path.Combine(prefabFolder, $"{fairyForm.packageName}.prefab");
 
                     if (File.Exists(prefabPath))
                     {
                         continue;
                     }
 
-                    GameObject tempPrefab = new(fairyForm.PackageName);
+                    GameObject tempPrefab = new(fairyForm.packageName);
                     PrefabUtility.SaveAsPrefabAsset(tempPrefab, prefabPath);
                     tempObjs.Add(tempPrefab);
                     Debug.Log($"Prefab '{fairyForm}' generated at '{prefabPath}'.");
@@ -446,19 +446,19 @@ namespace Game.FairyGUI.Runtime
 
             foreach (FairyForm fairyForm in runtimeData.FairyForms)
             {
-                Type type = hotUpdateAssembly.GetType($"Game.FairyGUI.Runtime.{fairyForm.PackageName}");
+                Type type = hotUpdateAssembly.GetType($"Game.FairyGUI.Runtime.{fairyForm.packageName}");
                 if (type == null)
                 {
                     continue;
                 }
 
-                string prefabPath = Path.Combine(prefabFolder, $"{fairyForm.PackageName}.prefab");
+                string prefabPath = Path.Combine(prefabFolder, $"{fairyForm.packageName}.prefab");
 
                 GameObject prefab = PrefabUtility.LoadPrefabContents(prefabPath);
 
                 if (prefab != null)
                 {
-                    if (!prefab.GetComponent(fairyForm.PackageName))
+                    if (!prefab.GetComponent(fairyForm.packageName))
                     {
                         prefab.AddComponent(type);
                         Debug.Log($"Prefab AddUIFormComponent '{type.Name}' to'{prefabPath}'.");
@@ -518,10 +518,10 @@ namespace Game.FairyGUI.Runtime
             for (int i = 0; i < pkgs.Count; i++)
             {
                 int index = i;
-                FairyForm item = runtimeData.FairyForms.Find(o => o.Id == index);
+                FairyForm item = runtimeData.FairyForms.Find(o => o.id == index);
                 if (item != null)
                 {
-                    item.GroupIndex = Array.IndexOf(m_GroupNames, item.UIGroupName);
+                    item.GroupIndex = Array.IndexOf(m_GroupNames, item.uiGroupName);
                     if (item.GroupIndex < 0)
                     {
                         item.GroupIndex = 0;
@@ -531,36 +531,36 @@ namespace Game.FairyGUI.Runtime
                 }
 
                 item = new FairyForm();
-                item.Id = index;
-                item.PackageName = pkgs[index].name;
-                item.AssetName = pkgs[index].assetPath + "_fui.bytes";
-                item.ObjectAssetName = FairyGUIEditorSetting.Instance.GeneralObjectAssetName + "/" + pkgs[index].name + ".prefab";
-                item.AllowMultiInstance = false;
-                item.UIGroupName = m_GroupNames[0];
-                item.PauseCoveredUIForm = false;
+                item.id = index;
+                item.packageName = pkgs[index].name;
+                item.assetName = pkgs[index].assetPath + "_fui.bytes";
+                item.objectAssetName = FairyGUIEditorSetting.Instance.GeneralObjectAssetName + "/" + pkgs[index].name + ".prefab";
+                item.allowMultiInstance = false;
+                item.uiGroupName = m_GroupNames[0];
+                item.pauseCoveredUIForm = false;
                 foreach (Dictionary<string, string> dependency in pkgs[i].dependencies)
                 {
-                    item.DependencyPackages.Add(dependency["name"]);
+                    item.dependencyPackages.Add(dependency["name"]);
                 }
 
-                string[] allAssetPaths = AssetDatabase.FindAssets(item.PackageName, new[] { FairyGUIEditorSetting.Instance.FairyGUIDataPath });
+                string[] allAssetPaths = AssetDatabase.FindAssets(item.packageName, new[] { FairyGUIEditorSetting.Instance.FairyGUIDataPath });
                 foreach (string guid in allAssetPaths)
                 {
                     string path = AssetDatabase.GUIDToAssetPath(guid);
                     //排除自身
-                    if (path == item.AssetName)
+                    if (path == item.assetName)
                     {
                         continue;
                     }
 
-                    if (path.StartsWith(FairyGUIEditorSetting.Instance.FairyGUIDataPath + "/" + item.PackageName + "_"))
+                    if (path.StartsWith(FairyGUIEditorSetting.Instance.FairyGUIDataPath + "/" + item.packageName + "_"))
                     {
-                        if (item.DependencyAssets.Contains(path))
+                        if (item.dependencyAssets.Contains(path))
                         {
                             continue;
                         }
 
-                        item.DependencyAssets.Add(path);
+                        item.dependencyAssets.Add(path);
                     }
                 }
 
@@ -571,7 +571,7 @@ namespace Game.FairyGUI.Runtime
         private static FairyGUIFormRuntimeData GetFairyGUIData()
         {
             var data = EditorTools.LoadScriptableObject<FairyGUIFormRuntimeData>(UpdateAssetUtility.GetScriptableAsset(nameof(FairyGUIFormRuntimeData)));
-            m_GroupNames = data.FairyGroups.Select(o => o.Name).ToArray();
+            m_GroupNames = data.FairyGroups.Select(o => o.groupName).ToArray();
             return data;
         }
 

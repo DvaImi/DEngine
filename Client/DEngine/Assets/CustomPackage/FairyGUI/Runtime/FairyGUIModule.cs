@@ -31,7 +31,7 @@ namespace Game.FairyGUI.Runtime
 
             foreach (var fairyGroup in m_FormRuntimeData.FairyGroups)
             {
-                m_UIComponent.AddUIGroup(fairyGroup.Name, fairyGroup.Depth);
+                m_UIComponent.AddUIGroup(fairyGroup.groupName, fairyGroup.depth);
             }
 
             if (InstanceAutoReleaseInterval < 60)
@@ -64,20 +64,20 @@ namespace Game.FairyGUI.Runtime
 
             await AddPackage(fairyForm);
 
-            if (!fairyForm.AllowMultiInstance)
+            if (!fairyForm.allowMultiInstance)
             {
-                if (m_UIComponent.IsLoadingUIForm(fairyForm.ObjectAssetName))
+                if (m_UIComponent.IsLoadingUIForm(fairyForm.objectAssetName))
                 {
                     return null;
                 }
 
-                if (m_UIComponent.HasUIForm(fairyForm.ObjectAssetName))
+                if (m_UIComponent.HasUIForm(fairyForm.objectAssetName))
                 {
-                    return (m_UIComponent.GetUIForm(fairyForm.ObjectAssetName)).Logic as T;
+                    return (m_UIComponent.GetUIForm(fairyForm.objectAssetName)).Logic as T;
                 }
             }
 
-            return (await m_UIComponent.OpenUIFormAsync(fairyForm.ObjectAssetName, fairyForm.UIGroupName, 0, fairyForm.PauseCoveredUIForm, userData)).Logic as T;
+            return (await m_UIComponent.OpenUIFormAsync(fairyForm.objectAssetName, fairyForm.uiGroupName, 0, fairyForm.pauseCoveredUIForm, userData)).Logic as T;
         }
 
         public async UniTask<T> OpenUIForm<T>(int uiFormId, object userData = null) where T : FairyGUIFormBase
@@ -91,20 +91,20 @@ namespace Game.FairyGUI.Runtime
 
             await AddPackage(fairyForm);
 
-            if (!fairyForm.AllowMultiInstance)
+            if (!fairyForm.allowMultiInstance)
             {
-                if (m_UIComponent.IsLoadingUIForm(fairyForm.ObjectAssetName))
+                if (m_UIComponent.IsLoadingUIForm(fairyForm.objectAssetName))
                 {
                     return null;
                 }
 
-                if (m_UIComponent.HasUIForm(fairyForm.ObjectAssetName))
+                if (m_UIComponent.HasUIForm(fairyForm.objectAssetName))
                 {
-                    return (m_UIComponent.GetUIForm(fairyForm.ObjectAssetName)).Logic as T;
+                    return (m_UIComponent.GetUIForm(fairyForm.objectAssetName)).Logic as T;
                 }
             }
 
-            return (await m_UIComponent.OpenUIFormAsync(fairyForm.ObjectAssetName, fairyForm.UIGroupName, 0, fairyForm.PauseCoveredUIForm, userData)).Logic as T;
+            return (await m_UIComponent.OpenUIFormAsync(fairyForm.objectAssetName, fairyForm.uiGroupName, 0, fairyForm.pauseCoveredUIForm, userData)).Logic as T;
         }
 
         public void CloseUIForm<T>() where T : FairyGUIFormBase
@@ -115,7 +115,7 @@ namespace Game.FairyGUI.Runtime
                 return;
             }
 
-            CloseUIForm(fairyForm.Id);
+            CloseUIForm(fairyForm.id);
         }
 
         public void CloseUIForm<T>(object userData) where T : FairyGUIFormBase
@@ -126,7 +126,7 @@ namespace Game.FairyGUI.Runtime
                 return;
             }
 
-            CloseUIForm(fairyForm.Id, userData);
+            CloseUIForm(fairyForm.id, userData);
         }
 
         public void CloseUIForm(FairyGUIFormBase fairyForm)
@@ -204,12 +204,12 @@ namespace Game.FairyGUI.Runtime
 
         private string GetGroupName(int uiFormId)
         {
-            return m_FormRuntimeData.GetFairyGroup(uiFormId)?.Name;
+            return m_FormRuntimeData.GetFairyGroup(uiFormId)?.groupName;
         }
 
         private string GetFairyGUIFormAssetName(int uiFormId)
         {
-            return m_FormRuntimeData.GetFairyForm(uiFormId)?.ObjectAssetName;
+            return m_FormRuntimeData.GetFairyForm(uiFormId)?.objectAssetName;
         }
 
         private async UniTask AddPackage(string packageName)
@@ -230,7 +230,7 @@ namespace Game.FairyGUI.Runtime
                 }
 
                 //load dependencies package
-                foreach (var package in fairyForm.DependencyPackages)
+                foreach (var package in fairyForm.dependencyPackages)
                 {
                     await AddPackage(package);
                 }
@@ -250,11 +250,11 @@ namespace Game.FairyGUI.Runtime
                 throw new DEngineException("fairyForm is null");
             }
 
-            UIPackage uiPackage = UIPackage.GetByName(fairyForm.PackageName);
+            UIPackage uiPackage = UIPackage.GetByName(fairyForm.packageName);
             if (uiPackage == null)
             {
                 using var parallel = UniTaskParallel.Creat();
-                foreach (var package in fairyForm.DependencyPackages)
+                foreach (var package in fairyForm.dependencyPackages)
                 {
                     parallel.Push(AddPackage(package));
                 }
@@ -264,26 +264,26 @@ namespace Game.FairyGUI.Runtime
             }
             else
             {
-                AddReference(fairyForm.PackageName);
+                AddReference(fairyForm.packageName);
             }
         }
 
         private async UniTask InternalLoadFairyGUIAsset(FairyForm fairyForm)
         {
             using var parallel = UniTaskParallel<Object[], TextAsset>.Creat();
-            parallel.Push(GameEntry.Resource.LoadAssetsAsync<Object>(fairyForm.DependencyAssets.ToArray()));
-            parallel.Push(GameEntry.Resource.LoadAssetAsync<TextAsset>(fairyForm.AssetName));
+            parallel.Push(GameEntry.Resource.LoadAssetsAsync<Object>(fairyForm.dependencyAssets.ToArray()));
+            parallel.Push(GameEntry.Resource.LoadAssetAsync<TextAsset>(fairyForm.assetName));
 
             var (dependencies, desc) = await parallel.FirstOfEach();
 
             UIPackage.AddPackage(desc.bytes, "", LoadFunc);
 
-            AddReference(fairyForm.PackageName);
+            AddReference(fairyForm.packageName);
 
             object LoadFunc(string name, string extension, Type type, out DestroyMethod destroyMethod)
             {
                 destroyMethod = DestroyMethod.None;
-                name = Utility.Text.Format("{0}_{1}", fairyForm.PackageName, name);
+                name = Utility.Text.Format("{0}_{1}", fairyForm.packageName, name);
                 return dependencies.FirstOrDefault(res => string.Equals(res.name, name));
             }
         }
