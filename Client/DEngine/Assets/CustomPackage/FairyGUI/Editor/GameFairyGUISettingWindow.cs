@@ -187,7 +187,7 @@ namespace Game.Editor.FairyGUI
             string directory = EditorUtility.OpenFilePanelWithFilters("Select Fairy Project", FairyGUIEditorSetting.Instance.FairyGUIProject, new[] { "Fairy file", "fairy" });
             if (!string.IsNullOrEmpty(directory))
             {
-                FairyGUIEditorSetting.Instance.FairyGUIProject = directory;
+                FairyGUIEditorSetting.Instance.FairyGUIProject = EditorTools.AbsolutePathToProject(directory);
             }
         }
 
