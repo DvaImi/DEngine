@@ -15,10 +15,10 @@ namespace Game.Editor.BuildPipeline
         {
             DEngine.Editor.BuildSettings.DefaultScenes();
             GeneratorDataTableCommonLine.GenerateAll();
+            Fantasy.LinkXmlGenerator.GenerateLinkXml();
             GameBuildPipeline.SaveHybridCLR();
             GameBuildPipeline.SaveBuildSetting();
             DEngineSetting.Save();
-            Fantasy.LinkXmlGenerator.GenerateLinkXml();
             AssetDatabase.Refresh();
         }
 

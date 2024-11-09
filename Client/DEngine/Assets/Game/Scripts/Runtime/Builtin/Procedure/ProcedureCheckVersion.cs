@@ -39,36 +39,11 @@ namespace Game
                     return;
                 }
 
-                if (TryUseLastLocalVersionResource())
-                {
-                    return;
-                }
-
+                TryUseLastLocalVersionResource();
                 return;
             }
 
             CheckVersionList();
-        }
-
-        private bool TryUseLastLocalVersionResource()
-        {
-            Log.Info("Try to use the latest local resource version.");
-            int internalResourceVersion = GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion);
-            if (GameEntry.Setting.HasSetting(Constant.ResourceVersion.InternalResourceVersion) && internalResourceVersion > 0)
-            {
-                m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
-                m_CheckVersionComplete = true;
-                return true;
-            }
-
-            GameEntry.BuiltinData.OpenDialog(new DialogParams
-            {
-                Mode = 1,
-                Message = "Try to use the latest local resource version failure.",
-                ConfirmText = "Quit",
-                OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
-            });
-            return false;
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -155,10 +130,41 @@ namespace Game
                     return;
                 }
 
-                if (TryUseLastLocalVersionResource())
+                TryUseLastLocalVersionResource();
+            }
+        }
+
+        private void TryUseLastLocalVersionResource()
+        {
+            Log.Info("Try to use the latest local resource version.");
+            if (GameEntry.Setting.HasSetting(Constant.ResourceVersion.InternalResourceVersion))
+            {
+                int internalResourceVersion = GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion);
+                if (internalResourceVersion > 0)
                 {
+                    GameEntry.BuiltinData.OpenDialog(new DialogParams
+                    {
+                        Mode = 2,
+                        Message = "Try to use the latest local resource version.",
+                        ConfirmText = "Confirm",
+                        CancelText = "Quit",
+                        OnClickConfirm = _ =>
+                        {
+                            m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
+                            m_CheckVersionComplete = true;
+                        },
+                        OnClickCancel = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                    });
                 }
             }
+
+            GameEntry.BuiltinData.OpenDialog(new DialogParams
+            {
+                Mode = 1,
+                Message = "Try to use the latest local resource version failure.",
+                ConfirmText = "Quit",
+                OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+            });
         }
 
         private static void GotoUpdateApp(object userData)

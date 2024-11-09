@@ -100,7 +100,6 @@ namespace Game.Editor
 
             string platformPath = GameBuildPipeline.GetPlatformPath(platform);
             string sourceVersion = DEngineSetting.Instance.SourceVersion;
-            Debug.LogFormat("Read build resource pack to {0}", sourceVersion);
             if (DEngineSetting.Instance.BuildResourcePack && GameBuildPipeline.BuildResourcePack(platform, sourceVersion, out string outputPath, out string targetVersion))
             {
                 Debug.LogFormat("Build Resource Pack {0}==>{1} Success", sourceVersion, targetVersion);

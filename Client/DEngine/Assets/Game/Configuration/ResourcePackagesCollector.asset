@@ -60,9 +60,9 @@ MonoBehaviour:
         LoadType: 0
         Packed: 0
         FilterRule: CollectAll
-      - Name: 
+      - Name: data3
         Enable: 1
-        FileSystem: shader
+        FileSystem: 
         Groups: Base
         Variant: 
         Asset: {fileID: 102900000, guid: a452f043ae001794fabdf7905a047bdd, type: 3}

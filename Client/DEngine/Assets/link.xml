@@ -1327,7 +1327,8 @@
     <type fullname="Game.GameEntry+++c__DisplayClass86_0" preserve="all"/>
     <type fullname="Game.ProcedureApplyResourcePack+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c" preserve="all"/>
-    <type fullname="Game.ProcedureCheckVersion++CheckVersionList+d__7" preserve="all"/>
+    <type fullname="Game.ProcedureCheckVersion+++c__DisplayClass7_0" preserve="all"/>
+    <type fullname="Game.ProcedureCheckVersion++CheckVersionList+d__6" preserve="all"/>
     <type fullname="Game.ProcedureClearCachePack++StartClearCachePack+d__5" preserve="all"/>
     <type fullname="Game.ProcedureLoadAssemblies+++c__DisplayClass6_0" preserve="all"/>
     <type fullname="Game.ProcedureLoadAssemblies++LoadUpdateAssemblies+d__6" preserve="all"/>

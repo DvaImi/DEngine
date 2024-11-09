@@ -29,6 +29,50 @@ namespace Game.Editor.BuildPipeline
             "UpdatableWhilePlaying (使用时下载的可更新模式)"
         };
 
+        [EditorToolbarMenu(nameof(SwitchResourceMode), 1, -1, true)]
+        public static void SwitchResourceMode()
+        {
+            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            {
+                var playModeIndex = (int)DEngineSetting.Instance.ResourceMode;
+                int selectedIndex = EditorGUILayout.Popup(playModeIndex, ResourceModeNames, GUILayout.Width(200));
+                if (selectedIndex != playModeIndex)
+                {
+                    Debug.Log($"更改编辑器资源运行模式 : {ResourceModeNames[selectedIndex]}");
+                    playModeIndex = selectedIndex;
+                    var baseComponent = Object.FindFirstObjectByType<DEngine.Runtime.BaseComponent>();
+                    var resourcesComponent = Object.FindFirstObjectByType<DEngine.Runtime.ResourceComponent>();
+                    if (baseComponent)
+                    {
+                        baseComponent.EditorResourceMode = selectedIndex <= 0;
+                        if (baseComponent.EditorResourceMode)
+                        {
+                            BuildSettings.AllScenes();
+                        }
+
+                        EditorTools.SaveAsset(baseComponent);
+                    }
+
+                    if (resourcesComponent)
+                    {
+                        if (selectedIndex > 0)
+                        {
+                            var fieldInfo = typeof(DEngine.Runtime.ResourceComponent).GetField("m_ResourceMode", BindingFlags.Instance | BindingFlags.NonPublic);
+                            if (fieldInfo != null)
+                            {
+                                fieldInfo.SetValue(resourcesComponent, (ResourceMode)playModeIndex);
+                                EditorTools.SaveAsset(resourcesComponent);
+                            }
+                        }
+                    }
+
+                    DEngineSetting.Instance.ResourceMode = (ResourceMode)playModeIndex;
+                    DEngineSetting.Save();
+                }
+            }
+            EditorGUI.EndDisabledGroup();
+        }
+
         [EditorToolbarMenu("Build Resource", 1, 3)]
         public static bool BuildResource()
         {
@@ -144,51 +188,6 @@ namespace Game.Editor.BuildPipeline
             }
 
             return isSuccess;
-        }
-
-
-        [EditorToolbarMenu(nameof(SwitchResourceMode), 1, -1, true)]
-        public static void SwitchResourceMode()
-        {
-            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
-            {
-                var playModeIndex = (int)DEngineSetting.Instance.ResourceMode;
-                int selectedIndex = EditorGUILayout.Popup(playModeIndex, ResourceModeNames, GUILayout.Width(200));
-                if (selectedIndex != playModeIndex)
-                {
-                    Debug.Log($"更改编辑器资源运行模式 : {ResourceModeNames[selectedIndex]}");
-                    playModeIndex = selectedIndex;
-                    var baseComponent = Object.FindFirstObjectByType<DEngine.Runtime.BaseComponent>();
-                    var resourcesComponent = Object.FindFirstObjectByType<DEngine.Runtime.ResourceComponent>();
-                    if (baseComponent)
-                    {
-                        baseComponent.EditorResourceMode = selectedIndex <= 0;
-                        if (baseComponent.EditorResourceMode)
-                        {
-                            BuildSettings.AllScenes();
-                        }
-
-                        EditorTools.SaveAsset(baseComponent);
-                    }
-
-                    if (resourcesComponent)
-                    {
-                        if (selectedIndex > 0)
-                        {
-                            var fieldInfo = typeof(DEngine.Runtime.ResourceComponent).GetField("m_ResourceMode", BindingFlags.Instance | BindingFlags.NonPublic);
-                            if (fieldInfo != null)
-                            {
-                                fieldInfo.SetValue(resourcesComponent, (ResourceMode)playModeIndex);
-                                EditorTools.SaveAsset(resourcesComponent);
-                            }
-                        }
-                    }
-
-                    DEngineSetting.Instance.ResourceMode = (ResourceMode)playModeIndex;
-                    DEngineSetting.Save();
-                }
-            }
-            EditorGUI.EndDisabledGroup();
         }
 
         public static void ClearResource()
@@ -474,7 +473,7 @@ namespace Game.Editor.BuildPipeline
             EditorUtility.DisplayProgressBar("Build Resource Packs", Utility.Text.Format("Build resource packs, {0}/{1} completed.", index + 1, count), (float)index / count);
         }
 
-        public static string GetVersionNameForDisplay(string versionName)
+        private static string GetVersionNameForDisplay(string versionName)
         {
             if (string.IsNullOrEmpty(versionName))
             {
