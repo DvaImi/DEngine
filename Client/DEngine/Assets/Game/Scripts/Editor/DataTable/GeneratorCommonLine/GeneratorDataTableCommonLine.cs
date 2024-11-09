@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,7 +28,7 @@ namespace Game.Editor.DataTableTools
             if (Directory.Exists(DataTableSetting.Instance.DataTableExcelsFolder))
             {
                 DirectoryInfo excelFolder = new(DataTableSetting.Instance.DataTableExcelsFolder);
-                excelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.Contains("~")).Select(info => Utility.Path.GetRegularPath(info.FullName)).ToArray();
+                excelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.StartsWith("#") && !info.Name.EndsWith("~")).Select(info => Utility.Path.GetRegularPath(info.FullName)).ToArray();
             }
             else
             {
@@ -77,10 +76,7 @@ namespace Game.Editor.DataTableTools
 
                             DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
                             DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
-                            if (DataTableSetting.Instance.GenerateDataTableEnum)
-                            {
-                                GenerateDataTableEnumFile(dataTableProcessor, dataTableName);
-                            }
+                            DataTableGenerator.GenerateDataEnumFile(dataTableProcessor, dataTableName);
                         }
                     }
                 }
@@ -165,59 +161,6 @@ namespace Game.Editor.DataTableTools
         public static void EditorLuban()
         {
             EditorUtility.RevealInFinder(Path.Combine(Application.dataPath, "../../../Share/Luban/Client/Datas"));
-        }
-
-        private static void GenerateDataTableEnumFile(DataTableProcessor dataTableProcessor, string dataTableName)
-        {
-            string fileName = $"{dataTableName}Id";
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("//this file is generate by tools,do not alter it...")
-                .AppendLine($"namespace {DataTableSetting.Instance.NameSpace}")
-                .AppendLine("{")
-                .AppendLine($"\t// {dataTableProcessor.GetValue(3, 1)}")
-                .AppendLine($"\tpublic enum {fileName} : byte")
-                .AppendLine("\t{");
-
-            for (int i = 4; i < dataTableProcessor.RawRowCount; i++)
-            {
-                var enumName = dataTableProcessor.GetValue(i, 3);
-                if (!CodeGenerator.IsValidLanguageIndependentIdentifier(enumName))
-                {
-                    Debug.LogWarning($"Warning:  DataTableName='{dataTableName}' '{enumName}' is not a valid enum name at row {i + 1}.");
-                    return;
-                }
-
-                stringBuilder.AppendLine($"\t\t// {dataTableProcessor.GetValue(i, 2)}").AppendLine($"\t\t{enumName} = {dataTableProcessor.GetValue(i, 1)},");
-            }
-
-            stringBuilder.AppendLine("\t}").AppendLine("}");
-
-            string outputFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.DataTableEnumPath, fileName + ".cs"));
-            FileInfo fileInfo = new FileInfo(outputFileName);
-            if (fileInfo.Exists)
-            {
-                fileInfo.Delete();
-                FileInfo meta = new FileInfo(outputFileName + ".meta");
-                if (meta.Exists)
-                {
-                    meta.Delete();
-                }
-            }
-
-            if (fileInfo.Directory is { Exists: false })
-            {
-                fileInfo.Directory.Create();
-            }
-
-            using (FileStream fileStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
-            {
-                using (StreamWriter stream = new StreamWriter(fileStream, Encoding.UTF8))
-                {
-                    stream.Write(stringBuilder.ToString());
-                }
-            }
-
-            Debug.Log(Utility.Text.Format("Generate code file '{0}' success.", outputFileName));
         }
     }
 }

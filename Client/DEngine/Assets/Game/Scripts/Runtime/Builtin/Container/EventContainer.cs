@@ -4,10 +4,9 @@ using DEngine.Event;
 
 namespace Game
 {
-    public class EventSubscriber : IReference
+    public class EventContainer : IReference
     {
         private readonly DEngineMultiDictionary<int, EventHandler<GameEventArgs>> m_DicEventHandler = new();
-
         public object Owner { get; private set; }
 
         public void Subscribe(int id, EventHandler<GameEventArgs> handler)
@@ -49,17 +48,18 @@ namespace Game
             m_DicEventHandler.Clear();
         }
 
-        public static EventSubscriber Create(object owner)
-        {
-            EventSubscriber eventSubscriber = ReferencePool.Acquire<EventSubscriber>();
-            eventSubscriber.Owner = owner;
-            return eventSubscriber;
-        }
 
         public void Clear()
         {
             m_DicEventHandler.Clear();
             Owner = null;
+        }
+
+        public static EventContainer Create(object owner)
+        {
+            EventContainer eventContainer = ReferencePool.Acquire<EventContainer>();
+            eventContainer.Owner = owner;
+            return eventContainer;
         }
     }
 }

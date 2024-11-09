@@ -17,7 +17,6 @@ MonoBehaviour:
   CSharpCodePath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DRCode
   CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/Extensions
-  GenerateDataTableEnum: 1
   DataTableEnumPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DataTableEnum
   NameSpace: Game.Update
   AssemblyNames:
@@ -32,5 +31,6 @@ MonoBehaviour:
   CommentRow: 3
   ContentStartRow: 4
   IdColumn: 1
+  EnumNameColumn: 3
   LocalizationPath: Assets/Game/Bundles/Localization
   LocalizationExcelsFolder: Assets/../Excels/Localization

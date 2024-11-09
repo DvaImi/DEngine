@@ -34,11 +34,6 @@
         public string ExtensionDirectoryPath = "Assets/Game/Scripts/Runtime/Update/Generate/DataTable/Extensions";
 
         /// <summary>
-        /// 是否生成枚举
-        /// </summary>
-        public bool GenerateDataTableEnum;
-
-        /// <summary>
         /// 生成枚举的路径
         /// </summary>
         public string DataTableEnumPath = "Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DataTableEnum";
@@ -83,6 +78,11 @@
         /// id所在列
         /// </summary>
         public int IdColumn = 1;
+        
+        /// <summary>
+        /// 生成枚举列
+        /// </summary>
+        public int EnumNameColumn = 3;
 
         #endregion
 

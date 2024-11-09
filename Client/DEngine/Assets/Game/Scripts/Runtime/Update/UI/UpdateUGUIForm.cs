@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DEngine.Runtime;
 using DEngine;
+using Game.UI;
 using Game.Update.Sound;
 
 namespace Game.Update
@@ -33,7 +34,7 @@ namespace Game.Update
             }
         }
 
-        public EventSubscriber EventSubscriber { get; private set; }
+        public EventContainer EventContainer { get; private set; }
 
         public void Close()
         {
@@ -80,7 +81,7 @@ namespace Game.Update
             transform.sizeDelta = Vector2.zero;
 
             gameObject.GetOrAddComponent<GraphicRaycaster>();
-            EventSubscriber = EventSubscriber.Create(this);
+            EventContainer = EventContainer.Create(this);
         }
 
 #if UNITY_2017_3_OR_NEWER
@@ -112,11 +113,11 @@ namespace Game.Update
 #endif
         {
             base.OnClose(isShutdown, userData);
-            if (EventSubscriber != null)
+            if (EventContainer != null)
             {
-                EventSubscriber.UnSubscribeAll();
-                ReferencePool.Release(EventSubscriber);
-                EventSubscriber = null;
+                EventContainer.UnSubscribeAll();
+                ReferencePool.Release(EventContainer);
+                EventContainer = null;
             }
         }
 

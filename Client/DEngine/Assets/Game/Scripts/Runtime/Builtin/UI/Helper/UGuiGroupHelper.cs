@@ -1,13 +1,14 @@
 ﻿//------------------------------------------------------------
 // Game Framework
+
 using UnityEngine;
 using UnityEngine.UI;
 using DEngine.Runtime;
 
-namespace Game
+namespace Game.UI
 {
     /// <summary>
-    /// uGUI 界面组辅助器。
+    /// UGUI 界面组辅助器。
     /// </summary>
     public class UGUIGroupHelper : UIGroupHelperBase
     {
