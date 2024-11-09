@@ -9,5 +9,6 @@ EditorBuildSettings:
     path: Assets/GameEntry.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
-    com.unity.input.settings: {fileID: 11400000, guid: e83081d7b82dae747890424cbed5861b, type: 2}
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 6f66ecf638f964646a996e61c094eb11, type: 3}
+    com.unity.input.settings: {fileID: 11400000, guid: ddd3464e1bd6a5b47ae06888c1e2a49f, type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_UseUCBPForAssetBundles: 0

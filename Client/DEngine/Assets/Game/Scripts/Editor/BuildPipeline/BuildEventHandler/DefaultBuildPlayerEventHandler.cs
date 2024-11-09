@@ -13,7 +13,9 @@ namespace Game.Editor.BuildPipeline
 
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, Platform platforms, string outputDirectory)
         {
+            DEngine.Editor.BuildSettings.DefaultScenes();
             GeneratorDataTableCommonLine.GenerateAll();
+            Fantasy.LinkXmlGenerator.GenerateLinkXml();
             GameBuildPipeline.SaveHybridCLR();
             GameBuildPipeline.SaveBuildSetting();
             DEngineSetting.Save();

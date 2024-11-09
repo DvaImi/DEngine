@@ -152,6 +152,17 @@ namespace Game.Editor
         #region EditorUtility
 
         /// <summary>
+        /// 保存资源
+        /// </summary>
+        /// <param name="asset"></param>
+        public static void SaveAsset(Object asset)
+        {
+            EditorUtility.SetDirty(asset);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        /// <summary>
         /// 搜集资源
         /// </summary>
         /// <param name="searchType">搜集的资源类型</param>
@@ -556,7 +567,7 @@ namespace Game.Editor
                     {
                         if (Directory.Exists(directory) && directory != path)
                         {
-                            path = directory;
+                            path = AbsolutePathToProject(directory);
                         }
                     }
                 }
@@ -596,7 +607,8 @@ namespace Game.Editor
                     {
                         if (File.Exists(file) && file != path)
                         {
-                            path = file;
+                            path = AbsolutePathToProject(file);
+                            ;
                         }
                     }
                 }

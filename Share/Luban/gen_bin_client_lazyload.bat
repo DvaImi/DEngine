@@ -13,5 +13,8 @@ dotnet %GEN_CLIENT% ^
     --customTemplateDir %CODE_LAZY% ^
     -x outputCodeDir=../../Client/DEngine/Assets/Game/Scripts/Runtime/Update/Generate/GameConfig ^
     -x bin.outputDataDir=Client/output/Bin/
-pause
+    
+if ERRORLEVEL 1 (
+    pause
+)
     

@@ -53,37 +53,34 @@ namespace Game.Editor.ResourceTools
             }
         }
 
-
         public async UniTask UploadFile(string filePath, string relativePath)
         {
+            using var request = new UnityWebRequest(m_UploadUrl, "POST");
             try
             {
                 // URL 编码文件相对路径
                 string encodedRelativePath = UnityWebRequest.EscapeURL(relativePath);
 
                 byte[] fileData = await File.ReadAllBytesAsync(filePath);
-                using (UnityWebRequest request = new UnityWebRequest(m_UploadUrl, "POST"))
+                // 设置上传的内容
+                request.uploadHandler = new UploadHandlerRaw(fileData);
+                request.uploadHandler.contentType = "application/octet-stream";
+                request.downloadHandler = new DownloadHandlerBuffer();
+
+                // 将编码后的相对路径通过Header发送到服务器
+                request.SetRequestHeader("FileName", encodedRelativePath);
+
+                // 发送请求并等待响应
+                await request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.Success)
                 {
-                    // 设置上传的内容
-                    request.uploadHandler = new UploadHandlerRaw(fileData);
-                    request.uploadHandler.contentType = "application/octet-stream";
-                    request.downloadHandler = new DownloadHandlerBuffer(); // 接收服务器的响应
-
-                    // 将编码后的相对路径通过Header发送到服务器
-                    request.SetRequestHeader("FileName", encodedRelativePath);
-
-                    // 发送请求并等待响应
-                    await request.SendWebRequest();
-
-                    if (request.result == UnityWebRequest.Result.Success)
-                    {
-                        Debug.Log("File uploaded successfully!");
-                        Debug.Log($"Response: {request.downloadHandler.text}");
-                    }
-                    else
-                    {
-                        Debug.LogError($"File upload failed: {request.error}");
-                    }
+                    Debug.Log("File uploaded successfully!");
+                    Debug.Log($"Response: {request.downloadHandler.text}");
+                }
+                else
+                {
+                    Debug.LogError($"File upload failed: {request.error}");
                 }
             }
             catch (Exception ex)
@@ -91,7 +88,6 @@ namespace Game.Editor.ResourceTools
                 Debug.LogError($"Failed to upload file: {ex.Message}");
             }
         }
-
 
         private void OnRequestReceived(IAsyncResult result)
         {
@@ -175,7 +171,6 @@ namespace Game.Editor.ResourceTools
 
             context.Response.Close();
         }
-
 
         private static void HandleFileDownload(HttpListenerContext context)
         {

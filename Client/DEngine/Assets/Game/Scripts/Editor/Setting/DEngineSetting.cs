@@ -8,6 +8,7 @@
 using System;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
+using UnityEngine.Serialization;
 
 namespace Game.Editor
 {
@@ -50,11 +51,6 @@ namespace Game.Editor
         public string ResourceBuilderConfig = "Assets/Game/Configuration/ResourceBuilder.xml";
 
         /// <summary>
-        /// 记录打包平台
-        /// </summary>
-        public Platform BuildPlatforms;
-
-        /// <summary>
         /// 资源打包模式
         /// </summary>
         public ResourceMode ResourceMode;
@@ -88,6 +84,16 @@ namespace Game.Editor
         /// 是否需要强制更新应用
         /// </summary>
         public bool ForceUpdateGame = false;
+
+        /// <summary>
+        /// 构建补丁包
+        /// </summary>
+        public bool BuildResourcePack = false;
+
+        /// <summary>
+        /// 补丁包基础版本
+        /// </summary>
+        public string SourceVersion;
 
         /// <summary>
         /// 服务器地址

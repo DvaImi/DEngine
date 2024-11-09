@@ -4,8 +4,6 @@ using System.Xml;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
 using Game.Editor.Toolbar;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
@@ -19,48 +17,18 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("BuildPlayer", 1, 10)]
         public static bool BuildPlayer()
         {
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Cannot build player because editor is compiling.");
+                return false;
+            }
+
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
-
-            var isSuccess = BuildPlayer(Platform.Windows);
-
+            AssetDatabase.Refresh();
+            var isSuccess = BuildPlayer(GetCurrentPlatform());
             if (isSuccess)
             {
-                isSuccess = BuildPlayer(Platform.Windows64);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.MacOS);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.Linux);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.IOS);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.Android);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.WindowsStore);
-            }
-
-            if (isSuccess)
-            {
-                isSuccess = BuildPlayer(Platform.WebGL);
-            }
-
-            if (isSuccess)
-            {
-                Debug.Log($"Build {DEngineSetting.Instance.BuildPlatforms} complete. ");
+                Debug.Log($"Build {GetCurrentPlatform()} complete. ");
             }
 
             return isSuccess;
@@ -68,23 +36,25 @@ namespace Game.Editor.BuildPipeline
 
         private static bool BuildPlayer(Platform platform)
         {
-            if (!IsPlatformSelected(platform))
-            {
-                return true;
-            }
+            return BuildPlayer(platform, DEngineSetting.AppOutput);
+        }
 
+        private static bool BuildPlayer(Platform platform, string outputDirectory)
+        {
             if (DEngineSetting.Instance.ResourceMode is ResourceMode.Updatable or ResourceMode.UpdatableWhilePlaying)
             {
                 SaveBuiltinData(platform);
             }
 
 
-            BuildReport report = BuildApplication(platform);
+            BuildReport report = BuildApplication(platform, outputDirectory);
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Build succeeded: " + GameUtility.String.GetByteLengthString((long)summary.totalSize));
+                DEngineSetting.Instance.InternalGameVersion += 1;
+                DEngineSetting.Save();
                 return true;
             }
             else
@@ -94,35 +64,16 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
-        public static void SaveBuiltinData(Platform platform)
-        {
-            BuiltinData builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
-            string platformPath = GetPlatformPath(platform);
-            string versionFilePath = Path.Combine(DEngineSetting.BundlesOutput, platformPath + "CheckVersion.json");
-            if (File.Exists(versionFilePath))
-            {
-                JObject checkVersionInfo = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(versionFilePath));
-                builtinData.BuildInfo = new BuildInfo
-                {
-                    LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
-                    CheckVersionUrl = checkVersionInfo["CheckVersionUrl"]!.Value<string>()
-                };
-                EditorUtility.SetDirty(builtinData);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
-        }
-
-        private static BuildReport BuildApplication(Platform platform)
+        private static BuildReport BuildApplication(Platform platform, string outputDirectory)
         {
             BuildTarget target = GetBuildTarget(platform);
             string outputExtension = GetFileExtensionForPlatform(target);
-            if (!Directory.Exists(DEngineSetting.AppOutput))
+            if (!Directory.Exists(outputDirectory))
             {
-                GameUtility.IO.CreateDirectoryIfNotExists(DEngineSetting.AppOutput);
+                GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
             }
 
-            string locationPath = Path.Combine(DEngineSetting.AppOutput, platform.ToString());
+            string locationPath = Path.Combine(outputDirectory, Application.version, platform.ToString());
             GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
             BuildPlayerOptions buildPlayerOptions = new()
             {
@@ -181,15 +132,23 @@ namespace Game.Editor.BuildPipeline
                     xmlSearchScenePaths.AppendChild(xmlPath);
                 }
 
-                // 保存 XML 文件到指定路径
                 xmlDocument.Save(DEngineSetting.Instance.BuildSettingsConfig);
                 AssetDatabase.Refresh();
-                Debug.Log("XML file generated and saved successfully at: " + DEngineSetting.Instance.BuildSettingsConfig);
+                Debug.Log("Saved successfully.");
             }
             catch (Exception e)
             {
                 Debug.LogError("Error generating XML file: " + e.Message);
             }
+        }
+
+        private static void SaveBuiltinData(Platform platform)
+        {
+            var builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
+            builtinData.BuildInfo ??= new BuildInfo();
+            builtinData.BuildInfo.LatestGameVersion = DEngineSetting.Instance.LatestGameVersion;
+            builtinData.BuildInfo.CheckVersionUrl = GetCheckVersionUrl(platform);
+            EditorTools.SaveAsset(builtinData);
         }
     }
 }

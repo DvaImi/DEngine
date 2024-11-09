@@ -150,6 +150,13 @@ namespace Game.Editor.FileSystem
                     m_ContentChange = true;
                 }
 
+                bool useEncryption = EditorGUILayout.Toggle("Use Encryption", fileSystemData.UseEncryption);
+                if (useEncryption != fileSystemData.UseEncryption)
+                {
+                    fileSystemData.UseEncryption = useEncryption;
+                    m_ContentChange = true;
+                }
+
                 fileSystemData.FileFullPaths ??= new List<string>();
                 EditorGUILayout.BeginVertical("box");
                 {

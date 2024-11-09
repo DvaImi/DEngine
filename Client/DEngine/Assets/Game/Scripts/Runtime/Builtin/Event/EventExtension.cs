@@ -2,7 +2,7 @@ using System;
 using DEngine.Event;
 using DEngine.Runtime;
 
-namespace Game.EventSystem
+namespace Game
 {
     public static class EventExtension
     {

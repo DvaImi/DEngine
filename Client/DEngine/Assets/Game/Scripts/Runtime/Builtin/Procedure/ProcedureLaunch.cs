@@ -2,19 +2,24 @@
 using DEngine.Procedure;
 using DEngine.Resource;
 using DEngine.Runtime;
+using Game.Debugger;
 
 namespace Game
 {
-    public class ProcedureLaunch : ProcedureBase
+    public class ProcedureLaunch : GameProcedureBase
     {
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
+
             GameEntry.BuiltinData.InitLanguageSettings();
             BuiltinDataComponent.InitCurrentVariant();
             BuiltinDataComponent.InitSoundSettings();
-            BuiltinDataComponent.InitDebugger();
             BuiltinDataComponent.InitExtensionEventHandle();
+
+            GameEntry.Debugger.RegisterDebuggerWindow("Profiler/Network", new NetworkDebuggerWindow());
+            GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", new ChangeLanguageDebuggerWindow());
+            GameEntry.Debugger.RegisterDebuggerWindow("Other/CommonLine", new CommonLineDebuggerWindow());
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -40,6 +45,7 @@ namespace Game
             {
                 // 可更新模式
                 Log.Info("Updatable resource mode detected.");
+                Log.Info(GameEntry.BuiltinData.ForceCheckVersion ? "Current updatable resource mode enforces version check." : "Current updatable resource mode does not enforce version check.");
                 ChangeState<ProcedureCheckVersion>(procedureOwner);
             }
         }

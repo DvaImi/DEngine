@@ -1,98 +1,72 @@
 ﻿using System;
 using System.Net.Sockets;
 using DEngine;
-using DEngine.Debugger;
 using Game.Network;
 using UnityEngine;
 
 namespace Game.Debugger
 {
-    public class NetworkDebuggerWindow : IDebuggerWindow
+    public class NetworkDebuggerWindow : ScrollableDebuggerWindowBase
     {
         private const float TitleWidth = 240f;
 
         private INetworkModule m_Network;
 
-        private string m_RemoteAddress;
-        private string m_Port;
-
-        public void Initialize(params object[] args)
+        public override void Initialize(params object[] args)
         {
             m_Network = GameEntry.GetModule<INetworkModule>();
         }
 
-        public void Shutdown()
-        {
-        }
-
-        public void OnEnter()
-        {
-        }
-
-        public void OnLeave()
-        {
-        }
-
-        public void OnUpdate(float elapseSeconds, float realElapseSeconds)
-        {
-        }
-
-        public void OnDraw()
-        {
-            OnDrawNetworkWindow();
-        }
-
-        private void OnDrawNetworkWindow()
+        protected override void OnDrawScrollableWindow()
         {
             GUILayout.Label("<b>Network Information</b>");
             GUILayout.BeginVertical("box");
             {
-                DrawItem("Network State", m_Network.Connected ? "Connected" : "Disconnected");
-                DrawItem("Network Session Ping", Utility.Text.Format("{0} ms", m_Network.Ping));
-                DrawItem("Address Family", m_Network.Connected ? GetAddressFamily(m_Network.Session.RemoteEndPoint.AddressFamily) : "Unavailable");
-                DrawItem("Remote Address", m_Network.Connected ? m_Network.Session.RemoteEndPoint.ToString() : "Unavailable");
-                DrawItem("Send Message", m_Network.SendMessageCount.ToString());
-                DrawItem("Send Route Message", m_Network.SentRouteMessageCount.ToString());
-                DrawItem("Call Request", m_Network.CallRequestCount.ToString());
-                DrawItem("Call Route Request", m_Network.CallRouteRequestCount.ToString());
-                DrawItem("Heart Beat LastTime", m_Network.Heartbeat == null ? "0" : DateTimeOffset.FromUnixTimeMilliseconds(m_Network.Heartbeat.LastTime).DateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
-
-                GUILayout.Space(5);
-                if (m_Network.Connected)
-                {
-                    DrawSendMessage();
-                }
-                else
-                {
-                    DrawConnect();
-                }
-
-                GUILayout.Space(5);
-                if (GUILayout.Button("Disconnect"))
-                {
-                    m_Network.Disconnect();
-                }
+                DrawItem("Network Channel Count", m_Network.NetworkChannelCount.ToString());
             }
             GUILayout.EndVertical();
-        }
 
-
-        private void DrawConnect()
-        {
-            GUILayout.Label("IP", GUILayout.Width(TitleWidth));
-            m_RemoteAddress = GUILayout.TextField(m_RemoteAddress);
-            GUILayout.Label("Port", GUILayout.Width(TitleWidth));
-            m_Port = GUILayout.TextField(m_Port);
-            GUILayout.Space(5);
-            if (GUILayout.Button("Connect"))
+            INetworkChannel[] networkChannels = m_Network.GetAllNetworkChannels();
+            foreach (INetworkChannel channel in networkChannels)
             {
-                m_Network.Connect(Utility.Text.Format("{0}:{1}", m_RemoteAddress, m_Port));
+                OnDrawNetworkWindow(channel);
             }
         }
 
-        private void DrawSendMessage()
+        private static void OnDrawNetworkWindow(INetworkChannel networkChannel)
         {
-           
+            GUILayout.Label("<b>Network Information</b>");
+            GUILayout.BeginVertical("box");
+            {
+                DrawItem("Network Name", networkChannel.Name);
+                DrawItem("Network ServiceType", networkChannel.ServiceType.ToString());
+                DrawItem("Network State", networkChannel.Connected ? "Connected" : "Disconnected");
+                DrawItem("Network IsHttps", networkChannel.IsHttps.ToString());
+                DrawItem("Network ConnectTimeout", networkChannel.ConnectTimeout.ToString());
+                DrawItem("Network HeartbeatInterval", networkChannel.HeartbeatInterval.ToString());
+                DrawItem("Network HeartbeatTimeOut", networkChannel.HeartbeatTimeOut.ToString());
+                DrawItem("Network HeartbeatTimeOutInterval", networkChannel.HeartbeatTimeOutInterval.ToString());
+                DrawItem("Network Session Ping", Utility.Text.Format("{0} ms", networkChannel.Ping));
+                DrawItem("Address Family", networkChannel.Connected ? GetAddressFamily(networkChannel.Scene.Session.RemoteEndPoint.AddressFamily) : "Unavailable");
+                DrawItem("Remote Address", networkChannel.Connected ? networkChannel.RemoteAddress : "Unavailable");
+                DrawItem("Send Message", networkChannel.SendMessageCount.ToString());
+                DrawItem("Send Route Message", networkChannel.SentRouteMessageCount.ToString());
+                DrawItem("Call Request", networkChannel.CallRequestCount.ToString());
+                DrawItem("Call Route Request", networkChannel.CallRouteRequestCount.ToString());
+                DrawItem("Heart Beat LastTime", networkChannel.Heartbeat == null ? "0" : DateTimeOffset.FromUnixTimeMilliseconds(networkChannel.Heartbeat.LastTime).DateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+
+                GUILayout.Space(5);
+                if (networkChannel.Connected)
+                {
+                    if (GUILayout.Button("Disconnect"))
+                    {
+                        networkChannel.Disconnect();
+                    }
+                }
+
+                GUILayout.Space(5);
+            }
+            GUILayout.EndVertical();
         }
 
         private static void DrawItem(string title, string content)

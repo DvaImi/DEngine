@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using DEngine;
+using DEngine.Editor;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
 using DEngine.Runtime;
@@ -10,6 +12,7 @@ using Game.Editor.Toolbar;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
 
 namespace Game.Editor.BuildPipeline
 {
@@ -18,11 +21,70 @@ namespace Game.Editor.BuildPipeline
     /// </summary>
     public static partial class GameBuildPipeline
     {
+        private static readonly string[] ResourceModeNames =
+        {
+            "EditorMode (编辑器模式)",
+            "Package (单机模式)",
+            "Updatable (预下载的可更新模式)",
+            "UpdatableWhilePlaying (使用时下载的可更新模式)"
+        };
+
+        [EditorToolbarMenu(nameof(SwitchResourceMode), 1, -1, true)]
+        public static void SwitchResourceMode()
+        {
+            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            {
+                var playModeIndex = (int)DEngineSetting.Instance.ResourceMode;
+                int selectedIndex = EditorGUILayout.Popup(playModeIndex, ResourceModeNames, GUILayout.Width(200));
+                if (selectedIndex != playModeIndex)
+                {
+                    Debug.Log($"更改编辑器资源运行模式 : {ResourceModeNames[selectedIndex]}");
+                    playModeIndex = selectedIndex;
+                    var baseComponent = Object.FindFirstObjectByType<DEngine.Runtime.BaseComponent>();
+                    var resourcesComponent = Object.FindFirstObjectByType<DEngine.Runtime.ResourceComponent>();
+                    if (baseComponent)
+                    {
+                        baseComponent.EditorResourceMode = selectedIndex <= 0;
+                        if (baseComponent.EditorResourceMode)
+                        {
+                            BuildSettings.AllScenes();
+                        }
+
+                        EditorTools.SaveAsset(baseComponent);
+                    }
+
+                    if (resourcesComponent)
+                    {
+                        if (selectedIndex > 0)
+                        {
+                            var fieldInfo = typeof(DEngine.Runtime.ResourceComponent).GetField("m_ResourceMode", BindingFlags.Instance | BindingFlags.NonPublic);
+                            if (fieldInfo != null)
+                            {
+                                fieldInfo.SetValue(resourcesComponent, (ResourceMode)playModeIndex);
+                                EditorTools.SaveAsset(resourcesComponent);
+                            }
+                        }
+                    }
+
+                    DEngineSetting.Instance.ResourceMode = (ResourceMode)playModeIndex;
+                    DEngineSetting.Save();
+                }
+            }
+            EditorGUI.EndDisabledGroup();
+        }
+
         [EditorToolbarMenu("Build Resource", 1, 3)]
         public static bool BuildResource()
         {
-            bool isSuccess = BuildResource(DEngineSetting.Instance.BuildPlatforms, DEngineSetting.Instance.ForceRebuildAssetBundle);
-            if (isSuccess)
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Can't build resource because editor is compiling.");
+                return false;
+            }
+
+            AssetDatabase.Refresh();
+            bool isSuccess = BuildResource(GetCurrentPlatform(), DEngineSetting.Instance.ForceRebuildAssetBundle);
+            if (isSuccess && DEngineSetting.Instance.EnableHostingService == false)
             {
                 EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
             }
@@ -30,18 +92,13 @@ namespace Game.Editor.BuildPipeline
             return isSuccess;
         }
 
-        private static bool BuildResource(Platform platforms, bool forceRebuild = false)
+        private static bool BuildResource(Platform platform, bool forceRebuild = false)
         {
-            return BuildResource(platforms, DEngineSetting.BundlesOutput, forceRebuild);
+            return BuildResource(platform, DEngineSetting.BundlesOutput, forceRebuild);
         }
 
-        private static bool BuildResource(Platform platforms, string outputDirectory, bool forceRebuild = false)
+        private static bool BuildResource(Platform platform, string outputDirectory, bool forceRebuild = false)
         {
-            if (!IsPlatformSelected(platforms))
-            {
-                return true;
-            }
-
             if (DEngineSetting.Instance.ResourceMode == ResourceMode.Unspecified)
             {
                 Debug.LogWarning("ResourceMode is Unspecified");
@@ -53,7 +110,7 @@ namespace Game.Editor.BuildPipeline
             GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
 
             var builderController = new ResourceBuilderController();
-            if (builderController.Load() && BuildResource(builderController, platforms, outputDirectory, forceRebuild))
+            if (builderController.Load() && BuildResource(builderController, platform, outputDirectory, forceRebuild))
             {
                 if (builderController.Save())
                 {
@@ -75,11 +132,6 @@ namespace Game.Editor.BuildPipeline
             if (builderController == null)
             {
                 return false;
-            }
-
-            if (!IsPlatformSelected(platforms))
-            {
-                return true;
             }
 
             GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
@@ -156,23 +208,6 @@ namespace Game.Editor.BuildPipeline
 
             AssetDatabase.Refresh();
             Debug.Log("Clear success");
-        }
-
-        public static bool IsPlatformSelected(Platform platform)
-        {
-            return (DEngineSetting.Instance.BuildPlatforms & platform) != 0;
-        }
-
-        public static void SelectPlatform(Platform platform, bool selected)
-        {
-            if (selected)
-            {
-                DEngineSetting.Instance.BuildPlatforms |= platform;
-            }
-            else
-            {
-                DEngineSetting.Instance.BuildPlatforms &= ~platform;
-            }
         }
 
         public static void RefreshPackages()
@@ -368,6 +403,96 @@ namespace Game.Editor.BuildPipeline
         {
             EditorUtility.ClearProgressBar();
             Debug.LogWarning(Utility.Text.Format("Build resources error with error message '{0}'.", errorMessage));
+        }
+
+        public static bool BuildResourcePack(Platform platform, string sourceVersion, out string outputPath, out string targetVersion)
+        {
+            outputPath = targetVersion = string.Empty;
+            if (DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.BuildResourcePack)
+            {
+                ResourcePackBuilderController controller = new();
+                controller.OnBuildResourcePacksStarted += OnBuildResourcePacksStarted;
+                controller.OnBuildResourcePacksCompleted += OnBuildResourcePacksCompleted;
+                controller.OnBuildResourcePackSuccess += OnBuildResourcePackSuccess;
+                controller.OnBuildResourcePackFailure += OnBuildResourcePackFailure;
+                if (controller.Load())
+                {
+                    controller.Platform = platform;
+                    var versionNames = controller.GetVersionNames();
+                    if (versionNames.Length < 2)
+                    {
+                        Debug.LogWarning("No version was found in the specified working directory and platform.");
+                        DEngineSetting.Instance.BuildResourcePack = false;
+                        DEngineSetting.Save();
+                        return false;
+                    }
+
+                    controller.BackupDiff = controller.BackupVersion = true;
+                    controller.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
+                    controller.RefreshCompressionHelper();
+                    outputPath = controller.OutputPath;
+                    targetVersion = versionNames[^1];
+                    return controller.BuildResourcePack(sourceVersion, targetVersion);
+                }
+            }
+
+            return false;
+        }
+
+        private static void OnBuildResourcePacksStarted(int count)
+        {
+            Debug.Log(Utility.Text.Format("Build resource packs started, '{0}' items to be built.", count));
+            EditorUtility.DisplayProgressBar("Build Resource Packs", Utility.Text.Format("Build resource packs, {0} items to be built.", count), 0f);
+        }
+
+        private static void OnBuildResourcePacksCompleted(int successCount, int count)
+        {
+            int failureCount = count - successCount;
+            string str = Utility.Text.Format("Build resource packs completed, '{0}' items, '{1}' success, '{2}' failure.", count, successCount, failureCount);
+            if (failureCount > 0)
+            {
+                Debug.LogWarning(str);
+            }
+            else
+            {
+                Debug.Log(str);
+            }
+
+            EditorUtility.ClearProgressBar();
+        }
+
+        private static void OnBuildResourcePackSuccess(int index, int count, string sourceVersion, string targetVersion)
+        {
+            Debug.Log(Utility.Text.Format("Build resource packs success, source version '{0}', target version '{1}'.", GetVersionNameForDisplay(sourceVersion), GetVersionNameForDisplay(targetVersion)));
+            EditorUtility.DisplayProgressBar("Build Resource Packs", Utility.Text.Format("Build resource packs, {0}/{1} completed.", index + 1, count), (float)index / count);
+        }
+
+        private static void OnBuildResourcePackFailure(int index, int count, string sourceVersion, string targetVersion)
+        {
+            Debug.LogWarning(Utility.Text.Format("Build resource packs failure, source version '{0}', target version '{1}'.", GetVersionNameForDisplay(sourceVersion), GetVersionNameForDisplay(targetVersion)));
+            EditorUtility.DisplayProgressBar("Build Resource Packs", Utility.Text.Format("Build resource packs, {0}/{1} completed.", index + 1, count), (float)index / count);
+        }
+
+        private static string GetVersionNameForDisplay(string versionName)
+        {
+            if (string.IsNullOrEmpty(versionName))
+            {
+                return "<None>";
+            }
+
+            string[] splitVersionNames = versionName.Split('.');
+            if (splitVersionNames.Length < 2)
+            {
+                return null;
+            }
+
+            string text = splitVersionNames[0];
+            for (int i = 1; i < splitVersionNames.Length - 1; i++)
+            {
+                text += "." + splitVersionNames[i];
+            }
+
+            return DEngine.Utility.Text.Format("{0} ({1})", text, splitVersionNames[^1]);
         }
     }
 }

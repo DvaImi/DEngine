@@ -7,5 +7,10 @@ namespace Game.Editor.FileSystem
     public class FileSystemCollector : ScriptableSingleton<FileSystemCollector>
     {
         public List<FileSystemData> FileSystemDatas = new();
+
+        public FileSystemData Get(string fileSystemName)
+        {
+            return FileSystemDatas.Find(o => o.FileSystem == fileSystemName);
+        }
     }
 }

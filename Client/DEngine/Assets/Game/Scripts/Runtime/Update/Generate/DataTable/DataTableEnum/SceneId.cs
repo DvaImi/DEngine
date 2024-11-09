@@ -4,5 +4,7 @@ namespace Game.Update
 	// 场景编号
 	public enum SceneId : byte
 	{
+		// 
+		GameScene = 0,
 	}
 }

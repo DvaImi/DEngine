@@ -5,11 +5,6 @@ namespace Game.Editor.BuildPipeline
     public interface IBuildPlayerEventHandler
     {
         /// <summary>
-        /// 获取当某个平台生成失败时，是否继续生成下一个平台。
-        /// </summary>
-        bool ContinueOnFailure { get; }
-
-        /// <summary>
         /// 所有平台生成开始前的预处理事件。
         /// </summary>
         /// <param name="productName">产品名称。</param>

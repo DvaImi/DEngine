@@ -14,7 +14,7 @@ namespace Game.Editor.BuildPipeline
 {
     public class GameBuildPlayerWindow : EditorWindow
     {
-        private bool m_BeginBuildPlayer = false;
+        private bool m_BeginBuildPlayer;
         private bool m_FoldoutBuildSceneGroup = true;
         private Vector2 m_ScrollPosition;
         private List<string> m_DefaultSceneNames;
@@ -73,7 +73,7 @@ namespace Game.Editor.BuildPipeline
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, false, false);
             {
                 GUILayout.Space(10f);
-                GameBuildPipeline.GUIPlatform();
+                EditorGUILayout.LabelField("Platform :", GameBuildPipeline.GetCurrentPlatform().ToString());
                 GUILayout.Space(10f);
                 EditorGUILayout.BeginVertical("box");
                 {

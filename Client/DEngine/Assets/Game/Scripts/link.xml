@@ -3,10 +3,8 @@
   <assembly fullname="DEngine">
     <type fullname="DEngine.DEngineEntry" preserve="all" />
     <type fullname="DEngine.DEngineException" preserve="all" />
-    <type fullname="DEngine.DEngineFunc`2" preserve="all" />
     <type fullname="DEngine.DataTable.DataTableBase" preserve="all" />
     <type fullname="DEngine.DataTable.IDataRow" preserve="all" />
-    <type fullname="DEngine.DataTable.IDataTableManager" preserve="all" />
     <type fullname="DEngine.DataTable.IDataTable`1" preserve="all" />
     <type fullname="DEngine.Event.GameEventArgs" preserve="all" />
     <type fullname="DEngine.Fsm.FsmState`1" preserve="all" />
@@ -52,7 +50,16 @@
     <type fullname="UnityExtension" preserve="all" />
   </assembly>
   <assembly fullname="Fantasy.Unity">
+    <type fullname="Fantasy.Async.AsyncFTaskMethodBuilder" preserve="all" />
+    <type fullname="Fantasy.Async.FTask" preserve="all" />
+    <type fullname="Fantasy.Async.FTaskCompleted" preserve="all" />
+    <type fullname="Fantasy.Async.FTask`1" preserve="all" />
+    <type fullname="Fantasy.Entitas.Entity" preserve="all" />
     <type fullname="Fantasy.Entitas.MessagePoolComponent" preserve="all" />
+    <type fullname="Fantasy.Event.AsyncEventSystem`1" preserve="all" />
+    <type fullname="Fantasy.Event.EventComponent" preserve="all" />
+    <type fullname="Fantasy.ILog" preserve="all" />
+    <type fullname="Fantasy.Log" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteMessage" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteRequest" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IAddressableRouteResponse" preserve="all" />
@@ -66,6 +73,7 @@
     <type fullname="Fantasy.Network.Interface.IRouteMessage" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteRequest" preserve="all" />
     <type fullname="Fantasy.Network.Interface.IRouteResponse" preserve="all" />
+    <type fullname="Fantasy.Platform.Unity.Entry" preserve="all" />
     <type fullname="Fantasy.Scene" preserve="all" />
     <type fullname="Fantasy.Serialize.AMessage" preserve="all" />
     <type fullname="Fantasy.Serialize.IProto" preserve="all" />
@@ -81,8 +89,9 @@
     <type fullname="Game.GameEntry" preserve="all" />
     <type fullname="Game.IGameModule" preserve="all" />
     <type fullname="Game.Network.INetworkModule" preserve="all" />
-    <type fullname="Game.Timer.ITimerModule" preserve="all" />
+    <type fullname="Game.Network.NetworkLog" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
+    <type fullname="Game.UniTaskParallel`1" preserve="all" />
   </assembly>
   <assembly fullname="Luban.Runtime">
     <type fullname="Luban.BeanBase" preserve="all" />
@@ -95,12 +104,16 @@
     <type fullname="System.ComponentModel.EditorBrowsableAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableState" preserve="all" />
   </assembly>
+  <assembly fullname="System.Core">
+    <type fullname="System.Linq.Enumerable" preserve="all" />
+  </assembly>
   <assembly fullname="UniTask">
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.UniTaskStatus" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTaskVoid" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.YieldAwaitable" preserve="all" />
@@ -179,10 +192,10 @@
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.ExtensionAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.IAsyncStateMachine" preserve="all" />
+    <type fullname="System.Runtime.CompilerServices.IsReadOnlyAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.IteratorStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeHelpers" preserve="all" />
-    <type fullname="System.Runtime.CompilerServices.TaskAwaiter`1" preserve="all" />
     <type fullname="System.RuntimeFieldHandle" preserve="all" />
     <type fullname="System.RuntimeTypeHandle" preserve="all" />
     <type fullname="System.Security.Permissions.SecurityAction" preserve="all" />
@@ -194,7 +207,6 @@
     <type fullname="System.StringSplitOptions" preserve="all" />
     <type fullname="System.Text.Encoding" preserve="all" />
     <type fullname="System.Threading.CancellationToken" preserve="all" />
-    <type fullname="System.Threading.Tasks.Task`1" preserve="all" />
     <type fullname="System.Type" preserve="all" />
     <type fullname="System.ValueType" preserve="all" />
   </assembly>

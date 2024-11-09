@@ -16,14 +16,8 @@ MonoBehaviour:
   - FileSystem: cfg
     OutPutFolderPath: Assets/Game/Bundles/Configs
     FileFullPaths:
-    - Excels/Output/DataTable/Entity.bytes
-    - Excels/Output/DataTable/Music.bytes
-    - Excels/Output/DataTable/Scene.bytes
-    - Excels/Output/DataTable/Sound.bytes
-    - Excels/Output/DataTable/UIForm.bytes
-    - Excels/Output/DataTable/UIGroup.bytes
-    - Excels/Output/DataTable/UISound.bytes
     - ../../Share/Luban/Client/output/Bin/TBItem.bytes
+    UseEncryption: 0
   - FileSystem: aot
     OutPutFolderPath: Assets/Game/Bundles/Assemblies
     FileFullPaths:
@@ -37,7 +31,10 @@ MonoBehaviour:
     - HybridCLRData/Output/AOT/System.Core.bytes
     - HybridCLRData/Output/AOT/UniTask.bytes
     - HybridCLRData/Output/AOT/UnityEngine.CoreModule.bytes
+    - HybridCLRData/Output/AOT/ZString.bytes
+    UseEncryption: 1
   - FileSystem: patch
     OutPutFolderPath: Assets/Game/Bundles/Assemblies
     FileFullPaths:
     - HybridCLRData/Output/HotUpdate/Game.Runtime.Update.bytes
+    UseEncryption: 1

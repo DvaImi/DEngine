@@ -24,7 +24,7 @@ namespace Game.Editor.FileSystem
             return m_FileSystemManager.HasFileSystem(fullPath) ? m_FileSystemManager.GetFileSystem(fullPath) : m_FileSystemManager.CreateFileSystem(fullPath, FileSystemAccess.Write, maxFileCount, maxBlockCount);
         }
 
-        public FileSystemDataVersion Execute(string fileSystemFullPath, IList<string> sourceFileFullPaths)
+        public FileSystemDataVersion Execute(string fileSystemFullPath, IList<string> sourceFileFullPaths, bool useEncryption)
         {
             int processedFiles = 0;
             int totalFiles = sourceFileFullPaths.Count;
@@ -34,7 +34,7 @@ namespace Game.Editor.FileSystem
                 FileSystem = fileSystem.FullPath
             };
 
-
+            Dictionary<string, int> hashCodeMap = new Dictionary<string, int>();
             foreach (var fullPath in sourceFileFullPaths)
             {
                 if (!File.Exists(fullPath))
@@ -52,7 +52,16 @@ namespace Game.Editor.FileSystem
                 }
 
                 var data = File.ReadAllBytes(fullPath);
+                int hashCode = 0;
+                if (useEncryption)
+                {
+                    hashCode = Utility.Verifier.GetCrc32(data);
+                    byte[] hashBytes = Utility.Converter.GetBytes(hashCode);
+                    data = Utility.Encryption.GetXorBytes(data, hashBytes);
+                }
+
                 fileSystem.WriteFile(fileName, data);
+                hashCodeMap[fileName] = hashCode;
                 processedFiles++;
                 var progress = (float)processedFiles / totalFiles;
                 EditorUtility.DisplayProgressBar("Build Files", $"Processing {fullPath}", progress);
@@ -60,7 +69,7 @@ namespace Game.Editor.FileSystem
 
             foreach (var fileInfo in fileSystem.GetAllFileInfos())
             {
-                fileSystemDataVersion.FileInfos[fileInfo.Name] = new FileInfo(fileInfo.Offset, fileInfo.Length);
+                fileSystemDataVersion.FileInfos[fileInfo.Name] = new FileInfo(fileInfo.Offset, fileInfo.Length, hashCodeMap[fileInfo.Name]);
             }
 
             return fileSystemDataVersion;
@@ -92,7 +101,7 @@ namespace Game.Editor.FileSystem
 
                     string fullPath = Utility.Path.GetRegularCombinePath(fileSystemData.OutPutFolderPath, fileSystemData.FileSystem + ".bytes");
                     string versionPath = Utility.Path.GetRegularCombinePath(fileSystemData.OutPutFolderPath, fileSystemData.FileSystem + "Version.bytes");
-                    fileSystemVersions[versionPath] = Execute(fullPath, fileSystemData.FileFullPaths);
+                    fileSystemVersions[versionPath] = Execute(fullPath, fileSystemData.FileFullPaths, fileSystemData.UseEncryption);
                 }
 
                 foreach (var version in fileSystemVersions)

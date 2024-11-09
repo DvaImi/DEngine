@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using DEngine.Editor;
+using Game.Editor.FileSystem;
 using Game.Editor.Toolbar;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
@@ -16,18 +17,45 @@ namespace Game.Editor.BuildPipeline
         [EditorToolbarMenu("AOT Generic", 1, 0)]
         public static void GenerateStripedAOT()
         {
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Cannot generate striped aot because editor is compiling.");
+                return;
+            }
+            AssetDatabase.Refresh();
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             StripAOTDllCommand.GenerateStripedAOTDlls();
             AOTReferenceGeneratorCommand.CompileAndGenerateAOTGenericReference();
             CopyAOTDllAssets(buildTarget);
+
+            var aot = FileSystemCollector.Instance.Get("aot");
+            if (aot == null)
+            {
+                return;
+            }
+
+            ProcessFileSystem(aot);
         }
 
         [EditorToolbarMenu("Compile", 1, 1)]
         public static void CompileUpdateDll()
         {
+            if (EditorApplication.isCompiling)
+            {
+                Debug.LogWarning("Cannot compile updated assemblies because editor is compiling.");
+                return;
+            }
+            AssetDatabase.Refresh();
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             CompileDllCommand.CompileDll(buildTarget);
             CopyUpdateDllAssets(buildTarget);
+            var patch = FileSystemCollector.Instance.Get("patch");
+            if (patch == null)
+            {
+                return;
+            }
+
+            ProcessFileSystem(patch);
         }
 
         public static void SaveHybridCLR()

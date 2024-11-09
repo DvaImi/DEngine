@@ -1,8 +1,9 @@
 ﻿using System;
+using DEngine.DataTable;
 using DEngine.Event;
 using DEngine.Procedure;
 using DEngine.Runtime;
-using Game.Update.Scene;
+using Game.Update.Sound;
 using ProcedureOwner = DEngine.Fsm.IFsm<DEngine.Procedure.IProcedureManager>;
 
 namespace Game.Update.Procedure
@@ -11,6 +12,7 @@ namespace Game.Update.Procedure
     {
         private bool m_IsChangeSceneComplete = false;
         private Type m_NextProcedureType;
+        private int m_BackgroundMusicId = 0;
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -43,7 +45,17 @@ namespace Game.Update.Procedure
 
             int sceneId = procedureOwner.GetData<VarInt32>(UpdateConstant.ProceureConstant.NextSceneId);
             m_NextProcedureType = procedureOwner.GetData<VarProcedure>(UpdateConstant.ProceureConstant.NextProcedure);
-            GameEntry.Scene.LoadScene((SceneId)sceneId, this);
+
+            IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
+            DRScene drScene = dtScene.GetDataRow(sceneId);
+            if (drScene == null)
+            {
+                Log.Warning("Can not load scene '{0}' from data table.", sceneId.ToString());
+                return;
+            }
+
+            GameEntry.Scene.LoadScene(UpdateAssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
+            m_BackgroundMusicId = drScene.BackgroundMusicId;
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -71,6 +83,7 @@ namespace Game.Update.Procedure
             }
 
             ChangeState(procedureOwner, m_NextProcedureType);
+            procedureOwner.RemoveData(UpdateConstant.ProceureConstant.NextProcedure);
         }
 
         private void OnLoadSceneSuccess(object sender, GameEventArgs e)
@@ -82,6 +95,10 @@ namespace Game.Update.Procedure
             }
 
             Log.Info("Load scene '{0}' OK.", ne.SceneAssetName);
+            if (m_BackgroundMusicId > 0)
+            {
+                GameEntry.Sound.PlayMusic(m_BackgroundMusicId);
+            }
             m_IsChangeSceneComplete = true;
         }
 

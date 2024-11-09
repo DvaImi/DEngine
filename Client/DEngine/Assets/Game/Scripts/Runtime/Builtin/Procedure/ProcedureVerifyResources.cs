@@ -8,7 +8,7 @@ namespace Game
     /// <summary>
     /// 使用可更新模式校验资源流程
     /// </summary>
-    public class ProcedureVerifyResources : ProcedureBase
+    public class ProcedureVerifyResources : GameProcedureBase
     {
         private bool m_VerifyResourcesComplete = false;
 

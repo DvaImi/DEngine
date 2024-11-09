@@ -65,10 +65,6 @@ namespace Game.Editor.BuildPipeline
         private static bool GetBuildVersions(Platform platform, bool lastFullVersion, out string fullPath, out string package, out string packed, out string patch)
         {
             fullPath = package = packed = patch = null;
-            if (!IsPlatformSelected(platform))
-            {
-                return true;
-            }
 
             string outputDirectory = DEngineSetting.BundlesOutput;
             string buildReportDirectory = Path.Combine(outputDirectory, "BuildReport");

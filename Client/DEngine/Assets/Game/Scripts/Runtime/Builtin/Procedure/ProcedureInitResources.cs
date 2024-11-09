@@ -4,7 +4,7 @@ using DEngine.Runtime;
 
 namespace Game
 {
-    public class ProcedureInitResources : ProcedureBase
+    public class ProcedureInitResources : GameProcedureBase
     {
         private bool m_InitResourcesComplete = false;
 
@@ -28,11 +28,7 @@ namespace Game
                 return;
             }
 
-#if ENABLE_HYBRIDCLR&& !UNITY_EDITOR
-            ChangeState<ProcedureLoadAssemblies>(procedureOwner);
-#else
-            ChangeState<ProcedureLoadHotUpdateEntry>(procedureOwner);
-#endif
+            ProcessAssembliesProcedure(procedureOwner);
         }
 
         private void OnInitResourcesComplete()

@@ -7,11 +7,12 @@ using UnityEngine;
 
 namespace Game
 {
-    public class ProcedureCheckVersion : ProcedureBase
+    public class ProcedureCheckVersion : GameProcedureBase
     {
-        private bool m_CheckVersionComplete = false;
-        private bool m_NeedUpdateVersion = false;
-        private VersionInfo m_VersionInfo = null;
+        private bool m_CheckVersionComplete;
+        private bool m_NeedUpdateVersion;
+        private bool m_UseResourcePatchPack;
+        private VersionInfo m_VersionInfo;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
@@ -19,19 +20,26 @@ namespace Game
 
             m_CheckVersionComplete = false;
             m_NeedUpdateVersion = false;
+            m_UseResourcePatchPack = false;
             m_VersionInfo = null;
 
             //检测连网状态
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
-                Log.Warning("The device is not connected to the network");
-                GameEntry.BuiltinData.OpenDialog(new DialogParams
+                if (GameEntry.BuiltinData.ForceCheckVersion)
                 {
-                    Mode = 1,
-                    Message = "The device is not connected to the network",
-                    ConfirmText = "Quit",
-                    OnClickConfirm = delegate(object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
-                });
+                    Log.Warning("The device is not connected to the network");
+                    GameEntry.BuiltinData.OpenDialog(new DialogParams
+                    {
+                        Mode = 1,
+                        Message = "The device is not connected to the network",
+                        ConfirmText = "Quit",
+                        OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                    });
+                    return;
+                }
+
+                TryUseLastLocalVersionResource();
                 return;
             }
 
@@ -47,12 +55,21 @@ namespace Game
                 return;
             }
 
+
             if (m_NeedUpdateVersion)
             {
                 procedureOwner.SetData<VarInt32>("VersionListLength", m_VersionInfo.VersionListLength);
                 procedureOwner.SetData<VarInt32>("VersionListHashCode", m_VersionInfo.VersionListHashCode);
                 procedureOwner.SetData<VarInt32>("VersionListCompressedLength", m_VersionInfo.VersionListCompressedLength);
                 procedureOwner.SetData<VarInt32>("VersionListCompressedHashCode", m_VersionInfo.VersionListCompressedHashCode);
+
+                if (m_UseResourcePatchPack && !string.IsNullOrEmpty(m_VersionInfo.PatchResourcePackName))
+                {
+                    procedureOwner.SetData<VarBoolean>("UseResourcePatchPack", m_VersionInfo.UseResourcePatchPack);
+                    procedureOwner.SetData<VarString>("PatchResourcePackName", m_VersionInfo.PatchResourcePackName);
+                    procedureOwner.SetData<VarInt64>("PatchTotalCompressedLength", m_VersionInfo.PatchTotalCompressedLength);
+                }
+
                 ChangeState<ProcedureUpdateVersionList>(procedureOwner);
             }
             else
@@ -64,7 +81,6 @@ namespace Game
         private async void CheckVersionList()
         {
             string checkVersionUrl = GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl;
-            // string checkVersionUrl = Utility.Text.Format(GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl, GameEntry.BuiltinData.Builtin.BuildInfo.LatestGameVersion, GetPlatformPath());
             Log.Debug(checkVersionUrl);
             // 向服务器请求版本信息
             WebRequestResult result = await GameEntry.WebRequest.Get(checkVersionUrl);
@@ -73,7 +89,7 @@ namespace Game
                 // 解析版本信息
                 byte[] versionInfoBytes = result.Bytes;
                 string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
-                Log.Debug(versionInfoString);
+                Log.Info(versionInfoString);
                 m_VersionInfo = Utility.Json.ToObject<VersionInfo>(versionInfoString);
                 if (m_VersionInfo == null)
                 {
@@ -82,8 +98,9 @@ namespace Game
                 }
 
                 Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
-                GameEntry.Setting.SetInt("InternalResourceVersion", m_VersionInfo.InternalResourceVersion);
+                GameEntry.Setting.SetInt(Constant.ResourceVersion.InternalResourceVersion, m_VersionInfo.InternalResourceVersion);
                 GameEntry.Setting.Save();
+                m_UseResourcePatchPack = m_VersionInfo.UseResourcePatchPack;
                 m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(m_VersionInfo.InternalResourceVersion) == CheckVersionListResult.NeedUpdate;
                 if (m_VersionInfo.ForceUpdateGame)
                 {
@@ -96,7 +113,7 @@ namespace Game
                         ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
                         OnClickConfirm = GotoUpdateApp,
                         CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
-                        OnClickCancel = delegate(object userData) { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                        OnClickCancel = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                     });
                     return;
                 }
@@ -108,10 +125,49 @@ namespace Game
             else
             {
                 Log.Warning("Check version failure, error message is '{0}'.", result.ErrorMessage);
+                if (GameEntry.BuiltinData.ForceCheckVersion)
+                {
+                    return;
+                }
+
+                TryUseLastLocalVersionResource();
             }
         }
 
-        private void GotoUpdateApp(object userData)
+        private void TryUseLastLocalVersionResource()
+        {
+            Log.Info("Try to use the latest local resource version.");
+            if (GameEntry.Setting.HasSetting(Constant.ResourceVersion.InternalResourceVersion))
+            {
+                int internalResourceVersion = GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion);
+                if (internalResourceVersion > 0)
+                {
+                    GameEntry.BuiltinData.OpenDialog(new DialogParams
+                    {
+                        Mode = 2,
+                        Message = "Try to use the latest local resource version.",
+                        ConfirmText = "Confirm",
+                        CancelText = "Quit",
+                        OnClickConfirm = _ =>
+                        {
+                            m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
+                            m_CheckVersionComplete = true;
+                        },
+                        OnClickCancel = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                    });
+                }
+            }
+
+            GameEntry.BuiltinData.OpenDialog(new DialogParams
+            {
+                Mode = 1,
+                Message = "Try to use the latest local resource version failure.",
+                ConfirmText = "Quit",
+                OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+            });
+        }
+
+        private static void GotoUpdateApp(object userData)
         {
             string url = null;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
@@ -127,44 +183,6 @@ namespace Game
             {
                 Application.OpenURL(url);
                 DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit);
-            }
-        }
-
-        private string GetPlatformPath()
-        {
-            // 这里和 GameBuildEventHandler.GetPlatformPath() 对应。
-            // 使用 平台标识符 关联 UnityEngine.RuntimePlatform 和 DEngine.Editor.ResourceTools.Platform
-            switch (Application.platform)
-            {
-                case RuntimePlatform.WindowsEditor:
-                    return "Windows";
-                case RuntimePlatform.WindowsPlayer:
-                    return "Windows";
-
-                case RuntimePlatform.OSXEditor:
-                case RuntimePlatform.OSXPlayer:
-                    return "MacOS";
-
-                case RuntimePlatform.IPhonePlayer:
-                    return "IOS";
-
-                case RuntimePlatform.Android:
-                    return "Android";
-
-                case RuntimePlatform.WSAPlayerX64:
-                case RuntimePlatform.WSAPlayerX86:
-                case RuntimePlatform.WSAPlayerARM:
-                    return "WSA";
-
-                case RuntimePlatform.WebGLPlayer:
-                    return "WebGL";
-
-                case RuntimePlatform.LinuxEditor:
-                case RuntimePlatform.LinuxPlayer:
-                    return "Linux";
-
-                default:
-                    throw new System.NotSupportedException(Utility.Text.Format("Platform '{0}' is not supported.", Application.platform));
             }
         }
     }

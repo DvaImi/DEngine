@@ -4,5 +4,7 @@ namespace Game.Update
 	// 音乐编号
 	public enum MusicId : byte
 	{
+		// 
+		bgm = 1,
 	}
 }
