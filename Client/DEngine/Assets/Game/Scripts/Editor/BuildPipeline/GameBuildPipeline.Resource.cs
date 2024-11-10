@@ -29,7 +29,7 @@ namespace Game.Editor.BuildPipeline
             "UpdatableWhilePlaying (使用时下载的可更新模式)"
         };
 
-        [EditorToolbarMenu(nameof(SwitchResourceMode), 1, -1, true)]
+        [EditorToolbarMenu(nameof(SwitchResourceMode), ToolBarMenuAlign.Right, -1, true)]
         public static void SwitchResourceMode()
         {
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
@@ -73,7 +73,7 @@ namespace Game.Editor.BuildPipeline
             EditorGUI.EndDisabledGroup();
         }
 
-        [EditorToolbarMenu("Build Resource", 1, 3)]
+        [EditorToolbarMenu("Build Resource", ToolBarMenuAlign.Right, 3)]
         public static bool BuildResource()
         {
             if (EditorApplication.isCompiling)

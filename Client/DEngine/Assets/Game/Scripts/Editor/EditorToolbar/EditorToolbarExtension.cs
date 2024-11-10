@@ -19,7 +19,7 @@ namespace Game.Editor.Toolbar
         private static readonly Dictionary<string, MethodInfo> RightCachedMethods = new();
         private static readonly Dictionary<string, MethodInfo> LeftToolbarCustomGUI = new();
         private static readonly Dictionary<string, MethodInfo> RightToolbarCustomGUI = new();
-        private static Stack<MethodInfo> RunMethodInfos = new();
+        private static readonly Stack<MethodInfo> RunMethodInfos = new();
 
         static EditorToolbarExtension()
         {
@@ -28,7 +28,7 @@ namespace Game.Editor.Toolbar
             CacheMethods();
         }
 
-        public static void Shutdown()
+        private static void Shutdown()
         {
             LeftMenu.Clear();
             RightMenu.Clear();
@@ -207,6 +207,7 @@ namespace Game.Editor.Toolbar
                             {
                                 if (LeftCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
                                 {
+                                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                                     RunMethodInfos.Push(methodInfo);
                                 }
                                 else
@@ -244,6 +245,7 @@ namespace Game.Editor.Toolbar
                             {
                                 if (RightCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
                                 {
+                                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                                     RunMethodInfos.Push(methodInfo);
                                 }
                                 else

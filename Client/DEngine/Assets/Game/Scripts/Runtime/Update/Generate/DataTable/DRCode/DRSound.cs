@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-10-13 11:20:26.845
+// 生成时间：2024-11-10 13:27:02.432
 //------------------------------------------------------------
 
 using DEngine;
@@ -136,7 +136,7 @@ namespace Game.Update
 
         public override string ToString()
         {
-                return string.Concat(string.Format("Id: {0}" ,Id),string.Format("AssetName: {0}" ,AssetName),string.Format("Priority: {0}" ,Priority),string.Format("Loop: {0}" ,Loop),string.Format("Volume: {0}" ,Volume),string.Format("SpatialBlend: {0}" ,SpatialBlend),string.Format("MaxDistance: {0}" ,MaxDistance));
+            return string.Concat($"Id: {Id}", $"AssetName: {AssetName}", $"Priority: {Priority}", $"Loop: {Loop}", $"Volume: {Volume}", $"SpatialBlend: {SpatialBlend}", $"MaxDistance: {MaxDistance}");
         }
 
     }

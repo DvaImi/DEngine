@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-11-01 23:48:44.206
+// 生成时间：2024-11-10 13:27:01.988
 //------------------------------------------------------------
 
 using DEngine;
@@ -125,7 +125,7 @@ namespace Game.Update
 
         public override string ToString()
         {
-                return string.Concat(string.Format("Id: {0}" ,Id),string.Format("Name: {0}" ,Name),string.Format("InstanceAutoReleaseInterval: {0}" ,InstanceAutoReleaseInterval),string.Format("InstanceCapacity: {0}" ,InstanceCapacity),string.Format("InstanceExpireTime: {0}" ,InstanceExpireTime),string.Format("InstancePriority: {0}" ,InstancePriority));
+            return string.Concat($"Id: {Id}", $"Name: {Name}", $"InstanceAutoReleaseInterval: {InstanceAutoReleaseInterval}", $"InstanceCapacity: {InstanceCapacity}", $"InstanceExpireTime: {InstanceExpireTime}", $"InstancePriority: {InstancePriority}");
         }
 
     }

@@ -83,13 +83,14 @@
   </assembly>
   <assembly fullname="Game.Runtime.Builtin">
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
-    <type fullname="Game.EventSubscriber" preserve="all" />
+    <type fullname="Game.EventContainer" preserve="all" />
     <type fullname="Game.FileSystem.FileInfo" preserve="all" />
     <type fullname="Game.FileSystem.FileSystemDataVersion" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
     <type fullname="Game.IGameModule" preserve="all" />
     <type fullname="Game.Network.INetworkModule" preserve="all" />
     <type fullname="Game.Network.NetworkLog" preserve="all" />
+    <type fullname="Game.SoundButton" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
     <type fullname="Game.UniTaskParallel`1" preserve="all" />
   </assembly>
@@ -147,6 +148,7 @@
     <type fullname="UnityEngine.CanvasGroup" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">
+    <type fullname="System.Action" preserve="all" />
     <type fullname="System.Activator" preserve="all" />
     <type fullname="System.AppDomain" preserve="all" />
     <type fullname="System.ArgumentException" preserve="all" />

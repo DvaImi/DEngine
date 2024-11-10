@@ -40,7 +40,7 @@ namespace Game.Editor.DataTableTools
 
                 if (!NameRegex.IsMatch(name))
                 {
-                    Debug.LogWarning(DEngine.Utility.Text.Format("Check raw data failure. DataTableName='{0}' Name='{1}'", dataTableName, name));
+                    Debug.LogWarning(Utility.Text.Format("Check raw data failure. DataTableName='{0}' Name='{1}'", dataTableName, name));
                     return false;
                 }
             }
@@ -50,7 +50,7 @@ namespace Game.Editor.DataTableTools
 
         public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string dataTableName)
         {
-            var binaryDataFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.OutputDataTableFolder, dataTableName + ".bytes"));
+            var binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.OutputDataTableFolder, dataTableName + ".bytes"));
 
             FileInfo fileInfo = new FileInfo(binaryDataFileName);
             if (fileInfo.Directory is { Exists: false })
@@ -88,7 +88,7 @@ namespace Game.Editor.DataTableTools
                 return;
             }
 
-            var csharpCodeFileName = DEngine.Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.CSharpCodePath, "DR" + dataTableName + ".cs"));
+            var csharpCodeFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.CSharpCodePath, "DR" + dataTableName + ".cs"));
             FileInfo fileInfo = new FileInfo(csharpCodeFileName);
             if (fileInfo.Directory is { Exists: false })
             {
@@ -237,30 +237,26 @@ namespace Game.Editor.DataTableTools
             codeContent.AppendLine("        public override string ToString()");
             codeContent.AppendLine("        {");
 
-            codeContent.AppendFormat("                return string.Concat(");
-            const string fmf = "{0}";
+            codeContent.Append("            return string.Concat(");
             for (var i = 0; i < dataTableProcessor.RawColumnCount; i++)
             {
-                if (dataTableProcessor.IsCommentColumn(i))
-                {
-                    continue;
-                }
-
-                if (dataTableProcessor.IsEnumNameColumn(i))
+                if (dataTableProcessor.IsCommentColumn(i) || dataTableProcessor.IsEnumNameColumn(i))
                 {
                     continue;
                 }
 
                 if (dataTableProcessor.IsListColumn(i) || dataTableProcessor.IsArrayColumn(i) || dataTableProcessor.IsDictionaryColumn(i))
                 {
-                    codeContent.Append($"string.Format(\"{dataTableProcessor.GetName(i)}: {fmf}\" ,GameUtility.String.CollectionToString({dataTableProcessor.GetName(i)}))");
-                    continue;
+                    codeContent.Append($"$\"{dataTableProcessor.GetName(i)}: {{GameUtility.String.CollectionToString({dataTableProcessor.GetName(i)})}}\"");
+                }
+                else
+                {
+                    codeContent.Append($"$\"{dataTableProcessor.GetName(i)}: {{{dataTableProcessor.GetName(i)}}}\"");
                 }
 
-                codeContent.Append($"string.Format(\"{dataTableProcessor.GetName(i)}: {fmf}\" ,{dataTableProcessor.GetName(i)})");
                 if (i < dataTableProcessor.RawColumnCount - 1)
                 {
-                    codeContent.Append(",");
+                    codeContent.Append(", ");
                 }
             }
 
@@ -268,6 +264,9 @@ namespace Game.Editor.DataTableTools
             codeContent.AppendLine("        }");
             return codeContent.ToString();
         }
+
+
+
 
         /// <summary>
         ///  数据类型生成版本2
@@ -417,15 +416,18 @@ namespace Game.Editor.DataTableTools
                     if (dataTableProcessor.IsArrayColumn(i))
                     {
                         var t = dataTableProcessor.GetDataProcessor(i).GetType().GetGenericArguments();
-                        var dataProcessor = Activator.CreateInstance(t[0]) as DataTableProcessor.DataProcessor;
-                        string typeName = dataProcessor.Type.Name;
-
-                        if (dataProcessor.IsEnum)
+                        if (Activator.CreateInstance(t[0]) is DataTableProcessor.DataProcessor dataProcessor)
                         {
-                            typeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessor.LanguageKeyword);
+                            string typeName = dataProcessor.Type.Name;
+
+                            if (dataProcessor.IsEnum)
+                            {
+                                typeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessor.LanguageKeyword);
+                            }
+
+                            stringBuilder.AppendFormat("\t\t\t{0} = DataTableExtension.Parse{1}Array(columnStrings[index++]);", dataTableProcessor.GetName(i), typeName).AppendLine();
                         }
 
-                        stringBuilder.AppendFormat("\t\t\t{0} = DataTableExtension.Parse{1}Array(columnStrings[index++]);", dataTableProcessor.GetName(i), typeName).AppendLine();
                         continue;
                     }
 
@@ -434,19 +436,26 @@ namespace Game.Editor.DataTableTools
                         var t = dataTableProcessor.GetDataProcessor(i).GetType().GetGenericArguments();
                         var dataProcessorT1 = Activator.CreateInstance(t[0]) as DataTableProcessor.DataProcessor;
                         var dataProcessorT2 = Activator.CreateInstance(t[1]) as DataTableProcessor.DataProcessor;
-                        var dataProcessorT1TypeName = dataProcessorT1.Type.Name;
-                        if (dataProcessorT1.IsEnum)
+                        if (dataProcessorT1 != null)
                         {
-                            dataProcessorT1TypeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessorT1.LanguageKeyword);
+                            var dataProcessorT1TypeName = dataProcessorT1.Type.Name;
+                            if (dataProcessorT1.IsEnum)
+                            {
+                                dataProcessorT1TypeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessorT1.LanguageKeyword);
+                            }
+
+                            if (dataProcessorT2 != null)
+                            {
+                                var dataProcessorT2TypeName = dataProcessorT2.Type.Name;
+                                if (dataProcessorT2.IsEnum)
+                                {
+                                    dataProcessorT2TypeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessorT2.LanguageKeyword);
+                                }
+
+                                stringBuilder.AppendFormat("\t\t\t{0} = DataTableExtension.Parse{1}{2}Dictionary(columnStrings[index++]);", dataTableProcessor.GetName(i), dataProcessorT1TypeName, dataProcessorT2TypeName).AppendLine();
+                            }
                         }
 
-                        var dataProcessorT2TypeName = dataProcessorT2.Type.Name;
-                        if (dataProcessorT2.IsEnum)
-                        {
-                            dataProcessorT2TypeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessorT2.LanguageKeyword);
-                        }
-
-                        stringBuilder.AppendFormat("\t\t\t{0} = DataTableExtension.Parse{1}{2}Dictionary(columnStrings[index++]);", dataTableProcessor.GetName(i), dataProcessorT1TypeName, dataProcessorT2TypeName).AppendLine();
                         continue;
                     }
 
@@ -506,29 +515,35 @@ namespace Game.Editor.DataTableTools
                 if (dataTableProcessor.IsListColumn(i))
                 {
                     var t = dataTableProcessor.GetDataProcessor(i).GetType().GetGenericArguments();
-                    var dataProcessor = Activator.CreateInstance(t[0]) as DataTableProcessor.DataProcessor;
-                    string typeName = dataProcessor.Type.Name;
-                    if (dataProcessor.IsEnum)
+                    if (Activator.CreateInstance(t[0]) is DataTableProcessor.DataProcessor dataProcessor)
                     {
-                        typeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessor.LanguageKeyword);
+                        string typeName = dataProcessor.Type.Name;
+                        if (dataProcessor.IsEnum)
+                        {
+                            typeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessor.LanguageKeyword);
+                        }
+
+                        stringBuilder.AppendFormat("\t\t\t\t\t{0} = binaryReader.Read{1}List();", dataTableProcessor.GetName(i), typeName).AppendLine();
                     }
 
-                    stringBuilder.AppendFormat("\t\t\t\t\t{0} = binaryReader.Read{1}List();", dataTableProcessor.GetName(i), typeName).AppendLine();
                     continue;
                 }
 
                 if (dataTableProcessor.IsArrayColumn(i))
                 {
                     var t = dataTableProcessor.GetDataProcessor(i).GetType().GetGenericArguments();
-                    var dataProcessor = Activator.CreateInstance(t[0]) as DataTableProcessor.DataProcessor;
-                    string typeName = dataProcessor.Type.Name;
-
-                    if (dataProcessor.IsEnum)
+                    if (Activator.CreateInstance(t[0]) is DataTableProcessor.DataProcessor dataProcessor)
                     {
-                        typeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessor.LanguageKeyword);
+                        string typeName = dataProcessor.Type.Name;
+
+                        if (dataProcessor.IsEnum)
+                        {
+                            typeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessor.LanguageKeyword);
+                        }
+
+                        stringBuilder.AppendFormat("\t\t\t\t\t{0} = binaryReader.Read{1}Array();", dataTableProcessor.GetName(i), typeName).AppendLine();
                     }
 
-                    stringBuilder.AppendFormat("\t\t\t\t\t{0} = binaryReader.Read{1}Array();", dataTableProcessor.GetName(i), typeName).AppendLine();
                     continue;
                 }
 
@@ -537,19 +552,26 @@ namespace Game.Editor.DataTableTools
                     var t = dataTableProcessor.GetDataProcessor(i).GetType().GetGenericArguments();
                     var dataProcessorT1 = Activator.CreateInstance(t[0]) as DataTableProcessor.DataProcessor;
                     var dataProcessorT2 = Activator.CreateInstance(t[1]) as DataTableProcessor.DataProcessor;
-                    var dataProcessorT1TypeName = dataProcessorT1.Type.Name;
-                    if (dataProcessorT1.IsEnum)
+                    if (dataProcessorT1 != null)
                     {
-                        dataProcessorT1TypeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessorT1.LanguageKeyword);
+                        var dataProcessorT1TypeName = dataProcessorT1.Type.Name;
+                        if (dataProcessorT1.IsEnum)
+                        {
+                            dataProcessorT1TypeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessorT1.LanguageKeyword);
+                        }
+
+                        if (dataProcessorT2 != null)
+                        {
+                            var dataProcessorT2TypeName = dataProcessorT2.Type.Name;
+                            if (dataProcessorT2.IsEnum)
+                            {
+                                dataProcessorT2TypeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessorT2.LanguageKeyword);
+                            }
+
+                            stringBuilder.AppendFormat("\t\t\t\t\t{0} = binaryReader.Read{1}{2}Dictionary();", dataTableProcessor.GetName(i), dataProcessorT1TypeName, dataProcessorT2TypeName).AppendLine();
+                        }
                     }
 
-                    var dataProcessorT2TypeName = dataProcessorT2.Type.Name;
-                    if (dataProcessorT2.IsEnum)
-                    {
-                        dataProcessorT2TypeName = DataTableProcessorExtensions.GetFullNameWithNotDot(dataProcessorT2.LanguageKeyword);
-                    }
-
-                    stringBuilder.AppendFormat("\t\t\t\t\t{0} = binaryReader.Read{1}{2}Dictionary();", dataTableProcessor.GetName(i), dataProcessorT1TypeName, dataProcessorT2TypeName).AppendLine();
                     continue;
                 }
 
@@ -753,7 +775,7 @@ namespace Game.Editor.DataTableTools
             {
                 if (index < 0 || index >= m_Items.Count)
                 {
-                    throw new DEngineException(DEngine.Utility.Text.Format("GetItem with invalid index '{0}'.", index.ToString()));
+                    throw new DEngineException(Utility.Text.Format("GetItem with invalid index '{0}'.", index.ToString()));
                 }
 
                 return m_Items[index];

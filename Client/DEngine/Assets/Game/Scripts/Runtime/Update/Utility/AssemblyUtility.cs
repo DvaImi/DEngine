@@ -6,6 +6,7 @@
 // 作者：Dvalmi 
 // 创建时间：2024-04-14 11:48:58
 // ========================================================
+
 using System;
 using System.Collections.Generic;
 using DEngine;
@@ -14,10 +15,10 @@ namespace Game.Update
 {
     public static class AssemblyUtility
     {
-        private static readonly System.Reflection.Assembly[] s_Assemblies = null;
-        private static readonly Dictionary<string, Type> s_CachedTypes = new Dictionary<string, Type>(StringComparer.Ordinal);
+        private static System.Reflection.Assembly[] s_Assemblies = null;
+        private static readonly Dictionary<string, Type> CachedTypes = new(StringComparer.Ordinal);
 
-        static AssemblyUtility()
+        public static void Initialize()
         {
             s_Assemblies = AppDomain.CurrentDomain.GetAssemblies();
         }
@@ -77,7 +78,7 @@ namespace Game.Update
             }
 
             Type type = null;
-            if (s_CachedTypes.TryGetValue(typeName, out type))
+            if (CachedTypes.TryGetValue(typeName, out type))
             {
                 return type;
             }
@@ -85,7 +86,7 @@ namespace Game.Update
             type = Type.GetType(typeName);
             if (type != null)
             {
-                s_CachedTypes.Add(typeName, type);
+                CachedTypes.Add(typeName, type);
                 return type;
             }
 
@@ -94,7 +95,7 @@ namespace Game.Update
                 type = Type.GetType(Utility.Text.Format("{0}, {1}", typeName, assembly.FullName));
                 if (type != null)
                 {
-                    s_CachedTypes.Add(typeName, type);
+                    CachedTypes.Add(typeName, type);
                     return type;
                 }
             }
@@ -102,5 +103,4 @@ namespace Game.Update
             return null;
         }
     }
-
 }

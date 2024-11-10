@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using DEngine;
 using Game.Editor.Toolbar;
 using OfficeOpenXml;
@@ -20,7 +21,7 @@ namespace Game.Editor.DataTableTools
         }
 
         [MenuItem("DataTable/Generate/DataTables", priority = 1)]
-        [EditorToolbarMenu("Generate DataTable", 0, 3)]
+        [EditorToolbarMenu("Generate DataTable", ToolBarMenuAlign.Left, 3)]
         public static void GenerateDataTablesFormExcel()
         {
             string[] excelFilePaths;
@@ -74,9 +75,7 @@ namespace Game.Editor.DataTableTools
                                 break;
                             }
 
-                            DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
-                            DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
-                            DataTableGenerator.GenerateDataEnumFile(dataTableProcessor, dataTableName);
+                            Parallel.Invoke(() => DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName), () => DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName), () => DataTableGenerator.GenerateDataEnumFile(dataTableProcessor, dataTableName));
                         }
                     }
                 }
@@ -147,7 +146,7 @@ namespace Game.Editor.DataTableTools
         }
 
         [MenuItem("DataTable/Generate/Luban", priority = 3)]
-        [EditorToolbarMenu("Generate Luban", 0, 4)]
+        [EditorToolbarMenu("Generate Luban", ToolBarMenuAlign.Left, 4)]
         public static void GenerateLuban()
         {
 #if UNITY_EDITOR_WIN

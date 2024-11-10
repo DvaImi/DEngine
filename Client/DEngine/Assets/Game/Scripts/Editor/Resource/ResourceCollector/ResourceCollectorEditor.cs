@@ -49,10 +49,10 @@ namespace Game.Editor
         private GUIContent m_SaveContent;
         private readonly float m_AddRectHeight = 50f;
         private bool m_IsDirty;
-        private float PackageSpace => 200;
+        private static float PackageSpace => 200;
 
         [MenuItem("Game/Resource Tools/Resource Collector", false, 0)]
-        [EditorToolbarMenu("Resource Collector", 0, 100)]
+        [EditorToolbarMenu("Resource Collector", ToolBarMenuAlign.Left, 100)]
         public static void OpenWindow()
         {
             var window = GetWindow<ResourceCollectorEditor>("资源收集器");

@@ -14,7 +14,7 @@ namespace Game.Editor.BuildPipeline
     {
         private const string EnableHybridCLRDefineSymbol = "ENABLE_HYBRIDCLR";
 
-        [EditorToolbarMenu("AOT Generic", 1, 0)]
+        [EditorToolbarMenu("AOT Generic", ToolBarMenuAlign.Right, 0)]
         public static void GenerateStripedAOT()
         {
             if (EditorApplication.isCompiling)
@@ -37,7 +37,7 @@ namespace Game.Editor.BuildPipeline
             ProcessFileSystem(aot);
         }
 
-        [EditorToolbarMenu("Compile", 1, 1)]
+        [EditorToolbarMenu("Compile", ToolBarMenuAlign.Right, 1)]
         public static void CompileUpdateDll()
         {
             if (EditorApplication.isCompiling)

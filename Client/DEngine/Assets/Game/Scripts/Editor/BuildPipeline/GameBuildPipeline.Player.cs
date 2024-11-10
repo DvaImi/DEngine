@@ -14,7 +14,7 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        [EditorToolbarMenu("BuildPlayer", 1, 10)]
+        [EditorToolbarMenu("BuildPlayer", ToolBarMenuAlign.Right, 10)]
         public static bool BuildPlayer()
         {
             if (EditorApplication.isCompiling)

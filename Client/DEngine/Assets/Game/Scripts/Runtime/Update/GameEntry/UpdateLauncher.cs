@@ -22,10 +22,12 @@ namespace Game.Update
         // ReSharper disable once Unity.IncorrectMethodSignature
         private async UniTaskVoid Start()
         {
+            // 热更程序集加载后初始化
+            AssemblyUtility.Initialize();
             if (!s_IsInitFantasy)
             {
                 Log.Register(new NetworkLog());
-                Entry.Initialize(AppDomain.CurrentDomain.GetAssemblies());
+                Entry.Initialize(AssemblyUtility.GetAssemblies());
                 s_IsInitFantasy = true;
             }
 

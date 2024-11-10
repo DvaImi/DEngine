@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-10-13 11:20:26.848
+// 生成时间：2024-11-10 13:27:02.660
 //------------------------------------------------------------
 
 using DEngine;
@@ -114,7 +114,7 @@ namespace Game.Update
 
         public override string ToString()
         {
-                return string.Concat(string.Format("Id: {0}" ,Id),string.Format("AssetName: {0}" ,AssetName),string.Format("UIGroupName: {0}" ,UIGroupName),string.Format("AllowMultiInstance: {0}" ,AllowMultiInstance),string.Format("PauseCoveredUIForm: {0}" ,PauseCoveredUIForm));
+            return string.Concat($"Id: {Id}", $"AssetName: {AssetName}", $"UIGroupName: {UIGroupName}", $"AllowMultiInstance: {AllowMultiInstance}", $"PauseCoveredUIForm: {PauseCoveredUIForm}");
         }
 
     }

@@ -1233,6 +1233,7 @@
     <type fullname="Game.BuiltinDataComponent" preserve="all"/>
     <type fullname="Game.IGameModule" preserve="all"/>
     <type fullname="Game.IGameUpdateModule" preserve="all"/>
+    <type fullname="Game.EventContainer" preserve="all"/>
     <type fullname="Game.DataTableHelper" preserve="all"/>
     <type fullname="Game.Constant" preserve="all"/>
     <type fullname="Game.BuildInfo" preserve="all"/>
@@ -1243,7 +1244,6 @@
     <type fullname="Game.BuiltinData" preserve="all"/>
     <type fullname="Game.GameEntityHelper" preserve="all"/>
     <type fullname="Game.EventExtension" preserve="all"/>
-    <type fullname="Game.EventSubscriber" preserve="all"/>
     <type fullname="Game.GameEntry" preserve="all"/>
     <type fullname="Game.ZStringHelper" preserve="all"/>
     <type fullname="Game.GameProcedureBase" preserve="all"/>
@@ -1262,8 +1262,8 @@
     <type fullname="Game.DialogForm" preserve="all"/>
     <type fullname="Game.DialogParams" preserve="all"/>
     <type fullname="Game.NativeDialogForm" preserve="all"/>
-    <type fullname="Game.UGUIGroupHelper" preserve="all"/>
     <type fullname="Game.UpdateResourceForm" preserve="all"/>
+    <type fullname="Game.SoundButton" preserve="all"/>
     <type fullname="Game.AwaitDataWrap`1" preserve="all"/>
     <type fullname="Game.DownLoadResult" preserve="all"/>
     <type fullname="Game.UniTaskExtension" preserve="all"/>
@@ -1278,9 +1278,11 @@
     <type fullname="Game.VariablePool" preserve="all"/>
     <type fullname="Game.WebRequestExtension" preserve="all"/>
     <type fullname="Game.WebRequestResult" preserve="all"/>
+    <type fullname="Game.UI.RaycastGraphic" preserve="all"/>
+    <type fullname="Game.UI.UGUIGroupHelper" preserve="all"/>
+    <type fullname="Game.UI.Widget" preserve="all"/>
     <type fullname="Game.Sound.SoundExtension" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper" preserve="all"/>
-    <type fullname="Game.Resource.GameAssetVersionLoader" preserve="all"/>
     <type fullname="Game.Network.INetworkChannel" preserve="all"/>
     <type fullname="Game.Network.INetworkModule" preserve="all"/>
     <type fullname="Game.Network.NetworkExtension" preserve="all"/>
@@ -1364,14 +1366,13 @@
     <type fullname="Game.Sound.Helper.SoundAgentHelper++FadeToVolume+d__61" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++PauseCo+d__60" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++StopCo+d__59" preserve="all"/>
-    <type fullname="Game.Resource.GameAssetVersionLoader++LoadAsync+d__0" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel" preserve="all"/>
     <type fullname="Game.CommandLine.CommandCreator++CollectCommands+d__0`1" preserve="all"/>
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3416" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=7864" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3444" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=8032" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">
