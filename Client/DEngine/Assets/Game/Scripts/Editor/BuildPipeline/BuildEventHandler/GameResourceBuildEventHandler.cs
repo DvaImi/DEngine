@@ -190,19 +190,34 @@ namespace Game.Editor
         {
             Debug.Log($"Ready to Upload To {DEngineSetting.Instance.HostURL}...");
             await UniTask.Delay(2000);
+
             if (!HostingServiceManager.IsListening)
             {
                 HostingServiceManager.StartService();
             }
 
+            int totalFiles = m_WaitUploadFileNames.Count;
+            int currentFileIndex = 0;
+
+            EditorUtility.DisplayProgressBar("Uploading Files", "Starting Upload...", 0);
+
             foreach (var fileName in m_WaitUploadFileNames)
             {
                 await HostingServiceManager.UploadFile(fileName.Key, fileName.Value);
+
+                currentFileIndex++;
+                float progress = (float)currentFileIndex / totalFiles;
+                EditorUtility.DisplayProgressBar("Uploading Files", $"Uploading {fileName.Key}...", progress);
             }
 
+            EditorUtility.DisplayProgressBar("Uploading Files", "Upload Complete", 1);
             Debug.Log($"Upload To {DEngineSetting.Instance.HostURL} complete...");
+
             HostingServiceManager.StopService();
-            EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
+
+            m_WaitUploadFileNames.Clear();
+            EditorUtility.ClearProgressBar();
         }
+
     }
 }
