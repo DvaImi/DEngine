@@ -125,7 +125,7 @@ namespace Game.Editor
             }
 
             PrecessLocalHost(outputFullPath);
-
+            GameBuildPipeline.SaveBuiltinData();
             m_WaitUploadFileNames.Add(SaveVersionInfo(platformPath), platformPath + "Version.json");
         }
 

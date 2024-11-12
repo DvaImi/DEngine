@@ -142,6 +142,11 @@ namespace Game.Editor.BuildPipeline
             }
         }
 
+        public static void SaveBuiltinData()
+        {
+            SaveBuiltinData(GetCurrentPlatform());
+        }
+        
         private static void SaveBuiltinData(Platform platform)
         {
             var builtinData = EditorTools.LoadScriptableObject<BuiltinData>();
