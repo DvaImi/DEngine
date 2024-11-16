@@ -80,19 +80,18 @@ namespace Game.Editor.ResourceTools
                 FilterRules[i] = type.Name;
             }
 
-
+            if (!EditorPrefs.HasKey("Resolve DuplicateAssets Helper Type Name"))
+            {
+                return;
+            }
+            
             var resolveDuplicateAssetsHelperType = Utility.Assembly.GetType(EditorPrefs.GetString("Resolve DuplicateAssets Helper Type Name"));
             if (resolveDuplicateAssetsHelperType == null)
             {
-                Debug.LogError("Failed to get ResolveDuplicateAssetsHelper Type.");
                 return;
             }
 
             ResolveDuplicateAssetsHelper = (IResolveDuplicateAssetsHelper)Activator.CreateInstance(resolveDuplicateAssetsHelperType);
-            if (ResolveDuplicateAssetsHelper == null)
-            {
-                Debug.LogWarning("Failed to create ResolveDuplicateAssetsHelper instance.");
-            }
         }
 
         /// <summary>
