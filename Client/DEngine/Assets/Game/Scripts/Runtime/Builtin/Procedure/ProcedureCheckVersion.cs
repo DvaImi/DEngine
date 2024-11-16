@@ -11,7 +11,6 @@ namespace Game
     {
         private bool m_CheckVersionComplete;
         private bool m_NeedUpdateVersion;
-        private bool m_UseResourcePatchPack;
         private VersionInfo m_VersionInfo;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
@@ -19,9 +18,8 @@ namespace Game
             base.OnEnter(procedureOwner);
 
             m_CheckVersionComplete = false;
-            m_NeedUpdateVersion = false;
-            m_UseResourcePatchPack = false;
-            m_VersionInfo = null;
+            m_NeedUpdateVersion    = false;
+            m_VersionInfo          = null;
 
             //检测连网状态
             if (Application.internetReachability == NetworkReachability.NotReachable)
@@ -31,9 +29,9 @@ namespace Game
                     Log.Warning("The device is not connected to the network");
                     GameEntry.BuiltinData.OpenDialog(new DialogParams
                     {
-                        Mode = 1,
-                        Message = "The device is not connected to the network",
-                        ConfirmText = "Quit",
+                        Mode           = 1,
+                        Message        = "The device is not connected to the network",
+                        ConfirmText    = "Quit",
                         OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                     });
                     return;
@@ -58,16 +56,15 @@ namespace Game
 
             if (m_NeedUpdateVersion)
             {
-                procedureOwner.SetData<VarInt32>("VersionListLength", m_VersionInfo.VersionListLength);
-                procedureOwner.SetData<VarInt32>("VersionListHashCode", m_VersionInfo.VersionListHashCode);
-                procedureOwner.SetData<VarInt32>("VersionListCompressedLength", m_VersionInfo.VersionListCompressedLength);
-                procedureOwner.SetData<VarInt32>("VersionListCompressedHashCode", m_VersionInfo.VersionListCompressedHashCode);
-
-                if (m_UseResourcePatchPack && !string.IsNullOrEmpty(m_VersionInfo.PatchResourcePackName))
+                procedureOwner.SetData<VarBoolean>(Constant.ResourceVersion.IsCompressedMode, m_VersionInfo.IsCompressedMode);
+                procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.VersionListLength, m_VersionInfo.ResourceVersionInfo.VersionListLength);
+                procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.VersionListHashCode, m_VersionInfo.ResourceVersionInfo.VersionListHashCode);
+                procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.VersionListCompressedLength, m_VersionInfo.ResourceVersionInfo.VersionListCompressedLength);
+                procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.VersionListCompressedHashCode, m_VersionInfo.ResourceVersionInfo.VersionListCompressedHashCode);
+                if (m_VersionInfo.IsCompressedMode)
                 {
-                    procedureOwner.SetData<VarBoolean>("UseResourcePatchPack", m_VersionInfo.UseResourcePatchPack);
-                    procedureOwner.SetData<VarString>("PatchResourcePackName", m_VersionInfo.PatchResourcePackName);
-                    procedureOwner.SetData<VarInt64>("PatchTotalCompressedLength", m_VersionInfo.PatchTotalCompressedLength);
+                    procedureOwner.SetData<VarString>(Constant.ResourceVersion.CompressedPackName, m_VersionInfo.CompressedBundleInfo.CompressedPackName);
+                    procedureOwner.SetData<VarInt64>(Constant.ResourceVersion.CompressedPackLength, m_VersionInfo.CompressedBundleInfo.CompressedPackLength);
                 }
 
                 ChangeState<ProcedureUpdateVersionList>(procedureOwner);
@@ -87,7 +84,7 @@ namespace Game
             if (result.Success)
             {
                 // 解析版本信息
-                byte[] versionInfoBytes = result.Bytes;
+                byte[] versionInfoBytes  = result.Bytes;
                 string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
                 Log.Info(versionInfoString);
                 m_VersionInfo = Utility.Json.ToObject<VersionInfo>(versionInfoString);
@@ -100,27 +97,26 @@ namespace Game
                 Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
                 GameEntry.Setting.SetInt(Constant.ResourceVersion.InternalResourceVersion, m_VersionInfo.InternalResourceVersion);
                 GameEntry.Setting.Save();
-                m_UseResourcePatchPack = m_VersionInfo.UseResourcePatchPack;
                 m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(m_VersionInfo.InternalResourceVersion) == CheckVersionListResult.NeedUpdate;
                 if (m_VersionInfo.ForceUpdateGame)
                 {
                     //需要强制更新游戏应用
                     GameEntry.BuiltinData.OpenDialog(new DialogParams
                     {
-                        Mode = 1,
-                        Title = GameEntry.Localization.GetString("ForceUpdate.Title"),
-                        Message = GameEntry.Localization.GetString("ForceUpdate.Message"),
-                        ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
+                        Mode           = 1,
+                        Title          = GameEntry.Localization.GetString("ForceUpdate.Title"),
+                        Message        = GameEntry.Localization.GetString("ForceUpdate.Message"),
+                        ConfirmText    = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
                         OnClickConfirm = GotoUpdateApp,
-                        CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
-                        OnClickCancel = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                        CancelText     = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
+                        OnClickCancel  = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                     });
                     return;
                 }
 
                 // 设置资源更新下载地址
                 GameEntry.Resource.UpdatePrefixUri = Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
-                m_CheckVersionComplete = true;
+                m_CheckVersionComplete             = true;
             }
             else
             {
@@ -144,13 +140,13 @@ namespace Game
                 {
                     GameEntry.BuiltinData.OpenDialog(new DialogParams
                     {
-                        Mode = 2,
-                        Message = "Try to use the latest local resource version.",
+                        Mode        = 2,
+                        Message     = "Try to use the latest local resource version.",
                         ConfirmText = "Confirm",
-                        CancelText = "Quit",
+                        CancelText  = "Quit",
                         OnClickConfirm = _ =>
                         {
-                            m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
+                            m_NeedUpdateVersion    = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
                             m_CheckVersionComplete = true;
                         },
                         OnClickCancel = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
@@ -160,9 +156,9 @@ namespace Game
 
             GameEntry.BuiltinData.OpenDialog(new DialogParams
             {
-                Mode = 1,
-                Message = "Try to use the latest local resource version failure.",
-                ConfirmText = "Quit",
+                Mode           = 1,
+                Message        = "Try to use the latest local resource version failure.",
+                ConfirmText    = "Quit",
                 OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
             });
         }

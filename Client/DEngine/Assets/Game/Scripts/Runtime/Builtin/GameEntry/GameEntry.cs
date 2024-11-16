@@ -1,5 +1,4 @@
-﻿using DEngine;
-using DEngine.Runtime;
+﻿using DEngine.Runtime;
 using UnityEngine;
 
 namespace Game
@@ -12,6 +11,7 @@ namespace Game
         private void Start()
         {
             InitBuiltinComponents();
+            InitCustomComponents();
         }
 
         private void Update()

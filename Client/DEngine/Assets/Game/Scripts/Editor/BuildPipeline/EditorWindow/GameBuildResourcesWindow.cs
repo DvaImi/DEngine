@@ -31,6 +31,9 @@ namespace Game.Editor.BuildPipeline
         private Vector2 m_ScrollPosition;
         private string[] m_VersionNamesForSourceDisplay;
         private int m_VersionNamesForSourceDisplayIndex;
+        private string m_ResolveDuplicateAssetsHelperTypeName;
+        private int m_ResolveDuplicateAssetsHelperTypeNameIndex;
+        private string[] m_ResolveDuplicateAssetsHelperTypeNames;
 
         private void Update()
         {
@@ -44,9 +47,9 @@ namespace Game.Editor.BuildPipeline
         private void OnEnable()
         {
             m_ScrollPosition = Vector2.zero;
-            m_EditorContent = EditorGUIUtility.TrTextContentWithIcon("Editor", "", "Settings");
-            m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("Build", "构建当前平台资源");
-            m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "");
+            m_EditorContent  = EditorGUIUtility.TrTextContentWithIcon("Editor", "", "Settings");
+            m_BuildContent   = EditorBuiltinIconHelper.GetPlatformIconContent("Build", "构建当前平台资源");
+            m_SaveContent    = EditorBuiltinIconHelper.GetSave("Save", "");
 
             m_HostingServiceTypeName = EditorPrefs.GetString("File Hosting Service Type Name", NoneOptionName);
 
@@ -56,7 +59,7 @@ namespace Game.Editor.BuildPipeline
             };
 
             helperTypeNames.AddRange(GameType.GetRuntimeOrEditorTypeNames(typeof(IHostingService)));
-            m_HostingServiceTypeNames = helperTypeNames.ToArray();
+            m_HostingServiceTypeNames     = helperTypeNames.ToArray();
             m_HostingServiceTypeNameIndex = 0;
             if (!string.IsNullOrEmpty(m_HostingServiceTypeName))
             {
@@ -64,7 +67,23 @@ namespace Game.Editor.BuildPipeline
                 if (m_HostingServiceTypeNameIndex <= 0)
                 {
                     m_HostingServiceTypeNameIndex = 0;
-                    m_HostingServiceTypeName = null;
+                    m_HostingServiceTypeName      = null;
+                }
+            }
+
+            m_ResolveDuplicateAssetsHelperTypeName = EditorPrefs.GetString("Resolve DuplicateAssets Helper Type Name", NoneOptionName);
+            helperTypeNames.Clear();
+            helperTypeNames.Add(NoneOptionName);
+            helperTypeNames.AddRange(GameType.GetRuntimeOrEditorTypeNames(typeof(IResolveDuplicateAssetsHelper)));
+            m_ResolveDuplicateAssetsHelperTypeNames     = helperTypeNames.ToArray();
+            m_ResolveDuplicateAssetsHelperTypeNameIndex = 0;
+            if (!string.IsNullOrEmpty(m_ResolveDuplicateAssetsHelperTypeName))
+            {
+                m_ResolveDuplicateAssetsHelperTypeNameIndex = helperTypeNames.IndexOf(m_ResolveDuplicateAssetsHelperTypeName);
+                if (m_ResolveDuplicateAssetsHelperTypeNameIndex <= 0)
+                {
+                    m_ResolveDuplicateAssetsHelperTypeNameIndex = 0;
+                    m_ResolveDuplicateAssetsHelperTypeName      = null;
                 }
             }
 
@@ -73,7 +92,7 @@ namespace Game.Editor.BuildPipeline
             {
                 controller.Platform = GameBuildPipeline.GetCurrentPlatform();
                 var versionNames = controller.GetVersionNames();
-                m_VersionNamesForSourceDisplay = new string[versionNames.Length + 1];
+                m_VersionNamesForSourceDisplay    = new string[versionNames.Length + 1];
                 m_VersionNamesForSourceDisplay[0] = "<None>";
                 for (int i = 0; i < versionNames.Length; i++)
                 {
@@ -161,11 +180,24 @@ namespace Game.Editor.BuildPipeline
                     GameBuildPipeline.SwitchResourceMode();
                     GUILayout.Space(10f);
                     var assetBundleCollectorIndex = DEngineSetting.Instance.AssetBundleCollectorIndex;
-                    var tempBundleCollectorIndex = EditorGUILayout.Popup("构建资源包裹", assetBundleCollectorIndex, GameBuildPipeline.PackagesNames);
+                    var tempBundleCollectorIndex  = EditorGUILayout.Popup("构建资源包裹", assetBundleCollectorIndex, GameBuildPipeline.PackagesNames);
                     if (tempBundleCollectorIndex != assetBundleCollectorIndex)
                     {
                         DEngineSetting.Instance.AssetBundleCollectorIndex = tempBundleCollectorIndex;
                         DEngineSetting.Save();
+                    }
+                }
+
+                EditorGUILayout.EndHorizontal();
+                GUILayout.Space(20f);
+                EditorGUILayout.BeginHorizontal();
+                {
+                    var resolverDuplicateAssetHelperIndex = EditorGUILayout.Popup("冗余处理帮助类", m_ResolveDuplicateAssetsHelperTypeNameIndex, m_ResolveDuplicateAssetsHelperTypeNames);
+                    if (resolverDuplicateAssetHelperIndex != m_ResolveDuplicateAssetsHelperTypeNameIndex)
+                    {
+                        m_ResolveDuplicateAssetsHelperTypeNameIndex = resolverDuplicateAssetHelperIndex;
+                        m_ResolveDuplicateAssetsHelperTypeName      = resolverDuplicateAssetHelperIndex <= 0 ? null : m_ResolveDuplicateAssetsHelperTypeNames[resolverDuplicateAssetHelperIndex];
+                        EditorPrefs.SetString("Resolve DuplicateAssets Helper Type Name", m_ResolveDuplicateAssetsHelperTypeName);
                     }
                 }
 
@@ -180,20 +212,20 @@ namespace Game.Editor.BuildPipeline
                         DEngineSetting.Instance.ForceRebuildAssetBundle = forceRebuildAssetBundle;
                     }
 
+                    GUI.enabled = DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.InternalResourceVersion > 1;
                     var forceUpdateGame = EditorGUILayout.ToggleLeft("需要更新主包", DEngineSetting.Instance.ForceUpdateGame);
                     if (!forceUpdateGame.Equals(DEngineSetting.Instance.ForceUpdateGame))
                     {
                         DEngineSetting.Instance.ForceUpdateGame = forceUpdateGame;
                     }
 
-                    GUI.enabled = DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.InternalResourceVersion > 1;
                     if (!GUI.enabled && DEngineSetting.Instance.BuildResourcePack)
                     {
                         DEngineSetting.Instance.BuildResourcePack = false;
                         DEngineSetting.Save();
                     }
 
-                    var buildResourcePack = EditorGUILayout.ToggleLeft("构建补丁包", DEngineSetting.Instance.BuildResourcePack);
+                    var buildResourcePack = EditorGUILayout.ToggleLeft("构建Pack包", DEngineSetting.Instance.BuildResourcePack);
                     if (!buildResourcePack.Equals(DEngineSetting.Instance.BuildResourcePack))
                     {
                         DEngineSetting.Instance.BuildResourcePack = buildResourcePack;
@@ -251,19 +283,19 @@ namespace Game.Editor.BuildPipeline
                 m_FoldoutVersionInfoGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutVersionInfoGroup, "VersionInfo");
                 if (m_FoldoutVersionInfoGroup)
                 {
-                    EditorGUILayout.LabelField("内置资源版本", DEngineSetting.Instance.InternalResourceVersion.ToString());
+                    DEngineSetting.Instance.InternalResourceVersion = EditorGUILayout.IntField("内置资源版本", DEngineSetting.Instance.InternalResourceVersion);
                     EditorGUILayout.LabelField("最新的游戏版本号", DEngineSetting.Instance.LatestGameVersion);
-                    DEngineSetting.Instance.HostURL = EditorGUILayout.TextField("网络CDN地址", DEngineSetting.Instance.HostURL);
+                    DEngineSetting.Instance.HostURL            = EditorGUILayout.TextField("网络CDN地址", DEngineSetting.Instance.HostURL);
                     DEngineSetting.Instance.HostingServicePort = EditorGUILayout.IntField("网络CDN地址端口号", DEngineSetting.Instance.HostingServicePort);
-                    GUI.enabled = false;
+                    GUI.enabled                                = false;
                     EditorGUILayout.TextField("资源版本地址格式", GameBuildPipeline.GetCheckVersionUrlFormat());
                     EditorGUILayout.TextField("资源下载地址格式", GameBuildPipeline.GetUpdatePrefixUriFormat());
-                    GUI.enabled = true;
+                    GUI.enabled                                 = true;
                     DEngineSetting.Instance.InternalGameVersion = EditorGUILayout.IntField("内部游戏版本号", DEngineSetting.Instance.InternalGameVersion);
-                    DEngineSetting.Instance.WindowsAppUrl = EditorGUILayout.TextField("Windows下载应用地址", DEngineSetting.Instance.WindowsAppUrl);
-                    DEngineSetting.Instance.AndroidAppUrl = EditorGUILayout.TextField("Android应用下载地址", DEngineSetting.Instance.AndroidAppUrl);
-                    DEngineSetting.Instance.MacOSAppUrl = EditorGUILayout.TextField("MacOS下载应用地址", DEngineSetting.Instance.MacOSAppUrl);
-                    DEngineSetting.Instance.IOSAppUrl = EditorGUILayout.TextField("IOS下载应用地址", DEngineSetting.Instance.IOSAppUrl);
+                    DEngineSetting.Instance.WindowsAppUrl       = EditorGUILayout.TextField("Windows下载应用地址", DEngineSetting.Instance.WindowsAppUrl);
+                    DEngineSetting.Instance.AndroidAppUrl       = EditorGUILayout.TextField("Android应用下载地址", DEngineSetting.Instance.AndroidAppUrl);
+                    DEngineSetting.Instance.MacOSAppUrl         = EditorGUILayout.TextField("MacOS下载应用地址", DEngineSetting.Instance.MacOSAppUrl);
+                    DEngineSetting.Instance.IOSAppUrl           = EditorGUILayout.TextField("IOS下载应用地址", DEngineSetting.Instance.IOSAppUrl);
                 }
 
                 EditorGUILayout.EndFoldoutHeaderGroup();
@@ -286,7 +318,7 @@ namespace Game.Editor.BuildPipeline
                     if (hostingServiceTypeNameIndex != m_HostingServiceTypeNameIndex)
                     {
                         m_HostingServiceTypeNameIndex = hostingServiceTypeNameIndex;
-                        m_HostingServiceTypeName = hostingServiceTypeNameIndex <= 0 ? null : m_HostingServiceTypeNames[hostingServiceTypeNameIndex];
+                        m_HostingServiceTypeName      = hostingServiceTypeNameIndex <= 0 ? null : m_HostingServiceTypeNames[hostingServiceTypeNameIndex];
                         EditorPrefs.SetString("File Hosting Service Type Name", m_HostingServiceTypeName);
                     }
 
@@ -310,7 +342,7 @@ namespace Game.Editor.BuildPipeline
                 int value = EditorGUILayout.Popup(m_VersionNamesForSourceDisplayIndex, m_VersionNamesForSourceDisplay);
                 if (m_VersionNamesForSourceDisplayIndex != value)
                 {
-                    m_VersionNamesForSourceDisplayIndex = value;
+                    m_VersionNamesForSourceDisplayIndex   = value;
                     DEngineSetting.Instance.SourceVersion = m_VersionNamesForSourceDisplay[m_VersionNamesForSourceDisplayIndex];
                     DEngineSetting.Save();
                 }

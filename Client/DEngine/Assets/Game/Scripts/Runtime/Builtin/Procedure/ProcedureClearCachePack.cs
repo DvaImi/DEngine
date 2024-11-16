@@ -38,16 +38,16 @@ namespace Game
 
             foreach (var file in files)
             {
-                var info = new FileInfo(file);
+                var info     = new FileInfo(file);
                 var versions = info.Name.Split('-');
                 if (versions.Length < 2)
                 {
                     continue;
                 }
 
-                string firstVersion = versions[1];
-                string latestGameVersion = firstVersion[..firstVersion.LastIndexOf('.')];
-                int internalResourceVersion = int.Parse(firstVersion.Split('.')[^1]);
+                string firstVersion            = versions[1];
+                string latestGameVersion       = firstVersion[..firstVersion.LastIndexOf('.')];
+                int    internalResourceVersion = int.Parse(firstVersion.Split('.')[^1]);
 
                 if (latestGameVersion != GameEntry.BuiltinData.Builtin.BuildInfo.LatestGameVersion)
                 {
@@ -56,7 +56,7 @@ namespace Game
                 }
 
                 //差异两个版本则丢弃
-                if (GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion) - internalResourceVersion >= 2)
+                if (GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion, 0) - internalResourceVersion >= 2)
                 {
                     m_DeleteCachePackFiles.Add(info);
                 }
@@ -69,6 +69,7 @@ namespace Game
                 {
                     if (fileInfo.Exists)
                     {
+                        Log.Info("Deleting file: " + fileInfo.FullName);
                         fileInfo.Delete();
                     }
                 }

@@ -37,8 +37,6 @@ namespace Game.Editor.ResourceTools
         /// </summary>
         public UnityEngine.Object Asset = null;
 
-        public UnityEngine.Object[] Assets = null;
-
         /// <summary>
         /// 资源加载方式
         /// </summary>
@@ -54,6 +52,9 @@ namespace Game.Editor.ResourceTools
         /// </summary>
         public string FilterRule = nameof(CollectAll);
 
+        /// <summary>
+        /// 获取资源路径
+        /// </summary>
         public string AssetPath => !Asset ? null : AssetDatabase.GetAssetPath(Asset);
 
         /// <summary>

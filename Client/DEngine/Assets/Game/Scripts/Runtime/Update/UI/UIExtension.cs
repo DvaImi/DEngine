@@ -1,56 +1,31 @@
-﻿using System.Collections;
+﻿using System.Threading;
 using Cysharp.Threading.Tasks;
+using DEngine;
 using DEngine.DataTable;
 using DEngine.Runtime;
 using DEngine.UI;
 using Game.Update.Sound;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.Update
 {
     public static class UIExtension
     {
-        public static IEnumerator FadeToAlpha(this CanvasGroup self, float alpha, float duration)
+        public static async UniTask FadeToAlpha(this CanvasGroup self, float alpha, float duration, CancellationToken cancellationToken = default)
         {
+            self.interactable = false;
             float time = 0f;
             float originalAlpha = self.alpha;
             while (time < duration)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 time += Time.deltaTime;
                 self.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
-                yield return new WaitForEndOfFrame();
+                await UniTask.Yield(cancellationToken);
             }
 
             self.alpha = alpha;
-        }
-
-        public static IEnumerator SmoothValue(this Slider self, float value, float duration)
-        {
-            float time = 0f;
-            float originalValue = self.value;
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                self.value = Mathf.Lerp(originalValue, value, time / duration);
-                yield return new WaitForEndOfFrame();
-            }
-
-            self.value = value;
-        }
-
-        public static async UniTask FadeToAlphaByUniTask(this CanvasGroup self, float alpha, float duration)
-        {
-            float time = 0f;
-            float originalAlpha = self.alpha;
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                self.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
-                await UniTask.Yield();
-            }
-
-            self.alpha = alpha;
+            self.interactable = true;
         }
 
         public static void SetGlobalUIClickSound(this UIComponent self, int soundId)

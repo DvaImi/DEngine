@@ -5,11 +5,9 @@ using Cysharp.Threading.Tasks;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
-using DEngine.Runtime;
 using Game.Editor.BuildPipeline;
 using Game.Editor.ResourceTools;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,7 +19,7 @@ namespace Game.Editor
 
         private readonly Dictionary<string, string> m_WaitUploadFileNames = new();
         private const string FullPartToFind = "Full/";
-        private VersionInfo m_VersionInfo = null;
+        private VersionInfo m_VersionInfo;
 
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, int internalResourceVersion, Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
@@ -37,7 +35,7 @@ namespace Game.Editor
             AssetDatabase.Refresh();
 
             GameUtility.IO.Delete(Application.streamingAssetsPath);
-            DEngineSetting.Instance.LatestGameVersion = applicableGameVersion;
+            DEngineSetting.Instance.LatestGameVersion       = applicableGameVersion;
             DEngineSetting.Instance.InternalResourceVersion = internalResourceVersion;
             DEngineSetting.Save();
             m_WaitUploadFileNames.Clear();
@@ -61,18 +59,18 @@ namespace Game.Editor
 
             m_VersionInfo = new VersionInfo
             {
-                ForceUpdateGame = DEngineSetting.Instance.ForceUpdateGame,
-                UpdatePrefixUri = GameBuildPipeline.GetUpdatePrefixUri(platform),
-                LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
-                InternalGameVersion = DEngineSetting.Instance.InternalGameVersion,
+                ForceUpdateGame         = DEngineSetting.Instance.ForceUpdateGame,
+                UpdatePrefixUri         = GameBuildPipeline.GetUpdatePrefixUri(platform),
+                LatestGameVersion       = DEngineSetting.Instance.LatestGameVersion,
+                InternalGameVersion     = DEngineSetting.Instance.InternalGameVersion,
                 InternalResourceVersion = DEngineSetting.Instance.InternalResourceVersion,
-                VersionListLength = versionListLength,
-                VersionListHashCode = versionListHashCode,
-                VersionListCompressedLength = versionListCompressedLength,
-                VersionListCompressedHashCode = versionListCompressedHashCode,
-                UseResourcePatchPack = false,
-                PatchResourcePackName = null,
-                PatchTotalCompressedLength = 0
+                ResourceVersionInfo =
+                {
+                    VersionListLength             = versionListLength,
+                    VersionListHashCode           = versionListHashCode,
+                    VersionListCompressedLength   = versionListCompressedLength,
+                    VersionListCompressedHashCode = versionListCompressedHashCode
+                }
             };
         }
 
@@ -80,9 +78,9 @@ namespace Game.Editor
         {
             string sourcePath = DEngineSetting.Instance.ResourceMode switch
             {
-                ResourceMode.Unspecified or ResourceMode.Package => outputPackagePath,
+                ResourceMode.Unspecified or ResourceMode.Package             => outputPackagePath,
                 ResourceMode.Updatable or ResourceMode.UpdatableWhilePlaying => outputPackedPath,
-                _ => outputPackagePath
+                _                                                            => outputPackagePath
             };
 
             GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);
@@ -98,24 +96,25 @@ namespace Game.Editor
                 return;
             }
 
-            string platformPath = GameBuildPipeline.GetPlatformPath(platform);
+            string platformPath  = GameBuildPipeline.GetPlatformPath(platform);
             string sourceVersion = DEngineSetting.Instance.SourceVersion;
             if (DEngineSetting.Instance.BuildResourcePack && GameBuildPipeline.BuildResourcePack(platform, sourceVersion, out string outputPath, out string targetVersion))
             {
                 Debug.LogFormat("Build Resource Pack {0}==>{1} Success", sourceVersion, targetVersion);
-                string searchPattern = Utility.Text.Format("{0}-{1}-{2}.*.block", "DEngineResourcePack", sourceVersion, targetVersion);
-                string[] files = Directory.GetFiles(outputPath, searchPattern);
+                string   searchPattern = Utility.Text.Format("{0}-{1}-{2}.*.block", "ResourcePack", sourceVersion, targetVersion);
+                string[] files         = Directory.GetFiles(outputPath, searchPattern);
                 if (files.Length > 0)
                 {
-                    FileInfo fileInfo = new(files[0]);
-                    m_VersionInfo.UseResourcePatchPack = true;
-                    m_VersionInfo.PatchResourcePackName = fileInfo.Name;
-                    m_VersionInfo.PatchTotalCompressedLength = fileInfo.Length;
+                    FileInfo fileInfo   = new(files[0]);
+                    m_VersionInfo.IsCompressedMode                          = true;
+                    m_VersionInfo.CompressedBundleInfo.CompressedPackName   = fileInfo.Name;
+                    m_VersionInfo.CompressedBundleInfo.CompressedPackLength = fileInfo.Length;
+                    m_VersionInfo.CompressedBundleInfo.Version              = Convert.ToInt32(targetVersion.Split('.')[^1]);
                     string destFileName = Utility.Path.GetRegularCombinePath(targetVersion, platformPath, fileInfo.FullName[outputPath.Length..]);
                     m_WaitUploadFileNames.Add(fileInfo.FullName, destFileName);
                 }
 
-                var targetDirectoryInfo = new DirectoryInfo(Utility.Text.Format("{0}/{1}-{2}-{3}", outputPath, "DEngineResourcePack", sourceVersion, targetVersion));
+                var targetDirectoryInfo    = new DirectoryInfo(Utility.Text.Format("{0}/{1}-{2}-{3}", outputPath, "ResourcePack", sourceVersion, targetVersion));
                 var targetVersionListFiles = targetDirectoryInfo.GetFiles("RemoteVersionList.*.block", SearchOption.TopDirectoryOnly);
                 if (targetVersionListFiles.Length > 0)
                 {
@@ -154,8 +153,8 @@ namespace Game.Editor
 
         private string SaveVersionInfo(string platformPath)
         {
-            string versionJson = JsonConvert.SerializeObject(m_VersionInfo);
-            string versionFolder = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/", DEngineSetting.BundlesOutput, m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalResourceVersion)).FullName);
+            string versionJson     = JsonConvert.SerializeObject(m_VersionInfo);
+            string versionFolder   = Utility.Path.GetRegularPath(new DirectoryInfo(Utility.Text.Format("{0}/Full/{1}.{2}/", DEngineSetting.BundlesOutput, m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalResourceVersion)).FullName);
             string versionFilePath = Utility.Path.GetRegularCombinePath(versionFolder, platformPath + "Version.json");
             File.WriteAllText(versionFilePath, versionJson);
             return versionFilePath;
@@ -169,7 +168,7 @@ namespace Game.Editor
                 foreach (string fileName in fileNames)
                 {
                     string bundlesOutput = DEngineSetting.BundlesOutput;
-                    string relativePath = fileName[bundlesOutput.Length..];
+                    string relativePath  = fileName[bundlesOutput.Length..];
 
                     int indexOfFull = relativePath.IndexOf(FullPartToFind, StringComparison.Ordinal);
 
@@ -189,35 +188,36 @@ namespace Game.Editor
         private async UniTask InternalUpload()
         {
             Debug.Log($"Ready to Upload To {DEngineSetting.Instance.HostURL}...");
+            EditorUtility.DisplayProgressBar("Uploading Files", "Starting Upload...", 0);
             await UniTask.Delay(2000);
-
             if (!HostingServiceManager.IsListening)
             {
                 HostingServiceManager.StartService();
             }
 
-            int totalFiles = m_WaitUploadFileNames.Count;
+            int totalFiles       = m_WaitUploadFileNames.Count;
             int currentFileIndex = 0;
 
-            EditorUtility.DisplayProgressBar("Uploading Files", "Starting Upload...", 0);
-
-            foreach (var fileName in m_WaitUploadFileNames)
+            try
             {
-                await HostingServiceManager.UploadFile(fileName.Key, fileName.Value);
+                foreach (var fileName in m_WaitUploadFileNames)
+                {
+                    await HostingServiceManager.UploadFile(fileName.Key, fileName.Value);
 
-                currentFileIndex++;
-                float progress = (float)currentFileIndex / totalFiles;
-                EditorUtility.DisplayProgressBar("Uploading Files", $"Uploading {fileName.Key}...", progress);
+                    currentFileIndex++;
+                    float progress = (float)currentFileIndex / totalFiles;
+                    EditorUtility.DisplayProgressBar("Uploading Files", $"Uploading {fileName.Key}...", progress);
+                }
+
+                EditorUtility.DisplayProgressBar("Uploading Files", "Upload Complete", 1);
+                Debug.Log($"Upload To {DEngineSetting.Instance.HostURL} complete...");
             }
-
-            EditorUtility.DisplayProgressBar("Uploading Files", "Upload Complete", 1);
-            Debug.Log($"Upload To {DEngineSetting.Instance.HostURL} complete...");
-
-            HostingServiceManager.StopService();
-
-            m_WaitUploadFileNames.Clear();
-            EditorUtility.ClearProgressBar();
+            finally
+            {
+                HostingServiceManager.StopService();
+                m_WaitUploadFileNames.Clear();
+                EditorUtility.ClearProgressBar();
+            }
         }
-
     }
 }

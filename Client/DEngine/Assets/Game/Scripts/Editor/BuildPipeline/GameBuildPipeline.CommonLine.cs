@@ -26,7 +26,7 @@ namespace Game.Editor.BuildPipeline
                 return;
             }
 
-            AssetDatabase.Refresh();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             EditorTools.CloseAllCustomEditorWindows();
             IBuildPlayerEventHandler eventHandler = GetBuildPlayerEventHandler();
             Debug.Log("开始一键打包任务");

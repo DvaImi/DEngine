@@ -2,43 +2,56 @@
 <DEngine>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Bundles/Assemblies/aot.bytes" FileSystem="aot" LoadType="4" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Assemblies/aotVersion.bytes" FileSystem="aot" LoadType="4" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Assemblies/patch.bytes" FileSystem="patch" LoadType="4" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Assemblies/patchVersion.bytes" FileSystem="patch" LoadType="4" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Configs/cfg.bytes" FileSystem="cfg" LoadType="4" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/Configs/cfgVersion.bytes" FileSystem="cfg" LoadType="4" Packed="False" ResourceGroups="Base" />
-      <Resource Name="Bundles/DataTables" FileSystem="cfg" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="data1" Variant="en" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="data1" Variant="zh-cn" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="data1" Variant="zh-tw" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="data2" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="data3" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="data7" LoadType="0" Packed="False" ResourceGroups="Base" />
-      <Resource Name="data8" LoadType="0" Packed="False" ResourceGroups="Base" />
+      <Resource Name="Bundles/Assemblies/aot.bytes" FileSystem="GameData2" LoadType="6" Packed="False" ResourceGroups="Assembly" />
+      <Resource Name="Bundles/Assemblies/aotVersion.bytes" FileSystem="GameData2" LoadType="6" Packed="False" ResourceGroups="Assembly" />
+      <Resource Name="Bundles/Assemblies/patch.bytes" FileSystem="GameData2" LoadType="6" Packed="False" ResourceGroups="Assembly" />
+      <Resource Name="Bundles/Assemblies/patchVersion.bytes" FileSystem="GameData2" LoadType="6" Packed="False" ResourceGroups="Assembly" />
+      <Resource Name="Bundles/Audios/Musics" FileSystem="Resources" LoadType="0" Packed="False" ResourceGroups="Sound" />
+      <Resource Name="Bundles/Audios/UISounds" FileSystem="Resources" LoadType="0" Packed="False" ResourceGroups="Sound" />
+      <Resource Name="Bundles/Configs/cfg.bytes" FileSystem="GameData" LoadType="6" Packed="False" ResourceGroups="Config" />
+      <Resource Name="Bundles/Configs/cfgVersion.bytes" FileSystem="GameData" LoadType="6" Packed="False" ResourceGroups="Config" />
+      <Resource Name="Bundles/DataTables" FileSystem="GameData" LoadType="0" Packed="False" ResourceGroups="DataTable" />
+      <Resource Name="Bundles/Fonts/Common" FileSystem="UI" LoadType="0" Packed="False" ResourceGroups="Fonts" />
+      <Resource Name="Bundles/Launcher/UpdateLauncher.prefab" FileSystem="GameData2" LoadType="0" Packed="False" ResourceGroups="Assembly" />
+      <Resource Name="Bundles/Localization/ChineseSimplified/ChineseSimplified.bytes" Variant="zh-cn" FileSystem="UI" LoadType="6" Packed="False" ResourceGroups="Localization" />
+      <Resource Name="Bundles/Localization/ChineseTraditional/ChineseTraditional.bytes" Variant="zh-tw" FileSystem="UI" LoadType="6" Packed="False" ResourceGroups="Localization" />
+      <Resource Name="Bundles/Localization/English/English.bytes" Variant="en" FileSystem="UI" LoadType="6" Packed="False" ResourceGroups="Localization" />
+      <Resource Name="Bundles/Scenes/GameScene" FileSystem="Resources" LoadType="0" Packed="False" ResourceGroups="Scene" />
+      <Resource Name="Bundles/ShaderVariants" FileSystem="Resources" LoadType="0" Packed="False" ResourceGroups="Shaders" />
+      <Resource Name="SharedAssets" FileSystem="SharedAssets" LoadType="0" Packed="False" ResourceGroups="SharedAssets" />
     </Resources>
     <Assets>
       <Asset Guid="00965b1af9cce1042aa8f66b14a24be2" ResourceName="Bundles/DataTables" />
+      <Asset Guid="025d716fc0a6b3b41acf3c7486df0b78" ResourceName="Bundles/DataTables" />
       <Asset Guid="02da71309e4f95445b73e7d2f7522b76" ResourceName="Bundles/DataTables" />
       <Asset Guid="0cf212ceb193ce247a4ee71a0e49197f" ResourceName="Bundles/Assemblies/aot.bytes" />
-      <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="data1" ResourceVariant="zh-cn" />
-      <Asset Guid="333ff64354a4f434d9369aa014a823e3" ResourceName="data3" />
+      <Asset Guid="13bdd20cdcff4684187b3938feaa1668" ResourceName="Bundles/Localization/ChineseSimplified/ChineseSimplified.bytes" ResourceVariant="zh-cn" />
+      <Asset Guid="230b0c809e3e6a647af26c803aa90467" ResourceName="Bundles/Fonts/Common" />
+      <Asset Guid="333ff64354a4f434d9369aa014a823e3" ResourceName="Bundles/ShaderVariants" />
       <Asset Guid="405f5a4f5a14afd4c9d96a27906c4088" ResourceName="Bundles/Configs/cfg.bytes" />
-      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="data2" />
+      <Asset Guid="472eb6dc823795144a603a49b95605eb" ResourceName="Bundles/Audios/UISounds" />
+      <Asset Guid="47c57db2cbae5594a9872a084eb9be62" ResourceName="Bundles/Launcher/UpdateLauncher.prefab" />
+      <Asset Guid="53b9781b792f33841a6a088ec392fbd8" ResourceName="Bundles/Fonts/Common" />
+      <Asset Guid="588ff96c6882fb3448095d7a881bced3" ResourceName="Bundles/Fonts/Common" />
       <Asset Guid="61ac612acf2c87f479eba867ee96c10c" ResourceName="Bundles/Assemblies/patchVersion.bytes" />
+      <Asset Guid="68e6db2ebdc24f95958faec2be5558d6" ResourceName="SharedAssets" />
       <Asset Guid="6e66ce640a86fa0449ad7dea09e4aaa6" ResourceName="Bundles/DataTables" />
-      <Asset Guid="88918b3d7c1ed21459fd390a05f9bfa2" ResourceName="data3" />
+      <Asset Guid="88918b3d7c1ed21459fd390a05f9bfa2" ResourceName="Bundles/ShaderVariants" />
+      <Asset Guid="8a4e2875174034b4aabb43c9ca9028a1" ResourceName="Bundles/Fonts/Common" />
       <Asset Guid="95ce57afa274d6648a1077d9a4127240" ResourceName="Bundles/Assemblies/aotVersion.bytes" />
       <Asset Guid="987845b39ba8e23468ba930b432430db" ResourceName="Bundles/DataTables" />
-      <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="data1" ResourceVariant="zh-tw" />
+      <Asset Guid="9deca69555354744b9e1fbdffb007bd8" ResourceName="Bundles/Fonts/Common" />
+      <Asset Guid="a075dfee8a074134cbf9079477bd884d" ResourceName="Bundles/Localization/ChineseTraditional/ChineseTraditional.bytes" ResourceVariant="zh-tw" />
       <Asset Guid="a0ff9808a5678514082d82627255adb6" ResourceName="Bundles/DataTables" />
+      <Asset Guid="a29db755b6ae1104a94df297de29cfc8" ResourceName="Bundles/Fonts/Common" />
       <Asset Guid="aeceeb3624a0f5447835b45deb7855d8" ResourceName="Bundles/DataTables" />
-      <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="data1" ResourceVariant="en" />
+      <Asset Guid="b750af275be47c047bb6a6aedbedab17" ResourceName="Bundles/Localization/English/English.bytes" ResourceVariant="en" />
+      <Asset Guid="b8f790017d833da45a5aec7344ed4f97" ResourceName="Bundles/Fonts/Common" />
       <Asset Guid="bf63450608b7bad458735692b71237eb" ResourceName="Bundles/DataTables" />
-      <Asset Guid="cdc5b5d4af28ff84fbd37e5d93500bb2" ResourceName="data8" />
+      <Asset Guid="cdc5b5d4af28ff84fbd37e5d93500bb2" ResourceName="Bundles/Scenes/GameScene" />
       <Asset Guid="de417fa21c06ab8418f56e1b9582861e" ResourceName="Bundles/DataTables" />
       <Asset Guid="ef509fea589ad0e4ead2dac138f5a6fd" ResourceName="Bundles/Assemblies/patch.bytes" />
-      <Asset Guid="f51e77864b499e245abf708bcad038d3" ResourceName="data7" />
+      <Asset Guid="f51e77864b499e245abf708bcad038d3" ResourceName="Bundles/Audios/Musics" />
       <Asset Guid="f98416e525a5f1242a5390ccbda6a6f7" ResourceName="Bundles/Configs/cfgVersion.bytes" />
     </Assets>
   </ResourceCollection>

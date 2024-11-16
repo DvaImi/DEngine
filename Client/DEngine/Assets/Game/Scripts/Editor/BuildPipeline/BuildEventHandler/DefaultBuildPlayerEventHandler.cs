@@ -19,7 +19,7 @@ namespace Game.Editor.BuildPipeline
             GameBuildPipeline.SaveHybridCLR();
             GameBuildPipeline.SaveBuildSetting();
             DEngineSetting.Save();
-            AssetDatabase.Refresh();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
         public void OnPreprocessPlatform(Platform platform)
@@ -31,7 +31,7 @@ namespace Game.Editor.BuildPipeline
                 UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
             }
 
-            AssetDatabase.Refresh();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             //TODO 根据平台判断是否需要ALL
             try
             {

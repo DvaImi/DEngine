@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4e172129d8694c4006faf45d0a763f761a3c4c66"
+      "hash": "1f0053a3c91cbe041bbf9d1522e441bbb738d13c"
     },
     "com.code-philosophy.luban": {
       "version": "https://gitee.com/focus-creative-games/luban_unity.git",
@@ -35,7 +35,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "a81d506462d3bb137891b98ab950c0003fb16e85"
+      "hash": "05a07bffe99ad84bcbadfe022e8d0881514ea642"
     },
     "com.fantasy.unity": {
       "version": "https://github.com/qq362946/Fantasy.Unity.git",
@@ -44,7 +44,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "2f305656980f6974ed19850e758a33330068ad87"
+      "hash": "5922af55e934273eadab36d293ff2f95457a1665"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.4",

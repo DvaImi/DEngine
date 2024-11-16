@@ -47,7 +47,6 @@
     <type fullname="DEngine.Runtime.UIForm" preserve="all" />
     <type fullname="DEngine.Runtime.UIFormLogic" preserve="all" />
     <type fullname="DEngine.Runtime.VarInt32" preserve="all" />
-    <type fullname="UnityExtension" preserve="all" />
   </assembly>
   <assembly fullname="Fantasy.Unity">
     <type fullname="Fantasy.Async.AsyncFTaskMethodBuilder" preserve="all" />
@@ -83,7 +82,6 @@
   </assembly>
   <assembly fullname="Game.Runtime.Builtin">
     <type fullname="Game.BuiltinDataComponent" preserve="all" />
-    <type fullname="Game.EventContainer" preserve="all" />
     <type fullname="Game.FileSystem.FileInfo" preserve="all" />
     <type fullname="Game.FileSystem.FileSystemDataVersion" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
@@ -91,6 +89,7 @@
     <type fullname="Game.Network.INetworkModule" preserve="all" />
     <type fullname="Game.Network.NetworkLog" preserve="all" />
     <type fullname="Game.SoundButton" preserve="all" />
+    <type fullname="Game.UI.GameUGUIFormLogic" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
     <type fullname="Game.UniTaskParallel`1" preserve="all" />
   </assembly>
@@ -114,37 +113,29 @@
     <type fullname="Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskVoidMethodBuilder" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask/Awaiter" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTaskCancellationExtensions" preserve="all" />
+    <type fullname="Cysharp.Threading.Tasks.UniTaskExtensions" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTaskVoid" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.YieldAwaitable" preserve="all" />
-    <type fullname="Cysharp.Threading.Tasks.YieldAwaitable/Awaiter" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
     <type fullname="UnityEngine.Color" preserve="all" />
     <type fullname="UnityEngine.Color32" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
-    <type fullname="UnityEngine.Coroutine" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
     <type fullname="UnityEngine.Mathf" preserve="all" />
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
     <type fullname="UnityEngine.Object" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.Rect" preserve="all" />
-    <type fullname="UnityEngine.RectTransform" preserve="all" />
     <type fullname="UnityEngine.ShaderVariantCollection" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
     <type fullname="UnityEngine.Vector2" preserve="all" />
     <type fullname="UnityEngine.Vector3" preserve="all" />
     <type fullname="UnityEngine.Vector4" preserve="all" />
-    <type fullname="UnityEngine.WaitForEndOfFrame" preserve="all" />
-  </assembly>
-  <assembly fullname="UnityEngine.UI">
-    <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
-    <type fullname="UnityEngine.UI.Slider" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.UIModule">
-    <type fullname="UnityEngine.Canvas" preserve="all" />
     <type fullname="UnityEngine.CanvasGroup" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">
@@ -181,7 +172,6 @@
     <type fullname="System.IO.Stream" preserve="all" />
     <type fullname="System.Int32" preserve="all" />
     <type fullname="System.Math" preserve="all" />
-    <type fullname="System.NotSupportedException" preserve="all" />
     <type fullname="System.Nullable`1" preserve="all" />
     <type fullname="System.Object" preserve="all" />
     <type fullname="System.Reflection.Assembly" preserve="all" />
@@ -189,13 +179,11 @@
     <type fullname="System.Reflection.DefaultMemberAttribute" preserve="all" />
     <type fullname="System.Reflection.MemberInfo" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.AsyncStateMachineAttribute" preserve="all" />
-    <type fullname="System.Runtime.CompilerServices.AsyncVoidMethodBuilder" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.ExtensionAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.IAsyncStateMachine" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.IsReadOnlyAttribute" preserve="all" />
-    <type fullname="System.Runtime.CompilerServices.IteratorStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeHelpers" preserve="all" />
     <type fullname="System.RuntimeFieldHandle" preserve="all" />
@@ -209,6 +197,7 @@
     <type fullname="System.StringSplitOptions" preserve="all" />
     <type fullname="System.Text.Encoding" preserve="all" />
     <type fullname="System.Threading.CancellationToken" preserve="all" />
+    <type fullname="System.Threading.CancellationTokenRegistration" preserve="all" />
     <type fullname="System.Type" preserve="all" />
     <type fullname="System.ValueType" preserve="all" />
   </assembly>

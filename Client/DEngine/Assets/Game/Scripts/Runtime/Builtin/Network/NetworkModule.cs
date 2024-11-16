@@ -8,14 +8,9 @@ namespace Game.Network
     {
         public int Priority { get; } = 0;
 
-        private readonly Dictionary<string, INetworkChannel> m_NetworkChannels = null;
+        private readonly Dictionary<string, INetworkChannel> m_NetworkChannels = new();
 
         public int NetworkChannelCount => m_NetworkChannels.Count;
-
-        public NetworkModule()
-        {
-            m_NetworkChannels = new Dictionary<string, INetworkChannel>();
-        }
 
         public bool HasNetworkChannel(string name)
         {

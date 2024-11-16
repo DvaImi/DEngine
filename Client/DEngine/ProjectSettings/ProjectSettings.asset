@@ -143,6 +143,7 @@ PlayerSettings:
   bundleVersion: 0.1.0
   preloadedAssets:
   - {fileID: 0}
+  - {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -898,7 +899,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: FANTASY_UNITY;ENABLE_LOG;ENABLE_HYBRIDCLR
     PS4: 
-    Standalone: FANTASY_UNITY;ENABLE_LOG;ENABLE_HYBRIDCLR;ENABLE_PROFILER
+    Standalone: FANTASY_UNITY;ENABLE_LOG;ENABLE_HYBRIDCLR
     WebGL: ENABLE_LOG;ENABLE_HYBRIDCLR
     Windows Store Apps: ENABLE_LOG;ENABLE_HYBRIDCLR
     XboxOne: 
@@ -922,7 +923,7 @@ PlayerSettings:
     PS4: 1
     PS5: 1
     Stadia: 1
-    Standalone: 4
+    Standalone: 1
     WebGL: 1
     Windows Store Apps: 1
     XboxOne: 1

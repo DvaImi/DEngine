@@ -266,6 +266,8 @@
     <type fullname="Fantasy.Network.NetworkType" preserve="all"/>
     <type fullname="Fantasy.Network.NetworkTarget" preserve="all"/>
     <type fullname="Fantasy.Network.NetworkProtocolType" preserve="all"/>
+    <type fullname="Fantasy.Network.INetworkThreadUpdate" preserve="all"/>
+    <type fullname="Fantasy.Network.NetworkThreadComponent" preserve="all"/>
     <type fullname="Fantasy.Network.SessionHeartbeatComponentAwakeSystem" preserve="all"/>
     <type fullname="Fantasy.Network.SessionHeartbeatComponent" preserve="all"/>
     <type fullname="Fantasy.Network.Session" preserve="all"/>
@@ -389,12 +391,8 @@
     <type fullname="Fantasy.Async.AsyncFTaskMethodBuilder`1" preserve="all"/>
     <type fullname="Fantasy.Async.AsyncFVoidMethodBuilder" preserve="all"/>
     <type fullname="Fantasy.Async.FCancellationToken" preserve="all"/>
-    <type fullname="Fantasy.Async.FCancellationTokenExtension" preserve="all"/>
     <type fullname="Fantasy.Async.FTask" preserve="all"/>
     <type fullname="Fantasy.Async.FTask`1" preserve="all"/>
-    <type fullname="Fantasy.Async.FTaskExtension" preserve="all"/>
-    <type fullname="Fantasy.Async.IFTask" preserve="all"/>
-    <type fullname="Fantasy.Async.FTaskType" preserve="all"/>
     <type fullname="Fantasy.Async.STaskStatus" preserve="all"/>
     <type fullname="Fantasy.Async.FTaskCompleted" preserve="all"/>
     <type fullname="Fantasy.Async.FVoid" preserve="all"/>
@@ -546,7 +544,10 @@
     <type fullname="Fantasy.Pool.MultiThreadPool+++c__3`1" preserve="all"/>
     <type fullname="Fantasy.Pool.MultiThreadPool+++c__DisplayClass2_0" preserve="all"/>
     <type fullname="Fantasy.Platform.Unity.Entry++CreateScene+d__6" preserve="all"/>
+    <type fullname="Fantasy.Network.NetworkThreadComponent+++c__DisplayClass10_0" preserve="all"/>
+    <type fullname="Fantasy.Network.NetworkThreadComponent+++c__DisplayClass9_0" preserve="all"/>
     <type fullname="Fantasy.Network.SessionHeartbeatComponent++RepeatedSend+d__16" preserve="all"/>
+    <type fullname="Fantasy.Network.TCP.TCPClientNetwork+++c__DisplayClass29_0" preserve="all"/>
     <type fullname="Fantasy.Network.TCP.TCPClientNetwork++ReadPipeDataAsync+d__23" preserve="all"/>
     <type fullname="Fantasy.Network.TCP.TCPClientNetwork++ReceiveSocketAsync+d__22" preserve="all"/>
     <type fullname="Fantasy.Network.KCP.KCPClientNetwork++ReadPipeDataAsync+d__42" preserve="all"/>
@@ -591,6 +592,7 @@
     <type fullname="Fantasy.Timer.TimerSchedulerNet+++c__DisplayClass19_0`1" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNet+++c__DisplayClass22_0`1" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNet++WaitAsync+d__13" preserve="all"/>
+    <type fullname="Fantasy.Timer.TimerSchedulerNet++WaitFrameAsync+d__15" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNet++WaitTillAsync+d__14" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNetUnity+++c__DisplayClass13_0" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNetUnity+++c__DisplayClass14_0" preserve="all"/>
@@ -598,6 +600,7 @@
     <type fullname="Fantasy.Timer.TimerSchedulerNetUnity+++c__DisplayClass19_0`1" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNetUnity+++c__DisplayClass22_0`1" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNetUnity++WaitAsync+d__13" preserve="all"/>
+    <type fullname="Fantasy.Timer.TimerSchedulerNetUnity++WaitFrameAsync+d__15" preserve="all"/>
     <type fullname="Fantasy.Timer.TimerSchedulerNetUnity++WaitTillAsync+d__14" preserve="all"/>
     <type fullname="Fantasy.Event.EventComponent+++c__DisplayClass5_0" preserve="all"/>
     <type fullname="Fantasy.Event.EventComponent+++c__DisplayClass6_0" preserve="all"/>
@@ -621,26 +624,21 @@
     <type fullname="Fantasy.Entitas.Entity++CreateAsync+d__29" preserve="all"/>
     <type fullname="Fantasy.Entitas.Entity++CreateAsync+d__31`1" preserve="all"/>
     <type fullname="Fantasy.Entitas.Entity++CreateAsync+d__33`1" preserve="all"/>
-    <type fullname="Fantasy.Entitas.Entity++DeserializeAsync+d__54" preserve="all"/>
-    <type fullname="Fantasy.Entitas.Entity++DisposeAsync+d__60" preserve="all"/>
-    <type fullname="Fantasy.Entitas.Entity++RemoveComponentAsync+d__46`1" preserve="all"/>
-    <type fullname="Fantasy.Entitas.Entity++RemoveComponentAsync+d__48`1" preserve="all"/>
-    <type fullname="Fantasy.Entitas.Entity++RemoveComponentAsync+d__50" preserve="all"/>
-    <type fullname="Fantasy.Entitas.Entity++RemoveComponentAsync+d__52`1" preserve="all"/>
-    <type fullname="Fantasy.Entitas.Entity++get_ForEachEntity+d__58" preserve="all"/>
-    <type fullname="Fantasy.Entitas.Entity++get_ForEachMultiEntity+d__56" preserve="all"/>
+    <type fullname="Fantasy.Entitas.Entity++DeserializeAsync+d__57" preserve="all"/>
+    <type fullname="Fantasy.Entitas.Entity++DisposeAsync+d__63" preserve="all"/>
+    <type fullname="Fantasy.Entitas.Entity++RemoveComponentAsync+d__49`1" preserve="all"/>
+    <type fullname="Fantasy.Entitas.Entity++RemoveComponentAsync+d__51`1" preserve="all"/>
+    <type fullname="Fantasy.Entitas.Entity++RemoveComponentAsync+d__53" preserve="all"/>
+    <type fullname="Fantasy.Entitas.Entity++RemoveComponentAsync+d__55`1" preserve="all"/>
+    <type fullname="Fantasy.Entitas.Entity++get_ForEachEntity+d__61" preserve="all"/>
+    <type fullname="Fantasy.Entitas.Entity++get_ForEachMultiEntity+d__59" preserve="all"/>
     <type fullname="Fantasy.Async.CoroutineLock++Wait+d__10" preserve="all"/>
-    <type fullname="Fantasy.Async.FCancellationTokenExtension++AddToCancellationToken+d__0" preserve="all"/>
-    <type fullname="Fantasy.Async.FCancellationTokenExtension++AddToCancellationToken+d__1`1" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask+++c__DisplayClass29_0" preserve="all"/>
     <type fullname="Fantasy.Async.FTask+++c__DisplayClass30_0" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask+++c__DisplayClass31_0" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++GetUserTokenAsync+d__7`1" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++InnerCoroutine+d__46" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++SetUserToKen+d__49" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++WaitAll+d__30" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask++WaitAny+d__31" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask`1++InnerCoroutine+d__20" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask`1++SetUserToKen+d__23" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask++InnerCoroutine+d__37" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask++WaitAll+d__29" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask++WaitAny+d__30" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask`1++InnerCoroutine+d__12" preserve="all"/>
     <type fullname="Fantasy.DataStructure.SkipTable.SkipTableBase`1++GetEnumerator+d__21" preserve="all"/>
     <type fullname="Fantasy.Assembly.AssemblySystem++ForEach+d__10" preserve="all"/>
     <type fullname="Fantasy.Assembly.AssemblySystem++ForEach+d__7" preserve="all"/>
@@ -650,8 +648,8 @@
     <type fullname="Fantasy.Assembly.AssemblySystem++get_ForEachAssembly+d__13" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=32" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=288" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=19841" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=28817" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=19797" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=28620" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+KeyCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+ValueCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeDictionary`2+KeyCollection+Enumerator" preserve="all"/>
@@ -661,8 +659,8 @@
     <type fullname="NativeCollections.NativeSortedDictionary`2+ValueCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeSortedList`2+KeyCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeSortedList`2+ValueCollection+Enumerator" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask+++c__DisplayClass30_0+++WaitAll+g__RunSTask|0+d" preserve="all"/>
-    <type fullname="Fantasy.Async.FTask+++c__DisplayClass31_0+++WaitAny+g__RunSTask|0+d" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask+++c__DisplayClass29_0+++WaitAll+g__RunSTask|0+d" preserve="all"/>
+    <type fullname="Fantasy.Async.FTask+++c__DisplayClass30_0+++WaitAny+g__RunSTask|0+d" preserve="all"/>
   </assembly>
   <assembly fullname="DEngine">
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
@@ -1227,6 +1225,7 @@
   <assembly fullname="Game.Runtime.Builtin">
     <type fullname="++f__AnonymousType0`2" preserve="all"/>
     <type fullname="VariantHelper" preserve="all"/>
+    <type fullname="UIExtension" preserve="all"/>
     <type fullname="AsyncBarrier" preserve="all"/>
     <type fullname="GameUtility" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
@@ -1234,12 +1233,15 @@
     <type fullname="Game.IGameModule" preserve="all"/>
     <type fullname="Game.IGameUpdateModule" preserve="all"/>
     <type fullname="Game.EventContainer" preserve="all"/>
+    <type fullname="Game.WidgetContainer" preserve="all"/>
     <type fullname="Game.DataTableHelper" preserve="all"/>
     <type fullname="Game.Constant" preserve="all"/>
     <type fullname="Game.BuildInfo" preserve="all"/>
     <type fullname="Game.DoubleMap`2" preserve="all"/>
     <type fullname="Game.UnOrderMultiMap`2" preserve="all"/>
     <type fullname="Game.UnOrderMultiMapSet`2" preserve="all"/>
+    <type fullname="Game.CompressedBundleInfo" preserve="all"/>
+    <type fullname="Game.ResourceVersionInfo" preserve="all"/>
     <type fullname="Game.VersionInfo" preserve="all"/>
     <type fullname="Game.BuiltinData" preserve="all"/>
     <type fullname="Game.GameEntityHelper" preserve="all"/>
@@ -1279,10 +1281,20 @@
     <type fullname="Game.WebRequestExtension" preserve="all"/>
     <type fullname="Game.WebRequestResult" preserve="all"/>
     <type fullname="Game.UI.RaycastGraphic" preserve="all"/>
+    <type fullname="Game.UI.GameUGUIFormLogic" preserve="all"/>
     <type fullname="Game.UI.UGUIGroupHelper" preserve="all"/>
+    <type fullname="Game.UI.IWidget" preserve="all"/>
     <type fullname="Game.UI.Widget" preserve="all"/>
+    <type fullname="Game.UI.WidgetItemObject" preserve="all"/>
     <type fullname="Game.Sound.SoundExtension" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper" preserve="all"/>
+    <type fullname="Game.AssetItemObject.AssetItemObject" preserve="all"/>
+    <type fullname="Game.AssetItemObject.AssetItemObjectComponent" preserve="all"/>
+    <type fullname="Game.AssetItemObject.SetSpriteExtensions" preserve="all"/>
+    <type fullname="Game.AssetItemObject.ISetAssetObject" preserve="all"/>
+    <type fullname="Game.AssetItemObject.LoadAssetObject" preserve="all"/>
+    <type fullname="Game.AssetItemObject.SetImageSpriteObject" preserve="all"/>
+    <type fullname="Game.AssetItemObject.SetSpriteRendererObject" preserve="all"/>
     <type fullname="Game.Network.INetworkChannel" preserve="all"/>
     <type fullname="Game.Network.INetworkModule" preserve="all"/>
     <type fullname="Game.Network.NetworkExtension" preserve="all"/>
@@ -1320,23 +1332,25 @@
     <type fullname="AsyncBarrier++SignalAndWaitAsync+d__3" preserve="all"/>
     <type fullname="GameUtility+Time" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1+MonoScriptData" preserve="all"/>
+    <type fullname="Game.WidgetContainer+WidgetInfo" preserve="all"/>
     <type fullname="Game.DataTableHelper+++c" preserve="all"/>
     <type fullname="Game.Constant+AssetPriority" preserve="all"/>
     <type fullname="Game.Constant+Layer" preserve="all"/>
     <type fullname="Game.Constant+ResourceVersion" preserve="all"/>
     <type fullname="Game.Constant+Setting" preserve="all"/>
-    <type fullname="Game.GameEntry+++c__85`1" preserve="all"/>
-    <type fullname="Game.GameEntry+++c__DisplayClass86_0" preserve="all"/>
+    <type fullname="Game.GameEntry+++c__90`1" preserve="all"/>
+    <type fullname="Game.GameEntry+++c__DisplayClass91_0" preserve="all"/>
     <type fullname="Game.ProcedureApplyResourcePack+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c" preserve="all"/>
-    <type fullname="Game.ProcedureCheckVersion+++c__DisplayClass7_0" preserve="all"/>
-    <type fullname="Game.ProcedureCheckVersion++CheckVersionList+d__6" preserve="all"/>
+    <type fullname="Game.ProcedureCheckVersion+++c__DisplayClass6_0" preserve="all"/>
+    <type fullname="Game.ProcedureCheckVersion++CheckVersionList+d__5" preserve="all"/>
     <type fullname="Game.ProcedureClearCachePack++StartClearCachePack+d__5" preserve="all"/>
     <type fullname="Game.ProcedureLoadAssemblies+++c__DisplayClass6_0" preserve="all"/>
     <type fullname="Game.ProcedureLoadAssemblies++LoadUpdateAssemblies+d__6" preserve="all"/>
     <type fullname="Game.ProcedureLoadHotUpdateEntry++HotfixLauncher+d__1" preserve="all"/>
     <type fullname="Game.ProcedureUpdateResourcePack+++c" preserve="all"/>
     <type fullname="Game.ProcedureUpdateResources+UpdateLengthData" preserve="all"/>
+    <type fullname="Game.ProcedureUpdateResources+++c" preserve="all"/>
     <type fullname="Game.UniTaskExtension+++c__DisplayClass20_0`1" preserve="all"/>
     <type fullname="Game.UniTaskExtension+++c__DisplayClass22_0" preserve="all"/>
     <type fullname="Game.UniTaskExtension+++c__DisplayClass40_0" preserve="all"/>
@@ -1366,13 +1380,14 @@
     <type fullname="Game.Sound.Helper.SoundAgentHelper++FadeToVolume+d__61" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++PauseCo+d__60" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++StopCo+d__59" preserve="all"/>
+    <type fullname="Game.AssetItemObject.AssetItemObjectComponent++Start+d__6" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel" preserve="all"/>
     <type fullname="Game.CommandLine.CommandCreator++CollectCommands+d__0`1" preserve="all"/>
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3444" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=8032" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4017" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9402" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">

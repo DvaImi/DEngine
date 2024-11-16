@@ -26,7 +26,7 @@ namespace Game.Update
         public static void Initialize()
         {
             Network = GameEntry.GetModule<INetworkModule>();
-            Luban = GameEntry.GetModule<ILubanDataProvider>();
+            Luban   = GameEntry.GetModule<ILubanDataProvider>();
         }
     }
 }

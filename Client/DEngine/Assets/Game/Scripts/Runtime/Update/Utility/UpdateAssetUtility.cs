@@ -1,4 +1,4 @@
-﻿namespace Game.Update
+namespace Game.Update
 {
     /// <summary>
     /// 可更新资源路径工具

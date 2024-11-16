@@ -22,19 +22,17 @@ namespace Game.Update
         // ReSharper disable once Unity.IncorrectMethodSignature
         private async UniTaskVoid Start()
         {
+            DEngine.Runtime.Log.Info("===============热更逻辑加载成功{0}==============", DateTime.Now);
             // 热更程序集加载后初始化
             AssemblyUtility.Initialize();
             if (!s_IsInitFantasy)
             {
                 Log.Register(new NetworkLog());
-                Entry.Initialize(AssemblyUtility.GetAssemblies());
+                Entry.Initialize(AppDomain.CurrentDomain.GetAssemblies());
                 s_IsInitFantasy = true;
             }
 
             GameEntry.BuiltinData.DestroyDialog();
-
-            DEngine.Runtime.Log.Info("===============热更逻辑加载成功{0}==============", DateTime.Now);
-
             await Entry.CreateScene();
             UpdateDomain.Initialize();
             await UpdateDomain.Scene.PublishAsync(new PreloadEventType());
