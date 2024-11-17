@@ -348,7 +348,7 @@ GameObject:
   - component: {fileID: 614242848}
   - component: {fileID: 614242847}
   - component: {fileID: 614242846}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: InstanceRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -595,7 +595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11420954, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_DownloadAgentHelperTypeName
-      value: DEngine.Runtime.UnityWebRequestDownloadAgentHelper
+      value: Game.GameDownloadAgentHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11447244, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_WebRequestAgentHelperCount
@@ -603,7 +603,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11447244, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_WebRequestAgentHelperTypeName
-      value: DEngine.Runtime.UnityWebRequestAgentHelper
+      value: Game.GameWebRequestAgentHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11451924, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_DataTableHelperTypeName
@@ -651,7 +651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ResourceHelperTypeName
-      value: DEngine.Runtime.DefaultResourceHelper
+      value: Game.GameResourceHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_LoadResourceAgentHelperCount
@@ -659,7 +659,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_LoadResourceAgentHelperTypeName
-      value: DEngine.Runtime.DefaultLoadResourceAgentHelper
+      value: Game.GameLoadResourceAgentHelper
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_FrameRate
@@ -687,7 +687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EditorResourceMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_JsonHelperTypeName

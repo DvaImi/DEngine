@@ -17,26 +17,23 @@ namespace Game.Update
     /// </summary>
     public class UpdateLauncher : MonoBehaviour
     {
-        private static bool s_IsInitFantasy = false;
-
         // ReSharper disable once Unity.IncorrectMethodSignature
         private async UniTaskVoid Start()
         {
             DEngine.Runtime.Log.Info("===============热更逻辑加载成功{0}==============", DateTime.Now);
             // 热更程序集加载后初始化
             AssemblyUtility.Initialize();
-            if (!s_IsInitFantasy)
+            var scene = UpdateDomain.Scene;
+            if (scene == null)
             {
                 Log.Register(new NetworkLog());
                 Entry.Initialize(AppDomain.CurrentDomain.GetAssemblies());
-                s_IsInitFantasy = true;
+                scene = await Fantasy.Scene.Create();
             }
 
             GameEntry.BuiltinData.DestroyDialog();
-            await Entry.CreateScene();
-            UpdateDomain.Initialize();
+            UpdateDomain.Initialize(scene);
             await UpdateDomain.Scene.PublishAsync(new PreloadEventType());
-            await UpdateDomain.Scene.PublishAsync(new ProcessingPreloadEventType());
             await UniTask.NextFrame();
             StartUpdateDomainProcedure();
             Destroy(gameObject);

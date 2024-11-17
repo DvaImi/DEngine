@@ -35,7 +35,6 @@ namespace Game.Editor.BuildPipeline
             }
 
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            //TODO 根据平台判断是否需要ALL
             try
             {
 #if ENABLE_HYBRIDCLR

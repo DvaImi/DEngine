@@ -53,7 +53,6 @@ namespace Game.Editor.BuildPipeline
 
             AssetDatabase.Refresh();
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
-            CheckAccessMissingMetadata(buildTarget);
             CompileDllCommand.CompileDll(buildTarget);
             CopyUpdateDllAssets(buildTarget);
             var patch = FileSystemCollector.Instance.Get("patch");

@@ -195,7 +195,7 @@ namespace Game.Editor.Toolbar
 
         private static void OnGUILeftHandler()
         {
-            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            EditorGUI.BeginDisabledGroup(GameBuildPipeline.IsEditorBusy());
             {
                 GUILayout.BeginHorizontal();
                 {
@@ -205,7 +205,7 @@ namespace Game.Editor.Toolbar
                         var menu = LeftMenu[i];
                         if (menu.UseCustomGUI)
                         {
-                            CallCustomGUIMethod(0, menu.MenuName);
+                            CallCustomGUIMethod(ToolBarMenuAlign.Left, menu.MenuName);
                         }
                         else
                         {
@@ -233,7 +233,7 @@ namespace Game.Editor.Toolbar
 
         private static void OnGUIRightHandler()
         {
-            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            EditorGUI.BeginDisabledGroup(GameBuildPipeline.IsEditorBusy());
             {
                 GUILayout.BeginHorizontal();
                 {
@@ -243,7 +243,7 @@ namespace Game.Editor.Toolbar
                         var menu = RightMenu[i];
                         if (menu.UseCustomGUI)
                         {
-                            CallCustomGUIMethod(1, menu.MenuName);
+                            CallCustomGUIMethod(ToolBarMenuAlign.Right, menu.MenuName);
                         }
                         else
                         {
@@ -271,7 +271,7 @@ namespace Game.Editor.Toolbar
             EditorGUI.EndDisabledGroup();
         }
 
-        private static void CallCustomGUIMethod(int align, string menuName)
+        private static void CallCustomGUIMethod(ToolBarMenuAlign align, string menuName)
         {
             if (align == 0)
             {

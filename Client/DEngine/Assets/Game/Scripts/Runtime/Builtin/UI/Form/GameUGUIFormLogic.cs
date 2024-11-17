@@ -31,7 +31,7 @@ namespace Game.UI
         /// <summary>
         /// 初始化界面，设置组件和默认状态
         /// </summary>
-        protected override void OnInit(object userData)
+        protected internal override void OnInit(object userData)
         {
             base.OnInit(userData);
 
@@ -55,7 +55,7 @@ namespace Game.UI
         /// <summary>
         /// 恢复界面时调用，恢复原本的UI状态并执行显示过渡
         /// </summary>
-        protected override void OnResume()
+        protected internal override void OnResume()
         {
             base.OnResume();
         }
@@ -63,7 +63,7 @@ namespace Game.UI
         /// <summary>
         /// 每帧更新时调用，用于处理UI的更新逻辑
         /// </summary>
-        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
         }
@@ -71,7 +71,7 @@ namespace Game.UI
         /// <summary>
         /// 暂停UI时调用，通常用于暂停交互等
         /// </summary>
-        protected override void OnPause()
+        protected internal override void OnPause()
         {
             base.OnPause();
         }
@@ -79,7 +79,7 @@ namespace Game.UI
         /// <summary>
         /// UI被遮挡时调用，用于处理遮挡状态
         /// </summary>
-        protected override void OnCover()
+        protected internal override void OnCover()
         {
             base.OnCover();
         }
@@ -87,7 +87,7 @@ namespace Game.UI
         /// <summary>
         /// UI恢复显示时调用，用于恢复显示状态
         /// </summary>
-        protected override void OnReveal()
+        protected internal override void OnReveal()
         {
             base.OnReveal();
         }
@@ -95,7 +95,7 @@ namespace Game.UI
         /// <summary>
         /// UI获得焦点时调用，通常在多UI切换时使用
         /// </summary>
-        protected override void OnRefocus(object userData)
+        protected internal override void OnRefocus(object userData)
         {
             base.OnRefocus(userData);
         }
@@ -103,7 +103,7 @@ namespace Game.UI
         /// <summary>
         /// 关闭界面时调用，执行清理工作
         /// </summary>
-        protected override void OnClose(bool isShutdown, object userData)
+        protected internal override void OnClose(bool isShutdown, object userData)
         {
             base.OnClose(isShutdown, userData);
             // 释放事件容器
@@ -118,7 +118,7 @@ namespace Game.UI
         /// <summary>
         /// 深度变化时调用，调整UI的显示顺序
         /// </summary>
-        protected override void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
+        protected internal override void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
         {
             int oldDepth = Depth;
             base.OnDepthChanged(uiGroupDepth, depthInUIGroup);

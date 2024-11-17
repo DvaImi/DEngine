@@ -1168,7 +1168,6 @@
     <type fullname="DEngine.Runtime.VarVector3" preserve="all"/>
     <type fullname="DEngine.Runtime.VarVector4" preserve="all"/>
     <type fullname="DEngine.Runtime.UnityWebRequestAgentHelper" preserve="all"/>
-    <type fullname="DEngine.Runtime.UnityWebRequestHeader" preserve="all"/>
     <type fullname="DEngine.Runtime.WebRequestAgentHelperBase" preserve="all"/>
     <type fullname="DEngine.Runtime.WebRequestComponent" preserve="all"/>
     <type fullname="DEngine.Runtime.WebRequestFailureEventArgs" preserve="all"/>
@@ -1217,8 +1216,8 @@
     <type fullname="DEngine.Runtime.SoundComponent+SoundGroup" preserve="all"/>
     <type fullname="DEngine.Runtime.UIComponent+UIGroup" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=10232" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=18444" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=10190" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=18352" preserve="all"/>
     <type fullname="DEngine.Runtime.DebuggerComponent+RuntimeMemoryInformationWindow`1+Sample" preserve="all"/>
     <type fullname="DEngine.Runtime.DebuggerComponent+RuntimeMemorySummaryWindow+Record" preserve="all"/>
   </assembly>
@@ -1229,9 +1228,9 @@
     <type fullname="AsyncBarrier" preserve="all"/>
     <type fullname="GameUtility" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
-    <type fullname="Game.BuiltinDataComponent" preserve="all"/>
     <type fullname="Game.IGameModule" preserve="all"/>
     <type fullname="Game.IGameUpdateModule" preserve="all"/>
+    <type fullname="Game.BuiltinDataComponent" preserve="all"/>
     <type fullname="Game.EventContainer" preserve="all"/>
     <type fullname="Game.VariableContainer" preserve="all"/>
     <type fullname="Game.DataTableHelper" preserve="all"/>
@@ -1244,9 +1243,13 @@
     <type fullname="Game.ResourceVersionInfo" preserve="all"/>
     <type fullname="Game.VersionInfo" preserve="all"/>
     <type fullname="Game.BuiltinData" preserve="all"/>
-    <type fullname="Game.GameEntityHelper" preserve="all"/>
     <type fullname="Game.EventExtension" preserve="all"/>
     <type fullname="Game.GameEntry" preserve="all"/>
+    <type fullname="Game.GameDownloadAgentHelper" preserve="all"/>
+    <type fullname="Game.GameEntityHelper" preserve="all"/>
+    <type fullname="Game.GameLoadResourceAgentHelper" preserve="all"/>
+    <type fullname="Game.GameResourceHelper" preserve="all"/>
+    <type fullname="Game.GameWebRequestAgentHelper" preserve="all"/>
     <type fullname="Game.ZStringHelper" preserve="all"/>
     <type fullname="Game.GameProcedureBase" preserve="all"/>
     <type fullname="Game.ProcedureApplyResourcePack" preserve="all"/>
@@ -1277,6 +1280,7 @@
     <type fullname="Game.GameProfiler" preserve="all"/>
     <type fullname="Game.GameUtility" preserve="all"/>
     <type fullname="Game.PermutationAndCombination`1" preserve="all"/>
+    <type fullname="Game.UnityWebRequestHeader" preserve="all"/>
     <type fullname="Game.WebRequestExtension" preserve="all"/>
     <type fullname="Game.WebRequestResult" preserve="all"/>
     <type fullname="Game.UI.RaycastGraphic" preserve="all"/>
@@ -1335,6 +1339,9 @@
     <type fullname="Game.Constant+Setting" preserve="all"/>
     <type fullname="Game.GameEntry+++c__90`1" preserve="all"/>
     <type fullname="Game.GameEntry+++c__DisplayClass91_0" preserve="all"/>
+    <type fullname="Game.GameDownloadAgentHelper+GameDownloadHandler" preserve="all"/>
+    <type fullname="Game.GameResourceHelper++LoadBytesByUniTask+d__3" preserve="all"/>
+    <type fullname="Game.GameResourceHelper++UnloadSceneByUniTask+d__4" preserve="all"/>
     <type fullname="Game.ProcedureApplyResourcePack+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c__DisplayClass6_0" preserve="all"/>
@@ -1382,8 +1389,8 @@
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3918" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9119" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4168" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9617" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">

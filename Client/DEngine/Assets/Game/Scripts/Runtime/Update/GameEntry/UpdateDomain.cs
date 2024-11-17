@@ -1,3 +1,4 @@
+using Fantasy.Platform.Unity;
 using Game.Network;
 using Game.Update.DataTable;
 
@@ -11,7 +12,7 @@ namespace Game.Update
         /// <summary>
         /// 根节点
         /// </summary>
-        public static Fantasy.Scene Scene { get; } = Fantasy.Platform.Unity.Entry.Scene;
+        public static Fantasy.Scene Scene { get; private set; }
 
         /// <summary>
         /// 获取网络模块。
@@ -23,10 +24,11 @@ namespace Game.Update
         /// </summary>
         public static ILubanDataProvider Luban { get; private set; }
 
-        public static void Initialize()
+        public static void Initialize(Fantasy.Scene scene)
         {
+            Scene = scene;
             Network = GameEntry.GetModule<INetworkModule>();
-            Luban   = GameEntry.GetModule<ILubanDataProvider>();
+            Luban = GameEntry.GetModule<ILubanDataProvider>();
         }
     }
 }
