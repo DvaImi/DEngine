@@ -43,6 +43,10 @@ namespace Game.Editor.BuildPipeline
                 {
                     PrebuildCommand.GenerateAll();
                 }
+                else
+                {
+                    CompileDllCommand.CompileDll(target);
+                }
 
                 GameBuildPipeline.CopyAOTDllAssets(target);
                 GameBuildPipeline.CopyUpdateDllAssets(target);
