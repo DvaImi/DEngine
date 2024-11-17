@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Game.Editor.BuildPipeline;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -174,7 +175,7 @@ namespace Game.Editor.Toolbar
                 }
             }
 
-            if (NeedWait())
+            if (GameBuildPipeline.IsEditorBusy())
             {
                 return;
             }
@@ -300,16 +301,6 @@ namespace Game.Editor.Toolbar
                     }
                 }
             }
-        }
-
-        private static bool NeedWait()
-        {
-            return EditorApplication.isCompiling ||
-                   Progress.GetCount() > 0 ||
-                   Lightmapping.isRunning ||
-                   AssetDatabase.IsAssetImportWorkerProcess() ||
-                   EditorApplication.isUpdating ||
-                   EditorApplication.isPlayingOrWillChangePlaymode;
         }
     }
 }

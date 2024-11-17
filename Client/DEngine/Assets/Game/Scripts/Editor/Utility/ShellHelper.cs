@@ -15,15 +15,15 @@ namespace Game.Editor
                 string app = "bash";
                 string arguments = "-c";
 #elif UNITY_EDITOR_WIN
-                string app = "cmd.exe";
+                string app       = "cmd.exe";
                 string arguments = "/c";
 #endif
                 ProcessStartInfo start = new ProcessStartInfo(app);
-                process.StartInfo = start;
-                start.Arguments = arguments + " \"" + cmd + "\"";
-                start.CreateNoWindow = false;
-                start.ErrorDialog = true;
-                start.UseShellExecute = true;
+                process.StartInfo      = start;
+                start.Arguments        = arguments + " \"" + cmd + "\"";
+                start.CreateNoWindow   = false;
+                start.ErrorDialog      = true;
+                start.UseShellExecute  = true;
                 start.WorkingDirectory = workDirectory;
 
                 process.Start();
@@ -44,7 +44,7 @@ namespace Game.Editor
                 string splitChar = ":";
                 string arguments = "-c";
 #elif UNITY_EDITOR_WIN
-                string app = "cmd.exe";
+                string app       = "cmd.exe";
                 string splitChar = ";";
                 string arguments = "/c";
 #endif
@@ -58,52 +58,52 @@ namespace Game.Editor
                     }
                 }
 
-                process.StartInfo = start;
-                start.Arguments = arguments + " \"" + cmd + "\"";
-                start.CreateNoWindow = true;
-                start.ErrorDialog = true;
-                start.UseShellExecute = false;
+                process.StartInfo      = start;
+                start.Arguments        = arguments + " \"" + cmd + "\"";
+                start.CreateNoWindow   = true;
+                start.ErrorDialog      = true;
+                start.UseShellExecute  = false;
                 start.WorkingDirectory = workDirectory;
 
                 if (start.UseShellExecute)
                 {
                     start.RedirectStandardOutput = false;
-                    start.RedirectStandardError = false;
-                    start.RedirectStandardInput = false;
+                    start.RedirectStandardError  = false;
+                    start.RedirectStandardInput  = false;
                 }
                 else
                 {
                     start.RedirectStandardOutput = true;
-                    start.RedirectStandardError = true;
-                    start.RedirectStandardInput = true;
+                    start.RedirectStandardError  = true;
+                    start.RedirectStandardInput  = true;
                     start.StandardOutputEncoding = System.Text.Encoding.UTF8;
-                    start.StandardErrorEncoding = System.Text.Encoding.UTF8;
+                    start.StandardErrorEncoding  = System.Text.Encoding.UTF8;
                 }
 
                 bool endOutput = false;
-                bool endError = false;
+                bool endError  = false;
 
                 process.OutputDataReceived += (sender, args) =>
                 {
-                    if (args.Data != null)
+                    if (string.IsNullOrWhiteSpace(args.Data))
                     {
-                        UnityEngine.Debug.Log(args.Data);
+                        endOutput = true;
                     }
                     else
                     {
-                        endOutput = true;
+                        UnityEngine.Debug.Log(args.Data);
                     }
                 };
 
                 process.ErrorDataReceived += (sender, args) =>
                 {
-                    if (args.Data != null)
+                    if (string.IsNullOrWhiteSpace(args.Data))
                     {
-                        UnityEngine.Debug.LogError(args.Data);
+                        endError = true;
                     }
                     else
                     {
-                        endError = true;
+                        UnityEngine.Debug.Log(args.Data);
                     }
                 };
 
