@@ -1,6 +1,6 @@
 {
-    "ShaderTotalCount": 10,
-    "VariantTotalCount": 10,
+    "ShaderTotalCount": 11,
+    "VariantTotalCount": 11,
     "ShaderVariantInfos": [
         {
             "AssetPath": "Resources/unity_builtin_extra",
@@ -96,6 +96,19 @@
         {
             "AssetPath": "Resources/unity_builtin_extra",
             "ShaderName": "Hidden/Internal-UIRAtlasBlitCopy",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/TextCore/Distance Field SSD",
             "ShaderVariantCount": 1,
             "ShaderVariantElements": [
                 {

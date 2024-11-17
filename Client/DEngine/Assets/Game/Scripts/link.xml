@@ -92,6 +92,7 @@
     <type fullname="Game.UI.GameUGUIFormLogic" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
     <type fullname="Game.UniTaskParallel`1" preserve="all" />
+    <type fullname="Game.VariableContainer" preserve="all" />
   </assembly>
   <assembly fullname="Luban.Runtime">
     <type fullname="Luban.BeanBase" preserve="all" />

@@ -145,13 +145,13 @@ namespace Game.Editor.Toolbar
                         {
                             style =
                             {
-                                flexGrow = 1,
+                                flexGrow      = 1,
                                 flexDirection = FlexDirection.Row,
                             }
                         };
 
-                        VisualElement toolbarLeftZone = concreteRoot.Q("ToolbarZoneLeftAlign");
-                        IMGUIContainer leftContainer = new IMGUIContainer();
+                        VisualElement  toolbarLeftZone = concreteRoot.Q("ToolbarZoneLeftAlign");
+                        IMGUIContainer leftContainer   = new IMGUIContainer();
                         leftContainer.onGUIHandler += OnGUILeftHandler;
                         leftParent.Add(leftContainer);
                         toolbarLeftZone.Add(leftParent);
@@ -160,18 +160,23 @@ namespace Game.Editor.Toolbar
                         {
                             style =
                             {
-                                flexGrow = 1,
+                                flexGrow      = 1,
                                 flexDirection = FlexDirection.Row,
                             }
                         };
 
-                        VisualElement toolbarRightZone = concreteRoot.Q("ToolbarZoneRightAlign");
-                        IMGUIContainer rightContainer = new IMGUIContainer();
+                        VisualElement  toolbarRightZone = concreteRoot.Q("ToolbarZoneRightAlign");
+                        IMGUIContainer rightContainer   = new IMGUIContainer();
                         rightContainer.onGUIHandler += OnGUIRightHandler;
                         rightParent.Add(rightContainer);
                         toolbarRightZone.Add(rightParent);
                     }
                 }
+            }
+
+            if (NeedWait())
+            {
+                return;
             }
 
             while (RunMethodInfos.Count > 0)
@@ -295,6 +300,16 @@ namespace Game.Editor.Toolbar
                     }
                 }
             }
+        }
+
+        private static bool NeedWait()
+        {
+            return EditorApplication.isCompiling ||
+                   Progress.GetCount() > 0 ||
+                   Lightmapping.isRunning ||
+                   AssetDatabase.IsAssetImportWorkerProcess() ||
+                   EditorApplication.isUpdating ||
+                   EditorApplication.isPlayingOrWillChangePlaymode;
         }
     }
 }

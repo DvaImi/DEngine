@@ -1233,7 +1233,7 @@
     <type fullname="Game.IGameModule" preserve="all"/>
     <type fullname="Game.IGameUpdateModule" preserve="all"/>
     <type fullname="Game.EventContainer" preserve="all"/>
-    <type fullname="Game.WidgetContainer" preserve="all"/>
+    <type fullname="Game.VariableContainer" preserve="all"/>
     <type fullname="Game.DataTableHelper" preserve="all"/>
     <type fullname="Game.Constant" preserve="all"/>
     <type fullname="Game.BuildInfo" preserve="all"/>
@@ -1277,15 +1277,11 @@
     <type fullname="Game.GameProfiler" preserve="all"/>
     <type fullname="Game.GameUtility" preserve="all"/>
     <type fullname="Game.PermutationAndCombination`1" preserve="all"/>
-    <type fullname="Game.VariablePool" preserve="all"/>
     <type fullname="Game.WebRequestExtension" preserve="all"/>
     <type fullname="Game.WebRequestResult" preserve="all"/>
     <type fullname="Game.UI.RaycastGraphic" preserve="all"/>
     <type fullname="Game.UI.GameUGUIFormLogic" preserve="all"/>
     <type fullname="Game.UI.UGUIGroupHelper" preserve="all"/>
-    <type fullname="Game.UI.IWidget" preserve="all"/>
-    <type fullname="Game.UI.Widget" preserve="all"/>
-    <type fullname="Game.UI.WidgetItemObject" preserve="all"/>
     <type fullname="Game.Sound.SoundExtension" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper" preserve="all"/>
     <type fullname="Game.AssetItemObject.AssetItemObject" preserve="all"/>
@@ -1332,7 +1328,6 @@
     <type fullname="AsyncBarrier++SignalAndWaitAsync+d__3" preserve="all"/>
     <type fullname="GameUtility+Time" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1+MonoScriptData" preserve="all"/>
-    <type fullname="Game.WidgetContainer+WidgetInfo" preserve="all"/>
     <type fullname="Game.DataTableHelper+++c" preserve="all"/>
     <type fullname="Game.Constant+AssetPriority" preserve="all"/>
     <type fullname="Game.Constant+Layer" preserve="all"/>
@@ -1386,8 +1381,8 @@
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4017" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9402" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3868" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9044" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">
