@@ -1,9 +1,13 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using DEngine.Editor;
 using Game.Editor.FileSystem;
 using Game.Editor.Toolbar;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
+using HybridCLR.Editor.HotUpdate;
 using HybridCLR.Editor.Settings;
 using UnityEditor;
 using UnityEngine;
@@ -22,6 +26,7 @@ namespace Game.Editor.BuildPipeline
                 Debug.LogWarning("Cannot generate striped aot because editor is compiling.");
                 return;
             }
+
             AssetDatabase.Refresh();
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
             StripAOTDllCommand.GenerateStripedAOTDlls();
@@ -45,8 +50,10 @@ namespace Game.Editor.BuildPipeline
                 Debug.LogWarning("Cannot compile updated assemblies because editor is compiling.");
                 return;
             }
+
             AssetDatabase.Refresh();
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
+            CheckAccessMissingMetadata(buildTarget);
             CompileDllCommand.CompileDll(buildTarget);
             CopyUpdateDllAssets(buildTarget);
             var patch = FileSystemCollector.Instance.Get("patch");
@@ -60,7 +67,7 @@ namespace Game.Editor.BuildPipeline
 
         public static void SaveHybridCLR()
         {
-            HybridCLRSettings.Instance.hotUpdateAssemblies = DEngineSetting.Instance.UpdateAssemblies;
+            HybridCLRSettings.Instance.hotUpdateAssemblies         = DEngineSetting.Instance.UpdateAssemblies;
             HybridCLRSettings.Instance.preserveHotUpdateAssemblies = DEngineSetting.Instance.PreserveAssemblies;
             HybridCLRSettings.Save();
         }
@@ -76,6 +83,15 @@ namespace Game.Editor.BuildPipeline
                 Directory.CreateDirectory(DEngineSetting.Instance.AOTAssembliesPath);
             }
 
+            if (Directory.Exists(DEngineSetting.Instance.CheckAccessMissingMetadataPath))
+            {
+                GameUtility.IO.Delete(DEngineSetting.Instance.CheckAccessMissingMetadataPath);
+            }
+            else
+            {
+                Directory.CreateDirectory(DEngineSetting.Instance.CheckAccessMissingMetadataPath);
+            }
+
             // Copy AOTAssemblies
             string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(buildTarget);
             foreach (var aotAssemblyFullName in DEngineSetting.Instance.AOTAssemblies)
@@ -87,7 +103,9 @@ namespace Game.Editor.BuildPipeline
                     continue;
                 }
 
-                var desFileName = Path.Combine(DEngineSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
+                var desFileName = Path.Combine(DEngineSetting.Instance.CheckAccessMissingMetadataPath, aotAssemblyFullName + ".dll");
+                File.Copy(oriFileName, desFileName, true);
+                desFileName = Path.Combine(DEngineSetting.Instance.AOTAssembliesPath, aotAssemblyFullName + ".bytes");
                 File.Copy(oriFileName, desFileName, true);
             }
         }
@@ -168,6 +186,49 @@ namespace Game.Editor.BuildPipeline
         {
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol(EnableHybridCLRDefineSymbol);
             SettingsUtil.Enable = false;
+        }
+
+        /// <summary>
+        /// 获取项目未生成的AOT程序集
+        /// </summary>
+        /// <returns></returns>
+        public static string[] GetProjectMissAOTAssemblies()
+        {
+            string aotDllPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(EditorUserBuildSettings.activeBuildTarget);
+            return !Directory.Exists(aotDllPath) ? Array.Empty<string>() : (from aotAssemblyFullName in DEngineSetting.Instance.AOTAssemblies let oriFileName = Path.Combine(aotDllPath, aotAssemblyFullName + ".dll") where !File.Exists(oriFileName) select aotAssemblyFullName).ToArray();
+        }
+
+        /// <summary>
+        /// TODO 
+        /// </summary>
+        /// <param name="buildTarget"></param>
+        private static void CheckAccessMissingMetadata(BuildTarget buildTarget)
+        {
+            // aotDir指向 构建主包时生成的裁剪aot dll目录，而不是最新的SettingsUtil.GetAssembliesPostIl2CppStripDir(target)目录。
+            // 一般来说，发布热更新包时，由于中间可能调用过generate/all，SettingsUtil.GetAssembliesPostIl2CppStripDir(target)目录中包含了最新的aot dll，
+            // 肯定无法检查出类型或者函数裁剪的问题。
+            // 需要在构建完主包后，将当时的aot dll保存下来，供后面补充元数据或者裁剪检查。
+            string aotDir = DEngineSetting.Instance.CheckAccessMissingMetadataPath;
+            if (!Directory.Exists(aotDir))
+            {
+                return;
+            }
+
+            // 第2个参数excludeDllNames为要排除的aot dll。一般取空列表即可。对于旗舰版本用户，
+            // excludeDllNames需要为dhe程序集列表，因为dhe 程序集会进行热更新，热更新代码中
+            // 引用的dhe程序集中的类型或函数肯定存在。
+            var checker = new MissingMetadataChecker(aotDir, new List<string>());
+
+            string hotUpdateDir = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget);
+            foreach (var dll in SettingsUtil.HotUpdateAssemblyFilesExcludePreserved)
+            {
+                string dllPath       = $"{hotUpdateDir}/{dll}";
+                bool   notAnyMissing = checker.Check(dllPath);
+                if (notAnyMissing)
+                {
+                    continue;
+                }
+            }
         }
     }
 }

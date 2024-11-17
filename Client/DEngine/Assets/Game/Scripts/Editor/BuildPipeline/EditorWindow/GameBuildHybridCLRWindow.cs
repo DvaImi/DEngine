@@ -27,6 +27,7 @@ namespace Game.Editor.BuildPipeline
         private GUIContent m_BuildContent;
         private GUIContent m_CompileContent;
         private GUIContent m_SaveContent;
+        private bool m_NeedGenerateStripedAOT;
 
         [MenuItem("Game/Build Pipeline/HybridCLR", false, 1)]
         private static void Open()
@@ -42,6 +43,7 @@ namespace Game.Editor.BuildPipeline
             {
                 m_IsAotGeneric = false;
                 GameBuildPipeline.GenerateStripedAOT();
+                m_NeedGenerateStripedAOT = GameBuildPipeline.GetProjectMissAOTAssemblies().Length > 0;
             }
 
             if (m_Compile)
@@ -53,12 +55,12 @@ namespace Game.Editor.BuildPipeline
 
         private void OnEnable()
         {
-            m_IsAotGeneric = false;
+            m_IsAotGeneric    = false;
             m_EnableHybridCLR = SettingsUtil.Enable;
-            m_ScrollPosition = Vector2.zero;
-            m_BuildContent = EditorBuiltinIconHelper.GetPlatformIconContent("AOT Generic", "生成AOT");
-            m_CompileContent = EditorGUIUtility.TrTextContentWithIcon("Compile", "编译热更代码", "Assembly Icon");
-            m_SaveContent = EditorBuiltinIconHelper.GetSave("Save", "保存配置");
+            m_ScrollPosition  = Vector2.zero;
+            m_BuildContent    = EditorBuiltinIconHelper.GetPlatformIconContent("AOT Generic", "生成AOT");
+            m_CompileContent  = EditorGUIUtility.TrTextContentWithIcon("Compile", "编译热更代码", "Assembly Icon");
+            m_SaveContent     = EditorBuiltinIconHelper.GetSave("Save", "保存配置");
 
             if (!Directory.Exists(DEngineSetting.AppOutput))
             {
@@ -72,6 +74,8 @@ namespace Game.Editor.BuildPipeline
 
             GameBuildPipeline.RefreshPackages();
             GameBuildPipeline.CheckEnableHybridCLR();
+
+            m_NeedGenerateStripedAOT = GameBuildPipeline.GetProjectMissAOTAssemblies().Length > 0;
         }
 
         private void OnGUI()
@@ -87,6 +91,11 @@ namespace Game.Editor.BuildPipeline
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndScrollView();
+
+            if (m_NeedGenerateStripedAOT)
+            {
+                EditorGUILayout.HelpBox("补充元数据程序集丢失, 执行 [AOT Generic] 以生成dll.", MessageType.Warning);
+            }
 
             GUILayout.FlexibleSpace();
             GUILayout.BeginHorizontal();
@@ -140,25 +149,15 @@ namespace Game.Editor.BuildPipeline
             }
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(10f);
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginVertical("box");
             {
-                DEngineSetting.Instance.UpdateAssembliesPath = EditorGUILayout.TextField("Update Assemblies Path", DEngineSetting.Instance.UpdateAssembliesPath);
-                Rect hotUpdateRect = GUILayoutUtility.GetLastRect();
-                if (DropPathUtility.DropPath(hotUpdateRect, out string hotDatePath))
-                {
-                    if (hotDatePath != null && hotDatePath != DEngineSetting.Instance.UpdateAssembliesPath)
-                    {
-                        DEngineSetting.Instance.UpdateAssembliesPath = hotDatePath;
-                    }
-                }
-
-                if (GUILayout.Button("Reveal", GUILayout.Width(80), GUILayout.Width(80)))
-                {
-                    EditorUtility.RevealInFinder(DEngineSetting.Instance.UpdateAssembliesPath);
-                }
+                EditorTools.GUIOutFolderPath("热更程序集导出路径", ref DEngineSetting.Instance.UpdateAssembliesPath);
+                GUILayout.Space(5f);
+                EditorGUILayout.HelpBox("在构建完主包后，将当时的aot dll保存下来，供后面补充元数据或者裁剪检查", MessageType.Info);
+                EditorTools.GUIOutFolderPath("元数据或裁剪检查程序集路径", ref DEngineSetting.Instance.CheckAccessMissingMetadataPath);
             }
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Space(5f);
+            EditorGUILayout.EndVertical();
+            GUILayout.Space(20f);
 
             m_FoldoutHotUpdateAssembliesGroup = EditorGUILayout.BeginFoldoutHeaderGroup(m_FoldoutHotUpdateAssembliesGroup, "UpdateAssembliesPath");
             {

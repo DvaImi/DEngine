@@ -174,5 +174,10 @@ namespace Game.Editor
         /// 其他预留按需加载程序集
         /// </summary>
         public string[] PreserveAssemblies = Array.Empty<string>();
+
+        /// <summary>
+        /// 需要在构建完主包后，将当时的aot dll保存下来，供后面补充元数据或者裁剪检查
+        /// </summary>
+        public string CheckAccessMissingMetadataPath = "Assets/../HybridCLRData/Output/CheckAccessMissingMetadata";
     }
 }

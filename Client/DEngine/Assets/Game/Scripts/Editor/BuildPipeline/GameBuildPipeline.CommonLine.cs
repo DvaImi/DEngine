@@ -10,9 +10,8 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        [MenuItem("Game/Build Pipeline/Automated Build", false, 100)]
         [EditorToolbarMenu("一键打包", ToolBarMenuAlign.Right, 100)]
-        private static void AutomatedBuild()
+        internal static void AutomatedBuild()
         {
             if (EditorApplication.isCompiling)
             {

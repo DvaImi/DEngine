@@ -1368,6 +1368,7 @@
     <type fullname="Game.UniTaskParallel`2++WhenAll+d__9" preserve="all"/>
     <type fullname="Game.GameUtility+Array" preserve="all"/>
     <type fullname="Game.GameUtility+Bson" preserve="all"/>
+    <type fullname="Game.GameUtility+Decrypt" preserve="all"/>
     <type fullname="Game.GameUtility+IO" preserve="all"/>
     <type fullname="Game.GameUtility+String" preserve="all"/>
     <type fullname="Game.GameUtility+Web" preserve="all"/>
@@ -1381,8 +1382,8 @@
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3868" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9044" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3918" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9119" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">
