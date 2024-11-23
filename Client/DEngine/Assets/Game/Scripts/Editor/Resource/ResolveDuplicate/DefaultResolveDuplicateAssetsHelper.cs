@@ -16,8 +16,8 @@ namespace Game.Editor.ResourceTools
             if (resAnalyzer.Prepare())
             {
                 resAnalyzer.Analyze();
-                List<string> duplicateAssets     = new List<string>();
-                var          scatteredAssetNames = resAnalyzer.GetScatteredAssetNames();
+                List<string> duplicateAssets = new List<string>();
+                var scatteredAssetNames = resAnalyzer.GetScatteredAssetNames();
                 foreach (var scatteredAsset in scatteredAssetNames)
                 {
                     var hostAssets = resAnalyzer.GetHostAssets(scatteredAsset);
@@ -43,7 +43,7 @@ namespace Game.Editor.ResourceTools
             {
                 sharedAssetGroup = new ResourceGroupCollector
                 {
-                    GroupName   = SharedAssetGroupName,
+                    GroupName = SharedAssetGroupName,
                     Description = "自动处理的冗余资源"
                 };
                 packageCollector.Groups.Add(sharedAssetGroup);
@@ -70,10 +70,9 @@ namespace Game.Editor.ResourceTools
                 // 添加到共享资源组
                 sharedAssetGroup.AssetCollectors.Add(new ResourceCollector
                 {
-                    Name       = "SharedAssets",
-                    FileSystem = "SharedAssets",
-                    Groups     = SharedAssetGroupName,
-                    Asset      = AssetDatabase.LoadAssetAtPath<Object>(assetName)
+                    Name = "SharedAssets",
+                    Groups = SharedAssetGroupName,
+                    Asset = AssetDatabase.LoadAssetAtPath<Object>(assetName)
                 });
                 Debug.Log($"冗余资源已移动到共享组: {assetName}");
             }

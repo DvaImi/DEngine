@@ -18,7 +18,7 @@
       <Resource Name="Bundles/Localization/English/English.bytes" Variant="en" FileSystem="UI" LoadType="6" Packed="False" ResourceGroups="Localization" />
       <Resource Name="Bundles/Scenes/GameScene" FileSystem="Resources" LoadType="0" Packed="False" ResourceGroups="Scene" />
       <Resource Name="Bundles/ShaderVariants" FileSystem="Resources" LoadType="0" Packed="False" ResourceGroups="Shaders" />
-      <Resource Name="SharedAssets" FileSystem="SharedAssets" LoadType="0" Packed="False" ResourceGroups="SharedAssets" />
+      <Resource Name="SharedAssets" LoadType="0" Packed="False" ResourceGroups="SharedAssets" />
     </Resources>
     <Assets>
       <Asset Guid="00965b1af9cce1042aa8f66b14a24be2" ResourceName="Bundles/DataTables" />

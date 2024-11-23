@@ -90,14 +90,17 @@ namespace Game.Editor.BuildPipeline
         {
             return platform switch
             {
+                BuildTarget.StandaloneWindows   => ".exe",
                 BuildTarget.StandaloneWindows64 => ".exe",
-                BuildTarget.StandaloneOSX => ".app",
-                BuildTarget.Android => ".apk",
-                BuildTarget.iOS => ".ipa",
-                BuildTarget.WebGL => "",
-                _ => ".exe",
+                BuildTarget.StandaloneOSX       => ".app",
+                BuildTarget.StandaloneLinux64   => ".x86_64",
+                BuildTarget.Android             => ".apk",
+                BuildTarget.iOS                 => ".ipa",
+                BuildTarget.WebGL               => "",
+                _                               => ""
             };
         }
+
 
         public static void SaveBuildSetting()
         {
@@ -146,7 +149,7 @@ namespace Game.Editor.BuildPipeline
         {
             SaveBuiltinData(GetCurrentPlatform());
         }
-        
+
         private static void SaveBuiltinData(Platform platform)
         {
             var builtinData = EditorTools.LoadScriptableObject<BuiltinData>();

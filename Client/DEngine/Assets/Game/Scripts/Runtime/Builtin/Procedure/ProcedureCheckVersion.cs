@@ -18,8 +18,8 @@ namespace Game
             base.OnEnter(procedureOwner);
 
             m_CheckVersionComplete = false;
-            m_NeedUpdateVersion    = false;
-            m_VersionInfo          = null;
+            m_NeedUpdateVersion = false;
+            m_VersionInfo = null;
 
             //检测连网状态
             if (Application.internetReachability == NetworkReachability.NotReachable)
@@ -29,9 +29,9 @@ namespace Game
                     Log.Warning("The device is not connected to the network");
                     GameEntry.BuiltinData.OpenDialog(new DialogParams
                     {
-                        Mode           = 1,
-                        Message        = "The device is not connected to the network",
-                        ConfirmText    = "Quit",
+                        Mode = 1,
+                        Message = "The device is not connected to the network",
+                        ConfirmText = "Quit",
                         OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                     });
                     return;
@@ -41,7 +41,9 @@ namespace Game
                 return;
             }
 
-            CheckVersionList();
+            string checkVersionUrl = GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl;
+            Log.Debug(checkVersionUrl);
+            GameEntry.WebRequest.Get(checkVersionUrl, OnRequestFinished);
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -75,19 +77,12 @@ namespace Game
             }
         }
 
-        private async void CheckVersionList()
+        private void OnRequestFinished(WebRequestResult result)
         {
-            string checkVersionUrl = GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl;
-            Log.Debug(checkVersionUrl);
-            // 向服务器请求版本信息
-            WebRequestResult result = await GameEntry.WebRequest.Get(checkVersionUrl);
             if (result.Success)
             {
                 // 解析版本信息
-                byte[] versionInfoBytes  = result.Bytes;
-                string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
-                Log.Info(versionInfoString);
-                m_VersionInfo = Utility.Json.ToObject<VersionInfo>(versionInfoString);
+                m_VersionInfo = result.ToObject<VersionInfo>();
                 if (m_VersionInfo == null)
                 {
                     Log.Error("Parse VersionInfo failure.");
@@ -103,20 +98,20 @@ namespace Game
                     //需要强制更新游戏应用
                     GameEntry.BuiltinData.OpenDialog(new DialogParams
                     {
-                        Mode           = 1,
-                        Title          = GameEntry.Localization.GetString("ForceUpdate.Title"),
-                        Message        = GameEntry.Localization.GetString("ForceUpdate.Message"),
-                        ConfirmText    = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
+                        Mode = 1,
+                        Title = GameEntry.Localization.GetString("ForceUpdate.Title"),
+                        Message = GameEntry.Localization.GetString("ForceUpdate.Message"),
+                        ConfirmText = GameEntry.Localization.GetString("ForceUpdate.UpdateButton"),
                         OnClickConfirm = GotoUpdateApp,
-                        CancelText     = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
-                        OnClickCancel  = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
+                        CancelText = GameEntry.Localization.GetString("ForceUpdate.QuitButton"),
+                        OnClickCancel = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
                     });
                     return;
                 }
 
                 // 设置资源更新下载地址
                 GameEntry.Resource.UpdatePrefixUri = Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
-                m_CheckVersionComplete             = true;
+                m_CheckVersionComplete = true;
             }
             else
             {
@@ -140,13 +135,13 @@ namespace Game
                 {
                     GameEntry.BuiltinData.OpenDialog(new DialogParams
                     {
-                        Mode        = 2,
-                        Message     = "Try to use the latest local resource version.",
+                        Mode = 2,
+                        Message = "Try to use the latest local resource version.",
                         ConfirmText = "Confirm",
-                        CancelText  = "Quit",
+                        CancelText = "Quit",
                         OnClickConfirm = _ =>
                         {
-                            m_NeedUpdateVersion    = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
+                            m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(internalResourceVersion) == CheckVersionListResult.NeedUpdate;
                             m_CheckVersionComplete = true;
                         },
                         OnClickCancel = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
@@ -156,9 +151,9 @@ namespace Game
 
             GameEntry.BuiltinData.OpenDialog(new DialogParams
             {
-                Mode           = 1,
-                Message        = "Try to use the latest local resource version failure.",
-                ConfirmText    = "Quit",
+                Mode = 1,
+                Message = "Try to use the latest local resource version failure.",
+                ConfirmText = "Quit",
                 OnClickConfirm = delegate { DEngine.Runtime.GameEntry.Shutdown(ShutdownType.Quit); },
             });
         }

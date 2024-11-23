@@ -687,7 +687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EditorResourceMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_JsonHelperTypeName
@@ -885,7 +885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ce0dc273f412a4fa2f699da45536df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkCanReleaseInterval: 30
+  checkCanReleaseInterval: 60
   autoReleaseInterval: 60
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

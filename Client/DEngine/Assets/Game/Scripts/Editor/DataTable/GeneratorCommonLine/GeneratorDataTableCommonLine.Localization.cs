@@ -1,9 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 using DEngine;
-using Game.Editor.Toolbar;
 using OfficeOpenXml;
 using UnityEditor;
 using UnityEngine;
@@ -18,8 +16,8 @@ namespace Game.Editor.DataTableTools
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             if (Directory.Exists(DataTableSetting.Instance.LocalizationExcelsFolder))
             {
-                DirectoryInfo excelFolder    = new(DataTableSetting.Instance.LocalizationExcelsFolder);
-                string[]      excelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.Contains("~") && !info.Name.Contains("#")).Select(o => Utility.Path.GetRegularPath(o.FullName)).ToArray();
+                DirectoryInfo excelFolder = new(DataTableSetting.Instance.LocalizationExcelsFolder);
+                string[] excelFilePaths = excelFolder.GetFiles("*.xlsx", SearchOption.TopDirectoryOnly).Where(info => !info.Name.Contains("~") && !info.Name.Contains("#")).Select(o => Utility.Path.GetRegularPath(o.FullName)).ToArray();
                 foreach (var excelFile in excelFilePaths)
                 {
                     string excelName = Path.GetFileNameWithoutExtension(excelFile);
@@ -36,10 +34,10 @@ namespace Game.Editor.DataTableTools
                                     continue;
                                 }
 
-                                string              dictionaryName     = workCount > 1 ? sheet.Name : excelName;
-                                DictionaryProcessor processor          = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
-                                string              binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName, dictionaryName + ".bytes"));
-                                FileInfo            fileInfo           = new(binaryDataFileName);
+                                string dictionaryName = workCount > 1 ? sheet.Name : excelName;
+                                DictionaryProcessor processor = new DictionaryProcessor(sheet, Encoding.UTF8, 0, 1);
+                                string binaryDataFileName = Utility.Path.GetRegularPath(Path.Combine(DataTableSetting.Instance.LocalizationPath, dictionaryName, dictionaryName + ".bytes"));
+                                FileInfo fileInfo = new(binaryDataFileName);
                                 if (fileInfo.Directory is { Exists: false })
                                 {
                                     fileInfo.Directory.Create();

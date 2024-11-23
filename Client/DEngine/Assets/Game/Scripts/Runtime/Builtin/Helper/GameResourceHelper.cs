@@ -53,25 +53,35 @@ namespace Game
             }
         }
 
-        private static async UniTaskVoid LoadBytesByUniTask(string fileUri, LoadBytesCallbacks loadBytesCallbacks, object userData)
+        private static async UniTask LoadBytesByUniTask(string fileUri, LoadBytesCallbacks loadBytesCallbacks, object userData)
         {
             var startTime = DateTime.UtcNow;
             using var unityWebRequest = UnityWebRequest.Get(fileUri);
-            await unityWebRequest.SendWebRequest();
-            var isError = unityWebRequest.result != UnityWebRequest.Result.Success;
-            var bytes = unityWebRequest.downloadHandler.data;
-            var errorMessage = isError ? unityWebRequest.error : null;
 
-            if (!isError)
+            try
             {
-                float elapseSeconds = (float)(DateTime.UtcNow - startTime).TotalSeconds;
-                loadBytesCallbacks.LoadBytesSuccessCallback(fileUri, bytes, elapseSeconds, userData);
+                await unityWebRequest.SendWebRequest();
+
+                bool isError = unityWebRequest.result != UnityWebRequest.Result.Success;
+                byte[] bytes = unityWebRequest.downloadHandler.data;
+                string errorMessage = isError ? unityWebRequest.error : null;
+
+                if (!isError && bytes != null)
+                {
+                    float elapseSeconds = (float)(DateTime.UtcNow - startTime).TotalSeconds;
+                    loadBytesCallbacks.LoadBytesSuccessCallback?.Invoke(fileUri, bytes, elapseSeconds, userData);
+                }
+                else
+                {
+                    loadBytesCallbacks.LoadBytesFailureCallback?.Invoke(fileUri, errorMessage ?? "Unknown error", userData);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                loadBytesCallbacks.LoadBytesFailureCallback?.Invoke(fileUri, errorMessage, userData);
+                loadBytesCallbacks.LoadBytesFailureCallback?.Invoke(fileUri, $"Exception: {ex.Message}", userData);
             }
         }
+
 
         private static async UniTaskVoid UnloadSceneByUniTask(string sceneAssetName, UnloadSceneCallbacks unloadSceneCallbacks, object userData)
         {

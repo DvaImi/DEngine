@@ -1297,7 +1297,6 @@
     <type fullname="Game.AssetItemObject.SetSpriteRendererObject" preserve="all"/>
     <type fullname="Game.Network.INetworkChannel" preserve="all"/>
     <type fullname="Game.Network.INetworkModule" preserve="all"/>
-    <type fullname="Game.Network.NetworkExtension" preserve="all"/>
     <type fullname="Game.Network.NetworkLog" preserve="all"/>
     <type fullname="Game.Network.NetworkModule" preserve="all"/>
     <type fullname="Game.Network.OnNetworkConnectedEventArg" preserve="all"/>
@@ -1345,7 +1344,6 @@
     <type fullname="Game.ProcedureApplyResourcePack+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c__DisplayClass6_0" preserve="all"/>
-    <type fullname="Game.ProcedureCheckVersion++CheckVersionList+d__5" preserve="all"/>
     <type fullname="Game.ProcedureClearCachePack++StartClearCachePack+d__5" preserve="all"/>
     <type fullname="Game.ProcedureLoadAssemblies+++c__DisplayClass6_0" preserve="all"/>
     <type fullname="Game.ProcedureLoadAssemblies++LoadUpdateAssemblies+d__6" preserve="all"/>
@@ -1379,6 +1377,12 @@
     <type fullname="Game.GameUtility+IO" preserve="all"/>
     <type fullname="Game.GameUtility+String" preserve="all"/>
     <type fullname="Game.GameUtility+Web" preserve="all"/>
+    <type fullname="Game.WebRequestExtension+++c__DisplayClass1_0" preserve="all"/>
+    <type fullname="Game.WebRequestExtension+++c__DisplayClass2_0" preserve="all"/>
+    <type fullname="Game.WebRequestExtension+++c__DisplayClass3_0" preserve="all"/>
+    <type fullname="Game.WebRequestExtension+++c__DisplayClass4_0" preserve="all"/>
+    <type fullname="Game.WebRequestExtension+++c__DisplayClass5_0" preserve="all"/>
+    <type fullname="Game.WebRequestExtension+++c__DisplayClass6_0" preserve="all"/>
     <type fullname="Game.WebRequestExtension++AddHeadWebRequest+d__0" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++FadeToVolume+d__61" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++PauseCo+d__60" preserve="all"/>
@@ -1389,8 +1393,8 @@
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4168" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9617" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4134" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9545" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">
