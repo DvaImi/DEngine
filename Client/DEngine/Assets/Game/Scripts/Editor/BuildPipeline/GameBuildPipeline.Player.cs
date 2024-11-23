@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
@@ -46,61 +47,74 @@ namespace Game.Editor.BuildPipeline
                 SaveBuiltinData(platform);
             }
 
-
-            BuildReport report = BuildApplication(platform, outputDirectory);
-            BuildSummary summary = report.summary;
-
-            if (summary.result == BuildResult.Succeeded)
+            try
             {
-                Debug.Log("Build succeeded: " + GameUtility.String.GetByteLengthString((long)summary.totalSize));
-                DEngineSetting.Instance.InternalGameVersion += 1;
-                DEngineSetting.Save();
-                return true;
-            }
-            else
-            {
+                var report = BuildApplication(platform, outputDirectory);
+                var summary = report.summary;
+
+                if (summary.result == BuildResult.Succeeded)
+                {
+                    Debug.Log("Build succeeded: " + GameUtility.String.GetByteLengthString((long)summary.totalSize));
+                    DEngineSetting.Instance.InternalGameVersion += 1;
+                    DEngineSetting.Save();
+                    return true;
+                }
+
                 Debug.Log("Build failed ");
                 return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Build failed: {ex.Message}");
+                throw;
             }
         }
 
         private static BuildReport BuildApplication(Platform platform, string outputDirectory)
         {
-            BuildTarget target = GetBuildTarget(platform);
-            string outputExtension = GetFileExtensionForPlatform(target);
-            if (!Directory.Exists(outputDirectory))
-            {
-                GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
-            }
-
+            var target = GetBuildTarget(platform);
+            GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
             string locationPath = Path.Combine(outputDirectory, Application.version, platform.ToString());
             GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
+            const BuildOptions buildOptions = BuildOptions.CompressWithLz4 | BuildOptions.ShowBuiltPlayer;
+            string outputExtension = string.Format(".{0}", GetBuildTargetExtension(target, buildOptions));
             BuildPlayerOptions buildPlayerOptions = new()
             {
                 scenes = DEngineSetting.Instance.DefaultSceneNames,
                 locationPathName = Path.Combine(locationPath, Application.productName + outputExtension),
                 target = target,
-                options = BuildOptions.CompressWithLz4 | BuildOptions.ShowBuiltPlayer
+                options = buildOptions
             };
 
             return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
-        private static string GetFileExtensionForPlatform(BuildTarget platform)
+        private static string GetBuildTargetExtension(BuildTarget target, BuildOptions buildOptions)
         {
-            return platform switch
+            try
             {
-                BuildTarget.StandaloneWindows   => ".exe",
-                BuildTarget.StandaloneWindows64 => ".exe",
-                BuildTarget.StandaloneOSX       => ".app",
-                BuildTarget.StandaloneLinux64   => ".x86_64",
-                BuildTarget.Android             => ".apk",
-                BuildTarget.iOS                 => ".ipa",
-                BuildTarget.WebGL               => "",
-                _                               => ""
-            };
-        }
+                var postprocessBuildPlayerType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.PostprocessBuildPlayer");
+                if (postprocessBuildPlayerType == null)
+                {
+                    throw new Exception("无法找到 UnityEditor.PostprocessBuildPlayer 类型。");
+                }
 
+                var method = postprocessBuildPlayerType.GetMethod("GetExtensionForBuildTarget", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { typeof(BuildTarget), typeof(BuildOptions) }, null);
+
+                if (method == null)
+                {
+                    throw new Exception("无法找到 GetExtensionForBuildTarget 方法。");
+                }
+
+                var result = method.Invoke(null, new object[] { target, buildOptions });
+                return result as string;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"调用内部方法失败: {ex.Message}");
+                throw;
+            }
+        }
 
         public static void SaveBuildSetting()
         {
