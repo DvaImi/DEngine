@@ -4,15 +4,15 @@ using DEngine.Runtime;
 
 namespace Game.Update.Procedure
 {
-    public class ProcedureEnterUpdateDomain : ProcedureBase
+    public class ProcedureEnterGameDomain : ProcedureBase
     {
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
             procedureOwner.SetData<VarInt32>(UpdateConstant.ProceureConstant.NextSceneId, (int)SceneId.GAMESCENE);
             procedureOwner.SetData<VarProcedure>(UpdateConstant.ProceureConstant.NextProcedure, typeof(ProcedureEnterGame));
-            GameEntry.UI.SetGlobalUIClickSound(1);
-            UpdateDomain.Scene.Publish(new ProcessingPreloadEventType());
+            GameDomain.Input.SetGlobalUIClickSound(1);
+            GameDomain.Scene.Publish(new ProcessingPreloadEventType());
         }
 
 

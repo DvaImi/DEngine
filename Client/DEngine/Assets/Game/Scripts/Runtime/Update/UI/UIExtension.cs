@@ -28,18 +28,6 @@ namespace Game.Update
             self.interactable = true;
         }
 
-        public static void SetGlobalUIClickSound(this UIComponent self, int soundId)
-        {
-            SoundButton.GlobalUIClickSoundHandler -= OnSoundButtonOnGlobalUIClickSoundHandler;
-            SoundButton.GlobalUIClickSoundHandler += OnSoundButtonOnGlobalUIClickSoundHandler;
-            return;
-
-            void OnSoundButtonOnGlobalUIClickSoundHandler()
-            {
-                GameEntry.Sound.PlayUISound(soundId);
-            }
-        }
-
         public static UIFormLogic GetUIForm(this UIComponent self, UIFormId uiFormId, string uiGroupName = null)
         {
             return self.GetUIForm((int)uiFormId, uiGroupName);

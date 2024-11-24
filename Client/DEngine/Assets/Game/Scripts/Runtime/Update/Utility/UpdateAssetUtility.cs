@@ -114,10 +114,11 @@ namespace Game.Update
         /// 获取ScriptableAssets 资源路径
         /// </summary>
         /// <param name="assetName"></param>
+        /// <param name="suffix"></param>
         /// <returns></returns>
-        public static string GetScriptableAsset(string assetName)
+        public static string GetScriptableAsset(string assetName, string suffix = "asset")
         {
-            return DEngine.Utility.Text.Format("Assets/Game/Bundles/ScriptableAssets/{0}.asset", assetName);
+            return DEngine.Utility.Text.Format("Assets/Game/Bundles/ScriptableAssets/{0}.{1}", assetName, suffix);
         }
 
         /// <summary>

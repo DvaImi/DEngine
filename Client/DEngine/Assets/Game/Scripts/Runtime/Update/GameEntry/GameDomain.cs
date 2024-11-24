@@ -1,13 +1,14 @@
-using Fantasy.Platform.Unity;
+using Fantasy.Async;
 using Game.Network;
 using Game.Update.DataTable;
+using Game.Update.Input;
 
 namespace Game.Update
 {
     /// <summary>
     /// 可更新入口
     /// </summary>
-    public static class UpdateDomain
+    public static class GameDomain
     {
         /// <summary>
         /// 根节点
@@ -24,11 +25,21 @@ namespace Game.Update
         /// </summary>
         public static ILubanDataProvider Luban { get; private set; }
 
-        public static void Initialize(Fantasy.Scene scene)
+        /// <summary>
+        /// 输入模块
+        /// </summary>
+        public static GameInputComponent Input { get; private set; }
+
+        public static async FTask Initialize()
         {
-            Scene = scene;
+            if (Scene == null || Scene.IsDisposed)
+            {
+                Scene = await Fantasy.Scene.Create();
+            }
+
             Network = GameEntry.GetModule<INetworkModule>();
             Luban = GameEntry.GetModule<ILubanDataProvider>();
+            Input = await Scene.AddComponentAsync<GameInputComponent>();
         }
     }
 }

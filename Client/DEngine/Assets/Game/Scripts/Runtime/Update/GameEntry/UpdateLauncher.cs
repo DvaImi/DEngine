@@ -23,17 +23,15 @@ namespace Game.Update
             DEngine.Runtime.Log.Info("===============热更逻辑加载成功{0}==============", DateTime.Now);
             // 热更程序集加载后初始化
             AssemblyUtility.Initialize();
-            var scene = UpdateDomain.Scene;
-            if (scene == null)
+            if (GameDomain.Scene == null)
             {
                 Log.Register(new NetworkLog());
                 Entry.Initialize(AppDomain.CurrentDomain.GetAssemblies());
-                scene = await Fantasy.Scene.Create();
             }
 
             GameEntry.BuiltinData.DestroyDialog();
-            UpdateDomain.Initialize(scene);
-            await UpdateDomain.Scene.PublishAsync(new PreloadEventType());
+            await GameDomain.Initialize();
+            await GameDomain.Scene.PublishAsync(new PreloadEventType());
             await UniTask.NextFrame();
             StartUpdateDomainProcedure();
             Destroy(gameObject);
@@ -60,7 +58,7 @@ namespace Game.Update
 
             var procedureManager = DEngineEntry.GetModule<IProcedureManager>();
             procedureManager.Initialize(DEngineEntry.GetModule<IFsmManager>(), procedures.ToArray());
-            procedureManager.StartProcedure<ProcedureEnterUpdateDomain>();
+            procedureManager.StartProcedure<ProcedureEnterGameDomain>();
         }
     }
 }
