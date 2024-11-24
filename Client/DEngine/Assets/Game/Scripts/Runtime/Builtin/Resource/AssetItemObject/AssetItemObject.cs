@@ -1,7 +1,7 @@
 ﻿using DEngine;
 using DEngine.ObjectPool;
 
-namespace Game.AssetItemObject
+namespace Game.AssetObject
 {
     public class AssetItemObject : ObjectBase
     {

@@ -1,4 +1,4 @@
-﻿using Game.AssetItemObject;
+﻿using Game.AssetObject;
 
 namespace Game
 {
@@ -7,11 +7,11 @@ namespace Game
     /// </summary>
     public partial class GameEntry
     {
-        public static AssetItemObjectComponent Item { get; private set; }
+        public static AssetObjectComponent Item { get; private set; }
 
         private static void InitCustomComponents()
         {
-            Item = DEngine.Runtime.GameEntry.GetComponent<AssetItemObjectComponent>();
+            Item = DEngine.Runtime.GameEntry.GetComponent<AssetObjectComponent>();
         }
     }
 }

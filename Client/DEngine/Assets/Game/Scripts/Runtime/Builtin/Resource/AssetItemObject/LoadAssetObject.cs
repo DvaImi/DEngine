@@ -1,4 +1,4 @@
-﻿namespace Game.AssetItemObject
+﻿namespace Game.AssetObject
 {
     public class LoadAssetObject
     {

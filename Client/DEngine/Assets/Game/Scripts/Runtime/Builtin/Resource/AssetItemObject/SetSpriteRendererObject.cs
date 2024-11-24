@@ -1,7 +1,7 @@
 ﻿using DEngine;
 using UnityEngine;
 
-namespace Game.AssetItemObject
+namespace Game.AssetObject
 {
     public class SetSpriteRendererObject : ISetAssetObject
     {
@@ -27,14 +27,14 @@ namespace Game.AssetItemObject
         public void Clear()
         {
             m_SpriteRenderer = null;
-            m_Sprite         = null;
+            m_Sprite = null;
         }
 
         public static SetSpriteRendererObject Create(SpriteRenderer spriteRenderer, string assetName)
         {
             var item = ReferencePool.Acquire<SetSpriteRendererObject>();
             item.m_SpriteRenderer = spriteRenderer;
-            item.AssetName        = assetName;
+            item.AssetName = assetName;
             return item;
         }
     }

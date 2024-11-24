@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.AssetItemObject
+namespace Game.AssetObject
 {
     public class SetImageSpriteObject : ISetAssetObject
     {

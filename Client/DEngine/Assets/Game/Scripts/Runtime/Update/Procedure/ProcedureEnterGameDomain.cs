@@ -9,8 +9,8 @@ namespace Game.Update.Procedure
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            procedureOwner.SetData<VarInt32>(UpdateConstant.ProceureConstant.NextSceneId, (int)SceneId.GAMESCENE);
-            procedureOwner.SetData<VarProcedure>(UpdateConstant.ProceureConstant.NextProcedure, typeof(ProcedureEnterGame));
+            procedureOwner.SetData<VarInt32>(UpdateConstant.ProcedureConstant.NextSceneId, (int)SceneId.GAMESCENE);
+            procedureOwner.SetData<VarProcedure>(UpdateConstant.ProcedureConstant.NextProcedure, typeof(ProcedureEnterGame));
             GameDomain.Input.SetGlobalUIClickSound(1);
             GameDomain.Scene.Publish(new ProcessingPreloadEventType());
         }

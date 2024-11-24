@@ -1268,7 +1268,6 @@
     <type fullname="Game.DialogParams" preserve="all"/>
     <type fullname="Game.NativeDialogForm" preserve="all"/>
     <type fullname="Game.UpdateResourceForm" preserve="all"/>
-    <type fullname="Game.SoundButton" preserve="all"/>
     <type fullname="Game.AwaitDataWrap`1" preserve="all"/>
     <type fullname="Game.DownLoadResult" preserve="all"/>
     <type fullname="Game.UniTaskExtension" preserve="all"/>
@@ -1288,13 +1287,13 @@
     <type fullname="Game.UI.UGUIGroupHelper" preserve="all"/>
     <type fullname="Game.Sound.SoundExtension" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper" preserve="all"/>
-    <type fullname="Game.AssetItemObject.AssetItemObject" preserve="all"/>
-    <type fullname="Game.AssetItemObject.AssetItemObjectComponent" preserve="all"/>
-    <type fullname="Game.AssetItemObject.SetSpriteExtensions" preserve="all"/>
-    <type fullname="Game.AssetItemObject.ISetAssetObject" preserve="all"/>
-    <type fullname="Game.AssetItemObject.LoadAssetObject" preserve="all"/>
-    <type fullname="Game.AssetItemObject.SetImageSpriteObject" preserve="all"/>
-    <type fullname="Game.AssetItemObject.SetSpriteRendererObject" preserve="all"/>
+    <type fullname="Game.AssetObject.AssetItemObject" preserve="all"/>
+    <type fullname="Game.AssetObject.AssetObjectComponent" preserve="all"/>
+    <type fullname="Game.AssetObject.SetSpriteExtensions" preserve="all"/>
+    <type fullname="Game.AssetObject.ISetAssetObject" preserve="all"/>
+    <type fullname="Game.AssetObject.LoadAssetObject" preserve="all"/>
+    <type fullname="Game.AssetObject.SetImageSpriteObject" preserve="all"/>
+    <type fullname="Game.AssetObject.SetSpriteRendererObject" preserve="all"/>
     <type fullname="Game.Network.INetworkChannel" preserve="all"/>
     <type fullname="Game.Network.INetworkModule" preserve="all"/>
     <type fullname="Game.Network.NetworkLog" preserve="all"/>
@@ -1387,14 +1386,13 @@
     <type fullname="Game.Sound.Helper.SoundAgentHelper++FadeToVolume+d__61" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++PauseCo+d__60" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++StopCo+d__59" preserve="all"/>
-    <type fullname="Game.AssetItemObject.AssetItemObjectComponent++Start+d__6" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel" preserve="all"/>
     <type fullname="Game.CommandLine.CommandCreator++CollectCommands+d__0`1" preserve="all"/>
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4134" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9545" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4081" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9472" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">

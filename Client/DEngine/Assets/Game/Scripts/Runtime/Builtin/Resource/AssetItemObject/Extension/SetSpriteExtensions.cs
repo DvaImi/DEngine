@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.AssetItemObject
+namespace Game.AssetObject
 {
     public static class SetSpriteExtensions
     {

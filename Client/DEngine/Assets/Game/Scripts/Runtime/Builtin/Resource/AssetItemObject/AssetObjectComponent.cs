@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using DEngine;
 using DEngine.ObjectPool;
 using DEngine.Resource;
@@ -6,10 +5,10 @@ using DEngine.Runtime;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Game.AssetItemObject
+namespace Game.AssetObject
 {
     [DisallowMultipleComponent]
-    public class AssetItemObjectComponent : DEngineComponent
+    public class AssetObjectComponent : DEngineComponent
     {
         /// <summary>
         /// 检查是否可以释放间隔
@@ -34,12 +33,11 @@ namespace Game.AssetItemObject
         private float m_CheckCanReleaseTime;
         private LoadAssetCallbacks m_LoadAssetCallbacks;
 
-        private async void Start()
+        private void Start()
         {
-            await UniTask.DelayFrame(2);
             m_LoadAssetObjectsLinkedList = new DEngineLinkedList<LoadAssetObject>();
-            m_AssetItemPool              = GameEntry.ObjectPool.CreateMultiSpawnObjectPool<AssetItemObject>("AssetItemObject", autoReleaseInterval, 16, 60, 0);
-            m_LoadAssetCallbacks         = new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFailure);
+            m_AssetItemPool = GameEntry.ObjectPool.CreateMultiSpawnObjectPool<AssetItemObject>("AssetItemObject", autoReleaseInterval, 16, 60, 0);
+            m_LoadAssetCallbacks = new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFailure);
         }
 
         private void Update()
@@ -68,8 +66,7 @@ namespace Game.AssetItemObject
 
         private void ReleaseUnused()
         {
-            Log.Info("Unload unused assets...");
-            if (m_LoadAssetObjectsLinkedList == null)
+            if (m_LoadAssetObjectsLinkedList is not { Count: > 0 })
             {
                 return;
             }
@@ -88,6 +85,7 @@ namespace Game.AssetItemObject
                 current = next;
             }
 
+            Log.Info("Unload unused assets...");
             m_CheckCanReleaseTime = 0f;
         }
 
@@ -100,7 +98,7 @@ namespace Game.AssetItemObject
         private void OnLoadAssetSuccess(string assetName, object asset, float duration, object userdata)
         {
             var setAssetObject = (ISetAssetObject)userdata;
-            var assetObject    = asset as Object;
+            var assetObject = asset as Object;
             if (assetObject)
             {
                 m_AssetItemPool.Register(AssetItemObject.Create(setAssetObject.AssetName, assetObject), true);

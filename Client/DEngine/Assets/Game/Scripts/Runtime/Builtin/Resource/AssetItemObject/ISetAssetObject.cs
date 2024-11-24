@@ -1,6 +1,6 @@
 ﻿using DEngine;
 
-namespace Game.AssetItemObject
+namespace Game.AssetObject
 {
     public interface ISetAssetObject : IReference
     {

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
-using DEngine.Editor;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Game.Editor
@@ -47,7 +46,7 @@ namespace Game.Editor
         /// <summary>
         /// 获取带继承关系的所有类的类型
         /// </summary>
-        public static List<Type> GetAssignableTypes(System.Type parentType)
+        public static List<Type> GetAssignableTypes(Type parentType)
         {
             TypeCache.TypeCollection collection = TypeCache.GetTypesDerivedFrom(parentType);
             return collection.ToList();
@@ -56,7 +55,7 @@ namespace Game.Editor
         /// <summary>
         /// 获取带有指定属性的所有类的类型
         /// </summary>
-        public static List<Type> GetTypesWithAttribute(System.Type attrType)
+        public static List<Type> GetTypesWithAttribute(Type attrType)
         {
             TypeCache.TypeCollection collection = TypeCache.GetTypesWithAttribute(attrType);
             return collection.ToList();
@@ -117,12 +116,12 @@ namespace Game.Editor
         /// <param name="type">类的类型</param>
         /// <param name="method">类里要调用的方法名</param>
         /// <param name="parameters">调用方法传入的参数</param>
-        public static object InvokeNonPublicStaticMethod(System.Type type, string method, params object[] parameters)
+        public static object InvokeNonPublicStaticMethod(Type type, string method, params object[] parameters)
         {
             var methodInfo = type.GetMethod(method, BindingFlags.NonPublic | BindingFlags.Static);
             if (methodInfo == null)
             {
-                UnityEngine.Debug.LogError($"{type.FullName} not found method : {method}");
+                Debug.LogError($"{type.FullName} not found method : {method}");
                 return null;
             }
 
@@ -135,12 +134,12 @@ namespace Game.Editor
         /// <param name="type">类的类型</param>
         /// <param name="method">类里要调用的方法名</param>
         /// <param name="parameters">调用方法传入的参数</param>
-        public static object InvokePublicStaticMethod(System.Type type, string method, params object[] parameters)
+        public static object InvokePublicStaticMethod(Type type, string method, params object[] parameters)
         {
             var methodInfo = type.GetMethod(method, BindingFlags.Public | BindingFlags.Static);
             if (methodInfo == null)
             {
-                UnityEngine.Debug.LogError($"{type.FullName} not found method : {method}");
+                Debug.LogError($"{type.FullName} not found method : {method}");
                 return null;
             }
 
@@ -299,7 +298,7 @@ namespace Game.Editor
                         Debug.LogWarning($"Found multiple file : {path}");
                     }
 
-                    throw new System.Exception($"Found multiple {settingType.Name} files !");
+                    throw new Exception($"Found multiple {settingType.Name} files !");
                 }
 
                 string filePath = AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -338,7 +337,7 @@ namespace Game.Editor
                         Debug.LogWarning($"Found multiple file : {path}");
                     }
 
-                    throw new System.Exception($"Found multiple {settingType.Name} files !");
+                    throw new Exception($"Found multiple {settingType.Name} files !");
                 }
 
                 var setting = AssetDatabase.LoadAssetAtPath<TScriptableObject>(filePath);
@@ -357,41 +356,41 @@ namespace Game.Editor
 
         public static void CloseUnityGameWindow()
         {
-            System.Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.GameView");
+            Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.GameView");
             EditorWindow.GetWindow(T, false, "GameView", true).Close();
         }
 
         public static void FocusUnityGameWindow()
         {
-            System.Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.GameView");
+            Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.GameView");
             EditorWindow.GetWindow(T, false, "GameView", true);
         }
 
         public static void FocueUnityProjectWindow()
         {
-            System.Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.ProjectBrowser");
+            Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.ProjectBrowser");
             EditorWindow.GetWindow(T, false, "Project", true);
         }
 
         public static void FocusUnityHierarchyWindow()
         {
-            System.Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.SceneHierarchyWindow");
+            Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.SceneHierarchyWindow");
             EditorWindow.GetWindow(T, false, "Hierarchy", true);
         }
 
         public static void FocusUnityInspectorWindow()
         {
-            System.Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.InspectorWindow");
+            Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.InspectorWindow");
             EditorWindow.GetWindow(T, false, "Inspector", true);
         }
 
         public static void FocusUnityConsoleWindow()
         {
-            System.Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.ConsoleWindow");
+            Type T = Assembly.Load("UnityEditor").GetType("UnityEditor.ConsoleWindow");
             EditorWindow.GetWindow(T, false, "Console", true);
         }
 
-        public static void EditorDisplay(string title, string message, string ok, string cancel, System.Action action)
+        public static void EditorDisplay(string title, string message, string ok, string cancel, Action action)
         {
             if (EditorUtility.DisplayDialog(title, message, ok, cancel))
             {
@@ -649,7 +648,7 @@ namespace Game.Editor
                 if (_clearConsoleMethod == null)
                 {
                     Assembly assembly = Assembly.GetAssembly(typeof(SceneView));
-                    System.Type logEntries = assembly.GetType("UnityEditor.LogEntries");
+                    Type logEntries = assembly.GetType("UnityEditor.LogEntries");
                     _clearConsoleMethod = logEntries.GetMethod("Clear");
                 }
 
@@ -814,7 +813,7 @@ namespace Game.Editor
         /// </summary>
         public static void CopyDirectory(string sourcePath, string destPath)
         {
-            sourcePath = EditorTools.GetRegularPath(sourcePath);
+            sourcePath = GetRegularPath(sourcePath);
 
             // If the destination directory doesn't exist, create it.
             if (Directory.Exists(destPath) == false)
@@ -823,7 +822,7 @@ namespace Game.Editor
             string[] fileList = Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories);
             foreach (string file in fileList)
             {
-                string temp = EditorTools.GetRegularPath(file);
+                string temp = GetRegularPath(file);
                 string savePath = temp.Replace(sourcePath, destPath);
                 CopyFile(file, savePath, true);
             }
