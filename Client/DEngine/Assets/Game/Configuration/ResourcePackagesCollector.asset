@@ -60,6 +60,15 @@ MonoBehaviour:
         LoadType: 0
         Packed: 0
         FilterRule: CollectAll
+      - Name: 
+        Enable: 1
+        FileSystem: Resources
+        Groups: Scene
+        Variant: 
+        Asset: {fileID: 102900000, guid: 5474ff713fa117542b68dbefee637bac, type: 3}
+        LoadType: 0
+        Packed: 0
+        FilterRule: CollectAll
     - GroupName: DataTable
       EnableGroup: 1
       Description: "\u914D\u7F6E\u8868"
@@ -274,4 +283,40 @@ MonoBehaviour:
         Asset: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
         LoadType: 0
         Packed: 0
+        FilterRule: CollectAll
+      - Name: SharedAssets
+        Enable: 1
+        FileSystem: 
+        Groups: SharedAssets
+        Variant: 
+        Asset: {fileID: 4800000, guid: 36e335017ad71d54fbb10842863188ae, type: 3}
+        LoadType: 0
+        Packed: 1
+        FilterRule: CollectAll
+      - Name: SharedAssets
+        Enable: 1
+        FileSystem: 
+        Groups: SharedAssets
+        Variant: 
+        Asset: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
+        LoadType: 0
+        Packed: 1
+        FilterRule: CollectAll
+      - Name: SharedAssets
+        Enable: 1
+        FileSystem: 
+        Groups: SharedAssets
+        Variant: 
+        Asset: {fileID: 4800000, guid: e6e9a19c3678ded42a3bc431ebef7dbd, type: 3}
+        LoadType: 0
+        Packed: 1
+        FilterRule: CollectAll
+      - Name: SharedAssets
+        Enable: 1
+        FileSystem: 
+        Groups: SharedAssets
+        Variant: 
+        Asset: {fileID: 4800000, guid: 93446b5c5339d4f00b85c159e1159b7c, type: 3}
+        LoadType: 0
+        Packed: 1
         FilterRule: CollectAll

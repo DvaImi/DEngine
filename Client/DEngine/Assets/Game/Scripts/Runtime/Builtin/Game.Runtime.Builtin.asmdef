@@ -10,7 +10,8 @@
         "GUID:0b7224b83ba514121aa026f3857f820a",
         "GUID:33661e06c33d31b4c9223810bf503247",
         "GUID:c55d28459d9c4444ebb4788be912e1f1",
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -19,6 +20,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "1.0.0",
+            "define": "UNITY_RENDER_PIPELINE_UNIVERSAL"
+        }
+    ],
     "noEngineReferences": false
 }

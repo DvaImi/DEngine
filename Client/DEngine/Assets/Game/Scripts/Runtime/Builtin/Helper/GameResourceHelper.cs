@@ -45,10 +45,10 @@ namespace Game
         /// <param name="objectToRelease">要释放的资源。</param>
         public override void Release(object objectToRelease)
         {
-            Log.Info("Release" + objectToRelease.GetType().Name);
             var assetBundle = objectToRelease as AssetBundle;
             if (assetBundle)
             {
+                Log.Info("Release [{0}] Name {1} at {2}", objectToRelease.GetType().Name, assetBundle.name, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 assetBundle.Unload(true);
             }
         }

@@ -5,8 +5,8 @@
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
     <type fullname="+PrivateImplementationDetails+" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1+MonoScriptData" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=50" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=152" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=74" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=257" preserve="all"/>
   </assembly>
   <assembly fullname="Fantasy.Unity">
     <type fullname="Microsoft.CodeAnalysis.EmbeddedAttribute" preserve="all"/>

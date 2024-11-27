@@ -54,6 +54,8 @@
     <type fullname="Fantasy.Async.FTaskCompleted" preserve="all" />
     <type fullname="Fantasy.Async.FTask`1" preserve="all" />
     <type fullname="Fantasy.Entitas.Entity" preserve="all" />
+    <type fullname="Fantasy.Entitas.Interface.AwakeSystemAsync`1" preserve="all" />
+    <type fullname="Fantasy.Entitas.Interface.DestroySystem`1" preserve="all" />
     <type fullname="Fantasy.Entitas.MessagePoolComponent" preserve="all" />
     <type fullname="Fantasy.Event.AsyncEventSystem`1" preserve="all" />
     <type fullname="Fantasy.Event.EventComponent" preserve="all" />
@@ -88,7 +90,6 @@
     <type fullname="Game.IGameModule" preserve="all" />
     <type fullname="Game.Network.INetworkModule" preserve="all" />
     <type fullname="Game.Network.NetworkLog" preserve="all" />
-    <type fullname="Game.SoundButton" preserve="all" />
     <type fullname="Game.UI.GameUGUIFormLogic" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
     <type fullname="Game.UniTaskParallel`1" preserve="all" />
@@ -120,7 +121,34 @@
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
   </assembly>
+  <assembly fullname="Unity.InputSystem">
+    <type fullname="UnityEngine.InputSystem.Controls.ButtonControl" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Controls.DeltaControl" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Controls.KeyControl" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Controls.TouchControl" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Controls.Vector2Control" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.IInputActionCollection" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.IInputActionCollection2" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputAction" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputAction/CallbackContext" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputActionAsset" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputActionMap" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputBinding" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputControl" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputControlExtensions" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputControlScheme" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputControl`1" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputDevice" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Key" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Keyboard" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Mouse" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Pointer" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Touchscreen" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Utilities.ReadOnlyArray`1" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.Utilities.ReadOnlyArray`1/Enumerator" preserve="all" />
+  </assembly>
   <assembly fullname="UnityEngine.CoreModule">
+    <type fullname="UnityEngine.Camera" preserve="all" />
     <type fullname="UnityEngine.Color" preserve="all" />
     <type fullname="UnityEngine.Color32" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
@@ -128,7 +156,9 @@
     <type fullname="UnityEngine.Mathf" preserve="all" />
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
     <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.Pool.CollectionPool`2" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
+    <type fullname="UnityEngine.Ray" preserve="all" />
     <type fullname="UnityEngine.Rect" preserve="all" />
     <type fullname="UnityEngine.ShaderVariantCollection" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
@@ -136,11 +166,27 @@
     <type fullname="UnityEngine.Vector3" preserve="all" />
     <type fullname="UnityEngine.Vector4" preserve="all" />
   </assembly>
+  <assembly fullname="UnityEngine.Physics2DModule">
+    <type fullname="UnityEngine.Collider2D" preserve="all" />
+    <type fullname="UnityEngine.Physics2D" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.PhysicsModule">
+    <type fullname="UnityEngine.Physics" preserve="all" />
+    <type fullname="UnityEngine.RaycastHit" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.UI">
+    <type fullname="UnityEngine.EventSystems.EventSystem" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.PointerEventData" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.RaycastResult" preserve="all" />
+    <type fullname="UnityEngine.UI.Button" preserve="all" />
+    <type fullname="UnityEngine.UI.Selectable" preserve="all" />
+  </assembly>
   <assembly fullname="UnityEngine.UIModule">
     <type fullname="UnityEngine.CanvasGroup" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">
     <type fullname="System.Action" preserve="all" />
+    <type fullname="System.Action`1" preserve="all" />
     <type fullname="System.Activator" preserve="all" />
     <type fullname="System.AppDomain" preserve="all" />
     <type fullname="System.ArgumentException" preserve="all" />
@@ -154,6 +200,7 @@
     <type fullname="System.Collections.Generic.IEqualityComparer`1" preserve="all" />
     <type fullname="System.Collections.Generic.List`1" preserve="all" />
     <type fullname="System.Collections.Generic.List`1/Enumerator" preserve="all" />
+    <type fullname="System.Collections.IEnumerable" preserve="all" />
     <type fullname="System.Collections.IEnumerator" preserve="all" />
     <type fullname="System.DateTime" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />

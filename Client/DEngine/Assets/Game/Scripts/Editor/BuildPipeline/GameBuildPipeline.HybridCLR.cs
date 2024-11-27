@@ -227,6 +227,7 @@ namespace Game.Editor.BuildPipeline
                 {
                     continue;
                 }
+                
             }
         }
     }
