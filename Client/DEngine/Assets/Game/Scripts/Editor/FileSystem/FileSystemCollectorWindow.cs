@@ -170,7 +170,7 @@ namespace Game.Editor.FileSystem
                             {
                                 foreach (var path in outSourceData)
                                 {
-                                    var absolutePathToAssetPath = EditorTools.AbsolutePathToProject(path);
+                                    var absolutePathToAssetPath = GameUtility.IO.AbsolutePathToProject(path);
                                     if (fileSystemData.FileFullPaths.Contains(absolutePathToAssetPath))
                                     {
                                         Debug.LogWarning($"There is already a file with the path '{path}'");

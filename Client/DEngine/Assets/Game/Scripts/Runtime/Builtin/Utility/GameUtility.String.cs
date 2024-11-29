@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Cysharp.Text;
@@ -53,6 +54,32 @@ namespace Game
                 return Utility.Text.Format("{0:F2} EB", byteLength / 1152921504606846976f);
             }
 
+            /// <summary>
+            /// 获取字节数组MD5
+            /// </summary>
+            public static string GetBytesMD5(byte[] buffer, int offset, int count)
+            {
+                using var md5 = new MD5CryptoServiceProvider();
+                byte[] bytes = md5.ComputeHash(buffer, offset, count);
+                string result = MD5BytesToString(bytes);
+                return result;
+            }
+
+            /// <summary>
+            /// MD5字节数组转换为字符串
+            /// </summary>
+            public static string MD5BytesToString(byte[] bytes)
+            {
+                var stringBuilder = new StringBuilder();
+                foreach (byte b in bytes)
+                {
+                    stringBuilder.Append(b.ToString("x2"));
+                }
+
+                string result = stringBuilder.ToString();
+                return result;
+            }
+
             public static string Substring(string content, string key, bool includeKey, bool firstMatch = true)
             {
                 if (string.IsNullOrEmpty(key))
@@ -62,6 +89,42 @@ namespace Game
 
                 var startIndex = firstMatch ? content.IndexOf(key, StringComparison.Ordinal) : content.LastIndexOf(key, StringComparison.Ordinal);
                 return startIndex == -1 ? content : includeKey ? content[startIndex..] : content[(startIndex + key.Length)..];
+            }
+
+            public static string RemoveFirstChar(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return str;
+                return str.Substring(1);
+            }
+
+            public static string RemoveLastChar(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return str;
+                return str.Substring(0, str.Length - 1);
+            }
+
+            public static List<string> StringToStringList(string str, char separator)
+            {
+                var result = new List<string>();
+                if (!string.IsNullOrEmpty(str))
+                {
+                    string[] splits = str.Split(separator);
+                    result.AddRange(splits.Select(split => split.Trim()).Where(value => !string.IsNullOrEmpty(value)));
+                }
+
+                return result;
+            }
+
+            public static T NameToEnum<T>(string name)
+            {
+                if (Enum.IsDefined(typeof(T), name) == false)
+                {
+                    throw new ArgumentException($"Enum {typeof(T)} is not defined name {name}");
+                }
+
+                return (T)Enum.Parse(typeof(T), name);
             }
 
             public static string GetHashString(string input)
@@ -118,10 +181,10 @@ namespace Game
                     sb.Append(e.Value);
                     sb.Append(',');
                 }
+
                 sb.Append('}');
                 return sb.ToString();
             }
-          
         }
     }
 }

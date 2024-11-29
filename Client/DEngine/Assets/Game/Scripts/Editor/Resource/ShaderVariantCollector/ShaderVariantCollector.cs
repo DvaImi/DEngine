@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.IO;
-using UnityEngine;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using Game.Editor;
 using Game.Editor.ResourceTools;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
 
 public static class ShaderVariantCollector
 {
@@ -24,15 +24,14 @@ public static class ShaderVariantCollector
 
     private const float WaitMilliseconds = 3000f;
     private const float SleepMilliseconds = 3000f;
-    private static string _savePath;
-    private static string _packageName;
-    private static int _processMaxNum;
-    private static Action _completedCallback;
+    private static string s_SavePath;
+    private static int s_ProcessMaxNum;
+    private static Action s_CompletedCallback;
 
-    private static ESteps _steps = ESteps.None;
-    private static Stopwatch _elapsedTime;
-    private static List<string> _allMaterials;
-    private static List<GameObject> _allSpheres = new List<GameObject>(1000);
+    private static ESteps s_Steps = ESteps.None;
+    private static Stopwatch s_ElapsedTime;
+    private static List<string> s_AllMaterials;
+    private static readonly List<GameObject> AllSpheres = new(1000);
 
 
     /// <summary>
@@ -40,23 +39,32 @@ public static class ShaderVariantCollector
     /// </summary>
     public static void Run(string savePath, string packageName, int processMaxNum, Action completedCallback)
     {
-        if (_steps != ESteps.None)
+        if (s_Steps != ESteps.None)
+        {
             return;
+        }
 
         if (Path.HasExtension(savePath) == false)
+        {
             savePath = $"{savePath}.shadervariants";
+        }
+
         if (Path.GetExtension(savePath) != ".shadervariants")
-            throw new System.Exception("Shader variant file extension is invalid.");
+        {
+            throw new Exception("Shader variant file extension is invalid.");
+        }
+
         if (string.IsNullOrEmpty(packageName))
-            throw new System.Exception("Package name is null or empty !");
+        {
+            throw new Exception("Package name is null or empty !");
+        }
 
         // 注意：先删除再保存，否则ShaderVariantCollection内容将无法及时刷新
         AssetDatabase.DeleteAsset(savePath);
-        EditorTools.CreateFileDirectory(savePath);
-        _savePath = savePath;
-        _packageName = packageName;
-        _processMaxNum = processMaxNum;
-        _completedCallback = completedCallback;
+        Game.GameUtility.IO.CreateFileDirectory(savePath);
+        s_SavePath = savePath;
+        s_ProcessMaxNum = processMaxNum;
+        s_CompletedCallback = completedCallback;
 
         // 聚焦到游戏窗口
         EditorTools.FocusUnityGameWindow();
@@ -64,73 +72,73 @@ public static class ShaderVariantCollector
         // 创建临时测试场景
         CreateTempScene();
 
-        _steps = ESteps.Prepare;
+        s_Steps = ESteps.Prepare;
         EditorApplication.update += EditorUpdate;
     }
 
     private static void EditorUpdate()
     {
-        if (_steps == ESteps.None)
+        if (s_Steps == ESteps.None)
             return;
 
-        if (_steps == ESteps.Prepare)
+        if (s_Steps == ESteps.Prepare)
         {
             ShaderVariantCollectionHelper.ClearCurrentShaderVariantCollection();
-            _steps = ESteps.CollectAllMaterial;
+            s_Steps = ESteps.CollectAllMaterial;
             return; //等待一帧
         }
 
-        if (_steps == ESteps.CollectAllMaterial)
+        if (s_Steps == ESteps.CollectAllMaterial)
         {
-            _allMaterials = GetAllMaterials();
-            _steps = ESteps.CollectVariants;
+            s_AllMaterials = GetAllMaterials();
+            s_Steps = ESteps.CollectVariants;
             return; //等待一帧
         }
 
-        if (_steps == ESteps.CollectVariants)
+        if (s_Steps == ESteps.CollectVariants)
         {
-            int count = Mathf.Min(_processMaxNum, _allMaterials.Count);
-            List<string> range = _allMaterials.GetRange(0, count);
-            _allMaterials.RemoveRange(0, count);
+            int count = Mathf.Min(s_ProcessMaxNum, s_AllMaterials.Count);
+            List<string> range = s_AllMaterials.GetRange(0, count);
+            s_AllMaterials.RemoveRange(0, count);
             CollectVariants(range);
 
-            if (_allMaterials.Count > 0)
+            if (s_AllMaterials.Count > 0)
             {
-                _elapsedTime = Stopwatch.StartNew();
-                _steps = ESteps.CollectSleeping;
+                s_ElapsedTime = Stopwatch.StartNew();
+                s_Steps = ESteps.CollectSleeping;
             }
             else
             {
-                _elapsedTime = Stopwatch.StartNew();
-                _steps = ESteps.WaitingDone;
+                s_ElapsedTime = Stopwatch.StartNew();
+                s_Steps = ESteps.WaitingDone;
             }
         }
 
-        if (_steps == ESteps.CollectSleeping)
+        if (s_Steps == ESteps.CollectSleeping)
         {
-            if (_elapsedTime.ElapsedMilliseconds > SleepMilliseconds)
+            if (s_ElapsedTime.ElapsedMilliseconds > SleepMilliseconds)
             {
                 DestroyAllSpheres();
-                _elapsedTime.Stop();
-                _steps = ESteps.CollectVariants;
+                s_ElapsedTime.Stop();
+                s_Steps = ESteps.CollectVariants;
             }
         }
 
-        if (_steps == ESteps.WaitingDone)
+        if (s_Steps == ESteps.WaitingDone)
         {
             // 注意：一定要延迟保存才会起效
-            if (_elapsedTime.ElapsedMilliseconds > WaitMilliseconds)
+            if (s_ElapsedTime.ElapsedMilliseconds > WaitMilliseconds)
             {
-                _elapsedTime.Stop();
-                _steps = ESteps.None;
+                s_ElapsedTime.Stop();
+                s_Steps = ESteps.None;
 
                 // 保存结果并创建清单
-                ShaderVariantCollectionHelper.SaveCurrentShaderVariantCollection(_savePath);
+                ShaderVariantCollectionHelper.SaveCurrentShaderVariantCollection(s_SavePath);
                 CreateManifest();
 
                 Debug.Log($"搜集SVC完毕！");
                 EditorApplication.update -= EditorUpdate;
-                _completedCallback?.Invoke();
+                s_CompletedCallback?.Invoke();
             }
         }
     }
@@ -171,8 +179,8 @@ public static class ShaderVariantCollector
         List<string> allMaterial = new List<string>(1000);
         foreach (var assetPath in allAssets)
         {
-            System.Type assetType = AssetDatabase.GetMainAssetTypeAtPath(assetPath);
-            if (assetType == typeof(UnityEngine.Material))
+            Type assetType = AssetDatabase.GetMainAssetTypeAtPath(assetPath);
+            if (assetType == typeof(Material))
             {
                 allMaterial.Add(assetPath);
             }
@@ -190,7 +198,7 @@ public static class ShaderVariantCollector
     {
         Camera camera = Camera.main;
         if (camera == null)
-            throw new System.Exception("Not found main camera.");
+            throw new Exception("Not found main camera.");
 
         // 设置主相机
         float aspect = camera.aspect;
@@ -213,7 +221,7 @@ public static class ShaderVariantCollector
             var position = new Vector3(x - halfWidth + 1f, y - halfHeight + 1f, 0f);
             var go = CreateSphere(material, position, i);
             if (go != null)
-                _allSpheres.Add(go);
+                AllSpheres.Add(go);
             if (x == xMax)
             {
                 x = 0;
@@ -246,12 +254,12 @@ public static class ShaderVariantCollector
 
     private static void DestroyAllSpheres()
     {
-        foreach (var go in _allSpheres)
+        foreach (var go in AllSpheres)
         {
-            GameObject.DestroyImmediate(go);
+            Object.DestroyImmediate(go);
         }
 
-        _allSpheres.Clear();
+        AllSpheres.Clear();
 
         // 尝试释放编辑器加载的资源
         EditorUtility.UnloadUnusedAssetsImmediate(true);
@@ -261,12 +269,12 @@ public static class ShaderVariantCollector
     {
         AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
-        ShaderVariantCollection svc = AssetDatabase.LoadAssetAtPath<ShaderVariantCollection>(_savePath);
+        ShaderVariantCollection svc = AssetDatabase.LoadAssetAtPath<ShaderVariantCollection>(s_SavePath);
         if (svc != null)
         {
             var wrapper = ShaderVariantCollectionManifest.Extract(svc);
             string jsonData = JsonUtility.ToJson(wrapper, true);
-            string savePath = _savePath.Replace(".shadervariants", ".json");
+            string savePath = s_SavePath.Replace(".shadervariants", ".json");
             File.WriteAllText(savePath, jsonData);
         }
 
