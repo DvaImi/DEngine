@@ -58,15 +58,15 @@ namespace Game
 
             if (m_NeedUpdateVersion)
             {
-                procedureOwner.SetData<VarBoolean>(Constant.ResourceVersion.IsCompressedMode, m_VersionInfo.IsCompressedMode);
-                procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.VersionListLength, m_VersionInfo.ResourceVersionInfo.VersionListLength);
-                procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.VersionListHashCode, m_VersionInfo.ResourceVersionInfo.VersionListHashCode);
-                procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.VersionListCompressedLength, m_VersionInfo.ResourceVersionInfo.VersionListCompressedLength);
-                procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.VersionListCompressedHashCode, m_VersionInfo.ResourceVersionInfo.VersionListCompressedHashCode);
+                procedureOwner.SetData<VarBoolean>(Constant.Resource.IsResourcePackMode, m_VersionInfo.IsCompressedMode);
+                procedureOwner.SetData<VarInt32>(Constant.Resource.VersionListLength, m_VersionInfo.ResourceVersionInfo.VersionListLength);
+                procedureOwner.SetData<VarInt32>(Constant.Resource.VersionListHashCode, m_VersionInfo.ResourceVersionInfo.VersionListHashCode);
+                procedureOwner.SetData<VarInt32>(Constant.Resource.VersionListCompressedLength, m_VersionInfo.ResourceVersionInfo.VersionListCompressedLength);
+                procedureOwner.SetData<VarInt32>(Constant.Resource.VersionListCompressedHashCode, m_VersionInfo.ResourceVersionInfo.VersionListCompressedHashCode);
                 if (m_VersionInfo.IsCompressedMode)
                 {
-                    procedureOwner.SetData<VarString>(Constant.ResourceVersion.CompressedPackName, m_VersionInfo.CompressedBundleInfo.CompressedPackName);
-                    procedureOwner.SetData<VarInt64>(Constant.ResourceVersion.CompressedPackLength, m_VersionInfo.CompressedBundleInfo.CompressedPackLength);
+                    procedureOwner.SetData<VarString>(Constant.Resource.ResourcePackName, m_VersionInfo.ResourcePackInfo.ResourcePackName);
+                    procedureOwner.SetData<VarInt64>(Constant.Resource.ResourcePackLength, m_VersionInfo.ResourcePackInfo.ResourcePackLength);
                 }
 
                 ChangeState<ProcedureUpdateVersionList>(procedureOwner);
@@ -90,7 +90,7 @@ namespace Game
                 }
 
                 Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
-                GameEntry.Setting.SetInt(Constant.ResourceVersion.InternalResourceVersion, m_VersionInfo.InternalResourceVersion);
+                GameEntry.Setting.SetInt(Constant.Resource.InternalResourceVersion, m_VersionInfo.InternalResourceVersion);
                 GameEntry.Setting.Save();
                 m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(m_VersionInfo.InternalResourceVersion) == CheckVersionListResult.NeedUpdate;
                 if (m_VersionInfo.ForceUpdateGame)
@@ -128,9 +128,9 @@ namespace Game
         private void TryUseLastLocalVersionResource()
         {
             Log.Info("Try to use the latest local resource version.");
-            if (GameEntry.Setting.HasSetting(Constant.ResourceVersion.InternalResourceVersion))
+            if (GameEntry.Setting.HasSetting(Constant.Resource.InternalResourceVersion))
             {
-                int internalResourceVersion = GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion);
+                int internalResourceVersion = GameEntry.Setting.GetInt(Constant.Resource.InternalResourceVersion);
                 if (internalResourceVersion > 0)
                 {
                     GameEntry.BuiltinData.OpenDialog(new DialogParams

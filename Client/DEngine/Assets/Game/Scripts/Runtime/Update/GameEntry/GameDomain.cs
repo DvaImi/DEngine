@@ -18,12 +18,12 @@ namespace Game.Update
         /// <summary>
         /// 获取网络模块。
         /// </summary>
-        public static INetworkModule Network { get; private set; }
+        public static NetworkModule Network { get; private set; }
 
         /// <summary>
         /// Luban配表模块
         /// </summary>
-        public static ILubanDataProvider Luban { get; private set; }
+        public static LubanDataProvider Luban { get; private set; }
 
         /// <summary>
         /// 输入模块
@@ -32,13 +32,10 @@ namespace Game.Update
 
         public static async FTask Initialize()
         {
-            if (Scene == null || Scene.IsDisposed)
-            {
-                Scene = await Fantasy.Scene.Create();
-            }
-
-            Network = GameEntry.GetModule<INetworkModule>();
-            Luban = GameEntry.GetModule<ILubanDataProvider>();
+            Scene?.Dispose();
+            Scene = await Fantasy.Scene.Create();
+            Network = await Scene.AddComponentAsync<NetworkModule>();
+            Luban = await Scene.AddComponentAsync<LubanDataProvider>();
             Input = await Scene.AddComponentAsync<GameInputComponent>();
         }
     }

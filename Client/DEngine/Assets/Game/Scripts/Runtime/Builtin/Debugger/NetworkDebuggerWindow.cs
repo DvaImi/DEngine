@@ -10,11 +10,14 @@ namespace Game.Debugger
     {
         private const float TitleWidth = 240f;
 
-        private INetworkModule m_Network;
+        private NetworkModule m_Network;
 
         public override void Initialize(params object[] args)
         {
-            m_Network = GameEntry.GetModule<INetworkModule>();
+            if (args[0] is NetworkModule networkModule)
+            {
+                m_Network = networkModule;
+            }
         }
 
         protected override void OnDrawScrollableWindow()
@@ -83,9 +86,9 @@ namespace Game.Debugger
         {
             return addressFamily switch
             {
-                AddressFamily.InterNetwork => "IPv4",
+                AddressFamily.InterNetwork   => "IPv4",
                 AddressFamily.InterNetworkV6 => "IPv6",
-                _ => Utility.Text.Format("Not supported address family '{0}'.", addressFamily)
+                _                            => Utility.Text.Format("Not supported address family '{0}'.", addressFamily)
             };
         }
     }

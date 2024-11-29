@@ -6,7 +6,7 @@ using DEngine.Runtime;
 namespace Game
 {
     /// <summary>
-    /// 使用可更新模式应用资源包包流程
+    /// 使用可更新模式应用资源包流程
     /// </summary>
     public class ProcedureApplyResourcePack : GameProcedureBase
     {
@@ -16,7 +16,7 @@ namespace Game
         {
             base.OnEnter(procedureOwner);
             Log.Info("Start apply pack");
-            var    patchResourcePackName = procedureOwner.GetData<VarString>(Constant.ResourceVersion.CompressedPackName);
+            var    patchResourcePackName = procedureOwner.GetData<VarString>(Constant.Resource.ResourcePackName);
             string patchResourcePackPath = Utility.Path.GetRegularCombinePath(GameEntry.Resource.ReadWritePath, patchResourcePackName);
             if (!GameEntry.Resource.VerifyResourcePack(patchResourcePackPath))
             {
@@ -25,7 +25,7 @@ namespace Game
             }
 
             Log.Info("Verify resource pack {0} valid", patchResourcePackName);
-            procedureOwner.RemoveData(Constant.ResourceVersion.CompressedPackName);
+            procedureOwner.RemoveData(Constant.Resource.ResourcePackName);
             GameEntry.Resource.ApplyResources(patchResourcePackPath, OnApplyResourcesComplete);
         }
 

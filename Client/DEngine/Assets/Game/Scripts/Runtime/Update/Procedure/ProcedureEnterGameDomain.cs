@@ -11,7 +11,7 @@ namespace Game.Update.Procedure
             base.OnEnter(procedureOwner);
             procedureOwner.SetData<VarInt32>(UpdateConstant.ProcedureConstant.NextSceneId, (int)SceneId.GAMESCENE);
             procedureOwner.SetData<VarProcedure>(UpdateConstant.ProcedureConstant.NextProcedure, typeof(ProcedureEnterGame));
-            GameDomain.Input.SetGlobalUIClickSound(1);
+            GameDomain.Input.SetGlobalUIClickSound((int)UISoundId.Basics);
             GameDomain.Scene.Publish(new ProcessingPreloadEventType());
         }
 

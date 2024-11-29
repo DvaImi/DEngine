@@ -5,28 +5,14 @@ using Luban;
 
 namespace Game.Update.DataTable
 {
-    public class LubanDataProvider : ILubanDataProvider
+    public partial class LubanDataProvider : Fantasy.Entitas.Entity
     {
         public int Priority => 1;
 
-        public Tables Tables { get; }
+        public Tables Tables { get; private set; }
 
-        private readonly FileSystemDataVersion m_FileSystemDataVersion;
-        private readonly string m_FileSystemFullPath;
-
-
-        public LubanDataProvider()
-        {
-            Tables = new Tables(OnLoadByteBuf);
-            if (GameEntry.Base.EditorResourceMode)
-            {
-                return;
-            }
-
-            m_FileSystemFullPath = UpdateAssetUtility.GetConfigAsset("cfg");
-            m_FileSystemDataVersion = FileSystemDataVersion.Deserialize(GameEntry.Resource.LoadBinaryFromFileSystem(UpdateAssetUtility.GetConfigAsset("cfgVersion")));
-        }
-
+        private FileSystemDataVersion m_FileSystemDataVersion;
+        private string m_FileSystemFullPath;
         #region Lazy Load
 
         private ByteBuf OnLoadByteBuf(string tableName)
@@ -47,9 +33,5 @@ namespace Game.Update.DataTable
         }
 
         #endregion
-
-        public void Shutdown()
-        {
-        }
     }
 }

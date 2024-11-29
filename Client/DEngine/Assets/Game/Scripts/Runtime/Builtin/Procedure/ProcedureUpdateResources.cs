@@ -32,10 +32,10 @@ namespace Game
             base.OnEnter(procedureOwner);
 
             m_UpdateResourcesComplete = false;
-            m_UpdateCount             = procedureOwner.GetData<VarInt32>(Constant.ResourceVersion.UpdateResourceCount);
-            procedureOwner.RemoveData(Constant.ResourceVersion.UpdateResourceCount);
-            m_UpdateTotalCompressedLength = procedureOwner.GetData<VarInt64>(Constant.ResourceVersion.UpdateResourceTotalCompressedLength);
-            procedureOwner.RemoveData(Constant.ResourceVersion.UpdateResourceTotalCompressedLength);
+            m_UpdateCount             = procedureOwner.GetData<VarInt32>(Constant.Resource.UpdateResourceCount);
+            procedureOwner.RemoveData(Constant.Resource.UpdateResourceCount);
+            m_UpdateTotalCompressedLength = procedureOwner.GetData<VarInt64>(Constant.Resource.UpdateResourceTotalCompressedLength);
+            procedureOwner.RemoveData(Constant.Resource.UpdateResourceTotalCompressedLength);
             m_UpdateSuccessCount = 0;
             m_UpdateLengthData.Clear();
             m_UpdateResourceForm = null;

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using DEngine;
+using DEngine.Runtime;
 using Fantasy.Network;
 
 namespace Game.Network
 {
-    public partial class NetworkModule : INetworkModule
+    public partial class NetworkModule : Fantasy.Entitas.Entity
     {
         public int Priority { get; } = 0;
 
@@ -79,6 +80,7 @@ namespace Game.Network
             }
 
             m_NetworkChannels.Clear();
+            Log.Info("Network channels have been destroyed.");
         }
     }
 }

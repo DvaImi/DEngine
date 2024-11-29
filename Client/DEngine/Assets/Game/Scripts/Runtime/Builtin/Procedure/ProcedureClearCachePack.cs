@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Cysharp.Threading.Tasks;
 using DEngine.Fsm;
 using DEngine.Procedure;
 using DEngine.Runtime;
@@ -10,44 +9,51 @@ namespace Game
     public class ProcedureClearCachePack : GameProcedureBase
     {
         private bool m_ClearCachePackComplete;
+        private bool m_ShouldDeleteCachePacks;
         private readonly List<FileInfo> m_DeleteCachePackFiles = new();
-        private const string SearchPattern = "DEngineResourcePack-*-*.block";
-
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
             m_ClearCachePackComplete = false;
-            StartClearCachePack();
+            m_ShouldDeleteCachePacks = false;
+            CollectCachePackFilesToDelete();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+
             if (!m_ClearCachePackComplete)
             {
+                if (m_ShouldDeleteCachePacks)
+                {
+                    DeleteCachePackFiles();
+                    m_ClearCachePackComplete = true;
+                }
+
                 return;
             }
 
             ProcessAssembliesProcedure(procedureOwner);
         }
 
-        private async void StartClearCachePack()
+        private void CollectCachePackFilesToDelete()
         {
-            string[] files = Directory.GetFiles(GameEntry.Resource.ReadWritePath, SearchPattern);
+            string[] files = Directory.GetFiles(GameEntry.Resource.ReadWritePath, Constant.Resource.ResourcePackSearchPattern);
 
             foreach (var file in files)
             {
-                var info     = new FileInfo(file);
+                var info = new FileInfo(file);
                 var versions = info.Name.Split('-');
                 if (versions.Length < 2)
                 {
                     continue;
                 }
 
-                string firstVersion            = versions[1];
-                string latestGameVersion       = firstVersion[..firstVersion.LastIndexOf('.')];
-                int    internalResourceVersion = int.Parse(firstVersion.Split('.')[^1]);
+                string firstVersion = versions[1];
+                string latestGameVersion = firstVersion[..firstVersion.LastIndexOf('.')];
+                int internalResourceVersion = int.Parse(firstVersion.Split('.')[^1]);
 
                 if (latestGameVersion != GameEntry.BuiltinData.Builtin.BuildInfo.LatestGameVersion)
                 {
@@ -55,14 +61,18 @@ namespace Game
                     continue;
                 }
 
-                //差异两个版本则丢弃
-                if (GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion, 0) - internalResourceVersion >= 2)
+                // 差异两个版本则丢弃
+                if (GameEntry.Setting.GetInt(Constant.Resource.InternalResourceVersion, 0) - internalResourceVersion >= 2)
                 {
                     m_DeleteCachePackFiles.Add(info);
                 }
             }
 
-            await UniTask.NextFrame();
+            m_ShouldDeleteCachePacks = true;
+        }
+
+        private void DeleteCachePackFiles()
+        {
             try
             {
                 foreach (var fileInfo in m_DeleteCachePackFiles)
@@ -74,9 +84,9 @@ namespace Game
                     }
                 }
             }
-            finally
+            catch (System.Exception ex)
             {
-                m_ClearCachePackComplete = true;
+                Log.Error("Failed to delete cache pack files: " + ex.Message);
             }
         }
     }

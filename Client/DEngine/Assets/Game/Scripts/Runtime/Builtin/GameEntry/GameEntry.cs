@@ -14,16 +14,6 @@ namespace Game
             InitCustomComponents();
         }
 
-        private void Update()
-        {
-            Update(Time.deltaTime, Time.unscaledDeltaTime);
-        }
-
-        private void OnDestroy()
-        {
-            ShutdownModule();
-        }
-
         public void Shutdown(ShutdownType shutdownType)
         {
             DEngine.Runtime.GameEntry.Shutdown(shutdownType);

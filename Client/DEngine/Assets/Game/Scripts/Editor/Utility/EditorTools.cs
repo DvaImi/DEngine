@@ -337,6 +337,38 @@ namespace Game.Editor
             }
         }
 
+        /// <summary>
+        /// 计算资源数组大小
+        /// </summary>
+        /// <param name="assetObjects"></param>
+        /// <returns></returns>
+        public static long CalculateAssetsSize(Object[] assetObjects)
+        {
+            long size = 0;
+            if (assetObjects == null)
+            {
+                return size;
+            }
+
+            foreach (var asset in assetObjects)
+            {
+                size += CalculateAssetSize(asset);
+            }
+
+            return size;
+        }
+
+        /// <summary>
+        /// 计算资源大小
+        /// </summary>
+        /// <param name="assetObject"></param>
+        /// <returns></returns>
+        public static long CalculateAssetSize(Object assetObject)
+        {
+            string assetPath = AssetDatabase.GetAssetPath(assetObject);
+            return AssetDatabase.IsValidFolder(assetPath) ? GameUtility.IO.CalculateFolderSize(assetPath) : GameUtility.IO.CalculateFileSize(assetPath);
+        }
+
         #endregion
 
         #region EditorWindow

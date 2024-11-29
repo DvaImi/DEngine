@@ -41,9 +41,9 @@ namespace Game
         public ResourceVersionInfo ResourceVersionInfo { get; set; } = new();
 
         /// <summary>
-        /// 整包更新信息（压缩包模式）
+        /// 资源包信息
         /// </summary>
-        public CompressedBundleInfo CompressedBundleInfo { get; set; } = new();
+        public ResourcePackInfo ResourcePackInfo { get; set; } = new();
 
         /// <summary>
         /// 更新描述

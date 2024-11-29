@@ -25,15 +25,15 @@ namespace Game
             base.OnEnter(procedureOwner);
 
             m_UpdateVersionComplete = false;
-            int versionListLength             = procedureOwner.GetData<VarInt32>(Constant.ResourceVersion.VersionListLength);
-            int versionListHashCode           = procedureOwner.GetData<VarInt32>(Constant.ResourceVersion.VersionListHashCode);
-            int versionListCompressedLength   = procedureOwner.GetData<VarInt32>(Constant.ResourceVersion.VersionListCompressedLength);
-            int versionListCompressedHashCode = procedureOwner.GetData<VarInt32>(Constant.ResourceVersion.VersionListCompressedHashCode);
+            int versionListLength             = procedureOwner.GetData<VarInt32>(Constant.Resource.VersionListLength);
+            int versionListHashCode           = procedureOwner.GetData<VarInt32>(Constant.Resource.VersionListHashCode);
+            int versionListCompressedLength   = procedureOwner.GetData<VarInt32>(Constant.Resource.VersionListCompressedLength);
+            int versionListCompressedHashCode = procedureOwner.GetData<VarInt32>(Constant.Resource.VersionListCompressedHashCode);
             GameEntry.Resource.UpdateVersionList(versionListLength, versionListHashCode, versionListCompressedLength, versionListCompressedHashCode, m_UpdateVersionListCallbacks);
-            procedureOwner.RemoveData(Constant.ResourceVersion.VersionListLength);
-            procedureOwner.RemoveData(Constant.ResourceVersion.VersionListHashCode);
-            procedureOwner.RemoveData(Constant.ResourceVersion.VersionListCompressedLength);
-            procedureOwner.RemoveData(Constant.ResourceVersion.VersionListCompressedHashCode);
+            procedureOwner.RemoveData(Constant.Resource.VersionListLength);
+            procedureOwner.RemoveData(Constant.Resource.VersionListHashCode);
+            procedureOwner.RemoveData(Constant.Resource.VersionListCompressedLength);
+            procedureOwner.RemoveData(Constant.Resource.VersionListCompressedHashCode);
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

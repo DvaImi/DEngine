@@ -3,10 +3,12 @@
     <DEngineTypeSetting>
         <RuntimeAssemblyNames>
             <Assembly Name="Game.Runtime.Builtin"/>
+            <Assembly Name="DEngine.Runtime.Extension"/>
         </RuntimeAssemblyNames>
         <RuntimeOrEditorAssemblyNames>
             <Assembly Name="Game.Editor"/>
             <Assembly Name="Game.Runtime.Builtin"/>
+            <Assembly Name="DEngine.Runtime.Extension"/>
         </RuntimeOrEditorAssemblyNames>
     </DEngineTypeSetting>
 </DEngine>

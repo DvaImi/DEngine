@@ -14,7 +14,7 @@ namespace Game
     public class ProcedureUpdateResourcePack : GameProcedureBase
     {
         private string m_CompressedPackName = null;
-        private bool m_UpdataCompressedPackComplete = false;
+        private bool m_UpdateCompressedPackComplete = false;
         private UpdateResourceForm m_UpdateResourceForm = null;
         private long m_CompressedPackLength;
         private long m_CurrentTotalUpdateLength;
@@ -23,10 +23,10 @@ namespace Game
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            m_UpdataCompressedPackComplete  = false;
-            m_CompressedPackName      = procedureOwner.GetData<VarString>(Constant.ResourceVersion.CompressedPackName);
-            m_CompressedPackLength = procedureOwner.GetData<VarInt64>(Constant.ResourceVersion.CompressedPackLength);
-            procedureOwner.RemoveData(Constant.ResourceVersion.CompressedPackLength);
+            m_UpdateCompressedPackComplete  = false;
+            m_CompressedPackName      = procedureOwner.GetData<VarString>(Constant.Resource.ResourcePackName);
+            m_CompressedPackLength = procedureOwner.GetData<VarInt64>(Constant.Resource.ResourcePackLength);
+            procedureOwner.RemoveData(Constant.Resource.ResourcePackLength);
             m_ResourcePackPath = Utility.Path.GetRegularCombinePath(GameEntry.Resource.ReadWritePath, m_CompressedPackName);
 
             GameEntry.Event.Subscribe(DownloadStartEventArgs.EventId, OnDownloadStart);
@@ -36,7 +36,7 @@ namespace Game
 
             if (File.Exists(m_ResourcePackPath))
             {
-                m_UpdataCompressedPackComplete = true;
+                m_UpdateCompressedPackComplete = true;
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace Game
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            if (!m_UpdataCompressedPackComplete)
+            if (!m_UpdateCompressedPackComplete)
             {
                 return;
             }
@@ -112,7 +112,7 @@ namespace Game
             if (e is DownloadSuccessEventArgs args && args.UserData == this)
             {
                 Log.Info("Download patch resource pack {0} success.", args.DownloadUri);
-                m_UpdataCompressedPackComplete = true;
+                m_UpdateCompressedPackComplete = true;
             }
         }
 

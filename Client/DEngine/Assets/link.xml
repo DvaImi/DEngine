@@ -1228,8 +1228,6 @@
     <type fullname="AsyncBarrier" preserve="all"/>
     <type fullname="GameUtility" preserve="all"/>
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>
-    <type fullname="Game.IGameModule" preserve="all"/>
-    <type fullname="Game.IGameUpdateModule" preserve="all"/>
     <type fullname="Game.BuiltinDataComponent" preserve="all"/>
     <type fullname="Game.EventContainer" preserve="all"/>
     <type fullname="Game.VariableContainer" preserve="all"/>
@@ -1239,7 +1237,7 @@
     <type fullname="Game.DoubleMap`2" preserve="all"/>
     <type fullname="Game.UnOrderMultiMap`2" preserve="all"/>
     <type fullname="Game.UnOrderMultiMapSet`2" preserve="all"/>
-    <type fullname="Game.CompressedBundleInfo" preserve="all"/>
+    <type fullname="Game.ResourcePackInfo" preserve="all"/>
     <type fullname="Game.ResourceVersionInfo" preserve="all"/>
     <type fullname="Game.VersionInfo" preserve="all"/>
     <type fullname="Game.BuiltinData" preserve="all"/>
@@ -1247,9 +1245,7 @@
     <type fullname="Game.GameEntry" preserve="all"/>
     <type fullname="Game.GameDownloadAgentHelper" preserve="all"/>
     <type fullname="Game.GameEntityHelper" preserve="all"/>
-    <type fullname="Game.GameLoadResourceAgentHelper" preserve="all"/>
     <type fullname="Game.GameResourceHelper" preserve="all"/>
-    <type fullname="Game.GameWebRequestAgentHelper" preserve="all"/>
     <type fullname="Game.ZStringHelper" preserve="all"/>
     <type fullname="Game.GameProcedureBase" preserve="all"/>
     <type fullname="Game.ProcedureApplyResourcePack" preserve="all"/>
@@ -1295,7 +1291,6 @@
     <type fullname="Game.AssetObject.SetImageSpriteObject" preserve="all"/>
     <type fullname="Game.AssetObject.SetSpriteRendererObject" preserve="all"/>
     <type fullname="Game.Network.INetworkChannel" preserve="all"/>
-    <type fullname="Game.Network.INetworkModule" preserve="all"/>
     <type fullname="Game.Network.NetworkLog" preserve="all"/>
     <type fullname="Game.Network.NetworkModule" preserve="all"/>
     <type fullname="Game.Network.OnNetworkConnectedEventArg" preserve="all"/>
@@ -1333,17 +1328,14 @@
     <type fullname="Game.DataTableHelper+++c" preserve="all"/>
     <type fullname="Game.Constant+AssetPriority" preserve="all"/>
     <type fullname="Game.Constant+Layer" preserve="all"/>
-    <type fullname="Game.Constant+ResourceVersion" preserve="all"/>
+    <type fullname="Game.Constant+Resource" preserve="all"/>
     <type fullname="Game.Constant+Setting" preserve="all"/>
-    <type fullname="Game.GameEntry+++c__90`1" preserve="all"/>
-    <type fullname="Game.GameEntry+++c__DisplayClass91_0" preserve="all"/>
     <type fullname="Game.GameDownloadAgentHelper+GameDownloadHandler" preserve="all"/>
     <type fullname="Game.GameResourceHelper++LoadBytesByUniTask+d__3" preserve="all"/>
     <type fullname="Game.GameResourceHelper++UnloadSceneByUniTask+d__4" preserve="all"/>
     <type fullname="Game.ProcedureApplyResourcePack+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c" preserve="all"/>
     <type fullname="Game.ProcedureCheckVersion+++c__DisplayClass6_0" preserve="all"/>
-    <type fullname="Game.ProcedureClearCachePack++StartClearCachePack+d__5" preserve="all"/>
     <type fullname="Game.ProcedureLoadAssemblies+++c__DisplayClass6_0" preserve="all"/>
     <type fullname="Game.ProcedureLoadAssemblies++LoadUpdateAssemblies+d__6" preserve="all"/>
     <type fullname="Game.ProcedureLoadHotUpdateEntry++HotfixLauncher+d__1" preserve="all"/>
@@ -1387,13 +1379,17 @@
     <type fullname="Game.Sound.Helper.SoundAgentHelper++PauseCo+d__60" preserve="all"/>
     <type fullname="Game.Sound.Helper.SoundAgentHelper++StopCo+d__59" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel" preserve="all"/>
+    <type fullname="Game.Network.NetworkModule+NetworkModuleAwakeSystem" preserve="all"/>
+    <type fullname="Game.Network.NetworkModule+NetworkModuleDestroySystem" preserve="all"/>
     <type fullname="Game.CommandLine.CommandCreator++CollectCommands+d__0`1" preserve="all"/>
     <type fullname="Game.CommandLine.CommandParser++Walk+d__9" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c" preserve="all"/>
     <type fullname="Game.CommandLine.CommandSystem+++c__DisplayClass10_0" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4081" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9472" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=4044" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=9084" preserve="all"/>
+    <type fullname="Game.GameUtility+String+++c" preserve="all"/>
     <type fullname="Game.Network.NetworkModule+NetworkChannel++Connect+d__62" preserve="all"/>
+    <type fullname="Game.Network.NetworkModule+NetworkModuleAwakeSystem++Awake+d__0" preserve="all"/>
   </assembly>
   <assembly fullname="UniTask">
     <type fullname="UnitySourceGeneratedAssemblyMonoScriptTypes_v1" preserve="all"/>

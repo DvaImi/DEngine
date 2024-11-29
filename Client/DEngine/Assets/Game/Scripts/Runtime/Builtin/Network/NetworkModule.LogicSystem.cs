@@ -1,0 +1,26 @@
+﻿using Fantasy.Async;
+using Fantasy.Entitas.Interface;
+using Game.Debugger;
+
+namespace Game.Network
+{
+    public partial class NetworkModule
+    {
+        private class NetworkModuleAwakeSystem : AwakeSystemAsync<NetworkModule>
+        {
+            protected override async FTask Awake(NetworkModule self)
+            {
+                GameEntry.Debugger.RegisterDebuggerWindow("Profiler/Network", new NetworkDebuggerWindow(), self);
+                await FTask.CompletedTask;
+            }
+        }
+
+        private class NetworkModuleDestroySystem : DestroySystem<NetworkModule>
+        {
+            protected override void Destroy(NetworkModule self)
+            {
+                self.Shutdown();
+            }
+        }
+    }
+}

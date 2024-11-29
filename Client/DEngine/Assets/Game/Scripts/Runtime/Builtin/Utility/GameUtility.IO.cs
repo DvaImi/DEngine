@@ -11,9 +11,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using DEngine;
-using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Game
 {
@@ -359,38 +357,6 @@ namespace Game
             {
                 string signature = ReadStringToNull(fileData, 20);
                 return signature is "UnityFS" or "UnityRaw" or "UnityWeb" or "\xFA\xFA\xFA\xFA\xFA\xFA\xFA\xFA";
-            }
-
-            /// <summary>
-            /// 计算资源数组大小
-            /// </summary>
-            /// <param name="assetObjects"></param>
-            /// <returns></returns>
-            public static long CalculateAssetsSize(Object[] assetObjects)
-            {
-                long size = 0;
-                if (assetObjects == null)
-                {
-                    return size;
-                }
-
-                foreach (var asset in assetObjects)
-                {
-                    size += CalculateAssetSize(asset);
-                }
-
-                return size;
-            }
-
-            /// <summary>
-            /// 计算资源大小
-            /// </summary>
-            /// <param name="assetObject"></param>
-            /// <returns></returns>
-            public static long CalculateAssetSize(Object assetObject)
-            {
-                string assetPath = AssetDatabase.GetAssetPath(assetObject);
-                return AssetDatabase.IsValidFolder(assetPath) ? CalculateFolderSize(assetPath) : CalculateFileSize(assetPath);
             }
 
             /// <summary>

@@ -33,15 +33,15 @@ namespace Game
 
             if (m_NeedUpdateResources)
             {
-                if (procedureOwner.HasData(Constant.ResourceVersion.IsCompressedMode) && procedureOwner.GetData<VarBoolean>(Constant.ResourceVersion.IsCompressedMode))
+                if (procedureOwner.HasData(Constant.Resource.IsResourcePackMode) && procedureOwner.GetData<VarBoolean>(Constant.Resource.IsResourcePackMode))
                 {
-                    procedureOwner.RemoveData(Constant.ResourceVersion.IsCompressedMode);
+                    procedureOwner.RemoveData(Constant.Resource.IsResourcePackMode);
                     ChangeState<ProcedureUpdateResourcePack>(procedureOwner);
                 }
                 else
                 {
-                    procedureOwner.SetData<VarInt32>(Constant.ResourceVersion.UpdateResourceCount, m_UpdateResourceCount);
-                    procedureOwner.SetData<VarInt64>(Constant.ResourceVersion.UpdateResourceTotalCompressedLength, m_UpdateResourceTotalCompressedLength);
+                    procedureOwner.SetData<VarInt32>(Constant.Resource.UpdateResourceCount, m_UpdateResourceCount);
+                    procedureOwner.SetData<VarInt64>(Constant.Resource.UpdateResourceTotalCompressedLength, m_UpdateResourceTotalCompressedLength);
                     ChangeState<ProcedureUpdateResources>(procedureOwner);
                 }
             }
