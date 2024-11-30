@@ -186,7 +186,7 @@ namespace Game
             }
 
             AssetBundle assetBundle = resource as AssetBundle;
-            if (assetBundle == null)
+            if (!assetBundle)
             {
                 LoadResourceAgentHelperErrorEventArgs loadResourceAgentHelperErrorEventArgs = LoadResourceAgentHelperErrorEventArgs.Create(LoadResourceStatus.TypeError, "Can not load asset bundle from loaded resource which is not an asset bundle.");
                 m_LoadResourceAgentHelperErrorEventHandler(this, loadResourceAgentHelperErrorEventArgs);
@@ -220,14 +220,7 @@ namespace Game
             }
             else
             {
-                if (assetType != null)
-                {
-                    m_AssetBundleRequest = assetBundle.LoadAssetAsync(assetName, assetType);
-                }
-                else
-                {
-                    m_AssetBundleRequest = assetBundle.LoadAssetAsync(assetName);
-                }
+                m_AssetBundleRequest = assetType != null ? assetBundle.LoadAssetAsync(assetName, assetType) : assetBundle.LoadAssetAsync(assetName);
             }
         }
 
@@ -242,19 +235,11 @@ namespace Game
             m_AssetName = null;
             m_LastProgress = 0f;
 
-#if UNITY_5_4_OR_NEWER
             if (m_UnityWebRequest != null)
             {
                 m_UnityWebRequest.Dispose();
                 m_UnityWebRequest = null;
             }
-#else
-            if (m_WWW != null)
-            {
-                m_WWW.Dispose();
-                m_WWW = null;
-            }
-#endif
 
             m_FileAssetBundleCreateRequest = null;
             m_BytesAssetBundleCreateRequest = null;
@@ -284,19 +269,11 @@ namespace Game
 
             if (disposing)
             {
-#if UNITY_5_4_OR_NEWER
                 if (m_UnityWebRequest != null)
                 {
                     m_UnityWebRequest.Dispose();
                     m_UnityWebRequest = null;
                 }
-#else
-                if (m_WWW != null)
-                {
-                    m_WWW.Dispose();
-                    m_WWW = null;
-                }
-#endif
             }
 
             m_Disposed = true;
