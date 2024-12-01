@@ -49,7 +49,7 @@ namespace Game.Archive
 
         private void Start()
         {
-            m_ArchiveManager = GameEntry.GetModule<IArchiveManager>();
+            m_ArchiveManager = new ArchiveManager();
             if (m_ArchiveManager == null)
             {
                 Log.Error("archive manager is invalid.");

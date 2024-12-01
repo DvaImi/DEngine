@@ -187,7 +187,7 @@ namespace Game.Editor.FairyGUI
             string directory = EditorUtility.OpenFilePanelWithFilters("Select Fairy Project", FairyGUIEditorSetting.Instance.FairyGUIProject, new[] { "Fairy file", "fairy" });
             if (!string.IsNullOrEmpty(directory))
             {
-                FairyGUIEditorSetting.Instance.FairyGUIProject = EditorTools.AbsolutePathToProject(directory);
+                FairyGUIEditorSetting.Instance.FairyGUIProject = GameUtility.IO.AbsolutePathToProject(directory);
             }
         }
 
@@ -200,8 +200,8 @@ namespace Game.Editor.FairyGUI
                 // 将整个元素宽度限制为300
                 float totalWidth = 300;
                 float nameFieldWidth = totalWidth - 70; // 名称字段的宽度
-                float depthFieldWidth = 60; // 深度字段的宽度
-                float spacing = 5; // 间距
+                float depthFieldWidth = 60;             // 深度字段的宽度
+                float spacing = 5;                      // 间距
 
                 // 调整 rect 以符合总宽度
                 rect.width = totalWidth;
@@ -268,10 +268,10 @@ namespace Game.Editor.FairyGUI
             string fileName = "FairyGUIFormId";
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("//this file is generate by tools,do not alter it...")
-                .AppendLine($"namespace Game.FairyGUI.Runtime")
-                .AppendLine("{")
-                .AppendLine($"\tpublic enum {fileName} : byte")
-                .AppendLine("\t{");
+                         .AppendLine($"namespace Game.FairyGUI.Runtime")
+                         .AppendLine("{")
+                         .AppendLine($"\tpublic enum {fileName} : byte")
+                         .AppendLine("\t{");
 
             for (int i = 0; i < runtimeData.FairyForms.Count; i++)
             {

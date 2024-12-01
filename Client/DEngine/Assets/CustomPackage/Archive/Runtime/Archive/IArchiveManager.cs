@@ -3,7 +3,7 @@
 namespace Game.Archive
 {
     // 存档管理接口
-    public interface IArchiveManager : IGameModule
+    public interface IArchiveManager
     {
         /// <summary>
         /// 使用加密

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Archive
 {
-    internal sealed class ArchiveManager : IArchiveManager, IGameModule
+    internal sealed class ArchiveManager : IArchiveManager
     {
         private const int Version = 1;
         private const string DefaultExtension = ".sav";
