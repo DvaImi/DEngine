@@ -57,7 +57,6 @@ namespace Game.Update.Entity
 
             return entity.Logic as T;
         }
-
         public static int GenerateSerialId(this EntityComponent self)
         {
             return --s_SerialId;

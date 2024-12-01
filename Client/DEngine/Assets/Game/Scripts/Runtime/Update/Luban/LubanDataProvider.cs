@@ -7,12 +7,11 @@ namespace Game.Update.DataTable
 {
     public partial class LubanDataProvider : Fantasy.Entitas.Entity
     {
-        public int Priority => 1;
-
         public Tables Tables { get; private set; }
 
         private FileSystemDataVersion m_FileSystemDataVersion;
         private string m_FileSystemFullPath;
+
         #region Lazy Load
 
         private ByteBuf OnLoadByteBuf(string tableName)

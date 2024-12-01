@@ -7,8 +7,6 @@ namespace Game.Network
 {
     public partial class NetworkModule : Fantasy.Entitas.Entity
     {
-        public int Priority { get; } = 0;
-
         private readonly Dictionary<string, INetworkChannel> m_NetworkChannels = new();
 
         public int NetworkChannelCount => m_NetworkChannels.Count;
