@@ -10,7 +10,6 @@ namespace Game
         private bool m_NeedUpdateResources;
         private int m_UpdateResourceCount;
         private long m_UpdateResourceTotalCompressedLength;
-        private bool m_UseResourcePatchPack;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
@@ -20,14 +19,6 @@ namespace Game
             m_NeedUpdateResources = false;
             m_UpdateResourceCount = 0;
             m_UpdateResourceTotalCompressedLength = 0L;
-            m_UseResourcePatchPack = false;
-
-            if (procedureOwner.HasData("UseResourcePatchPack"))
-            {
-                m_UseResourcePatchPack = procedureOwner.GetData<VarBoolean>("UseResourcePatchPack");
-                procedureOwner.RemoveData("UseResourcePatchPack");
-            }
-
             GameEntry.Resource.CheckResources(OnCheckResourcesComplete);
         }
 
@@ -42,14 +33,15 @@ namespace Game
 
             if (m_NeedUpdateResources)
             {
-                if (m_UseResourcePatchPack)
+                if (procedureOwner.HasData(Constant.Resource.IsResourcePackMode) && procedureOwner.GetData<VarBoolean>(Constant.Resource.IsResourcePackMode))
                 {
+                    procedureOwner.RemoveData(Constant.Resource.IsResourcePackMode);
                     ChangeState<ProcedureUpdateResourcePack>(procedureOwner);
                 }
                 else
                 {
-                    procedureOwner.SetData<VarInt32>("UpdateResourceCount", m_UpdateResourceCount);
-                    procedureOwner.SetData<VarInt64>("UpdateResourceTotalCompressedLength", m_UpdateResourceTotalCompressedLength);
+                    procedureOwner.SetData<VarInt32>(Constant.Resource.UpdateResourceCount, m_UpdateResourceCount);
+                    procedureOwner.SetData<VarInt64>(Constant.Resource.UpdateResourceTotalCompressedLength, m_UpdateResourceTotalCompressedLength);
                     ChangeState<ProcedureUpdateResources>(procedureOwner);
                 }
             }

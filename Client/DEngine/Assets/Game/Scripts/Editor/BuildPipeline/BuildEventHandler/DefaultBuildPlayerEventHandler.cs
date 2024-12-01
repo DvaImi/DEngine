@@ -9,9 +9,7 @@ namespace Game.Editor.BuildPipeline
 {
     public class DefaultBuildPlayerEventHandler : IBuildPlayerEventHandler
     {
-        public bool ContinueOnFailure { get; } = true;
-
-        public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, Platform platforms, string outputDirectory)
+        public void OnPreprocessPlatform(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, Platform platform, string outputDirectory)
         {
             DEngine.Editor.BuildSettings.DefaultScenes();
             GeneratorDataTableCommonLine.GenerateAll();
@@ -19,10 +17,15 @@ namespace Game.Editor.BuildPipeline
             GameBuildPipeline.SaveHybridCLR();
             GameBuildPipeline.SaveBuildSetting();
             DEngineSetting.Save();
-            AssetDatabase.Refresh();
+            PreprocessPlatform(platform);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
-        public void OnPreprocessPlatform(Platform platform)
+        public void OnPostprocessPlatform(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, Platform platform, string outputDirectory, bool isSuccess)
+        {
+        }
+
+        private static void PreprocessPlatform(Platform platform)
         {
             BuildTarget target = GameBuildPipeline.GetBuildTarget(platform);
             if (target != EditorUserBuildSettings.activeBuildTarget)
@@ -31,13 +34,20 @@ namespace Game.Editor.BuildPipeline
                 UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
             }
 
-            AssetDatabase.Refresh();
-            //TODO 根据平台判断是否需要ALL
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             try
             {
 #if ENABLE_HYBRIDCLR
                 Debug.Log("====================编译代码========================");
-                PrebuildCommand.GenerateAll();
+                if (GameBuildPipeline.GetProjectMissAOTAssemblies().Length > 0)
+                {
+                    PrebuildCommand.GenerateAll();
+                }
+                else
+                {
+                    CompileDllCommand.CompileDll(target);
+                }
+
                 GameBuildPipeline.CopyAOTDllAssets(target);
                 GameBuildPipeline.CopyUpdateDllAssets(target);
                 Debug.Log("====================编译代码结束========================");
@@ -51,14 +61,6 @@ namespace Game.Editor.BuildPipeline
             {
                 Debug.LogError(e.Message);
             }
-        }
-
-        public void OnPostprocessPlatform(Platform platform, bool isSuccess)
-        {
-        }
-
-        public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, Platform platforms, string outputDirectory)
-        {
         }
     }
 }

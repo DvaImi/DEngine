@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
+using Debug = UnityEngine.Debug;
 
 namespace Game.Editor
 {
@@ -8,35 +10,35 @@ namespace Game.Editor
     {
         public static void Run(string cmd, string workDirectory)
         {
-            System.Diagnostics.Process process = new();
+            Process process = new();
             try
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
                 string app = "bash";
                 string arguments = "-c";
 #elif UNITY_EDITOR_WIN
-                string app = "cmd.exe";
+                string app       = "cmd.exe";
                 string arguments = "/c";
 #endif
                 ProcessStartInfo start = new ProcessStartInfo(app);
-                process.StartInfo = start;
-                start.Arguments = arguments + " \"" + cmd + "\"";
-                start.CreateNoWindow = false;
-                start.ErrorDialog = true;
-                start.UseShellExecute = true;
+                process.StartInfo      = start;
+                start.Arguments        = arguments + " \"" + cmd + "\"";
+                start.CreateNoWindow   = false;
+                start.ErrorDialog      = true;
+                start.UseShellExecute  = true;
                 start.WorkingDirectory = workDirectory;
 
                 process.Start();
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.LogException(e);
+                Debug.LogException(e);
             }
         }
 
         public static void RunV2(string cmd, string workDirectory, List<string> environmentVars = null)
         {
-            System.Diagnostics.Process process = new();
+            Process process = new();
             try
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
@@ -44,7 +46,7 @@ namespace Game.Editor
                 string splitChar = ":";
                 string arguments = "-c";
 #elif UNITY_EDITOR_WIN
-                string app = "cmd.exe";
+                string app       = "cmd.exe";
                 string splitChar = ";";
                 string arguments = "/c";
 #endif
@@ -58,52 +60,52 @@ namespace Game.Editor
                     }
                 }
 
-                process.StartInfo = start;
-                start.Arguments = arguments + " \"" + cmd + "\"";
-                start.CreateNoWindow = true;
-                start.ErrorDialog = true;
-                start.UseShellExecute = false;
+                process.StartInfo      = start;
+                start.Arguments        = arguments + " \"" + cmd + "\"";
+                start.CreateNoWindow   = true;
+                start.ErrorDialog      = true;
+                start.UseShellExecute  = false;
                 start.WorkingDirectory = workDirectory;
 
                 if (start.UseShellExecute)
                 {
                     start.RedirectStandardOutput = false;
-                    start.RedirectStandardError = false;
-                    start.RedirectStandardInput = false;
+                    start.RedirectStandardError  = false;
+                    start.RedirectStandardInput  = false;
                 }
                 else
                 {
                     start.RedirectStandardOutput = true;
-                    start.RedirectStandardError = true;
-                    start.RedirectStandardInput = true;
-                    start.StandardOutputEncoding = System.Text.Encoding.UTF8;
-                    start.StandardErrorEncoding = System.Text.Encoding.UTF8;
+                    start.RedirectStandardError  = true;
+                    start.RedirectStandardInput  = true;
+                    start.StandardOutputEncoding = Encoding.UTF8;
+                    start.StandardErrorEncoding  = Encoding.UTF8;
                 }
 
                 bool endOutput = false;
-                bool endError = false;
+                bool endError  = false;
 
-                process.OutputDataReceived += (sender, args) =>
+                process.OutputDataReceived += (_, args) =>
                 {
-                    if (args.Data != null)
-                    {
-                        UnityEngine.Debug.Log(args.Data);
-                    }
-                    else
+                    if (string.IsNullOrWhiteSpace(args.Data))
                     {
                         endOutput = true;
                     }
+                    else
+                    {
+                        Debug.Log(args.Data);
+                    }
                 };
 
-                process.ErrorDataReceived += (sender, args) =>
+                process.ErrorDataReceived += (_, args) =>
                 {
-                    if (args.Data != null)
+                    if (string.IsNullOrWhiteSpace(args.Data))
                     {
-                        UnityEngine.Debug.LogError(args.Data);
+                        endError = true;
                     }
                     else
                     {
-                        endError = true;
+                        Debug.Log(args.Data);
                     }
                 };
 
@@ -120,7 +122,7 @@ namespace Game.Editor
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.LogException(e);
+                Debug.LogException(e);
             }
             finally
             {

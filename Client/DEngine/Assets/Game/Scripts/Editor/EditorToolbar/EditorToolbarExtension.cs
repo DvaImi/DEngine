@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Game.Editor.BuildPipeline;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,7 +20,7 @@ namespace Game.Editor.Toolbar
         private static readonly Dictionary<string, MethodInfo> RightCachedMethods = new();
         private static readonly Dictionary<string, MethodInfo> LeftToolbarCustomGUI = new();
         private static readonly Dictionary<string, MethodInfo> RightToolbarCustomGUI = new();
-        private static Stack<MethodInfo> RunMethodInfos = new();
+        private static readonly Stack<MethodInfo> RunMethodInfos = new();
 
         static EditorToolbarExtension()
         {
@@ -28,7 +29,7 @@ namespace Game.Editor.Toolbar
             CacheMethods();
         }
 
-        public static void Shutdown()
+        private static void Shutdown()
         {
             LeftMenu.Clear();
             RightMenu.Clear();
@@ -145,13 +146,13 @@ namespace Game.Editor.Toolbar
                         {
                             style =
                             {
-                                flexGrow = 1,
+                                flexGrow      = 1,
                                 flexDirection = FlexDirection.Row,
                             }
                         };
 
-                        VisualElement toolbarLeftZone = concreteRoot.Q("ToolbarZoneLeftAlign");
-                        IMGUIContainer leftContainer = new IMGUIContainer();
+                        VisualElement  toolbarLeftZone = concreteRoot.Q("ToolbarZoneLeftAlign");
+                        IMGUIContainer leftContainer   = new IMGUIContainer();
                         leftContainer.onGUIHandler += OnGUILeftHandler;
                         leftParent.Add(leftContainer);
                         toolbarLeftZone.Add(leftParent);
@@ -160,18 +161,23 @@ namespace Game.Editor.Toolbar
                         {
                             style =
                             {
-                                flexGrow = 1,
+                                flexGrow      = 1,
                                 flexDirection = FlexDirection.Row,
                             }
                         };
 
-                        VisualElement toolbarRightZone = concreteRoot.Q("ToolbarZoneRightAlign");
-                        IMGUIContainer rightContainer = new IMGUIContainer();
+                        VisualElement  toolbarRightZone = concreteRoot.Q("ToolbarZoneRightAlign");
+                        IMGUIContainer rightContainer   = new IMGUIContainer();
                         rightContainer.onGUIHandler += OnGUIRightHandler;
                         rightParent.Add(rightContainer);
                         toolbarRightZone.Add(rightParent);
                     }
                 }
+            }
+
+            if (GameBuildPipeline.IsEditorBusy())
+            {
+                return;
             }
 
             while (RunMethodInfos.Count > 0)
@@ -189,7 +195,7 @@ namespace Game.Editor.Toolbar
 
         private static void OnGUILeftHandler()
         {
-            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            EditorGUI.BeginDisabledGroup(GameBuildPipeline.IsEditorBusy());
             {
                 GUILayout.BeginHorizontal();
                 {
@@ -199,7 +205,7 @@ namespace Game.Editor.Toolbar
                         var menu = LeftMenu[i];
                         if (menu.UseCustomGUI)
                         {
-                            CallCustomGUIMethod(0, menu.MenuName);
+                            CallCustomGUIMethod(ToolBarMenuAlign.Left, menu.MenuName);
                         }
                         else
                         {
@@ -207,6 +213,7 @@ namespace Game.Editor.Toolbar
                             {
                                 if (LeftCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
                                 {
+                                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                                     RunMethodInfos.Push(methodInfo);
                                 }
                                 else
@@ -226,7 +233,7 @@ namespace Game.Editor.Toolbar
 
         private static void OnGUIRightHandler()
         {
-            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            EditorGUI.BeginDisabledGroup(GameBuildPipeline.IsEditorBusy());
             {
                 GUILayout.BeginHorizontal();
                 {
@@ -236,7 +243,7 @@ namespace Game.Editor.Toolbar
                         var menu = RightMenu[i];
                         if (menu.UseCustomGUI)
                         {
-                            CallCustomGUIMethod(1, menu.MenuName);
+                            CallCustomGUIMethod(ToolBarMenuAlign.Right, menu.MenuName);
                         }
                         else
                         {
@@ -244,6 +251,7 @@ namespace Game.Editor.Toolbar
                             {
                                 if (RightCachedMethods.TryGetValue(menu.MenuName, out var methodInfo))
                                 {
+                                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                                     RunMethodInfos.Push(methodInfo);
                                 }
                                 else
@@ -263,7 +271,7 @@ namespace Game.Editor.Toolbar
             EditorGUI.EndDisabledGroup();
         }
 
-        private static void CallCustomGUIMethod(int align, string menuName)
+        private static void CallCustomGUIMethod(ToolBarMenuAlign align, string menuName)
         {
             if (align == 0)
             {

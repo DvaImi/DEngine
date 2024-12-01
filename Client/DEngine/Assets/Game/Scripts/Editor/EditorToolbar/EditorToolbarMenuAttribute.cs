@@ -11,9 +11,9 @@ namespace Game.Editor.Toolbar
         public string MenuName { get; private set; }
 
         /// <summary>
-        /// 排列方位 0 left 1 right
+        /// 排列方位
         /// </summary>
-        public int Align { get; private set; }
+        public ToolBarMenuAlign Align { get; private set; }
 
         /// <summary>
         /// 排序
@@ -25,14 +25,14 @@ namespace Game.Editor.Toolbar
         /// </summary>
         public bool UseCustomGUI { get; private set; }
 
-        public EditorToolbarMenuAttribute(string menu, int align, int order)
+        public EditorToolbarMenuAttribute(string menu, ToolBarMenuAlign align, int order)
         {
             MenuName = menu;
             Align = align;
             Order = order;
         }
 
-        public EditorToolbarMenuAttribute(string menu, int align, int order, bool useCustomGUI)
+        public EditorToolbarMenuAttribute(string menu, ToolBarMenuAlign align, int order, bool useCustomGUI)
         {
             MenuName = menu;
             Align = align;

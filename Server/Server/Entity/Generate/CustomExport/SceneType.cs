@@ -11,6 +11,7 @@ namespace Fantasy
 		public const int CopyManager = 6;
 		public const int Copy = 7;
 		public const int Chat = 8;
+		public const int HTTP = 9;
 
 		public static readonly Dictionary<string, int> SceneTypeDic = new Dictionary<string, int>()
 		{
@@ -22,6 +23,7 @@ namespace Fantasy
 			{ "CopyManager", 6 },
 			{ "Copy", 7 },
 			{ "Chat", 8 },
+			{ "HTTP", 9 },
 		};
 	}
 }

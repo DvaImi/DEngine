@@ -17,7 +17,6 @@ namespace Game
             BuiltinDataComponent.InitSoundSettings();
             BuiltinDataComponent.InitExtensionEventHandle();
 
-            GameEntry.Debugger.RegisterDebuggerWindow("Profiler/Network", new NetworkDebuggerWindow());
             GameEntry.Debugger.RegisterDebuggerWindow("Other/Language", new ChangeLanguageDebuggerWindow());
             GameEntry.Debugger.RegisterDebuggerWindow("Other/CommonLine", new CommonLineDebuggerWindow());
         }

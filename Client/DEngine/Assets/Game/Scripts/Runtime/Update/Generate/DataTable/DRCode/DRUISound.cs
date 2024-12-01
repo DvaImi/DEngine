@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-10-13 11:20:26.852
+// 生成时间：2024-11-10 13:27:02.436
 //------------------------------------------------------------
 
 using DEngine;
@@ -103,7 +103,7 @@ namespace Game.Update
 
         public override string ToString()
         {
-                return string.Concat(string.Format("Id: {0}" ,Id),string.Format("AssetName: {0}" ,AssetName),string.Format("Priority: {0}" ,Priority),string.Format("Volume: {0}" ,Volume));
+            return string.Concat($"Id: {Id}", $"AssetName: {AssetName}", $"Priority: {Priority}", $"Volume: {Volume}");
         }
 
     }

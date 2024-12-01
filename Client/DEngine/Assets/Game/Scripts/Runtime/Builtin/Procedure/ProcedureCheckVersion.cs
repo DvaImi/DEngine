@@ -11,7 +11,6 @@ namespace Game
     {
         private bool m_CheckVersionComplete;
         private bool m_NeedUpdateVersion;
-        private bool m_UseResourcePatchPack;
         private VersionInfo m_VersionInfo;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
@@ -20,7 +19,6 @@ namespace Game
 
             m_CheckVersionComplete = false;
             m_NeedUpdateVersion = false;
-            m_UseResourcePatchPack = false;
             m_VersionInfo = null;
 
             //检测连网状态
@@ -43,7 +41,9 @@ namespace Game
                 return;
             }
 
-            CheckVersionList();
+            string checkVersionUrl = GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl;
+            Log.Debug(checkVersionUrl);
+            GameEntry.WebRequest.Get(checkVersionUrl, OnRequestFinished);
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -58,16 +58,15 @@ namespace Game
 
             if (m_NeedUpdateVersion)
             {
-                procedureOwner.SetData<VarInt32>("VersionListLength", m_VersionInfo.VersionListLength);
-                procedureOwner.SetData<VarInt32>("VersionListHashCode", m_VersionInfo.VersionListHashCode);
-                procedureOwner.SetData<VarInt32>("VersionListCompressedLength", m_VersionInfo.VersionListCompressedLength);
-                procedureOwner.SetData<VarInt32>("VersionListCompressedHashCode", m_VersionInfo.VersionListCompressedHashCode);
-
-                if (m_UseResourcePatchPack && !string.IsNullOrEmpty(m_VersionInfo.PatchResourcePackName))
+                procedureOwner.SetData<VarBoolean>(Constant.Resource.IsResourcePackMode, m_VersionInfo.IsCompressedMode);
+                procedureOwner.SetData<VarInt32>(Constant.Resource.VersionListLength, m_VersionInfo.ResourceVersionInfo.VersionListLength);
+                procedureOwner.SetData<VarInt32>(Constant.Resource.VersionListHashCode, m_VersionInfo.ResourceVersionInfo.VersionListHashCode);
+                procedureOwner.SetData<VarInt32>(Constant.Resource.VersionListCompressedLength, m_VersionInfo.ResourceVersionInfo.VersionListCompressedLength);
+                procedureOwner.SetData<VarInt32>(Constant.Resource.VersionListCompressedHashCode, m_VersionInfo.ResourceVersionInfo.VersionListCompressedHashCode);
+                if (m_VersionInfo.IsCompressedMode)
                 {
-                    procedureOwner.SetData<VarBoolean>("UseResourcePatchPack", m_VersionInfo.UseResourcePatchPack);
-                    procedureOwner.SetData<VarString>("PatchResourcePackName", m_VersionInfo.PatchResourcePackName);
-                    procedureOwner.SetData<VarInt64>("PatchTotalCompressedLength", m_VersionInfo.PatchTotalCompressedLength);
+                    procedureOwner.SetData<VarString>(Constant.Resource.ResourcePackName, m_VersionInfo.ResourcePackInfo.ResourcePackName);
+                    procedureOwner.SetData<VarInt64>(Constant.Resource.ResourcePackLength, m_VersionInfo.ResourcePackInfo.ResourcePackLength);
                 }
 
                 ChangeState<ProcedureUpdateVersionList>(procedureOwner);
@@ -78,19 +77,12 @@ namespace Game
             }
         }
 
-        private async void CheckVersionList()
+        private void OnRequestFinished(WebRequestResult result)
         {
-            string checkVersionUrl = GameEntry.BuiltinData.Builtin.BuildInfo.CheckVersionUrl;
-            Log.Debug(checkVersionUrl);
-            // 向服务器请求版本信息
-            WebRequestResult result = await GameEntry.WebRequest.Get(checkVersionUrl);
             if (result.Success)
             {
                 // 解析版本信息
-                byte[] versionInfoBytes = result.Bytes;
-                string versionInfoString = Utility.Converter.GetString(versionInfoBytes);
-                Log.Info(versionInfoString);
-                m_VersionInfo = Utility.Json.ToObject<VersionInfo>(versionInfoString);
+                m_VersionInfo = result.ToObject<VersionInfo>();
                 if (m_VersionInfo == null)
                 {
                     Log.Error("Parse VersionInfo failure.");
@@ -98,9 +90,8 @@ namespace Game
                 }
 
                 Log.Info("Latest game version is '{0} ({1})', local game version is '{2} ({3})'.", m_VersionInfo.LatestGameVersion, m_VersionInfo.InternalGameVersion.ToString(), Version.GameVersion, Version.InternalGameVersion.ToString());
-                GameEntry.Setting.SetInt(Constant.ResourceVersion.InternalResourceVersion, m_VersionInfo.InternalResourceVersion);
+                GameEntry.Setting.SetInt(Constant.Resource.InternalResourceVersion, m_VersionInfo.InternalResourceVersion);
                 GameEntry.Setting.Save();
-                m_UseResourcePatchPack = m_VersionInfo.UseResourcePatchPack;
                 m_NeedUpdateVersion = GameEntry.Resource.CheckVersionList(m_VersionInfo.InternalResourceVersion) == CheckVersionListResult.NeedUpdate;
                 if (m_VersionInfo.ForceUpdateGame)
                 {
@@ -137,9 +128,9 @@ namespace Game
         private void TryUseLastLocalVersionResource()
         {
             Log.Info("Try to use the latest local resource version.");
-            if (GameEntry.Setting.HasSetting(Constant.ResourceVersion.InternalResourceVersion))
+            if (GameEntry.Setting.HasSetting(Constant.Resource.InternalResourceVersion))
             {
-                int internalResourceVersion = GameEntry.Setting.GetInt(Constant.ResourceVersion.InternalResourceVersion);
+                int internalResourceVersion = GameEntry.Setting.GetInt(Constant.Resource.InternalResourceVersion);
                 if (internalResourceVersion > 0)
                 {
                     GameEntry.BuiltinData.OpenDialog(new DialogParams

@@ -23,12 +23,12 @@ namespace Game.Editor.ResourceTools
         [InitializeOnEnterPlayMode]
         public static void StartService()
         {
-            if (DEngineSetting.Instance.ResourceMode < ResourceMode.Updatable)
+            if (!DEngineSetting.Instance.EnableHostingService || IsListening)
             {
                 return;
             }
-
-            if (!DEngineSetting.Instance.EnableHostingService || IsListening)
+            
+            if (DEngineSetting.Instance.ResourceMode < ResourceMode.Updatable)
             {
                 return;
             }

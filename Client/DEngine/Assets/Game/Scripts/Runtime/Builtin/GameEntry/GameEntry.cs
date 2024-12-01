@@ -1,5 +1,4 @@
-﻿using DEngine;
-using DEngine.Runtime;
+﻿using DEngine.Runtime;
 using UnityEngine;
 
 namespace Game
@@ -12,16 +11,7 @@ namespace Game
         private void Start()
         {
             InitBuiltinComponents();
-        }
-
-        private void Update()
-        {
-            Update(Time.deltaTime, Time.unscaledDeltaTime);
-        }
-
-        private void OnDestroy()
-        {
-            ShutdownModule();
+            InitCustomComponents();
         }
 
         public void Shutdown(ShutdownType shutdownType)

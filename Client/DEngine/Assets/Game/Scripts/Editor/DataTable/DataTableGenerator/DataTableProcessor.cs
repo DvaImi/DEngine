@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DEngine;
+using OfficeOpenXml;
 using UnityEngine;
 
 namespace Game.Editor.DataTableTools
@@ -11,8 +12,6 @@ namespace Game.Editor.DataTableTools
     public sealed partial class DataTableProcessor
     {
         private const string CommentLineSeparator = "#";
-        private static readonly char[] DataSplitSeparators = { '\t' };
-        private static readonly char[] DataTrimSeparators = { '\"' };
         private readonly string[] m_CommentRow;
 
         private readonly DataProcessor[] m_DataProcessor;
@@ -21,52 +20,84 @@ namespace Game.Editor.DataTableTools
         private readonly string[] m_NameRow;
         private readonly string[][] m_RawValues;
         private readonly string[] m_Strings;
-        private readonly string[] m_TypeRow;
         private DataTableCodeGenerator m_CodeGenerator;
+        private readonly int m_EnumNameColumn;
 
-        public DataTableProcessor(string dataTableFileName, Encoding encoding, int nameRow, int typeRow, int? defaultValueRow, int? commentRow, int contentStartRow, int idColumn)
+        /// <summary>
+        /// 解析 Excel 表格并提取数据。
+        /// </summary>
+        /// <param name="sheet">要解析的工作表。</param>
+        /// <param name="nameRow">包含字段名称的行索引。</param>
+        /// <param name="typeRow">包含字段类型的行索引。</param>
+        /// <param name="defaultValueRow">包含字段默认值的行索引。</param>
+        /// <param name="commentRow">包含字段注释的行索引。</param>
+        /// <param name="contentStartRow">数据内容起始行索引。</param>
+        /// <param name="idColumn">ID 列索引，用于标识每条记录。</param>
+        /// <param name="enumNameColumn">枚举名称列，用于生成枚举类型的字段。</param>
+        public DataTableProcessor(ExcelWorksheet sheet, int nameRow, int typeRow, int? defaultValueRow, int? commentRow, int contentStartRow, int idColumn, int enumNameColumn)
         {
-            if (string.IsNullOrEmpty(dataTableFileName))
-            {
-                throw new DEngineException("Data table file name is invalid.");
-            }
-
-            if (!dataTableFileName.EndsWith(".txt", StringComparison.Ordinal))
-            {
-                throw new DEngineException(Utility.Text.Format("Data table file '{0}' is not a txt.", dataTableFileName));
-            }
-
-            if (!File.Exists(dataTableFileName))
-            {
-                throw new DEngineException(Utility.Text.Format("Data table file '{0}' is not exist.", dataTableFileName));
-            }
-
-            var lines = File.ReadAllLines(dataTableFileName, encoding);
-            var rawRowCount = lines.Length;
-
-            var rawColumnCount = 0;
+            var rawRowCount = 0;
             var rawValues = new List<string[]>();
-            for (var i = 0; i < lines.Length; i++)
+            var rawColumnCount = sheet.Dimension.End.Column;
+
+            var validColumns = new List<int>();
+            for (int col = 1; col <= rawColumnCount; col++)
             {
-                var rawValue = lines[i].Split(DataSplitSeparators);
-                for (var j = 0; j < rawValue.Length; j++)
+                bool hasData = false;
+                for (int row = 1; row <= sheet.Dimension.End.Row; row++)
                 {
-                    rawValue[j] = rawValue[j].Trim(DataTrimSeparators);
+                    if (sheet.Cells[row, col].Value != null && !string.IsNullOrWhiteSpace(sheet.Cells[row, col].Value.ToString()))
+                    {
+                        hasData = true;
+                        break;
+                    }
                 }
 
-                if (i == 0)
+                if (hasData)
                 {
-                    rawColumnCount = rawValue.Length;
+                    validColumns.Add(col);
                 }
-                else if (rawValue.Length != rawColumnCount)
+            }
+
+            rawColumnCount = validColumns.Count;
+            m_EnumNameColumn = enumNameColumn;
+            for (int i = 1; i <= sheet.Dimension.End.Row; i++)
+            {
+                if (i > DataTableSetting.Instance.ContentStartRow)
                 {
-                    throw new DEngineException(Utility.Text.Format("Data table file '{0}', raw Column is '{2}', but line '{1}' column is '{3}'.", dataTableFileName, i.ToString(), rawColumnCount.ToString(), rawValue.Length.ToString()));
+                    //跳过没有id的空行
+                    if (sheet.Cells[i, DataTableSetting.Instance.IdColumn + 1].Value == null)
+                    {
+                        continue;
+                    }
                 }
+
+                var rawValue = new string[rawColumnCount];
+                for (int j = 1; j <= validColumns.Count; j++)
+                {
+                    //跳过生成枚举列
+                    if (validColumns[j - 1] == enumNameColumn)
+                    {
+                        continue;
+                    }
+
+                    if (sheet.Cells[i, j].Value == null)
+                    {
+                        rawValue[j - 1] = string.Empty;
+                    }
+                    else
+                    {
+                        rawValue[j - 1] = sheet.Cells[i, j].Value.ToString();
+                    }
+                }
+
+                rawRowCount++;
 
                 rawValues.Add(rawValue);
             }
 
             m_RawValues = rawValues.ToArray();
+
 
             if (nameRow < 0)
             {
@@ -98,12 +129,12 @@ namespace Game.Editor.DataTableTools
                 throw new DEngineException(Utility.Text.Format("Type row '{0}' >= raw row count '{1}' is not allow.", typeRow.ToString(), rawRowCount.ToString()));
             }
 
-            if (defaultValueRow.HasValue && defaultValueRow.Value >= rawRowCount)
+            if (defaultValueRow >= rawRowCount)
             {
                 throw new DEngineException(Utility.Text.Format("Default value row '{0}' >= raw row count '{1}' is not allow.", defaultValueRow.Value.ToString(), rawRowCount.ToString()));
             }
 
-            if (commentRow.HasValue && commentRow.Value >= rawRowCount)
+            if (commentRow >= rawRowCount)
             {
                 throw new DEngineException(Utility.Text.Format("Comment row '{0}' >= raw row count '{1}' is not allow.", commentRow.Value.ToString(), rawRowCount.ToString()));
             }
@@ -119,7 +150,7 @@ namespace Game.Editor.DataTableTools
             }
 
             m_NameRow = m_RawValues[nameRow];
-            m_TypeRow = m_RawValues[typeRow];
+            var typeRow1 = m_RawValues[typeRow];
             m_DefaultValueRow = defaultValueRow.HasValue ? m_RawValues[defaultValueRow.Value] : null;
             m_CommentRow = commentRow.HasValue ? m_RawValues[commentRow.Value] : null;
             ContentStartRow = contentStartRow;
@@ -134,7 +165,7 @@ namespace Game.Editor.DataTableTools
                 }
                 else
                 {
-                    m_DataProcessor[i] = DataProcessorUtility.GetDataProcessor(m_TypeRow[i]);
+                    m_DataProcessor[i] = DataProcessorUtility.GetDataProcessor(typeRow1[i]);
                 }
             }
 
@@ -167,13 +198,9 @@ namespace Game.Editor.DataTableTools
                     var values = str.Split(',');
                     foreach (var value in values)
                     {
-                        if (strings.ContainsKey(value))
+                        if (!strings.TryAdd(value, 1))
                         {
                             strings[value]++;
-                        }
-                        else
-                        {
-                            strings[value] = 1;
                         }
                     }
                 }
@@ -213,7 +240,7 @@ namespace Game.Editor.DataTableTools
             return m_DataProcessor[rawColumn].GetTypeStrings()[0].Equals("{0}[]");
         }
 
-        public bool IsEnumrColumn(int rawColumn)
+        public bool IsEnumColumn(int rawColumn)
         {
             if (rawColumn < 0 || rawColumn >= RawColumnCount)
             {
@@ -261,6 +288,16 @@ namespace Game.Editor.DataTableTools
             }
 
             return string.IsNullOrEmpty(GetName(rawColumn)) || m_DataProcessor[rawColumn].IsComment;
+        }
+
+        public bool IsEnumNameColumn(int rawColumn)
+        {
+            if (rawColumn < 0 || rawColumn >= RawColumnCount)
+            {
+                throw new DEngineException(Utility.Text.Format("Raw column '{0}' is out of range.", rawColumn.ToString()));
+            }
+
+            return string.IsNullOrEmpty(GetName(rawColumn)) || rawColumn == m_EnumNameColumn;
         }
 
         public string GetName(int rawColumn)
@@ -428,11 +465,7 @@ namespace Game.Editor.DataTableTools
             try
             {
                 var stringBuilder = new StringBuilder(DataProcessorUtility.CodeTemplate);
-                if (m_CodeGenerator != null)
-                {
-                    m_CodeGenerator(this, stringBuilder, userData);
-                }
-
+                m_CodeGenerator?.Invoke(this, stringBuilder, userData);
                 using (var fileStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
                 {
                     using (var stream = new StreamWriter(fileStream, encoding))
@@ -460,6 +493,11 @@ namespace Game.Editor.DataTableTools
                     for (var rawColumn = 0; rawColumn < RawColumnCount; rawColumn++)
                     {
                         if (IsCommentColumn(rawColumn))
+                        {
+                            continue;
+                        }
+
+                        if (IsEnumNameColumn(rawColumn))
                         {
                             continue;
                         }

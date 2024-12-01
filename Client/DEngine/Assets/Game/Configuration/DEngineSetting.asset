@@ -17,7 +17,7 @@ MonoBehaviour:
   ResourceCollectionConfig: Assets/Game/Configuration/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Configuration/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Configuration/ResourceBuilder.xml
-  ResourceMode: 2
+  ResourceMode: 1
   BuildPlayerEventHandlerTypeName: Game.Editor.BuildPipeline.DefaultBuildPlayerEventHandler
   ForceRebuildAssetBundle: 0
   DefaultSceneNames:
@@ -27,12 +27,12 @@ MonoBehaviour:
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
   BuildResourcePack: 1
-  SourceVersion: 0.1.0.9
+  SourceVersion: 0.1.0.17
   HostURL: http://localhost
   HostingServicePort: 8899
-  InternalResourceVersion: 13
+  InternalResourceVersion: 37
   LatestGameVersion: 0.1.0
-  InternalGameVersion: 9
+  InternalGameVersion: 87
   WindowsAppUrl: 
   MacOSAppUrl: 
   IOSAppUrl: 
@@ -57,3 +57,4 @@ MonoBehaviour:
   PreserveAssembliesPath: Assets/../HybridCLRData/Output/Preserve
   PreserveAssemblies:
   - Game.Runtime.Preserve
+  CheckAccessMissingMetadataPath: Assets/../HybridCLRData/Output/CheckAccessMissingMetadata

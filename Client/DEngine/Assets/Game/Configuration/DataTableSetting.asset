@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &1
+--- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -17,20 +17,20 @@ MonoBehaviour:
   CSharpCodePath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DRCode
   CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/Extensions
-  GenerateDataTableEnum: 1
   DataTableEnumPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DataTableEnum
   NameSpace: Game.Update
   AssemblyNames:
+  - Assembly-CSharp
   - DEngine
   - DEngine.Runtime
-  - DEngine.Editor
-  - Game.Editor
   - Game.Runtime.Builtin
+  - Game.Runtime.Preserve
   - Game.Runtime.Update
   NameRow: 1
   TypeRow: 2
   CommentRow: 3
   ContentStartRow: 4
   IdColumn: 1
+  EnumNameColumn: 3
   LocalizationPath: Assets/Game/Bundles/Localization
   LocalizationExcelsFolder: Assets/../Excels/Localization

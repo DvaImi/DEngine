@@ -9,34 +9,34 @@ using UnityEngine;
 namespace Game
 {
     /// <summary>
-    /// 使用可更新模式更新补丁包流程
+    /// 使用可更新模式更新Pack流程
     /// </summary>
     public class ProcedureUpdateResourcePack : GameProcedureBase
     {
-        private string m_PatchResourcePackName = null;
-        private bool m_PatchResourcePackComplete = false;
+        private string m_CompressedPackName = null;
+        private bool m_UpdateCompressedPackComplete = false;
         private UpdateResourceForm m_UpdateResourceForm = null;
-        private long m_PatchTotalCompressedLength;
+        private long m_CompressedPackLength;
         private long m_CurrentTotalUpdateLength;
-        private string m_PatchResourcePackPath;
+        private string m_ResourcePackPath;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            m_PatchResourcePackComplete = false;
-            m_PatchResourcePackName = procedureOwner.GetData<VarString>("PatchResourcePackName");
-            m_PatchTotalCompressedLength = procedureOwner.GetData<VarInt64>("PatchTotalCompressedLength");
-            procedureOwner.RemoveData("PatchTotalCompressedLength");
-            m_PatchResourcePackPath = Utility.Path.GetRegularCombinePath(GameEntry.Resource.ReadWritePath, m_PatchResourcePackName);
+            m_UpdateCompressedPackComplete  = false;
+            m_CompressedPackName      = procedureOwner.GetData<VarString>(Constant.Resource.ResourcePackName);
+            m_CompressedPackLength = procedureOwner.GetData<VarInt64>(Constant.Resource.ResourcePackLength);
+            procedureOwner.RemoveData(Constant.Resource.ResourcePackLength);
+            m_ResourcePackPath = Utility.Path.GetRegularCombinePath(GameEntry.Resource.ReadWritePath, m_CompressedPackName);
 
             GameEntry.Event.Subscribe(DownloadStartEventArgs.EventId, OnDownloadStart);
             GameEntry.Event.Subscribe(DownloadUpdateEventArgs.EventId, OnDownloadUpdate);
             GameEntry.Event.Subscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
             GameEntry.Event.Subscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
 
-            if (File.Exists(m_PatchResourcePackPath))
+            if (File.Exists(m_ResourcePackPath))
             {
-                m_PatchResourcePackComplete = true;
+                m_UpdateCompressedPackComplete = true;
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace Game
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            if (!m_PatchResourcePackComplete)
+            if (!m_UpdateCompressedPackComplete)
             {
                 return;
             }
@@ -79,14 +79,14 @@ namespace Game
             }
 
             Log.Info("Start patch resources...");
-            string downloadPath = m_PatchResourcePackPath;
-            string downloadUri = Utility.Path.GetRemotePath(Utility.Text.Format("{0}/{1}", GameEntry.Resource.UpdatePrefixUri, m_PatchResourcePackName));
-            GameEntry.Download.AddDownload(downloadPath, downloadUri, m_PatchResourcePackName, this);
+            string downloadPath = m_ResourcePackPath;
+            string downloadUri = Utility.Path.GetRemotePath(Utility.Text.Format("{0}/{1}", GameEntry.Resource.UpdatePrefixUri, m_CompressedPackName));
+            GameEntry.Download.AddDownload(downloadPath, downloadUri, m_CompressedPackName, this);
         }
 
         private void RefreshProgress()
         {
-            float progressTotal = (float)m_CurrentTotalUpdateLength / m_PatchTotalCompressedLength;
+            float progressTotal = (float)m_CurrentTotalUpdateLength / m_CompressedPackLength;
             m_UpdateResourceForm.SetProgress(progressTotal, null);
         }
 
@@ -112,7 +112,7 @@ namespace Game
             if (e is DownloadSuccessEventArgs args && args.UserData == this)
             {
                 Log.Info("Download patch resource pack {0} success.", args.DownloadUri);
-                m_PatchResourcePackComplete = true;
+                m_UpdateCompressedPackComplete = true;
             }
         }
 

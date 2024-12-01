@@ -2,7 +2,7 @@
 {
     public static partial class UpdateConstant
     {
-        public static class ProceureConstant
+        public static class ProcedureConstant
         {
             /// <summary>
             /// 下一个场景

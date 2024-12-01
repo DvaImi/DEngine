@@ -25,12 +25,15 @@ namespace Game
             base.OnEnter(procedureOwner);
 
             m_UpdateVersionComplete = false;
-
-            GameEntry.Resource.UpdateVersionList(procedureOwner.GetData<VarInt32>("VersionListLength"), procedureOwner.GetData<VarInt32>("VersionListHashCode"), procedureOwner.GetData<VarInt32>("VersionListCompressedLength"), procedureOwner.GetData<VarInt32>("VersionListCompressedHashCode"), m_UpdateVersionListCallbacks);
-            procedureOwner.RemoveData("VersionListLength");
-            procedureOwner.RemoveData("VersionListHashCode");
-            procedureOwner.RemoveData("VersionListCompressedLength");
-            procedureOwner.RemoveData("VersionListCompressedHashCode");
+            int versionListLength             = procedureOwner.GetData<VarInt32>(Constant.Resource.VersionListLength);
+            int versionListHashCode           = procedureOwner.GetData<VarInt32>(Constant.Resource.VersionListHashCode);
+            int versionListCompressedLength   = procedureOwner.GetData<VarInt32>(Constant.Resource.VersionListCompressedLength);
+            int versionListCompressedHashCode = procedureOwner.GetData<VarInt32>(Constant.Resource.VersionListCompressedHashCode);
+            GameEntry.Resource.UpdateVersionList(versionListLength, versionListHashCode, versionListCompressedLength, versionListCompressedHashCode, m_UpdateVersionListCallbacks);
+            procedureOwner.RemoveData(Constant.Resource.VersionListLength);
+            procedureOwner.RemoveData(Constant.Resource.VersionListHashCode);
+            procedureOwner.RemoveData(Constant.Resource.VersionListCompressedLength);
+            procedureOwner.RemoveData(Constant.Resource.VersionListCompressedHashCode);
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

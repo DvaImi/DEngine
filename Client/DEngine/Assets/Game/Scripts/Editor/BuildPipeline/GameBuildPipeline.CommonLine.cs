@@ -10,13 +10,13 @@ namespace Game.Editor.BuildPipeline
 {
     public static partial class GameBuildPipeline
     {
-        [MenuItem("Game/Build Pipeline/Automated Build", false, 100)]
-        [EditorToolbarMenu("一键打包", 1, 100)]
-        private static void AutomatedBuild()
+        [EditorToolbarMenu("一键打包", ToolBarMenuAlign.Right, 100)]
+        internal static void AutomatedBuild()
         {
-            if (EditorApplication.isCompiling)
+            //等待编译器任务完成
+            if (IsEditorBusy())
             {
-                Debug.LogWarning("Cannot build because editor is compiling.");
+                Debug.LogWarning("Waiting for editor...");
                 return;
             }
 
@@ -26,42 +26,25 @@ namespace Game.Editor.BuildPipeline
                 return;
             }
 
-            AssetDatabase.Refresh();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             EditorTools.CloseAllCustomEditorWindows();
             IBuildPlayerEventHandler eventHandler = GetBuildPlayerEventHandler();
+            Platform                 platform     = GetCurrentPlatform();
             Debug.Log("开始一键打包任务");
             if (eventHandler != null)
             {
-                Debug.Log("Execute build event handler 'OnPreprocessAllPlatforms'...");
-                eventHandler.OnPreprocessAllPlatforms(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, GetCurrentPlatform(), DEngineSetting.AppOutput);
+                Debug.LogFormat("Execute build event handler 'OnPreprocessPlatform for '{0}''...", platform.ToString());
+                eventHandler.OnPreprocessPlatform(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, GetCurrentPlatform(), DEngineSetting.AppOutput);
             }
 
-            var isSuccess = InternalAutomatedBuild(GetCurrentPlatform(), eventHandler);
-
-            if (eventHandler != null)
-            {
-                Debug.Log("Execute build event handler 'OnPostprocessAllPlatforms'...");
-                eventHandler.OnPostprocessAllPlatforms(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, GetCurrentPlatform(), DEngineSetting.AppOutput);
-            }
-
-            if (isSuccess)
-            {
-                Debug.Log($"Build {GetCurrentPlatform()} complete. ");
-            }
-        }
-
-        private static bool InternalAutomatedBuild(Platform platform, IBuildPlayerEventHandler eventHandler)
-        {
-            Debug.LogFormat("Execute build event handler 'OnPreprocessPlatform for '{0}''...", platform.ToString());
-            eventHandler?.OnPreprocessPlatform(platform);
             Debug.LogFormat("====================打包{0}资源========================", platform.ToString());
             var isSuccess = BuildResource(platform);
             Debug.LogFormat("====================打包{0}资源结束========================", platform.ToString());
             if (eventHandler != null && !isSuccess)
             {
                 Debug.Log("Execute build event handler 'OnPostprocessPlatform'...");
-                eventHandler.OnPostprocessPlatform(platform, false);
-                return false;
+                eventHandler.OnPostprocessPlatform(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, platform, DEngineSetting.AppOutput, false);
+                return;
             }
 
             Debug.LogFormat("====================打包{0}工程========================", platform.ToString());
@@ -71,11 +54,14 @@ namespace Game.Editor.BuildPipeline
             if (eventHandler != null)
             {
                 Debug.Log("Execute build event handler 'OnPostprocessPlatform'...");
-                eventHandler.OnPostprocessPlatform(platform, isSuccess);
-                return isSuccess;
+                eventHandler.OnPostprocessPlatform(PlayerSettings.productName, PlayerSettings.companyName, PlayerSettings.applicationIdentifier, Application.unityVersion, Application.version, platform, DEngineSetting.AppOutput, isSuccess);
+                return;
             }
 
-            return true;
+            if (isSuccess)
+            {
+                Debug.Log($"Build {platform} complete. ");
+            }
         }
 
         private static IBuildPlayerEventHandler GetBuildPlayerEventHandler()

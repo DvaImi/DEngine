@@ -17,26 +17,21 @@ namespace Game.Update
     /// </summary>
     public class UpdateLauncher : MonoBehaviour
     {
-        private static bool s_IsInitFantasy = false;
-
         // ReSharper disable once Unity.IncorrectMethodSignature
         private async UniTaskVoid Start()
         {
-            if (!s_IsInitFantasy)
+            DEngine.Runtime.Log.Info("===============热更逻辑加载成功{0}==============", DateTime.Now);
+            // 热更程序集加载后初始化
+            AssemblyUtility.Initialize();
+            if (GameDomain.Scene == null)
             {
                 Log.Register(new NetworkLog());
                 Entry.Initialize(AppDomain.CurrentDomain.GetAssemblies());
-                s_IsInitFantasy = true;
             }
 
             GameEntry.BuiltinData.DestroyDialog();
-
-            DEngine.Runtime.Log.Info("===============热更逻辑加载成功{0}==============", DateTime.Now);
-
-            await Entry.CreateScene();
-            UpdateDomain.Initialize();
-            await UpdateDomain.Scene.PublishAsync(new PreloadEventType());
-            await UpdateDomain.Scene.PublishAsync(new ProcessingPreloadEventType());
+            await GameDomain.Initialize();
+            await GameDomain.Scene.PublishAsync(new PreloadEventType());
             await UniTask.NextFrame();
             StartUpdateDomainProcedure();
             Destroy(gameObject);
@@ -63,7 +58,7 @@ namespace Game.Update
 
             var procedureManager = DEngineEntry.GetModule<IProcedureManager>();
             procedureManager.Initialize(DEngineEntry.GetModule<IFsmManager>(), procedures.ToArray());
-            procedureManager.StartProcedure<ProcedureEnterUpdateDomain>();
+            procedureManager.StartProcedure<ProcedureEnterGameDomain>();
         }
     }
 }

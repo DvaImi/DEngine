@@ -14,7 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useUnityContractResolver: 1
   useAllOutsideConverters: 1
-  outsideConverters: []
+  outsideConverters:
+  - enabled: 1
+    converterName: Newtonsoft.Json.Bson.Converters.BsonDataObjectIdConverter
+    converterAssembly: Newtonsoft.Json.Bson
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.Bson.Converters.BsonDataRegexConverter
+    converterAssembly: Newtonsoft.Json.Bson
+    settings: []
   useAllUnityConverters: 1
   unityConverters:
   - enabled: 1

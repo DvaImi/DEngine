@@ -16,6 +16,11 @@ namespace Game.Update.Sound
         private const float FadeVolumeDuration = 1f;
         private static int? s_MusicSerialId = null;
 
+        public static int? PlayMusic(this SoundComponent self, MusicId musicId, object userData = null)
+        {
+            return self.PlayMusic((int)musicId, userData);
+        }
+
         public static int? PlayMusic(this SoundComponent self, int musicId, object userData = null)
         {
             self.StopMusic();
@@ -38,20 +43,9 @@ namespace Game.Update.Sound
             return s_MusicSerialId;
         }
 
-        public static int? PlayMusic(this SoundComponent self, MusicId musicId, object userData = null)
+        public static int? PlaySound(this SoundComponent self, SoundId soundId, DEngine.Runtime.Entity bindingEntity = null, object userData = null)
         {
-            return self.PlayMusic((int)musicId, userData);
-        }
-
-        public static void StopMusic(this SoundComponent self)
-        {
-            if (!s_MusicSerialId.HasValue)
-            {
-                return;
-            }
-
-            self.StopSound(s_MusicSerialId.Value, FadeVolumeDuration);
-            s_MusicSerialId = null;
+            return self.PlaySound((int)soundId, bindingEntity, userData);
         }
 
         public static int? PlaySound(this SoundComponent self, int soundId, DEngine.Runtime.Entity bindingEntity = null, object userData = null)
@@ -70,6 +64,11 @@ namespace Game.Update.Sound
             playSoundParams.VolumeInSoundGroup = drSound.Volume;
             playSoundParams.SpatialBlend = drSound.SpatialBlend;
             return self.PlaySound(UpdateAssetUtility.GetSoundAsset(drSound.AssetName), "Sound", Constant.AssetPriority.SoundAsset, playSoundParams, bindingEntity != null ? bindingEntity : null, userData);
+        }
+
+        public static int? PlayUISound(this SoundComponent self, UISoundId uiSoundId, object userData = null)
+        {
+            return self.PlayUISound((int)uiSoundId, userData);
         }
 
         public static int? PlayUISound(this SoundComponent self, int uiSoundId, object userData = null)
@@ -124,6 +123,17 @@ namespace Game.Update.Sound
             }
 
             return soundGroup.Volume;
+        }
+
+        public static void StopMusic(this SoundComponent self)
+        {
+            if (!s_MusicSerialId.HasValue)
+            {
+                return;
+            }
+
+            self.StopSound(s_MusicSerialId.Value, FadeVolumeDuration);
+            s_MusicSerialId = null;
         }
     }
 }

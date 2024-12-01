@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2024-10-13 11:20:26.843
+// 生成时间：2024-11-10 13:27:02.209
 //------------------------------------------------------------
 
 using DEngine;
@@ -92,7 +92,7 @@ namespace Game.Update
 
         public override string ToString()
         {
-                return string.Concat(string.Format("Id: {0}" ,Id),string.Format("AssetName: {0}" ,AssetName),string.Format("BackgroundMusicId: {0}" ,BackgroundMusicId));
+            return string.Concat($"Id: {Id}", $"AssetName: {AssetName}", $"BackgroundMusicId: {BackgroundMusicId}");
         }
 
     }

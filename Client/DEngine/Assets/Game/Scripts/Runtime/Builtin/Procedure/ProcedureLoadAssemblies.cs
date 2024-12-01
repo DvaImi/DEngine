@@ -22,6 +22,7 @@ namespace Game
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
+            
             if (s_MetadataForAOTLoaded && s_UpdateAssembliesLoaded)
             {
                 return;

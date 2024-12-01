@@ -22,7 +22,7 @@ namespace Game.Update.Entity
             }
 
             IDataTable<DREntity> dtEntity = GameEntry.DataTable.GetDataTable<DREntity>();
-            DREntity drEntity = dtEntity.GetDataRow(data.TypeId);
+            DREntity             drEntity = dtEntity.GetDataRow(data.TypeId);
             if (drEntity == null)
             {
                 Log.Warning("Can not load entity id '{0}' from data table.", data.TypeId.ToString());
@@ -41,7 +41,7 @@ namespace Game.Update.Entity
             }
 
             IDataTable<DREntity> dtEntity = GameEntry.DataTable.GetDataTable<DREntity>();
-            DREntity drEntity = dtEntity.GetDataRow(data.TypeId);
+            DREntity             drEntity = dtEntity.GetDataRow(data.TypeId);
             if (drEntity == null)
             {
                 Log.Warning("Can not load entity id '{0}' from data table.", data.TypeId.ToString());
@@ -57,8 +57,7 @@ namespace Game.Update.Entity
 
             return entity.Logic as T;
         }
-
-        private static int GenerateSerialId()
+        public static int GenerateSerialId(this EntityComponent self)
         {
             return --s_SerialId;
         }

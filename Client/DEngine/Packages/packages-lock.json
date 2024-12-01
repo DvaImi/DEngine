@@ -5,14 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4e172129d8694c4006faf45d0a763f761a3c4c66"
-    },
-    "com.code-philosophy.luban": {
-      "version": "https://gitee.com/focus-creative-games/luban_unity.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "7dcd33fd67c7ffe73e88c741bf9ef89ee04aa521"
+      "hash": "1f0053a3c91cbe041bbf9d1522e441bbb738d13c"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
@@ -35,7 +28,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "a81d506462d3bb137891b98ab950c0003fb16e85"
+      "hash": "ce7944837eeaf50a448580d9e12199c9904e565e"
     },
     "com.fantasy.unity": {
       "version": "https://github.com/qq362946/Fantasy.Unity.git",
@@ -44,10 +37,10 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "2f305656980f6974ed19850e758a33330068ad87"
+      "hash": "7c2c0b6c5da1d6939e6cc95ea7724307983a9878"
     },
     "com.unity.ai.navigation": {
-      "version": "2.0.4",
+      "version": "2.0.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -158,6 +151,65 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.render-pipelines.core": {
+      "version": "17.0.3",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.burst": "1.8.14",
+        "com.unity.mathematics": "1.3.2",
+        "com.unity.ugui": "2.0.0",
+        "com.unity.collections": "2.4.3",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.terrain": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.rendering.light-transport": "1.0.1"
+      }
+    },
+    "com.unity.render-pipelines.universal": {
+      "version": "17.0.3",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.render-pipelines.core": "17.0.3",
+        "com.unity.shadergraph": "17.0.3",
+        "com.unity.render-pipelines.universal-config": "17.0.3"
+      }
+    },
+    "com.unity.render-pipelines.universal-config": {
+      "version": "17.0.3",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.render-pipelines.core": "17.0.3"
+      }
+    },
+    "com.unity.rendering.light-transport": {
+      "version": "1.0.1",
+      "depth": 2,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.collections": "2.2.0",
+        "com.unity.mathematics": "1.2.4",
+        "com.unity.modules.terrain": "1.0.0"
+      }
+    },
+    "com.unity.searcher": {
+      "version": "4.9.2",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.shadergraph": {
+      "version": "17.0.3",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.render-pipelines.core": "17.0.3",
+        "com.unity.searcher": "4.9.2"
+      }
+    },
     "com.unity.sysroot": {
       "version": "2.0.10",
       "depth": 1,
@@ -224,6 +276,15 @@
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
+      }
+    },
+    "com.unity.visualeffectgraph": {
+      "version": "17.0.3",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.shadergraph": "17.0.3",
+        "com.unity.render-pipelines.core": "17.0.3"
       }
     },
     "jillejr.newtonsoft.json-for-unity.converters": {

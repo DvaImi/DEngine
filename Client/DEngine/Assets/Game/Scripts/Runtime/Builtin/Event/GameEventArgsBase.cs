@@ -11,7 +11,7 @@ namespace Game.Event
 {
     public abstract class GameEventArgsBase<T> : GameEventArgs
     {
-        public static int EventId = typeof(T).GetHashCode();
+        public static readonly int EventId = typeof(T).GetHashCode();
 
         public override int Id => EventId;
     }

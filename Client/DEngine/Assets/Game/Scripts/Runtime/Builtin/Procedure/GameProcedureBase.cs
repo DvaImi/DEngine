@@ -9,7 +9,7 @@ namespace Game
         ///  处理程序集流程方法
         /// </summary>
         /// <param name="procedureOwner"></param>
-        public virtual void ProcessAssembliesProcedure(IFsm<IProcedureManager> procedureOwner)
+        protected void ProcessAssembliesProcedure(IFsm<IProcedureManager> procedureOwner)
         {
 #if ENABLE_HYBRIDCLR && !UNITY_EDITOR
             ChangeState<ProcedureLoadAssemblies>(procedureOwner);

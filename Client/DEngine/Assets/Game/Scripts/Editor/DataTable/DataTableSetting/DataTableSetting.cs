@@ -1,9 +1,4 @@
-﻿using System.IO;
-using DEngine;
-using UnityEditor;
-using UnityEngine.Serialization;
-
-namespace Game.Editor.DataTableTools
+﻿namespace Game.Editor.DataTableTools
 {
     /// <summary>
     /// 数据表编辑器配置相关数据
@@ -39,11 +34,6 @@ namespace Game.Editor.DataTableTools
         public string ExtensionDirectoryPath = "Assets/Game/Scripts/Runtime/Update/Generate/DataTable/Extensions";
 
         /// <summary>
-        /// 是否生成枚举
-        /// </summary>
-        public bool GenerateDataTableEnum;
-
-        /// <summary>
         /// 生成枚举的路径
         /// </summary>
         public string DataTableEnumPath = "Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DataTableEnum";
@@ -61,7 +51,6 @@ namespace Game.Editor.DataTableTools
             "Assembly-CSharp",
             "DEngine",
             "DEngine.Runtime",
-            "Game.Update"
         };
 
         //所有行列 是逻辑行列从0 开始 但是eppplus 需要从1开始遍历 使用时需要+1
@@ -89,6 +78,11 @@ namespace Game.Editor.DataTableTools
         /// id所在列
         /// </summary>
         public int IdColumn = 1;
+        
+        /// <summary>
+        /// 生成枚举列
+        /// </summary>
+        public int EnumNameColumn = 3;
 
         #endregion
 

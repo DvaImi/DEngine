@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DEngine;
 using DEngine.Event;
 using DEngine.Fsm;
@@ -19,22 +20,22 @@ namespace Game
     /// </summary>
     public class ProcedureUpdateResources : GameProcedureBase
     {
-        private bool m_UpdateResourcesComplete = false;
-        private int m_UpdateCount = 0;
-        private long m_UpdateTotalCompressedLength = 0L;
-        private int m_UpdateSuccessCount = 0;
+        private bool m_UpdateResourcesComplete;
+        private int m_UpdateCount;
+        private long m_UpdateTotalCompressedLength;
+        private int m_UpdateSuccessCount;
         private readonly List<UpdateLengthData> m_UpdateLengthData = new();
-        private UpdateResourceForm m_UpdateResourceForm = null;
+        private UpdateResourceForm m_UpdateResourceForm;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
 
             m_UpdateResourcesComplete = false;
-            m_UpdateCount = procedureOwner.GetData<VarInt32>("UpdateResourceCount");
-            procedureOwner.RemoveData("UpdateResourceCount");
-            m_UpdateTotalCompressedLength = procedureOwner.GetData<VarInt64>("UpdateResourceTotalCompressedLength");
-            procedureOwner.RemoveData("UpdateResourceTotalCompressedLength");
+            m_UpdateCount             = procedureOwner.GetData<VarInt32>(Constant.Resource.UpdateResourceCount);
+            procedureOwner.RemoveData(Constant.Resource.UpdateResourceCount);
+            m_UpdateTotalCompressedLength = procedureOwner.GetData<VarInt64>(Constant.Resource.UpdateResourceTotalCompressedLength);
+            procedureOwner.RemoveData(Constant.Resource.UpdateResourceTotalCompressedLength);
             m_UpdateSuccessCount = 0;
             m_UpdateLengthData.Clear();
             m_UpdateResourceForm = null;
@@ -43,8 +44,7 @@ namespace Game
             GameEntry.Event.Subscribe(ResourceUpdateChangedEventArgs.EventId, OnResourceUpdateChanged);
             GameEntry.Event.Subscribe(ResourceUpdateSuccessEventArgs.EventId, OnResourceUpdateSuccess);
             GameEntry.Event.Subscribe(ResourceUpdateFailureEventArgs.EventId, OnResourceUpdateFailure);
-            string groupName = GameEntry.Resource.ResourceMode >= ResourceMode.UpdatableWhilePlaying ? "Base" : null;
-            StartUpdateResources(groupName);
+            StartUpdateResources(null);
         }
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)
@@ -88,18 +88,13 @@ namespace Game
 
         private void RefreshProgress()
         {
-            long currentTotalUpdateLength = 0L;
-            for (int i = 0; i < m_UpdateLengthData.Count; i++)
-            {
-                currentTotalUpdateLength += m_UpdateLengthData[i].Length;
-            }
-
-            float progressTotal = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
-            string descriptionText = Utility.Text.Format("{0}/{1},{2}/{3}, {4:P0},{5}/s", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), GameUtility.String.GetByteLengthString(currentTotalUpdateLength), GameUtility.String.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("P2"), GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
+            long   currentTotalUpdateLength = m_UpdateLengthData.Aggregate(0L, (current, t) => current + t.Length);
+            float  progressTotal            = (float)currentTotalUpdateLength / m_UpdateTotalCompressedLength;
+            string descriptionText          = Utility.Text.Format("{0}/{1},{2}/{3}, {4:P0},{5}/s", m_UpdateSuccessCount.ToString(), m_UpdateCount.ToString(), GameUtility.String.GetByteLengthString(currentTotalUpdateLength), GameUtility.String.GetByteLengthString(m_UpdateTotalCompressedLength), progressTotal.ToString("P2"), GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed));
             descriptionText += "\n";
-            int needTime = (int)((m_UpdateTotalCompressedLength - currentTotalUpdateLength) / GameEntry.Download.CurrentSpeed);
-            TimeSpan timespan = new(0, 0, needTime);
-            string timeFormat = timespan.ToString(@"mm\:ss");
+            int      needTime   = (int)((m_UpdateTotalCompressedLength - currentTotalUpdateLength) / GameEntry.Download.CurrentSpeed);
+            TimeSpan timespan   = new(0, 0, needTime);
+            string   timeFormat = timespan.ToString(@"mm\:ss");
             descriptionText += $"剩余时间 {timeFormat}({GameUtility.String.GetByteLengthString((long)GameEntry.Download.CurrentSpeed)}/s)";
             m_UpdateResourceForm.SetProgress(progressTotal, descriptionText);
         }

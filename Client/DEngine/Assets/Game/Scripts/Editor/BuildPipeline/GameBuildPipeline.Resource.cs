@@ -10,7 +10,9 @@ using DEngine.Runtime;
 using Game.Editor.ResourceTools;
 using Game.Editor.Toolbar;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
@@ -29,7 +31,7 @@ namespace Game.Editor.BuildPipeline
             "UpdatableWhilePlaying (使用时下载的可更新模式)"
         };
 
-        [EditorToolbarMenu(nameof(SwitchResourceMode), 1, -1, true)]
+        [EditorToolbarMenu(nameof(SwitchResourceMode), ToolBarMenuAlign.Right, -1, true)]
         public static void SwitchResourceMode()
         {
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
@@ -40,8 +42,8 @@ namespace Game.Editor.BuildPipeline
                 {
                     Debug.Log($"更改编辑器资源运行模式 : {ResourceModeNames[selectedIndex]}");
                     playModeIndex = selectedIndex;
-                    var baseComponent = Object.FindFirstObjectByType<DEngine.Runtime.BaseComponent>();
-                    var resourcesComponent = Object.FindFirstObjectByType<DEngine.Runtime.ResourceComponent>();
+                    var baseComponent      = Object.FindFirstObjectByType<BaseComponent>();
+                    var resourcesComponent = Object.FindFirstObjectByType<ResourceComponent>();
                     if (baseComponent)
                     {
                         baseComponent.EditorResourceMode = selectedIndex <= 0;
@@ -57,7 +59,7 @@ namespace Game.Editor.BuildPipeline
                     {
                         if (selectedIndex > 0)
                         {
-                            var fieldInfo = typeof(DEngine.Runtime.ResourceComponent).GetField("m_ResourceMode", BindingFlags.Instance | BindingFlags.NonPublic);
+                            var fieldInfo = typeof(ResourceComponent).GetField("m_ResourceMode", BindingFlags.Instance | BindingFlags.NonPublic);
                             if (fieldInfo != null)
                             {
                                 fieldInfo.SetValue(resourcesComponent, (ResourceMode)playModeIndex);
@@ -68,12 +70,13 @@ namespace Game.Editor.BuildPipeline
 
                     DEngineSetting.Instance.ResourceMode = (ResourceMode)playModeIndex;
                     DEngineSetting.Save();
+                    EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
                 }
             }
             EditorGUI.EndDisabledGroup();
         }
 
-        [EditorToolbarMenu("Build Resource", 1, 3)]
+        [EditorToolbarMenu("Build Resource", ToolBarMenuAlign.Right, 3)]
         public static bool BuildResource()
         {
             if (EditorApplication.isCompiling)
@@ -139,26 +142,26 @@ namespace Game.Editor.BuildPipeline
             GameUtility.IO.CreateDirectoryIfNotExists(outputDirectory);
 
             bool isSuccess = false;
-            builderController.Platforms = platforms;
-            builderController.OutputDirectory = outputDirectory;
+            builderController.Platforms                 = platforms;
+            builderController.OutputDirectory           = outputDirectory;
             builderController.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
             builderController.RefreshCompressionHelper();
             builderController.BuildEventHandlerTypeName = typeof(GameResourceBuildEventHandler).FullName;
             builderController.RefreshBuildEventHandler();
-            builderController.AdditionalCompressionSelected = true;
-            builderController.ForceRebuildAssetBundleSelected = forceRebuild;
-            builderController.OutputPackageSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Package;
-            builderController.OutputFullSelected = true;
-            builderController.OutputPackedSelected = DEngineSetting.Instance.ResourceMode == ResourceMode.Updatable || DEngineSetting.Instance.ResourceMode == ResourceMode.UpdatableWhilePlaying;
-            builderController.OnLoadingResource += OnLoadingResource;
-            builderController.OnLoadingAsset += OnLoadingAsset;
-            builderController.OnLoadCompleted += OnLoadCompleted;
-            builderController.OnAnalyzingAsset += OnAnalyzingAsset;
-            builderController.OnAnalyzeCompleted += OnAnalyzeCompleted;
-            builderController.ProcessingAssetBundle += OnProcessingAssetBundle;
-            builderController.ProcessingBinary += OnProcessingBinary;
-            builderController.ProcessResourceComplete += OnProcessResourceComplete;
-            builderController.BuildResourceError += OnBuildResourceError;
+            builderController.AdditionalCompressionSelected   =  true;
+            builderController.ForceRebuildAssetBundleSelected =  forceRebuild;
+            builderController.OutputPackageSelected           =  DEngineSetting.Instance.ResourceMode == ResourceMode.Package;
+            builderController.OutputFullSelected              =  true;
+            builderController.OutputPackedSelected            =  DEngineSetting.Instance.ResourceMode == ResourceMode.Updatable || DEngineSetting.Instance.ResourceMode == ResourceMode.UpdatableWhilePlaying;
+            builderController.OnLoadingResource               += OnLoadingResource;
+            builderController.OnLoadingAsset                  += OnLoadingAsset;
+            builderController.OnLoadCompleted                 += OnLoadCompleted;
+            builderController.OnAnalyzingAsset                += OnAnalyzingAsset;
+            builderController.OnAnalyzeCompleted              += OnAnalyzeCompleted;
+            builderController.ProcessingAssetBundle           += OnProcessingAssetBundle;
+            builderController.ProcessingBinary                += OnProcessingBinary;
+            builderController.ProcessResourceComplete         += OnProcessResourceComplete;
+            builderController.BuildResourceError              += OnBuildResourceError;
             GetBuildMessage(builderController, out var buildMessage, out var buildMessageType);
 
             switch (buildMessageType)
@@ -213,7 +216,7 @@ namespace Game.Editor.BuildPipeline
         public static void RefreshPackages()
         {
             PackagesNames = ResourcePackagesCollector.Instance.PackagesCollector.Select(x => x.PackageName).ToArray();
-            VariantNames = VariantHelper.GetVariantArray();
+            VariantNames  = VariantHelper.GetVariantArray();
         }
 
         public static string GetCurrentPackageName()
@@ -226,7 +229,7 @@ namespace Game.Editor.BuildPipeline
             ResourceEditorController resourceEditorController = new ResourceEditorController();
             if (resourceEditorController.Load())
             {
-                int unknownAssetCount = resourceEditorController.RemoveUnknownAssets();
+                int unknownAssetCount   = resourceEditorController.RemoveUnknownAssets();
                 int unusedResourceCount = resourceEditorController.RemoveUnusedResources();
                 Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets and {1} unused resources has been removed.", unknownAssetCount, unusedResourceCount));
             }
@@ -250,7 +253,7 @@ namespace Game.Editor.BuildPipeline
 
         private static void GetBuildMessage(ResourceBuilderController builderController, out string message, out MessageType messageType)
         {
-            message = string.Empty;
+            message     = string.Empty;
             messageType = MessageType.Error;
             if (builderController.Platforms == Platform.Undefined)
             {
@@ -290,8 +293,8 @@ namespace Game.Editor.BuildPipeline
             messageType = MessageType.Info;
             if (Directory.Exists(builderController.OutputPackagePath))
             {
-                message += Utility.Text.Format("{0} will be overwritten.", builderController.OutputPackagePath);
-                messageType = MessageType.Warning;
+                message     += Utility.Text.Format("{0} will be overwritten.", builderController.OutputPackagePath);
+                messageType =  MessageType.Warning;
             }
 
             if (Directory.Exists(builderController.OutputFullPath))
@@ -301,8 +304,8 @@ namespace Game.Editor.BuildPipeline
                     message += " ";
                 }
 
-                message += Utility.Text.Format("{0} will be overwritten.", builderController.OutputFullPath);
-                messageType = MessageType.Warning;
+                message     += Utility.Text.Format("{0} will be overwritten.", builderController.OutputFullPath);
+                messageType =  MessageType.Warning;
             }
 
             if (Directory.Exists(builderController.OutputPackedPath))
@@ -312,8 +315,8 @@ namespace Game.Editor.BuildPipeline
                     message += " ";
                 }
 
-                message += Utility.Text.Format("{0} will be overwritten.", builderController.OutputPackedPath);
-                messageType = MessageType.Warning;
+                message     += Utility.Text.Format("{0} will be overwritten.", builderController.OutputPackedPath);
+                messageType =  MessageType.Warning;
             }
 
             if (messageType == MessageType.Warning)
@@ -327,13 +330,13 @@ namespace Game.Editor.BuildPipeline
         public static void CopyFileToStreamingAssets(string sourcePath)
         {
             GameUtility.IO.CreateDirectoryIfNotExists(Application.streamingAssetsPath);
-            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
-            string[] fileNames = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
+            string   streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+            string[] fileNames           = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {
-                string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName[sourcePath.Length..]));
+                string   destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName[sourcePath.Length..]));
                 FileInfo destFileInfo = new(destFileName);
-                if (destFileInfo.Directory != null && !destFileInfo.Directory.Exists)
+                if (destFileInfo.Directory is { Exists: false })
                 {
                     destFileInfo.Directory.Create();
                 }
@@ -411,10 +414,10 @@ namespace Game.Editor.BuildPipeline
             if (DEngineSetting.Instance.ResourceMode >= ResourceMode.Updatable && DEngineSetting.Instance.BuildResourcePack)
             {
                 ResourcePackBuilderController controller = new();
-                controller.OnBuildResourcePacksStarted += OnBuildResourcePacksStarted;
+                controller.OnBuildResourcePacksStarted   += OnBuildResourcePacksStarted;
                 controller.OnBuildResourcePacksCompleted += OnBuildResourcePacksCompleted;
-                controller.OnBuildResourcePackSuccess += OnBuildResourcePackSuccess;
-                controller.OnBuildResourcePackFailure += OnBuildResourcePackFailure;
+                controller.OnBuildResourcePackSuccess    += OnBuildResourcePackSuccess;
+                controller.OnBuildResourcePackFailure    += OnBuildResourcePackFailure;
                 if (controller.Load())
                 {
                     controller.Platform = platform;
@@ -427,10 +430,10 @@ namespace Game.Editor.BuildPipeline
                         return false;
                     }
 
-                    controller.BackupDiff = controller.BackupVersion = true;
+                    controller.BackupDiff                = controller.BackupVersion = true;
                     controller.CompressionHelperTypeName = typeof(DefaultCompressionHelper).FullName;
                     controller.RefreshCompressionHelper();
-                    outputPath = controller.OutputPath;
+                    outputPath    = controller.OutputPath;
                     targetVersion = versionNames[^1];
                     return controller.BuildResourcePack(sourceVersion, targetVersion);
                 }
@@ -447,8 +450,8 @@ namespace Game.Editor.BuildPipeline
 
         private static void OnBuildResourcePacksCompleted(int successCount, int count)
         {
-            int failureCount = count - successCount;
-            string str = Utility.Text.Format("Build resource packs completed, '{0}' items, '{1}' success, '{2}' failure.", count, successCount, failureCount);
+            int    failureCount = count - successCount;
+            string str          = Utility.Text.Format("Build resource packs completed, '{0}' items, '{1}' success, '{2}' failure.", count, successCount, failureCount);
             if (failureCount > 0)
             {
                 Debug.LogWarning(str);
@@ -492,7 +495,7 @@ namespace Game.Editor.BuildPipeline
                 text += "." + splitVersionNames[i];
             }
 
-            return DEngine.Utility.Text.Format("{0} ({1})", text, splitVersionNames[^1]);
+            return Utility.Text.Format("{0} ({1})", text, splitVersionNames[^1]);
         }
     }
 }

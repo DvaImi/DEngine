@@ -8,13 +8,12 @@ namespace Fantasy;
 
 public class User : Entity, ISupportedMultiEntity
 {
-
 }
 
 public class UserManager : Entity
 {
-    
 }
+
 public sealed class OnCreateSceneEvent : AsyncEventSystem<OnCreateScene>
 {
     private static long _addressableSceneRunTimeId;

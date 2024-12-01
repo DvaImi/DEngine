@@ -43,8 +43,8 @@ namespace Game.Update.Procedure
             // 还原游戏速度
             GameEntry.Base.ResetNormalGameSpeed();
 
-            int sceneId = procedureOwner.GetData<VarInt32>(UpdateConstant.ProceureConstant.NextSceneId);
-            m_NextProcedureType = procedureOwner.GetData<VarProcedure>(UpdateConstant.ProceureConstant.NextProcedure);
+            int sceneId = procedureOwner.GetData<VarInt32>(UpdateConstant.ProcedureConstant.NextSceneId);
+            m_NextProcedureType = procedureOwner.GetData<VarProcedure>(UpdateConstant.ProcedureConstant.NextProcedure);
 
             IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
             DRScene drScene = dtScene.GetDataRow(sceneId);
@@ -83,7 +83,7 @@ namespace Game.Update.Procedure
             }
 
             ChangeState(procedureOwner, m_NextProcedureType);
-            procedureOwner.RemoveData(UpdateConstant.ProceureConstant.NextProcedure);
+            procedureOwner.RemoveData(UpdateConstant.ProcedureConstant.NextProcedure);
         }
 
         private void OnLoadSceneSuccess(object sender, GameEventArgs e)

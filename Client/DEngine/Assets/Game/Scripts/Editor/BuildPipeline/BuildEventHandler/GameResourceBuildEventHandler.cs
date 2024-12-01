@@ -5,11 +5,9 @@ using Cysharp.Threading.Tasks;
 using DEngine;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
-using DEngine.Runtime;
 using Game.Editor.BuildPipeline;
 using Game.Editor.ResourceTools;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,7 +19,7 @@ namespace Game.Editor
 
         private readonly Dictionary<string, string> m_WaitUploadFileNames = new();
         private const string FullPartToFind = "Full/";
-        private VersionInfo m_VersionInfo = null;
+        private VersionInfo m_VersionInfo;
 
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier, string unityVersion, string applicableGameVersion, int internalResourceVersion, Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
@@ -66,13 +64,13 @@ namespace Game.Editor
                 LatestGameVersion = DEngineSetting.Instance.LatestGameVersion,
                 InternalGameVersion = DEngineSetting.Instance.InternalGameVersion,
                 InternalResourceVersion = DEngineSetting.Instance.InternalResourceVersion,
-                VersionListLength = versionListLength,
-                VersionListHashCode = versionListHashCode,
-                VersionListCompressedLength = versionListCompressedLength,
-                VersionListCompressedHashCode = versionListCompressedHashCode,
-                UseResourcePatchPack = false,
-                PatchResourcePackName = null,
-                PatchTotalCompressedLength = 0
+                ResourceVersionInfo =
+                {
+                    VersionListLength = versionListLength,
+                    VersionListHashCode = versionListHashCode,
+                    VersionListCompressedLength = versionListCompressedLength,
+                    VersionListCompressedHashCode = versionListCompressedHashCode
+                }
             };
         }
 
@@ -80,9 +78,9 @@ namespace Game.Editor
         {
             string sourcePath = DEngineSetting.Instance.ResourceMode switch
             {
-                ResourceMode.Unspecified or ResourceMode.Package => outputPackagePath,
+                ResourceMode.Unspecified or ResourceMode.Package             => outputPackagePath,
                 ResourceMode.Updatable or ResourceMode.UpdatableWhilePlaying => outputPackedPath,
-                _ => outputPackagePath
+                _                                                            => outputPackagePath
             };
 
             GameBuildPipeline.CopyFileToStreamingAssets(sourcePath);
@@ -103,19 +101,20 @@ namespace Game.Editor
             if (DEngineSetting.Instance.BuildResourcePack && GameBuildPipeline.BuildResourcePack(platform, sourceVersion, out string outputPath, out string targetVersion))
             {
                 Debug.LogFormat("Build Resource Pack {0}==>{1} Success", sourceVersion, targetVersion);
-                string searchPattern = Utility.Text.Format("{0}-{1}-{2}.*.block", "DEngineResourcePack", sourceVersion, targetVersion);
+                string searchPattern = Utility.Text.Format("{0}-{1}-{2}.*.block", "ResourcePack", sourceVersion, targetVersion);
                 string[] files = Directory.GetFiles(outputPath, searchPattern);
                 if (files.Length > 0)
                 {
                     FileInfo fileInfo = new(files[0]);
-                    m_VersionInfo.UseResourcePatchPack = true;
-                    m_VersionInfo.PatchResourcePackName = fileInfo.Name;
-                    m_VersionInfo.PatchTotalCompressedLength = fileInfo.Length;
+                    m_VersionInfo.IsCompressedMode = true;
+                    m_VersionInfo.ResourcePackInfo.ResourcePackName = fileInfo.Name;
+                    m_VersionInfo.ResourcePackInfo.ResourcePackLength = fileInfo.Length;
+                    m_VersionInfo.ResourcePackInfo.Version = Convert.ToInt32(targetVersion.Split('.')[^1]);
                     string destFileName = Utility.Path.GetRegularCombinePath(targetVersion, platformPath, fileInfo.FullName[outputPath.Length..]);
                     m_WaitUploadFileNames.Add(fileInfo.FullName, destFileName);
                 }
 
-                var targetDirectoryInfo = new DirectoryInfo(Utility.Text.Format("{0}/{1}-{2}-{3}", outputPath, "DEngineResourcePack", sourceVersion, targetVersion));
+                var targetDirectoryInfo = new DirectoryInfo(Utility.Text.Format("{0}/{1}-{2}-{3}", outputPath, "ResourcePack", sourceVersion, targetVersion));
                 var targetVersionListFiles = targetDirectoryInfo.GetFiles("RemoteVersionList.*.block", SearchOption.TopDirectoryOnly);
                 if (targetVersionListFiles.Length > 0)
                 {
@@ -125,7 +124,7 @@ namespace Game.Editor
             }
 
             PrecessLocalHost(outputFullPath);
-
+            GameBuildPipeline.SaveBuiltinData();
             m_WaitUploadFileNames.Add(SaveVersionInfo(platformPath), platformPath + "Version.json");
         }
 
@@ -189,20 +188,34 @@ namespace Game.Editor
         private async UniTask InternalUpload()
         {
             Debug.Log($"Ready to Upload To {DEngineSetting.Instance.HostURL}...");
-            await UniTask.Delay(2000);
+            EditorUtility.DisplayProgressBar("Uploading Files", "Starting Upload...", 0);
             if (!HostingServiceManager.IsListening)
             {
                 HostingServiceManager.StartService();
             }
 
-            foreach (var fileName in m_WaitUploadFileNames)
-            {
-                await HostingServiceManager.UploadFile(fileName.Key, fileName.Value);
-            }
+            int totalFiles = m_WaitUploadFileNames.Count;
+            int currentFileIndex = 0;
 
-            Debug.Log($"Upload To {DEngineSetting.Instance.HostURL} complete...");
-            HostingServiceManager.StopService();
-            EditorUtility.RevealInFinder(DEngineSetting.BundlesOutput);
+            try
+            {
+                foreach (var fileName in m_WaitUploadFileNames)
+                {
+                    await HostingServiceManager.UploadFile(fileName.Key, fileName.Value);
+                    currentFileIndex++;
+                    float progress = (float)currentFileIndex / totalFiles;
+                    EditorUtility.DisplayProgressBar("Uploading Files", $"Uploading {fileName.Key}...", progress);
+                }
+
+                EditorUtility.DisplayProgressBar("Uploading Files", "Upload Complete", 1);
+                Debug.Log($"Upload To {DEngineSetting.Instance.HostURL} complete...");
+            }
+            finally
+            {
+                HostingServiceManager.StopService();
+                m_WaitUploadFileNames.Clear();
+                EditorUtility.ClearProgressBar();
+            }
         }
     }
 }

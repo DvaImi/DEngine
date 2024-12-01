@@ -23,8 +23,7 @@ namespace Game
                 return;
             }
 
-            GameEntry.Resource.UnloadAsset(launcher);
-            Object.Instantiate(launcher);
+            await Object.InstantiateAsync(launcher);
         }
     }
 }

@@ -63,13 +63,12 @@ namespace Game
                 return null;
             }
 
-            UniTask<T>[] tasks = new UniTask<T>[assetName.Length];
-            for (int i = 0; i < tasks.Length; i++)
+            using var parallel = UniTaskParallel<T>.Creat();
+            foreach (var asset in assetName)
             {
-                tasks[i] = self.LoadAssetAsync<T>(assetName[i]);
+                parallel.Push(self.LoadAssetAsync<T>(asset));
             }
-
-            return await UniTask.WhenAll(tasks);
+            return await parallel.WhenAll();
         }
 
         /// <summary>
@@ -82,6 +81,8 @@ namespace Game
         public static UniTask<byte[]> LoadBinaryAsync(this ResourceComponent self, string binaryAssetName, CancellationToken? cancellationToken = null)
         {
             UniTaskCompletionSource<byte[]> loadAssetTcs = new UniTaskCompletionSource<byte[]>();
+            self.LoadBinary(binaryAssetName, new LoadBinaryCallbacks(LoadAssetSuccessCallback, LoadAssetFailureCallback));
+            return loadAssetTcs.Task;
 
             void LoadAssetSuccessCallback(string localBinaryAssetName, byte[] binaryBytes, float duration, object userData)
             {
@@ -104,9 +105,6 @@ namespace Game
             {
                 loadAssetTcs.TrySetException(new DEngineException(errorMessage));
             }
-
-            self.LoadBinary(binaryAssetName, new LoadBinaryCallbacks(LoadAssetSuccessCallback, LoadAssetFailureCallback));
-            return loadAssetTcs.Task;
         }
     }
 }

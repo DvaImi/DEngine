@@ -121,18 +121,13 @@ namespace Game.Editor.DataTableTools
                     EditorTools.GUIAssetPath("数据表类导出路径", ref DataTableSetting.Instance.CSharpCodePath, true);
                     EditorTools.GUIAssetPath("数据表模板类路径", ref DataTableSetting.Instance.CSharpCodeTemplateFileName);
                     EditorTools.GUIAssetPath("数据表扩展类导出路径", ref DataTableSetting.Instance.ExtensionDirectoryPath, true);
+                    EditorTools.GUIAssetPath("生成枚举类路径", ref DataTableSetting.Instance.DataTableEnumPath, true);
                     DataTableSetting.Instance.NameSpace = EditorGUILayout.TextField("数据表命名空间", DataTableSetting.Instance.NameSpace);
                     DataTableSetting.Instance.NameRow = EditorGUILayout.IntField("字段名所在行", DataTableSetting.Instance.NameRow);
                     DataTableSetting.Instance.TypeRow = EditorGUILayout.IntField("类型名所在行", DataTableSetting.Instance.TypeRow);
                     DataTableSetting.Instance.CommentRow = EditorGUILayout.IntField("注释所在行", DataTableSetting.Instance.CommentRow);
                     DataTableSetting.Instance.ContentStartRow = EditorGUILayout.IntField("内容所在行", DataTableSetting.Instance.ContentStartRow);
-                    DataTableSetting.Instance.GenerateDataTableEnum = EditorGUILayout.Toggle("是否生成数据表枚举", DataTableSetting.Instance.GenerateDataTableEnum);
-
-                    if (DataTableSetting.Instance.GenerateDataTableEnum)
-                    {
-                        EditorTools.GUIAssetPath("数据表扩展枚举导出路径", ref DataTableSetting.Instance.DataTableEnumPath, true);
-                        EditorGUILayout.HelpBox("注意:数据表第三列将会作为枚举名称,Id 作为枚举值.", MessageType.Warning);
-                    }
+                    DataTableSetting.Instance.EnumNameColumn = EditorGUILayout.IntField("生成枚举列", DataTableSetting.Instance.EnumNameColumn);
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();

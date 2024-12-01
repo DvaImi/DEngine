@@ -11,19 +11,19 @@ namespace Game.Editor.BuildPipeline
             return GetPlatform(EditorUserBuildSettings.activeBuildTarget);
         }
 
-        public static Platform GetPlatform(BuildTarget target)
+        private static Platform GetPlatform(BuildTarget target)
         {
             return target switch
             {
-                BuildTarget.StandaloneOSX => Platform.MacOS,
-                BuildTarget.StandaloneWindows => Platform.Windows,
-                BuildTarget.iOS => Platform.IOS,
-                BuildTarget.Android => Platform.Android,
+                BuildTarget.StandaloneOSX       => Platform.MacOS,
+                BuildTarget.StandaloneWindows   => Platform.Windows,
+                BuildTarget.iOS                 => Platform.IOS,
+                BuildTarget.Android             => Platform.Android,
                 BuildTarget.StandaloneWindows64 => Platform.Windows64,
-                BuildTarget.WebGL => Platform.WebGL,
-                BuildTarget.WSAPlayer => Platform.WindowsStore,
-                BuildTarget.StandaloneLinux64 => Platform.Linux,
-                _ => throw new DEngineException("Platform is invalid."),
+                BuildTarget.WebGL               => Platform.WebGL,
+                BuildTarget.WSAPlayer           => Platform.WindowsStore,
+                BuildTarget.StandaloneLinux64   => Platform.Linux,
+                _                               => throw new DEngineException("Platform is invalid."),
             };
         }
 
@@ -31,16 +31,16 @@ namespace Game.Editor.BuildPipeline
         {
             return platform switch
             {
-                Platform.Windows => BuildTarget.StandaloneWindows,
-                Platform.Windows64 => BuildTarget.StandaloneWindows64,
-                Platform.MacOS => BuildTarget.StandaloneOSX,
-                Platform.Linux => BuildTarget.StandaloneLinux64,
-                Platform.IOS => BuildTarget.iOS,
-                Platform.Android => BuildTarget.Android,
+                Platform.Windows      => BuildTarget.StandaloneWindows,
+                Platform.Windows64    => BuildTarget.StandaloneWindows64,
+                Platform.MacOS        => BuildTarget.StandaloneOSX,
+                Platform.Linux        => BuildTarget.StandaloneLinux64,
+                Platform.IOS          => BuildTarget.iOS,
+                Platform.Android      => BuildTarget.Android,
                 Platform.WindowsStore => BuildTarget.WSAPlayer,
-                Platform.WebGL => BuildTarget.WebGL,
-                Platform.Undefined => throw new DEngineException("Platform is invalid."),
-                _ => throw new DEngineException("Platform is invalid.")
+                Platform.WebGL        => BuildTarget.WebGL,
+                Platform.Undefined    => throw new DEngineException("Platform is invalid."),
+                _                     => throw new DEngineException("Platform is invalid.")
             };
         }
 
@@ -49,7 +49,7 @@ namespace Game.Editor.BuildPipeline
             return Utility.Text.Format("{0}:{1}/{{Platform}}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort);
         }
 
-        public static string GetCheckVersionUrl(Platform platform)
+        private static string GetCheckVersionUrl(Platform platform)
         {
             return Utility.Text.Format("{0}:{1}/{2}Version.json", DEngineSetting.Instance.HostURL, DEngineSetting.Instance.HostingServicePort, GetPlatformPath(platform));
         }
@@ -68,15 +68,15 @@ namespace Game.Editor.BuildPipeline
         {
             return platform switch
             {
-                Platform.Windows => "Windows",
-                Platform.Windows64 => "Windows64",
-                Platform.MacOS => "MacOS",
-                Platform.IOS => "IOS",
-                Platform.Android => "Android",
+                Platform.Windows      => "Windows",
+                Platform.Windows64    => "Windows64",
+                Platform.MacOS        => "MacOS",
+                Platform.IOS          => "IOS",
+                Platform.Android      => "Android",
                 Platform.WindowsStore => "WSA",
-                Platform.WebGL => "WebGL",
-                Platform.Linux => "Linux",
-                _ => ""
+                Platform.WebGL        => "WebGL",
+                Platform.Linux        => "Linux",
+                _                     => ""
             };
         }
 

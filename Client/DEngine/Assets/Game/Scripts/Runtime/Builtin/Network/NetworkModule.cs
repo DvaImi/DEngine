@@ -1,21 +1,15 @@
 ﻿using System.Collections.Generic;
 using DEngine;
+using DEngine.Runtime;
 using Fantasy.Network;
 
 namespace Game.Network
 {
-    public partial class NetworkModule : INetworkModule
+    public partial class NetworkModule : Fantasy.Entitas.Entity
     {
-        public int Priority { get; } = 0;
-
-        private readonly Dictionary<string, INetworkChannel> m_NetworkChannels = null;
+        private readonly Dictionary<string, INetworkChannel> m_NetworkChannels = new();
 
         public int NetworkChannelCount => m_NetworkChannels.Count;
-
-        public NetworkModule()
-        {
-            m_NetworkChannels = new Dictionary<string, INetworkChannel>();
-        }
 
         public bool HasNetworkChannel(string name)
         {
@@ -84,6 +78,7 @@ namespace Game.Network
             }
 
             m_NetworkChannels.Clear();
+            Log.Info("Network channels have been destroyed.");
         }
     }
 }

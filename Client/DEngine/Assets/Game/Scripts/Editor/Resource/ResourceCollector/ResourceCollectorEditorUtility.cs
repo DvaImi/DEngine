@@ -44,7 +44,7 @@ namespace Game.Editor.ResourceTools
         /// <summary>
         /// 资源规则
         /// </summary>
-        internal static ResourceCollection Collection
+        private static ResourceCollection Collection
         {
             get
             {
@@ -60,6 +60,8 @@ namespace Game.Editor.ResourceTools
                 return s_ResourceCollection;
             }
         }
+
+        private static readonly IResolveDuplicateAssetsHelper ResolveDuplicateAssetsHelper;
 
         static ResourceCollectorEditorUtility()
         {
@@ -77,6 +79,19 @@ namespace Game.Editor.ResourceTools
 
                 FilterRules[i] = type.Name;
             }
+
+            if (!EditorPrefs.HasKey("Resolve DuplicateAssets Helper Type Name"))
+            {
+                return;
+            }
+            
+            var resolveDuplicateAssetsHelperType = Utility.Assembly.GetType(EditorPrefs.GetString("Resolve DuplicateAssets Helper Type Name"));
+            if (resolveDuplicateAssetsHelperType == null)
+            {
+                return;
+            }
+
+            ResolveDuplicateAssetsHelper = (IResolveDuplicateAssetsHelper)Activator.CreateInstance(resolveDuplicateAssetsHelperType);
         }
 
         /// <summary>
@@ -92,20 +107,18 @@ namespace Game.Editor.ResourceTools
                 collectorData ??= ResourcePackagesCollector.GetResourceGroupsCollector(DEngineSetting.Instance.AssetBundleCollectorIndex);
                 Debug.Log($"Export {collectorData.PackageName} ...");
 
-                s_SourceAssetExceptTypeFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
+                s_SourceAssetExceptTypeFilterGuidArray  = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptTypeFilter);
                 s_SourceAssetExceptLabelFilterGuidArray = AssetDatabase.FindAssets(resourceEditorController.SourceAssetExceptLabelFilter);
 
                 Collection.Clear();
-
-                ResolveDuplicateAssetsHelper.ResolveDuplicateAssets(resourceEditorController);
                 AnalysisResourceFilters(collectorData);
-                int unknownAssetCount = resourceEditorController.RemoveUnknownAssets();
+                int unknownAssetCount   = resourceEditorController.RemoveUnknownAssets();
                 int unusedResourceCount = resourceEditorController.RemoveUnusedResources();
                 Debug.Log(Utility.Text.Format("Clean complete, {0} unknown assets and {1} unused resources has been removed.", unknownAssetCount, unusedResourceCount));
 
 
                 resourceEditorController.Save();
-                Debug.Log(Collection.Save() ? "Refresh ResourceCollection.xml success" : "Refresh ResourceCollection.xml fail");
+                Debug.Log(Collection.Save() ? "Refresh ResourceCollection.xml success" : "Refresh ResourceCollection.xml failure");
                 AssetDatabase.Refresh();
                 return;
             }
@@ -141,7 +154,7 @@ namespace Game.Editor.ResourceTools
         /// 获取所有资源
         /// </summary>
         /// <returns>资源数组</returns>
-        private static DEngine.Editor.ResourceTools.Resource[] GetResources()
+        private static Resource[] GetResources()
         {
             return Collection.GetResources();
         }
@@ -203,6 +216,12 @@ namespace Game.Editor.ResourceTools
         /// <param name="collectorData">资源组收集器</param>
         private static void AnalysisResourceFilters(ResourceGroupsCollector collectorData)
         {
+            var duplicateAssetNames = ResolveDuplicateAssetsHelper?.GetDuplicateAssetNames();
+            if (duplicateAssetNames is { Count: > 0 } && ResolveDuplicateAssetsHelper.ResolveDuplicateAssets(duplicateAssetNames))
+            {
+                Debug.Log("resolve duplicate assets successfully.");
+            }
+
             ResourceEditorController resourceEditorController = new();
 
             string sourceAssetRootPath = "Assets";
@@ -232,13 +251,23 @@ namespace Game.Editor.ResourceTools
                             resourceCollector.Variant = null;
                         }
 
-                        if (AssetDatabase.IsValidFolder(resourceCollector.AssetPath) || File.Exists(resourceCollector.AssetPath))
+                        string resourceName = string.IsNullOrEmpty(resourceCollector.Name) ? resourceCollector.AssetPath[(sourceAssetRootPath.Length + 1)..] : resourceCollector.Name;
+
+                        if (AssetDatabase.IsValidFolder(resourceCollector.AssetPath))
                         {
-                            string resourceName = string.IsNullOrEmpty(resourceCollector.Name) ? resourceCollector.AssetPath[(sourceAssetRootPath.Length + 1)..] : resourceCollector.Name;
-                            ApplyResourceFilter(resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));
+                            FileInfo[] assetFiles = new DirectoryInfo(resourceCollector.AssetPath).GetFiles("*.*", SearchOption.AllDirectories);
+                            if (assetFiles.Length > 0)
+                            {
+                                ProcessFolderResource(resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule), assetFiles);
+                            }
+                        }
+                        else if (File.Exists(resourceCollector.AssetPath))
+                        {
+                            ProcessFileFilter(resourceCollector, resourceName, GetFilterRuleInstance(resourceCollector.FilterRule));
                         }
                         else
                         {
+                            // 路径无效
                             Debug.LogWarningFormat("assetPath {0} is invalid.", resourceCollector.AssetPath);
                         }
                     }
@@ -247,12 +276,56 @@ namespace Game.Editor.ResourceTools
         }
 
         /// <summary>
-        /// 应用资源过滤规则
+        ///  处理文件夹资源
+        /// </summary>
+        /// <param name="resourceCollector"></param>
+        /// <param name="resourceName"></param>
+        /// <param name="filterRule"></param>
+        /// <param name="assetFiles"></param>
+        private static void ProcessFolderResource(ResourceCollector resourceCollector, string resourceName, IFilterRule filterRule, FileInfo[] assetFiles)
+        {
+            TryAddResource(resourceCollector, resourceName);
+            foreach (var file in assetFiles)
+            {
+                if (filterRule.IsCollectAsset(file.FullName))
+                {
+                    string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
+                    string assetGuid = AssetDatabase.AssetPathToGUID(assetName);
+                    if (!s_SourceAssetExceptTypeFilterGuidArray.Contains(assetGuid) && !s_SourceAssetExceptLabelFilterGuidArray.Contains(assetGuid))
+                    {
+                        if (!AssignAsset(assetGuid, resourceName, resourceCollector.Variant))
+                        {
+                            Debug.LogWarningFormat("Assign asset '{0}' to resource '{1}' failure.", resourceCollector.Name, resourceCollector.AssetPath);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 处理文件
         /// </summary>
         /// <param name="assetCollector">资源收集器</param>
         /// <param name="resourceName">资源名称</param>
         /// <param name="filterRule">过滤规则</param>
-        private static void ApplyResourceFilter(ResourceCollector assetCollector, string resourceName, IFilterRule filterRule)
+        private static void ProcessFileFilter(ResourceCollector assetCollector, string resourceName, IFilterRule filterRule)
+        {
+            TryAddResource(assetCollector, resourceName);
+
+            if (filterRule.IsCollectAsset(assetCollector.AssetPath))
+            {
+                string assetGuid = AssetDatabase.AssetPathToGUID(assetCollector.AssetPath);
+                if (!s_SourceAssetExceptTypeFilterGuidArray.Contains(assetGuid) && !s_SourceAssetExceptLabelFilterGuidArray.Contains(assetGuid))
+                {
+                    if (!AssignAsset(assetGuid, resourceName, assetCollector.Variant))
+                    {
+                        Debug.LogWarningFormat("Assign asset '{0}' to resource '{1}' failure.", assetCollector.Name, assetCollector.AssetPath);
+                    }
+                }
+            }
+        }
+
+        private static void TryAddResource(ResourceCollector assetCollector, string resourceName)
         {
             foreach (var oldResource in GetResources())
             {
@@ -277,40 +350,6 @@ namespace Game.Editor.ResourceTools
                 if (!AddResource(resourceName, assetCollector.Variant, assetCollector.FileSystem, assetCollector.LoadType, assetCollector.Packed, assetCollector.Groups.Split('|')))
                 {
                     Debug.LogWarningFormat("Add resource '{0}' failure.", assetCollector.AssetPath);
-                }
-            }
-
-            if (AssetDatabase.IsValidFolder(assetCollector.AssetPath))
-            {
-                FileInfo[] assetFiles = new DirectoryInfo(assetCollector.AssetPath).GetFiles("*.*", SearchOption.AllDirectories);
-                foreach (FileInfo file in assetFiles)
-                {
-                    if (filterRule.IsCollectAsset(file.FullName))
-                    {
-                        string assetName = Path.Combine("Assets", file.FullName[(Application.dataPath.Length + 1)..]);
-                        string assetGuid = AssetDatabase.AssetPathToGUID(assetName);
-                        if (!s_SourceAssetExceptTypeFilterGuidArray.Contains(assetGuid) && !s_SourceAssetExceptLabelFilterGuidArray.Contains(assetGuid))
-                        {
-                            if (!AssignAsset(assetGuid, resourceName, assetCollector.Variant))
-                            {
-                                Debug.LogWarningFormat("Assign asset '{0}' to resource '{1}' failure.", assetCollector.Name, assetCollector.AssetPath);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (filterRule.IsCollectAsset(assetCollector.AssetPath))
-                {
-                    string assetGuid = AssetDatabase.AssetPathToGUID(assetCollector.AssetPath);
-                    if (!s_SourceAssetExceptTypeFilterGuidArray.Contains(assetGuid) && !s_SourceAssetExceptLabelFilterGuidArray.Contains(assetGuid))
-                    {
-                        if (!AssignAsset(assetGuid, resourceName, assetCollector.Variant))
-                        {
-                            Debug.LogWarningFormat("Assign asset '{0}' to resource '{1}' failure.", assetCollector.Name, assetCollector.AssetPath);
-                        }
-                    }
                 }
             }
         }
