@@ -34,9 +34,9 @@ namespace Game.Update
         {
             Scene?.Dispose();
             Scene = await Fantasy.Scene.Create();
-            Network = await Scene.AddComponentAsync<NetworkModule>();
-            Luban = await Scene.AddComponentAsync<LubanDataProvider>();
-            Input = await Scene.AddComponentAsync<GameInputComponent>();
+            Network = Scene.AddComponent<NetworkModule>();
+            Luban = Scene.AddComponent<LubanDataProvider>();
+            Input = Scene.AddComponent<GameInputComponent>();
         }
     }
 }

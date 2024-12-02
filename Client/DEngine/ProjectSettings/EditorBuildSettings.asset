@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GameEntry.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Game/Bundles/Scenes/GameScene/GameScene.unity
+    guid: cdc5b5d4af28ff84fbd37e5d93500bb2
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: ddd3464e1bd6a5b47ae06888c1e2a49f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 4b25c2184204f3641bef732cf79ee2cd, type: 3}

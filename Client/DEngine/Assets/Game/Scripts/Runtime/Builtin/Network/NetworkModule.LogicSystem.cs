@@ -6,12 +6,11 @@ namespace Game.Network
 {
     public partial class NetworkModule
     {
-        private class NetworkModuleAwakeSystem : AwakeSystemAsync<NetworkModule>
+        private class NetworkModuleAwakeSystem : AwakeSystem<NetworkModule>
         {
-            protected override async FTask Awake(NetworkModule self)
+            protected override void Awake(NetworkModule self)
             {
                 GameEntry.Debugger.RegisterDebuggerWindow("Profiler/Network", new NetworkDebuggerWindow(), self);
-                await FTask.CompletedTask;
             }
         }
 

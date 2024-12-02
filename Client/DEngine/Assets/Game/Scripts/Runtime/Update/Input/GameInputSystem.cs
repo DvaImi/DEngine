@@ -1,15 +1,14 @@
-﻿using Fantasy.Async;
-using Fantasy.Entitas.Interface;
+﻿using Fantasy.Entitas.Interface;
 
 namespace Game.Update.Input
 {
     public static class GameInputSystem
     {
-        public class GameInputAwakeSystem : AwakeSystemAsync<GameInputComponent>
+        public class GameInputAwakeSystem : AwakeSystem<GameInputComponent>
         {
-            protected override async FTask Awake(GameInputComponent self)
+            protected override void Awake(GameInputComponent self)
             {
-                await self.Awake();
+                self.Awake().Coroutine();
             }
         }
 
