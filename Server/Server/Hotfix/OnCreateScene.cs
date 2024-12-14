@@ -31,7 +31,7 @@ public sealed class OnCreateSceneEvent : AsyncEventSystem<OnCreateScene>
             case SceneType.Addressable:
             {
                 // scene.AddComponent<AddressableManageComponent>(); 
-                _addressableSceneRunTimeId = scene.RunTimeId;
+                _addressableSceneRunTimeId = scene.RuntimeId;
                 break;
             }
             case SceneType.Map:
