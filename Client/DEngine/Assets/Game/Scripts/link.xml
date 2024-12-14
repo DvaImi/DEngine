@@ -54,7 +54,7 @@
     <type fullname="Fantasy.Async.FTaskCompleted" preserve="all" />
     <type fullname="Fantasy.Async.FTask`1" preserve="all" />
     <type fullname="Fantasy.Entitas.Entity" preserve="all" />
-    <type fullname="Fantasy.Entitas.Interface.AwakeSystemAsync`1" preserve="all" />
+    <type fullname="Fantasy.Entitas.Interface.AwakeSystem`1" preserve="all" />
     <type fullname="Fantasy.Entitas.Interface.DestroySystem`1" preserve="all" />
     <type fullname="Fantasy.Entitas.MessagePoolComponent" preserve="all" />
     <type fullname="Fantasy.Event.AsyncEventSystem`1" preserve="all" />
@@ -87,9 +87,8 @@
     <type fullname="Game.FileSystem.FileInfo" preserve="all" />
     <type fullname="Game.FileSystem.FileSystemDataVersion" preserve="all" />
     <type fullname="Game.GameEntry" preserve="all" />
-    <type fullname="Game.IGameModule" preserve="all" />
-    <type fullname="Game.Network.INetworkModule" preserve="all" />
     <type fullname="Game.Network.NetworkLog" preserve="all" />
+    <type fullname="Game.Network.NetworkModule" preserve="all" />
     <type fullname="Game.UI.GameUGUIFormLogic" preserve="all" />
     <type fullname="Game.UniTaskExtension" preserve="all" />
     <type fullname="Game.UniTaskParallel`1" preserve="all" />

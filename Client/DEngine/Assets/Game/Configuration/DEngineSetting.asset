@@ -30,9 +30,9 @@ MonoBehaviour:
   SourceVersion: 0.1.0.17
   HostURL: http://localhost
   HostingServicePort: 8899
-  InternalResourceVersion: 37
+  InternalResourceVersion: 42
   LatestGameVersion: 0.1.0
-  InternalGameVersion: 87
+  InternalGameVersion: 91
   WindowsAppUrl: 
   MacOSAppUrl: 
   IOSAppUrl: 
