@@ -15,7 +15,7 @@ MonoBehaviour:
   OutputDataTableFolder: Assets/Game/Bundles/DataTables
   DataTableExcelsFolder: Assets/../Excels/DataTable
   CSharpCodePath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DRCode
-  CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
+  CSharpCodeTemplateFileName: Assets/Game/Scripts/Editor/Builtin/DataTable/TableCodeTemplate/DataTableCodeTemplate.txt
   ExtensionDirectoryPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/Extensions
   DataTableEnumPath: Assets/Game/Scripts/Runtime/Update/Generate/DataTable/DataTableEnum
   NameSpace: Game.Update

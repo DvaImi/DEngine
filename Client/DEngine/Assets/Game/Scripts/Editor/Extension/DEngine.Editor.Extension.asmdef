@@ -1,0 +1,22 @@
+{
+    "name": "DEngine.Editor.Extension",
+    "rootNamespace": "",
+    "references": [
+        "GUID:40dbc3cb2d4c42d4dbbb8346fe52272e",
+        "GUID:844937d985828c648866dc5fe1dc749c",
+        "GUID:a2d8a19598eca814496b089021d08d60",
+        "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
+        "GUID:df685cd8a6c9193408793941fc1bc7f6"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

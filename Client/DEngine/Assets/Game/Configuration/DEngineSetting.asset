@@ -17,7 +17,7 @@ MonoBehaviour:
   ResourceCollectionConfig: Assets/Game/Configuration/ResourceCollection.xml
   ResourceEditorConfig: Assets/Game/Configuration/ResourceEditor.xml
   ResourceBuilderConfig: Assets/Game/Configuration/ResourceBuilder.xml
-  ResourceMode: 1
+  ResourceMode: 0
   BuildPlayerEventHandlerTypeName: Game.Editor.BuildPipeline.DefaultBuildPlayerEventHandler
   ForceRebuildAssetBundle: 0
   DefaultSceneNames:
@@ -26,13 +26,13 @@ MonoBehaviour:
   - Assets
   AssetBundleCollectorIndex: 0
   ForceUpdateGame: 0
-  BuildResourcePack: 1
+  BuildResourcePack: 0
   SourceVersion: 0.1.0.17
   HostURL: http://localhost
   HostingServicePort: 8899
-  InternalResourceVersion: 42
+  InternalResourceVersion: 47
   LatestGameVersion: 0.1.0
-  InternalGameVersion: 91
+  InternalGameVersion: 95
   WindowsAppUrl: 
   MacOSAppUrl: 
   IOSAppUrl: 
