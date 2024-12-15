@@ -1,0 +1,17 @@
+{
+  "name": "com.dvalmi.dengine",
+  "version": "1.0.0",
+  "displayName": "DEngine",
+  "description": "DEngine is a game development template.",
+  "category": "Runtime",
+  "keywords": [
+    "Dengine",
+    "dengine"
+  ],
+  "author": {
+    "name": "Dvalmi"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }
+}
