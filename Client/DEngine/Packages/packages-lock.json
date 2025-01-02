@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4d0fef095b5af314b06e204ea0f6c17681f3ec3c"
+      "hash": "b176d63d93a6b8fd1a873769af7f7fa4c43a4288"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
@@ -28,7 +28,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "c4c97a9d9f0fa5a7babd8aec4794236242c44313"
+      "hash": "f6b81510695d4a37a2b97bbc237d59d758ffe113"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.5",
