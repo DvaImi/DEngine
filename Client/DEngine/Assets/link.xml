@@ -304,8 +304,21 @@
     <type fullname="Fantasy.Network.Interface.INetworkChannel" preserve="all"/>
     <type fullname="Fantasy.IdFactory.EntityIdStruct" preserve="all"/>
     <type fullname="Fantasy.IdFactory.EntityIdFactory" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.EntityIdFactoryTool" preserve="all"/>
     <type fullname="Fantasy.IdFactory.RuntimeIdStruct" preserve="all"/>
     <type fullname="Fantasy.IdFactory.RuntimeIdFactory" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.RuntimeIdFactoryTool" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.IdFactoryHelper" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.IdFactoryType" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.IEntityIdFactory" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.IRuntimeIdFactory" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.IIdFactoryTool" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.WorldEntityIdStruct" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.WorldEntityIdFactory" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.WorldEntityIdFactoryTool" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.WorldRuntimeIdStruct" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.WorldRuntimeIdFactory" preserve="all"/>
+    <type fullname="Fantasy.IdFactory.WorldRuntimeIdFactoryTool" preserve="all"/>
     <type fullname="Fantasy.Http.HttpClientHelper" preserve="all"/>
     <type fullname="Fantasy.Http.HttpClientPool" preserve="all"/>
     <type fullname="Fantasy.Http.IJsonRpcRequest" preserve="all"/>
@@ -530,10 +543,10 @@
     <type fullname="NativeCollections.NativeStack`1+NativeStackHandle" preserve="all"/>
     <type fullname="NativeCollections.NativeStack`1+Enumerator" preserve="all"/>
     <type fullname="Fantasy.ThreadSynchronizationContext+++c__DisplayClass3_0" preserve="all"/>
-    <type fullname="Fantasy.Scene+++c__DisplayClass59_0" preserve="all"/>
-    <type fullname="Fantasy.Scene++Create+d__59" preserve="all"/>
-    <type fullname="Fantasy.Scene++Initialize+d__41" preserve="all"/>
-    <type fullname="Fantasy.Scene++SetScheduler+d__61" preserve="all"/>
+    <type fullname="Fantasy.Scene+++c__DisplayClass63_0" preserve="all"/>
+    <type fullname="Fantasy.Scene++Create+d__63" preserve="all"/>
+    <type fullname="Fantasy.Scene++Initialize+d__45" preserve="all"/>
+    <type fullname="Fantasy.Scene++SetScheduler+d__65" preserve="all"/>
     <type fullname="Fantasy.MainScheduler+++c__DisplayClass4_0" preserve="all"/>
     <type fullname="Fantasy.MainScheduler+++c__DisplayClass5_0" preserve="all"/>
     <type fullname="Fantasy.MultiThreadScheduler+++c__DisplayClass5_0" preserve="all"/>
@@ -631,8 +644,8 @@
     <type fullname="Fantasy.Assembly.AssemblySystem++get_ForEachAssembly+d__13" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=32" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=288" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=19632" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=28883" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=20138" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=29379" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+KeyCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeConcurrentDictionary`2+ValueCollection+Enumerator" preserve="all"/>
     <type fullname="NativeCollections.NativeDictionary`2+KeyCollection+Enumerator" preserve="all"/>
@@ -972,7 +985,7 @@
     <type fullname="DEngine.DataNode.DataNodeManager+DataNode" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=15005" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=25020" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=24486" preserve="all"/>
     <type fullname="DEngine.Utility+Compression+ICompressionHelper" preserve="all"/>
     <type fullname="DEngine.Utility+Json+IJsonHelper" preserve="all"/>
     <type fullname="DEngine.Utility+Text+ITextHelper" preserve="all"/>
@@ -1200,7 +1213,7 @@
     <type fullname="DEngine.Runtime.UIComponent+UIGroup" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=3" preserve="all"/>
     <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=10190" preserve="all"/>
-    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=18352" preserve="all"/>
+    <type fullname="+PrivateImplementationDetails++__StaticArrayInitTypeSize=17958" preserve="all"/>
     <type fullname="DEngine.Runtime.DebuggerComponent+RuntimeMemoryInformationWindow`1+Sample" preserve="all"/>
     <type fullname="DEngine.Runtime.DebuggerComponent+RuntimeMemorySummaryWindow+Record" preserve="all"/>
   </assembly>
