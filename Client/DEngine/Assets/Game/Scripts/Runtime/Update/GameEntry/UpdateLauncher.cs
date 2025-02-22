@@ -26,7 +26,7 @@ namespace Game.Update
             if (GameDomain.Scene == null)
             {
                 Log.Register(new NetworkLog());
-                Entry.Initialize(AppDomain.CurrentDomain.GetAssemblies());
+                await Entry.Initialize(AppDomain.CurrentDomain.GetAssemblies());
             }
 
             GameEntry.BuiltinData.DestroyDialog();
