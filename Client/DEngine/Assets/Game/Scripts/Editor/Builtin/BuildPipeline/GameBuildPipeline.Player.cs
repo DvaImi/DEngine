@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using System.Xml;
 using DEngine.Editor.ResourceTools;
 using DEngine.Resource;
@@ -77,7 +76,7 @@ namespace Game.Editor.BuildPipeline
             string locationPath = Path.Combine(outputDirectory, Application.version, platform.ToString());
             GameUtility.IO.CreateDirectoryIfNotExists(locationPath);
             const BuildOptions buildOptions = BuildOptions.CompressWithLz4 | BuildOptions.ShowBuiltPlayer;
-            string outputExtension = string.Format(".{0}", GetBuildTargetExtension(target, buildOptions));
+            string outputExtension = string.Format(".{0}", GetBuildTargetExtension(target));
             BuildPlayerOptions buildPlayerOptions = new()
             {
                 scenes = DEngineSetting.Instance.DefaultSceneNames,
@@ -89,32 +88,24 @@ namespace Game.Editor.BuildPipeline
             return UnityEditor.BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
-        private static string GetBuildTargetExtension(BuildTarget target, BuildOptions buildOptions)
+        private static string GetBuildTargetExtension(BuildTarget target)
         {
-            try
+            return target switch
             {
-                var postprocessBuildPlayerType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.PostprocessBuildPlayer");
-                if (postprocessBuildPlayerType == null)
-                {
-                    throw new Exception("无法找到 UnityEditor.PostprocessBuildPlayer 类型。");
-                }
-
-                var method = postprocessBuildPlayerType.GetMethod("GetExtensionForBuildTarget", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { typeof(BuildTarget), typeof(BuildOptions) }, null);
-
-                if (method == null)
-                {
-                    throw new Exception("无法找到 GetExtensionForBuildTarget 方法。");
-                }
-
-                var result = method.Invoke(null, new object[] { target, buildOptions });
-                return result as string;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"调用内部方法失败: {ex.Message}");
-                throw;
-            }
+                BuildTarget.StandaloneWindows or BuildTarget.StandaloneWindows64 => ".exe",
+                BuildTarget.StandaloneLinux64                                    => ".x86_64",
+                BuildTarget.StandaloneOSX                                        => ".app",
+                BuildTarget.Android                                              => ".apk",
+                BuildTarget.iOS                                                  => ".ipa",
+                BuildTarget.WebGL                                                => ".zip",
+                BuildTarget.PS4                                                  => ".pkg",
+                BuildTarget.PS5                                                  => ".pkg",
+                BuildTarget.XboxOne                                              => ".xvc",
+                BuildTarget.Switch                                               => ".nsp",
+                _                                                                => throw new ArgumentOutOfRangeException(nameof(target), target, "Unsupported build target")
+            };
         }
+
 
         public static void SaveBuildSetting()
         {
